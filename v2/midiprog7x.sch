@@ -7506,16 +7506,16 @@ general purpose rectifier, 1 A</description>
 <part name="IC4" library="tpic" deviceset="TPIC6B596" device="N"/>
 <part name="VDD8" library="supply1" deviceset="VDD" device=""/>
 <part name="GND10" library="supply1" deviceset="GND" device=""/>
-<part name="R2" library="rcl" deviceset="R-US_" device="0207/10"/>
-<part name="R12" library="rcl" deviceset="R-US_" device="0207/10"/>
-<part name="R13" library="rcl" deviceset="R-US_" device="0207/10"/>
+<part name="R2" library="rcl" deviceset="R-US_" device="0207/10" value="220"/>
+<part name="R12" library="rcl" deviceset="R-US_" device="0207/10" value="220"/>
+<part name="R13" library="rcl" deviceset="R-US_" device="0207/10" value="220"/>
 <part name="R15" library="rcl" deviceset="R-US_" device="0207/10" value="220"/>
 <part name="GND14" library="supply1" deviceset="GND" device=""/>
 <part name="C8" library="rcl" deviceset="C-US" device="050-025X075" value=".1"/>
 <part name="VDD12" library="supply1" deviceset="VDD" device=""/>
-<part name="R16" library="rcl" deviceset="R-US_" device="0207/10"/>
-<part name="R17" library="rcl" deviceset="R-US_" device="0207/10"/>
-<part name="R18" library="rcl" deviceset="R-US_" device="0207/10"/>
+<part name="R16" library="rcl" deviceset="R-US_" device="0207/10" value="220"/>
+<part name="R17" library="rcl" deviceset="R-US_" device="0207/10" value="220"/>
+<part name="R18" library="rcl" deviceset="R-US_" device="0207/10" value="220"/>
 <part name="R19" library="rcl" deviceset="R-US_" device="0207/10" value="220"/>
 <part name="R20" library="rcl" deviceset="R-US_" device="0207/10"/>
 <part name="R21" library="rcl" deviceset="R-US_" device="0207/10"/>
