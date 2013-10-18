@@ -6727,17 +6727,14 @@ W = angled&lt;p&gt;
 <wire x1="137.16" y1="68.58" x2="139.7" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<junction x="137.16" y="104.14"/>
 <pinref part="LED_FX_CN" gate="G$1" pin="2"/>
 <wire x1="139.7" y1="101.6" x2="137.16" y2="101.6" width="0.1524" layer="91"/>
 <wire x1="137.16" y1="101.6" x2="137.16" y2="104.14" width="0.1524" layer="91"/>
 <pinref part="LED_FX_CN" gate="G$1" pin="4"/>
 <wire x1="137.16" y1="104.14" x2="139.7" y2="104.14" width="0.1524" layer="91"/>
-<junction x="137.16" y="106.68"/>
 <wire x1="137.16" y1="104.14" x2="137.16" y2="106.68" width="0.1524" layer="91"/>
 <pinref part="LED_FX_CN" gate="G$1" pin="6"/>
 <wire x1="137.16" y1="106.68" x2="139.7" y2="106.68" width="0.1524" layer="91"/>
-<junction x="137.16" y="109.22"/>
 <wire x1="137.16" y1="106.68" x2="137.16" y2="109.22" width="0.1524" layer="91"/>
 <pinref part="LED_FX_CN" gate="G$1" pin="8"/>
 <wire x1="137.16" y1="109.22" x2="139.7" y2="109.22" width="0.1524" layer="91"/>
@@ -6755,10 +6752,13 @@ W = angled&lt;p&gt;
 <wire x1="137.16" y1="119.38" x2="139.7" y2="119.38" width="0.1524" layer="91"/>
 <pinref part="VDD12" gate="G$1" pin="VDD"/>
 <wire x1="137.16" y1="119.38" x2="137.16" y2="127" width="0.1524" layer="91"/>
-<junction x="137.16" y="119.38"/>
-<junction x="137.16" y="116.84"/>
-<junction x="137.16" y="114.3"/>
+<junction x="137.16" y="104.14"/>
+<junction x="137.16" y="106.68"/>
+<junction x="137.16" y="109.22"/>
 <junction x="137.16" y="111.76"/>
+<junction x="137.16" y="114.3"/>
+<junction x="137.16" y="116.84"/>
+<junction x="137.16" y="119.38"/>
 </segment>
 </net>
 <net name="N$1" class="0">
