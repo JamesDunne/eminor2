@@ -13389,6 +13389,10 @@ We've spent an enormous amount of time creating and checking these footprints an
 <part name="U$3" library="7805" deviceset="7805" device=""/>
 <part name="MIDI_OUT" library="SparkFun-Connectors-fdb4deb3ddf02d02cecaec8c0f5c972a585683b1" deviceset="MIDI_CONN_FEMALE_SUPPORT" device=""/>
 <part name="JP1" library="SparkFun-Connectors-fdb4deb3ddf02d02cecaec8c0f5c972a585683b1" deviceset="USB" device="PTH" value="USB-B"/>
+<part name="C6" library="rcl" deviceset="C-US" device="050-025X075" value=".1"/>
+<part name="GND3" library="supply1" deviceset="GND" device=""/>
+<part name="C7" library="rcl" deviceset="C-US" device="050-025X075" value=".1"/>
+<part name="GND12" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -13420,7 +13424,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <instance part="VDD5" gate="G$1" x="386.08" y="58.42"/>
 <instance part="GND8" gate="1" x="401.32" y="27.94"/>
 <instance part="R11" gate="G$1" x="393.7" y="50.8"/>
-<instance part="VDD6" gate="G$1" x="381" y="152.4"/>
+<instance part="VDD6" gate="G$1" x="391.16" y="160.02"/>
 <instance part="GND9" gate="1" x="358.14" y="119.38"/>
 <instance part="VDD1" gate="G$1" x="248.92" y="63.5"/>
 <instance part="GND11" gate="1" x="335.28" y="12.7"/>
@@ -13444,7 +13448,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <instance part="GND14" gate="1" x="180.34" y="111.76"/>
 <instance part="C8" gate="G$1" x="195.58" y="119.38"/>
 <instance part="VDD12" gate="G$1" x="137.16" y="96.52" rot="R90"/>
-<instance part="VDD13" gate="G$1" x="294.64" y="152.4"/>
+<instance part="VDD13" gate="G$1" x="304.8" y="160.02"/>
 <instance part="GND16" gate="1" x="271.78" y="73.66"/>
 <instance part="U$2" gate="G$1" x="287.02" y="134.62"/>
 <instance part="VDD15" gate="G$1" x="246.38" y="154.94"/>
@@ -13484,6 +13488,10 @@ We've spent an enormous amount of time creating and checking these footprints an
 <instance part="U$3" gate="G$1" x="190.5" y="-15.24"/>
 <instance part="MIDI_OUT" gate="G$1" x="416.56" y="50.8" rot="R180"/>
 <instance part="JP1" gate="G$1" x="393.7" y="-2.54"/>
+<instance part="C6" gate="G$1" x="312.42" y="147.32"/>
+<instance part="GND3" gate="1" x="312.42" y="139.7"/>
+<instance part="C7" gate="G$1" x="398.78" y="147.32"/>
+<instance part="GND12" gate="1" x="398.78" y="139.7"/>
 </instances>
 <busses>
 </busses>
@@ -13512,9 +13520,15 @@ We've spent an enormous amount of time creating and checking these footprints an
 <pinref part="C9" gate="G$1" pin="1"/>
 </segment>
 <segment>
-<wire x1="381" y1="142.24" x2="381" y2="149.86" width="0.1524" layer="91"/>
+<wire x1="381" y1="142.24" x2="391.16" y2="142.24" width="0.1524" layer="91"/>
+<wire x1="391.16" y1="142.24" x2="391.16" y2="152.4" width="0.1524" layer="91"/>
 <pinref part="VDD6" gate="G$1" pin="VDD"/>
 <pinref part="U$1" gate="G$1" pin="VCC"/>
+<wire x1="391.16" y1="152.4" x2="391.16" y2="157.48" width="0.1524" layer="91"/>
+<wire x1="391.16" y1="152.4" x2="398.78" y2="152.4" width="0.1524" layer="91"/>
+<wire x1="398.78" y1="152.4" x2="398.78" y2="149.86" width="0.1524" layer="91"/>
+<pinref part="C7" gate="G$1" pin="1"/>
+<junction x="391.16" y="152.4"/>
 </segment>
 <segment>
 <pinref part="R1" gate="G$1" pin="2"/>
@@ -13567,9 +13581,15 @@ We've spent an enormous amount of time creating and checking these footprints an
 <pinref part="C8" gate="G$1" pin="1"/>
 </segment>
 <segment>
-<wire x1="294.64" y1="142.24" x2="294.64" y2="149.86" width="0.1524" layer="91"/>
+<wire x1="294.64" y1="142.24" x2="304.8" y2="142.24" width="0.1524" layer="91"/>
+<wire x1="304.8" y1="142.24" x2="304.8" y2="152.4" width="0.1524" layer="91"/>
 <pinref part="VDD13" gate="G$1" pin="VDD"/>
 <pinref part="U$2" gate="G$1" pin="VCC"/>
+<wire x1="304.8" y1="152.4" x2="304.8" y2="157.48" width="0.1524" layer="91"/>
+<wire x1="304.8" y1="152.4" x2="312.42" y2="152.4" width="0.1524" layer="91"/>
+<wire x1="312.42" y1="152.4" x2="312.42" y2="149.86" width="0.1524" layer="91"/>
+<pinref part="C6" gate="G$1" pin="1"/>
+<junction x="304.8" y="152.4"/>
 </segment>
 <segment>
 <pinref part="VDD15" gate="G$1" pin="VDD"/>
@@ -13880,6 +13900,14 @@ We've spent an enormous amount of time creating and checking these footprints an
 <junction x="279.4" y="76.2"/>
 <junction x="276.86" y="76.2"/>
 <junction x="274.32" y="76.2"/>
+</segment>
+<segment>
+<pinref part="C6" gate="G$1" pin="2"/>
+<pinref part="GND3" gate="1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="C7" gate="G$1" pin="2"/>
+<pinref part="GND12" gate="1" pin="GND"/>
 </segment>
 </net>
 <net name="SHIFTREG_RCK" class="0">
