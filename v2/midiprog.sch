@@ -14050,13 +14050,6 @@ We've spent an enormous amount of time creating and checking these footprints an
 <pinref part="R10" gate="G$1" pin="1"/>
 </segment>
 </net>
-<net name="N$8" class="0">
-<segment>
-<wire x1="403.86" y1="45.72" x2="396.24" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="R10" gate="G$1" pin="2"/>
-<pinref part="MIDI_OUT" gate="G$1" pin="MIDI_IN"/>
-</segment>
-</net>
 <net name="BTN_S0" class="0">
 <segment>
 <wire x1="251.46" y1="30.48" x2="241.3" y2="30.48" width="0.1524" layer="91"/>
@@ -14139,14 +14132,6 @@ We've spent an enormous amount of time creating and checking these footprints an
 <pinref part="C10" gate="G$1" pin="+"/>
 <pinref part="U$3" gate="G$1" pin="VI"/>
 <wire x1="177.8" y1="-15.24" x2="180.34" y2="-15.24" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$9" class="0">
-<segment>
-<wire x1="403.86" y1="48.26" x2="398.78" y2="48.26" width="0.1524" layer="91"/>
-<wire x1="398.78" y1="48.26" x2="398.78" y2="50.8" width="0.1524" layer="91"/>
-<pinref part="R11" gate="G$1" pin="2"/>
-<pinref part="MIDI_OUT" gate="G$1" pin="MIDI_OUT"/>
 </segment>
 </net>
 <net name="N$34" class="0">
@@ -14611,6 +14596,22 @@ We've spent an enormous amount of time creating and checking these footprints an
 <pinref part="U$1" gate="G$1" pin="A2"/>
 <wire x1="391.16" y1="109.22" x2="391.16" y2="139.7" width="0.1524" layer="91"/>
 <wire x1="391.16" y1="139.7" x2="381" y2="139.7" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$8" class="0">
+<segment>
+<pinref part="R11" gate="G$1" pin="2"/>
+<wire x1="398.78" y1="50.8" x2="398.78" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="MIDI_OUT" gate="G$1" pin="MIDI_IN"/>
+<wire x1="398.78" y1="45.72" x2="403.86" y2="45.72" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$9" class="0">
+<segment>
+<pinref part="R10" gate="G$1" pin="2"/>
+<wire x1="396.24" y1="45.72" x2="396.24" y2="48.26" width="0.1524" layer="91"/>
+<pinref part="MIDI_OUT" gate="G$1" pin="MIDI_OUT"/>
+<wire x1="396.24" y1="48.26" x2="403.86" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
