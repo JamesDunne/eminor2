@@ -1,0 +1,118 @@
+PrintEPS (Vers. 1.3)
+====================
+
+(c) 2003, J. Rathlev, IEAP-Kiel
+
+PrintEPS ist ein Programm zum Ausdrucken von mehreren EPS-Dateien
+(Encapsulated Postscript) auf einer Seite. Jedes EPS-Dokument kann
+auf der Seite (Hoch- oder Querformat) beliebig positioniert und
+mit einer zusätzlichen Beschriftung versehen werden.
+
+Es eignet sich damit besonders zum Ausdrucken von mit dem CAM-Prozessor
+des Layoutprogramms "Eagle" erzeugten Dokumenten: Alle zu kleinen
+Platinen gehörenden Pläne (Bestückung, Layout, etc.) lassen sich so auf
+einer Seite zusammenfassen.
+
+Anforderungen:
+--------------
+Postscript-fähiger Drucker oder GhostView/GhostScript (Freeware).
+
+
+Verfahrensweise:
+----------------
+1. Erzeugen einer oder mehrere EPS-Dateien mit einer beliebigen Anwendung:
+
+   Eagle Vers. 4.0:
+   ----------------
+   - CAM-Prozessor-Job mit mehreren Sektionen (je Plan eine) erstellen
+   - alle auf Device "EPS" einstellen
+   - Sektion Lötseite mit Ausgabe nach <path>\.SOL
+   - Sektion Bauteilseite mit Ausgabe nach <path>\.CMP
+   - Sektion Bestückungsplan (B) mit Ausgabe nach <path>\.PLC
+   - Sektion Bestückungsplan (LB) mit Ausgabe nach <path>\.PLS
+   - etc.
+   - "Process Job" erzeugt mehrere EPS-Dateien.
+
+   Andere Anwendungen:
+   -------------------
+   - Postscript-Drucker mit Dateiausgabe erstellen (falls noch nicht vorhanden).
+     Empfehlung: Adobe-Treiber APS106DEU.EXE
+                 (siehe http://www.adobe.com/support/downloads/)
+     erforderliche PPD-Datei: PSCOLOR.PPD (liegt dem Programm bei)
+   - Einstellungen: unter Druckeinstellungen/Erweitert/
+       Postscript-Optionen/Postscript-Ausgabeoption: "Eingekapselter Postscript (PS)"
+   - Über die Druckfunktion des Anwender-Programms eine EPS-Datei erstellen.
+
+     Achtung: Nicht alle Anwendungen passen die "Bounding-Box" im Postscript
+     -------  an die tatsächliche Größe des ausgegebenden Objekts (z.B. Abbildung) an.
+              Stattdessen wird hier die Größe des Papierformats (z.B. A4) verwendet.
+              In manchen Anwendungen genügt es bestimmte Objekte vor dem Drucken
+              auszuwählen und das Drucken auf diese Objekte zu beschränken.
+              Notfalls können die Werte für die Bounding-Box von Hand mit einem
+              Texteditor korrigiert werden (1 Einheit = 1/72 inch = 0,353 mm).
+
+
+2. PrintEPS starten:
+-----------------
+  - Drucker und Papierformat auswählen
+  - nacheinander die gewünschten EPS-Dateien auf der Seite anordnen
+  - bei Bedarf Textkommentare einfügen
+    Hochstellen von Zeichen: ^x
+    Tiefstellen von Zeichen: _x  (Bsp.: x_i^^3_ = ...)
+    Sonderzeichen können aus einer Tabelle ausgewählt werden.
+  - Zusammenstellung speichern (Datei: *.pps)
+  - Drucken: Zum Ausdruck ist ein postscriptfähiger Drucker erforderlich.
+    -------- Alternativ kann die Ausgabe mit dem o.a. Treiber in eine Datei
+             erfolgen und anschließend mit GhostView/Ghostscript weiterverarbeitet
+             werden (Druckausgabe oder PDF-Erstellung).
+
+
+Alle erforderlichen Hilfsprogramme und Treiber sind auch auf meiner
+Web-Download-Seite
+
+  http://www.ieap.uni-kiel.de/surface/ag-berndt/download.html
+
+verfügbar.
+
+
+1. Nutzung des Programms / Using the program
+--------------------------------------------
+
+Das vorliegende Programm kannn kostenlos genutzt werden. Eine Gewährleistung
+für die Funktionsfähigkeit des Programms und der Korrektheit der Ergebnisse,
+sowie eine Haftung für Schäden an der Hard- oder Software des Benutzers
+wird nicht übernommen.
+
+The program may be used in any way, for any purpose, at no cost. There is no
+warranty for correct operation of the program and results. The author
+is not liable for any damages on hard- and software arising out of the use
+of the program.
+
+
+2. Weitergabe des Programms / Distributing the program
+------------------------------------------------------
+
+Das Programm darf ohne Einschränkungen weitergegeben werden, vorausgesetzt die
+Originaldateien, wie sie vom Autotr bereitgestellt wurden, bleiben unverändert.
+Es darf dafür keine Gebühr verlangt werden.
+Die Nutzung oder Verwertung als Bestandteil von kommerziellen Produkten ist
+ohne Zustimmung des Autors untersagt.
+
+It may be distributed by any means, provided that the original files as
+supplied by the author remain intact and no charge is made other than
+for reasonable distribution costs.
+The program may not be distributed as a component of any
+commercial product without a prior license agreement with the author.
+
+
+3. Kontakt mit dem Autor / Contacting then author
+-------------------------------------------------
+Dr. Jürgen Rathlev
+Institut für Experimentelle und Angewandte Physik
+Universität Kiel
+24098 Kiel
+E-Mail: rathlev@physik.uni-kiel.de
+
+
+
+
