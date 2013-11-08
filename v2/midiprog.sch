@@ -13144,7 +13144,7 @@ W = angled&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
-<library name="SparkFun-Connectors-fdb4deb3ddf02d02cecaec8c0f5c972a585683b1">
+<library name="SparkFun-Connectors">
 <description>&lt;h3&gt;SparkFun Electronics' preferred foot prints&lt;/h3&gt;
 In this library you'll find connectors and sockets- basically anything that can be plugged into or onto.&lt;br&gt;&lt;br&gt;
 We've spent an enormous amount of time creating and checking these footprints and parts, but it is the end user's responsibility to ensure correctness and suitablity for a given componet or application. If you enjoy using this library, please buy one of our products at www.sparkfun.com.
@@ -13913,8 +13913,8 @@ We've spent an enormous amount of time creating and checking these footprints an
 <part name="C10" library="rcl" deviceset="CPOL-US" device="E2.5-6" value="10u"/>
 <part name="C11" library="rcl" deviceset="CPOL-US" device="E2.5-6" value="10u"/>
 <part name="U$3" library="7805" deviceset="7805" device=""/>
-<part name="MIDI_OUT" library="SparkFun-Connectors-fdb4deb3ddf02d02cecaec8c0f5c972a585683b1" deviceset="MIDI_CONN_FEMALE_SUPPORT" device=""/>
-<part name="JP1" library="SparkFun-Connectors-fdb4deb3ddf02d02cecaec8c0f5c972a585683b1" deviceset="USB" device="PTH" value="USB-B"/>
+<part name="MIDI_OUT" library="SparkFun-Connectors" deviceset="MIDI_CONN_FEMALE_SUPPORT" device=""/>
+<part name="JP1" library="SparkFun-Connectors" deviceset="USB" device="PTH" value="USB-B"/>
 <part name="C6" library="rcl" deviceset="C-US" device="050-025X075" value=".1"/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="C7" library="rcl" deviceset="C-US" device="050-025X075" value=".1"/>
