@@ -40,7 +40,7 @@ PCB mounted:
 Case mounted:
 -------------
 16x	8mm panel mount LEDs	(67-1168-ND)
-16x	foot switches	http://www.bitcheslovemyswitches.com/#!/~/product/category=5027572&id=10220659
+16x	foot switches	http://www.bitcheslovemyswitches.com/#!/~/product/category=5027572&id=10220659 (shaft diameter is 11.77mm; use a 12mm bit to drill a mounting hole)
 
 1x	toggle switch for power
 1x	+9V DC power jack
