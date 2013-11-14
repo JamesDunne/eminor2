@@ -1,4 +1,3 @@
-
 Case:
 -----
 1x	KB20-7 (Black/White finish)	http://www.lmbheeger.com/products.asp?catid=27
@@ -44,13 +43,18 @@ Case mounted:
 16x	foot switches	http://www.bitcheslovemyswitches.com/#!/~/product/category=5027572&id=10220659
 
 1x	toggle switch for power
-1x	+9V power jack
+1x	+9V DC power jack
+1x	+9V DC power supply (with >= 300mA, NEGATIVE shell, Positive Post)
 
-3x	30 AWG wire wrap wire - BLACK (elecexpress.com: 27001WWBK) ORDER
+Extra from previous job (to use?):
+----------------------------------
+3x	30 AWG wire wrap wire - BLACK (elecexpress.com: 27001WWBK)
 
 1x	220ohm 8 resistor network (4116R-1-221LF)
 1x	100ohm 8 resistor network (4116R-1-101LF)
 
 Mounting:
 ---------
-4x	mounting screws + washers
+4x	mounting screws
+4x 	washers
+4x	standoffs
