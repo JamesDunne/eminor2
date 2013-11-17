@@ -12,7 +12,7 @@ static char sClassName[] = "MyClass";
 static HINSTANCE zhInstance = NULL;
 
 /* scale factor (pixels per inch) */
-const int dpi = 80;
+const int dpi = 75;
 const double inWidth = 20.0;
 const double inHeight = 7.0;
 
@@ -177,7 +177,7 @@ BOOL dpi_TextOut(HDC hdc, double nXStart, double nYStart, LPCTSTR lpString, int 
 /* paint the face plate window */
 void paintFacePlate(HWND hwnd) {
     HDC			hDC;
-    PAINTSTRUCT	Ps;
+    PAINTSTRUCT	ps;
 
     HPEN	penThick, penThin, penGridThick, penGridThin;
     HBRUSH	brsWhite, brsRed, brsDarkGreen, brsGreen, brsBlack;
@@ -185,7 +185,17 @@ void paintFacePlate(HWND hwnd) {
     int		h = 0, v = 0;
     double	inH, inV;
 
-    hDC = BeginPaint(hwnd, &Ps);
+    RECT client_rect;
+    GetClientRect(hwnd, &client_rect);
+    int win_width = client_rect.right - client_rect.left;
+    int win_height = client_rect.bottom + client_rect.left;
+    HDC Memhdc;
+    HDC orighdc;
+    HBITMAP Membitmap;
+    orighdc = BeginPaint(hwnd, &ps);
+    hDC = Memhdc = CreateCompatibleDC(orighdc);
+    Membitmap = CreateCompatibleBitmap(orighdc, win_width, win_height);
+    SelectObject(hDC, Membitmap);
 
     penGridThick = CreatePen(PS_SOLID, 2, RGB(32, 32, 32));
     penGridThin = CreatePen(PS_SOLID, 1, RGB(32, 32, 32));
@@ -208,23 +218,19 @@ void paintFacePlate(HWND hwnd) {
 #if 1
     /* draw grid at 1/4" sections: */
     for (inH = 0; inH <= inWidth; inH += 0.1, h = (h + 1) % 10) {
-        if (h == 0) {
+        if (h == 0)
             SelectObject(hDC, penGridThick);
-        }
-        else {
+        else
             SelectObject(hDC, penGridThin);
-        }
         dpi_MoveTo(hDC, inH, 0);
         dpi_LineTo(hDC, inH, inHeight);
 
         v = 0;
         for (inV = 0; inV <= inHeight; inV += 0.1, v = (v + 1) % 10) {
-            if (v == 0) {
+            if (v == 0)
                 SelectObject(hDC, penGridThick);
-            }
-            else {
+            else
                 SelectObject(hDC, penGridThin);
-            }
             dpi_MoveTo(hDC, 0, inV);
             dpi_LineTo(hDC, inWidth, inV);
         }
@@ -234,7 +240,7 @@ void paintFacePlate(HWND hwnd) {
     for (v = 0; v < 2; ++v) {
         SelectObject(hDC, penThin);
         SelectObject(hDC, brsWhite);
-        /* draw 2 rows of 8 evenly spaced foot-switches */
+        // draw 2 rows of 8 evenly spaced foot-switches
         u16 b = 1 << (v * 8);
         for (h = 0; h < 8; ++h, b <<= 1) {
             SelectObject(hDC, penThick);
@@ -282,7 +288,12 @@ void paintFacePlate(HWND hwnd) {
     DeleteObject(penGridThick);
     DeleteObject(penGridThin);
 
-    EndPaint(hwnd, &Ps);
+    BitBlt(orighdc, 0, 0, win_width, win_height, Memhdc, 0, 0, SRCCOPY);
+    DeleteObject(Membitmap);
+    DeleteDC(Memhdc);
+    DeleteDC(orighdc);
+
+    EndPaint(hwnd, &ps);
 }
 
 /* message processing function: */
