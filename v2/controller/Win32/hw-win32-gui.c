@@ -12,13 +12,14 @@ static char sClassName[] = "MyClass";
 static HINSTANCE zhInstance = NULL;
 
 /* scale factor (pixels per inch) */
-const int dpi = 72;
+const int dpi = 80;
 const double inWidth = 20.0;
 const double inHeight = 7.0;
 
 const double vStart = 2.5;
-const double hSpacing = 2.35;
-const double vSpacing = 2.75;
+const double hLeft = 1.25;
+const double hSpacing = 2.5;
+const double vSpacing = 3.15;
 
 // button labels:
 static char *labels[2][8] = {
@@ -60,8 +61,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     MSG Msg;
     unsigned long result;
 
-    int i;
-
     zhInstance = hInstance;
 
     WndClass.cbSize = sizeof(WNDCLASSEX);
@@ -73,7 +72,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     WndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
     WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-    WndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW);
+    WndClass.hbrBackground = NULL;
+    //WndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW);
     WndClass.lpszMenuName = NULL;
     WndClass.lpszClassName = sClassName;
 
@@ -89,8 +89,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        (int)(inWidth * dpi) + 9,
-        (int)(inHeight * dpi) + 28,
+        (int)(inWidth * dpi) + 16,
+        (int)(inHeight * dpi) + 37,
         NULL,
         NULL,
         zhInstance,
@@ -178,9 +178,8 @@ BOOL dpi_TextOut(HDC hdc, double nXStart, double nYStart, LPCTSTR lpString, int 
 void paintFacePlate(HWND hwnd) {
     HDC			hDC;
     PAINTSTRUCT	Ps;
-    char		num[2];
 
-    HPEN	penThick, penThin;
+    HPEN	penThick, penThin, penGridThick, penGridThin;
     HBRUSH	brsWhite, brsRed, brsDarkGreen, brsGreen, brsBlack;
 
     int		h = 0, v = 0;
@@ -188,8 +187,12 @@ void paintFacePlate(HWND hwnd) {
 
     hDC = BeginPaint(hwnd, &Ps);
 
+    penGridThick = CreatePen(PS_SOLID, 2, RGB(32, 32, 32));
+    penGridThin = CreatePen(PS_SOLID, 1, RGB(32, 32, 32));
+
     penThick = CreatePen(PS_SOLID, 2, RGB(128, 128, 128));
     penThin = CreatePen(PS_SOLID, 1, RGB(128, 128, 128));
+
     brsWhite = CreateSolidBrush(RGB(192, 192, 192));
     brsRed = CreateSolidBrush(RGB(250, 25, 5));
     brsDarkGreen = CreateSolidBrush(RGB(8, 30, 3));
@@ -202,25 +205,25 @@ void paintFacePlate(HWND hwnd) {
     SetBkMode(hDC, TRANSPARENT);
     SetTextColor(hDC, RGB(192, 192, 192));
 
-#if 0
+#if 1
     /* draw grid at 1/4" sections: */
-    for (inH = 0; inH <= inWidth; inH += 0.25, h = (h + 1) % 4) {
+    for (inH = 0; inH <= inWidth; inH += 0.1, h = (h + 1) % 10) {
         if (h == 0) {
-            SelectObject(hDC, penThick);
+            SelectObject(hDC, penGridThick);
         }
         else {
-            SelectObject(hDC, penThin);
+            SelectObject(hDC, penGridThin);
         }
         dpi_MoveTo(hDC, inH, 0);
         dpi_LineTo(hDC, inH, inHeight);
 
         v = 0;
-        for (inV = 0; inV <= inHeight; inV += 0.25, v = (v + 1) % 4) {
+        for (inV = 0; inV <= inHeight; inV += 0.1, v = (v + 1) % 10) {
             if (v == 0) {
-                SelectObject(hDC, penThick);
+                SelectObject(hDC, penGridThick);
             }
             else {
-                SelectObject(hDC, penThin);
+                SelectObject(hDC, penGridThin);
             }
             dpi_MoveTo(hDC, 0, inV);
             dpi_LineTo(hDC, inWidth, inV);
@@ -235,15 +238,15 @@ void paintFacePlate(HWND hwnd) {
         u16 b = 1 << (v * 8);
         for (h = 0; h < 8; ++h, b <<= 1) {
             SelectObject(hDC, penThick);
-            dpi_CenterEllipse(hDC, 1.5 + (h * hSpacing), vStart + (v * vSpacing), 0.34026, 0.34026);
+            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), 0.34026, 0.34026);
             SelectObject(hDC, penThin);
-            dpi_CenterEllipse(hDC, 1.5 + (h * hSpacing), vStart + (v * vSpacing), 0.30, 0.30);
+            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), 0.30, 0.30);
             if (fsw_pushed & b) {
                 SelectObject(hDC, brsRed);
-                dpi_CenterEllipse(hDC, 1.5 + (h * hSpacing), vStart + (v * vSpacing), 0.25, 0.25);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), 0.25, 0.25);
                 SelectObject(hDC, brsWhite);
             }
-            dpi_TextOut(hDC, 1.320 + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], strlen(labels[v][h]));
+            dpi_TextOut(hDC, hLeft - 0.18 + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], strlen(labels[v][h]));
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
@@ -254,7 +257,7 @@ void paintFacePlate(HWND hwnd) {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if ((led_state[v] & b) == 0) {
-                dpi_CenterEllipse(hDC, 1.5 + (h * hSpacing), vStart - 0.7 + (v * vSpacing), 0.2032, 0.2032);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), 0.2032, 0.2032);
             }
         }
 
@@ -263,15 +266,21 @@ void paintFacePlate(HWND hwnd) {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if (led_state[v] & b) {
-                dpi_CenterEllipse(hDC, 1.5 + (h * hSpacing), vStart - 0.7 + (v * vSpacing), 0.2032, 0.2032);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), 0.2032, 0.2032);
             }
         }
     }
 
+    DeleteObject(brsWhite);
+    DeleteObject(brsDarkGreen);
     DeleteObject(brsRed);
     DeleteObject(brsGreen);
+    DeleteObject(brsBlack);
+
     DeleteObject(penThick);
     DeleteObject(penThin);
+    DeleteObject(penGridThick);
+    DeleteObject(penGridThin);
 
     EndPaint(hwnd, &Ps);
 }
