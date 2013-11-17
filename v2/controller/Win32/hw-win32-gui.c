@@ -111,8 +111,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	for (i = 0; i < 8; ++i) {
 		pushed[i] = 0;
-		led_active[i] = 0;
 	}
+    for (i = 0; i < 4; ++i) {
+        led_active[i] = 0;
+    }
 
 	/* display the possible MIDI output devices: */
 	show_midi_output_devices();
@@ -143,15 +145,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 /* scaled drawing routines: */
 
 BOOL dpi_MoveTo(HDC hdc, double X, double Y) {
-	MoveToEx(hdc, (int)(X * dpi), (int)(Y * dpi), NULL);
+	return MoveToEx(hdc, (int)(X * dpi), (int)(Y * dpi), NULL);
 }
 
 BOOL dpi_LineTo(HDC hdc, double X, double Y) {
-	LineTo(hdc, (int)(X * dpi), (int)(Y * dpi));
+    return LineTo(hdc, (int)(X * dpi), (int)(Y * dpi));
 }
 
 BOOL dpi_Rectangle(HDC hdc, double left, double top, double right, double bottom) {
-	Rectangle(hdc,
+    return Rectangle(hdc,
 		(int)(left * dpi),
 		(int)(top * dpi),
 		(int)(right * dpi),
@@ -160,7 +162,7 @@ BOOL dpi_Rectangle(HDC hdc, double left, double top, double right, double bottom
 }
 
 BOOL dpi_CenterEllipse(HDC hdc, double cX, double cY, double rW, double rH) {
-	Ellipse(hdc,
+    return Ellipse(hdc,
 		(int)((cX - rW) * dpi),
 		(int)((cY - rH) * dpi),
 		(int)((cX + rW) * dpi),
@@ -169,7 +171,7 @@ BOOL dpi_CenterEllipse(HDC hdc, double cX, double cY, double rW, double rH) {
 }
 
 BOOL dpi_TextOut(HDC hdc, double nXStart, double nYStart, LPCTSTR lpString, int cbString) {
-	TextOut(hdc, (int)(nXStart * dpi), (int)(nYStart * dpi), lpString, cbString);
+    return TextOut(hdc, (int)(nXStart * dpi), (int)(nYStart * dpi), lpString, cbString);
 }
 
 /* paint the face plate window */
@@ -177,6 +179,8 @@ void paintFacePlate(HWND hwnd) {
 	HDC			hDC;
 	PAINTSTRUCT	Ps;
 	char		num[2];
+    char        *labels1[4] = { "DLY", "CHO", "FLT", "PIT" };
+    char        *labels2[4] = { "1", "2", "3", "4" };
 
 	HFONT	fontLED;
 	HPEN	penThick, penThin;
@@ -193,8 +197,9 @@ void paintFacePlate(HWND hwnd) {
 		0,
 		0,
 		FW_SEMIBOLD, FALSE, FALSE, FALSE,
-		ANSI_CHARSET, OUT_DEFAULT_PRECIS,
-		CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+		ANSI_CHARSET,
+        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        ANTIALIASED_QUALITY,
 		DEFAULT_PITCH | FF_ROMAN,
 		"Courier New"
 	);
@@ -235,7 +240,7 @@ void paintFacePlate(HWND hwnd) {
 	SelectObject(hDC, penThin);
 	SelectObject(hDC, brsWhite);
 
-	/* draw 4x evenly spaced foot-switches for presets 1-4 */
+	/* draw 4x evenly spaced foot-switches for controls 1-4 */
 	for (hCount = 0; hCount < 4; ++hCount) {
 		SelectObject(hDC, penThick);
 		dpi_CenterEllipse(hDC, 1.5 + (hCount * 2.0), 3.5, 0.34026, 0.34026);
@@ -246,11 +251,10 @@ void paintFacePlate(HWND hwnd) {
 			dpi_CenterEllipse(hDC, 1.5 + (hCount * 2.0), 3.5, 0.25, 0.25);
 			SelectObject(hDC, brsWhite);
 		}
-		sprintf(num, "%1d", hCount + 1);
-		dpi_TextOut(hDC, 1.475 + (hCount * 2.0), 4.0, num, 1);
+        dpi_TextOut(hDC, 1.320 + (hCount * 2.0), 4.0, labels1[hCount], strlen(labels1[hCount]));
 	}
 
-	/* draw 4x evenly spaced foot-switches for DEC, INC, ENTER, NEXT */
+	/* draw 4x evenly spaced foot-switches for presets 1-4 */
 	for (hCount = 0; hCount < 4; ++hCount) {
 		SelectObject(hDC, penThick);
 		dpi_CenterEllipse(hDC, 1.5 + (hCount * 2.0), 5.5, 0.34026, 0.34026);
@@ -261,13 +265,16 @@ void paintFacePlate(HWND hwnd) {
 			dpi_CenterEllipse(hDC, 1.5 + (hCount * 2.0), 5.5, 0.25, 0.25);
 			SelectObject(hDC, brsWhite);
 		}
+        dpi_TextOut(hDC, 1.475 + (hCount * 2.0), 6.0, labels2[hCount], strlen(labels2[hCount]));
 	}
 
+#if 0
 	/* label the DEC, INC, ENTER, NEXT foot-switches */
-	dpi_TextOut(hDC, 1.380, 6.0, "DEC", 3);
-	dpi_TextOut(hDC, 3.410, 6.0, "INC", 3);
-	dpi_TextOut(hDC, 5.300, 6.0, "ENTER", 5);
-	dpi_TextOut(hDC, 7.325, 6.0, "NEXT", 4);
+	dpi_TextOut(hDC, 1.380, 6.0, "1", 3);
+	dpi_TextOut(hDC, 3.410, 6.0, "2", 3);
+	dpi_TextOut(hDC, 5.300, 6.0, "3", 5);
+	dpi_TextOut(hDC, 7.325, 6.0, "4", 4);
+#endif
 
 	/* draw 4x evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches */
 	SelectObject(hDC, penThin);
@@ -400,14 +407,14 @@ void leds_show_1digit(u8 value) {
 
 /* Poll up to 28 foot-switch toggles simultaneously.  DEC INC ENTER NEXT map to 28-31 bit positions. */
 u32 fsw_poll() {
-	return ((u32)pushed[0] << FSB_PRESET_1) |
-		   ((u32)pushed[1] << FSB_PRESET_2) |
-		   ((u32)pushed[2] << FSB_PRESET_3) |
-		   ((u32)pushed[3] << FSB_PRESET_4) |
-		   ((u32)pushed[4] << FSB_DEC) |
-		   ((u32)pushed[5] << FSB_INC) |
-		   ((u32)pushed[6] << FSB_ENTER) |
-		   ((u32)pushed[7] << FSB_NEXT);
+	return ((u32)pushed[0] << FSB_CONTROL_1) |
+		   ((u32)pushed[1] << FSB_CONTROL_2) |
+		   ((u32)pushed[2] << FSB_CONTROL_3) |
+		   ((u32)pushed[3] << FSB_CONTROL_4) |
+		   ((u32)pushed[4] << FSB_PRESET_1) |
+		   ((u32)pushed[5] << FSB_PRESET_2) |
+		   ((u32)pushed[6] << FSB_PRESET_3) |
+		   ((u32)pushed[7] << FSB_PRESET_4);
 }
 
 /* Set currently active program foot-switch's LED indicator and disable all others */
