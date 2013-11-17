@@ -17,14 +17,14 @@ const double inWidth = 20.0;
 const double inHeight = 7.0;
 
 const double vStart = 2.5;
-const double hLeft = 1.25;
-const double hSpacing = 2.5;
+const double hLeft = 1.0;
+const double hSpacing = 2.57;
 const double vSpacing = 3.15;
 
 // button labels:
 static char *labels[2][8] = {
     { "CMP", "FLT", "PIT", "CHO", "DLY", "RVB", "MUTE", "PREV" },
-    {  "1",   "1S",  "2",   "2S",  "3",   "3S", "TAP ", "NEXT" }
+    { "1", "1S", "2", "2S", "3", "3S", "TAP ", "NEXT" }
 };
 
 /* foot-switch pushed state */
@@ -163,8 +163,8 @@ BOOL dpi_Rectangle(HDC hdc, double left, double top, double right, double bottom
 
 BOOL dpi_CenterEllipse(HDC hdc, double cX, double cY, double rW, double rH) {
     return Ellipse(hdc,
-        (int)((cX - rW) * dpi) - 1,
-        (int)((cY - rH) * dpi) - 1,
+        (int)((cX - rW) * dpi),
+        (int)((cY - rH) * dpi),
         (int)((cX + rW) * dpi),
         (int)((cY + rH) * dpi)
         );
@@ -216,7 +216,7 @@ void paintFacePlate(HWND hwnd) {
     SetTextColor(hDC, RGB(192, 192, 192));
 
 #if 1
-    /* draw grid at 1/4" sections: */
+    /* draw grid: */
     for (inH = 0; inH <= inWidth; inH += 0.1, h = (h + 1) % 10) {
         if (h == 0)
             SelectObject(hDC, penGridThick);
@@ -277,6 +277,8 @@ void paintFacePlate(HWND hwnd) {
         }
     }
 
+    BitBlt(orighdc, 0, 0, win_width, win_height, Memhdc, 0, 0, SRCCOPY);
+
     DeleteObject(brsWhite);
     DeleteObject(brsDarkGreen);
     DeleteObject(brsRed);
@@ -288,7 +290,6 @@ void paintFacePlate(HWND hwnd) {
     DeleteObject(penGridThick);
     DeleteObject(penGridThin);
 
-    BitBlt(orighdc, 0, 0, win_width, win_height, Memhdc, 0, 0, SRCCOPY);
     DeleteObject(Membitmap);
     DeleteDC(Memhdc);
     DeleteDC(orighdc);
@@ -321,23 +322,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
         /* only fire if the previous button state was UP (i.e. ignore autorepeat messages) */
         if ((lParam & (1 << 30)) == 0) {
             switch (wParam) {
-                case 'Q': case 'q': fsw_pushed |= FSM_TOP_1; break;
-                case 'W': case 'w': fsw_pushed |= FSM_TOP_2; break;
-                case 'E': case 'e': fsw_pushed |= FSM_TOP_3; break;
-                case 'R': case 'r': fsw_pushed |= FSM_TOP_4; break;
-                case 'T': case 't': fsw_pushed |= FSM_TOP_5; break;
-                case 'Y': case 'y': fsw_pushed |= FSM_TOP_6; break;
-                case 'U': case 'u': fsw_pushed |= FSM_TOP_7; break;
-                case 'I': case 'i': fsw_pushed |= FSM_TOP_8; break;
+            case 'Q': case 'q': fsw_pushed |= FSM_TOP_1; break;
+            case 'W': case 'w': fsw_pushed |= FSM_TOP_2; break;
+            case 'E': case 'e': fsw_pushed |= FSM_TOP_3; break;
+            case 'R': case 'r': fsw_pushed |= FSM_TOP_4; break;
+            case 'T': case 't': fsw_pushed |= FSM_TOP_5; break;
+            case 'Y': case 'y': fsw_pushed |= FSM_TOP_6; break;
+            case 'U': case 'u': fsw_pushed |= FSM_TOP_7; break;
+            case 'I': case 'i': fsw_pushed |= FSM_TOP_8; break;
 
-                case 'A': case 'a': fsw_pushed |= FSM_BOT_1; break;
-                case 'S': case 's': fsw_pushed |= FSM_BOT_2; break;
-                case 'D': case 'd': fsw_pushed |= FSM_BOT_3; break;
-                case 'F': case 'f': fsw_pushed |= FSM_BOT_4; break;
-                case 'G': case 'g': fsw_pushed |= FSM_BOT_5; break;
-                case 'H': case 'h': fsw_pushed |= FSM_BOT_6; break;
-                case 'J': case 'j': fsw_pushed |= FSM_BOT_7; break;
-                case 'K': case 'k': fsw_pushed |= FSM_BOT_8; break;
+            case 'A': case 'a': fsw_pushed |= FSM_BOT_1; break;
+            case 'S': case 's': fsw_pushed |= FSM_BOT_2; break;
+            case 'D': case 'd': fsw_pushed |= FSM_BOT_3; break;
+            case 'F': case 'f': fsw_pushed |= FSM_BOT_4; break;
+            case 'G': case 'g': fsw_pushed |= FSM_BOT_5; break;
+            case 'H': case 'h': fsw_pushed |= FSM_BOT_6; break;
+            case 'J': case 'j': fsw_pushed |= FSM_BOT_7; break;
+            case 'K': case 'k': fsw_pushed |= FSM_BOT_8; break;
             }
             /* TODO: fix to only redraw affected button */
             InvalidateRect(hwnd, NULL, TRUE);
@@ -346,30 +347,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
     case WM_KEYUP:
         /* handle toggle button up */
         switch (wParam) {
-            case 'Q': case 'q': fsw_pushed &= ~FSM_TOP_1; break;
-            case 'W': case 'w': fsw_pushed &= ~FSM_TOP_2; break;
-            case 'E': case 'e': fsw_pushed &= ~FSM_TOP_3; break;
-            case 'R': case 'r': fsw_pushed &= ~FSM_TOP_4; break;
-            case 'T': case 't': fsw_pushed &= ~FSM_TOP_5; break;
-            case 'Y': case 'y': fsw_pushed &= ~FSM_TOP_6; break;
-            case 'U': case 'u': fsw_pushed &= ~FSM_TOP_7; break;
-            case 'I': case 'i': fsw_pushed &= ~FSM_TOP_8; break;
+        case 'Q': case 'q': fsw_pushed &= ~FSM_TOP_1; break;
+        case 'W': case 'w': fsw_pushed &= ~FSM_TOP_2; break;
+        case 'E': case 'e': fsw_pushed &= ~FSM_TOP_3; break;
+        case 'R': case 'r': fsw_pushed &= ~FSM_TOP_4; break;
+        case 'T': case 't': fsw_pushed &= ~FSM_TOP_5; break;
+        case 'Y': case 'y': fsw_pushed &= ~FSM_TOP_6; break;
+        case 'U': case 'u': fsw_pushed &= ~FSM_TOP_7; break;
+        case 'I': case 'i': fsw_pushed &= ~FSM_TOP_8; break;
 
-            case 'A': case 'a': fsw_pushed &= ~FSM_BOT_1; break;
-            case 'S': case 's': fsw_pushed &= ~FSM_BOT_2; break;
-            case 'D': case 'd': fsw_pushed &= ~FSM_BOT_3; break;
-            case 'F': case 'f': fsw_pushed &= ~FSM_BOT_4; break;
-            case 'G': case 'g': fsw_pushed &= ~FSM_BOT_5; break;
-            case 'H': case 'h': fsw_pushed &= ~FSM_BOT_6; break;
-            case 'J': case 'j': fsw_pushed &= ~FSM_BOT_7; break;
-            case 'K': case 'k': fsw_pushed &= ~FSM_BOT_8; break;
+        case 'A': case 'a': fsw_pushed &= ~FSM_BOT_1; break;
+        case 'S': case 's': fsw_pushed &= ~FSM_BOT_2; break;
+        case 'D': case 'd': fsw_pushed &= ~FSM_BOT_3; break;
+        case 'F': case 'f': fsw_pushed &= ~FSM_BOT_4; break;
+        case 'G': case 'g': fsw_pushed &= ~FSM_BOT_5; break;
+        case 'H': case 'h': fsw_pushed &= ~FSM_BOT_6; break;
+        case 'J': case 'j': fsw_pushed &= ~FSM_BOT_7; break;
+        case 'K': case 'k': fsw_pushed &= ~FSM_BOT_8; break;
         }
         /* TODO: fix to only redraw affected button */
         InvalidateRect(hwnd, NULL, TRUE);
         break;
     case WM_TIMER:
         switch (wParam) {
-            case IDT_TIMER1: controller_10msec_timer(); break;
+        case IDT_TIMER1: controller_10msec_timer(); break;
         }
         break;
     default:
