@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.0" id="seven-segment-">
+<style type="text/css" id="style">
+polygon {fill-opacity: 0.75; fill-rule: evenodd; stroke: white; stroke-width: 0.25; stroke-opacity: 1.0; stroke-linecap: butt; stroke-linejoin: miter;}
+</style>
+<g id="" transform="scale(16) translate(1, 1)">
+	<desc>Seven-segment (LED) display, segments  lit.</desc>
+	<polygon id="a" points=" 1, 1  2, 0  8, 0  9, 1  8, 2  2, 2" fill="#EEE"/>
+	<polygon id="b" points=" 9, 1 10, 2 10, 8  9, 9  8, 8  8, 2" fill="#EEE"/>
+	<polygon id="c" points=" 9, 9 10,10 10,16  9,17  8,16  8,10" fill="#EEE"/>
+	<polygon id="d" points=" 9,17  8,18  2,18  1,17  2,16  8,16" fill="#EEE"/>
+	<polygon id="e" points=" 1,17  0,16  0,10  1, 9  2,10  2,16" fill="#EEE"/>
+	<polygon id="f" points=" 1, 9  0, 8  0, 2  1, 1  2, 2  2, 8" fill="#EEE"/>
+	<polygon id="g" points=" 1, 9  2, 8  8, 8  9, 9  8,10  2,10" fill="#EEE"/>
+</g>
+</svg>

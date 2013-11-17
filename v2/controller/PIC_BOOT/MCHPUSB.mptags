@@ -1,0 +1,340 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.5.4	//
+!_TAG_REVISION_NAME	MCHPTags	//
+!_TAG_REVISION_VERSION	6.0.1	//
+ADDRESS_STATE::5	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	63;"	d	line:63
+ADR	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	189;"	p	line:189	file:	signature:((int)counter) << 6
+ADR	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	191;"	m	line:191	struct:_BOOT_DATA_PACKET::<anonymous>
+ADR	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	124;"	m	line:124	struct:_BDT::<anonymous>
+ADRH	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	118;"	m	line:118	struct:_BDT::<anonymous>
+ADRL	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	117;"	m	line:117	struct:_BDT::<anonymous>
+ADR_PENDING_STATE::4	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	62;"	d	line:62
+ATTACHED_STATE::1	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	59;"	d	line:59
+BC8	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	85;"	m	line:85	struct:_BD_STAT::<anonymous>
+BC8	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	95;"	m	line:95	struct:_BD_STAT::<anonymous>
+BC9	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	86;"	m	line:86	struct:_BD_STAT::<anonymous>
+BC9	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	96;"	m	line:96	struct:_BD_STAT::<anonymous>
+BDT	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	126;"	t	line:126
+BD_STAT	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	109;"	t	line:109
+BOOL	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	150;"	t	line:150
+BOOT_BD_IN::ep1Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	71;"	d	line:71
+BOOT_BD_OUT::ep1Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	70;"	d	line:70
+BOOT_DATA_PACKET	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	200;"	t	line:200
+BOOT_EP_SIZE::64	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	72;"	d	line:72
+BOOT_H	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	37;"	d	line:37
+BOOT_INTF_ID::0x00	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	68;"	d	line:68
+BOOT_LOAD_MODE	D:\work\midicontroller\svn\trunk\PIC_BOOT\main.c	133;"	f	line:133	signature:(void)
+BOOT_LOAD_MODE	D:\work\midicontroller\svn\trunk\PIC_BOOT\main.c	67;"	p	line:67	file:	signature:(void)
+BOOT_UEP::UEP1	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	69;"	d	line:69
+BSTALL	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	87;"	m	line:87	struct:_BD_STAT::<anonymous>
+BYTE	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	58;"	t	line:58
+BootInitEP	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	87;"	f	line:87	signature:(void)
+BootInitEP	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	236;"	p	line:236	signature:(void)
+BootService	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	237;"	f	line:237	signature:(void)
+BootService	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	237;"	p	line:237	signature:(void)
+Byte0	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	103;"	m	line:103	struct:_DWORD::<anonymous>
+Byte0	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	70;"	m	line:70	struct:_WORD::<anonymous>
+Byte1	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	104;"	m	line:104	struct:_DWORD::<anonymous>
+Byte1	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	71;"	m	line:71	struct:_WORD::<anonymous>
+Byte2	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	105;"	m	line:105	struct:_DWORD::<anonymous>
+Byte3	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	106;"	m	line:106	struct:_DWORD::<anonymous>
+CARD_DETECT::PORTBbits.RB4	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	116;"	d	line:116
+CFG01::romstruct\	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.h	49;"	d	line:49
+CHECKSUM_CHECK_EN	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	217;"	d	line:217
+CHECKSUM_CHECK_EN	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	222;"	d	line:222
+CHECKSUM_CHECK_EN	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	227;"	d	line:227
+CLEAR_RAM	D:\work\midicontroller\svn\trunk\PIC\config.asm	48;"	l	line:48
+CMD	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	180;"	m	line:180	struct:_BOOT_DATA_PACKET::<anonymous>
+CONFIGURED_STATE::6	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	64;"	d	line:64
+Cnt	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	116;"	m	line:116	struct:_BDT::<anonymous>
+CtrlTrfData	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	269;"	v	line:269
+DATA_SIZE::(BOOT_EP_SIZE-OVER_HEAD)	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	161;"	d	line:161
+DEFAULT_STATE::3	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	61;"	d	line:61
+DETACHED_STATE::0	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	58;"	d	line:58
+DTS	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	91;"	m	line:91	struct:_BD_STAT::<anonymous>
+DTSEN	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	88;"	m	line:88	struct:_BD_STAT::<anonymous>
+DWORD	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	117;"	t	line:117
+EECON1_RD::EECON1bits.RD	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	60;"	d	line:60
+EECON1_WR::EECON1bits.WR	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	61;"	d	line:61
+ENCRYPTION_ENABLED	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	218;"	d	line:218
+ENCRYPTION_ENABLED	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	228;"	d	line:228
+ENCRYPTION_MASK::0x19	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	231;"	d	line:231
+EP0_BUFF_SIZE::8	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	38;"	d	line:38
+ERASE_FLASH	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	173;"	e	line:173	enum:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+EraseProgMem	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	180;"	f	line:180	signature:(void)
+FAIL::FALSE	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	153;"	d	line:153
+FALSE	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	150;"	e	line:150	enum:_BOOL
+HITECH_C18	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	46;"	d	line:46
+HighB	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	76;"	m	line:76	struct:_WORD::<anonymous>
+INCDIS	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	89;"	m	line:89	struct:_BD_STAT::<anonymous>
+INPUT_PIN::1	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	54;"	d	line:54
+IO_CFG_H	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	48;"	d	line:48
+KEN	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	90;"	m	line:90	struct:_BD_STAT::<anonymous>
+LAB_TEST	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	206;"	d	line:206
+LOWER_LSB::(a)((a).v[0])	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	118;"	d	line:118
+LOWER_MSB::(a)((a).v[1])	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	119;"	d	line:119
+LSB::(a)((a).v[0])	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	83;"	d	line:83
+LowB	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	75;"	m	line:75	struct:_WORD::<anonymous>
+MAJOR_VERSION::0x01	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	96;"	d	line:96
+MAX_EP_NUMBER::1	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	74;"	d	line:74
+MAX_NUM_INT::1	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	39;"	d	line:39
+MCHP_C18	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	48;"	d	line:48
+MINOR_VERSION::0x00	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	95;"	d	line:95
+MODE_PP::_PPBM0	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	42;"	d	line:42
+MSB::(a)((a).v[1])	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	84;"	d	line:84
+MUID_NULL::0	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	59;"	d	line:59
+MUID_USB9::1	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	60;"	d	line:60
+OK::TRUE	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	152;"	d	line:152
+OUTPUT_PIN::0	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	55;"	d	line:55
+OVER_HEAD::5	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	160;"	d	line:160
+PID	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	106;"	m	line:106	struct:_BD_STAT::<anonymous>
+PID0	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	97;"	m	line:97	struct:_BD_STAT::<anonymous>
+PID1	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	98;"	m	line:98	struct:_BD_STAT::<anonymous>
+PID2	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	99;"	m	line:99	struct:_BD_STAT::<anonymous>
+PID3	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	100;"	m	line:100	struct:_BD_STAT::<anonymous>
+POINTER	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	148;"	t	line:148
+POWERED_STATE::2	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	60;"	d	line:60
+RAMCLEAR1	D:\work\midicontroller\svn\trunk\PIC\config.asm	52;"	l	line:52
+READ_CONFIG	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	176;"	e	line:176	enum:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+READ_EEDATA	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	174;"	e	line:174	enum:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+READ_FLASH	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	171;"	e	line:171	enum:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+READ_PROTECT	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	219;"	d	line:219
+READ_PROTECT	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	224;"	d	line:224
+READ_PROTECT	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	229;"	d	line:229
+READ_VERSION	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	170;"	e	line:170	enum:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+REMAPPED_RESET_VECTOR::0xA00	D:\work\midicontroller\svn\trunk\PIC_BOOT\main.c	45;"	d	line:45	file:
+RESET	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	179;"	e	line:179	enum:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+RM_HIGH_INTERRUPT_VECTOR::0x000A08	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	88;"	d	line:88
+RM_LOW_INTERRUPT_VECTOR::0x000A18	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	89;"	d	line:89
+RM_RESET_VECTOR::0x000A00	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	87;"	d	line:87
+ReadEE	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	197;"	f	line:197	signature:(void)
+ReadProgMem	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	128;"	f	line:128	signature:(void)
+ReadVersion	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	122;"	f	line:122	signature:(void)
+RemoteWakeup	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	76;"	m	line:76	struct:_USB_DEVICE_STATUS::<anonymous>
+SENDING_RESP::0x01	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	100;"	d	line:100
+SetupPkt	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	268;"	v	line:268
+StartOfLine	D:\work\midicontroller\svn\trunk\PIC_BOOT\main.c	102;"	p	line:102	file:	signature:(void)
+StartWrite	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	112;"	f	line:112	signature:(void)
+Stat	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	115;"	m	line:115	struct:_BDT::<anonymous>
+TRIS_CARD_DETECT::TRISBbits.TRISB4	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	115;"	d	line:115
+TRIS_WRITE_DETECT::TRISAbits.TRISA4	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	118;"	d	line:118
+TRUE	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	150;"	e	line:150	enum:_BOOL
+TYPEDEFS_H	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	38;"	d	line:38
+Temp0	D:\work\midicontroller\svn\trunk\PIC_BOOT\main.c	107;"	l	line:107
+UCFG_VAL::_PUEN|_TRINT|_FS|MODE_PP	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	43;"	d	line:43
+UOWN	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	102;"	m	line:102	struct:_BD_STAT::<anonymous>
+UOWN	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	92;"	m	line:92	struct:_BD_STAT::<anonymous>
+UPDATE_LED	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	178;"	e	line:178	enum:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+UPPER_LSB::(a)((a).v[2])	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	120;"	d	line:120
+UPPER_MSB::(a)((a).v[3])	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	121;"	d	line:121
+USBCFG_H	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbcfg.h	35;"	d	line:35
+USBCheckBusStatus	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	87;"	f	line:87	signature:(void)
+USBCheckStdRequest	D:\work\midicontroller\svn\trunk\PIC_BOOT\usb9.c	79;"	f	line:79	signature:(void)
+USBCtrlEPService	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	103;"	f	line:103	signature:(void)
+USBCtrlEPServiceComplete	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	396;"	f	line:396	signature:(void)
+USBCtrlTrfInHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	246;"	f	line:246	signature:(void)
+USBCtrlTrfInHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	79;"	p	line:79	file:	signature:(void)
+USBCtrlTrfOutHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	201;"	f	line:201	signature:(void)
+USBCtrlTrfOutHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	78;"	p	line:78	file:	signature:(void)
+USBCtrlTrfRxService	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	345;"	f	line:345	signature:(void)
+USBCtrlTrfSetupHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	158;"	f	line:158	signature:(void)
+USBCtrlTrfSetupHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	77;"	p	line:77	file:	signature:(void)
+USBCtrlTrfTxService	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	285;"	f	line:285	signature:(void)
+USBDSC_H	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.h	40;"	d	line:40
+USBDriverService	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	121;"	f	line:121	signature:(void)
+USBErrorHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	67;"	p	line:67	file:	signature:(void)
+USBMMAP_H	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	38;"	d	line:38
+USBModuleDisable	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	59;"	p	line:59	file:	signature:(void)
+USBModuleEnable	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	58;"	p	line:58	file:	signature:(void)
+USBPrepareForNextSetupTrf	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	504;"	f	line:504	signature:(void)
+USBProtocolResetHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	226;"	f	line:226	signature:(void)
+USBProtocolResetHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	64;"	p	line:64	file:	signature:(void)
+USBStallHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	66;"	p	line:66	file:	signature:(void)
+USBStdFeatureReqHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usb9.c	59;"	p	line:59	file:	signature:(void)
+USBStdGetDscHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usb9.c	56;"	p	line:56	file:	signature:(void)
+USBStdGetStatusHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usb9.c	58;"	p	line:58	file:	signature:(void)
+USBStdSetCfgHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usb9.c	210;"	f	line:210	signature:(void)
+USBStdSetCfgHandler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usb9.c	57;"	p	line:57	file:	signature:(void)
+USBSuspend	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	61;"	p	line:61	file:	signature:(void)
+USBWakeFromSuspend	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	62;"	p	line:62	file:	signature:(void)
+USB_DEVICE_STATUS	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	79;"	t	line:79
+USB_H	D:\work\midicontroller\svn\trunk\PIC_BOOT\usb.h	37;"	d	line:37
+USB_SOF_Handler	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdrv.c	65;"	p	line:65	file:	signature:(void)
+WAIT_FOR_CMD::0x00	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	99;"	d	line:99
+WORD	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	82;"	t	line:82
+WRITE_CONFIG	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	177;"	e	line:177	enum:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+WRITE_DETECT::PORTAbits.RA4	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	119;"	d	line:119
+WRITE_EEDATA	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	175;"	e	line:175	enum:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+WRITE_FLASH	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	172;"	e	line:172	enum:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+Word0	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	110;"	m	line:110	struct:_DWORD::<anonymous>
+Word1	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	111;"	m	line:111	struct:_DWORD::<anonymous>
+WriteConfig	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	223;"	f	line:223	signature:(void)
+WriteEE	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	209;"	f	line:209	signature:(void)
+WriteProgMem	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	150;"	f	line:150	signature:(void)
+_BDT	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	111;"	u	line:111
+_BD_STAT	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	81;"	u	line:81
+_BOOL	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	150;"	g	line:150
+_BOOT_DATA_PACKET	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	163;"	u	line:163
+_BSTALL::0x04	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	47;"	d	line:47
+_BYTE	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	44;"	u	line:44
+_DAT0::0x00	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	51;"	d	line:51
+_DAT1::0x40	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	52;"	d	line:52
+_DTSEN::0x08	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	48;"	d	line:48
+_DTSMASK::0x40	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	53;"	d	line:53
+_DWORD	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	86;"	u	line:86
+_INCDIS::0x10	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	49;"	d	line:49
+_KEN::0x20	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	50;"	d	line:50
+_POINTER	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	125;"	u	line:125
+_RAM::0	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	67;"	d	line:67
+_ROM::1	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	68;"	d	line:68
+_UCPU::0x00	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	55;"	d	line:55
+_USB_DEVICE_STATUS	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	71;"	u	line:71
+_USIE::0x80	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	54;"	d	line:54
+_WORD	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	60;"	u	line:60
+_byte	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	165;"	m	line:165	union:_BOOT_DATA_PACKET
+_byte	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	46;"	m	line:46	union:_BYTE
+_byte	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	73;"	m	line:73	union:_USB_DEVICE_STATUS
+_byte	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	83;"	m	line:83	union:_BD_STAT
+_dword	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	88;"	m	line:88	union:_DWORD
+_high_ISR	D:\work\midicontroller\svn\trunk\PIC_BOOT\main.c	72;"	f	line:72	signature:(void)
+_low_ISR	D:\work\midicontroller\svn\trunk\PIC_BOOT\main.c	78;"	f	line:78	signature:(void)
+_word	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	133;"	m	line:133	union:_POINTER
+_word	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	62;"	m	line:62	union:_WORD
+b0	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	49;"	m	line:49	struct:_BYTE::<anonymous>
+b1	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	50;"	m	line:50	struct:_BYTE::<anonymous>
+b2	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	51;"	m	line:51	struct:_BYTE::<anonymous>
+b3	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	52;"	m	line:52	struct:_BYTE::<anonymous>
+b4	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	53;"	m	line:53	struct:_BYTE::<anonymous>
+b5	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	54;"	m	line:54	struct:_BYTE::<anonymous>
+b6	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	55;"	m	line:55	struct:_BYTE::<anonymous>
+b7	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	56;"	m	line:56	struct:_BYTE::<anonymous>
+bDscType	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.c	227;"	m	line:227	file:
+bDscType	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.h	59;"	m	line:59
+bHigh	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	130;"	m	line:130	struct:_POINTER::<anonymous>
+bLength	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.c	227;"	m	line:227	file:
+bLength	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.h	59;"	m	line:59
+bLow	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	129;"	m	line:129	struct:_POINTER::<anonymous>
+bRam	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	137;"	m	line:137	union:_POINTER
+bRom	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	142;"	m	line:142	union:_POINTER
+big_counter	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	56;"	v	line:56
+byte	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	40;"	t	line:40
+byte0	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	65;"	m	line:65	struct:_WORD::<anonymous>
+byte0	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	91;"	m	line:91	struct:_DWORD::<anonymous>
+byte1	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	66;"	m	line:66	struct:_WORD::<anonymous>
+byte1	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	92;"	m	line:92	struct:_DWORD::<anonymous>
+byte2	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	93;"	m	line:93	struct:_DWORD::<anonymous>
+byte3	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	94;"	m	line:94	struct:_DWORD::<anonymous>
+byteTemp	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	53;"	v	line:53
+byte_to_read	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	347;"	l	line:347
+byte_to_send	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	287;"	l	line:287
+cd01	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.h	50;"	v	line:50
+counter	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	52;"	v	line:52
+cs_sdmmc::LATBbits.LATB3	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	112;"	d	line:112
+cs_temp_sensor::LATBbits.LATB2	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	109;"	d	line:109
+ctrl_trf_mem	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.h	77;"	m	line:77	struct:_USB_DEVICE_STATUS::<anonymous>
+ctrl_trf_session_owner	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	70;"	v	line:70
+ctrl_trf_state	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	69;"	v	line:69
+data	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	192;"	m	line:192	struct:_BOOT_DATA_PACKET::<anonymous>
+dataPacket	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	276;"	v	line:276
+device_dsc	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.c	180;"	v	line:180
+dword	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	42;"	t	line:42
+ep01i_i00a00	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.h	53;"	v	line:53
+ep01o_i00a00	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.h	52;"	v	line:52
+ep0Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	175;"	v	line:175
+ep0Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	174;"	v	line:174
+ep10Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	225;"	v	line:225
+ep10Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	224;"	v	line:224
+ep11Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	230;"	v	line:230
+ep11Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	229;"	v	line:229
+ep12Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	235;"	v	line:235
+ep12Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	234;"	v	line:234
+ep13Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	240;"	v	line:240
+ep13Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	239;"	v	line:239
+ep14Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	245;"	v	line:245
+ep14Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	244;"	v	line:244
+ep15Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	250;"	v	line:250
+ep15Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	249;"	v	line:249
+ep1Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	180;"	v	line:180
+ep1Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	179;"	v	line:179
+ep2Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	185;"	v	line:185
+ep2Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	184;"	v	line:184
+ep3Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	190;"	v	line:190
+ep3Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	189;"	v	line:189
+ep4Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	195;"	v	line:195
+ep4Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	194;"	v	line:194
+ep5Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	200;"	v	line:200
+ep5Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	199;"	v	line:199
+ep6Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	205;"	v	line:205
+ep6Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	204;"	v	line:204
+ep7Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	210;"	v	line:210
+ep7Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	209;"	v	line:209
+ep8Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	215;"	v	line:215
+ep8Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	214;"	v	line:214
+ep9Bi	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	220;"	v	line:220
+ep9Bo	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	219;"	v	line:219
+high	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	188;"	m	line:188	struct:_BOOT_DATA_PACKET::<anonymous>::<anonymous>::<anonymous>
+i	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	160;"	l	line:160
+i00a00	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.h	51;"	v	line:51
+led_num	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	197;"	m	line:197	struct:_BOOT_DATA_PACKET::<anonymous>
+led_status	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	198;"	m	line:198	struct:_BOOT_DATA_PACKET::<anonymous>
+len	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	181;"	m	line:181	struct:_BOOT_DATA_PACKET::<anonymous>
+low	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	187;"	m	line:187	struct:_BOOT_DATA_PACKET::<anonymous>::<anonymous>::<anonymous>
+mBootRxIsBusy::BOOT_BD_OUT.Stat.UOWN	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	119;"	d	line:119
+mBootTxIsBusy::BOOT_BD_IN.Stat.UOWN	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	138;"	d	line:138
+mInitAllLEDs::LATD&=0xF0;TRISD&=0xF0;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	75;"	d	line:75
+mInitAllSwitches::TRISBbits.TRISB4=1;TRISBbits.T	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	98;"	d	line:98
+mInitPOT::TRISAbits.TRISA0=1;ADCON0=0x01	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	105;"	d	line:105
+mInitSwitch2::TRISBbits.TRISB4=1;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	99;"	d	line:99
+mInitSwitch3::TRISBbits.TRISB5=1;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	100;"	d	line:100
+mLED_1::LATDbits.LATD0	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	77;"	d	line:77
+mLED_1_Off::mLED_1=0;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	87;"	d	line:87
+mLED_1_On::mLED_1=1;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	82;"	d	line:82
+mLED_1_Toggle::mLED_1=!mLED_1;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	92;"	d	line:92
+mLED_2::LATDbits.LATD1	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	78;"	d	line:78
+mLED_2_Off::mLED_2=0;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	88;"	d	line:88
+mLED_2_On::mLED_2=1;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	83;"	d	line:83
+mLED_2_Toggle::mLED_2=!mLED_2;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	93;"	d	line:93
+mLED_3::LATDbits.LATD2	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	79;"	d	line:79
+mLED_3_Off::mLED_3=0;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	89;"	d	line:89
+mLED_3_On::mLED_3=1;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	84;"	d	line:84
+mLED_3_Toggle::mLED_3=!mLED_3;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	94;"	d	line:94
+mLED_4::LATDbits.LATD3	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	80;"	d	line:80
+mLED_4_Off::mLED_4=0;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	90;"	d	line:90
+mLED_4_On::mLED_4=1;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	85;"	d	line:85
+mLED_4_Toggle::mLED_4=!mLED_4;	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	95;"	d	line:95
+main	D:\work\midicontroller\svn\trunk\PIC_BOOT\main.c	104;"	f	line:104	signature:(void)
+pAdr	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	184;"	m	line:184	union:_BOOT_DATA_PACKET::<anonymous>::<anonymous>
+pDst	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	73;"	v	line:73
+pFunc	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	123;"	t	line:123
+pSrc	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	72;"	v	line:72
+sd000	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.c	227;"	v	line:227
+self_power::1	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	71;"	d	line:71
+self_power::PORTAbits.RA2	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	69;"	d	line:69
+string	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.c	227;"	m	line:227	file:
+string	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbdsc.h	59;"	m	line:59
+sw2::PORTBbits.RB4	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	101;"	d	line:101
+sw3::PORTBbits.RB5	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	102;"	d	line:102
+trf_state	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.c	54;"	v	line:54
+tris_cs_sdmmc::TRISBbits.TRISB3	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	111;"	d	line:111
+tris_cs_temp_sensor::TRISBbits.TRISB2	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	108;"	d	line:108
+tris_self_power::TRISAbits.TRISA2	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	66;"	d	line:66
+tris_usb_bus_sense::TRISAbits.TRISA1	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	58;"	d	line:58
+upper	D:\work\midicontroller\svn\trunk\PIC_BOOT\boot.h	189;"	m	line:189	struct:_BOOT_DATA_PACKET::<anonymous>::<anonymous>::<anonymous>
+usb_active_cfg	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	159;"	v	line:159
+usb_alt_intf	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	160;"	v	line:160
+usb_bus_sense::1	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	63;"	d	line:63
+usb_bus_sense::PORTAbits.RA1	D:\work\midicontroller\svn\trunk\PIC_BOOT\io_cfg.h	61;"	d	line:61
+usb_device_state	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	157;"	v	line:157
+usb_stat	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbmmap.c	158;"	v	line:158
+v	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	115;"	m	line:115	struct:_DWORD::<anonymous>
+v	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	80;"	m	line:80	struct:_WORD::<anonymous>
+wCount	D:\work\midicontroller\svn\trunk\PIC_BOOT\usbctrltrf.c	74;"	v	line:74
+wRam	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	139;"	m	line:139	union:_POINTER
+wRom	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	143;"	m	line:143	union:_POINTER
+word	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	41;"	t	line:41
+word0	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	98;"	m	line:98	struct:_DWORD::<anonymous>
+word1	D:\work\midicontroller\svn\trunk\PIC_BOOT\typedefs.h	99;"	m	line:99	struct:_DWORD::<anonymous>

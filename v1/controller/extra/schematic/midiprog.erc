@@ -1,0 +1,23 @@
+EAGLE Version 4.16r2 Copyright (c) 1988-2006 CadSoft
+
+Electrical Rule Check for D:/work/midicontroller/schematic/midiprog.sch at  4/11/2007 08:30:16p
+
+WARNING: Sheet 1/1: unconnected Pin: R3 1
+WARNING: Sheet 1/1: unconnected Pin: R4 1
+WARNING: Sheet 1/1: POWER Pin IC1 VSS connected to GND
+ERROR: Sheet 1/1: no SUPPLY for POWER Pin IC1 VSS
+ERROR: Sheet 1/1: unconnected INPUT Pin: IC4 DI
+ERROR: Sheet 1/1: unconnected INPUT Pin: IC4 G
+ERROR: Sheet 1/1: unconnected INPUT Pin: IC4 RCK
+ERROR: Sheet 1/1: unconnected INPUT Pin: IC4 SCK
+ERROR: Sheet 1/1: unconnected INPUT Pin: IC4 SCLR
+ERROR: Sheet 1/1: no SUPPLY for implicit POWER Pin IC4P VCC
+ERROR: Sheet 1/1: unconnected INPUT Pin: IC2 G
+ERROR: Sheet 1/1: unconnected INPUT Pin: IC2 SCLR
+ERROR: Sheet 1/1: no SUPPLY for implicit POWER Pin IC2P VCC
+WARNING: Only 1 Pin on net EXP_PEDAL
+
+No board loaded - consistency has not been checked
+
+   10 errors
+    4 warnings

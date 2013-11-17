@@ -1,0 +1,960 @@
+MPLINK 3.90.01, Linker
+Linker Map File - Created Tue May 17 13:11:12 2005
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+               _entry_scn       code   0x000000    program   0x000006
+                   .cinit    romdata   0x000006    program   0x000002
+   _HIGH_INTERRUPT_VECTOR       code   0x000008    program   0x000006
+             .code_main.o       code   0x00000e    program   0x000000
+          .romdata_main.o    romdata   0x00000e    program   0x000000
+          .idata_main.o_i    romdata   0x00000e    program   0x000000
+          .code_usbmmap.o       code   0x00000e    program   0x000000
+       .romdata_usbmmap.o    romdata   0x00000e    program   0x000000
+       .idata_usbmmap.o_i    romdata   0x00000e    program   0x000000
+             .code_boot.o       code   0x00000e    program   0x000000
+          .romdata_boot.o    romdata   0x00000e    program   0x000000
+          .idata_boot.o_i    romdata   0x00000e    program   0x000000
+       .code_usbctrltrf.o       code   0x00000e    program   0x000000
+    .romdata_usbctrltrf.o    romdata   0x00000e    program   0x000000
+    .idata_usbctrltrf.o_i    romdata   0x00000e    program   0x000000
+         .idata_c018i.o_i    romdata   0x00000e    program   0x000000
+         .romdata_c018i.o    romdata   0x00000e    program   0x000000
+            .code_c018i.o       code   0x00000e    program   0x000000
+        .idata_usbdrv.o_i    romdata   0x00000e    program   0x000000
+        .romdata_usbdrv.o    romdata   0x00000e    program   0x000000
+           .code_usbdrv.o       code   0x00000e    program   0x000000
+           .code_usbdsc.o       code   0x00000e    program   0x000000
+          .idata_usb9.o_i    romdata   0x00000e    program   0x000000
+          .romdata_usb9.o    romdata   0x00000e    program   0x000000
+             .code_usb9.o       code   0x00000e    program   0x000000
+        .idata_usbdsc.o_i    romdata   0x00000e    program   0x000000
+    _LOW_INTERRUPT_VECTOR       code   0x000018    program   0x000006
+                  USBBOOT       code   0x00001e    program   0x0005f8
+               _cinit_scn       code   0x000616    program   0x00009e
+        .romdata_usbdsc.o    romdata   0x0006b4    program   0x000036
+             _startup_scn       code   0x0006ea    program   0x000018
+                RS232BOOT       code   0x000800    program   0x000172
+                     user       code   0x000a00    program   0x000000
+    .config_300000_main.o    romdata   0x300000    program   0x000001
+    .config_300001_main.o    romdata   0x300001    program   0x000001
+    .config_300002_main.o    romdata   0x300002    program   0x000001
+    .config_300003_main.o    romdata   0x300003    program   0x000001
+    .config_300005_main.o    romdata   0x300005    program   0x000001
+    .config_300006_main.o    romdata   0x300006    program   0x000001
+    .config_300008_main.o    romdata   0x300008    program   0x000001
+    .config_300009_main.o    romdata   0x300009    program   0x000001
+    .config_30000a_main.o    romdata   0x30000a    program   0x000001
+    .config_30000b_main.o    romdata   0x30000b    program   0x000001
+    .config_30000c_main.o    romdata   0x30000c    program   0x000001
+    .config_30000d_main.o    romdata   0x30000d    program   0x000001
+                 .tmpdata      udata   0x000000       data   0x000004
+                MATH_DATA      udata   0x000004       data   0x000002
+                  BOOTRAM      udata   0x000060       data   0x00000e
+      .udata_usbctrltrf.o      udata   0x00006e       data   0x00000b
+           .udata_c018i.o      udata   0x000079       data   0x00000a
+            .udata_boot.o      udata   0x000083       data   0x000005
+         .udata_usbmmap.o      udata   0x000088       data   0x000004
+            .udata_main.o      udata   0x00008c       data   0x000001
+          .udata_usbdsc.o      udata   0x00008d       data   0x000000
+          .idata_usbdsc.o      idata   0x00008d       data   0x000000
+            .idata_usb9.o      idata   0x00008d       data   0x000000
+      .idata_usbctrltrf.o      idata   0x00008d       data   0x000000
+            .udata_usb9.o      udata   0x00008d       data   0x000000
+          .idata_usbdrv.o      idata   0x00008d       data   0x000000
+            .idata_boot.o      idata   0x00008d       data   0x000000
+         .idata_usbmmap.o      idata   0x00008d       data   0x000000
+            .idata_main.o      idata   0x00008d       data   0x000000
+          .udata_usbdrv.o      udata   0x00008d       data   0x000000
+           .idata_c018i.o      idata   0x00008d       data   0x000000
+                   .stack      udata   0x000300       data   0x000100
+                  usbram4      udata   0x000400       data   0x000060
+            SFR_UNBANKED0      udata   0x000f62       data   0x00009e
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x00000d      
+                            0x000018    0x000701      
+                            0x000800    0x000971      
+                            0x300000    0x300003      
+                            0x300005    0x300006      
+                            0x300008    0x30000d      
+            2166 out of 24856 program addresses used, program memory utilization is 8%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                 Autobaud   0x000802    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+           BOOT_LOAD_MODE   0x0005fc    program     extern C:\fw\pedalbtldr\x201\main.c
+               BootInitEP   0x000372    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+              BootService   0x000492    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+             CheckCommand   0x000858    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                 CheckSum   0x00083a    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+             EraseProgMem   0x0003fa    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+             EraseProgMem   0x0008b2    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+               GetNextDat   0x00081a    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                      Lp1   0x000898    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    NoDLE   0x00082e    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    NoETX   0x000826    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    NoSTX   0x000820    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                  RdRS232   0x00094e    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                   ReadEE   0x00042c    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                   ReadEE   0x0008c8    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              ReadProgMem   0x0003b2    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+              ReadProgMem   0x000882    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+           ReadProgMem_10   0x000882    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              ReadVersion   0x0003a8    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+              ReadVersion   0x000876    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+          SendAcknowledge   0x000906    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                 SendNext   0x000916    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    Setup   0x000800    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              StartOfLine   0x00080c    program     extern C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+               StartWrite   0x00039c    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+               StartWrite   0x00095e    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+        USBCheckBusStatus   0x00001e    program     extern C:\fw\pedalbtldr\x201\system\usb\usbdrv\usbdrv.c
+       USBCheckStdRequest   0x0000c8    program     extern C:\fw\pedalbtldr\x201\system\usb\usb9\usb9.c
+         USBCtrlEPService   0x000194    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+ USBCtrlEPServiceComplete   0x0002e0    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+      USBCtrlTrfInHandler   0x0001fa    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+     USBCtrlTrfOutHandler   0x0001dc    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+      USBCtrlTrfRxService   0x00029e    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+   USBCtrlTrfSetupHandler   0x0001ca    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+      USBCtrlTrfTxService   0x000230    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+         USBDriverService   0x000034    program     extern C:\fw\pedalbtldr\x201\system\usb\usbdrv\usbdrv.c
+USBPrepareForNextSetupTrf   0x000352    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+  USBProtocolResetHandler   0x0000a2    program     extern C:\fw\pedalbtldr\x201\system\usb\usbdrv\usbdrv.c
+      USBStdSetCfgHandler   0x000172    program     extern C:\fw\pedalbtldr\x201\system\usb\usb9\usb9.c
+    VERIFY_PROGRAM_MEMORY   0x00096e    program     extern C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    WrDLE   0x00093e    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                   WrData   0x00092c    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                   WrNext   0x000942    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                  WrRS232   0x000944    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              WriteConfig   0x0008f2    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              WriteConfig   0x000478    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                  WriteEE   0x0008dc    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                  WriteEE   0x00044e    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+              WritePacket   0x000908    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+             WriteProgMem   0x000892    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+             WriteProgMem   0x0003d2    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+          _RS232BOOT_00E8   0x0008e8    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+          _RS232BOOT_0148   0x000948    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+          _RS232BOOT_0156   0x000956    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+      ___case_-1_lbl00044   0x000544    program     static                          
+       ___case_0_lbl00036   0x0004fe    program     static                          
+       ___case_1_lbl00038   0x000508    program     static                          
+       ___case_2_lbl00039   0x000512    program     static                          
+       ___case_3_lbl00040   0x00051c    program     static                          
+       ___case_4_lbl00041   0x000526    program     static                          
+       ___case_5_lbl00042   0x000530    program     static                          
+       ___case_6_lbl00037   0x000508    program     static                          
+       ___case_7_lbl00043   0x00053a    program     static                          
+      ___default_lbl00047   0x000562    program     static                          
+           ___if_lbl00003   0x0005f4    program     static                          
+           ___if_lbl00005   0x000046    program     static                          
+           ___if_lbl00007   0x000054    program     static                          
+           ___if_lbl00009   0x00006c    program     static                          
+           ___if_lbl00011   0x000082    program     static                          
+           ___if_lbl00012   0x000084    program     static                          
+           ___if_lbl00013   0x00008e    program     static                          
+           ___if_lbl00015   0x0000a0    program     static                          
+           ___if_lbl00032   0x0004a2    program     static                          
+           ___if_lbl00033   0x0004c8    program     static                          
+           ___if_lbl00034   0x0004ca    program     static                          
+           ___if_lbl00048   0x000584    program     static                          
+           ___if_lbl00049   0x000584    program     static                          
+       ___return_lbl00000   0x00000c    program     static                          
+       ___return_lbl00000   0x000004    program     static                          
+       ___return_lbl00001   0x00001c    program     static                          
+       ___return_lbl00001   0x000700    program     static                          
+       ___return_lbl00002   0x0005fa    program     static                          
+       ___return_lbl00002   0x0006b2    program     static                          
+       ___return_lbl00003   0x0000a0    program     static                          
+       ___return_lbl00004   0x000614    program     static                          
+       ___return_lbl00030   0x000584    program     static                          
+   ___switchexit_lbl00035   0x000564    program     static                          
+        ___while_lbl00005   0x000604    program     static                          
+        ___while_lbl00006   0x000614    program     static                          
+        ___while_lbl00045   0x00054c    program     static                          
+        ___while_lbl00046   0x00055e    program     static                          
+               __config_0   0x300000    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_1   0x300001    program     static C:\fw\pedalbtldr\x201\main.c
+              __config_10   0x30000c    program     static C:\fw\pedalbtldr\x201\main.c
+              __config_11   0x30000d    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_2   0x300002    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_3   0x300003    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_4   0x300005    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_5   0x300006    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_6   0x300008    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_7   0x300009    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_8   0x30000a    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_9   0x30000b    program     static C:\fw\pedalbtldr\x201\main.c
+                   __pa_0   0x000362    program     static C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                   __pa_0   0x000586    program     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                   __pa_1   0x0005a4    program     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                   __pa_2   0x0005b2    program     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                   __pa_3   0x0005bc    program     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                   __pa_4   0x0005cc    program     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+               __tmplbl_0   0x000040    program     static                          
+               __tmplbl_0   0x0004a0    program     static                          
+               __tmplbl_1   0x00003a    program     static                          
+               __tmplbl_1   0x00049a    program     static                          
+               __tmplbl_2   0x000052    program     static                          
+               __tmplbl_3   0x00004c    program     static                          
+               __tmplbl_4   0x000060    program     static                          
+               __tmplbl_5   0x00005a    program     static                          
+               __tmplbl_6   0x000078    program     static                          
+               __tmplbl_7   0x000072    program     static                          
+               __tmplbl_8   0x00009a    program     static                          
+               __tmplbl_9   0x000094    program     static                          
+                _do_cinit   0x000616    program     extern C:\mcc18\src\traditional\startup\c018i.c
+                   _entry   0x000000    program     extern C:\mcc18\src\traditional\startup\c018i.c
+                _high_ISR   0x000008    program     extern C:\fw\pedalbtldr\x201\main.c
+                 _low_ISR   0x000018    program     extern C:\fw\pedalbtldr\x201\main.c
+                 _startup   0x0006ea    program     extern C:\mcc18\src\traditional\startup\c018i.c
+                    cfg01   0x0006c6    program     extern C:\fw\pedalbtldr\x201\autofiles\usbdsc.c
+                copy_loop   0x000688    program     static                          
+            copy_one_byte   0x00068e    program     static                          
+               device_dsc   0x0006b4    program     extern C:\fw\pedalbtldr\x201\autofiles\usbdsc.c
+                     done   0x0006b2    program     static                          
+             done_copying   0x00069c    program     static                          
+                     loop   0x0006fa    program     static                          
+                     main   0x0005d8    program     extern C:\fw\pedalbtldr\x201\main.c
+                    sd000   0x0006e6    program     extern C:\fw\pedalbtldr\x201\autofiles\usbdsc.c
+                     test   0x000630    program     static                          
+                 ABTIME_H   0x000062       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                 ABTIME_L   0x000063       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                   ADCON0   0x000fc2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               ADCON0bits   0x000fc2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   ADCON1   0x000fc1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               ADCON1bits   0x000fc1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   ADCON2   0x000fc0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               ADCON2bits   0x000fc0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                ADDRESS_H   0x000069       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                ADDRESS_L   0x000068       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                ADDRESS_U   0x00006a       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    ADRES   0x000fc3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   ADRESH   0x000fc4       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   ADRESL   0x000fc3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  BAUDCON   0x000fb8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              BAUDCONbits   0x000fb8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      BSR   0x000fe0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CCP1AS   0x000fb6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               CCP1ASbits   0x000fb6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  CCP1CON   0x000fbd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              CCP1CONbits   0x000fbd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  CCP1DEL   0x000fb7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              CCP1DELbits   0x000fb7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  CCP2CON   0x000fba       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              CCP2CONbits   0x000fba       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    CCPR1   0x000fbe       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CCPR1H   0x000fbf       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CCPR1L   0x000fbe       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    CCPR2   0x000fbb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CCPR2H   0x000fbc       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CCPR2L   0x000fbb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CHKSUM   0x000060       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    CMCON   0x000fb4       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                CMCONbits   0x000fb4       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  COUNTER   0x000061       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                   CVRCON   0x000fb5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               CVRCONbits   0x000fb5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              CtrlTrfData   0x000418       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                DATA_BUFF   0x000066       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+               DATA_COUNT   0x000067       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                     DDRA   0x000f92       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 DDRAbits   0x000f92       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     DDRB   0x000f93       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 DDRBbits   0x000f93       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     DDRC   0x000f94       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 DDRCbits   0x000f94       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     DDRD   0x000f95       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 DDRDbits   0x000f95       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     DDRE   0x000f96       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 DDREbits   0x000f96       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  ECCP1AS   0x000fb6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              ECCP1ASbits   0x000fb6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 ECCP1CON   0x000fbd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+             ECCP1CONbits   0x000fbd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 ECCP1DEL   0x000fb7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+             ECCP1DELbits   0x000fb7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    EEADR   0x000fa9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   EECON1   0x000fa6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               EECON1bits   0x000fa6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   EECON2   0x000fa7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   EEDATA   0x000fa8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  FPFLAGS   0x000005       data     extern C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+              FPFLAGSbits   0x000005       data     extern C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                     FSR0   0x000fe9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR0H   0x000fea       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR0L   0x000fe9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     FSR1   0x000fe1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR1H   0x000fe2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR1L   0x000fe1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     FSR2   0x000fd9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR2H   0x000fda       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR2L   0x000fd9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  HLVDCON   0x000fd2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              HLVDCONbits   0x000fd2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    INDF0   0x000fef       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    INDF1   0x000fe7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    INDF2   0x000fdf       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   INTCON   0x000ff2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  INTCON2   0x000ff1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              INTCON2bits   0x000ff1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  INTCON3   0x000ff0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              INTCON3bits   0x000ff0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               INTCONbits   0x000ff2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     IPR1   0x000f9f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 IPR1bits   0x000f9f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     IPR2   0x000fa2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 IPR2bits   0x000fa2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     LATA   0x000f89       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 LATAbits   0x000f89       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     LATB   0x000f8a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 LATBbits   0x000f8a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     LATC   0x000f8b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 LATCbits   0x000f8b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     LATD   0x000f8c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 LATDbits   0x000f8c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     LATE   0x000f8d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 LATEbits   0x000f8d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   LVDCON   0x000fd2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               LVDCONbits   0x000fd2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   OSCCON   0x000fd3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               OSCCONbits   0x000fd3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  OSCTUNE   0x000f9b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              OSCTUNEbits   0x000f9b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              PACKET_DATA   0x00006b       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                       PC   0x000ff9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      PCL   0x000ff9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   PCLATH   0x000ffa       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   PCLATU   0x000ffb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     PIE1   0x000f9d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 PIE1bits   0x000f9d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     PIE2   0x000fa0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 PIE2bits   0x000fa0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     PIR1   0x000f9e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 PIR1bits   0x000f9e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     PIR2   0x000fa1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 PIR2bits   0x000fa1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   PLUSW0   0x000feb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   PLUSW1   0x000fe3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   PLUSW2   0x000fdb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PORTA   0x000f80       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                PORTAbits   0x000f80       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PORTB   0x000f81       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                PORTBbits   0x000f81       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PORTC   0x000f82       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                PORTCbits   0x000f82       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PORTD   0x000f83       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                PORTDbits   0x000f83       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PORTE   0x000f84       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                PORTEbits   0x000f84       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTDEC0   0x000fed       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTDEC1   0x000fe5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTDEC2   0x000fdd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTINC0   0x000fee       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTINC1   0x000fe6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTINC2   0x000fde       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      PR2   0x000fcb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  PREINC0   0x000fec       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  PREINC1   0x000fe4       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  PREINC2   0x000fdc       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     PROD   0x000ff3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PRODH   0x000ff4       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PRODL   0x000ff3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+     ProgMemoryChecksum_H   0x00006d       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+     ProgMemoryChecksum_L   0x00006c       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                     RCON   0x000fd0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 RCONbits   0x000fd0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    RCREG   0x000fae       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    RCSTA   0x000fab       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                RCSTAbits   0x000fab       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   RXDATA   0x000064       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                     SIGN   0x000004       data     extern C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                    SPBRG   0x000faf       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SPBRGH   0x000fb0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SPPCFG   0x000f63       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               SPPCFGbits   0x000f63       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SPPCON   0x000f65       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               SPPCONbits   0x000f65       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  SPPDATA   0x000f62       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SPPEPS   0x000f64       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               SPPEPSbits   0x000f64       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SSPADD   0x000fc8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SSPBUF   0x000fc9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  SSPCON1   0x000fc6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              SSPCON1bits   0x000fc6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  SSPCON2   0x000fc5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              SSPCON2bits   0x000fc5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  SSPSTAT   0x000fc7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              SSPSTATbits   0x000fc7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   STATUS   0x000fd8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               STATUSbits   0x000fd8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   STKPTR   0x000ffc       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               STKPTRbits   0x000ffc       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 SetupPkt   0x000410       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                    T0CON   0x000fd5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                T0CONbits   0x000fd5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    T1CON   0x000fcd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                T1CONbits   0x000fcd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    T2CON   0x000fca       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                T2CONbits   0x000fca       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    T3CON   0x000fb1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                T3CONbits   0x000fb1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   TABLAT   0x000ff5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   TBLPTR   0x000ff6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  TBLPTRH   0x000ff7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  TBLPTRL   0x000ff6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  TBLPTRU   0x000ff8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR0H   0x000fd7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR0L   0x000fd6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR1H   0x000fcf       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR1L   0x000fce       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     TMR2   0x000fcc       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR3H   0x000fb3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR3L   0x000fb2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      TOS   0x000ffd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     TOSH   0x000ffe       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     TOSL   0x000ffd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     TOSU   0x000fff       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TRISA   0x000f92       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TRISAbits   0x000f92       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TRISB   0x000f93       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TRISBbits   0x000f93       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TRISC   0x000f94       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TRISCbits   0x000f94       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TRISD   0x000f95       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TRISDbits   0x000f95       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TRISE   0x000f96       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TRISEbits   0x000f96       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   TXDATA   0x000065       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    TXREG   0x000fad       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TXSTA   0x000fac       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TXSTAbits   0x000fac       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    Temp0   0x00008c       data     static C:\fw\pedalbtldr\x201\main.c
+                    UADDR   0x000f6e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UADDRbits   0x000f6e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UCFG   0x000f6f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UCFGbits   0x000f6f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UCON   0x000f6d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UCONbits   0x000f6d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEIE   0x000f6b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEIEbits   0x000f6b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEIR   0x000f6a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEIRbits   0x000f6a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP0   0x000f70       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP0bits   0x000f70       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP1   0x000f71       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP10   0x000f7a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP10bits   0x000f7a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP11   0x000f7b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP11bits   0x000f7b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP12   0x000f7c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP12bits   0x000f7c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP13   0x000f7d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP13bits   0x000f7d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP14   0x000f7e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP14bits   0x000f7e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP15   0x000f7f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP15bits   0x000f7f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP1bits   0x000f71       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP2   0x000f72       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP2bits   0x000f72       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP3   0x000f73       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP3bits   0x000f73       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP4   0x000f74       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP4bits   0x000f74       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP5   0x000f75       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP5bits   0x000f75       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP6   0x000f76       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP6bits   0x000f76       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP7   0x000f77       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP7bits   0x000f77       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP8   0x000f78       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP8bits   0x000f78       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP9   0x000f79       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP9bits   0x000f79       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UFRM   0x000f66       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UFRMH   0x000f67       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UFRML   0x000f66       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      UIE   0x000f69       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  UIEbits   0x000f69       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      UIR   0x000f68       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  UIRbits   0x000f68       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    USTAT   0x000f6c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                USTATbits   0x000f6c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   WDTCON   0x000fd1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               WDTCONbits   0x000fd1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     WREG   0x000fe8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  __tmp_0   0x000000       data     static C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                  __tmp_0   0x000000       data     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+              big_counter   0x000086       data     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                 byteTemp   0x000084       data     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+             byte_to_read   0x000078       data     static C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+             byte_to_send   0x000077       data     static C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                  counter   0x000083       data     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+   ctrl_trf_session_owner   0x00006f       data     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+           ctrl_trf_state   0x00006e       data     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                curr_byte   0x00007c       data     static C:\mcc18\src\traditional\startup\c018i.c
+               curr_entry   0x00007e       data     static C:\mcc18\src\traditional\startup\c018i.c
+               dataPacket   0x000420       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                 data_ptr   0x000080       data     static C:\mcc18\src\traditional\startup\c018i.c
+                    ep0Bi   0x000404       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                    ep0Bo   0x000400       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                    ep1Bi   0x00040c       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                    ep1Bo   0x000408       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                        i   0x000076       data     static C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                     pDst   0x000072       data     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                     pSrc   0x000070       data     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                     prom   0x000079       data     static C:\mcc18\src\traditional\startup\c018i.c
+                trf_state   0x000085       data     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+           usb_active_cfg   0x00008a       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+             usb_alt_intf   0x00008b       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+         usb_device_state   0x000088       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                 usb_stat   0x000089       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                   wCount   0x000074       data     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                   _entry   0x000000    program     extern C:\mcc18\src\traditional\startup\c018i.c
+       ___return_lbl00000   0x000004    program     static                          
+                _high_ISR   0x000008    program     extern C:\fw\pedalbtldr\x201\main.c
+       ___return_lbl00000   0x00000c    program     static                          
+                 _low_ISR   0x000018    program     extern C:\fw\pedalbtldr\x201\main.c
+       ___return_lbl00001   0x00001c    program     static                          
+        USBCheckBusStatus   0x00001e    program     extern C:\fw\pedalbtldr\x201\system\usb\usbdrv\usbdrv.c
+         USBDriverService   0x000034    program     extern C:\fw\pedalbtldr\x201\system\usb\usbdrv\usbdrv.c
+               __tmplbl_1   0x00003a    program     static                          
+               __tmplbl_0   0x000040    program     static                          
+           ___if_lbl00005   0x000046    program     static                          
+               __tmplbl_3   0x00004c    program     static                          
+               __tmplbl_2   0x000052    program     static                          
+           ___if_lbl00007   0x000054    program     static                          
+               __tmplbl_5   0x00005a    program     static                          
+               __tmplbl_4   0x000060    program     static                          
+           ___if_lbl00009   0x00006c    program     static                          
+               __tmplbl_7   0x000072    program     static                          
+               __tmplbl_6   0x000078    program     static                          
+           ___if_lbl00011   0x000082    program     static                          
+           ___if_lbl00012   0x000084    program     static                          
+           ___if_lbl00013   0x00008e    program     static                          
+               __tmplbl_9   0x000094    program     static                          
+               __tmplbl_8   0x00009a    program     static                          
+           ___if_lbl00015   0x0000a0    program     static                          
+       ___return_lbl00003   0x0000a0    program     static                          
+  USBProtocolResetHandler   0x0000a2    program     extern C:\fw\pedalbtldr\x201\system\usb\usbdrv\usbdrv.c
+       USBCheckStdRequest   0x0000c8    program     extern C:\fw\pedalbtldr\x201\system\usb\usb9\usb9.c
+      USBStdSetCfgHandler   0x000172    program     extern C:\fw\pedalbtldr\x201\system\usb\usb9\usb9.c
+         USBCtrlEPService   0x000194    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+   USBCtrlTrfSetupHandler   0x0001ca    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+     USBCtrlTrfOutHandler   0x0001dc    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+      USBCtrlTrfInHandler   0x0001fa    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+      USBCtrlTrfTxService   0x000230    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+      USBCtrlTrfRxService   0x00029e    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+ USBCtrlEPServiceComplete   0x0002e0    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+USBPrepareForNextSetupTrf   0x000352    program     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                   __pa_0   0x000362    program     static C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+               BootInitEP   0x000372    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+               StartWrite   0x00039c    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+              ReadVersion   0x0003a8    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+              ReadProgMem   0x0003b2    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+             WriteProgMem   0x0003d2    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+             EraseProgMem   0x0003fa    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                   ReadEE   0x00042c    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                  WriteEE   0x00044e    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+              WriteConfig   0x000478    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+              BootService   0x000492    program     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+               __tmplbl_1   0x00049a    program     static                          
+               __tmplbl_0   0x0004a0    program     static                          
+           ___if_lbl00032   0x0004a2    program     static                          
+           ___if_lbl00033   0x0004c8    program     static                          
+           ___if_lbl00034   0x0004ca    program     static                          
+       ___case_0_lbl00036   0x0004fe    program     static                          
+       ___case_1_lbl00038   0x000508    program     static                          
+       ___case_6_lbl00037   0x000508    program     static                          
+       ___case_2_lbl00039   0x000512    program     static                          
+       ___case_3_lbl00040   0x00051c    program     static                          
+       ___case_4_lbl00041   0x000526    program     static                          
+       ___case_5_lbl00042   0x000530    program     static                          
+       ___case_7_lbl00043   0x00053a    program     static                          
+      ___case_-1_lbl00044   0x000544    program     static                          
+        ___while_lbl00045   0x00054c    program     static                          
+        ___while_lbl00046   0x00055e    program     static                          
+      ___default_lbl00047   0x000562    program     static                          
+   ___switchexit_lbl00035   0x000564    program     static                          
+           ___if_lbl00048   0x000584    program     static                          
+           ___if_lbl00049   0x000584    program     static                          
+       ___return_lbl00030   0x000584    program     static                          
+                   __pa_0   0x000586    program     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                   __pa_1   0x0005a4    program     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                   __pa_2   0x0005b2    program     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                   __pa_3   0x0005bc    program     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                   __pa_4   0x0005cc    program     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                     main   0x0005d8    program     extern C:\fw\pedalbtldr\x201\main.c
+           ___if_lbl00003   0x0005f4    program     static                          
+       ___return_lbl00002   0x0005fa    program     static                          
+           BOOT_LOAD_MODE   0x0005fc    program     extern C:\fw\pedalbtldr\x201\main.c
+        ___while_lbl00005   0x000604    program     static                          
+       ___return_lbl00004   0x000614    program     static                          
+        ___while_lbl00006   0x000614    program     static                          
+                _do_cinit   0x000616    program     extern C:\mcc18\src\traditional\startup\c018i.c
+                     test   0x000630    program     static                          
+                copy_loop   0x000688    program     static                          
+            copy_one_byte   0x00068e    program     static                          
+             done_copying   0x00069c    program     static                          
+       ___return_lbl00002   0x0006b2    program     static                          
+                     done   0x0006b2    program     static                          
+               device_dsc   0x0006b4    program     extern C:\fw\pedalbtldr\x201\autofiles\usbdsc.c
+                    cfg01   0x0006c6    program     extern C:\fw\pedalbtldr\x201\autofiles\usbdsc.c
+                    sd000   0x0006e6    program     extern C:\fw\pedalbtldr\x201\autofiles\usbdsc.c
+                 _startup   0x0006ea    program     extern C:\mcc18\src\traditional\startup\c018i.c
+                     loop   0x0006fa    program     static                          
+       ___return_lbl00001   0x000700    program     static                          
+                    Setup   0x000800    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                 Autobaud   0x000802    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              StartOfLine   0x00080c    program     extern C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+               GetNextDat   0x00081a    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    NoSTX   0x000820    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    NoETX   0x000826    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    NoDLE   0x00082e    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                 CheckSum   0x00083a    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+             CheckCommand   0x000858    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              ReadVersion   0x000876    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              ReadProgMem   0x000882    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+           ReadProgMem_10   0x000882    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+             WriteProgMem   0x000892    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                      Lp1   0x000898    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+             EraseProgMem   0x0008b2    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                   ReadEE   0x0008c8    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                  WriteEE   0x0008dc    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+          _RS232BOOT_00E8   0x0008e8    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              WriteConfig   0x0008f2    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+          SendAcknowledge   0x000906    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              WritePacket   0x000908    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                 SendNext   0x000916    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                   WrData   0x00092c    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                    WrDLE   0x00093e    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                   WrNext   0x000942    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                  WrRS232   0x000944    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+          _RS232BOOT_0148   0x000948    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                  RdRS232   0x00094e    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+          _RS232BOOT_0156   0x000956    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+               StartWrite   0x00095e    program     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+    VERIFY_PROGRAM_MEMORY   0x00096e    program     extern C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+               __config_0   0x300000    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_1   0x300001    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_2   0x300002    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_3   0x300003    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_4   0x300005    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_5   0x300006    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_6   0x300008    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_7   0x300009    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_8   0x30000a    program     static C:\fw\pedalbtldr\x201\main.c
+               __config_9   0x30000b    program     static C:\fw\pedalbtldr\x201\main.c
+              __config_10   0x30000c    program     static C:\fw\pedalbtldr\x201\main.c
+              __config_11   0x30000d    program     static C:\fw\pedalbtldr\x201\main.c
+                  __tmp_0   0x000000       data     static C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                  __tmp_0   0x000000       data     static C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                     SIGN   0x000004       data     extern C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                  FPFLAGS   0x000005       data     extern C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+              FPFLAGSbits   0x000005       data     extern C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                   CHKSUM   0x000060       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                  COUNTER   0x000061       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                 ABTIME_H   0x000062       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                 ABTIME_L   0x000063       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                   RXDATA   0x000064       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                   TXDATA   0x000065       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                DATA_BUFF   0x000066       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+               DATA_COUNT   0x000067       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                ADDRESS_L   0x000068       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                ADDRESS_H   0x000069       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+                ADDRESS_U   0x00006a       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+              PACKET_DATA   0x00006b       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+     ProgMemoryChecksum_L   0x00006c       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+     ProgMemoryChecksum_H   0x00006d       data     static C:\fw\691213\asm\x201\RS232\rs232bootload.asm
+           ctrl_trf_state   0x00006e       data     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+   ctrl_trf_session_owner   0x00006f       data     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                     pSrc   0x000070       data     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                     pDst   0x000072       data     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                   wCount   0x000074       data     extern C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                        i   0x000076       data     static C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+             byte_to_send   0x000077       data     static C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+             byte_to_read   0x000078       data     static C:\fw\pedalbtldr\x201\system\usb\usbctrltrf\usbctrltrf.c
+                     prom   0x000079       data     static C:\mcc18\src\traditional\startup\c018i.c
+                curr_byte   0x00007c       data     static C:\mcc18\src\traditional\startup\c018i.c
+               curr_entry   0x00007e       data     static C:\mcc18\src\traditional\startup\c018i.c
+                 data_ptr   0x000080       data     static C:\mcc18\src\traditional\startup\c018i.c
+                  counter   0x000083       data     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                 byteTemp   0x000084       data     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+                trf_state   0x000085       data     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+              big_counter   0x000086       data     extern C:\fw\pedalbtldr\x201\system\usb\class\boot\boot.c
+         usb_device_state   0x000088       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                 usb_stat   0x000089       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+           usb_active_cfg   0x00008a       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+             usb_alt_intf   0x00008b       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                    Temp0   0x00008c       data     static C:\fw\pedalbtldr\x201\main.c
+                    ep0Bo   0x000400       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                    ep0Bi   0x000404       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                    ep1Bo   0x000408       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                    ep1Bi   0x00040c       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                 SetupPkt   0x000410       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+              CtrlTrfData   0x000418       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+               dataPacket   0x000420       data     extern C:\fw\pedalbtldr\x201\system\usb\usbmmap.c
+                  SPPDATA   0x000f62       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               SPPCFGbits   0x000f63       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SPPCFG   0x000f63       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               SPPEPSbits   0x000f64       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SPPEPS   0x000f64       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               SPPCONbits   0x000f65       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SPPCON   0x000f65       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UFRM   0x000f66       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UFRML   0x000f66       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UFRMH   0x000f67       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      UIR   0x000f68       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  UIRbits   0x000f68       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      UIE   0x000f69       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  UIEbits   0x000f69       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEIR   0x000f6a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEIRbits   0x000f6a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEIE   0x000f6b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEIEbits   0x000f6b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    USTAT   0x000f6c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                USTATbits   0x000f6c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UCON   0x000f6d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UCONbits   0x000f6d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UADDR   0x000f6e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UADDRbits   0x000f6e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UCFG   0x000f6f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UCFGbits   0x000f6f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP0   0x000f70       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP0bits   0x000f70       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP1bits   0x000f71       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP1   0x000f71       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP2bits   0x000f72       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP2   0x000f72       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP3bits   0x000f73       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP3   0x000f73       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP4   0x000f74       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP4bits   0x000f74       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP5   0x000f75       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP5bits   0x000f75       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP6   0x000f76       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP6bits   0x000f76       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP7   0x000f77       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP7bits   0x000f77       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP8bits   0x000f78       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP8   0x000f78       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 UEP9bits   0x000f79       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     UEP9   0x000f79       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP10bits   0x000f7a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP10   0x000f7a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP11   0x000f7b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP11bits   0x000f7b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP12   0x000f7c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP12bits   0x000f7c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP13bits   0x000f7d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP13   0x000f7d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP14bits   0x000f7e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP14   0x000f7e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                UEP15bits   0x000f7f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    UEP15   0x000f7f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PORTA   0x000f80       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                PORTAbits   0x000f80       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PORTB   0x000f81       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                PORTBbits   0x000f81       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PORTC   0x000f82       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                PORTCbits   0x000f82       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PORTD   0x000f83       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                PORTDbits   0x000f83       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                PORTEbits   0x000f84       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PORTE   0x000f84       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     LATA   0x000f89       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 LATAbits   0x000f89       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     LATB   0x000f8a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 LATBbits   0x000f8a       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     LATC   0x000f8b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 LATCbits   0x000f8b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 LATDbits   0x000f8c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     LATD   0x000f8c       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 LATEbits   0x000f8d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     LATE   0x000f8d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 DDRAbits   0x000f92       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     DDRA   0x000f92       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TRISA   0x000f92       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TRISAbits   0x000f92       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     DDRB   0x000f93       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 DDRBbits   0x000f93       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TRISBbits   0x000f93       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TRISB   0x000f93       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TRISCbits   0x000f94       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 DDRCbits   0x000f94       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     DDRC   0x000f94       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TRISC   0x000f94       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TRISDbits   0x000f95       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 DDRDbits   0x000f95       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     DDRD   0x000f95       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TRISD   0x000f95       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 DDREbits   0x000f96       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     DDRE   0x000f96       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TRISE   0x000f96       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TRISEbits   0x000f96       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  OSCTUNE   0x000f9b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              OSCTUNEbits   0x000f9b       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     PIE1   0x000f9d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 PIE1bits   0x000f9d       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     PIR1   0x000f9e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 PIR1bits   0x000f9e       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     IPR1   0x000f9f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 IPR1bits   0x000f9f       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 PIE2bits   0x000fa0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     PIE2   0x000fa0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 PIR2bits   0x000fa1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     PIR2   0x000fa1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     IPR2   0x000fa2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 IPR2bits   0x000fa2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               EECON1bits   0x000fa6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   EECON1   0x000fa6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   EECON2   0x000fa7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   EEDATA   0x000fa8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    EEADR   0x000fa9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    RCSTA   0x000fab       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                RCSTAbits   0x000fab       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                TXSTAbits   0x000fac       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TXSTA   0x000fac       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TXREG   0x000fad       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    RCREG   0x000fae       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    SPBRG   0x000faf       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SPBRGH   0x000fb0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                T3CONbits   0x000fb1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    T3CON   0x000fb1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR3L   0x000fb2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR3H   0x000fb3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    CMCON   0x000fb4       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                CMCONbits   0x000fb4       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CVRCON   0x000fb5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               CVRCONbits   0x000fb5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               CCP1ASbits   0x000fb6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CCP1AS   0x000fb6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  ECCP1AS   0x000fb6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              ECCP1ASbits   0x000fb6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              CCP1DELbits   0x000fb7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  CCP1DEL   0x000fb7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 ECCP1DEL   0x000fb7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+             ECCP1DELbits   0x000fb7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              BAUDCONbits   0x000fb8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  BAUDCON   0x000fb8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              CCP2CONbits   0x000fba       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  CCP2CON   0x000fba       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    CCPR2   0x000fbb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CCPR2L   0x000fbb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CCPR2H   0x000fbc       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              CCP1CONbits   0x000fbd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 ECCP1CON   0x000fbd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+             ECCP1CONbits   0x000fbd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  CCP1CON   0x000fbd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    CCPR1   0x000fbe       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CCPR1L   0x000fbe       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   CCPR1H   0x000fbf       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               ADCON2bits   0x000fc0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   ADCON2   0x000fc0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   ADCON1   0x000fc1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               ADCON1bits   0x000fc1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               ADCON0bits   0x000fc2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   ADCON0   0x000fc2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    ADRES   0x000fc3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   ADRESL   0x000fc3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   ADRESH   0x000fc4       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              SSPCON2bits   0x000fc5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  SSPCON2   0x000fc5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              SSPCON1bits   0x000fc6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  SSPCON1   0x000fc6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              SSPSTATbits   0x000fc7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  SSPSTAT   0x000fc7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SSPADD   0x000fc8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   SSPBUF   0x000fc9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    T2CON   0x000fca       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                T2CONbits   0x000fca       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      PR2   0x000fcb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     TMR2   0x000fcc       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                T1CONbits   0x000fcd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    T1CON   0x000fcd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR1L   0x000fce       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR1H   0x000fcf       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 RCONbits   0x000fd0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     RCON   0x000fd0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               WDTCONbits   0x000fd1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   WDTCON   0x000fd1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               LVDCONbits   0x000fd2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   LVDCON   0x000fd2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  HLVDCON   0x000fd2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              HLVDCONbits   0x000fd2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               OSCCONbits   0x000fd3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   OSCCON   0x000fd3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    T0CON   0x000fd5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                T0CONbits   0x000fd5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR0L   0x000fd6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    TMR0H   0x000fd7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   STATUS   0x000fd8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               STATUSbits   0x000fd8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     FSR2   0x000fd9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR2L   0x000fd9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR2H   0x000fda       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   PLUSW2   0x000fdb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  PREINC2   0x000fdc       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTDEC2   0x000fdd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTINC2   0x000fde       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    INDF2   0x000fdf       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      BSR   0x000fe0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     FSR1   0x000fe1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR1L   0x000fe1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR1H   0x000fe2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   PLUSW1   0x000fe3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  PREINC1   0x000fe4       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTDEC1   0x000fe5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTINC1   0x000fe6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    INDF1   0x000fe7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     WREG   0x000fe8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     FSR0   0x000fe9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR0L   0x000fe9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    FSR0H   0x000fea       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   PLUSW0   0x000feb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  PREINC0   0x000fec       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTDEC0   0x000fed       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                 POSTINC0   0x000fee       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    INDF0   0x000fef       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  INTCON3   0x000ff0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              INTCON3bits   0x000ff0       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  INTCON2   0x000ff1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+              INTCON2bits   0x000ff1       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   INTCON   0x000ff2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               INTCONbits   0x000ff2       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PRODL   0x000ff3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     PROD   0x000ff3       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                    PRODH   0x000ff4       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   TABLAT   0x000ff5       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  TBLPTRL   0x000ff6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   TBLPTR   0x000ff6       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  TBLPTRH   0x000ff7       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                  TBLPTRU   0x000ff8       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      PCL   0x000ff9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                       PC   0x000ff9       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   PCLATH   0x000ffa       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   PCLATU   0x000ffb       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                   STKPTR   0x000ffc       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+               STKPTRbits   0x000ffc       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     TOSL   0x000ffd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                      TOS   0x000ffd       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     TOSH   0x000ffe       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+                     TOSU   0x000fff       data     extern C:\MCC18\SRC\TRADIT~1\PROC\p18f4455.asm
+
+
