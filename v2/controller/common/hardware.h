@@ -7,75 +7,58 @@
     NOTE: it is expected that 'types.h' is #included before this file
 */
 
-#define LEDS_MAX_ALPHAS 4
-#define BANK_PRESET_COUNT 4
-#define BANK_MAP_COUNT 8
-#define BANK_NAME_MAXLENGTH 4
-
-/* --------------- LED read-out display functions: */
-
-/* show 4 alphas on the 4-digit display */
-void leds_show_4alphas(char text[LEDS_MAX_ALPHAS]);
-
-/* show single digit on the single digit display */
-void leds_show_1digit(u8 value);
-
-#define FSB_PRESET_1 28
-#define FSB_PRESET_2 31
-#define FSB_PRESET_3 30
-#define FSB_PRESET_4 29
-
-#define FSB_CONTROL_1 0
-#define FSB_CONTROL_2 1
-#define FSB_CONTROL_3 2
-#define FSB_CONTROL_4 3
-
 /* --------------- Momentary toggle foot-switches: */
-#define FSM_PRESET_1	0x10000000
-#define FSM_PRESET_2	0x80000000
-#define FSM_PRESET_3	0x40000000
-#define FSM_PRESET_4	0x20000000
 
-#define FSM_CONTROL_1	0x00000001
-#define FSM_CONTROL_2	0x00000002
-#define FSM_CONTROL_3	0x00000004
-#define FSM_CONTROL_4	0x00000008
+#define FSB_TOP_1 0
+#define FSB_TOP_2 1
+#define FSB_TOP_3 2
+#define FSB_TOP_4 3
+#define FSB_TOP_5 4
+#define FSB_TOP_6 5
+#define FSB_TOP_7 6
+#define FSB_TOP_8 7
 
-/* Poll up to 28 foot-switch toggles simultaneously.  PREV NEXT DEC  INC map to 28-31 bit positions. */
-u32 fsw_poll(void);
+#define FSB_BOT_1 8
+#define FSB_BOT_2 9
+#define FSB_BOT_3 10
+#define FSB_BOT_4 11
+#define FSB_BOT_5 12
+#define FSB_BOT_6 13
+#define FSB_BOT_7 14
+#define FSB_BOT_8 15
 
-/* Set currently active program foot-switch's LED indicator and disable all others */
-void fsw_led_set_active(int idx);
+#define FSM_TOP_1 0x0001U
+#define FSM_TOP_2 0x0002U
+#define FSM_TOP_3 0x0004U
+#define FSM_TOP_4 0x0008U
+#define FSM_TOP_5 0x0010U
+#define FSM_TOP_6 0x0020U
+#define FSM_TOP_7 0x0040U
+#define FSM_TOP_8 0x0080U
 
-/* Explicitly enable a single LED without affecting the others */
-void fsw_led_enable(int idx);
+#define FSM_BOT_1 0x0100U
+#define FSM_BOT_2 0x0200U
+#define FSM_BOT_3 0x0400U
+#define FSM_BOT_4 0x0800U
+#define FSM_BOT_5 0x1000U
+#define FSM_BOT_6 0x2000U
+#define FSM_BOT_7 0x4000U
+#define FSM_BOT_8 0x8000U
 
-/* Explicitly disable a single LED without affecting the others */
-void fsw_led_disable(int idx);
+#define LEDM_1 0x0001U
+#define LEDM_2 0x0002U
+#define LEDM_3 0x0004U
+#define LEDM_4 0x0008U
+#define LEDM_5 0x0010U
+#define LEDM_6 0x0020U
+#define LEDM_7 0x0040U
+#define LEDM_8 0x0080U
 
-/* --------------- External inputs: */
+/* Poll 16 foot-switch toggles simultaneously. */
+u16 fsw_poll(void);
 
-/* Poll the slider switch to see which mode we're in: */
-u8 slider_poll(void);
-
-/* Poll the expression pedal's data (0-127): */
-u8 expr_poll(void);
-
-/* --------------- Data persistence functions: */
-
-/* Gets number of stored banks */
-u16 banks_count(void);
-
-/* Loads a bank into the specified arrays: */
-void bank_load(u16 bank_index, char name[BANK_NAME_MAXLENGTH], u8 bank[BANK_PRESET_COUNT], u8 bankcontroller[BANK_PRESET_COUNT], u8 bankmap[BANK_MAP_COUNT], u8 *bankmap_count);
-/* Stores the programs back to the bank: */
-void bank_store(u16 bank_index, u8 bank[BANK_PRESET_COUNT], u8 bankcontroller[BANK_PRESET_COUNT], u8 bankmap[BANK_MAP_COUNT], u8 bankmap_count);
-
-/* Load bank name for browsing through banks: */
-void bank_loadname(u16 bank_index, char name[BANK_NAME_MAXLENGTH]);
-
-/* Get the alphabetically sorted bank index */
-u16 bank_getsortedindex(u16 sort_index);
+/* Explicitly set the state of all 16 LEDs */
+void led_set(u8 topMask, u8 botMask);
 
 /* --------------- MIDI I/O functions: */
 
@@ -97,13 +80,3 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);
 void controller_init(void);
 void controller_10msec_timer(void);
 void controller_handle(void);
-
-u8 button_pressed(u32 mask);
-
-enum mainmode {
-	MODE_PRACTICE = 0,
-	MODE_CONCERT = 1,
-	MODE_UNDEFINED = 2
-};
-
-extern enum mainmode mode;
