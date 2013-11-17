@@ -12,7 +12,7 @@ static char sClassName[] = "MyClass";
 static HINSTANCE zhInstance = NULL;
 
 /* scale factor (pixels per inch) */
-const int dpi = 75;
+const double dpi = 55.4;    // NOTE(jsd): This is to-scale on my 40" Samsung HDTV 1080p
 const double inWidth = 20.0;
 const double inHeight = 7.0;
 
