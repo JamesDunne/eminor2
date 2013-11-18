@@ -41,8 +41,6 @@
       <itemPath>hwcalls.c</itemPath>
       <itemPath>vectors.c</itemPath>
       <itemPath>eeprom.c</itemPath>
-      <itemPath>leds.c</itemPath>
-      <itemPath>tables.c</itemPath>
       <itemPath>writeprogmem.c</itemPath>
       <itemPath>systick.c</itemPath>
       <itemPath>MidiComm.c</itemPath>

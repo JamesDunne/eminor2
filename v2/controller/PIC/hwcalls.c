@@ -198,16 +198,6 @@ void led_set(u8 top, u8 bot){
     LedStatesBot = bot;
 }
 
-/* Poll the slider switch to see which mode we're in: */
-
-void read_rom_to_pmbuffer(unsigned short Address) {
-	unsigned char index;
-	
-	for (index = 0;index<64;index++) {
-		ProgmemBuffer[index] = ROM_SAVEDATA[Address++];	//read rom data into ram
-	}
-}
-
 /* --------------- MIDI I/O functions: */
 
 /* Send formatted MIDI commands.

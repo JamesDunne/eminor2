@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c startup.c usb.c usbapplet.c usbdescript.c rs232.c hid.c ram_def.c config.asm intslct.c init.c hwcalls.c vectors.c eeprom.c leds.c tables.c writeprogmem.c systick.c MidiComm.c ../common/controller-simple.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c startup.c usb.c usbapplet.c usbdescript.c rs232.c hid.c ram_def.c config.asm intslct.c init.c hwcalls.c vectors.c eeprom.c writeprogmem.c systick.c MidiComm.c ../common/controller-simple.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/startup.o ${OBJECTDIR}/usb.o ${OBJECTDIR}/usbapplet.o ${OBJECTDIR}/usbdescript.o ${OBJECTDIR}/rs232.o ${OBJECTDIR}/hid.o ${OBJECTDIR}/ram_def.o ${OBJECTDIR}/config.o ${OBJECTDIR}/intslct.o ${OBJECTDIR}/init.o ${OBJECTDIR}/hwcalls.o ${OBJECTDIR}/vectors.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/leds.o ${OBJECTDIR}/tables.o ${OBJECTDIR}/writeprogmem.o ${OBJECTDIR}/systick.o ${OBJECTDIR}/MidiComm.o ${OBJECTDIR}/_ext/1270477542/controller-simple.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/startup.o.d ${OBJECTDIR}/usb.o.d ${OBJECTDIR}/usbapplet.o.d ${OBJECTDIR}/usbdescript.o.d ${OBJECTDIR}/rs232.o.d ${OBJECTDIR}/hid.o.d ${OBJECTDIR}/ram_def.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/intslct.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/hwcalls.o.d ${OBJECTDIR}/vectors.o.d ${OBJECTDIR}/eeprom.o.d ${OBJECTDIR}/leds.o.d ${OBJECTDIR}/tables.o.d ${OBJECTDIR}/writeprogmem.o.d ${OBJECTDIR}/systick.o.d ${OBJECTDIR}/MidiComm.o.d ${OBJECTDIR}/_ext/1270477542/controller-simple.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/startup.o ${OBJECTDIR}/usb.o ${OBJECTDIR}/usbapplet.o ${OBJECTDIR}/usbdescript.o ${OBJECTDIR}/rs232.o ${OBJECTDIR}/hid.o ${OBJECTDIR}/ram_def.o ${OBJECTDIR}/config.o ${OBJECTDIR}/intslct.o ${OBJECTDIR}/init.o ${OBJECTDIR}/hwcalls.o ${OBJECTDIR}/vectors.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/writeprogmem.o ${OBJECTDIR}/systick.o ${OBJECTDIR}/MidiComm.o ${OBJECTDIR}/_ext/1270477542/controller-simple.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/startup.o.d ${OBJECTDIR}/usb.o.d ${OBJECTDIR}/usbapplet.o.d ${OBJECTDIR}/usbdescript.o.d ${OBJECTDIR}/rs232.o.d ${OBJECTDIR}/hid.o.d ${OBJECTDIR}/ram_def.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/intslct.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/hwcalls.o.d ${OBJECTDIR}/vectors.o.d ${OBJECTDIR}/eeprom.o.d ${OBJECTDIR}/writeprogmem.o.d ${OBJECTDIR}/systick.o.d ${OBJECTDIR}/MidiComm.o.d ${OBJECTDIR}/_ext/1270477542/controller-simple.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/startup.o ${OBJECTDIR}/usb.o ${OBJECTDIR}/usbapplet.o ${OBJECTDIR}/usbdescript.o ${OBJECTDIR}/rs232.o ${OBJECTDIR}/hid.o ${OBJECTDIR}/ram_def.o ${OBJECTDIR}/config.o ${OBJECTDIR}/intslct.o ${OBJECTDIR}/init.o ${OBJECTDIR}/hwcalls.o ${OBJECTDIR}/vectors.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/leds.o ${OBJECTDIR}/tables.o ${OBJECTDIR}/writeprogmem.o ${OBJECTDIR}/systick.o ${OBJECTDIR}/MidiComm.o ${OBJECTDIR}/_ext/1270477542/controller-simple.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/startup.o ${OBJECTDIR}/usb.o ${OBJECTDIR}/usbapplet.o ${OBJECTDIR}/usbdescript.o ${OBJECTDIR}/rs232.o ${OBJECTDIR}/hid.o ${OBJECTDIR}/ram_def.o ${OBJECTDIR}/config.o ${OBJECTDIR}/intslct.o ${OBJECTDIR}/init.o ${OBJECTDIR}/hwcalls.o ${OBJECTDIR}/vectors.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/writeprogmem.o ${OBJECTDIR}/systick.o ${OBJECTDIR}/MidiComm.o ${OBJECTDIR}/_ext/1270477542/controller-simple.o
 
 # Source Files
-SOURCEFILES=main.c startup.c usb.c usbapplet.c usbdescript.c rs232.c hid.c ram_def.c config.asm intslct.c init.c hwcalls.c vectors.c eeprom.c leds.c tables.c writeprogmem.c systick.c MidiComm.c ../common/controller-simple.c
+SOURCEFILES=main.c startup.c usb.c usbapplet.c usbdescript.c rs232.c hid.c ram_def.c config.asm intslct.c init.c hwcalls.c vectors.c eeprom.c writeprogmem.c systick.c MidiComm.c ../common/controller-simple.c
 
 
 CFLAGS=
@@ -206,22 +206,6 @@ ${OBJECTDIR}/eeprom.o: eeprom.c  nbproject/Makefile-${CND_CONF}.mk
 	@${DEP_GEN} -d ${OBJECTDIR}/eeprom.o 
 	@${FIXDEPS} "${OBJECTDIR}/eeprom.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
-${OBJECTDIR}/leds.o: leds.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR} 
-	@${RM} ${OBJECTDIR}/leds.o.d 
-	@${RM} ${OBJECTDIR}/leds.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -p$(MP_PROCESSOR_OPTION) -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/leds.o   leds.c  -nw 2060 -nw 2056 -nw 2055
-	@${DEP_GEN} -d ${OBJECTDIR}/leds.o 
-	@${FIXDEPS} "${OBJECTDIR}/leds.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
-	
-${OBJECTDIR}/tables.o: tables.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR} 
-	@${RM} ${OBJECTDIR}/tables.o.d 
-	@${RM} ${OBJECTDIR}/tables.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -p$(MP_PROCESSOR_OPTION) -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/tables.o   tables.c  -nw 2060 -nw 2056 -nw 2055
-	@${DEP_GEN} -d ${OBJECTDIR}/tables.o 
-	@${FIXDEPS} "${OBJECTDIR}/tables.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
-	
 ${OBJECTDIR}/writeprogmem.o: writeprogmem.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/writeprogmem.o.d 
@@ -358,22 +342,6 @@ ${OBJECTDIR}/eeprom.o: eeprom.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/eeprom.o   eeprom.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/eeprom.o 
 	@${FIXDEPS} "${OBJECTDIR}/eeprom.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
-	
-${OBJECTDIR}/leds.o: leds.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR} 
-	@${RM} ${OBJECTDIR}/leds.o.d 
-	@${RM} ${OBJECTDIR}/leds.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/leds.o   leds.c  -nw 2060 -nw 2056 -nw 2055
-	@${DEP_GEN} -d ${OBJECTDIR}/leds.o 
-	@${FIXDEPS} "${OBJECTDIR}/leds.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
-	
-${OBJECTDIR}/tables.o: tables.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR} 
-	@${RM} ${OBJECTDIR}/tables.o.d 
-	@${RM} ${OBJECTDIR}/tables.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/tables.o   tables.c  -nw 2060 -nw 2056 -nw 2055
-	@${DEP_GEN} -d ${OBJECTDIR}/tables.o 
-	@${FIXDEPS} "${OBJECTDIR}/tables.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
 ${OBJECTDIR}/writeprogmem.o: writeprogmem.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 

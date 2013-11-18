@@ -1,9 +1,9 @@
 *.s#?
 *.b#?
 *.pro
+
 Debug/
 Release/
-build/
 *.sdf
 *.opensdf
 *.ilk
@@ -11,3 +11,6 @@ build/
 *.vcxproj.filters
 *.exe
 *.suo
+
+build/
+*.err
