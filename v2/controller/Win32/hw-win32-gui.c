@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <winuser.h>
 #include <stdio.h>
+#include <string.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
 
@@ -24,12 +25,12 @@ const double hSpacing = 2.57;
 const double vSpacing = 3.15;
 
 // was 0.2032
-const double inLEDOuterDiam = 0.2032;
+const double inLEDOuterDiam = (8 /*mm*/ * 0.01 * 2.54);
 
 // was 0.34026
-const double inFswOuterDiam = (13 /*mm*/ * 0.01 * 2.54);
+const double inFswOuterDiam = (12.2 /*mm*/ * 0.01 * 2.54);
 // was 0.30
-const double inFswInnerDiam = (12.2 /*mm*/ * 0.01 * 2.54);
+const double inFswInnerDiam = (11 /*mm*/ * 0.01 * 2.54);
 
 // button labels:
 static LPCTSTR labels[2][8] = {
@@ -37,7 +38,12 @@ static LPCTSTR labels[2][8] = {
     { L"1", L"1S", L"2", L"2S", L"3", L"3S", L"TAP", L"NEXT" }
 };
 
-/* foot-switch pushed state */
+static LPCTSTR keylabels[2][8] = {
+    { L"Q", L"W", L"E", L"R", L"T", L"Y", L"U", L"I" },
+    { L"A", L"S", L"D", L"F", L"G", L"H", L"J", L"K" }
+};
+
+// foot-switch pushed state
 static u16 fsw_pushed;
 // LED state:
 static u8 led_state[2];
@@ -50,23 +56,27 @@ void show_midi_output_devices() {
     MIDIOUTCAPS     moc;
     unsigned long iNumDevs, i;
 
-    /* Get the number of MIDI Out devices in this computer */
+    // Get the number of MIDI Out devices in this computer
     iNumDevs = midiOutGetNumDevs();
 
-    /* Go through all of those devices, displaying their names */
+    // Go through all of those devices, displaying their names
+    if (iNumDevs > 0) {
+        printf("MIDI Devices:\r\n");
+    }
+
     for (i = 0; i < iNumDevs; i++)
     {
-        /* Get info about the next device */
+        // Get info about the next device
         if (!midiOutGetDevCaps(i, &moc, sizeof(MIDIOUTCAPS)))
         {
-            /* Display its Device ID and name */
-            printf("Device ID #%u: %s\r\n", i, moc.szPname);
+            // Display its Device ID and name
+            printf("  #%d: %ls\r\n", i, moc.szPname);
         }
     }
 }
 
-/* main entry point */
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+// main entry point
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
     WNDCLASSEX WndClass;
     MSG Msg;
     unsigned long result;
@@ -112,25 +122,31 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return 0;
     }
 
+    // TODO: really should FreeConsole() and fclose(stdout) later but it'll be open til process end anyway.
+    AllocConsole();
+    freopen("CONOUT$", "wb", stdout);
+
+    // Activate the 10ms timer:
     SetTimer(hwndMain,         // handle to main window
         IDT_TIMER1,            // timer identifier
         10,                    // 10-ms interval
-        (TIMERPROC)NULL);     // no timer callback
+        (TIMERPROC)NULL);      // no timer callback
 
-    ShowWindow(hwndMain, nCmdShow);
-    UpdateWindow(hwndMain);
-
-    /* display the possible MIDI output devices: */
+    // display the possible MIDI output devices:
     show_midi_output_devices();
 
-    /* Open the MIDI Mapper */
-    result = midiOutOpen(&outHandle, (UINT)-1, 0, 0, CALLBACK_WINDOW);
-    if (result) {
-        printf("There was an error opening MIDI Mapper!  Disabling MIDI output...\r\n");
+    // Open the MIDI Mapper
+    UINT midiDeviceID = (UINT)1;
+    if (wcslen(pCmdLine) > 0) {
+        if (swscanf(pCmdLine, L"%d", &midiDeviceID) == 0)
+            midiDeviceID = (UINT)1;
     }
-    else {
-        printf("Opened MIDI mapper.\r\n");
-    }
+    printf("Opening MIDI device ID #%d...\r\n", midiDeviceID);
+    result = midiOutOpen(&outHandle, midiDeviceID, 0, 0, CALLBACK_WINDOW);
+    if (result)
+        printf("There was an error opening MIDI device!  Disabling MIDI output...\r\n\r\n");
+    else
+        printf("Opened MIDI device successfully.\r\n\r\n");
 
     // initialize UI bits:
     fsw_pushed = 0;
@@ -138,22 +154,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         led_state[r] = 0;
     }
 
-    /* initialize the logic controller */
+    // initialize the logic controller
     controller_init();
 
-    /* default Win32 message pump */
+    // Show main window:
+    ShowWindow(hwndMain, nCmdShow);
+    //UpdateWindow(hwndMain);
+
+    // default Win32 message pump
     while (GetMessage(&Msg, NULL, 0, 0)) {
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);
 
-        /* give control to the logic controller */
+        // give control to the logic controller
         controller_handle();
     }
 
     return 0;
 }
 
-/* scaled drawing routines: */
+// scaled drawing routines:
 
 BOOL dpi_MoveTo(HDC hdc, double X, double Y) {
     return MoveToEx(hdc, (int)(X * dpi), (int)(Y * dpi), NULL);
@@ -185,7 +205,7 @@ BOOL dpi_TextOut(HDC hdc, double nXStart, double nYStart, LPCWSTR lpString, int 
     return TextOutW(hdc, (int)(nXStart * dpi), (int)(nYStart * dpi), lpString, cbString);
 }
 
-/* paint the face plate window */
+// paint the face plate window
 void paintFacePlate(HWND hwnd) {
     HDC			hDC;
     PAINTSTRUCT	ps;
@@ -224,10 +244,10 @@ void paintFacePlate(HWND hwnd) {
     dpi_Rectangle(hDC, 0, 0, inWidth, inHeight);
 
     SetBkMode(hDC, TRANSPARENT);
-    SetTextColor(hDC, RGB(192, 192, 192));
+    SetTextAlign(hDC, TA_CENTER);
 
 #if 1
-    /* draw grid: */
+    // draw grid:
     for (inH = 0; inH <= inWidth; inH += 0.1, h = (h + 1) % 10) {
         if (h == 0)
             SelectObject(hDC, penGridThick);
@@ -263,7 +283,14 @@ void paintFacePlate(HWND hwnd) {
                 dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam, inFswOuterDiam);
                 SelectObject(hDC, brsWhite);
             }
-            dpi_TextOut(hDC, hLeft - 0.18 + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
+            SetTextColor(hDC, RGB(192, 192, 192));
+            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
+
+            // Label w/ the keyboard key:
+            wchar_t tmp[2] = L" ";
+            tmp[0] = keylabels[v][h][0];
+            SetTextColor(hDC, RGB(96, 16, 16));
+            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.75 + (v * vSpacing), tmp, 1);
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
@@ -308,19 +335,18 @@ void paintFacePlate(HWND hwnd) {
     EndPaint(hwnd, &ps);
 }
 
-/* message processing function: */
+// message processing function:
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
     switch (Message) {
     case WM_CLOSE:
         DestroyWindow(hwnd);
         break;
     case WM_DESTROY:
-        /* Close the MIDI device */
+        // Close the MIDI device:
         if (outHandle != 0) {
             if (midiOutClose(outHandle)) {
                 printf("There was a problem closing the MIDI mapper.\r\n");
-            }
-            else {
+            } else {
                 printf("Closed MIDI mapper.\r\n");
             }
         }
@@ -330,7 +356,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
         paintFacePlate(hwnd);
         break;
     case WM_KEYDOWN:
-        /* only fire if the previous button state was UP (i.e. ignore autorepeat messages) */
+        // only fire if the previous button state was UP (i.e. ignore autorepeat messages)
         if ((lParam & (1 << 30)) == 0) {
             switch (wParam) {
             case 'Q': case 'q': fsw_pushed |= FSM_TOP_1; break;
@@ -351,12 +377,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             case 'J': case 'j': fsw_pushed |= FSM_BOT_7; break;
             case 'K': case 'k': fsw_pushed |= FSM_BOT_8; break;
             }
-            /* TODO: fix to only redraw affected button */
             InvalidateRect(hwnd, NULL, TRUE);
         }
         break;
     case WM_KEYUP:
-        /* handle toggle button up */
+        // handle toggle button up
         switch (wParam) {
         case 'Q': case 'q': fsw_pushed &= ~FSM_TOP_1; break;
         case 'W': case 'w': fsw_pushed &= ~FSM_TOP_2; break;
@@ -376,7 +401,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
         case 'J': case 'j': fsw_pushed &= ~FSM_BOT_7; break;
         case 'K': case 'k': fsw_pushed &= ~FSM_BOT_8; break;
         }
-        /* TODO: fix to only redraw affected button */
         InvalidateRect(hwnd, NULL, TRUE);
         break;
     case WM_TIMER:
@@ -390,34 +414,34 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
     return 0;
 }
 
-/* --------------- Momentary toggle foot-switches: */
+// --------------- Momentary toggle foot-switches:
 
-/* Poll up to 28 foot-switch toggles simultaneously.  DEC INC ENTER NEXT map to 28-31 bit positions. */
+// Poll 16 foot-switch toggles simultaneously
 u16 fsw_poll() {
     return fsw_pushed;
 }
 
-/* Explicitly set the state of all 16 LEDs */
+// Explicitly set the state of all 16 LEDs
 void led_set(u8 topMask, u8 botMask) {
     led_state[0] = topMask;
     led_state[1] = botMask;
     InvalidateRect(hwndMain, NULL, TRUE);
 }
 
-/* --------------- MIDI I/O functions: */
+// --------------- MIDI I/O functions:
 
 /* Send formatted MIDI commands.
 
     0 <= cmd <= F       - MIDI command
     0 <= channel <= F   - MIDI channel to send command to
     00 <= data1 <= FF   - data byte of MIDI command
-    */
+*/
 void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
-    printf("MIDI: cmd=%1X, chan=%1X, %02X\r\n", cmd, channel, data1);
     if (outHandle != 0) {
-        /* send the MIDI command to the opened MIDI Mapper device: */
+        // send the MIDI command to the opened MIDI Mapper device:
         midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8));
     }
+    printf("MIDI: %1X%1X %02X\r\n", cmd, channel, data1);
 }
 
 /* Send formatted MIDI commands.
@@ -428,9 +452,9 @@ void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
     00 <= data2 <= FF   - second (optional) data byte of MIDI command
     */
 void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
-    printf("MIDI: cmd=%1X, chan=%1X, %02X %02X\r\n", cmd, channel, data1, data2);
     if (outHandle != 0) {
-        /* send the MIDI command to the opened MIDI Mapper device: */
+        // send the MIDI command to the opened MIDI Mapper device:
         midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8) | ((u32)data2 << 16));
     }
+    printf("MIDI: %1X%1X %02X %02X\r\n", cmd, channel, data1, data2);
 }
