@@ -8,18 +8,28 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 #define IDT_TIMER1 101
 
-static char sClassName[] = "MyClass";
 static HINSTANCE zhInstance = NULL;
 
-/* scale factor (pixels per inch) */
+// display scale factor (pixels per inch)
 const double dpi = 55.4;    // NOTE(jsd): This is to-scale on my 40" Samsung HDTV 1080p
+
+// Total width, height in inches:
 const double inWidth = 20.0;
 const double inHeight = 7.0;
 
+// Position and spacing of footswitches (from centers):
 const double vStart = 2.5;
 const double hLeft = 1.0;
 const double hSpacing = 2.57;
 const double vSpacing = 3.15;
+
+// was 0.2032
+const double inLEDOuterDiam = 0.2032;
+
+// was 0.34026
+const double inFswOuterDiam = (13 /*mm*/ * 0.01 * 2.54);
+// was 0.30
+const double inFswInnerDiam = (12.2 /*mm*/ * 0.01 * 2.54);
 
 // button labels:
 static LPCTSTR labels[2][8] = {
@@ -110,11 +120,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     ShowWindow(hwndMain, nCmdShow);
     UpdateWindow(hwndMain);
 
-    fsw_pushed = 0;
-    for (int r = 0; r < 2; ++r) {
-        led_state[r] = 0;
-    }
-
     /* display the possible MIDI output devices: */
     show_midi_output_devices();
 
@@ -125,6 +130,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
     else {
         printf("Opened MIDI mapper.\r\n");
+    }
+
+    // initialize UI bits:
+    fsw_pushed = 0;
+    for (int r = 0; r < 2; ++r) {
+        led_state[r] = 0;
     }
 
     /* initialize the logic controller */
@@ -180,7 +191,7 @@ void paintFacePlate(HWND hwnd) {
     PAINTSTRUCT	ps;
 
     HPEN	penThick, penThin, penGridThick, penGridThin;
-    HBRUSH	brsWhite, brsRed, brsDarkGreen, brsGreen, brsBlack;
+    HBRUSH	brsWhite, brsDarkSilver, brsDarkGreen, brsGreen, brsBlack;
 
     int		h = 0, v = 0;
     double	inH, inV;
@@ -204,7 +215,7 @@ void paintFacePlate(HWND hwnd) {
     penThin = CreatePen(PS_SOLID, 1, RGB(128, 128, 128));
 
     brsWhite = CreateSolidBrush(RGB(192, 192, 192));
-    brsRed = CreateSolidBrush(RGB(250, 25, 5));
+    brsDarkSilver = CreateSolidBrush(RGB(96, 96, 96));
     brsDarkGreen = CreateSolidBrush(RGB(8, 30, 3));
     brsGreen = CreateSolidBrush(RGB(25, 250, 5));
     brsBlack = CreateSolidBrush(RGB(0, 0, 0));
@@ -244,12 +255,12 @@ void paintFacePlate(HWND hwnd) {
         u16 b = 1 << (v * 8);
         for (h = 0; h < 8; ++h, b <<= 1) {
             SelectObject(hDC, penThick);
-            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), 0.34026, 0.34026);
+            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam, inFswOuterDiam);
             SelectObject(hDC, penThin);
-            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), 0.30, 0.30);
+            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswInnerDiam, inFswInnerDiam);
             if (fsw_pushed & b) {
-                SelectObject(hDC, brsRed);
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), 0.25, 0.25);
+                SelectObject(hDC, brsDarkSilver);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam, inFswOuterDiam);
                 SelectObject(hDC, brsWhite);
             }
             dpi_TextOut(hDC, hLeft - 0.18 + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
@@ -263,7 +274,7 @@ void paintFacePlate(HWND hwnd) {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if ((led_state[v] & b) == 0) {
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), 0.2032, 0.2032);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), inLEDOuterDiam, inLEDOuterDiam);
             }
         }
 
@@ -272,7 +283,7 @@ void paintFacePlate(HWND hwnd) {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if (led_state[v] & b) {
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), 0.2032, 0.2032);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), inLEDOuterDiam, inLEDOuterDiam);
             }
         }
     }
@@ -281,7 +292,7 @@ void paintFacePlate(HWND hwnd) {
 
     DeleteObject(brsWhite);
     DeleteObject(brsDarkGreen);
-    DeleteObject(brsRed);
+    DeleteObject(brsDarkSilver);
     DeleteObject(brsGreen);
     DeleteObject(brsBlack);
 

@@ -15,3 +15,5 @@ Release/
 dist/
 build/
 *.err
+*.map
+
