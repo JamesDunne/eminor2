@@ -69,21 +69,6 @@ static u8 gmaj_cc_lookup[6] = {
 // Current and previous button state:
 u16	sw_curr, sw_last;
 
-/* determine if a footswitch was pressed: */
-static u8 button_pressed(u16 mask) {
-    return ((sw_curr & mask) == mask) && ((sw_last & mask) == 0);
-}
-
-/* determine if still holding footswitch: */
-static u8 button_held(u16 mask) {
-    return (sw_curr & mask) == mask;
-}
-
-/* determine if a footswitch was released: */
-static u8 button_released(u16 mask) {
-    return ((sw_last & mask) == mask) && ((sw_curr & mask) == 0);
-}
-
 /* current control on/off toggle bits */
 u8 leds_top, leds_bot;
 
@@ -91,6 +76,11 @@ u8 toggle_tap;
 
 // Current g-major program #:
 u8 gmajp;
+
+/* determine if a footswitch was pressed: */
+static u8 button_pressed(u16 mask) {
+    return ((sw_curr & mask) == mask) && ((sw_last & mask) == 0);
+}
 
 // Set RJM program to p (0-5)
 static void rjm_program(u8 p) {
@@ -253,5 +243,4 @@ void controller_handle(void) {
 
     // Record the previous switch state:
     sw_last = sw_curr;
-    return;
 }

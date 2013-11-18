@@ -22,9 +22,9 @@ const double hSpacing = 2.57;
 const double vSpacing = 3.15;
 
 // button labels:
-static char *labels[2][8] = {
-    { "CMP", "FLT", "PIT", "CHO", "DLY", "RVB", "MUTE", "PREV" },
-    { "1", "1S", "2", "2S", "3", "3S", "TAP ", "NEXT" }
+static LPCTSTR labels[2][8] = {
+    { L"CMP", L"FLT", L"PIT", L"CHO", L"DLY", L"RVB", L"MUTE", L"PREV" },
+    { L"1", L"1S", L"2", L"2S", L"3", L"3S", L"TAP", L"NEXT" }
 };
 
 /* foot-switch pushed state */
@@ -75,17 +75,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     WndClass.hbrBackground = NULL;
     //WndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW);
     WndClass.lpszMenuName = NULL;
-    WndClass.lpszClassName = sClassName;
+    WndClass.lpszClassName = L"MyClass";
 
-    if (!RegisterClassEx(&WndClass)) {
-        MessageBox(0, "Error Registering Class!", "Error!", MB_ICONSTOP | MB_OK);
+    if (!RegisterClassExW(&WndClass)) {
+        MessageBox(0, L"Error Registering Class!", L"Error!", MB_ICONSTOP | MB_OK);
         return 0;
     }
 
-    hwndMain = CreateWindowEx(
+    hwndMain = CreateWindowExW(
         0,
-        sClassName,
-        "MIDI controller test harness",
+        L"MyClass",
+        L"MIDI controller test harness",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -98,7 +98,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         );
 
     if (hwndMain == NULL) {
-        MessageBox(0, "Error Creating Window!", "Error!", MB_ICONSTOP | MB_OK);
+        MessageBoxW(0, L"Error Creating Window!", L"Error!", MB_ICONSTOP | MB_OK);
         return 0;
     }
 
@@ -139,7 +139,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         controller_handle();
     }
 
-    return Msg.wParam;
+    return 0;
 }
 
 /* scaled drawing routines: */
@@ -170,8 +170,8 @@ BOOL dpi_CenterEllipse(HDC hdc, double cX, double cY, double rW, double rH) {
         );
 }
 
-BOOL dpi_TextOut(HDC hdc, double nXStart, double nYStart, LPCTSTR lpString, int cbString) {
-    return TextOut(hdc, (int)(nXStart * dpi), (int)(nYStart * dpi), lpString, cbString);
+BOOL dpi_TextOut(HDC hdc, double nXStart, double nYStart, LPCWSTR lpString, int cbString) {
+    return TextOutW(hdc, (int)(nXStart * dpi), (int)(nYStart * dpi), lpString, cbString);
 }
 
 /* paint the face plate window */
@@ -252,7 +252,7 @@ void paintFacePlate(HWND hwnd) {
                 dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), 0.25, 0.25);
                 SelectObject(hDC, brsWhite);
             }
-            dpi_TextOut(hDC, hLeft - 0.18 + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], strlen(labels[v][h]));
+            dpi_TextOut(hDC, hLeft - 0.18 + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
