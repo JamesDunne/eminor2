@@ -26,10 +26,6 @@
 #include "../common/hardware.h"
 
 // Useful macros:
-#define setbit(VAR,Place) VAR |= (1 << Place)
-#define clrbit(VAR,Place) VAR &= ~(1 << Place)
-
-#define chkbit(VAR,Place) (VAR & (1 << Place))
 #define tglbit(VAR,Place) VAR ^= (1 << Place)
 
 #if DEBUG
@@ -77,7 +73,7 @@ u8 toggle_tap;
 // Current g-major program #:
 u8 gmajp;
 
-// determine if a footswitch was pressed:
+// Determine if a footswitch was pressed
 static u8 button_pressed(u16 mask) {
     return ((sw_curr & mask) == mask) && ((sw_last & mask) == 0);
 }
@@ -99,7 +95,7 @@ static void rjm_program(u8 p) {
 }
 
 
-// Set g-major program to p (0-127):
+// Set g-major program to p (0-127)
 static void gmaj_program(u8 p) {
     // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
     midi_send_cmd1(0xC, gmaj_midi_channel, p);
@@ -110,38 +106,35 @@ static void gmaj_program(u8 p) {
     led_set(leds_top, leds_bot);
 }
 
+// Set g-major CC value
 static void gmaj_cc_set(u8 cc, u8 val) {
     midi_send_cmd2(0xB, gmaj_midi_channel, cc, val);
 }
 
-static void gmaj_cc_on(u8 cc) {
-    gmaj_cc_set(cc, 0x7F);
-}
-
-static void gmaj_cc_off(u8 cc) {
-    gmaj_cc_set(cc, 0x00);
-}
-
+// Reset g-major mute to off if on
 static void reset_tuner_mute(void) {
     // Turn off mute if enabled:
     if (leds_top & LEDM_7) {
         leds_top &= ~LEDM_7;
-        gmaj_cc_off(gmaj_cc_mute);
+        gmaj_cc_set(gmaj_cc_mute, 0x00);
         led_set(leds_top, leds_bot);
     }
 }
 
+// Toggle a g-major CC effect
 static void gmaj_toggle_cc(u8 idx) {
     u8 togglevalue = 0x00;
+    u8 idxMask = (1 << idx);
 
+    // Make sure we don't go out of range:
     assert(idx < 6);
 
     // Toggle on/off the selected continuous controller:
-    tglbit(leds_top, idx);
+    leds_top ^= idxMask;
     led_set(leds_top, leds_bot);
 
     // Determine the MIDI value to use depending on the newly toggled state:
-    if (chkbit(leds_top, idx)) togglevalue = 0x7F;
+    if (leds_top & idxMask) togglevalue = 0x7F;
 
     // Send MIDI command:
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);

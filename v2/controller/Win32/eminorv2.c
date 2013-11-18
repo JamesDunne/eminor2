@@ -12,7 +12,8 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 static HINSTANCE zhInstance = NULL;
 
 // display scale factor (pixels per inch)
-const double dpi = 55.4;    // NOTE(jsd): This is to-scale on my 40" Samsung HDTV 1080p
+const double defaultDpi = 55.4;    // NOTE(jsd): This is to-scale on my 40" Samsung HDTV 1080p
+static double dpi = 55.4;
 
 // Total width, height in inches:
 const double inWidth = 20.0;
@@ -64,11 +65,9 @@ void show_midi_output_devices() {
         printf("MIDI Devices:\r\n");
     }
 
-    for (i = 0; i < iNumDevs; i++)
-    {
+    for (i = 0; i < iNumDevs; i++) {
         // Get info about the next device
-        if (!midiOutGetDevCaps(i, &moc, sizeof(MIDIOUTCAPS)))
-        {
+        if (!midiOutGetDevCaps(i, &moc, sizeof(MIDIOUTCAPS))) {
             // Display its Device ID and name
             printf("  #%d: %ls\r\n", i, moc.szPname);
         }
@@ -244,7 +243,6 @@ void paintFacePlate(HWND hwnd) {
     dpi_Rectangle(hDC, 0, 0, inWidth, inHeight);
 
     SetBkMode(hDC, TRANSPARENT);
-    SetTextAlign(hDC, TA_CENTER);
 
 #if 1
     // draw grid:
@@ -268,6 +266,16 @@ void paintFacePlate(HWND hwnd) {
     }
 #endif
 
+    // dpi label:
+    SetTextAlign(hDC, TA_LEFT | VTA_TOP);
+    wchar_t tmp[16];
+    swprintf(tmp, 16, L"dpi: %3.1f", dpi);
+    SetTextColor(hDC, RGB(100, 100, 100));
+    dpi_TextOut(hDC, 0.5, 0.5, tmp, wcslen(tmp));
+
+    SetTextAlign(hDC, TA_CENTER | VTA_TOP);
+
+    // 2 rows of foot switches:
     for (v = 0; v < 2; ++v) {
         SelectObject(hDC, penThin);
         SelectObject(hDC, brsWhite);
@@ -283,7 +291,15 @@ void paintFacePlate(HWND hwnd) {
                 dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam, inFswOuterDiam);
                 SelectObject(hDC, brsWhite);
             }
-            SetTextColor(hDC, RGB(192, 192, 192));
+
+            // Set label color:
+            if (v == 0 && h < 6)
+                SetTextColor(hDC, RGB(64, 64, 192));
+            else if (v == 1 && h < 6)
+                SetTextColor(hDC, RGB(64, 192, 64));
+            else
+
+                SetTextColor(hDC, RGB(224, 224, 224));
             dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
 
             // Label w/ the keyboard key:
@@ -313,8 +329,10 @@ void paintFacePlate(HWND hwnd) {
         }
     }
 
+    // Copy memory buffer to screen:
     BitBlt(orighdc, 0, 0, win_width, win_height, Memhdc, 0, 0, SRCCOPY);
 
+    // Cleanup:
     DeleteObject(brsWhite);
     DeleteObject(brsDarkGreen);
     DeleteObject(brsDarkSilver);
@@ -335,79 +353,102 @@ void paintFacePlate(HWND hwnd) {
 
 // message processing function:
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
+    RECT rect;
     switch (Message) {
-    case WM_CLOSE:
-        DestroyWindow(hwnd);
-        break;
-    case WM_DESTROY:
-        // Close the MIDI device:
-        if (outHandle != 0) {
-            if (midiOutClose(outHandle)) {
-                printf("There was a problem closing the MIDI mapper.\r\n");
-            } else {
-                printf("Closed MIDI mapper.\r\n");
+        case WM_CLOSE:
+            DestroyWindow(hwnd);
+            break;
+        case WM_DESTROY:
+            // Close the MIDI device:
+            if (outHandle != 0) {
+                if (midiOutClose(outHandle)) {
+                    printf("There was a problem closing the MIDI mapper.\r\n");
+                }
+                else {
+                    printf("Closed MIDI mapper.\r\n");
+                }
             }
-        }
-        PostQuitMessage(0);
-        break;
-    case WM_PAINT:
-        paintFacePlate(hwnd);
-        break;
-    case WM_KEYDOWN:
-        // only fire if the previous button state was UP (i.e. ignore autorepeat messages)
-        if ((lParam & (1 << 30)) == 0) {
-            switch (wParam) {
-            case 'Q': case 'q': fsw_pushed |= FSM_TOP_1; break;
-            case 'W': case 'w': fsw_pushed |= FSM_TOP_2; break;
-            case 'E': case 'e': fsw_pushed |= FSM_TOP_3; break;
-            case 'R': case 'r': fsw_pushed |= FSM_TOP_4; break;
-            case 'T': case 't': fsw_pushed |= FSM_TOP_5; break;
-            case 'Y': case 'y': fsw_pushed |= FSM_TOP_6; break;
-            case 'U': case 'u': fsw_pushed |= FSM_TOP_7; break;
-            case 'I': case 'i': fsw_pushed |= FSM_TOP_8; break;
+            PostQuitMessage(0);
+            break;
+        case WM_PAINT:
+            paintFacePlate(hwnd);
+            break;
+        case WM_MOUSEWHEEL:
+            if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
+                // mwheel up
+                dpi += 0.2 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
+            }
+            else {
+                // mwheel down
+                dpi -= 0.2 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
+                if (dpi < 1.0) dpi = 1.0;
+            }
+            GetWindowRect(hwnd, &rect);
+            SetWindowPos(hwnd, 0, rect.left, rect.top, (int)(inWidth * dpi) + 16, (int)(inHeight * dpi) + 37, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+            InvalidateRect(hwnd, NULL, TRUE);
+            break;
+        case WM_KEYDOWN:
+            // only fire if the previous button state was UP (i.e. ignore autorepeat messages)
+            if ((lParam & (1 << 30)) == 0) {
+                switch (wParam) {
+                    case 'Q': case 'q': fsw_pushed |= FSM_TOP_1; break;
+                    case 'W': case 'w': fsw_pushed |= FSM_TOP_2; break;
+                    case 'E': case 'e': fsw_pushed |= FSM_TOP_3; break;
+                    case 'R': case 'r': fsw_pushed |= FSM_TOP_4; break;
+                    case 'T': case 't': fsw_pushed |= FSM_TOP_5; break;
+                    case 'Y': case 'y': fsw_pushed |= FSM_TOP_6; break;
+                    case 'U': case 'u': fsw_pushed |= FSM_TOP_7; break;
+                    case 'I': case 'i': fsw_pushed |= FSM_TOP_8; break;
 
-            case 'A': case 'a': fsw_pushed |= FSM_BOT_1; break;
-            case 'S': case 's': fsw_pushed |= FSM_BOT_2; break;
-            case 'D': case 'd': fsw_pushed |= FSM_BOT_3; break;
-            case 'F': case 'f': fsw_pushed |= FSM_BOT_4; break;
-            case 'G': case 'g': fsw_pushed |= FSM_BOT_5; break;
-            case 'H': case 'h': fsw_pushed |= FSM_BOT_6; break;
-            case 'J': case 'j': fsw_pushed |= FSM_BOT_7; break;
-            case 'K': case 'k': fsw_pushed |= FSM_BOT_8; break;
+                    case 'A': case 'a': fsw_pushed |= FSM_BOT_1; break;
+                    case 'S': case 's': fsw_pushed |= FSM_BOT_2; break;
+                    case 'D': case 'd': fsw_pushed |= FSM_BOT_3; break;
+                    case 'F': case 'f': fsw_pushed |= FSM_BOT_4; break;
+                    case 'G': case 'g': fsw_pushed |= FSM_BOT_5; break;
+                    case 'H': case 'h': fsw_pushed |= FSM_BOT_6; break;
+                    case 'J': case 'j': fsw_pushed |= FSM_BOT_7; break;
+                    case 'K': case 'k': fsw_pushed |= FSM_BOT_8; break;
+
+                    case '0': {
+                                  dpi = defaultDpi;
+                                  GetWindowRect(hwnd, &rect);
+                                  SetWindowPos(hwnd, 0, rect.left, rect.top, (int)(inWidth * dpi) + 16, (int)(inHeight * dpi) + 37, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+                                  break;
+                    }
+                }
+                InvalidateRect(hwnd, NULL, TRUE);
+            }
+            break;
+        case WM_KEYUP:
+            // handle toggle button up
+            switch (wParam) {
+                case 'Q': case 'q': fsw_pushed &= ~FSM_TOP_1; break;
+                case 'W': case 'w': fsw_pushed &= ~FSM_TOP_2; break;
+                case 'E': case 'e': fsw_pushed &= ~FSM_TOP_3; break;
+                case 'R': case 'r': fsw_pushed &= ~FSM_TOP_4; break;
+                case 'T': case 't': fsw_pushed &= ~FSM_TOP_5; break;
+                case 'Y': case 'y': fsw_pushed &= ~FSM_TOP_6; break;
+                case 'U': case 'u': fsw_pushed &= ~FSM_TOP_7; break;
+                case 'I': case 'i': fsw_pushed &= ~FSM_TOP_8; break;
+
+                case 'A': case 'a': fsw_pushed &= ~FSM_BOT_1; break;
+                case 'S': case 's': fsw_pushed &= ~FSM_BOT_2; break;
+                case 'D': case 'd': fsw_pushed &= ~FSM_BOT_3; break;
+                case 'F': case 'f': fsw_pushed &= ~FSM_BOT_4; break;
+                case 'G': case 'g': fsw_pushed &= ~FSM_BOT_5; break;
+                case 'H': case 'h': fsw_pushed &= ~FSM_BOT_6; break;
+                case 'J': case 'j': fsw_pushed &= ~FSM_BOT_7; break;
+                case 'K': case 'k': fsw_pushed &= ~FSM_BOT_8; break;
             }
             InvalidateRect(hwnd, NULL, TRUE);
-        }
-        break;
-    case WM_KEYUP:
-        // handle toggle button up
-        switch (wParam) {
-        case 'Q': case 'q': fsw_pushed &= ~FSM_TOP_1; break;
-        case 'W': case 'w': fsw_pushed &= ~FSM_TOP_2; break;
-        case 'E': case 'e': fsw_pushed &= ~FSM_TOP_3; break;
-        case 'R': case 'r': fsw_pushed &= ~FSM_TOP_4; break;
-        case 'T': case 't': fsw_pushed &= ~FSM_TOP_5; break;
-        case 'Y': case 'y': fsw_pushed &= ~FSM_TOP_6; break;
-        case 'U': case 'u': fsw_pushed &= ~FSM_TOP_7; break;
-        case 'I': case 'i': fsw_pushed &= ~FSM_TOP_8; break;
-
-        case 'A': case 'a': fsw_pushed &= ~FSM_BOT_1; break;
-        case 'S': case 's': fsw_pushed &= ~FSM_BOT_2; break;
-        case 'D': case 'd': fsw_pushed &= ~FSM_BOT_3; break;
-        case 'F': case 'f': fsw_pushed &= ~FSM_BOT_4; break;
-        case 'G': case 'g': fsw_pushed &= ~FSM_BOT_5; break;
-        case 'H': case 'h': fsw_pushed &= ~FSM_BOT_6; break;
-        case 'J': case 'j': fsw_pushed &= ~FSM_BOT_7; break;
-        case 'K': case 'k': fsw_pushed &= ~FSM_BOT_8; break;
-        }
-        InvalidateRect(hwnd, NULL, TRUE);
-        break;
-    case WM_TIMER:
-        switch (wParam) {
-        case IDT_TIMER1: controller_10msec_timer(); break;
-        }
-        break;
-    default:
-        return DefWindowProc(hwnd, Message, wParam, lParam);
+            break;
+        case WM_TIMER:
+            switch (wParam) {
+                case IDT_TIMER1: controller_10msec_timer(); break;
+            }
+            break;
+        default:
+            return DefWindowProc(hwnd, Message, wParam, lParam);
     }
     return 0;
 }
@@ -433,7 +474,7 @@ void led_set(u8 topMask, u8 botMask) {
     0 <= cmd <= F       - MIDI command
     0 <= channel <= F   - MIDI channel to send command to
     00 <= data1 <= FF   - data byte of MIDI command
-*/
+    */
 void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
     if (outHandle != 0) {
         // send the MIDI command to the opened MIDI Mapper device:
