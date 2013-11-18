@@ -34,8 +34,8 @@ const double inFswInnerDiam = (11 /*mm*/ * 0.01 * 2.54);
 
 // button labels:
 static LPCTSTR labels[2][8] = {
-    { L"CMP", L"FLT", L"PIT", L"CHO", L"DLY", L"RVB", L"MUTE", L"PREV" },
-    { L"1", L"1S", L"2", L"2S", L"3", L"3S", L"TAP", L"NEXT" }
+    { L"COMP", L"FILTER", L"PITCH", L"CHORUS", L"DELAY", L"REVERB", L"MUTE", L"PREV" },
+    { L"CH1", L"CH1S", L"CH2", L"CH2S", L"CH3", L"CH3S", L"TAP", L"NEXT" }
 };
 
 static LPCTSTR keylabels[2][8] = {
