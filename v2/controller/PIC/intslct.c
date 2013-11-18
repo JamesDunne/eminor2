@@ -46,7 +46,7 @@ void	InterruptHandlerHigh ()
 			SystickCntr = 0;
 //Every 1mS routine:
 			Systick = true;
-			Process7Segs();
+			//Process7Segs();
 		}
 	}
 }

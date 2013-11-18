@@ -3,6 +3,7 @@
 *.pro
 Debug/
 Release/
+build/
 *.sdf
 *.opensdf
 *.ilk

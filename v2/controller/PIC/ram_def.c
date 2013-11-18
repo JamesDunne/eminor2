@@ -11,7 +11,6 @@ near BitField MiscFlags1;
 
 //----------------------------Main variables----------------------------------------
 #pragma udata gpr1
-BitField DispSegData[5];
 TwoBytes ProgMemAddr;
 unsigned char ProgmemBuffer[64];
 
@@ -20,9 +19,10 @@ TwoBytes RAMCommAddr;
 TwoBytes ROMCommAddr;
 
 unsigned char DispNumOfCommons;
-unsigned char LedStates;			//footswitch leds
-unsigned char ButtonState;
-unsigned char ExpPedalInst;
+unsigned char LedStatesTop;
+unsigned char LedStatesBot;
+unsigned char ButtonStateTop;
+unsigned char ButtonStateBot;
 unsigned char SystickCntr;
 unsigned char SystickCntr2;
 unsigned char SystickCntr3;
@@ -30,12 +30,6 @@ unsigned char SystickCntr4;
 unsigned char SystickCntr5;
 
 unsigned char ComPointer;
-
-unsigned char ScrollingDisplayData[64];
-unsigned char ScrollingDisplayLength;
-unsigned char ScrollingDisplayIndex;
-
-TwoBytes ExpPedalAvg;
 
 unsigned char TxBuffer[MAX_TX_LENGTH];
 unsigned char TxBufPtr;

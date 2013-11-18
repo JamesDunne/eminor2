@@ -141,9 +141,9 @@ static void reset_tuner_mute(void) {
 }
 
 static void gmaj_toggle_cc(u8 idx) {
-    assert(idx < 6);
-
     u8 togglevalue = 0x00;
+
+    assert(idx < 6);
 
     // Toggle on/off the selected continuous controller:
     tglbit(leds_top, idx);

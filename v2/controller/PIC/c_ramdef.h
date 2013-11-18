@@ -27,14 +27,8 @@ near extern BitField ArbFlags2;
 #define	CheckButtons		ArbFlags2.bit0
 #define	ControllerTiming	ArbFlags2.bit1
 
-near extern BitField MiscFlags1;
-#define	ModeSwitchState		MiscFlags1.bit0
-#define	Scroll7Segs			MiscFlags1.bit1
-
-
 //----------------------------Main variables----------------------------------------
 
-extern BitField DispSegData[5];		//0 = a, 1 = b, etc.. 
 extern TwoBytes	ProgMemAddr;
 extern unsigned char ProgmemBuffer[64];
 
@@ -43,8 +37,10 @@ extern TwoBytes RAMCommAddr;
 extern TwoBytes ROMCommAddr;
 
 extern unsigned char DispNumOfCommons;
-extern unsigned char LedStates;			//footswitch leds
-extern unsigned char ButtonState;
+extern unsigned char LedStatesTop;
+extern unsigned char LedStatesBot;
+extern unsigned char ButtonStateTop;
+extern unsigned char ButtonStateBot;
 extern unsigned char ExpPedalInst;
 extern unsigned char SystickCntr;
 extern unsigned char SystickCntr2;
@@ -57,8 +53,6 @@ extern unsigned char ComPointer;
 extern unsigned char ScrollingDisplayData[64];
 extern unsigned char ScrollingDisplayLength;
 extern unsigned char ScrollingDisplayIndex;
-
-extern TwoBytes ExpPedalAvg;
 
 extern unsigned char TxBuffer[MAX_TX_LENGTH];
 extern unsigned char TxBufPtr;

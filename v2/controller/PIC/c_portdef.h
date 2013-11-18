@@ -11,15 +11,14 @@
 #define	OUTPUT						0
 
 //PORTA Definitions
-#define	EXP_PEDAL_BIT					0
-#define	EXP_PEDAL_PIN					PORTAbits.RA0	//Pin 2
-#define	EXP_PEDAL_LAT_BIT				LATAbits.LATA0
-#define	EXP_PEDAL_LAT					LATA
-#define	EXP_PEDAL_TRIS_BIT				TRISAPINbits.TRISA0
-#define	EXP_PEDAL_PORT					PORTA
+#define	BTN_S3_BIT                      0
+#define	BTN_S3_PIN                      PORTAbits.RA0	//Pin 2
+#define	BTN_S3_LAT_BIT                  LATAbits.LATA0
+#define	BTN_S3_LAT                      LATA
+#define	BTN_S3_TRIS_BIT                 TRISAPINbits.TRISA0
+#define	BTN_S3_PORT                     PORTA
 #define	TRISAPIN0						(INPUT<<0)
 #define	LATAPIN0						(false<<0)
-#define	EXP_PEDAL_CHANNEL				0x01
 
 #define SHIFTREG_SRCK_BIT				1
 #define SHIFTREG_SRCK_PIN				PORTAbits.RA1	//Pin 3
@@ -151,33 +150,6 @@
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //PORTC Definitions
 
-#define	DISP_COM1_BIT					0
-#define	DISP_COM1_PIN					PORTCbits.RC0	//Pin 15
-#define	DISP_COM1_LAT_BIT				LATCbits.LATC0
-#define	DISP_COM1_LAT					LATC
-#define	DISP_COM1_TRIS_BIT				TRISCPINbits.TRISC0
-#define	DISP_COM1_PORT					PORTC
-#define	TRISCPIN0						(OUTPUT<<0)
-#define	LATCPIN0						(false<<0)
-
-#define	UNUSED_3_BIT					1
-#define	UNUSED_3_PIN					PORTCbits.RC1	//Pin 16
-#define	UNUSED_3_LAT_BIT				LATCbits.LATC1
-#define	UNUSED_3_LAT					LATC
-#define	UNUSED_3_TRIS_BIT				TRISCPINbits.TRISC1
-#define	UNUSED_3_PORT					PORTC
-#define	TRISCPIN1						(OUTPUT<<1)
-#define	LATCPIN1						(false<<1)
-
-#define	DISP_SEG5_BIT					2
-#define	DISP_SEG5_PIN					PORTCbits.RC2	//Pin 17
-#define	DISP_SEG5_LAT_BIT				LATCbits.LATC2
-#define	DISP_SEG5_LAT					LATC
-#define	DISP_SEG5_TRIS_BIT				TRISCPINbits.TRISC2
-#define	DISP_SEG5_PORT					PORTC
-#define	TRISCPIN2						(OUTPUT<<2)
-#define	LATCPIN2						(false<<2)
-
 //VUSB
 #define	TRISCPIN3						(INPUT<<3)	//input only
 #define	LATCPIN3						(false<<3)
@@ -218,8 +190,8 @@
 #define	TRISCPIN7						(INPUT<<7)
 #define	LATCPIN7						(false<<7)
 
-#define	INIT_TRISC	(TRISCPIN0+TRISCPIN1+TRISCPIN2+TRISCPIN3+TRISCPIN4+TRISCPIN5+TRISCPIN6+TRISCPIN7)
-#define	INIT_LATC	(LATCPIN0+LATCPIN1+LATCPIN2+LATCPIN3+LATCPIN4+LATCPIN5+LATCPIN6+LATCPIN7)
+#define	INIT_TRISC	(TRISCPIN3+TRISCPIN4+TRISCPIN5+TRISCPIN6+TRISCPIN7)
+#define	INIT_LATC	(LATCPIN3+LATCPIN4+LATCPIN5+LATCPIN6+LATCPIN7)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
