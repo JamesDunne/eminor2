@@ -287,10 +287,8 @@ void paintFacePlate(HWND hwnd) {
             dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
 
             // Label w/ the keyboard key:
-            wchar_t tmp[2] = L" ";
-            tmp[0] = keylabels[v][h][0];
             SetTextColor(hDC, RGB(96, 16, 16));
-            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.75 + (v * vSpacing), tmp, 1);
+            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.75 + (v * vSpacing), keylabels[v][h], 1);
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
