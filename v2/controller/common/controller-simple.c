@@ -69,7 +69,7 @@ static u8 gmaj_cc_lookup[6] = {
 // Current and previous button state:
 u16	sw_curr, sw_last;
 
-/* current control on/off toggle bits */
+// current control on/off toggle bits
 u8 leds_top, leds_bot;
 
 u8 toggle_tap;
@@ -77,7 +77,7 @@ u8 toggle_tap;
 // Current g-major program #:
 u8 gmajp;
 
-/* determine if a footswitch was pressed: */
+// determine if a footswitch was pressed:
 static u8 button_pressed(u16 mask) {
     return ((sw_curr & mask) == mask) && ((sw_last & mask) == 0);
 }
@@ -86,8 +86,9 @@ static u8 button_pressed(u16 mask) {
 static void rjm_program(u8 p) {
     assert(p < 6);
 
-    /* Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo: */
-    midi_send_cmd1(0xC, rjm_midi_channel, p);
+    // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
+    // NOTE(jsd): add 4 for personal raisins; first 4 programs are reserved for existing v1 controller.
+    midi_send_cmd1(0xC, rjm_midi_channel, p + 4);
 
     // Disable all top LEDs, preserve LEDs 7 and 8:
     leds_top &= (LEDM_7 | LEDM_8);
@@ -100,8 +101,8 @@ static void rjm_program(u8 p) {
 
 // Set g-major program to p (0-127):
 static void gmaj_program(u8 p) {
-    /* Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit: */
-    midi_send_cmd1(0xC, rjm_midi_channel, p);
+    // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
+    midi_send_cmd1(0xC, gmaj_midi_channel, p);
 
     // Disable all top LEDs, preserve LEDs 7 and 8:
     leds_top &= (LEDM_7 | LEDM_8);
@@ -147,28 +148,30 @@ static void gmaj_toggle_cc(u8 idx) {
 }
 
 
-/* ------------------------- Actual controller logic ------------------------- */
+// ------------------------- Actual controller logic -------------------------
 
-/* set the controller to an initial state */
+// set the controller to an initial state
 void controller_init(void) {
     leds_top = 0;
     leds_bot = 0;
+    // `gmaj_program` and `rjm_program` will both call led_set() to set LED state.
 
     gmajp = 0;
     gmaj_program(gmajp);
     rjm_program(0);
 }
 
-/* called every 10ms */
+// called every 10ms
 void controller_10msec_timer(void) {
+    // No timers in use by this code.
 }
 
-/* main control loop */
+// main control loop
 void controller_handle(void) {
-    /* poll foot-switch depression status: */
+    // poll foot-switch depression status:
     sw_curr = fsw_poll();
 
-    // handle top buttons:
+    // handle top 6 FX block buttons:
     if (button_pressed(FSM_TOP_1)) {
         gmaj_toggle_cc(0);
     }
@@ -188,33 +191,39 @@ void controller_handle(void) {
         gmaj_toggle_cc(5);
     }
 
-    // handle bottom buttons:
+    // handle bottom 6 amp selector buttons:
     if (button_pressed(FSM_BOT_1)) {
-        reset_tuner_mute();
         rjm_program(0);
+        gmaj_program(gmajp);
+        reset_tuner_mute();
     }
     if (button_pressed(FSM_BOT_2)) {
-        reset_tuner_mute();
         rjm_program(1);
+        gmaj_program(gmajp);
+        reset_tuner_mute();
     }
     if (button_pressed(FSM_BOT_3)) {
-        reset_tuner_mute();
         rjm_program(2);
+        gmaj_program(gmajp);
+        reset_tuner_mute();
     }
     if (button_pressed(FSM_BOT_4)) {
-        reset_tuner_mute();
         rjm_program(3);
+        gmaj_program(gmajp);
+        reset_tuner_mute();
     }
     if (button_pressed(FSM_BOT_5)) {
-        reset_tuner_mute();
         rjm_program(4);
+        gmaj_program(gmajp);
+        reset_tuner_mute();
     }
     if (button_pressed(FSM_BOT_6)) {
-        reset_tuner_mute();
         rjm_program(5);
+        gmaj_program(gmajp);
+        reset_tuner_mute();
     }
 
-    // handle miscellaneous:
+    // handle remaining 4 functions:
 
     if (button_pressed(FSM_TOP_7)) {
         // mute:
@@ -230,14 +239,12 @@ void controller_handle(void) {
 
     if (button_pressed(FSM_TOP_8)) {
         // prev g-major program:
-        if (gmajp == 127) gmajp = 0;
-        else gmajp++;
+        if (gmajp != 0) gmajp--;
         gmaj_program(gmajp);
     }
     if (button_pressed(FSM_BOT_8)) {
         // next g-major program:
-        if (gmajp == 0) gmajp = 127;
-        else gmajp--;
+        if (gmajp != 127) gmajp++;
         gmaj_program(gmajp);
     }
 
