@@ -2,15 +2,27 @@
 
 <html>
 <head>
-<script type="text/javascript" src="eminorv2.js"></script>
-<style type="text/css">
+    <title>e-minor v2 demo</title>
+    <script type="text/javascript" src="eminorv2.js"></script>
+    <style type="text/css">
 body { background: #020208; color: silver; padding: 0; margin: 0 }
 h1, h3 { text-align: center; padding: 0; margin: 0 }
-</style>
+canvas {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+}
+    </style>
 </head>
 <body>
     <h1>e-minor v2 MIDI foot controller HTML5 demo</h1>
     <h3>Use keyboard keys to control foot switches!</h3>
+    <h3>Now with mouse/touch support!</h3>
     <div style="text-align: center">
         <canvas id="cvs"></canvas>
         <div style="text-align: left">
@@ -41,6 +53,7 @@ var led_state_bot = 0;
 
 // poll all 16 foot switches' state in a 16-bit word:
 function _fsw_poll() { return fsw_state; }
+
 // called to set the new state of the LEDs in a top and bottom row, each 8-bit words:
 function _led_set(top, bot) {
     if (led_state_top != top) ui_modified = true;
@@ -48,19 +61,17 @@ function _led_set(top, bot) {
 
     led_state_top = top;
     led_state_bot = bot;
-
-    //console.log("top: %d, bot: %d", top, bot);
 }
+
 // called to send MIDI command with one data byte:
 function _midi_send_cmd1(cmd, chan, data1) {
-    //console.log("MIDI: %s%s %s", hex1(cmd), hex1(chan), hex2(data1));
     var f = "" +  hex1(cmd) + hex1(chan) + " " + hex2(data1) + "\n";
     midiLog.appendChild(document.createTextNode(f));
     midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
 }
+
 // called to send MIDI command with two data bytes:
 function _midi_send_cmd2(cmd, chan, data1, data2) {
-    //console.log("MIDI: %s%s %s %s", hex1(cmd), hex1(chan), hex2(data1), hex2(data2));
     var f = "" +  hex1(cmd) + hex1(chan) + " " + hex2(data1) + " " + hex2(data2) + "\n";
     midiLog.appendChild(document.createTextNode(f));    
     midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
@@ -282,6 +293,58 @@ function keyup(e) {
     return false;
 }
 
+// mouse button held down inside canvas:
+function mousedown(e) {
+    // e.offsetX, e.offsetY is relative mouse position from top-left of canvas:
+    var old_fsw_state = fsw_state;
+
+    var x = e.offsetX / dpi, y = e.offsetY / dpi;
+    var dist;
+    var r_sqr = inFswOuterDiam * inFswOuterDiam;
+
+    // Find out which foot-switch we're nearest to:
+    var h = 0, v = 0, b = 0;
+    for (v = 0; v < 2; ++v) {
+        var b = 1 << (v * 8);
+        for (h = 0; h < 8; ++h, b <<= 1) {
+            dist = (x - (hLeft + (h * hSpacing))) * (x - (hLeft + (h * hSpacing))) + (y - (vStart + (v * vSpacing))) * (y - (vStart + (v * vSpacing)));
+            if (dist < r_sqr) {
+                fsw_state |= b;
+            }
+        }
+    }
+
+    if (old_fsw_state !== fsw_state) ui_modified = true;
+}
+
+// mouse button released inside canvas:
+function mouseup(e) {
+    fsw_state = 0;
+    ui_modified = true;
+/*
+    // e.offsetX, e.offsetY is relative mouse position from top-left of canvas:
+    var old_fsw_state = fsw_state;
+
+    var x = e.offsetX / dpi, y = e.offsetY / dpi;
+    var dist;
+    var r_sqr = inFswOuterDiam * inFswOuterDiam;
+
+    // Find out which foot-switch we're nearest to:
+    var h = 0, v = 0, b = 0;
+    for (v = 0; v < 2; ++v) {
+        var b = 1 << (v * 8);
+        for (h = 0; h < 8; ++h, b <<= 1) {
+            dist = (x - (hLeft + (h * hSpacing))) * (x - (hLeft + (h * hSpacing))) + (y - (vStart + (v * vSpacing))) * (y - (vStart + (v * vSpacing)));
+            if (dist < r_sqr) {
+                fsw_state &= b ^ 65535;
+            }
+        }
+    }
+
+    if (old_fsw_state !== fsw_state) ui_modified = true;
+*/
+}
+
 // Document initialization:
 function init() {
     window.requestAnimFrame = (function(){
@@ -314,6 +377,8 @@ function init() {
 
     cvs.setAttribute('width', inWidth * dpi);
     cvs.setAttribute('height', inHeight * dpi);
+    cvs.addEventListener('mousedown', mousedown, true);
+    cvs.addEventListener('mouseup', mouseup, true);
 
     // Initialize controller:
     // NOTE(jsd): `eminorv2` is the name of the emscripten compiled module; exported functions have a leading '_'.
