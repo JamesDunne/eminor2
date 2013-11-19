@@ -1,0 +1,1 @@
+emcc hardware.c ../common/controller-simple.c -o www/eminorv2.js -s TOTAL_STACK="192" -s TOTAL_MEMORY="2048" -s FAST_MEMORY="2048" -s EXPORT_NAME="'eminorv2'" -s EXPORTED_FUNCTIONS="['_controller_init','_controller_10msec_timer','_controller_handle']"
