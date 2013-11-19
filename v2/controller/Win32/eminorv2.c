@@ -298,8 +298,8 @@ void paintFacePlate(HWND hwnd) {
             else if (v == 1 && h < 6)
                 SetTextColor(hDC, RGB(64, 192, 64));
             else
-
                 SetTextColor(hDC, RGB(224, 224, 224));
+
             dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
 
             // Label w/ the keyboard key:

@@ -40,7 +40,7 @@ function _led_set(top, bot) {
     led_state_top = top;
     led_state_bot = bot;
 
-    console.log("top: %d, bot: %d", top, bot);
+    //console.log("top: %d, bot: %d", top, bot);
 }
 // called to send MIDI command with one data byte:
 function _midi_send_cmd1(cmd, chan, data1) {
@@ -117,84 +117,72 @@ function renderUI() {
 
     var h, inH, v, inV;
 
-    // draw grid:
-    ctx.strokeStyle = "#202020";
-    h = 0;
-    for (inH = 0; inH <= inWidth; inH += 0.1, h = (h + 1) % 10) {
-        if (h == 0) {
-            ctx.lineWidth = 2;
-        } else {
-            ctx.lineWidth = 1;
-        }
-        ctx.beginPath();
-        dpi_MoveTo(inH, 0);
-        dpi_LineTo(inH, inHeight);
-        ctx.stroke();
-
-        v = 0;
-        for (inV = 0; inV <= inHeight; inV += 0.1, v = (v + 1) % 10) {
-            if (v == 0) {
+    if (false) {
+        // draw grid:
+        ctx.strokeStyle = "#202020";
+        h = 0;
+        for (inH = 0; inH <= inWidth; inH += 0.1, h = (h + 1) % 10) {
+            if (h == 0) {
                 ctx.lineWidth = 2;
             } else {
                 ctx.lineWidth = 1;
             }
             ctx.beginPath();
-            dpi_MoveTo(0, inV);
-            dpi_LineTo(inWidth, inV);
+            dpi_MoveTo(inH, 0);
+            dpi_LineTo(inH, inHeight);
             ctx.stroke();
+
+            v = 0;
+            for (inV = 0; inV <= inHeight; inV += 0.1, v = (v + 1) % 10) {
+                if (v == 0) {
+                    ctx.lineWidth = 2;
+                } else {
+                    ctx.lineWidth = 1;
+                }
+                ctx.beginPath();
+                dpi_MoveTo(0, inV);
+                dpi_LineTo(inWidth, inV);
+                ctx.stroke();
+            }
         }
     }
 
-    //SetTextAlign(hDC, TA_CENTER | VTA_TOP);
     ctx.textAlign = "center";
-    ctx.shadow
+    ctx.textBaseline = "top";
+    ctx.font = '10pt Arial Bold';
 
     // 2 rows of foot switches:
     for (v = 0; v < 2; ++v) {
         var led_state = (v == 0) ? led_state_top : led_state_bot;
 
-        //SelectObject(hDC, penThin);
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = "#808080";
-        //SelectObject(hDC, brsWhite);
-        ctx.fillStyle = "#C0C0C0";
-
         // draw 2 rows of 8 evenly spaced foot-switches
         var b = 1 << (v * 8);
         for (h = 0; h < 8; ++h, b <<= 1) {
-            //SelectObject(hDC, penThick);
             ctx.lineWidth = 2;
             ctx.strokeStyle = "#808080";
             ctx.fillStyle = "#C0C0C0";
             dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam);
 
-            //SelectObject(hDC, penThin);
             ctx.lineWidth = 1;
             dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswInnerDiam);
             if (fsw_state & b) {
-                //SelectObject(hDC, brsDarkSilver);
+                // Foot switch is depressed:
                 ctx.fillStyle = "#606060";
                 dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam);
-                //SelectObject(hDC, brsWhite);
-                ctx.fillStyle = "#C0C0C0";
             }
 
             // Set label color:
             if (v == 0 && h < 6)
-                //SetTextColor(hDC, RGB(64, 64, 192));
                 ctx.fillStyle = "#4040C0";
             else if (v == 1 && h < 6)
-                //SetTextColor(hDC, RGB(64, 192, 64));
                 ctx.fillStyle = "#40C040";
             else
-                //SetTextColor(hDC, RGB(224, 224, 224));
                 ctx.fillStyle = "#E0E0E0";
 
             ctx.lineWidth = 1;
             dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h]);
 
             // Label w/ the keyboard key:
-            //SetTextColor(hDC, RGB(96, 16, 16));
             ctx.fillStyle = "#601010";
             dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.75 + (v * vSpacing), keylabels[v][h]);
         }
@@ -202,10 +190,8 @@ function renderUI() {
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
 
         // draw inactive LEDs:
-        //SelectObject(hDC, penThin);
         ctx.lineWidth = 1;
         ctx.strokeStyle = "#808080";
-        //SelectObject(hDC, brsDarkGreen);
         ctx.fillStyle = "#081E03";
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
@@ -215,7 +201,6 @@ function renderUI() {
         }
 
         // draw active LEDs:
-        //SelectObject(hDC, brsGreen);
         ctx.fillStyle = "#19FA05";
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
@@ -229,7 +214,6 @@ function renderUI() {
 }
 
 function keydown(e) {
-    //console.log(e);
     // QWERTYUI for top row:
     if (e.keyCode == 81) fsw_state |= 1;
     else if (e.keyCode == 87) fsw_state |= 2;
@@ -256,7 +240,6 @@ function keydown(e) {
 }
 
 function keyup(e) {
-    //console.log(e);
     // QWERTYUI for top row:
     if (e.keyCode == 81) fsw_state &= 1 ^ 65535;
     else if (e.keyCode == 87) fsw_state &= 2 ^ 65535;
