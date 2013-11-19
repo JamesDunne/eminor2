@@ -14453,7 +14453,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <label x="203.2" y="142.24" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="SHIFTREG_SCL" class="0">
+<net name="SHIFTREG_SCK" class="0">
 <segment>
 <wire x1="193.04" y1="60.96" x2="213.36" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="IC2" gate="G$1" pin="SCK"/>
@@ -14964,7 +14964,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="162.56" y1="76.2" x2="162.56" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$46" class="0">
+<net name="BTN_TOP_6" class="0">
 <segment>
 <pinref part="U$2" gate="G$1" pin="A5"/>
 <wire x1="271.78" y1="132.08" x2="269.24" y2="132.08" width="0.1524" layer="91"/>
@@ -14974,7 +14974,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="269.24" y1="116.84" x2="269.24" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$48" class="0">
+<net name="BTN_TOP_8" class="0">
 <segment>
 <pinref part="U$2" gate="G$1" pin="A7"/>
 <wire x1="271.78" y1="134.62" x2="266.7" y2="134.62" width="0.1524" layer="91"/>
@@ -14984,7 +14984,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="279.4" y1="114.3" x2="279.4" y2="93.98" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$49" class="0">
+<net name="BTN_TOP_7" class="0">
 <segment>
 <pinref part="BTN_FX_CN" gate="G$1" pin="13"/>
 <wire x1="276.86" y1="93.98" x2="276.86" y2="111.76" width="0.1524" layer="91"/>
@@ -14994,7 +14994,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="264.16" y1="139.7" x2="271.78" y2="139.7" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$60" class="0">
+<net name="BTN_TOP_5" class="0">
 <segment>
 <pinref part="BTN_FX_CN" gate="G$1" pin="15"/>
 <wire x1="274.32" y1="93.98" x2="274.32" y2="109.22" width="0.1524" layer="91"/>
@@ -15004,7 +15004,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="261.62" y1="142.24" x2="271.78" y2="142.24" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$61" class="0">
+<net name="BTN_TOP_4" class="0">
 <segment>
 <pinref part="BTN_FX_CN" gate="G$1" pin="7"/>
 <wire x1="284.48" y1="93.98" x2="284.48" y2="116.84" width="0.1524" layer="91"/>
@@ -15014,7 +15014,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="297.18" y1="132.08" x2="294.64" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$62" class="0">
+<net name="BTN_TOP_1" class="0">
 <segment>
 <pinref part="BTN_FX_CN" gate="G$1" pin="5"/>
 <wire x1="287.02" y1="93.98" x2="287.02" y2="114.3" width="0.1524" layer="91"/>
@@ -15024,7 +15024,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="299.72" y1="134.62" x2="294.64" y2="134.62" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$63" class="0">
+<net name="BTN_TOP_2" class="0">
 <segment>
 <pinref part="BTN_FX_CN" gate="G$1" pin="3"/>
 <wire x1="289.56" y1="93.98" x2="289.56" y2="111.76" width="0.1524" layer="91"/>
@@ -15034,7 +15034,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="302.26" y1="137.16" x2="294.64" y2="137.16" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$64" class="0">
+<net name="BTN_TOP_3" class="0">
 <segment>
 <pinref part="BTN_FX_CN" gate="G$1" pin="1"/>
 <wire x1="292.1" y1="93.98" x2="292.1" y2="109.22" width="0.1524" layer="91"/>
@@ -15044,7 +15044,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="304.8" y1="139.7" x2="294.64" y2="139.7" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$47" class="0">
+<net name="BTN_BOT_6" class="0">
 <segment>
 <pinref part="BTN_PR_CN" gate="G$1" pin="9"/>
 <wire x1="368.3" y1="91.44" x2="368.3" y2="116.84" width="0.1524" layer="91"/>
@@ -15054,7 +15054,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="355.6" y1="132.08" x2="358.14" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$50" class="0">
+<net name="BTN_BOT_8" class="0">
 <segment>
 <pinref part="BTN_PR_CN" gate="G$1" pin="11"/>
 <wire x1="365.76" y1="91.44" x2="365.76" y2="114.3" width="0.1524" layer="91"/>
@@ -15064,7 +15064,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="353.06" y1="134.62" x2="358.14" y2="134.62" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$51" class="0">
+<net name="BTN_BOT_7" class="0">
 <segment>
 <pinref part="BTN_PR_CN" gate="G$1" pin="13"/>
 <wire x1="363.22" y1="91.44" x2="363.22" y2="111.76" width="0.1524" layer="91"/>
@@ -15074,7 +15074,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="350.52" y1="139.7" x2="358.14" y2="139.7" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$52" class="0">
+<net name="BTN_BOT_5" class="0">
 <segment>
 <pinref part="BTN_PR_CN" gate="G$1" pin="15"/>
 <wire x1="360.68" y1="91.44" x2="360.68" y2="109.22" width="0.1524" layer="91"/>
@@ -15084,7 +15084,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="347.98" y1="142.24" x2="358.14" y2="142.24" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$55" class="0">
+<net name="BTN_BOT_4" class="0">
 <segment>
 <pinref part="BTN_PR_CN" gate="G$1" pin="7"/>
 <wire x1="370.84" y1="91.44" x2="370.84" y2="116.84" width="0.1524" layer="91"/>
@@ -15094,7 +15094,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="383.54" y1="132.08" x2="381" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$56" class="0">
+<net name="BTN_BOT_1" class="0">
 <segment>
 <pinref part="BTN_PR_CN" gate="G$1" pin="5"/>
 <wire x1="373.38" y1="91.44" x2="373.38" y2="114.3" width="0.1524" layer="91"/>
@@ -15104,7 +15104,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="386.08" y1="134.62" x2="381" y2="134.62" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$57" class="0">
+<net name="BTN_BOT_2" class="0">
 <segment>
 <pinref part="BTN_PR_CN" gate="G$1" pin="3"/>
 <wire x1="375.92" y1="91.44" x2="375.92" y2="111.76" width="0.1524" layer="91"/>
@@ -15114,7 +15114,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="388.62" y1="137.16" x2="381" y2="137.16" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$58" class="0">
+<net name="BTN_BOT_3" class="0">
 <segment>
 <pinref part="BTN_PR_CN" gate="G$1" pin="1"/>
 <wire x1="378.46" y1="91.44" x2="378.46" y2="109.22" width="0.1524" layer="91"/>
