@@ -4,11 +4,20 @@
 <head>
 <script type="text/javascript" src="eminorv2.js"></script>
 <style type="text/css">
-body { background: black; color: silver; }
+body { background: #020208; color: silver; padding: 0; margin: 0 }
+h1, h3 { text-align: center; padding: 0; margin: 0 }
 </style>
 </head>
 <body>
-    <canvas id="cvs"></canvas>
+    <h1>e-minor v2 MIDI foot controller HTML5 demo</h1>
+    <h3>Use keyboard keys to control foot switches!</h3>
+    <div style="text-align: center">
+        <canvas id="cvs"></canvas>
+        <div style="text-align: left">
+            <label for="midiLog">MIDI OUT:</label>
+            <pre id="midiLog"></pre>
+        </div>
+    </div>
 
 <script type="text/javascript">
 "use strict";
@@ -44,19 +53,27 @@ function _led_set(top, bot) {
 }
 // called to send MIDI command with one data byte:
 function _midi_send_cmd1(cmd, chan, data1) {
-    console.log("MIDI: %s%s %s", hex1(cmd), hex1(chan), hex2(data1));
+    //console.log("MIDI: %s%s %s", hex1(cmd), hex1(chan), hex2(data1));
+    var f = "" +  hex1(cmd) + hex1(chan) + " " + hex2(data1) + "\n";
+    midiLog.appendChild(document.createTextNode(f));
+    midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
 }
 // called to send MIDI command with two data bytes:
 function _midi_send_cmd2(cmd, chan, data1, data2) {
-    console.log("MIDI: %s%s %s %s", hex1(cmd), hex1(chan), hex2(data1), hex2(data2));
+    //console.log("MIDI: %s%s %s %s", hex1(cmd), hex1(chan), hex2(data1), hex2(data2));
+    var f = "" +  hex1(cmd) + hex1(chan) + " " + hex2(data1) + " " + hex2(data2) + "\n";
+    midiLog.appendChild(document.createTextNode(f));    
+    midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
 }
 
 
 // ----------------- UI
 
+var midiLog;
+var midiLogHeight = 240;
+
 var cvs, ctx;
 var dpi = 55.4;
-
 
 var labels = [
     [ "COMP", "FILTER", "PITCH", "CHORUS", "DELAY", "REVERB", "MUTE", "PREV" ],
@@ -282,6 +299,10 @@ function init() {
     document.addEventListener("keydown", keydown, true);
     document.addEventListener("keyup", keyup, true);
 
+    midiLog = document.getElementById('midiLog');
+    midiLog.style['overflow-y'] = "scroll";
+    midiLog.style.height = "" + midiLogHeight + "px";
+
     // Get canvas and its drawing context:
     cvs = document.getElementById('cvs');
     ctx = cvs.getContext('2d');
@@ -290,15 +311,18 @@ function init() {
     cvs.setAttribute('height', inHeight * dpi);
 
     // Initialize controller:
+    // NOTE(jsd): `eminorv2` is the name of the emscripten compiled module; exported functions have a leading '_'.
     eminorv2._controller_init();
-    // Render UI:
+    // Render initial UI:
     requestAnimFrame(renderUI);
 
+    // Setup a refresh rate of 10ms:
     setInterval(function() {
-        // Handle controller functions:
+        // Handle controller:
+        eminorv2._controller_10msec_timer();
         eminorv2._controller_handle();
 
-        // Update UI:
+        // Update UI only on changes:
         if (ui_modified) {
             requestAnimFrame(renderUI);
             ui_modified = false;
