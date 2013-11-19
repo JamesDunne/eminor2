@@ -63,7 +63,7 @@
         <targetDevice>PIC18F4455</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>ICD3PlatformTool</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>C18</languageToolchain>
         <languageToolchainVersion>3.46</languageToolchainVersion>
         <platform>3</platform>

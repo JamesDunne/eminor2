@@ -72,7 +72,8 @@ void	SendDataToShiftReg8(unsigned char dataToSend) {
 	SHIFTREG_SRCK_LAT_BIT = true;			//Release serial clk
 }
 
-void	SendDataToShiftReg16(unsigned char data1, unsigned char data2) {
+// Send MSBs first from hi to lo.
+void	SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
 	unsigned char DataCounter;
 //SEND_SPEC_TO_LATCHES
 	DataCounter = 8;								//Load number of bits to be transfered
@@ -84,28 +85,29 @@ void	SendDataToShiftReg16(unsigned char data1, unsigned char data2) {
 //STL_TRANSMIT_BIT
 	do {
 		SHIFTREG_SRCK_LAT_BIT = false;				//Clear strobe pin
-		if (!chkbit(data2, 7)) {		//MSB high?
+		if (!chkbit(hi, 7)) {		//MSB high?
 			SHIFTREG_SER_IN_LAT_BIT = false;		//No, set data signal low
 		}
 		else {								//MSB low?
 			SHIFTREG_SER_IN_LAT_BIT = true;		//No, release data signal
 		}
-		data2 <<= 1;					//Shift next bit to MSB position
+		hi <<= 1;					//Shift next bit to MSB position
 		SHIFTREG_SRCK_LAT_BIT = true;
 
 //STL_RESET_CLOCK_LEVEL
 	} while (--DataCounter!=0);				//All 8 bits transfered? No, go transfer next bit
 
+	DataCounter = 8;								//Load number of bits to be transfered
 //STL_TRANSMIT_BIT
 	do {
 		SHIFTREG_SRCK_LAT_BIT = false;				//Clear strobe pin
-		if (!chkbit(data1, 7)) {		//MSB high?
+		if (!chkbit(lo, 7)) {		//MSB high?
 			SHIFTREG_SER_IN_LAT_BIT = false;		//No, set data signal low
 		}
 		else {								//MSB low?
 			SHIFTREG_SER_IN_LAT_BIT = true;		//No, release data signal
 		}
-		data1 <<= 1;					//Shift next bit to MSB position
+		lo <<= 1;					//Shift next bit to MSB position
 		SHIFTREG_SRCK_LAT_BIT = true;
 
 //STL_RESET_CLOCK_LEVEL
@@ -141,7 +143,6 @@ void	ReadButtons(void) {
 		bitloc <<= 1;										//shift the bit over to the next
 	}
 	ButtonStateTop = TempButtons.byte;
-	ButtonStateTop |= 0xFFFFFF00;
 	// all buttons are backwards logic, so simply invert the state of ButtonState.
 	ButtonStateTop = ~ButtonStateTop;
 
@@ -156,7 +157,6 @@ void	ReadButtons(void) {
 		bitloc <<= 1;										//shift the bit over to the next
 	}
 	ButtonStateBot = TempButtons.byte;
-	ButtonStateBot |= 0xFFFFFF00;
 	// all buttons are backwards logic, so simply invert the state of ButtonState.
 	ButtonStateBot = ~ButtonStateBot;
 
@@ -188,8 +188,22 @@ u16 fsw_poll() {
 	return TempButtons.s_form;
 }
 
+static u8 reverse_bits(u8 v) {
+    // see http://graphics.stanford.edu/~seander/bithacks.html#ReverseParallel
+    v = ((v >> 1) & 0x55) | ((v & 0x55) << 1);
+    v = ((v >> 2) & 0x33) | ((v & 0x33) << 2);
+    v = ((v >> 4) & 0x0F) | ((v & 0x0F) << 4);
+    return v;
+}
+
 void	UpdateLeds(void) {
-	SendDataToShiftReg16(LedStatesTop, LedStatesBot);
+    u8 top, bot;
+
+    // LEDs are wired in reverse:
+    top = reverse_bits(LedStatesTop);
+    bot = reverse_bits(LedStatesBot);
+
+	SendDataToShiftReg16(LedStatesBot, LedStatesTop);
 }
 
 /* Set currently active program foot-switch's LED indicator and disable all others */
