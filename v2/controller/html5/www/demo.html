@@ -300,8 +300,13 @@ function init() {
     document.addEventListener("keyup", keyup, true);
 
     midiLog = document.getElementById('midiLog');
-    midiLog.style['overflow-y'] = "scroll";
     midiLog.style.height = "" + midiLogHeight + "px";
+    if (midiLog.style['overflow-y'] !== undefined) {
+        midiLog.style['overflow-y'] = "scroll";
+    } else {
+        // FireFox hack:
+        midiLog.style.overflow = '-moz-scrollbars-vertical';
+    }
 
     // Get canvas and its drawing context:
     cvs = document.getElementById('cvs');
