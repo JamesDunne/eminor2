@@ -63,19 +63,28 @@ static u8 gmaj_cc_lookup[6] = {
 };
 
 // Current and previous button state:
-u16	sw_curr, sw_last;
+io16 fsw, fsw_last;
+// Current LED state:
+io16 leds;
 
-// current control on/off toggle bits
-u8 leds_top, leds_bot;
-
+// Toggle value for tap tempo:
 u8 toggle_tap;
 
 // Current g-major program #:
 u8 gmajp;
 
 // Determine if a footswitch was pressed
-static u8 button_pressed(u16 mask) {
-    return ((sw_curr & mask) == mask) && ((sw_last & mask) == 0);
+static u8 is_top_button_pressed(u8 mask) {
+    return ((fsw.top.byte & mask) == mask) && ((fsw_last.top.byte & mask) == 0);
+}
+
+static u8 is_bot_button_pressed(u8 mask) {
+    return ((fsw.bot.byte & mask) == mask) && ((fsw_last.bot.byte & mask) == 0);
+}
+
+static void send_leds() {
+    u16 tmp = (u16)leds.bot.byte | ((u16)leds.top.byte << 8);
+    led_set(tmp);
 }
 
 // Set RJM program to p (0-5)
@@ -87,13 +96,12 @@ static void rjm_program(u8 p) {
     midi_send_cmd1(0xC, rjm_midi_channel, p + 4);
 
     // Disable all top LEDs, preserve LEDs 7 and 8:
-    leds_top &= (LEDM_7 | LEDM_8);
+    leds.top.byte &= (M_7 | M_8);
     // Set only current program LED on, preserve LEDs 7 and 8:
-    leds_bot = (1 << p) | (leds_bot & (LEDM_7 | LEDM_8));
+    leds.bot.byte = (1 << p) | (leds.bot.byte & (M_7 | M_8));
 
-    led_set(leds_top, leds_bot);
+    send_leds();
 }
-
 
 // Set g-major program to p (0-127)
 static void gmaj_program(u8 p) {
@@ -101,9 +109,10 @@ static void gmaj_program(u8 p) {
     midi_send_cmd1(0xC, gmaj_midi_channel, p);
 
     // Disable all top LEDs, preserve LEDs 7 and 8:
-    leds_top &= (LEDM_7 | LEDM_8);
+    leds.top.byte &= (M_7 | M_8);
+    // TODO: load program/channel state
 
-    led_set(leds_top, leds_bot);
+    send_leds();
 }
 
 // Set g-major CC value
@@ -114,10 +123,10 @@ static void gmaj_cc_set(u8 cc, u8 val) {
 // Reset g-major mute to off if on
 static void reset_tuner_mute(void) {
     // Turn off mute if enabled:
-    if (leds_top & LEDM_7) {
-        leds_top &= ~LEDM_7;
+    if (leds.top.bits._7) {
+        leds.top.bits._7 = 0;
         gmaj_cc_set(gmaj_cc_mute, 0x00);
-        led_set(leds_top, leds_bot);
+        send_leds();
     }
 }
 
@@ -130,11 +139,11 @@ static void gmaj_toggle_cc(u8 idx) {
     assert(idx < 6);
 
     // Toggle on/off the selected continuous controller:
-    leds_top ^= idxMask;
-    led_set(leds_top, leds_bot);
+    leds.top.byte ^= idxMask;
+    send_leds();
 
     // Determine the MIDI value to use depending on the newly toggled state:
-    if (leds_top & idxMask) togglevalue = 0x7F;
+    if (leds.top.byte & idxMask) togglevalue = 0x7F;
 
     // Send MIDI command:
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
@@ -145,8 +154,8 @@ static void gmaj_toggle_cc(u8 idx) {
 
 // set the controller to an initial state
 void controller_init(void) {
-    leds_top = 0;
-    leds_bot = 0;
+    leds.top.byte = 0;
+    leds.bot.byte = 0;
     // `gmaj_program` and `rjm_program` will both call led_set() to set LED state.
 
     gmajp = 0;
@@ -162,55 +171,57 @@ void controller_10msec_timer(void) {
 // main control loop
 void controller_handle(void) {
     // poll foot-switch depression status:
-    sw_curr = fsw_poll();
+    u16 tmp = fsw_poll();
+    fsw.bot.byte = tmp & 0xFF;
+    fsw.top.byte = (tmp >> 8) & 0xFF;
 
     // handle top 6 FX block buttons:
-    if (button_pressed(FSM_TOP_1)) {
+    if (is_top_button_pressed(M_1)) {
         gmaj_toggle_cc(0);
     }
-    if (button_pressed(FSM_TOP_2)) {
+    if (is_top_button_pressed(M_2)) {
         gmaj_toggle_cc(1);
     }
-    if (button_pressed(FSM_TOP_3)) {
+    if (is_top_button_pressed(M_3)) {
         gmaj_toggle_cc(2);
     }
-    if (button_pressed(FSM_TOP_4)) {
+    if (is_top_button_pressed(M_4)) {
         gmaj_toggle_cc(3);
     }
-    if (button_pressed(FSM_TOP_5)) {
+    if (is_top_button_pressed(M_5)) {
         gmaj_toggle_cc(4);
     }
-    if (button_pressed(FSM_TOP_6)) {
+    if (is_top_button_pressed(M_6)) {
         gmaj_toggle_cc(5);
     }
 
     // handle bottom 6 amp selector buttons:
-    if (button_pressed(FSM_BOT_1)) {
+    if (is_bot_button_pressed(M_1)) {
         rjm_program(0);
         gmaj_program(gmajp);
         reset_tuner_mute();
     }
-    if (button_pressed(FSM_BOT_2)) {
+    if (is_bot_button_pressed(M_2)) {
         rjm_program(1);
         gmaj_program(gmajp);
         reset_tuner_mute();
     }
-    if (button_pressed(FSM_BOT_3)) {
+    if (is_bot_button_pressed(M_3)) {
         rjm_program(2);
         gmaj_program(gmajp);
         reset_tuner_mute();
     }
-    if (button_pressed(FSM_BOT_4)) {
+    if (is_bot_button_pressed(M_4)) {
         rjm_program(3);
         gmaj_program(gmajp);
         reset_tuner_mute();
     }
-    if (button_pressed(FSM_BOT_5)) {
+    if (is_bot_button_pressed(M_5)) {
         rjm_program(4);
         gmaj_program(gmajp);
         reset_tuner_mute();
     }
-    if (button_pressed(FSM_BOT_6)) {
+    if (is_bot_button_pressed(M_6)) {
         rjm_program(5);
         gmaj_program(gmajp);
         reset_tuner_mute();
@@ -218,29 +229,37 @@ void controller_handle(void) {
 
     // handle remaining 4 functions:
 
-    if (button_pressed(FSM_TOP_7)) {
+    if (is_top_button_pressed(M_7)) {
         // mute:
-        leds_top ^= LEDM_7;
-        gmaj_cc_set(gmaj_cc_mute, (leds_top & LEDM_7) ? 0x7F : 0x00);
-        led_set(leds_top, leds_bot);
+        leds.top.byte ^= M_7;
+        gmaj_cc_set(gmaj_cc_mute, (leds.top.bits._7) ? 0x7F : 0x00);
+        send_leds();
     }
-    if (button_pressed(FSM_BOT_7)) {
+    if (is_bot_button_pressed(M_7)) {
         // tap tempo function (does not use LED):
         toggle_tap = ~toggle_tap & 0x7F;
         gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
     }
+    // Turn on the TAP LED while the TAP button is held:
+    leds.bot.bits._7 = fsw.bot.bits._7;
 
-    if (button_pressed(FSM_TOP_8)) {
+    if (is_top_button_pressed(M_8)) {
         // prev g-major program:
         if (gmajp != 0) gmajp--;
         gmaj_program(gmajp);
     }
-    if (button_pressed(FSM_BOT_8)) {
+    // Turn on the PREV LED while the PREV button is held:
+    leds.top.bits._8 = fsw.top.bits._8;
+    if (is_bot_button_pressed(M_8)) {
         // next g-major program:
         if (gmajp != 127) gmajp++;
         gmaj_program(gmajp);
     }
+    // Turn on the NEXT LED while the NEXT button is held:
+    leds.bot.bits._8 = fsw.bot.bits._8;
+
+    send_leds();
 
     // Record the previous switch state:
-    sw_last = sw_curr;
+    fsw_last = fsw;
 }

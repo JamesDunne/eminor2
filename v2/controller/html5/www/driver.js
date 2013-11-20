@@ -22,13 +22,13 @@ var cvs, ctx;
 var dpi = 42;
 
 var labels = [
-    ["COMP", "FILTER", "PITCH", "CHORUS", "DELAY", "REVERB", "MUTE", "PREV"],
-    ["CH1", "CH1S", "CH2", "CH2S", "CH3", "CH3S", "TAP", "NEXT"]
+    ["CH1", "CH1S", "CH2", "CH2S", "CH3", "CH3S", "TAP", "NEXT"],
+    ["COMP", "FILTER", "PITCH", "CHORUS", "DELAY", "REVERB", "MUTE", "PREV"]
 ];
 
 var keylabels = [
-    ["Q", "W", "E", "R", "T", "Y", "U", "I"],
-    ["A", "S", "D", "F", "G", "H", "J", "K"]
+    ["A", "S", "D", "F", "G", "H", "J", "K"],
+    ["Q", "W", "E", "R", "T", "Y", "U", "I"]
 ];
 
 // Total width, height in inches:
@@ -36,7 +36,7 @@ var inWidth = 20.0;
 var inHeight = 7.0;
 
 // Position and spacing of footswitches (from centers):
-var vStart = 2.5;
+var vStart = 5.65;
 var hLeft = 1.0;
 var hSpacing = 2.57;
 var vSpacing = 3.15;
@@ -119,24 +119,24 @@ function renderUI() {
     ctx.textBaseline = "top";
     ctx.font = '10pt Arial Bold';
 
-    // 2 rows of foot switches:
+    // draw 2 rows of foot switches and LEDs, starting at bottom row and moving up:
     for (v = 0; v < 2; ++v) {
-        var led_state = (v == 0) ? led_state_top : led_state_bot;
+        var led_state = (v == 0) ? led_state_bot : led_state_top;
 
-        // draw 2 rows of 8 evenly spaced foot-switches
+        // draw 8 evenly spaced foot-switches
         var b = 1 << (v * 8);
         for (h = 0; h < 8; ++h, b <<= 1) {
             ctx.lineWidth = 2;
             ctx.strokeStyle = "#808080";
             ctx.fillStyle = "#C0C0C0";
-            dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam);
+            dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam);
 
             ctx.lineWidth = 1;
-            dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswInnerDiam);
+            dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswInnerDiam);
             if (fsw_state & b) {
                 // Foot switch is depressed:
                 ctx.fillStyle = "#606060";
-                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam);
+                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam);
             }
 
             // Set label color:
@@ -148,11 +148,11 @@ function renderUI() {
                 ctx.fillStyle = "#E0E0E0";
 
             ctx.lineWidth = 1;
-            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h]);
+            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.5 - (v * vSpacing), labels[v][h]);
 
             // Label w/ the keyboard key:
             ctx.fillStyle = "#601010";
-            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.75 + (v * vSpacing), keylabels[v][h]);
+            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.75 - (v * vSpacing), keylabels[v][h]);
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
@@ -164,7 +164,7 @@ function renderUI() {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if ((led_state & b) == 0) {
-                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), inLEDOuterDiam);
+                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - 0.7 - (v * vSpacing), inLEDOuterDiam);
             }
         }
 
@@ -173,7 +173,7 @@ function renderUI() {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if (led_state & b) {
-                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), inLEDOuterDiam);
+                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - 0.7 - (v * vSpacing), inLEDOuterDiam);
             }
         }
     }
@@ -184,24 +184,24 @@ function renderUI() {
 function keydown(e) {
     if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return false;
 
+    // ASDFGHJK for bottom row:
+         if (e.keyCode == 65) fsw_state |= 1;
+    else if (e.keyCode == 83) fsw_state |= 2;
+    else if (e.keyCode == 68) fsw_state |= 4;
+    else if (e.keyCode == 70) fsw_state |= 8;
+    else if (e.keyCode == 71) fsw_state |= 16;
+    else if (e.keyCode == 72) fsw_state |= 32;
+    else if (e.keyCode == 74) fsw_state |= 64;
+    else if (e.keyCode == 75) fsw_state |= 128;
     // QWERTYUI for top row:
-    if (e.keyCode == 81) fsw_state |= 1;
-    else if (e.keyCode == 87) fsw_state |= 2;
-    else if (e.keyCode == 69) fsw_state |= 4;
-    else if (e.keyCode == 82) fsw_state |= 8;
-    else if (e.keyCode == 84) fsw_state |= 16;
-    else if (e.keyCode == 89) fsw_state |= 32;
-    else if (e.keyCode == 85) fsw_state |= 64;
-    else if (e.keyCode == 73) fsw_state |= 128;
-        // ASDFGHJK for bottom row:
-    else if (e.keyCode == 65) fsw_state |= 256;
-    else if (e.keyCode == 83) fsw_state |= 512;
-    else if (e.keyCode == 68) fsw_state |= 1024;
-    else if (e.keyCode == 70) fsw_state |= 2048;
-    else if (e.keyCode == 71) fsw_state |= 4096;
-    else if (e.keyCode == 72) fsw_state |= 8192;
-    else if (e.keyCode == 74) fsw_state |= 16384;
-    else if (e.keyCode == 75) fsw_state |= 32768;
+    else if (e.keyCode == 81) fsw_state |= 256;
+    else if (e.keyCode == 87) fsw_state |= 512;
+    else if (e.keyCode == 69) fsw_state |= 1024;
+    else if (e.keyCode == 82) fsw_state |= 2048;
+    else if (e.keyCode == 84) fsw_state |= 4096;
+    else if (e.keyCode == 89) fsw_state |= 8192;
+    else if (e.keyCode == 85) fsw_state |= 16384;
+    else if (e.keyCode == 73) fsw_state |= 32768;
     else return true;
 
     ui_modified = true;
@@ -212,24 +212,24 @@ function keydown(e) {
 function keyup(e) {
     if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return false;
 
+    // ASDFGHJK for bottom row:
+         if (e.keyCode == 65) fsw_state &= 1 ^ 65535;
+    else if (e.keyCode == 83) fsw_state &= 2 ^ 65535;
+    else if (e.keyCode == 68) fsw_state &= 4 ^ 65535;
+    else if (e.keyCode == 70) fsw_state &= 8 ^ 65535;
+    else if (e.keyCode == 71) fsw_state &= 16 ^ 65535;
+    else if (e.keyCode == 72) fsw_state &= 32 ^ 65535;
+    else if (e.keyCode == 74) fsw_state &= 64 ^ 65535;
+    else if (e.keyCode == 75) fsw_state &= 128 ^ 65535;
     // QWERTYUI for top row:
-    if (e.keyCode == 81) fsw_state &= 1 ^ 65535;
-    else if (e.keyCode == 87) fsw_state &= 2 ^ 65535;
-    else if (e.keyCode == 69) fsw_state &= 4 ^ 65535;
-    else if (e.keyCode == 82) fsw_state &= 8 ^ 65535;
-    else if (e.keyCode == 84) fsw_state &= 16 ^ 65535;
-    else if (e.keyCode == 89) fsw_state &= 32 ^ 65535;
-    else if (e.keyCode == 85) fsw_state &= 64 ^ 65535;
-    else if (e.keyCode == 73) fsw_state &= 128 ^ 65535;
-        // ASDFGHJK for bottom row:
-    else if (e.keyCode == 65) fsw_state &= 256 ^ 65535;
-    else if (e.keyCode == 83) fsw_state &= 512 ^ 65535;
-    else if (e.keyCode == 68) fsw_state &= 1024 ^ 65535;
-    else if (e.keyCode == 70) fsw_state &= 2048 ^ 65535;
-    else if (e.keyCode == 71) fsw_state &= 4096 ^ 65535;
-    else if (e.keyCode == 72) fsw_state &= 8192 ^ 65535;
-    else if (e.keyCode == 74) fsw_state &= 16384 ^ 65535;
-    else if (e.keyCode == 75) fsw_state &= 32768 ^ 65535;
+    else if (e.keyCode == 81) fsw_state &= 256 ^ 65535;
+    else if (e.keyCode == 87) fsw_state &= 512 ^ 65535;
+    else if (e.keyCode == 69) fsw_state &= 1024 ^ 65535;
+    else if (e.keyCode == 82) fsw_state &= 2048 ^ 65535;
+    else if (e.keyCode == 84) fsw_state &= 4096 ^ 65535;
+    else if (e.keyCode == 89) fsw_state &= 8192 ^ 65535;
+    else if (e.keyCode == 85) fsw_state &= 16384 ^ 65535;
+    else if (e.keyCode == 73) fsw_state &= 32768 ^ 65535;
     else return true;
 
     ui_modified = true;
@@ -256,7 +256,7 @@ function mousedown(e) {
     for (v = 0; v < 2; ++v) {
         var b = 1 << (v * 8);
         for (h = 0; h < 8; ++h, b <<= 1) {
-            dist = (x - (hLeft + (h * hSpacing))) * (x - (hLeft + (h * hSpacing))) + (y - (vStart + (v * vSpacing))) * (y - (vStart + (v * vSpacing)));
+            dist = (x - (hLeft + (h * hSpacing))) * (x - (hLeft + (h * hSpacing))) + (y - (vStart - (v * vSpacing))) * (y - (vStart - (v * vSpacing)));
             if (dist < r_sqr) {
                 fsw_state |= b;
             }
@@ -289,12 +289,15 @@ function hex2(v) {
 function _fsw_poll() { return fsw_state; }
 
 // called to set the new state of the LEDs in a top and bottom row, each 8-bit words:
-function _led_set(top, bot) {
-    if (led_state_top != top) ui_modified = true;
-    if (led_state_bot != bot) ui_modified = true;
+function _led_set(leds) {
+    var bot = leds & 255;
+    var top = (leds >>> 8) & 255;
 
-    led_state_top = top;
+    if (led_state_bot != bot) ui_modified = true;
+    if (led_state_top != top) ui_modified = true;
+
     led_state_bot = bot;
+    led_state_top = top;
 }
 
 // called to send MIDI command with one data byte:
@@ -354,6 +357,18 @@ function init() {
 
     // Give the canvas focus:
     cvs.focus();
+
+    var clearMidiOut = document.getElementById('clearMidiOut');
+    if (clearMidiOut)
+        clearMidiOut.addEventListener('click', function (e) {
+            e.preventDefault();
+            var c = midiLog.childNodes;
+            for (var i = c.length - 1; i >= 0; i--) {
+                midiLog.removeChild(c[i]);
+            }
+            cvs.focus();
+            return false;
+        });
 
     // Initialize controller:
     // NOTE(jsd): `eminorv2` is the name of the emscripten compiled module; exported functions have a leading '_'.

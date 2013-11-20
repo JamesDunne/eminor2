@@ -15,7 +15,7 @@
 extern u16 fsw_poll(void);
 
 /* Explicitly set the state of all 16 LEDs */
-extern void led_set(u8 topMask, u8 botMask);
+extern void led_set(u16 leds);
 
 /* --------------- MIDI I/O functions: */
 

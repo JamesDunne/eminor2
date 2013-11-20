@@ -166,7 +166,7 @@ void	ReadButtons(void) {
 //	}
 }
 
-void	SetDipAddress(unsigned char Address) {
+void SetDipAddress(unsigned char Address) {
 	BTN_S0_LAT_BIT = false;
 	BTN_S1_LAT_BIT = false;
 	BTN_S2_LAT_BIT = false;
@@ -179,37 +179,27 @@ void	SetDipAddress(unsigned char Address) {
 
 /* --------------- LED read-out display functions: */
 u16 fsw_poll() {
-	TwoBytes TempButtons;
+	u16 fsw;
 
-	TempButtons.s_form = 0;
-	TempButtons.b_form.high = ButtonStateBot & (unsigned char)0xF0;
-	TempButtons.b_form.low  = ButtonStateTop & (unsigned char)0x0F;
+    fsw = ButtonStateBot | (ButtonStateTop << 8);
 
-	return TempButtons.s_form;
+	return fsw;
 }
 
-static u8 reverse_bits(u8 v) {
-    // see http://graphics.stanford.edu/~seander/bithacks.html#ReverseParallel
-    v = ((v >> 1) & 0x55) | ((v & 0x55) << 1);
-    v = ((v >> 2) & 0x33) | ((v & 0x33) << 2);
-    v = ((v >> 4) & 0x0F) | ((v & 0x0F) << 4);
-    return v;
-}
-
-void	UpdateLeds(void) {
+void UpdateLeds(void) {
     u8 top, bot;
 
     // LEDs are wired in reverse:
-    top = reverse_bits(LedStatesTop);
-    bot = reverse_bits(LedStatesBot);
+    top = LedStatesTop;
+    bot = LedStatesBot;
 
 	SendDataToShiftReg16(LedStatesBot, LedStatesTop);
 }
 
 /* Set currently active program foot-switch's LED indicator and disable all others */
-void led_set(u8 top, u8 bot){
-    LedStatesTop = top;
-    LedStatesBot = bot;
+void led_set(u16 leds){
+    LedStatesTop = (leds >> 8) & 0xFF;
+    LedStatesBot = leds & 0xFF;
 }
 
 /* --------------- MIDI I/O functions: */

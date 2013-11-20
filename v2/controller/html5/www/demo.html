@@ -9,8 +9,6 @@
         body {
             background: #020208;
             color: silver;
-            padding: 0;
-            margin: 0;
             font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
             font-size: 13px;
         }
@@ -67,7 +65,7 @@
             <span>(click to focus)</span>
         </div>
         <div style="display: inline-block; vertical-align: top; width: 16em; text-align: left; white-space: normal">
-            <h5>MIDI OUT:</h5>
+            <h5>MIDI OUT: <a href="#" id="clearMidiOut">(clear)</a></h5>
             <pre id="midiLog" style="height: 240px; width: 14em"></pre>
             <p><strong>NOTE:</strong> These commands are not actually sent to a MIDI device because that is not easily accomplished from a browser.</p>
         </div>

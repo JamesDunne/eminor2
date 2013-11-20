@@ -1,9 +1,12 @@
 #include <windows.h>
+#include <windowsx.h>
 #include <winuser.h>
 #include <stdio.h>
 #include <string.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
+
+typedef unsigned long u32;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -16,11 +19,11 @@ const double defaultDpi = 55.4;    // NOTE(jsd): This is to-scale on my 40" Sams
 static double dpi = 55.4;
 
 // Total width, height in inches:
-const double inWidth = 20.0;
-const double inHeight = 7.0;
+const double inWidth = 20.078;
+const double inHeight = 6.305;
 
 // Position and spacing of footswitches (from centers):
-const double vStart = 2.5;
+const double vStart = 2.0;
 const double hLeft = 1.0;
 const double hSpacing = 2.57;
 const double vSpacing = 3.15;
@@ -31,7 +34,7 @@ const double inLEDOuterDiam = (8 /*mm*/ * 0.01 * 2.54);
 // was 0.34026
 const double inFswOuterDiam = (12.2 /*mm*/ * 0.01 * 2.54);
 // was 0.30
-const double inFswInnerDiam = (11 /*mm*/ * 0.01 * 2.54);
+const double inFswInnerDiam = (10 /*mm*/ * 0.01 * 2.54);
 
 // button labels:
 static LPCTSTR labels[2][8] = {
@@ -44,14 +47,16 @@ static LPCTSTR keylabels[2][8] = {
     { L"A", L"S", L"D", L"F", L"G", L"H", L"J", L"K" }
 };
 
-// foot-switch pushed state
-static u16 fsw_pushed;
+// foot-switch state
+static io16 fsw_state;
 // LED state:
-static u8 led_state[2];
+static io16 led_state;
 
 static HWND hwndMain;
 
-HMIDIOUT      outHandle;
+// MIDI I/O:
+
+HMIDIOUT outHandle;
 
 void show_midi_output_devices() {
     MIDIOUTCAPS     moc;
@@ -83,7 +88,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     zhInstance = hInstance;
 
     WndClass.cbSize = sizeof(WNDCLASSEX);
-    WndClass.style = CS_DBLCLKS;
+    WndClass.style = 0; // disable CS_DBLCLKS
     WndClass.lpfnWndProc = WndProc;
     WndClass.cbClsExtra = 0;
     WndClass.cbWndExtra = 0;
@@ -148,10 +153,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         printf("Opened MIDI device successfully.\r\n\r\n");
 
     // initialize UI bits:
-    fsw_pushed = 0;
-    for (int r = 0; r < 2; ++r) {
-        led_state[r] = 0;
-    }
+    fsw_state.bot.byte = 0;
+    fsw_state.top.byte = 0;
+    led_state.bot.byte = 0;
+    led_state.top.byte = 0;
 
     // initialize the logic controller
     controller_init();
@@ -269,24 +274,33 @@ void paintFacePlate(HWND hwnd) {
     // dpi label:
     SetTextAlign(hDC, TA_LEFT | VTA_TOP);
     wchar_t tmp[16];
-    swprintf(tmp, 16, L"dpi: %3.1f", dpi);
+    swprintf(tmp, 16, L"dpi: %3.2f", dpi);
     SetTextColor(hDC, RGB(100, 100, 100));
-    dpi_TextOut(hDC, 0.5, 0.5, tmp, wcslen(tmp));
+    dpi_TextOut(hDC, 0.5, 0.5, tmp, (int)wcslen(tmp));
 
     SetTextAlign(hDC, TA_CENTER | VTA_TOP);
 
     // 2 rows of foot switches:
     for (v = 0; v < 2; ++v) {
-        SelectObject(hDC, penThin);
+        b8 fsw, led;
+        if (v == 0) {
+            fsw = fsw_state.top;
+            led = led_state.top;
+        } else {
+            fsw = fsw_state.bot;
+            led = led_state.bot;
+        }
+
         SelectObject(hDC, brsWhite);
+
         // draw 2 rows of 8 evenly spaced foot-switches
-        u16 b = 1 << (v * 8);
+        u8 b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             SelectObject(hDC, penThick);
             dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam, inFswOuterDiam);
             SelectObject(hDC, penThin);
             dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswInnerDiam, inFswInnerDiam);
-            if (fsw_pushed & b) {
+            if (fsw.byte & b) {
                 SelectObject(hDC, brsDarkSilver);
                 dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam, inFswOuterDiam);
                 SelectObject(hDC, brsWhite);
@@ -314,7 +328,7 @@ void paintFacePlate(HWND hwnd) {
         SelectObject(hDC, brsDarkGreen);
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
-            if ((led_state[v] & b) == 0) {
+            if ((led.byte & b) == 0) {
                 dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), inLEDOuterDiam, inLEDOuterDiam);
             }
         }
@@ -323,7 +337,7 @@ void paintFacePlate(HWND hwnd) {
         SelectObject(hDC, brsGreen);
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
-            if (led_state[v] & b) {
+            if (led.byte & b) {
                 dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), inLEDOuterDiam, inLEDOuterDiam);
             }
         }
@@ -363,8 +377,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             if (outHandle != 0) {
                 if (midiOutClose(outHandle)) {
                     printf("There was a problem closing the MIDI mapper.\r\n");
-                }
-                else {
+                } else {
                     printf("Closed MIDI mapper.\r\n");
                 }
             }
@@ -373,14 +386,48 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
         case WM_PAINT:
             paintFacePlate(hwnd);
             break;
+        case WM_LBUTTONDOWN: {
+            int h, b;
+
+            double x = (double)GET_X_LPARAM(lParam) / dpi,
+                   y = (double)GET_Y_LPARAM(lParam) / dpi;
+            const double r_sqr = inFswOuterDiam * inFswOuterDiam;
+
+            // Find out which foot-switch the mouse cursor is inside:
+            b = 1;
+            for (h = 0; h < 8; ++h, b <<= 1) {
+                double bx = (hLeft + (h * hSpacing));
+                double by = (vStart + (0 * vSpacing));
+                double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
+                if (dist_sqr <= r_sqr) {
+                    fsw_state.top.byte |= b;
+                }
+            }
+            b = 1;
+            for (h = 0; h < 8; ++h, b <<= 1) {
+                double bx = (hLeft + (h * hSpacing));
+                double by = (vStart + (1 * vSpacing));
+                double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
+                if (dist_sqr <= r_sqr) {
+                    fsw_state.bot.byte |= b;
+                }
+            }
+
+            InvalidateRect(hwnd, NULL, TRUE);
+            break;
+        }
+        case WM_LBUTTONUP:
+            fsw_state.bot.byte = 0;
+            fsw_state.top.byte = 0;
+            InvalidateRect(hwnd, NULL, TRUE);
+            break;
         case WM_MOUSEWHEEL:
             if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
                 // mwheel up
-                dpi += 0.2 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
-            }
-            else {
+                dpi += 0.25 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
+            } else {
                 // mwheel down
-                dpi -= 0.2 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
+                dpi -= 0.25 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
                 if (dpi < 1.0) dpi = 1.0;
             }
             GetWindowRect(hwnd, &rect);
@@ -390,24 +437,29 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
         case WM_KEYDOWN:
             // only fire if the previous button state was UP (i.e. ignore autorepeat messages)
             if ((lParam & (1 << 30)) == 0) {
+                // ESC quits:
+                if (wParam == VK_ESCAPE) {
+                    DestroyWindow(hwnd);
+                    break;
+                }
                 switch (wParam) {
-                    case 'Q': case 'q': fsw_pushed |= FSM_TOP_1; break;
-                    case 'W': case 'w': fsw_pushed |= FSM_TOP_2; break;
-                    case 'E': case 'e': fsw_pushed |= FSM_TOP_3; break;
-                    case 'R': case 'r': fsw_pushed |= FSM_TOP_4; break;
-                    case 'T': case 't': fsw_pushed |= FSM_TOP_5; break;
-                    case 'Y': case 'y': fsw_pushed |= FSM_TOP_6; break;
-                    case 'U': case 'u': fsw_pushed |= FSM_TOP_7; break;
-                    case 'I': case 'i': fsw_pushed |= FSM_TOP_8; break;
+                    case 'Q': case 'q': fsw_state.top.bits._1 = 1; break;
+                    case 'W': case 'w': fsw_state.top.bits._2 = 1; break;
+                    case 'E': case 'e': fsw_state.top.bits._3 = 1; break;
+                    case 'R': case 'r': fsw_state.top.bits._4 = 1; break;
+                    case 'T': case 't': fsw_state.top.bits._5 = 1; break;
+                    case 'Y': case 'y': fsw_state.top.bits._6 = 1; break;
+                    case 'U': case 'u': fsw_state.top.bits._7 = 1; break;
+                    case 'I': case 'i': fsw_state.top.bits._8 = 1; break;
 
-                    case 'A': case 'a': fsw_pushed |= FSM_BOT_1; break;
-                    case 'S': case 's': fsw_pushed |= FSM_BOT_2; break;
-                    case 'D': case 'd': fsw_pushed |= FSM_BOT_3; break;
-                    case 'F': case 'f': fsw_pushed |= FSM_BOT_4; break;
-                    case 'G': case 'g': fsw_pushed |= FSM_BOT_5; break;
-                    case 'H': case 'h': fsw_pushed |= FSM_BOT_6; break;
-                    case 'J': case 'j': fsw_pushed |= FSM_BOT_7; break;
-                    case 'K': case 'k': fsw_pushed |= FSM_BOT_8; break;
+                    case 'A': case 'a': fsw_state.bot.bits._1 = 1; break;
+                    case 'S': case 's': fsw_state.bot.bits._2 = 1; break;
+                    case 'D': case 'd': fsw_state.bot.bits._3 = 1; break;
+                    case 'F': case 'f': fsw_state.bot.bits._4 = 1; break;
+                    case 'G': case 'g': fsw_state.bot.bits._5 = 1; break;
+                    case 'H': case 'h': fsw_state.bot.bits._6 = 1; break;
+                    case 'J': case 'j': fsw_state.bot.bits._7 = 1; break;
+                    case 'K': case 'k': fsw_state.bot.bits._8 = 1; break;
 
                     case '0': {
                                   dpi = defaultDpi;
@@ -422,23 +474,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
         case WM_KEYUP:
             // handle toggle button up
             switch (wParam) {
-                case 'Q': case 'q': fsw_pushed &= ~FSM_TOP_1; break;
-                case 'W': case 'w': fsw_pushed &= ~FSM_TOP_2; break;
-                case 'E': case 'e': fsw_pushed &= ~FSM_TOP_3; break;
-                case 'R': case 'r': fsw_pushed &= ~FSM_TOP_4; break;
-                case 'T': case 't': fsw_pushed &= ~FSM_TOP_5; break;
-                case 'Y': case 'y': fsw_pushed &= ~FSM_TOP_6; break;
-                case 'U': case 'u': fsw_pushed &= ~FSM_TOP_7; break;
-                case 'I': case 'i': fsw_pushed &= ~FSM_TOP_8; break;
+                case 'Q': case 'q': fsw_state.top.bits._1 = 0; break;
+                case 'W': case 'w': fsw_state.top.bits._2 = 0; break;
+                case 'E': case 'e': fsw_state.top.bits._3 = 0; break;
+                case 'R': case 'r': fsw_state.top.bits._4 = 0; break;
+                case 'T': case 't': fsw_state.top.bits._5 = 0; break;
+                case 'Y': case 'y': fsw_state.top.bits._6 = 0; break;
+                case 'U': case 'u': fsw_state.top.bits._7 = 0; break;
+                case 'I': case 'i': fsw_state.top.bits._8 = 0; break;
 
-                case 'A': case 'a': fsw_pushed &= ~FSM_BOT_1; break;
-                case 'S': case 's': fsw_pushed &= ~FSM_BOT_2; break;
-                case 'D': case 'd': fsw_pushed &= ~FSM_BOT_3; break;
-                case 'F': case 'f': fsw_pushed &= ~FSM_BOT_4; break;
-                case 'G': case 'g': fsw_pushed &= ~FSM_BOT_5; break;
-                case 'H': case 'h': fsw_pushed &= ~FSM_BOT_6; break;
-                case 'J': case 'j': fsw_pushed &= ~FSM_BOT_7; break;
-                case 'K': case 'k': fsw_pushed &= ~FSM_BOT_8; break;
+                case 'A': case 'a': fsw_state.bot.bits._1 = 0; break;
+                case 'S': case 's': fsw_state.bot.bits._2 = 0; break;
+                case 'D': case 'd': fsw_state.bot.bits._3 = 0; break;
+                case 'F': case 'f': fsw_state.bot.bits._4 = 0; break;
+                case 'G': case 'g': fsw_state.bot.bits._5 = 0; break;
+                case 'H': case 'h': fsw_state.bot.bits._6 = 0; break;
+                case 'J': case 'j': fsw_state.bot.bits._7 = 0; break;
+                case 'K': case 'k': fsw_state.bot.bits._8 = 0; break;
             }
             InvalidateRect(hwnd, NULL, TRUE);
             break;
@@ -456,24 +508,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 // --------------- Momentary toggle foot-switches:
 
 // Poll 16 foot-switch toggles simultaneously
-u16 fsw_poll() {
-    return fsw_pushed;
+u16 fsw_poll(void) {
+    return ((u16)fsw_state.bot.byte) | ((u16)fsw_state.top.byte << 8);
 }
 
 // Explicitly set the state of all 16 LEDs
-void led_set(u8 topMask, u8 botMask) {
-    led_state[0] = topMask;
-    led_state[1] = botMask;
+void led_set(u16 leds) {
+    led_state.bot.byte = leds & 0xFF;
+    led_state.top.byte = (leds >> 8) & 0xFF;
     InvalidateRect(hwndMain, NULL, TRUE);
 }
 
 // --------------- MIDI I/O functions:
 
-/* Send formatted MIDI commands.
-
-    0 <= cmd <= F       - MIDI command
-    0 <= channel <= F   - MIDI channel to send command to
-    00 <= data1 <= FF   - data byte of MIDI command
+/* Send multi-byte MIDI commands
+    0 <= cmd     <=  F   - MIDI command
+    0 <= channel <=  F   - MIDI channel to send command to
+    00 <= data1   <= FF   - first data byte of MIDI command
+    00 <= data2   <= FF   - second (optional) data byte of MIDI command
     */
 void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
     if (outHandle != 0) {
@@ -483,13 +535,6 @@ void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
     printf("MIDI: %1X%1X %02X\r\n", cmd, channel, data1);
 }
 
-/* Send formatted MIDI commands.
-
-    0 <= cmd <= F       - MIDI command
-    0 <= channel <= F   - MIDI channel to send command to
-    00 <= data1 <= FF   - first data byte of MIDI command
-    00 <= data2 <= FF   - second (optional) data byte of MIDI command
-    */
 void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
     if (outHandle != 0) {
         // send the MIDI command to the opened MIDI Mapper device:
