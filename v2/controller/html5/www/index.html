@@ -72,12 +72,12 @@
     <p>The <a href="https://github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">GitHub repository</a> contains everything you'd need to build your own, e.g. all of the controller source code, the MPLAB PIC18 project, the hardware schematic, and even PCB layout.</p>
 
     <p>Our device is designed with 2 rows of 8 rugged foot switches, each paired with an indicator LED. The function of these foot switches and LEDs is entirely up to the programmer to decide.</p>
-    <p>At the back of the device is a MIDI OUT jack, a USB-B connection, a power switch, and a 9V DV jack. We like to keep things simple here.</p>
+    <p>At the back of the device is a MIDI OUT port, a USB-B port, a power switch, and a 9V DV jack. We like to keep things simple here.</p>
 
     <h2>Function</h2>
     <p>Although this project aims to be a useful template for constructing any programmable MIDI controller, I have a concrete implementation with controller logic specific to my guitar rig equipment to fit my needs.</p>
     <p>
-        My rig consists of a MESA/Boogie&trade; Mark V amplifier head, an RJM Mini Amp Gizmo, and a t.c. eletronics g-major rack effects unit. Since the Mark V itself is not MIDI-enabled, I use the Mini Amp Gizmo to translate MIDI commands into more
+        My rig consists of a MESA/Boogie&trade; Mark V amplifier head, an RJM Mini Amp Gizmo, and a t.c. electronics g-major rack effects unit. Since the Mark V itself is not MIDI-enabled, I use the Mini Amp Gizmo to translate MIDI commands into more
         primitive on/off signals sent to the Mark V head via its floorboard jack. Essentially, the Mini Amp Gizmo is acting as a floorboard controller for the Mark V but is MIDI controlled.
         The g-major is also MIDI controllable and can switch presets or enable/disable certain effects depending on the MIDI commands sent to it.
         The current e-minor controller logic is designed to send program change messages to both devices listening on separate channels (g-major on channel 1, RJM on channel 2). This way the two devices don't get confused listening to each others' commands.
@@ -91,7 +91,7 @@
     <div style="text-align: center; margin-left: 2em; margin-right: 2em; white-space: nowrap">
         <div style="display: inline-block; vertical-align: top; margin-right: 1em">
             <canvas id="cvs" tabindex="1"></canvas><br />
-            <span>(click to focus; use keyboard QWERTYUI and ASDFHJK or mouse)</span>
+            <span>(click to focus; use keyboard QWERTYUI and ASDFGHJK or mouse)</span>
         </div>
         <div style="display: inline-block; vertical-align: top; width: 16em; text-align: left; white-space: normal">
             <h5>MIDI OUT:</h5>
@@ -141,7 +141,7 @@
     </p>
 
     <h2>Hardware</h2>
-    <p>The project is designed to run on a PIC18 microprocessor. The TX pin of the UART is used to send MIDI data via a MIDI OUT port. The PIC18 also natively supports USB and our firmware allows one to easily reprogram the PIC via USB.</p>
+    <p>The project is designed to run on a PIC18, an 8-bit microprocessor. The TX pin (from the UART of the PIC18) is used to send MIDI data via the MIDI OUT port. The PIC18 also natively supports USB and our firmware allows one to easily reprogram the PIC via USB.</p>
     <p>We used CADSoft Eagle to design the schematic and PCB. You can find all the project files here: <a href="https://github.com/JamesDunne/eminor2/tree/master/v2/pcb" target="_blank">https://github.com/JamesDunne/eminor2/tree/master/v2/pcb</a></p>
     <p>Here is a screenshot the schematic:</p>
     <div style="text-align: center; margin-top: 1em">
@@ -159,8 +159,8 @@
         The foot switches we use come from <a href="http://www.bitcheslovemyswitches.com/#!/%7E/product/category=5027572&id=10220659" target="_blank">bitcheslovemyswitches.com</a>.
         Shout out to <a href="https://twitter.com/LawrenceScaduto" target="_blank">Lawrence Scaduto</a>, owner and proprietor, for being a big help in fulfilling my initial order!
     </p>
-    <p>The chassis we use is <a href="http://www.lmbheeger.com/products.asp?catid=27" target="_blank">LMB Heeger's Model# KB20-7</a>, an aluminum 20" x 7" keyboarder case with a slanted face, perfect for a floorboard controller accessible by foot.</p>
-    <p>The schematic does a good job of labeling all the values for the resistors and capacitors so there should be no problem there.</p>
+    <p>The chassis we use is <a href="http://www.hammondmfg.com/dwg16.htm#15degree" target="_blank">Hammond Mfg.'s 1456WH3BKBU</a>, an aluminum sloped console with a usable surface area of 20.078" x 6.305" on the sloped face, perfect for a floorboard controller. On their datasheet they claim they can do factory modifications (drilling, milling, printing). I just might be interested in that... Definitely not looking forward to drilling holes manually for foot switches and LEDs.</p>
+    <p>Our schematic does a good job of labelling all the values for the resistors and capacitors so there should be no problem there.</p>
     <p>I found MIDI and USB-B PCB-mounted parts at <a href="https://www.sparkfun.com/" target="_blank">sparkfun.com</a>.</p>
     <p>I'm still working out the remaining components for the PCB but in the mean time you can go to this <a href="https://docs.google.com/spreadsheet/ccc?key=0Ah4nh0yGtjrgdHBYRjlqZkN1UXhrbTFLOTFnZWNGYkE#gid=0" target="_blank">Google Docs Spreadsheet</a> to see the work-in-progress.</p>
 
