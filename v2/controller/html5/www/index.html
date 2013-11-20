@@ -2,14 +2,137 @@
 
 <html>
 <head>
-<style type="text/css">
-body { background: #020208; color: silver; padding: 0; margin: 0 }
-h1, h3 { text-align: center; padding: 0; margin: 0 }
-</style>
+    <title>e-minor v2 MIDI foot controller</title>
+    <script type="text/javascript" src="eminorv2.js"></script>
+    <script type="text/javascript" src="driver.js"></script>
+    <style type="text/css">
+        body {
+            background: #020208;
+            color: silver;
+            font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+            font-size: 13px;
+        }
+
+        h1, h3 {
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        h5 {
+            padding: 0;
+            margin: 0;
+        }
+
+        canvas {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            outline: none;
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+        }
+
+        dl {
+            margin-bottom: 1em;
+        }
+
+            dl dt {
+                background: #101020;
+                color: #fff;
+                float: left;
+                margin-right: 10px;
+                padding: 5px;
+                width: 100px;
+            }
+
+            dl dd {
+                margin: 2px 0;
+                padding: 5px 0;
+            }
+    </style>
 </head>
 <body>
     <h1>e-minor v2 MIDI foot controller</h1>
-    <p>TODO!</p>
-    <a href="demo.html">Click here</a> for a live HTML5 demo of the MIDI controller!
+    <h3>Software designed by <a href="https://github.com/JamesDunne" target="_blank">James S. Dunne</a></h3>
+    <h3>Hardware/firmware designed by <a href="https://github.com/jdunne525" target="_blank">Joseph R. Dunne</a></h3>
+
+    <h2>What is it?</h2>
+    <p>
+        The e-minor v2 is an open-source and open-hardware project describing a custom programmable floorboard controller designed to send MIDI commands to musical instrument devices with a focus on controlling guitar amplifier and effects equipment.
+        MIDI is still in widespread use with electric guitar equipment, despite the standard's age; most moderately advanced devices support it. There are also many MIDI adapter systems which can translate MIDI commands into more primitive switch signals,
+        e.g. <a href="http://www.rjmmusic.com/" target="_blank">RJM Technologies'</a> products like the Amp Gizmo and Mini Amp Gizmo.
+    </p>
+    <p>Our device is designed with 2 rows of 8 rugged foot switches, each paired with an indicator LED. The function of these foot switches and LEDs is entirely up to the programmer to decide.</p>
+    <h2>Links</h2>
+    <p>Access our github repository here: <a href="https://github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">https://github.com/JamesDunne/eminor2/tree/master/v2</a>.</p>
+
+
+    <h2>Software</h2>
+    <p>Although this project aims to be a useful template to constructprogrammable MIDI controllers with, I have a concrete implementation with controller logic specific to my guitar rig equipment to fit my needs.</p>
+    <p>
+        I believe most things can best be explained by example, so feel free to play with the live HTML5 example below to get a feel for the controller logic! Use keyboard keys or your mouse to depress the foot switches. The MIDI OUT window shows what
+        MIDI commands would be sent.
+    </p>
+
+    <!-- Live demo here: -->
+    <div style="text-align: center; margin-left: 4em; margin-right: 4em">
+        <div style="float: left; margin-right: 2em">
+            <canvas id="cvs" tabindex="1"></canvas><br />
+            <span>(click to focus)</span>
+        </div>
+        <div style="float: left; width: 20em; text-align: left">
+            <h5>MIDI OUT:</h5>
+            <pre id="midiLog" style="height: 240px"></pre>
+            <p><strong>NOTE:</strong> These commands are not actually sent to a MIDI device because that is not easily accomplished from a browser.</p>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+
+    <div style="margin-left: 4em; margin-right: 4em">
+        <div>
+            <h5>MIDI commands:</h5>
+            <dl>
+                <dt><strong>C</strong><em>c aa</em></dt>
+                <dd>A program change message sent to channel 'c' (zero-based); program number is 'aa' (zero-based)</dd>
+                <dt><strong>B</strong><em>c aa bb</em></dt>
+                <dd>A continuous controller change message sent to channel 'c'; 'aa' is the controller number; 'bb' is the controller value</dd>
+            </dl>
+            <p>
+                The MIDI data is displayed in hexadecimal which means only two characters are needed to display values in the range 0-255. Each hex digit represents exactly 4 bits of data so each pairing of digits represents exactly 8 bits.
+                This is just a convenient notation for programmers and engineers to use since it is more aligned with the binary system, much more so than decimal digits are.
+            </p>
+        </div>
+    </div>
+
+    <p>
+        My rig consists of a MESA/Boogie&trade; Mark V amplifier head, an RJM Mini Amp Gizmo, and a t.c. eletronics g-major rack effects unit. Since the Mark V itself is not MIDI-enabled, I use the Mini Amp Gizmo to translate MIDI commands into more
+        primitive on/off signals sent to the Mark V head via its floorboard jack. Essentially, the Mini Amp Gizmo is acting as a floorboard controller for the Mark V but is MIDI controlled.
+    </p>
+    <p>The g-major is also MIDI controllable and can switch presets or enable/disable certain effects depending on the MIDI commands sent to it.</p>
+    <p>The current e-minor controller logic is designed to send program change messages to both devices listening on separate channels (g-major on channel 1, RJM on channel 2). This way the two devices don't get confused listening to each others' commands.</p>
+    <p>The top row of foot switches enables/disables effects on the g-major.</p>
+    <p>
+        The bottom row of foot switches switches amplifier channels on the Mark V via the RJM. It also reloads the current g-major program in order to reset all effects back to their original on/off state. The Mark V is a 3-channel amplifier and also
+        has a SOLO mode that gives a nice volume boost when desired. The foot switches alternate enabling the SOLO mode per channel. This configuration is more useful to me than having an independent SOLO foot switch since usually I want to go straight to a
+        specific soloed sound and not spend two clicks to get there when I can get there in just one.
+    </p>
+    <p>The MUTE foot switch toggles the g-major input mute, useful for entering a silent tuning mode while on stage.</p>
+    <p>The TAP foot switch sends the g-major a TAP TEMPO function, useful for keeping time-related effects in sync with the song's tempo.</p>
+    <p>The NEXT/PREV foot switches change the g-major program. I have the g-major programmed with per-song effects settings and use the NEXT/PREV to move to the song I'm currently playing.</p>
+
+    <h2>Firmware</h2>
+    <p>The primary controller logic for the project is written in entirely portable ISO C99 (C) code. The controller logic expects a hardware interface layer consisting of several functions to be implemented in the host.</p>
+
+    <h2>Hardware</h2>
+    <p>The project is designed to run on a PIC18 microprocessor. The TX pin of the UART is used to send MIDI data via a MIDI OUT port. The PIC18 also natively supports USB and our firmware allows one to easily reprogram the PIC via USB. Here is the schematic:</p>
+    <div style="text-align: center; margin-top: 1em">
+        <a href="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/schematic.png" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" alt="Schematic" style="max-width: 600px" /></a>
+    </div>
+    <p>I took the liberty of designing a PCB layout for the schematic as well. Unfortunately, due to PCB size constraints, some pin-mapping sins had to be committed so that the traces and ICs could all fit happily on the board. Look at the pin headers to see what I mean.</p>
+    <div style="text-align: center; margin-top: 1em">
+        <a href="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/pcb.png" target="_blank"><img src="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/pcb.png" alt="PCB Layout" style="max-width: 600px" /></a>
+    </div>
 </body>
 </html>
