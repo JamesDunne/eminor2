@@ -11,6 +11,8 @@
             color: silver;
             padding: 0;
             margin: 0;
+            font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+            font-size: 13px;
         }
 
         h1, h3 {
@@ -18,6 +20,7 @@
             padding: 0;
             margin: 0;
         }
+
         h5 {
             padding: 0;
             margin: 0;
@@ -58,31 +61,45 @@
     <h3>Use keyboard keys or mouse to control foot switches!</h3>
     <h3>Software designed by <a href="https://github.com/JamesDunne" target="_blank">James S. Dunne</a></h3>
 
-    <div style="text-align: center; margin-left: 4em; margin-right: 4em; margin-top: 2em">
-        <div style="float: left; margin-right: 2em">
+    <div style="text-align: center; margin-left: 2em; margin-right: 2em; margin-top: 2em; white-space: nowrap">
+        <div style="display: inline-block; vertical-align: top; margin-right: 1em">
             <canvas id="cvs" tabindex="1"></canvas><br />
             <span>(click to focus)</span>
         </div>
-        <div style="text-align: left; float: left; width: 20em">
+        <div style="display: inline-block; vertical-align: top; width: 16em; text-align: left; white-space: normal">
             <h5>MIDI OUT:</h5>
-            <pre id="midiLog" style="height: 240px"></pre>
+            <pre id="midiLog" style="height: 240px; width: 14em"></pre>
             <p><strong>NOTE:</strong> These commands are not actually sent to a MIDI device because that is not easily accomplished from a browser.</p>
         </div>
-        <div style="clear: both"></div>
     </div>
 
-    <div style="margin-left: 4em; margin-right: 4em">
-        <h5>MIDI commands:</h5>
-        <dl>
-            <dt><strong>C</strong><em>c aa</em></dt>
-            <dd>A program change message sent to channel 'c' (zero-based); program number is 'aa' (zero-based)</dd>
-            <dt><strong>B</strong><em>c aa bb</em></dt>
-            <dd>A continuous controller change message sent to channel 'c'; 'aa' is the controller number; 'bb' is the controller value</dd>
-        </dl>
-        <p>
-            The MIDI data is displayed in hexadecimal which means only two characters are needed to display values in the range 0-255. Each hex digit represents exactly 4 bits of data so each pairing of digits represents exactly 8 bits.
-            This is just a convenient notation for programmers and engineers to use since it is more aligned with the binary system, much more so than decimal digits are.
-        </p>
+    <div style="text-align: center; margin-left: 2em; margin-right: 2em; white-space: nowrap">
+        <div style="display: inline-block; text-align: left; margin-right: 4em; width: 32em; white-space: normal; ">
+            <h5>MIDI commands:</h5>
+            <dl>
+                <dt><strong>C</strong><em>c aa</em></dt>
+                <dd>A program change message sent to channel <em>c</em>; program number is <em>aa</em></dd>
+                <dt><strong>B</strong><em>c aa bb</em></dt>
+                <dd>A continuous controller change message sent to channel <em>c</em>; <em>aa</em> is the controller number; <em>bb</em> is the controller value</dd>
+            </dl>
+        </div>
+        <div style="display: inline-block; text-align: left; width: 32em; white-space: normal; ">
+            <p>
+                The MIDI data is displayed in hexadecimal which means only two characters are needed to display values in the range 0-255. Each hex digit represents exactly 4 bits of data so each pairing of digits represents exactly 8 bits.
+                This is just a convenient notation for programmers and engineers to use since it is more aligned with the binary system, much more so than decimal digits are.
+            </p>
+        </div>
     </div>
+
+    <p>The top row of foot switches enables/disables effects on the g-major.</p>
+    <p>
+        The bottom row of foot switches switches amplifier channels on the Mark V via the RJM. It also reloads the current g-major program in order to reset all effects back to their original on/off state. The Mark V is a 3-channel amplifier and also
+        has a SOLO mode that gives a nice volume boost when desired. The foot switches alternate enabling the SOLO mode per channel. This configuration is more useful to me than having an independent SOLO foot switch since usually I want to go straight to a
+        specific soloed sound and not spend two clicks to get there when I can get there in just one.
+    </p>
+    <p>The MUTE foot switch toggles the g-major input mute, useful for entering a silent tuning mode while on stage.</p>
+    <p>The TAP foot switch sends the g-major a TAP TEMPO function, useful for keeping time-related effects in sync with the song's tempo.</p>
+    <p>The NEXT/PREV foot switches change the g-major program. I have the g-major programmed with per-song effects settings and use the NEXT/PREV to move to the song I'm currently playing.</p>
+
 </body>
 </html>
