@@ -110,11 +110,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         0,
         L"MyClass",
         L"MIDI controller test harness",
-        WS_OVERLAPPEDWINDOW,
+        WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        (int)(inWidth * dpi) + 16,
-        (int)(inHeight * dpi) + 37,
+        (int)(inWidth * dpi) + 6,
+        (int)(inHeight * dpi) + 28,
         NULL,
         NULL,
         zhInstance,
@@ -431,7 +431,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
                 if (dpi < 1.0) dpi = 1.0;
             }
             GetWindowRect(hwnd, &rect);
-            SetWindowPos(hwnd, 0, rect.left, rect.top, (int)(inWidth * dpi) + 16, (int)(inHeight * dpi) + 37, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+            SetWindowPos(hwnd, 0, rect.left, rect.top, (int)(inWidth * dpi) + 6, (int)(inHeight * dpi) + 28, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
             InvalidateRect(hwnd, NULL, TRUE);
             break;
         case WM_KEYDOWN:

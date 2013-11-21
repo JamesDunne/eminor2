@@ -24,15 +24,16 @@
 
 #include "../common/types.h"
 #include "../common/hardware.h"
+#include <assert.h>
 
 // Useful macros:
 #define tglbit(VAR,Place) VAR ^= (1 << Place)
 
-#if DEBUG
-#define assert(e) if (!(e)) return;
-#else
-#define assert(e)
-#endif
+//#if DEBUG
+//#define assert(e) if (!(e)) return;
+//#else
+//#define assert(e)
+//#endif
 
 // Hard-coded MIDI channel #s:
 #define	gmaj_midi_channel	0
@@ -48,18 +49,39 @@
 #define gmaj_cc_chorus      87
 #define gmaj_cc_delay       88
 #define gmaj_cc_reverb      89
-
 #define gmaj_cc_noisegate   90
 #define gmaj_cc_eq          91
 
+// FX button labels:
+#define fxb_compressor  0
+#define fxb_filter      1
+#define fxb_pitch       2
+#define fxb_chorus      3
+#define fxb_delay       4
+#define fxb_reverb      5
+#define fxb_noisegate   6
+#define fxb_eq          7
+
+// FX button enable bitmasks:
+#define fxm_compressor  0x01
+#define fxm_filter      0x02
+#define fxm_pitch       0x04
+#define fxm_chorus      0x08
+#define fxm_delay       0x10
+#define fxm_reverb      0x20
+#define fxm_noisegate   0x40
+#define fxm_eq          0x80
+
 // Top row of controller buttons activate these CCs:
-static u8 gmaj_cc_lookup[6] = {
+static u8 gmaj_cc_lookup[8] = {
     gmaj_cc_compressor,
     gmaj_cc_filter,
     gmaj_cc_pitch,
     gmaj_cc_chorus,
     gmaj_cc_delay,
-    gmaj_cc_reverb
+    gmaj_cc_reverb,
+    gmaj_cc_noisegate,
+    gmaj_cc_eq
 };
 
 // Current and previous button state:
@@ -85,14 +107,14 @@ void load_program_state(u8 program) {
     // TODO: use `flash_load`!
     // defaults: SOLO channels get delay enabled
     chan_effects[0] = 0;
-    chan_effects[1] = M_5;
-    chan_effects[2] = 0;
-    chan_effects[3] = M_5;
-    chan_effects[4] = 0;
-    chan_effects[5] = M_5;
+    chan_effects[1] = fxm_delay;
+    chan_effects[2] = fxm_noisegate;
+    chan_effects[3] = fxm_noisegate | fxm_delay;
+    chan_effects[4] = fxm_noisegate;
+    chan_effects[5] = fxm_noisegate | fxm_delay;
 }
 
-void store_program_states(u8 program) {
+void store_program_states() {
     // TODO: use `flash_store`!
 }
 
@@ -130,20 +152,25 @@ static void reset_tuner_mute(void) {
 // Toggle a g-major CC effect
 static void gmaj_toggle_cc(u8 idx) {
     u8 togglevalue = 0x00;
-    u8 idxMask = (1 << idx);
+    u8 idxMask;
 
     // Make sure we don't go out of range:
     assert(idx < 6);
 
+    idxMask = (1 << idx);
+
     // Toggle on/off the selected continuous controller:
-    leds.top.byte ^= idxMask;
-    send_leds();
+    chan_effects[rjm_channel] ^= idxMask;
 
     // Determine the MIDI value to use depending on the newly toggled state:
-    if (leds.top.byte & idxMask) togglevalue = 0x7F;
+    if (chan_effects[rjm_channel] & idxMask) togglevalue = 0x7F;
 
     // Send MIDI command:
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
+
+    // Update LEDs:
+    leds.top.byte ^= idxMask;
+    send_leds();
 }
 
 static void update_effects_MIDI_state() {
@@ -156,6 +183,10 @@ static void update_effects_MIDI_state() {
     leds.top.byte &= (M_7 | M_8);
     leds.top.byte |= n.byte & ~(M_7 | M_8);
 
+    if (n.bits._7) {
+        // turn on noise gate:
+        gmaj_cc_set(gmaj_cc_lookup[6], 0x7F);
+    }
     if (n.bits._5) {
         // turn on delay:
         gmaj_cc_set(gmaj_cc_lookup[4], 0x7F);
@@ -180,14 +211,15 @@ static void update_effects_MIDI_state() {
         // turn on compressor:
         gmaj_cc_set(gmaj_cc_lookup[0], 0x7F);
     }
+    if (n.bits._8) {
+        // turn on eq:
+        gmaj_cc_set(gmaj_cc_lookup[7], 0x7F);
+    }
 }
 
 // Set RJM program to p (0-5)
 static void set_rjm_channel(u8 p) {
     assert(p < 6);
-
-    // Save current channel's effects state for the next STORE:
-    chan_effects[rjm_channel] = leds.top.byte & ~(M_7 | M_8);
 
     rjm_channel = p;
 
