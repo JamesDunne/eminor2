@@ -302,6 +302,7 @@ function _led_set(leds) {
 
 // called to send MIDI command with one data byte:
 function _midi_send_cmd1(cmd, chan, data1) {
+    // TODO: add commentary about recognized commands
     var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + "\n";
     midiLog.appendChild(document.createTextNode(f));
     midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
@@ -309,9 +310,51 @@ function _midi_send_cmd1(cmd, chan, data1) {
 
 // called to send MIDI command with two data bytes:
 function _midi_send_cmd2(cmd, chan, data1, data2) {
+    // TODO: add commentary about recognized commands
     var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + " " + hex2(data2) + "\n";
     midiLog.appendChild(document.createTextNode(f));
     midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
+}
+
+// loads a chunk of bytes from persistent storage:
+function _flash_load(addr, count, data_ptr) {
+    // We use localStorage to store a string representing flash data in hexadecimal.
+    var flash = localStorage.getItem("flash");
+    if (flash === null || flash.length < 2048) {
+        flash = new Array(1024 + 1).join("00");
+        localStorage.setItem("flash", flash);
+    }
+
+    for (var a = 0; a < count; a++) {
+        // unaligned stores! some platforms might take issue with this.
+        var v = parseInt(flash.substring((addr + a) * 2, (addr + a) * 2 + 2), 16);
+        eminorv2.setValue(data_ptr + a, v, 'i8');
+    }
+}
+
+// stores a chunk of bytes to persistent storage:
+function _flash_store(addr, count, data_ptr) {
+    // Verify store does not cross 64-byte boundary!
+    var start_chunk = (addr) & ~63;
+    var end_chunk = ((addr + count)) & ~63;
+    if (start_chunk !== end_chunk) throw "Flash store cannot cross 64-byte boundary!";
+
+    // We use localStorage to store a string representing flash data in hexadecimal.
+    var flash = localStorage.getItem("flash");
+    if (flash === null || flash.length < 2048) {
+        flash = new Array(1024 + 1).join("00");
+    }
+
+    // Update the flash string with data read from the heap:
+    for (var a = 0; a < count; a++) {
+        // unaligned loads! some platforms might take issue with this.
+        var v = eminorv2.getValue(data_ptr + a, 'i8');
+        var h = hex2(v);
+        flash = flash.substring(0, (addr + a) * 2) + h + flash.substring((addr + a) * 2 + 2);
+    }
+
+    // Store the flash data back:
+    localStorage.setItem("flash", flash);
 }
 
 // ----------------------------- Startup:

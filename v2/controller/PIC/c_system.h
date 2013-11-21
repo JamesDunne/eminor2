@@ -51,4 +51,5 @@ void	RS232_ROUTINE(void);
 void	PROCESS_COMM_REQUEST(void);
 void	InterruptHandlerHigh ();
 
+extern rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];
 //-----------------------------------------------------------------------------

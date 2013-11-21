@@ -61,7 +61,7 @@
     <h3>Software designed by <a href="https://github.com/JamesDunne" target="_blank">James S. Dunne</a></h3>
     <h3>Hardware/firmware designed by <a href="https://github.com/jdunne525" target="_blank">Joseph R. Dunne</a></h3>
     <h5 style="text-align: center"><a href="https://github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">https://github.com/JamesDunne/eminor2/tree/master/v2</a></h5>
-    <h5 style="text-align: center">Last updated: 2013-11-19</h5>
+    <h5 style="text-align: center">Last updated: 2013-11-21</h5>
 
     <h2>What is it?</h2>
     <p>
@@ -126,11 +126,9 @@
     </p>
     <p>The MUTE foot switch toggles the g-major input mute, useful for entering a silent tuning mode while on stage.</p>
     <p>The TAP foot switch sends the g-major a TAP TEMPO function, useful for keeping time-related effects in sync with the song's tempo. The MIDI controller change command alternates the value used each tap between 00 and 7F.</p>
-    <p>The NEXT/PREV foot switches change the g-major program. I have the g-major programmed with per-song effects settings and use the NEXT/PREV to move to the song I'm currently playing.</p>
+    <p>The NEXT/PREV foot switches change the g-major program; the program is switched to when a channel foot switch is activated (unless MUTE mode is on in which case the program change is instant). I have the g-major programmed with per-song effects settings and use the NEXT/PREV to move to the song I want to play next.</p>
 
-    <p>I intend to extend this current design to allow me to store and recall initial effect on/off states per channel per song instead of assuming that all effects revert to their off states when changing channels. This would allow me to, for example, switch from a flangered and delayed clean sound into a dry overdriven sound with just one foot tap for one particular song (Hoobastank's Crawling in the Dark).</p>
-    <p>This data can be stored in a compact fashion in the EEPROM of the PIC18. We have 128 programs to store with each program needing 6 channels and each channel needing 6 effect on/off states. Since there are only 6 effects to control, we can limit ourselves to one byte to store each 6-bit bitfield with 2 bits left unused. Doing a little arithmetic, we arrive at just 768 bytes to store all that data. I imagine overloading the TAP foot switch to act as a STORE function (if held down for 500ms) where it would store the current on/off state of the effects on the current channel into the current program. Since EEPROM writes occur in 64 byte chunks, that gives us exactly 12 chunks to work with.</p>
-    <p>Another idea I'm toying with is to allow temporary effect enable/disable by holding down an effect control foot switch for longer than 500ms. Once released, the effect would disable immediately instead of waiting for another tap. This would help for quick passages that need effects only for a short time.</p>
+    <p>An idea I'm toying with is to allow temporary effect enable/disable by holding down an effect control foot switch for longer than 500ms. Once released, the effect would disable immediately instead of waiting for another tap. This would help for quick passages that need effects only for a short time.</p>
 
     <h2>Firmware</h2>
     <p>The primary controller logic for the project is written in entirely portable ISO C99 (C) code. The controller logic expects a hardware interface layer consisting of several functions to be implemented in the host.

@@ -42,3 +42,6 @@ unsigned char ResponseType;
 
 unsigned char midiInData[23];
 unsigned char midiInBufPtr;
+
+#pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR		//Update lkr file if this is to change!!
+rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];

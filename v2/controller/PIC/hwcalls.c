@@ -6,7 +6,7 @@
 //;#																		  #
 //;############################################################################
 
-
+#include <assert.h>
 #include "c_system.h"
 #include "typedefs.h"
 #include "hardware.h"
@@ -232,4 +232,46 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 	MIDI_ENQUEUE(((cmd & 0xF) << 4) | (channel & 0xF));
 	MIDI_ENQUEUE(data1 & 0x7F);
 	MIDI_ENQUEUE(data2 & 0x7F);
+}
+
+// ---------------- FLASH interface:
+
+// FLASH memory is read freely as a normal memory access.
+// FLASH memory is written to by erasing 64 bytes at a time on aligned addresses and then writing 32 bytes at a time.
+
+void flash_load(u16 addr, u16 count, u8 *data) {
+    u8 i;
+    u16 saddr;
+
+    // Copy data from ROM to destination:
+    assert(addr + count < WRITABLE_SEG_LEN);
+    for (i = 0, saddr = addr; i < count; i++, saddr++)
+        data[i] = ROM_SAVEDATA[saddr];
+}
+
+void flash_store(u16 addr, u16 count, u8 *data) {
+    u8 i;
+    u16 saddr, daddr;
+
+    // Copy 64 byte aligned chunk of ROM into RAM so it can be put back in after ERASE completes.
+    saddr = (64 + addr) & ~63;
+	for (i = 0; i < 64; i++, saddr++) {
+		ProgmemBuffer[i] = ROM_SAVEDATA[saddr];
+	}
+
+    // Copy new data into RAM buffer, assuming we don't cross a 64-byte chunk boundary:
+    saddr = (64 + addr) & ~63;
+    daddr = addr - saddr;
+    assert(daddr + count < 64);     // that'd be bad, m'kay?
+    for (i = 0; i < count; i++, daddr++)
+        ProgmemBuffer[daddr] = data[i];
+
+    // Start the ERASE operation:
+    // +512 for debugging..
+    ProgMemAddr.s_form = ((64 + addr) & ~63) + WRITABLE_SEG_ADDR;
+    EraseProgMem();
+
+    // arb will catch this and handle it later...
+    Write0Pending = true;
+    Write32Pending = true;
 }

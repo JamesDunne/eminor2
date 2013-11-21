@@ -2,38 +2,34 @@
     Programmable e-minor MIDI foot controller v2.
 
     Currently designed to work with:
-        RJM Mini Amp Gizmo controlling a 3-channel Mark V amplifier
-        t.c. electronic g-major effects unit.
+    RJM Mini Amp Gizmo controlling a 3-channel Mark V amplifier
+    t.c. electronic g-major effects unit.
 
     Assumptions:
-        g-major listens on MIDI channel 1
-        g-major listens for program change messages
-        RJM listens on MIDI channel 2
-        RJM listens for program change messages with program #s 1-6
+    g-major listens on MIDI channel 1
+    g-major listens for program change messages and CC messages
+    RJM listens on MIDI channel 2
+    RJM listens for program change messages with program #s 1-6
 
     Footswitch layout:
-          *      *      *      *      *      *      *
-         CMP    FLT    PIT    CHO    DLY    RVB    MUTE    PREV
+    *      *      *      *      *      *      *
+    CMP    FLT    PIT    CHO    DLY    RVB    MUTE    PREV
 
-          *      *      *      *      *      *
-          1      1S     2      2S     3      3S    TAP     NEXT
+    *      *      *      *      *      *
+    1      1S     2      2S     3      3S    TAP     NEXT
 
-    Written by James S. Dunne
+    Written by
+    James S. Dunne
+    https://github.com/JamesDunne/
     2013-11-17
-*/
+    */
 
+#include <assert.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
-#include <assert.h>
 
 // Useful macros:
 #define tglbit(VAR,Place) VAR ^= (1 << Place)
-
-//#if DEBUG
-//#define assert(e) if (!(e)) return;
-//#else
-//#define assert(e)
-//#endif
 
 // Hard-coded MIDI channel #s:
 #define	gmaj_midi_channel	0
@@ -97,25 +93,43 @@ u8 rjm_channel;
 
 // Current g-major program # (0-127):
 u8 gmaj_program;
+// Next g-major program to update to:
+u8 next_gmaj_program;
+// Most recent changed-to g-major program via MIDI message:
+u8 midi_gmaj_program;
 
 // Initial effects on/off state per channel:
-u8 chan_effects[6];
+u8 chan_effects[8];
 
 
 // Loads a 6-bit bit field describing the initial on/off state of effects
-void load_program_state(u8 program) {
-    // TODO: use `flash_load`!
-    // defaults: SOLO channels get delay enabled
+void load_program_state(void) {
+#if NOFLASH
+    // defaults: all SOLO channels get delay enabled
     chan_effects[0] = 0;
     chan_effects[1] = fxm_delay;
-    chan_effects[2] = fxm_noisegate;
-    chan_effects[3] = fxm_noisegate | fxm_delay;
-    chan_effects[4] = fxm_noisegate;
-    chan_effects[5] = fxm_noisegate | fxm_delay;
+    chan_effects[2] = 0;
+    chan_effects[3] = fxm_delay;
+    chan_effects[4] = 0;
+    chan_effects[5] = fxm_delay;
+#else
+    // Load effects on/off state data from persistent storage:
+    // NOTE(jsd): Use multiple of 8 to avoid crossing 64-byte boundaries in flash!
+    flash_load(gmaj_program * 8, 6, chan_effects);
+#endif
+
+    // Since user has no way to turn on/off these settings yet, we force them here.
+    // All overdrive channels get noise gate on:
+    chan_effects[2] |= fxm_noisegate;
+    chan_effects[3] |= fxm_noisegate;
+    chan_effects[4] |= fxm_noisegate;
+    chan_effects[5] |= fxm_noisegate;
 }
 
-void store_program_states() {
-    // TODO: use `flash_store`!
+void store_program_state(void) {
+    // Store effects on/off state of current program:
+    // NOTE(jsd): Use multiple of 8 to avoid crossing 64-byte boundaries in flash!
+    flash_store(gmaj_program * 8, 6, chan_effects);
 }
 
 
@@ -129,7 +143,7 @@ static u8 is_bot_button_pressed(u8 mask) {
 }
 
 
-static void send_leds() {
+static void send_leds(void) {
     u16 tmp = (u16)leds.bot.byte | ((u16)leds.top.byte << 8);
     led_set(tmp);
 }
@@ -173,7 +187,7 @@ static void gmaj_toggle_cc(u8 idx) {
     send_leds();
 }
 
-static void update_effects_MIDI_state() {
+static void update_effects_MIDI_state(void) {
     b8 n;
     n.byte = chan_effects[rjm_channel];
 
@@ -227,8 +241,9 @@ static void set_rjm_channel(u8 p) {
     // NOTE(jsd): add 4 for personal raisins; first 4 programs are reserved for existing v1 controller.
     midi_send_cmd1(0xC, rjm_midi_channel, p + 4);
 
-    // Reset the g-major effects:
+    // Change to the g-major program:
     midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
+    midi_gmaj_program = gmaj_program;
 
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
@@ -240,17 +255,31 @@ static void set_rjm_channel(u8 p) {
 }
 
 // Set g-major program:
-static void set_gmaj_program() {
-    // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
-    midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
+static void set_gmaj_program(void) {
+    // Save current effect states:
+    store_program_state();
 
-    // Load new channel effect states:
-    load_program_state(gmaj_program);
+    // Update internal state:
+    gmaj_program = next_gmaj_program;
 
-    // Send MIDI effects enable commands and set effects LEDs:
-    update_effects_MIDI_state();
+    // Load new effect states:
+    load_program_state();
 
-    send_leds();
+    // NOTE(jsd): Do not send MIDI commands until an RJM channel select button is selected.
+    // This allows one to pre-load songs without affecting current state.
+
+    // Only send MIDI program change if MUTE enabled; makes it easy to cycle through programs
+    // during down time.
+    if (leds.top.bits._7) {
+        // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
+        midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
+        midi_gmaj_program = next_gmaj_program;
+
+        // Send MIDI effects enable commands and set effects LEDs:
+        update_effects_MIDI_state();
+
+        send_leds();
+    }
 }
 
 
@@ -263,9 +292,22 @@ void controller_init(void) {
 
     rjm_channel = 0;
     gmaj_program = 0;
+    next_gmaj_program = 0;
+    midi_gmaj_program = 0;
+
+    // This should be overwritten instantly by load_program_state()
+    chan_effects[0] = 0;
+    chan_effects[1] = fxm_delay;
+    chan_effects[2] = 0;
+    chan_effects[3] = fxm_delay;
+    chan_effects[4] = 0;
+    chan_effects[5] = fxm_delay;
+    // Extra two bytes for padding alignment so as not to cross 64-byte flash write boundaries:
+    chan_effects[6] = 0;
+    chan_effects[7] = 0;
 
     // Load new channel effect states:
-    load_program_state(gmaj_program);
+    load_program_state();
     set_rjm_channel(0);
 }
 
@@ -345,18 +387,20 @@ void controller_handle(void) {
 
     if (is_top_button_pressed(M_8)) {
         // prev g-major program:
-        if (gmaj_program != 0) gmaj_program--;
+        if (next_gmaj_program != 0) next_gmaj_program--;
         set_gmaj_program();
     }
-    // Turn on the PREV LED while the PREV button is held:
-    leds.top.bits._8 = fsw.top.bits._8;
     if (is_bot_button_pressed(M_8)) {
         // next g-major program:
-        if (gmaj_program != 127) gmaj_program++;
+        if (next_gmaj_program != 127) next_gmaj_program++;
         set_gmaj_program();
     }
-    // Turn on the NEXT LED while the NEXT button is held:
-    leds.bot.bits._8 = fsw.bot.bits._8;
+
+    // Use PREV LED to indicate that either NEXT or PREV button is acknowledged:
+    leds.top.bits._8 = fsw.bot.bits._8 | fsw.top.bits._8;
+
+    // Turn on the NEXT LED while a program change is pending:
+    leds.bot.bits._8 = (midi_gmaj_program != gmaj_program);
 
     send_leds();
 

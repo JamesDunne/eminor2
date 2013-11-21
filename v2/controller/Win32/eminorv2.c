@@ -3,6 +3,7 @@
 #include <winuser.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
 
@@ -390,7 +391,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             int h, b;
 
             double x = (double)GET_X_LPARAM(lParam) / dpi,
-                   y = (double)GET_Y_LPARAM(lParam) / dpi;
+                y = (double)GET_Y_LPARAM(lParam) / dpi;
             const double r_sqr = inFswOuterDiam * inFswOuterDiam;
 
             // Find out which foot-switch the mouse cursor is inside:
@@ -505,7 +506,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
     return 0;
 }
 
-// --------------- Momentary toggle foot-switches:
+// --------------- Momentary toggle foot-switches and LEDs interface:
 
 // Poll 16 foot-switch toggles simultaneously
 u16 fsw_poll(void) {
@@ -519,7 +520,7 @@ void led_set(u16 leds) {
     InvalidateRect(hwndMain, NULL, TRUE);
 }
 
-// --------------- MIDI I/O functions:
+// --------------- MIDI I/O interface:
 
 /* Send multi-byte MIDI commands
     0 <= cmd     <=  F   - MIDI command
@@ -541,4 +542,75 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
         midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8) | ((u32)data2 << 16));
     }
     printf("MIDI: %1X%1X %02X %02X\r\n", cmd, channel, data1, data2);
+}
+
+// --------------- Flash memory interface:
+
+// Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
+void flash_load(u16 addr, u16 count, u8 *data) {
+#if _DEBUG
+    long p;
+#endif
+
+    FILE *f = fopen("flash.bin", "rb");
+    if (f == NULL) {
+        memset(data, 0, count);
+        return;
+    }
+
+    // Attempt to seek to the location in the file:
+    if (fseek(f, addr, SEEK_SET) != 0) {
+        fclose(f);
+        memset(data, 0, count);
+        return;
+    }
+
+#if _DEBUG
+    p = ftell(f);
+    assert(p == addr);
+#endif
+
+    size_t r = fread(data, 1, count, f);
+    if (r < count) {
+        // Zero the remainder of the buffer:
+        memset(data + r, 0, count - r);
+    }
+    fclose(f);
+}
+
+// Stores `count` bytes from `data` into flash memory at address `addr` (0-based where 0 is first available byte of available flash memory):
+void flash_store(u16 addr, u16 count, u8 *data) {
+    long p;
+    u16 start_chunk, end_chunk;
+    FILE *f;
+
+    // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
+    start_chunk = (addr) & ~63;
+    end_chunk = ((addr + count)) & ~63;
+    assert(start_chunk == end_chunk);
+
+    // Create file or append to it:
+    f = fopen("flash.bin", "a+b");
+    if (fseek(f, addr, SEEK_SET) != 0) {
+        static u8 zeroes[64];
+
+        fseek(f, 0, SEEK_END);
+        p = ftell(f);
+        while (addr - p >= 64) {
+            p += (long)fwrite(zeroes, 1, 64, f);
+        }
+        if (addr - p > 0)
+            fwrite(zeroes, 1, addr - p, f);
+    }
+
+#if _DEBUG
+    p = ftell(f);
+    assert(p == addr);
+#endif
+
+    fwrite(data, 1, count, f);
+    fclose(f);
+
+    // simulate a flash write delay of 4ms
+    Sleep(4);
 }

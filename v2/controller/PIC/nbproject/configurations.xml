@@ -18,6 +18,7 @@
       <itemPath>_TOOLS.H</itemPath>
       <itemPath>../common/types.h</itemPath>
       <itemPath>a_micrdef.inc</itemPath>
+      <itemPath>assert.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"

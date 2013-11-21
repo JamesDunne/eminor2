@@ -66,12 +66,8 @@ void WriteProgMem(unsigned char index) //TESTED: Passed
 //uses TwoBytes ProgMemAddr;
 void EraseProgMem(void) //TESTED: Passed
 {
-
-
 	//diag 
 	//return;
-
-
 
     //The most significant 16 bits of the address pointer points to the block
     //being erased. Bits5:0 are ignored. (In hardware).
