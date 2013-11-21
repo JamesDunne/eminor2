@@ -32,6 +32,18 @@ h5 {
     margin: 0;
 }
 
+nav > a {
+    text-align: center;
+    font-weight: bold;
+    background: #101020;
+    color: #fff;
+    float: left;
+    margin-top: 4px;
+    margin-right: 1px;
+    padding: 12px 18px 12px 18px;
+    min-width: 6em;
+}
+
 dl {
     margin-bottom: 1em;
 }
@@ -59,6 +71,18 @@ dl {
     vertical-align: top;
 }
 
+canvas {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+}
+
+
 pre.code-block {
     margin: 0;
     margin-left: 2em;
@@ -71,13 +95,62 @@ code {
     font-size: 11pt;
 }
 
-canvas {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    outline: none;
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+pre .comment {
+    color: #5F5A60;
+}
+
+pre .constant.numeric {
+    color: #D87D50;
+}
+
+pre .constant {
+    color: #889AB4;
+}
+
+    pre .constant.symbol, pre .constant.language {
+        color: #D87D50;
+    }
+
+pre .storage {
+    color: #F9EE98;
+}
+
+pre .string {
+    color: #8F9D6A;
+}
+
+    pre .string.regexp {
+        color: #E9C062;
+    }
+
+pre .keyword, pre .selector, pre .storage {
+    color: #CDA869;
+}
+
+pre .inherited-class {
+    color: #9B5C2E;
+}
+
+pre .entity {
+    color: #FF6400;
+}
+
+pre .support {
+    color: #9B859D;
+}
+
+    pre .support.magic {
+        color: #DAD69A;
+    }
+
+pre .variable {
+    color: #7587A6;
+}
+
+pre .function, pre .entity.class {
+    color: #9B703F;
+}
+
+pre .support.class-name, pre .support.type {
+    color: #AB99AC;
 }

@@ -6,10 +6,14 @@
     <meta name="author" content="James Dunne, Joe Dunne" />
     <meta name="keywords" content="MIDI, e-minor, PIC18, microcontroller, microprocessor, HTML5, javascript, controller, PCB, schematic, James Dunne, Joe Dunne" />
     <meta name="description" content="Project page for the e-minor v2 MIDI floorboard controller for guitar rig control." />
+    <link type="text/css" rel="stylesheet" href="main.css" />
 
+    <script type="text/javascript" src="rainbow.min.js"></script>
+    <script type="text/javascript">
+        Rainbow.extend('c', [{ 'name': 'storage.type', 'pattern': /u8|u16/g }]);
+    </script>
     <script type="text/javascript" src="eminorv2.js"></script>
     <script type="text/javascript" src="driver.js"></script>
-    <link type="text/css" rel="stylesheet" href="main.css" />
 </head>
 
 <body style="text-align: center">
@@ -20,17 +24,21 @@
     <div class="content">
         <h5 style="margin-top: 10px"><a href="https://github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">Our GitHub Repository</a></h5>
         <h5 style="">Last updated: 2013-11-21</h5>
-
-        <nav>
-            <a href="#what">What is it?</a>
-            <a href="#demo">Demo</a>
-            <a href="#my-guitar-rig">My guitar rig</a>
-            <a href="#how-it-works">How it works</a>
-            <a href="#firmware">Firmware</a>
-            <a href="#hardware">Hardware</a>
-            <a href="#bom">Bill of Materials</a>
-        </nav>
-
+    </div>
+    <div style="margin-top: 16px">
+        <div style="text-align: center; display: inline-block; vertical-align: top;">
+            <nav>
+                <a href="#what">What is it?</a>
+                <a href="#demo">Demo</a>
+                <a href="#my-guitar-rig">My guitar rig</a>
+                <a href="#how-it-works">How it works</a>
+                <a href="#firmware">Firmware</a>
+                <a href="#hardware">Hardware</a>
+                <a href="#bom">Bill of Materials</a>
+            </nav>
+        </div>
+    </div>
+    <div class="content">
         <h2 id="what">What is it?</h2>
         <p>The e-minor v2 is an open-source and open-hardware project describing a custom programmable floorboard controller designed to send MIDI commands to musical instrument devices with a focus on controlling guitar amplifier and effects equipment.</p>
         <p>This project is intended to serve as a working template to help you create your own custom MIDI controller. The example controller logic is developed for use with my own personal guitar rig and its MIDI-enabled equipment.</p>
@@ -117,7 +125,7 @@
         </p>
         <p>
             <pre class="code-block">
-<code>// Poll 16 foot-switch toggles simultaneously into a bit field
+<code data-language="c">// Poll 16 foot-switch toggles simultaneously into a bit field
 u16 fsw_poll(void);
 // Explicitly set the state of all 16 LEDs
 void led_set(u8 topMask, u8 botMask);
@@ -135,7 +143,7 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);</code></pre>
         <p>The controller implements three functions exported to the host:</p>
         <p>
             <pre class="code-block">
-<code>// Run once on boot to initialize controller:
+<code data-language="c">// Run once on boot to initialize controller:
 void controller_init(void);
 // Run every 10msec to increment timers used:
 void controller_10msec_timer(void);
