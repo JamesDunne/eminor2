@@ -2,147 +2,127 @@
 
 <html>
 <head>
-    <title>e-minor v2 MIDI foot controller</title>
+    <title>E-Minor v2 MIDI floorboard controller project page</title>
+    <meta name="author" content="James Dunne, Joe Dunne" />
+    <meta name="keywords" content="MIDI, e-minor, PIC18, microcontroller, microprocessor, HTML5, javascript, controller, PCB, schematic, James Dunne, Joe Dunne" />
+    <meta name="description" content="Project page for the e-minor v2 MIDI floorboard controller for guitar rig control." />
+
     <script type="text/javascript" src="eminorv2.js"></script>
     <script type="text/javascript" src="driver.js"></script>
-    <style type="text/css">
-        body {
-            background: #020208;
-            color: silver;
-            font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
-            font-size: 13px;
-        }
-
-        h1, h3 {
-            text-align: center;
-            padding: 0;
-            margin: 0;
-        }
-
-        h5 {
-            padding: 0;
-            margin: 0;
-        }
-
-        canvas {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            outline: none;
-            -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
-        }
-
-        dl {
-            margin-bottom: 1em;
-        }
-
-            dl dt {
-                background: #101020;
-                color: #fff;
-                clear: left;
-                float: left;
-                margin-top: 2px;
-                margin-right: 10px;
-                padding: 12px;
-                width: 100px;
-            }
-
-            dl dd {
-                margin: 2px 0;
-                padding: 0px 0;
-            }
-    </style>
+    <link type="text/css" rel="stylesheet" href="main.css" />
 </head>
-<body>
-    <h1>e-minor v2 MIDI foot controller</h1>
-    <h3>Software designed by <a href="https://github.com/JamesDunne" target="_blank">James S. Dunne</a></h3>
+
+<body style="text-align: center">
+    <h1>E-Minor V2 - a custom MIDI floorboard controller</h1>
+
+    <h3 style="margin-top: 10px">Software designed by <a href="https://github.com/JamesDunne" target="_blank">James S. Dunne</a></h3>
     <h3>Hardware/firmware designed by <a href="https://github.com/jdunne525" target="_blank">Joseph R. Dunne</a></h3>
-    <h5 style="text-align: center"><a href="https://github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">https://github.com/JamesDunne/eminor2/tree/master/v2</a></h5>
-    <h5 style="text-align: center">Last updated: 2013-11-21</h5>
+    <div class="content">
+        <h5 style="margin-top: 10px"><a href="https://github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">Our GitHub Repository</a></h5>
+        <h5 style="">Last updated: 2013-11-21</h5>
 
-    <h2>What is it?</h2>
-    <p>
-        The e-minor v2 is an open-source and open-hardware project describing a custom programmable floorboard controller designed to send MIDI commands to musical instrument devices with a focus on controlling guitar amplifier and effects equipment.
-        MIDI is still in widespread use with electric guitar equipment, despite the standard's age; most moderately advanced devices support it. There are also many MIDI adapter systems which can translate MIDI commands into more primitive switch signals,
-        e.g. <a href="http://www.rjmmusic.com/" target="_blank">RJM Technologies'</a> products like the Amp Gizmo and Mini Amp Gizmo.
-    </p>
-    <p>The <a href="https://github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">GitHub repository</a> contains everything you'd need to build your own, e.g. all of the controller source code, the MPLAB PIC18 project, the hardware schematic, and even PCB layout.</p>
+        <nav>
+            <a href="#what">What is it?</a>
+            <a href="#demo">Demo</a>
+            <a href="#my-guitar-rig">My guitar rig</a>
+            <a href="#how-it-works">How it works</a>
+            <a href="#firmware">Firmware</a>
+            <a href="#hardware">Hardware</a>
+            <a href="#bom">Bill of Materials</a>
+        </nav>
 
-    <p>Our device is designed with 2 rows of 8 rugged foot switches, each paired with an indicator LED. The function of these foot switches and LEDs is entirely up to the programmer to decide.</p>
-    <p>At the back of the device is a MIDI OUT port, a USB-B port, a power switch, and a 9V DV jack. We like to keep things simple here.</p>
+        <h2 id="what">What is it?</h2>
+        <p>The e-minor v2 is an open-source and open-hardware project describing a custom programmable floorboard controller designed to send MIDI commands to musical instrument devices with a focus on controlling guitar amplifier and effects equipment.</p>
+        <p>This project is intended to serve as a working template to help you create your own custom MIDI controller. The example controller logic is developed for use with my own personal guitar rig and its MIDI-enabled equipment.</p>
 
-    <h2>Function</h2>
-    <p>Although this project aims to be a useful template for constructing any programmable MIDI controller, I have a concrete implementation with controller logic specific to my guitar rig equipment to fit my needs.</p>
-    <p>
-        My rig consists of a <a href="http://www.mesaboogie.com/Product_Info/Mark_Series/mark5/mark5.html" target="_blank">MESA/Boogie&trade; Mark V</a> amplifier head, an <a href="http://www.rjmmusic.com/miniampgizmo.php" target="_blank">RJM Mini Amp Gizmo</a>, and a <a href="http://www.tcelectronic.com/g-major/" target="_blank">t.c. electronics g-major</a> rack effects unit. Since the Mark V itself is not MIDI-enabled, I use the Mini Amp Gizmo to translate MIDI commands into more
-        primitive on/off signals sent to the Mark V head via its floorboard jack. Essentially, the Mini Amp Gizmo is acting as a floorboard controller for the Mark V but is MIDI controlled.
-        The g-major is also MIDI controllable and can switch presets or enable/disable certain effects depending on the MIDI commands sent to it.
-        The current e-minor controller logic is designed to send program change messages to both devices listening on separate channels (g-major on channel 1, RJM on channel 2). This way the two devices don't get confused listening to each others' commands.
-    </p>
-    <p>
-        I believe most things can best be explained by example, so feel free to play with the live HTML5 example below to get a feel for the controller logic! Use keyboard keys or your mouse to depress the foot switches. The MIDI OUT window shows what
-        MIDI commands would be sent.
-    </p>
+        <p>The device is a 20" by 6" sloped console chassis sporting 2 rows of 8 evenly horizontally-spaced rugged foot-switches, each paired with an indicator LED.</p>
+        <p>At the back of the device is a MIDI OUT port, a USB-B port, a power switch, and a 9V DV jack.</p>
 
+        <p><strong>NOTE: </strong>At this time, the prototype device is not yet assembled so there are no pictures of it to show. I still have the bill of materials to finalize and components to order before construction can begin. See below for more information.</p>
+    </div>
     <!-- Live demo here: -->
-    <div style="text-align: center; margin-left: 2em; margin-right: 2em; white-space: nowrap">
+    <div id="demo" style="text-align: center; margin-top: 2em; margin-left: 2em; margin-right: 2em; white-space: nowrap; font-size: 10pt">
         <div style="display: inline-block; vertical-align: top; margin-right: 1em">
+            <strong>A working demonstration:</strong><br />
             <canvas id="cvs" tabindex="1"></canvas><br />
-            <span>(click to focus; use keyboard QWERTYUI and ASDFGHJK or mouse)</span>
+            <span>(click to focus; use keyboard QWERTYUI and ASDFGHJK or mouse to activate foot-switches)</span><br />
+            <span><a href="https://github.com/JamesDunne/eminor2/tree/master/v2/controller/Win32" target="_blank">Download the Windows EXE version</a> to test with actual MIDI gear!</span>
         </div>
         <div style="display: inline-block; vertical-align: top; width: 16em; text-align: left; white-space: normal">
-            <h5>MIDI OUT: <a href="#" id="clearMidiOut">(clear)</a></h5>
+            <h5>MIDI OUT:&nbsp;&nbsp;<a href="#" id="clearMidiOut">(clear)</a></h5>
             <pre id="midiLog" style="height: 240px; width: 14em"></pre>
             <p><strong>NOTE:</strong> These commands are not actually sent to a MIDI device because that is not easily accomplished from a browser.</p>
         </div>
-    </div>
-
-    <div style="text-align: center; margin-left: 2em; margin-right: 2em; white-space: nowrap">
-        <div style="display: inline-block; text-align: left; margin-right: 4em; width: 32em; white-space: normal; ">
-            <h5>MIDI commands:</h5>
-            <dl>
-                <dt><strong>C</strong><em>c aa</em></dt>
-                <dd>A program change message sent to channel <em>c</em>; program number is <em>aa</em></dd>
-                <dt><strong>B</strong><em>c aa bb</em></dt>
-                <dd>A continuous controller change message sent to channel <em>c</em>; <em>aa</em> is the controller number; <em>bb</em> is the controller value</dd>
-            </dl>
+        <div style="text-align: center; margin-left: 2em; margin-right: 2em; white-space: nowrap">
+            <div style="display: inline-block; text-align: left; margin-right: 4em; width: 32em; white-space: normal; ">
+                <h5>MIDI commands:</h5>
+                <dl>
+                    <dt><strong>C</strong><em>c aa</em></dt>
+                    <dd>A program change message sent to channel <em>c</em>; program number is <em>aa</em></dd>
+                    <dt><strong>B</strong><em>c aa bb</em></dt>
+                    <dd>A continuous controller change message sent to channel <em>c</em>; <em>aa</em> is the controller number; <em>bb</em> is the controller value</dd>
+                </dl>
+            </div>
+            <div style="display: inline-block; text-align: left; width: 32em; white-space: normal; ">
+                <p>
+                    <strong>NOTE:</strong> The MIDI data is displayed in hexadecimal notation which means only two characters are needed to display values in the range 0-255. Each hex digit (0-9 A-F)
+                    represents exactly 4 bits of data so each pairing of digits represents exactly 8 bits. This is just a convenient notation for programmers and engineers to use since
+                    it is more aligned with the binary system, much more so than ordinary decimal digits are.
+                </p>
+            </div>
         </div>
-        <div style="display: inline-block; text-align: left; width: 32em; white-space: normal; ">
-            <p>
-                The MIDI data is displayed in hexadecimal which means only two characters are needed to display values in the range 0-255. Each hex digit represents exactly 4 bits of data so each pairing of digits represents exactly 8 bits.
-                This is just a convenient notation for programmers and engineers to use since it is more aligned with the binary system, much more so than decimal digits are.
-            </p>
-        </div>
     </div>
+    <div class="content">
+        <h2 id="my-guitar-rig">My Guitar Rig</h2>
+        <p>
+            My guitar rig consists of a <a href="http://www.mesaboogie.com/Product_Info/Mark_Series/mark5/mark5.html" target="_blank">MESA/Boogie&trade; Mark V</a> amplifier head, an
+            <a href="http://www.rjmmusic.com/miniampgizmo.php" target="_blank">RJM Mini Amp Gizmo</a>, and a <a href="http://www.tcelectronic.com/g-major/" target="_blank">t.c. electronics g-major</a>
+            rack effects unit. Since the Mark V itself is not MIDI-enabled, I use the Mini Amp Gizmo to translate MIDI commands into more primitive on/off signals sent to the Mark V head
+            via its floorboard jack. Essentially, the Mini Amp Gizmo is acting as a floorboard controller for the Mark V but is MIDI controlled.
+            The g-major is also MIDI controllable and can switch presets or enable/disable certain effects depending on the MIDI commands sent to it.
+        </p>
+        <p>
+            The example controller logic is designed to send program change messages to both devices listening on separate channels (g-major on channel 1, RJM on channel 2). This way the two devices don't get confused listening to each others' commands.
+        </p>
+        <p>
+            I believe most things can best be explained by example, so feel free to play with the live HTML5 example below to get a feel for the controller logic. Use keyboard keys or your mouse to depress the foot-switches. The MIDI OUT window shows what
+            MIDI commands would be sent.
+        </p>
 
-    <p>The top row of foot switches enables/disables effects on the g-major.</p>
-    <p>
-        The bottom row of foot switches switches amplifier channels on the Mark V via the RJM. It also reloads the current g-major program in order to reset all effects back to their original on/off state. The Mark V is a 3-channel amplifier and also
-        has a SOLO mode that gives a nice volume boost when desired. The foot switches alternate enabling the SOLO mode per channel. This configuration is more useful to me than having an independent SOLO foot switch since usually I want to go straight to a
-        specific soloed sound and not spend two clicks to get there when I can get there in just one.
-    </p>
-    <p>The MUTE foot switch toggles the g-major input mute, useful for entering a silent tuning mode while on stage.</p>
-    <p>The TAP foot switch sends the g-major a TAP TEMPO function, useful for keeping time-related effects in sync with the song's tempo. The MIDI controller change command alternates the value used each tap between 00 and 7F.</p>
-    <p>The NEXT/PREV foot switches change the g-major program; the program is switched to when a channel foot switch is activated (unless MUTE mode is on in which case the program change is instant). I have the g-major programmed with per-song effects settings and use the NEXT/PREV to move to the song I want to play next.</p>
+        <h2 id="how-it-works">How It Works</h2>
 
-    <p>An idea I'm toying with is to allow temporary effect enable/disable by holding down an effect control foot switch for longer than 500ms. Once released, the effect would disable immediately instead of waiting for another tap. This would help for quick passages that need effects only for a short time.</p>
+        <p>The NEXT/PREV foot-switches change the g-major program. For me, the g-major programs represent per-song effects settings but you are free to implement your own programming scheme.</p>
+        <p>The MUTE foot-switch toggles the g-major input mute, useful for entering a silent tuning mode while on stage. The g-major still receives signal from the amplifier but mutes the output so you can still use its on-board tuner.</p>
+        <p>The TAP foot-switch sends the g-major a TAP TEMPO function, useful for keeping time-related effects in sync with the song's tempo. The MIDI controller change command alternates the value used (00 and 7F) for each tap.</p>
 
-    <h2>Firmware</h2>
-    <p>The primary controller logic for the project is written in entirely portable ISO C99 (C) code. The controller logic expects a hardware interface layer consisting of several functions to be implemented in the host.
-    Here's the C header file for the hardware interface (common/hardware.h) that the host must implement:</p>
-    <p><code><pre>
-// Poll 16 foot-switch toggles simultaneously into a bit field
+        <p>
+            The top row of foot-switches enables/disables effects on the g-major. The bottom row of foot-switches changes amplifier channels on the Mark V via the RJM. Since the Mark V is a 3-channel amplifier, having 6 channel
+            foot-switches would seem strange, but the Mark V also has a built-in SOLO mode for an extra volume boost. This is why there are 6 channel foot-switches for a 3-channel amplifier: to have a both non-soloed and a soloed
+            version of each channel, each available at the tap of a single foot-switch as opposed to the more cumbersome 3-channel foot-switch layout with an additional SOLO enable/disable foot-switch. Furthermore, we can treat
+            these 6 foot-switches as now representing pseudo channels so that each can have its own independent configuration.
+        </p>
+
+        <p>
+            Each channel foot-switch has an associated effects on/off state for the current g-major program. This state is stored in persistent memory (i.e. program flash on the PIC18, localStorage in HTML5, and a flash.bin file
+            in Windows). Experiment with the independent channels above and watch how your effects state is preserved on each channel independently. This state is temporarily stored in RAM per each channel. To persist the
+            configuration, hold down the TAP/STORE foot-switch for more than 1 second and it will be written to persistent storage (i.e. program flash memory).
+        </p>
+
+        <p>An idea I'm toying with is to allow temporary effect enable/disable by holding down an effect control foot-switch for longer than 500ms. Once released, the effect would disable immediately instead of waiting for another tap. This would help for quick passages that need effects only for a short time.</p>
+
+        <h2 id="firmware">Firmware</h2>
+        <p>
+            The primary controller logic for the project is written in entirely portable ISO C99 (C) code. The controller logic expects a hardware interface layer consisting of several functions to be implemented in the host.
+            Here's the C header file for the hardware interface (common/hardware.h) that the host must implement:
+        </p>
+        <p>
+            <pre class="code-block">
+<code>// Poll 16 foot-switch toggles simultaneously into a bit field
 u16 fsw_poll(void);
-
 // Explicitly set the state of all 16 LEDs
 void led_set(u8 topMask, u8 botMask);
-
 // Send a single MIDI byte
 void midi_send_byte(u8 data);
-
 /* Send multi-byte MIDI commands
      0 <= cmd     <=  F   - MIDI command
      0 <= channel <=  F   - MIDI channel to send command to
@@ -150,56 +130,59 @@ void midi_send_byte(u8 data);
     00 <= data2   <= FF   - second (optional) data byte of MIDI command
 */
 void midi_send_cmd1(u8 cmd, u8 channel, u8 data1);
-void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);
-</pre></code></p>
-    <p>The controller implements three functions exported to the host:</p>
-    <p><code><pre>
-// Run once on boot to initialize controller:
+void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);</code></pre>
+        </p>
+        <p>The controller implements three functions exported to the host:</p>
+        <p>
+            <pre class="code-block">
+<code>// Run once on boot to initialize controller:
 void controller_init(void);
 // Run every 10msec to increment timers used:
 void controller_10msec_timer(void);
 // Run main event loop to handle logic and update state:
-void controller_handle(void);
-</pre></code></p>
-    <p>
-        As of now, there are three hosts implemented for the portable controller logic written in C:
-        <ul>
-            <li>This HTML5 javascript demo compiled from the C code using <a href="https://github.com/kripken/emscripten/wiki" target="_blank">Emscripten</a></li>
-            <li>A <a href="https://github.com/JamesDunne/eminor2/tree/master/v2/controller/Win32" target="_blank">Windows desktop application</a> test harness (see the readme.txt) which actually sends MIDI messages for testing</li>
-            <li>PIC18 microcontroller firmware controlled by physical foot switches</li>
-        </ul>
-        How's that for cross-platform portability?
-    </p>
+void controller_handle(void);</code></pre>
+        </p>
+        <p>
+            As of now, there are three hosts implemented for the portable controller logic written in C:
+            <ul>
+                <li>This HTML5 javascript demo compiled from the C code using <a href="https://github.com/kripken/emscripten/wiki" target="_blank">Emscripten</a></li>
+                <li>A <a href="https://github.com/JamesDunne/eminor2/tree/master/v2/controller/Win32" target="_blank">Windows desktop application</a> test harness (see the readme.txt) which actually sends MIDI messages for testing</li>
+                <li>PIC18 microcontroller firmware controlled by physical foot-switches</li>
+            </ul>
+            How's that for cross-platform portability?
+        </p>
 
-    <h2>Hardware</h2>
-    <p>The project is designed to run on a PIC18, an 8-bit microprocessor. The TX pin (from the UART of the PIC18) is used to send MIDI data via the MIDI OUT port. The PIC18 also natively supports USB and our firmware allows one to easily reprogram the PIC via USB.</p>
-    <p>We have a total of 16 inputs (foot switches) and 16 outputs (LEDs) which are all binary in nature, on or off.</p>
-    <p>To capture the foot switch inputs, we use a pair of analog multiplexers (CD74HC4051E). Each mux can handle only 8 signals (pins A0-7) and uses 3 address lines (S0-S2) to select which signal pin to connect through to the A pin. The E' pin is used as a "fake" 4th address selector pin so we can choose which mux to read from (using a transistor). Reading of the foot switch states is done in a tight loop (16 iterations) where the address lines are set incrementally and the BTN_IN bit is read and shifted into a bitfield and stored for later use by the portable controller logic.</p>
-    <p>LED outputs are handled by a pair of shift registers (TPIC6B596N) daisy-chained together via their DO/DI pins. Each shift reg has 8 output pins. The latch pin is set low to allow the shift registers to buffer their data in and then once the latch is set high all the output pins instantaneously change. We send the shift registers data in a tight loop, strobing the SCK pin to push the bits through in MSB to LSB order.</p>
+        <h2 id="hardware">Hardware</h2>
+        <p>The project is designed to run on a PIC18, an 8-bit microprocessor. The TX pin (from the UART of the PIC18) is used to send MIDI data via the MIDI OUT port. The PIC18 also natively supports USB and our firmware allows one to easily reprogram the PIC via USB.</p>
+        <p>We have a total of 16 inputs (foot-switches) and 16 outputs (LEDs) which are all binary in nature, on or off.</p>
+        <p>To capture the foot-switch inputs, we use a pair of analog multiplexers (CD74HC4051E). Each mux can handle only 8 signals (pins A0-7) and uses 3 address lines (S0-S2) to select which signal pin to connect through to the A pin. The E' pin is used as a "fake" 4th address selector pin so we can choose which mux to read from (using a transistor). Reading of the foot-switch states is done in a tight loop (16 iterations) where the address lines are set incrementally and the BTN_IN bit is read and shifted into a bitfield and stored for later use by the portable controller logic.</p>
+        <p>LED outputs are handled by a pair of shift registers (TPIC6B596N) daisy-chained together via their DO/DI pins. Each shift reg has 8 output pins. The latch pin is set low to allow the shift registers to buffer their data in and then once the latch is set high all the output pins instantaneously change. We send the shift registers data in a tight loop, strobing the SCK pin to push the bits through in MSB to LSB order.</p>
 
-    <p>We used CADSoft Eagle to design the schematic and PCB. You can find all the project files here: <a href="https://github.com/JamesDunne/eminor2/tree/master/v2/pcb" target="_blank">https://github.com/JamesDunne/eminor2/tree/master/v2/pcb</a></p>
-    <p>Here is a screenshot of the schematic:</p>
-    <div style="text-align: center; margin-top: 1em">
-        <a href="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/schematic.png" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" alt="Schematic" style="max-width: 600px" /></a><br />
-        <span>(click for larger version)</span>
+        <p>We used CADSoft Eagle to design the schematic and PCB. You can find all the project files here: <a href="https://github.com/JamesDunne/eminor2/tree/master/v2/pcb" target="_blank">https://github.com/JamesDunne/eminor2/tree/master/v2/pcb</a></p>
+        <p>Here is a screenshot of the schematic:</p>
+        <div style="text-align: center; margin-top: 1em">
+            <a href="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/schematic.png" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" alt="Schematic" style="max-width: 600px" /></a><br />
+            <small>(click for larger version)</small>
+        </div>
+        <p>I took the liberty of designing a PCB layout for the schematic as well. Unfortunately, due to PCB size constraints, some pin-mapping sins had to be committed so that the traces and ICs could all fit happily on the board. Look at the pin headers to see what I mean. This can be easily accommodated for in the physical wiring, or if you're lazy it can also be accommodated for in the firmware.</p>
+        <div style="text-align: center; margin-top: 1em">
+            <a href="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/pcb.png" target="_blank"><img src="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/pcb.png" alt="PCB Layout" style="max-width: 600px" /></a><br />
+            <small>(click for larger version)</small>
+        </div>
+
+        <h2 id="bom">Bill of Materials</h2>
+        <p>
+            The foot-switches we use come from <a href="http://www.bitcheslovemyswitches.com/#!/%7E/product/category=5027572&id=10220659" target="_blank">bitcheslovemyswitches.com</a>. They feel great and have very little noise, no louder than a cheap pen's click.
+            Shout out to <a href="https://twitter.com/LawrenceScaduto" target="_blank">Lawrence Scaduto</a>, owner and proprietor, for being a big help in fulfilling my initial order!
+        </p>
+        <p>The chassis we use is <a href="http://www.hammondmfg.com/dwg16.htm#15degree" target="_blank">Hammond Mfg.'s 1456WH3BKBU</a>, an aluminum sloped console with a usable surface area of 20.078" x 6.305" on the sloped face, perfect for a floorboard controller. On their datasheet they claim they can do factory modifications (drilling, milling, printing). I just might be interested in that... Definitely not looking forward to drilling holes manually for foot-switches and LEDs.</p>
+        <p>Our schematic does a good job of labelling all the values for the resistors and capacitors so there should be no problem there. Capacitors want to be in the 16V-25V tolerance range.</p>
+        <p>I found MIDI and USB-B PCB-mounted parts at <a href="https://www.sparkfun.com/" target="_blank">sparkfun.com</a>.</p>
+        <p>I'm still working out the remaining components for the PCB but in the mean time you can go to this <a href="https://docs.google.com/spreadsheet/ccc?key=0Ah4nh0yGtjrgdHBYRjlqZkN1UXhrbTFLOTFnZWNGYkE#gid=0" target="_blank">Google Docs Spreadsheet</a> to see the work-in-progress.</p>
+
+        <h2>More to come!</h2>
+        <p>There's still much more to come as I'll be getting all the components put together and assembling the device myself in the next few weeks. Stay tuned!</p>
     </div>
-    <p>I took the liberty of designing a PCB layout for the schematic as well. Unfortunately, due to PCB size constraints, some pin-mapping sins had to be committed so that the traces and ICs could all fit happily on the board. Look at the pin headers to see what I mean. This can be easily accommodated for in the physical wiring, or if you're lazy it can also be accommodated for in the firmware.</p>
-    <div style="text-align: center; margin-top: 1em">
-        <a href="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/pcb.png" target="_blank"><img src="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/pcb.png" alt="PCB Layout" style="max-width: 600px" /></a><br />
-        <span>(click for larger version)</span>
     </div>
-
-    <h2>Bill of Materials</h2>
-    <p>
-        The foot switches we use come from <a href="http://www.bitcheslovemyswitches.com/#!/%7E/product/category=5027572&id=10220659" target="_blank">bitcheslovemyswitches.com</a>. They feel great and have very little noise, no louder than a cheap pen's click.
-        Shout out to <a href="https://twitter.com/LawrenceScaduto" target="_blank">Lawrence Scaduto</a>, owner and proprietor, for being a big help in fulfilling my initial order!
-    </p>
-    <p>The chassis we use is <a href="http://www.hammondmfg.com/dwg16.htm#15degree" target="_blank">Hammond Mfg.'s 1456WH3BKBU</a>, an aluminum sloped console with a usable surface area of 20.078" x 6.305" on the sloped face, perfect for a floorboard controller. On their datasheet they claim they can do factory modifications (drilling, milling, printing). I just might be interested in that... Definitely not looking forward to drilling holes manually for foot switches and LEDs.</p>
-    <p>Our schematic does a good job of labelling all the values for the resistors and capacitors so there should be no problem there. Capacitors want to be in the 16V-25V tolerance range.</p>
-    <p>I found MIDI and USB-B PCB-mounted parts at <a href="https://www.sparkfun.com/" target="_blank">sparkfun.com</a>.</p>
-    <p>I'm still working out the remaining components for the PCB but in the mean time you can go to this <a href="https://docs.google.com/spreadsheet/ccc?key=0Ah4nh0yGtjrgdHBYRjlqZkN1UXhrbTFLOTFnZWNGYkE#gid=0" target="_blank">Google Docs Spreadsheet</a> to see the work-in-progress.</p>
-
-    <h2>More to come!</h2>
-    <p>There's still much more to come as I'll be getting all the components put together and assembling the device myself in the next few weeks. Stay tuned!</p>
 </body>
 </html>
