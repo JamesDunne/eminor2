@@ -112,11 +112,14 @@
 
         <p>
             Each channel foot-switch has an associated effects on/off state for the current g-major program. This state is stored in persistent memory (i.e. program flash on the PIC18, localStorage in HTML5, and a flash.bin file
-            in Windows). Experiment with the independent channels above and watch how your effects state is preserved on each channel independently. This state is temporarily stored in RAM per each channel. To persist the
-            configuration, hold down the TAP/STORE foot-switch for more than 1 second and it will be written to persistent storage (i.e. program flash memory).
+            in Windows). Experiment with the channels above and watch how your effects state is preserved with the channel. This state is temporarily stored in RAM until the program is changed or the state is persisted by request.
+            To persist the state, hold down the TAP/STORE foot-switch for more than 1 second and it will be written to persistent storage. This allows for quick reprogramming on-stage, if necessary.
         </p>
 
-        <p>An idea I'm toying with is to allow temporary effect enable/disable by holding down an effect control foot-switch for longer than 500ms. Once released, the effect would disable immediately instead of waiting for another tap. This would help for quick passages that need effects only for a short time.</p>
+        <p>
+            An idea I'm toying with is to allow temporary effect enable/disable by holding down an effect control foot-switch for longer than 500ms. Once released, the effect would disable immediately instead of waiting for
+            another tap. This would help for quick passages that need effects only for a short time.
+        </p>
 
         <h2 id="firmware">Firmware</h2>
         <p>

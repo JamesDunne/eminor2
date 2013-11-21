@@ -24,6 +24,10 @@
     2013-11-17
     */
 
+// TODO: only change MIDI state when needed on channel-switch activation.
+// Since effects state is persisted per channel, it is redundant to always
+// update MIDI state on repeated activations.
+
 #include <assert.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
@@ -256,30 +260,23 @@ static void set_rjm_channel(u8 p) {
 
 // Set g-major program:
 static void set_gmaj_program(void) {
+    // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
+    midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
+
     // Save current effect states:
     store_program_state();
 
     // Update internal state:
     gmaj_program = next_gmaj_program;
+    midi_gmaj_program = next_gmaj_program;
 
     // Load new effect states:
     load_program_state();
 
-    // NOTE(jsd): Do not send MIDI commands until an RJM channel select button is selected.
-    // This allows one to pre-load songs without affecting current state.
+    // Send MIDI effects enable commands and set effects LEDs:
+    update_effects_MIDI_state();
 
-    // Only send MIDI program change if MUTE enabled; makes it easy to cycle through programs
-    // during down time.
-    if (leds.top.bits._7) {
-        // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
-        midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
-        midi_gmaj_program = next_gmaj_program;
-
-        // Send MIDI effects enable commands and set effects LEDs:
-        update_effects_MIDI_state();
-
-        send_leds();
-    }
+    send_leds();
 }
 
 
@@ -396,11 +393,9 @@ void controller_handle(void) {
         set_gmaj_program();
     }
 
-    // Use PREV LED to indicate that either NEXT or PREV button is acknowledged:
-    leds.top.bits._8 = fsw.bot.bits._8 | fsw.top.bits._8;
-
-    // Turn on the NEXT LED while a program change is pending:
-    leds.bot.bits._8 = (midi_gmaj_program != gmaj_program);
+    // NEXT/PREV LEDs:
+    leds.top.bits._8 = fsw.top.bits._8;
+    leds.bot.bits._8 = fsw.bot.bits._8;
 
     send_leds();
 
