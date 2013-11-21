@@ -77,7 +77,7 @@
     <h2>Function</h2>
     <p>Although this project aims to be a useful template for constructing any programmable MIDI controller, I have a concrete implementation with controller logic specific to my guitar rig equipment to fit my needs.</p>
     <p>
-        My rig consists of a MESA/Boogie&trade; Mark V amplifier head, an RJM Mini Amp Gizmo, and a t.c. electronics g-major rack effects unit. Since the Mark V itself is not MIDI-enabled, I use the Mini Amp Gizmo to translate MIDI commands into more
+        My rig consists of a <a href="http://www.mesaboogie.com/Product_Info/Mark_Series/mark5/mark5.html" target="_blank">MESA/Boogie&trade; Mark V</a> amplifier head, an <a href="http://www.rjmmusic.com/miniampgizmo.php" target="_blank">RJM Mini Amp Gizmo</a>, and a <a href="http://www.tcelectronic.com/g-major/" target="_blank">t.c. electronics g-major</a> rack effects unit. Since the Mark V itself is not MIDI-enabled, I use the Mini Amp Gizmo to translate MIDI commands into more
         primitive on/off signals sent to the Mark V head via its floorboard jack. Essentially, the Mini Amp Gizmo is acting as a floorboard controller for the Mark V but is MIDI controlled.
         The g-major is also MIDI controllable and can switch presets or enable/disable certain effects depending on the MIDI commands sent to it.
         The current e-minor controller logic is designed to send program change messages to both devices listening on separate channels (g-major on channel 1, RJM on channel 2). This way the two devices don't get confused listening to each others' commands.
