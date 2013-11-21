@@ -70,8 +70,32 @@ io16 leds;
 // Toggle value for tap tempo:
 u8 toggle_tap;
 
-// Current g-major program #:
-u8 gmajp;
+// Current RJM channel # (0-5):
+u8 rjm_channel;
+
+// Current g-major program # (0-127):
+u8 gmaj_program;
+
+// Initial effects on/off state per channel:
+u8 chan_effects[6];
+
+
+// Loads a 6-bit bit field describing the initial on/off state of effects
+void load_program_state(u8 program) {
+    // TODO: use `flash_load`!
+    // defaults: SOLO channels get delay enabled
+    chan_effects[0] = 0;
+    chan_effects[1] = M_5;
+    chan_effects[2] = 0;
+    chan_effects[3] = M_5;
+    chan_effects[4] = 0;
+    chan_effects[5] = M_5;
+}
+
+void store_program_states(u8 program) {
+    // TODO: use `flash_store`!
+}
+
 
 // Determine if a footswitch was pressed
 static u8 is_top_button_pressed(u8 mask) {
@@ -82,37 +106,10 @@ static u8 is_bot_button_pressed(u8 mask) {
     return ((fsw.bot.byte & mask) == mask) && ((fsw_last.bot.byte & mask) == 0);
 }
 
+
 static void send_leds() {
     u16 tmp = (u16)leds.bot.byte | ((u16)leds.top.byte << 8);
     led_set(tmp);
-}
-
-// Set RJM program to p (0-5)
-static void rjm_program(u8 p) {
-    assert(p < 6);
-
-    // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
-    // NOTE(jsd): add 4 for personal raisins; first 4 programs are reserved for existing v1 controller.
-    midi_send_cmd1(0xC, rjm_midi_channel, p + 4);
-
-    // Disable all top LEDs, preserve LEDs 7 and 8:
-    leds.top.byte &= (M_7 | M_8);
-    // Set only current program LED on, preserve LEDs 7 and 8:
-    leds.bot.byte = (1 << p) | (leds.bot.byte & (M_7 | M_8));
-
-    send_leds();
-}
-
-// Set g-major program to p (0-127)
-static void gmaj_program(u8 p) {
-    // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
-    midi_send_cmd1(0xC, gmaj_midi_channel, p);
-
-    // Disable all top LEDs, preserve LEDs 7 and 8:
-    leds.top.byte &= (M_7 | M_8);
-    // TODO: load program/channel state
-
-    send_leds();
 }
 
 // Set g-major CC value
@@ -149,6 +146,81 @@ static void gmaj_toggle_cc(u8 idx) {
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
 }
 
+static void update_effects_MIDI_state() {
+    b8 n;
+    n.byte = chan_effects[rjm_channel];
+
+    // Assume all effects are off by default because g-major program change has just occurred.
+
+    // Reset top LEDs to new state, preserve LEDs 7 and 8:
+    leds.top.byte &= (M_7 | M_8);
+    leds.top.byte |= n.byte & ~(M_7 | M_8);
+
+    if (n.bits._5) {
+        // turn on delay:
+        gmaj_cc_set(gmaj_cc_lookup[4], 0x7F);
+    }
+    if (n.bits._6) {
+        // turn on reverb:
+        gmaj_cc_set(gmaj_cc_lookup[5], 0x7F);
+    }
+    if (n.bits._3) {
+        // turn on pitch:
+        gmaj_cc_set(gmaj_cc_lookup[2], 0x7F);
+    }
+    if (n.bits._2) {
+        // turn on filter:
+        gmaj_cc_set(gmaj_cc_lookup[1], 0x7F);
+    }
+    if (n.bits._4) {
+        // turn on chorus:
+        gmaj_cc_set(gmaj_cc_lookup[3], 0x7F);
+    }
+    if (n.bits._1) {
+        // turn on compressor:
+        gmaj_cc_set(gmaj_cc_lookup[0], 0x7F);
+    }
+}
+
+// Set RJM program to p (0-5)
+static void set_rjm_channel(u8 p) {
+    assert(p < 6);
+
+    // Save current channel's effects state for the next STORE:
+    chan_effects[rjm_channel] = leds.top.byte & ~(M_7 | M_8);
+
+    rjm_channel = p;
+
+    // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
+    // NOTE(jsd): add 4 for personal raisins; first 4 programs are reserved for existing v1 controller.
+    midi_send_cmd1(0xC, rjm_midi_channel, p + 4);
+
+    // Reset the g-major effects:
+    midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
+
+    // Send MIDI effects enable commands and set effects LEDs:
+    update_effects_MIDI_state();
+
+    // Set only current program LED on bottom, preserve LEDs 7 and 8:
+    leds.bot.byte = (1 << p) | (leds.bot.byte & (M_7 | M_8));
+
+    send_leds();
+}
+
+// Set g-major program:
+static void set_gmaj_program() {
+    // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
+    midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
+
+    // Load new channel effect states:
+    load_program_state(gmaj_program);
+
+    // Send MIDI effects enable commands and set effects LEDs:
+    update_effects_MIDI_state();
+
+    send_leds();
+}
+
 
 // ------------------------- Actual controller logic -------------------------
 
@@ -156,11 +228,13 @@ static void gmaj_toggle_cc(u8 idx) {
 void controller_init(void) {
     leds.top.byte = 0;
     leds.bot.byte = 0;
-    // `gmaj_program` and `rjm_program` will both call led_set() to set LED state.
 
-    gmajp = 0;
-    gmaj_program(gmajp);
-    rjm_program(0);
+    rjm_channel = 0;
+    gmaj_program = 0;
+
+    // Load new channel effect states:
+    load_program_state(gmaj_program);
+    set_rjm_channel(0);
 }
 
 // called every 10ms
@@ -197,33 +271,27 @@ void controller_handle(void) {
 
     // handle bottom 6 amp selector buttons:
     if (is_bot_button_pressed(M_1)) {
-        rjm_program(0);
-        gmaj_program(gmajp);
+        set_rjm_channel(0);
         reset_tuner_mute();
     }
     if (is_bot_button_pressed(M_2)) {
-        rjm_program(1);
-        gmaj_program(gmajp);
+        set_rjm_channel(1);
         reset_tuner_mute();
     }
     if (is_bot_button_pressed(M_3)) {
-        rjm_program(2);
-        gmaj_program(gmajp);
+        set_rjm_channel(2);
         reset_tuner_mute();
     }
     if (is_bot_button_pressed(M_4)) {
-        rjm_program(3);
-        gmaj_program(gmajp);
+        set_rjm_channel(3);
         reset_tuner_mute();
     }
     if (is_bot_button_pressed(M_5)) {
-        rjm_program(4);
-        gmaj_program(gmajp);
+        set_rjm_channel(4);
         reset_tuner_mute();
     }
     if (is_bot_button_pressed(M_6)) {
-        rjm_program(5);
-        gmaj_program(gmajp);
+        set_rjm_channel(5);
         reset_tuner_mute();
     }
 
@@ -245,15 +313,15 @@ void controller_handle(void) {
 
     if (is_top_button_pressed(M_8)) {
         // prev g-major program:
-        if (gmajp != 0) gmajp--;
-        gmaj_program(gmajp);
+        if (gmaj_program != 0) gmaj_program--;
+        set_gmaj_program();
     }
     // Turn on the PREV LED while the PREV button is held:
     leds.top.bits._8 = fsw.top.bits._8;
     if (is_bot_button_pressed(M_8)) {
         // next g-major program:
-        if (gmajp != 127) gmajp++;
-        gmaj_program(gmajp);
+        if (gmaj_program != 127) gmaj_program++;
+        set_gmaj_program();
     }
     // Turn on the NEXT LED while the NEXT button is held:
     leds.bot.bits._8 = fsw.bot.bits._8;

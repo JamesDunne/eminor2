@@ -15,6 +15,8 @@
 #define M_7 0x40U
 #define M_8 0x80U
 
+// For foot switches and LEDs, the bottom row takes up LSB and top row takes up MSB of a u16.
+
 // Poll 16 foot-switch states:
 extern u16 fsw_poll(void);
 
@@ -34,6 +36,14 @@ extern void midi_send_byte(u8 data);
 */
 extern void midi_send_cmd1(u8 cmd, u8 channel, u8 data1);
 extern void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);
+
+// --------------- Flash memory functions:
+
+// Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
+extern void flash_load(u16 addr, u16 count, u8 *data);
+
+// Stores `count` bytes from `data` into flash memory at address `addr` (0-based where 0 is first available byte of available flash memory):
+extern void flash_store(u16 addr, u16 count, u8 *data);
 
 // --------------- Controller logic interface functions:
 
