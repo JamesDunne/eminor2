@@ -137,16 +137,6 @@ void store_program_state(void) {
 }
 
 
-// Determine if a footswitch was pressed
-static u8 is_top_button_pressed(u8 mask) {
-    return ((fsw.top.byte & mask) == mask) && ((fsw_last.top.byte & mask) == 0);
-}
-
-static u8 is_bot_button_pressed(u8 mask) {
-    return ((fsw.bot.byte & mask) == mask) && ((fsw_last.bot.byte & mask) == 0);
-}
-
-
 static void send_leds(void) {
     u16 tmp = (u16)leds.bot.byte | ((u16)leds.top.byte << 8);
     led_set(tmp);
@@ -198,8 +188,7 @@ static void update_effects_MIDI_state(void) {
     // Assume all effects are off by default because g-major program change has just occurred.
 
     // Reset top LEDs to new state, preserve LEDs 7 and 8:
-    leds.top.byte &= (M_7 | M_8);
-    leds.top.byte |= n.byte & ~(M_7 | M_8);
+    leds.top.byte = (n.byte & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
 
     if (n.bits._7) {
         // turn on noise gate:
@@ -264,7 +253,7 @@ static void set_gmaj_program(void) {
     midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
 
     // Save current effect states:
-    store_program_state();
+    //store_program_state();
 
     // Update internal state:
     gmaj_program = next_gmaj_program;
@@ -279,13 +268,34 @@ static void set_gmaj_program(void) {
     send_leds();
 }
 
+// Determine if a footswitch was pressed
+static u8 is_top_button_pressed(u8 mask) {
+    return ((fsw.top.byte & mask) == mask) && ((fsw_last.top.byte & mask) == 0);
+}
+
+static u8 is_bot_button_pressed(u8 mask) {
+    return ((fsw.bot.byte & mask) == mask) && ((fsw_last.bot.byte & mask) == 0);
+}
+
+static u8 is_top_button_released(u8 mask) {
+    return ((fsw_last.top.byte & mask) == mask) && ((fsw.top.byte & mask) == 0);
+}
+
+static u8 is_bot_button_released(u8 mask) {
+    return ((fsw_last.bot.byte & mask) == mask) && ((fsw.bot.byte & mask) == 0);
+}
 
 // ------------------------- Actual controller logic -------------------------
+
+u8 timer_tapstore;
+u8 timeout_flash;
 
 // set the controller to an initial state
 void controller_init(void) {
     leds.top.byte = 0;
     leds.bot.byte = 0;
+    timer_tapstore = 0;
+    timeout_flash = 0;
 
     rjm_channel = 0;
     gmaj_program = 0;
@@ -310,7 +320,19 @@ void controller_init(void) {
 
 // called every 10ms
 void controller_10msec_timer(void) {
-    // No timers in use by this code.
+    if (fsw.bot.bits._7)
+        timer_tapstore++;
+
+    if (timeout_flash) {
+        if ((timeout_flash & 15) <= 7) {
+            leds.top.byte = (M_1 | M_2 | M_3 | M_4 | M_5 | M_6) | (leds.top.byte & (M_7 | M_8));
+        } else {
+            leds.top.byte = (leds.top.byte & (M_7 | M_8));
+        }
+        send_leds();
+
+        --timeout_flash;
+    }
 }
 
 // main control loop
@@ -378,7 +400,17 @@ void controller_handle(void) {
         // tap tempo function (does not use LED):
         toggle_tap = ~toggle_tap & 0x7F;
         gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
+        // start timer for STORE:
+        timer_tapstore = 0;
     }
+    // TAP/STORE released after 1000ms?
+    if ((timer_tapstore >= 100) && is_bot_button_released(M_7)) {
+        // STORE:
+        store_program_state();
+        // flash LEDs for 500ms:
+        timeout_flash = 50;
+    }
+
     // Turn on the TAP LED while the TAP button is held:
     leds.bot.bits._7 = fsw.bot.bits._7;
 

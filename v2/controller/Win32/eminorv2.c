@@ -164,7 +164,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     // Show main window:
     ShowWindow(hwndMain, nCmdShow);
-    //UpdateWindow(hwndMain);
+    UpdateWindow(hwndMain);
 
     // default Win32 message pump
     while (GetMessage(&Msg, NULL, 0, 0)) {
@@ -370,6 +370,13 @@ void paintFacePlate(HWND hwnd) {
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
     RECT rect;
     switch (Message) {
+        case WM_TIMER:
+            switch (wParam) {
+                case IDT_TIMER1:
+                    controller_10msec_timer();
+                    return 0;
+            }
+            break;
         case WM_CLOSE:
             DestroyWindow(hwnd);
             break;
@@ -495,11 +502,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             }
             InvalidateRect(hwnd, NULL, TRUE);
             break;
-        case WM_TIMER:
-            switch (wParam) {
-                case IDT_TIMER1: controller_10msec_timer(); break;
-            }
-            break;
         default:
             return DefWindowProc(hwnd, Message, wParam, lParam);
     }
@@ -585,7 +587,7 @@ void flash_store(u16 addr, u16 count, u8 *data) {
     FILE *f;
 
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
-    start_chunk = (addr) & ~63;
+    start_chunk = (addr)& ~63;
     end_chunk = ((addr + count)) & ~63;
     assert(start_chunk == end_chunk);
 
