@@ -40,7 +40,7 @@ const double inFswInnerDiam = (10 /*mm*/ * 0.01 * 2.54);
 // button labels:
 static LPCTSTR labels[2][8] = {
     { L"COMP", L"FILTER", L"PITCH", L"CHORUS", L"DELAY", L"REVERB", L"MUTE", L"PREV" },
-    { L"CH1", L"CH1S", L"CH2", L"CH2S", L"CH3", L"CH3S", L"TAP", L"NEXT" }
+    { L"CH1", L"CH1S", L"CH2", L"CH2S", L"CH3", L"CH3S", L"TAP/STORE", L"NEXT" }
 };
 
 static LPCTSTR keylabels[2][8] = {
@@ -127,6 +127,19 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         return 0;
     }
 
+    #define TARGET_RESOLUTION 1         // 1-millisecond target resolution
+
+    TIMECAPS tc;
+    UINT     wTimerRes;
+
+    if (timeGetDevCaps(&tc, sizeof(TIMECAPS)) != TIMERR_NOERROR)
+    {
+        return -1;
+    }
+
+    wTimerRes = min(max(tc.wPeriodMin, TARGET_RESOLUTION), tc.wPeriodMax);
+    timeBeginPeriod(wTimerRes);
+
     // TODO: really should FreeConsole() and fclose(stdout) later but it'll be open til process end anyway.
     AllocConsole();
     freopen("CONOUT$", "wb", stdout);
@@ -167,11 +180,19 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     UpdateWindow(hwndMain);
 
     // default Win32 message pump
+    DWORD timeLast = timeGetTime();
     while (GetMessage(&Msg, NULL, 0, 0)) {
         TranslateMessage(&Msg);
         DispatchMessage(&Msg);
 
-        // give control to the logic controller
+        // handle the 10ms timer:
+        DWORD timeCurr = timeGetTime();
+        if (timeCurr - timeLast >= 10) {
+            controller_10msec_timer();
+            timeLast = timeCurr;
+        }
+
+        // give control to the logic controller:
         controller_handle();
     }
 
@@ -370,13 +391,6 @@ void paintFacePlate(HWND hwnd) {
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
     RECT rect;
     switch (Message) {
-        case WM_TIMER:
-            switch (wParam) {
-                case IDT_TIMER1:
-                    controller_10msec_timer();
-                    return 0;
-            }
-            break;
         case WM_CLOSE:
             DestroyWindow(hwnd);
             break;
@@ -588,16 +602,20 @@ void flash_store(u16 addr, u16 count, u8 *data) {
 
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
     start_chunk = (addr)& ~63;
-    end_chunk = ((addr + count)) & ~63;
+    end_chunk = ((addr + count - 1)) & ~63;
     assert(start_chunk == end_chunk);
 
     // Create file or append to it:
     f = fopen("flash.bin", "a+b");
-    if (fseek(f, addr, SEEK_SET) != 0) {
+
+    // Find file size:
+    fseek(f, 0, SEEK_END);
+    p = ftell(f);
+
+    // Pad the end of the file until we reach `addr`:
+    if (addr > p) {
         static u8 zeroes[64];
 
-        fseek(f, 0, SEEK_END);
-        p = ftell(f);
         while (addr - p >= 64) {
             p += (long)fwrite(zeroes, 1, 64, f);
         }
@@ -605,14 +623,13 @@ void flash_store(u16 addr, u16 count, u8 *data) {
             fwrite(zeroes, 1, addr - p, f);
     }
 
-#if _DEBUG
+    fseek(f, addr, SEEK_SET);
     p = ftell(f);
     assert(p == addr);
-#endif
 
-    fwrite(data, 1, count, f);
+    size_t r = fwrite(data, 1, count, f);
+    if (r < count) {
+        assert(0);
+    }
     fclose(f);
-
-    // simulate a flash write delay of 4ms
-    Sleep(4);
 }

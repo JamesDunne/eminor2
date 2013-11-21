@@ -119,7 +119,7 @@ void load_program_state(void) {
 #else
     // Load effects on/off state data from persistent storage:
     // NOTE(jsd): Use multiple of 8 to avoid crossing 64-byte boundaries in flash!
-    flash_load(gmaj_program * 8, 6, chan_effects);
+    flash_load((u16)gmaj_program * 8, 8, chan_effects);
 #endif
 
     // Since user has no way to turn on/off these settings yet, we force them here.
@@ -133,7 +133,7 @@ void load_program_state(void) {
 void store_program_state(void) {
     // Store effects on/off state of current program:
     // NOTE(jsd): Use multiple of 8 to avoid crossing 64-byte boundaries in flash!
-    flash_store(gmaj_program * 8, 6, chan_effects);
+    flash_store((u16)gmaj_program * 8, 8, chan_effects);
 }
 
 
@@ -252,9 +252,6 @@ static void set_gmaj_program(void) {
     // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
     midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
 
-    // Save current effect states:
-    //store_program_state();
-
     // Update internal state:
     gmaj_program = next_gmaj_program;
     midi_gmaj_program = next_gmaj_program;
@@ -320,18 +317,23 @@ void controller_init(void) {
 
 // called every 10ms
 void controller_10msec_timer(void) {
-    if (fsw.bot.bits._7)
+    if (fsw.bot.bits._7 && (timer_tapstore > 0))
         timer_tapstore++;
 
     if (timeout_flash) {
-        if ((timeout_flash & 15) <= 7) {
-            leds.top.byte = (M_1 | M_2 | M_3 | M_4 | M_5 | M_6) | (leds.top.byte & (M_7 | M_8));
+        if (!--timeout_flash) {
+            // Reset LED state:
+            leds.top.byte = (chan_effects[rjm_channel] & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+            send_leds();
         } else {
-            leds.top.byte = (leds.top.byte & (M_7 | M_8));
+            // Flash top LEDs on/off:
+            if ((timeout_flash & 15) >= 7) {
+                leds.top.byte = (M_1 | M_2 | M_3 | M_4 | M_5 | M_6) | (leds.top.byte & (M_7 | M_8));
+            } else {
+                leds.top.byte = (leds.top.byte & (M_7 | M_8));
+            }
+            send_leds();
         }
-        send_leds();
-
-        --timeout_flash;
     }
 }
 
@@ -401,14 +403,16 @@ void controller_handle(void) {
         toggle_tap = ~toggle_tap & 0x7F;
         gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
         // start timer for STORE:
-        timer_tapstore = 0;
+        timer_tapstore = 1;
     }
-    // TAP/STORE released after 1000ms?
-    if ((timer_tapstore >= 100) && is_bot_button_released(M_7)) {
+    // TAP/STORE released after 600ms?
+    if ((timer_tapstore >= 60) && fsw.bot.bits._7) {
         // STORE:
         store_program_state();
-        // flash LEDs for 500ms:
-        timeout_flash = 50;
+        // flash LEDs for 800ms:
+        timeout_flash = 80;
+        // disable STORE timer:
+        timer_tapstore = 0;
     }
 
     // Turn on the TAP LED while the TAP button is held:

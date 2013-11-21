@@ -22,7 +22,7 @@ var cvs, ctx;
 var dpi = 42;
 
 var labels = [
-    ["CH1", "CH1S", "CH2", "CH2S", "CH3", "CH3S", "TAP", "NEXT"],
+    ["CH1", "CH1S", "CH2", "CH2S", "CH3", "CH3S", "TAP/STORE", "NEXT"],
     ["COMP", "FILTER", "PITCH", "CHORUS", "DELAY", "REVERB", "MUTE", "PREV"]
 ];
 
