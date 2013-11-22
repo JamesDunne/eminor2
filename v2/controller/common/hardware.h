@@ -15,7 +15,7 @@
 #define M_7 0x40U
 #define M_8 0x80U
 
-// For foot switches and LEDs, the bottom row takes up LSB and top row takes up MSB of a u16.
+// Foot switch and LED on/off states are represented with u16 bit-fields; the bottom row takes up LSBs (bits 0-7) and top row takes up MSBs (bits 8-15).
 
 // Poll 16 foot-switch states:
 extern u16 fsw_poll(void);
