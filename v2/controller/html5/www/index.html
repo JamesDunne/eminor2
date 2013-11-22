@@ -9,24 +9,8 @@
 
     <link type="text/css" rel="stylesheet" href="main.css" />
 
-    <!-- HTML5 polyfills -->
-    <script type="text/javascript" src="es5.js"></script>
-    <script type="text/javascript" src="web.js"></script>
-    <script type="text/javascript" src="typedarray.js"></script>
-    <script type="text/javascript" src="storage.js"></script>
-    <script type="text/javascript" src="console.js"></script>
-
-    <!-- Syntax highlighting -->
     <![if (!IE)|(gte IE 9)]>
-    <script type="text/javascript" src="rainbow.min.js"></script>
-    <script type="text/javascript">
-        Rainbow.extend('c', [{ 'name': 'storage.type', 'pattern': /u8|u16/g }]);
-    </script>
-    <![endif]>
-
-    <![if (!IE)|(gte IE 9)]>
-    <script type="text/javascript" src="eminorv2.js"></script>
-    <script type="text/javascript" src="driver.js"></script>
+    <script type="text/javascript" src="all.min.js"></script>
     <![endif]>
 </head>
 
@@ -209,12 +193,12 @@ void controller_handle(void);</code></pre>
         <p>We used CADSoft Eagle to design the schematic and PCB. You can find all the project files here: <a href="https://github.com/JamesDunne/eminor2/tree/master/v2/pcb" target="_blank">https://github.com/JamesDunne/eminor2/tree/master/v2/pcb</a></p>
         <p>Here is a screenshot of the schematic:</p>
         <div style="text-align: center; margin-top: 1em">
-            <a href="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/schematic.png" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" alt="Schematic" style="max-width: 600px" /></a><br />
+            <a href="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" alt="Schematic" style="max-width: 600px" /></a><br />
             <small>(click for larger version)</small>
         </div>
         <p>I took the liberty of designing a PCB layout for the schematic as well. Unfortunately, due to PCB size constraints, some pin-mapping sins had to be committed so that the traces and ICs could all fit happily on the board. Look at the pin headers to see what I mean. This can be easily accommodated for in the physical wiring, or if you're lazy it can also be accommodated for in the firmware.</p>
         <div style="text-align: center; margin-top: 1em">
-            <a href="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/pcb.png" target="_blank"><img src="https://github.com/JamesDunne/eminor2/raw/master/v2/pcb/pcb.png" alt="PCB Layout" style="max-width: 600px" /></a><br />
+            <a href="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/pcb.png" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/pcb.png" alt="PCB Layout" style="max-width: 600px" /></a><br />
             <small>(click for larger version)</small>
         </div>
 
