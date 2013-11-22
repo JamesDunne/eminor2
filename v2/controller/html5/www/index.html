@@ -6,14 +6,28 @@
     <meta name="author" content="James Dunne, Joe Dunne" />
     <meta name="keywords" content="MIDI, e-minor, PIC18, microcontroller, microprocessor, HTML5, javascript, controller, PCB, schematic, James Dunne, Joe Dunne" />
     <meta name="description" content="Project page for the e-minor v2 MIDI floorboard controller for guitar rig control." />
+
     <link type="text/css" rel="stylesheet" href="main.css" />
 
+    <!-- HTML5 polyfills -->
+    <script type="text/javascript" src="es5.js"></script>
+    <script type="text/javascript" src="web.js"></script>
+    <script type="text/javascript" src="typedarray.js"></script>
+    <script type="text/javascript" src="storage.js"></script>
+    <script type="text/javascript" src="console.js"></script>
+
+    <!-- Syntax highlighting -->
+    <![if (!IE)|(gte IE 9)]>
     <script type="text/javascript" src="rainbow.min.js"></script>
     <script type="text/javascript">
         Rainbow.extend('c', [{ 'name': 'storage.type', 'pattern': /u8|u16/g }]);
     </script>
+    <![endif]>
+
+    <![if (!IE)|(gte IE 9)]>
     <script type="text/javascript" src="eminorv2.js"></script>
     <script type="text/javascript" src="driver.js"></script>
+    <![endif]>
 </head>
 
 <body style="text-align: center">
@@ -49,6 +63,7 @@
         <p><strong>NOTE: </strong>At this time, the prototype device is not yet assembled so there are no pictures of it to show. I still have the bill of materials to finalize and components to order before construction can begin. See below for more information.</p>
     </div>
     <!-- Live demo here: -->
+    <![if (!IE)|(gte IE 9)]>
     <div id="demo" style="text-align: center; margin-top: 2em; margin-left: 2em; margin-right: 2em; white-space: nowrap; font-size: 10pt">
         <div style="display: inline-block; vertical-align: top; margin-right: 1em">
             <strong>A working demonstration:</strong><br />
@@ -80,6 +95,14 @@
             </div>
         </div>
     </div>
+    <![endif]>
+    <!--[if (IE)&(lt IE 9)]>
+    <div id="demo" style="border: 2px solid red; text-align: center; margin-top: 2em; margin-left: 2em; margin-right: 2em; margin-bottom: 2em; white-space: nowrap; font-size: 12pt">
+        Sorry, this interactive demo requires HTML5 features. This is something your browser does not support; please upgrade to a better browser.<br/>
+        Here is a screenshot of how it would appear in a modern browser:<br/>
+        <img src="/demo.png" alt="demo screenshot" />
+    </div>
+    <![endif]-->
     <div class="content">
         <h2 id="my-guitar-rig">My Guitar Rig</h2>
         <p>

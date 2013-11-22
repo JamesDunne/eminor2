@@ -82,6 +82,10 @@ canvas {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
 }
 
+img {
+    border: none;
+}
+
 /* NOTE(jsd): More web FAIL. No way for FF to set custom scrollbar. */
 ::-webkit-scrollbar {
     width: 12px;

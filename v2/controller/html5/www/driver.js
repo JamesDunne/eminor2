@@ -185,7 +185,7 @@ function keydown(e) {
     if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return false;
 
     // ASDFGHJK for bottom row:
-         if (e.keyCode == 65) fsw_state |= 1;
+    if (e.keyCode == 65) fsw_state |= 1;
     else if (e.keyCode == 83) fsw_state |= 2;
     else if (e.keyCode == 68) fsw_state |= 4;
     else if (e.keyCode == 70) fsw_state |= 8;
@@ -193,7 +193,7 @@ function keydown(e) {
     else if (e.keyCode == 72) fsw_state |= 32;
     else if (e.keyCode == 74) fsw_state |= 64;
     else if (e.keyCode == 75) fsw_state |= 128;
-    // QWERTYUI for top row:
+        // QWERTYUI for top row:
     else if (e.keyCode == 81) fsw_state |= 256;
     else if (e.keyCode == 87) fsw_state |= 512;
     else if (e.keyCode == 69) fsw_state |= 1024;
@@ -213,7 +213,7 @@ function keyup(e) {
     if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return false;
 
     // ASDFGHJK for bottom row:
-         if (e.keyCode == 65) fsw_state &= 1 ^ 65535;
+    if (e.keyCode == 65) fsw_state &= 1 ^ 65535;
     else if (e.keyCode == 83) fsw_state &= 2 ^ 65535;
     else if (e.keyCode == 68) fsw_state &= 4 ^ 65535;
     else if (e.keyCode == 70) fsw_state &= 8 ^ 65535;
@@ -221,7 +221,7 @@ function keyup(e) {
     else if (e.keyCode == 72) fsw_state &= 32 ^ 65535;
     else if (e.keyCode == 74) fsw_state &= 64 ^ 65535;
     else if (e.keyCode == 75) fsw_state &= 128 ^ 65535;
-    // QWERTYUI for top row:
+        // QWERTYUI for top row:
     else if (e.keyCode == 81) fsw_state &= 256 ^ 65535;
     else if (e.keyCode == 87) fsw_state &= 512 ^ 65535;
     else if (e.keyCode == 69) fsw_state &= 1024 ^ 65535;
@@ -336,7 +336,7 @@ function _flash_load(addr, count, data_ptr) {
 function _flash_store(addr, count, data_ptr) {
     // Verify store does not cross 64-byte boundary!
     var start_chunk = (addr) & ~63;
-    var end_chunk = ((addr + count)) & ~63;
+    var end_chunk = (addr + count - 1) & ~63;
     if (start_chunk !== end_chunk) throw "Flash store cannot cross 64-byte boundary!";
 
     // We use localStorage to store a string representing flash data in hexadecimal.
@@ -433,4 +433,8 @@ function init() {
     }, 10);
 }
 
-document.addEventListener("DOMContentLoaded", init, false);
+if (!document.addEventListener) {
+    document.attachEvent("onload", init);
+} else {
+    document.addEventListener("DOMContentLoaded", init, false);
+}

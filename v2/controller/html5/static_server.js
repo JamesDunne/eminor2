@@ -9,7 +9,8 @@ http.createServer(function(request, response) {
   var uri = url.parse(request.url).pathname
     , filename = path.join(process.cwd(), uri);
   var tmp = uri.lastIndexOf(".");
-  var extension = uri.substring((tmp + 1));
+  var extension = null;
+  if (tmp >= 0) extension = uri.substring((tmp + 1));
 
   fs.exists(filename, function(exists) {
     if(!exists) {
@@ -22,24 +23,25 @@ http.createServer(function(request, response) {
     if (fs.statSync(filename).isDirectory()) filename += '/index.html';
 
     fs.readFile(filename, "binary", function(err, file) {
-      if(err) {        
+      if(err) {
         response.writeHead(500, {"Content-Type": "text/plain"});
         response.write(err + "\n");
         response.end();
         return;
       }
 
-      if (extension === 'html') response.writeHeader(200, {"Content-Type": 'text/html'});
-      else if (extension === 'htm') response.writeHeader(200, {"Content-Type": 'text/html'});
-      else if (extension === 'css') response.writeHeader(200, {"Content-Type": 'text/css'});
-      else if (extension === 'js') response.writeHeader(200, {"Content-Type": 'text/javascript'});
-      else if (extension === 'png') response.writeHeader(200, {"Content-Type": 'image/png'});
-      else if (extension === 'jpg') response.writeHeader(200, {"Content-Type": 'image/jpg'});
-      else if (extension === 'jpeg') response.writeHeader(200, {"Content-Type": 'image/jpeg'});
+      if (extension === null || extension === 'html') response.writeHead(200, {"Content-Type": 'text/html'});
+      else if (extension === 'htm') response.writeHead(200, {"Content-Type": 'text/html'});
+      else if (extension === 'css') response.writeHead(200, {"Content-Type": 'text/css'});
+      else if (extension === 'js') response.writeHead(200, {"Content-Type": 'text/javascript'});
+      else if (extension === 'png') response.writeHead(200, {"Content-Type": 'image/png'});
+      else if (extension === 'jpg') response.writeHead(200, {"Content-Type": 'image/jpeg'});
+      else if (extension === 'jpeg') response.writeHead(200, {"Content-Type": 'image/jpeg'});
+      else response.writeHead(200, {"Content-Type": 'application/octet-stream'});
 
-      //response.writeHead(200);
-      //response.write(file, "binary");
-      response.end(file);
+      response.write(file, "binary");
+      response.end();
+      //response.end(file);
     });
   });
 }).listen(parseInt(port, 10));
