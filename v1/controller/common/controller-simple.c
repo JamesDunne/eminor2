@@ -65,27 +65,8 @@
 #define gmaj_cc_noisegate   90
 #define gmaj_cc_eq          91
 
-// FX button labels:
-#define fxb_compressor  0
-#define fxb_filter      1
-#define fxb_pitch       2
-#define fxb_chorus      3
-#define fxb_delay       4
-#define fxb_reverb      5
-#define fxb_noisegate   6
-#define fxb_eq          7
-
-// FX button enable bitmasks:
-#define fxm_compressor  0x01
-#define fxm_filter      0x02
-#define fxm_pitch       0x04
-#define fxm_chorus      0x08
-#define fxm_delay       0x10
-#define fxm_reverb      0x20
-#define fxm_noisegate   0x40
-#define fxm_eq          0x80
-
-u8 chan_effects[4];
+// NOTE(jsd): Must be 8 to work with flash chunk boundaries
+u8 chan_effects[8];
 
 u8 control_press_values[6];
 
@@ -100,6 +81,7 @@ u8 switch_mode = 0;
 // timers for preset button hold time
 u8 timer_control4 = 0, timer_control4_enable = 0;
 u8 timer_alt = 0;
+u8 stored = 0;
 
 // is tuner mute on or off?
 u8 mute_toggle = 0;
@@ -126,7 +108,7 @@ static void show_program(void) {
         // Alternate switch mode.
 
         // Show 'E' in first position:
-        s[0] = 'E';
+        s[0] = 'A';
     }
 
     // Update 4-char display:
@@ -187,6 +169,15 @@ static void update_effects_MIDI_state(void) {
     //gmaj_cc_set(gmaj_cc_reverb, (fx & fxm_reverb) ? 0x7F : 0x00);
 }
 
+// Disable mute if enabled
+static void disable_mute() {
+    if (mute_toggle)
+    {
+        mute_toggle = 0x00;
+        gmaj_cc_set(gmaj_cc_mute, mute_toggle);
+    }
+}
+
 static void set_rjm_channel(u8 idx) {
     u8 pgm;
 
@@ -199,11 +190,7 @@ static void set_rjm_channel(u8 idx) {
     rjm_channel = idx;
 
     // Disable mute if enabled:
-    if (mute_toggle)
-    {
-        mute_toggle = 0x00;
-        gmaj_cc_set(gmaj_cc_mute, mute_toggle);
-    }
+    disable_mute();
 
     // Send the MIDI PROGRAM CHANGE message to the RJM to switch amp channel:
     midi_send_cmd1(0xC, rjm_midi_channel, pgm);
@@ -217,14 +204,44 @@ static void set_rjm_channel(u8 idx) {
     set_toggle_leds();
 }
 
+// changes to the next g-major program and loads initial effects state and
+// switches RJM to initial channel.
 static void set_gmaj_program(void) {
+    u8 tmp[8];
+    u8 new_rjm_channel;
+
     // Change g-major program:
     midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
 
-    // TODO: load new channel states from flash!
+    // Load channel states from flash memory:
+    // NOTE(jsd): Use multiple of 8 to avoid crossing 64-byte boundaries in flash!
+    flash_load((u16)gmaj_program * 8, 8, tmp);
 
-    // Update MIDI effects state:
-    update_effects_MIDI_state();
+    // NOTE(jsd): Since user has no way to turn on/off these settings yet, we force them here.
+    // All overdrive channels get noise gate on and clean channels don't:
+    tmp[0] &= ~fxm_noisegate;
+    tmp[1] &= ~fxm_noisegate;
+    tmp[2] |= fxm_noisegate;
+    tmp[3] |= fxm_noisegate;
+    tmp[4] |= fxm_noisegate;
+    tmp[5] |= fxm_noisegate;
+
+    // Remap from v2 memory layout to our v1 layout:
+    chan_effects[0] = tmp[0];
+    chan_effects[1] = tmp[2];
+    chan_effects[2] = tmp[4];
+    chan_effects[3] = tmp[5];
+
+    // Map starting v2 channel to v1:
+    if (tmp[6] == 0) new_rjm_channel = 0;
+    else if (tmp[6] == 1) new_rjm_channel = 0;
+    else if (tmp[6] == 2) new_rjm_channel = 1;
+    else if (tmp[6] == 3) new_rjm_channel = 1;
+    else if (tmp[6] == 4) new_rjm_channel = 2;
+    else if (tmp[6] == 5) new_rjm_channel = 3;
+
+    // Set RJM channel and update MIDI effects state:
+    set_rjm_channel(new_rjm_channel);
 
     // Update 7-segment display:
     show_program();
@@ -281,7 +298,7 @@ void controller_init(void) {
     control_press_values[3] = gmaj_cc_pitch;
     // Top-row 2 controls in alternate mode:
     control_press_values[4] = gmaj_cc_compressor;
-    control_press_values[5] = gmaj_cc_reverb;
+    //control_press_values[5] = gmaj_cc_reverb;
 
     switch_mode = 0;
 
@@ -291,7 +308,9 @@ void controller_init(void) {
     mute_toggle = 0;
     control4_button_mask = FSM_PRESET_1;
 
-    set_rjm_channel(0);
+    // Initialize g-major program to 0:
+    gmaj_program = 0;
+    set_gmaj_program();
 }
 
 // called every 10ms
@@ -300,13 +319,34 @@ void controller_10msec_timer(void) {
     if (timer_control4 > 0) --timer_control4;
 
     if (switch_mode != 0) {
-        // Flash 4th LED while in alternate mode.
-        if ((timer_alt++ & 15) <= 7) {
+        // Blink 3rd and 4th LEDs while in alternate mode.
+        if ((timer_alt++ & 31) <= 15) {
+            fsw_led_disable(2);
             fsw_led_enable(3);
         } else {
+            fsw_led_enable(2);
             fsw_led_disable(3);
         }
-        if (timer_alt >= 16) timer_alt = 0;
+        if (timer_alt >= 32) timer_alt = 0;
+    } else if (stored) {
+        // Blink all top LEDs for a little bit if we just stored state:
+        if ((timer_alt++ & 31) <= 15) {
+            fsw_led_enable(0);
+            fsw_led_enable(1);
+            fsw_led_enable(2);
+            fsw_led_enable(3);
+        } else {
+            fsw_led_disable(0);
+            fsw_led_disable(1);
+            fsw_led_disable(2);
+            fsw_led_disable(3);
+        }
+        if (timer_alt >= 80) {
+            timer_alt = 0;
+            stored = 0;
+            // Update to original LED state:
+            set_toggle_leds();
+        }
     }
 }
 
@@ -323,6 +363,7 @@ void controller_handle(void) {
             } else {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
+                disable_mute();
             }
             reset_timer4(FSM_PRESET_1);
         }
@@ -332,6 +373,7 @@ void controller_handle(void) {
             } else {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
+                disable_mute();
             }
             reset_timer4(FSM_PRESET_2);
         }
@@ -341,6 +383,7 @@ void controller_handle(void) {
             } else {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
+                disable_mute();
             }
             reset_timer4(FSM_PRESET_3);
         }
@@ -350,6 +393,7 @@ void controller_handle(void) {
             } else {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
+                disable_mute();
             }
             reset_timer4(FSM_PRESET_4);
         }
@@ -398,13 +442,42 @@ void controller_handle(void) {
         }
 
         if (button_pressed(FSM_CONTROL_3)) {
-            // TODO: store channel states to flash!
+            // Map v1 memory layout to v2 memory layout:
+            u8 tmp[8];
+            tmp[0] = chan_effects[0];
+            tmp[1] = chan_effects[0];
+            tmp[2] = chan_effects[1];
+            tmp[3] = chan_effects[1];
+            tmp[4] = chan_effects[2];
+            tmp[5] = chan_effects[3];
+            // Store the initial channel: (map channel # from v1 to v2):
+            if (rjm_channel == 0) tmp[6] = 0;
+            else if (rjm_channel == 1) tmp[6] = 2;
+            else if (rjm_channel == 2) tmp[6] = 4;
+            else if (rjm_channel == 3) tmp[6] = 5;
+            // Unused:
+            tmp[7] = 0;
+
+            // Store effects on/off state of current program:
+            // NOTE(jsd): Use multiple of 8 to avoid crossing 64-byte boundaries in flash!
+            flash_store((u16)gmaj_program * 8, 8, tmp);
+
             set_toggle_leds();
+
+            // Inidicate that we stored successfully and flash LEDs:
+            stored = 1;
+            timer_alt = 0;
+
+            // Exit alternate switch mode:
+            switch_mode = 0;
+            set_toggle_leds();
+            show_program();
         } else if (button_released(FSM_CONTROL_3)) {
             set_toggle_leds();
         }
 
         if (button_pressed(FSM_CONTROL_4)) {
+            // Exit alternate switch mode:
             switch_mode = 0;
             set_toggle_leds();
             show_program();

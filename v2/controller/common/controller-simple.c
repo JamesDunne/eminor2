@@ -124,6 +124,8 @@ void load_program_state(void) {
 
     // Since user has no way to turn on/off these settings yet, we force them here.
     // All overdrive channels get noise gate on:
+    chan_effects[0] &= ~fxm_noisegate;
+    chan_effects[1] &= ~fxm_noisegate;
     chan_effects[2] |= fxm_noisegate;
     chan_effects[3] |= fxm_noisegate;
     chan_effects[4] |= fxm_noisegate;

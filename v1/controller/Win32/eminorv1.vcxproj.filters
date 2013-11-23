@@ -29,5 +29,8 @@
     <ClInclude Include="..\common\types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\flash_init.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

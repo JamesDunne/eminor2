@@ -2,6 +2,7 @@
 #include <winuser.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
 
@@ -17,8 +18,8 @@ static double dpi = 55.4;
 const double inWidth = 9.0;
 const double inHeight = 7.0;
 
-static LPCWSTR labels1[4] = { L"DLY", L"CHO", L"FLT", L"PIT" };
-static LPCWSTR labels2[4] = { L"CH1", L"CH2", L"CH3", L"CH4" };
+static LPCWSTR labels1[4] = { L"DLY/CMP", L"CHO/MUTE", L"FLT/STORE", L"PIT/EXIT" };
+static LPCWSTR labels2[4] = { L"CH1/-5", L"CH2/-1", L"CH3/+1", L"CH4/+5" };
 
 /* foot-switch pushed status */
 static u32 pushed[8];
@@ -37,7 +38,7 @@ static size_t rom_size;
 
 static HWND hwndMain;
 
-HMIDIOUT      outHandle;
+HMIDIOUT    outHandle;
 
 void show_midi_output_devices() {
     MIDIOUTCAPS     moc;
@@ -338,10 +339,15 @@ void paintFacePlate(HWND hwnd) {
     // Copy memory buffer to screen:
     BitBlt(orighdc, 0, 0, win_width, win_height, Memhdc, 0, 0, SRCCOPY);
 
-    DeleteObject(brsRed);
-    DeleteObject(brsGreen);
     DeleteObject(penThick);
     DeleteObject(penThin);
+    DeleteObject(fontLED);
+
+    DeleteObject(brsWhite);
+    DeleteObject(brsDarkRed);
+    DeleteObject(brsRed);
+    DeleteObject(brsGreen);
+    DeleteObject(brsBlack);
 
     DeleteObject(Membitmap);
     DeleteDC(Memhdc);
@@ -499,194 +505,6 @@ u8 expr_poll(void) {
     return 0;
 }
 
-/* --------------- Data persistence functions: */
-
-void load_eeprom(void) {
-    FILE	*f = fopen("eeprom.bin", "rb");
-    fseek(f, 0, SEEK_END);
-    rom_size = ftell(f);
-    fseek(f, 0, SEEK_SET);
-
-    rom_data = malloc(sizeof(u8)* 24 * 1024);
-    memset(rom_data, 0, sizeof(u8)* 24 * 1024);
-
-    fread(rom_data, rom_size, sizeof(u8), f);
-    fclose(f);
-
-    rom_loaded = TRUE;
-}
-
-void read_eeprom(u8 chunk[64], u16 addr) {
-    /* copy 64-byte chunk from rom_data: */
-    memcpy(chunk, rom_data + addr, 64);
-}
-
-void write_eeprom(u8 chunk[64], u16 addr) {
-    FILE *f;
-
-    /* copy 64-byte chunk to rom_data: */
-    memcpy(rom_data + addr, chunk, 64);
-    /* flush the rom_data to the file: */
-    f = fopen("eeprom.bin", "wb");
-    fseek(f, 0, SEEK_SET);
-    fwrite(rom_data, 24 * 1024, sizeof(u8), f);
-    fclose(f);
-}
-
-/* Gets number of stored banks */
-u16 banks_count(void) {
-    u16	count;
-
-    /* load from eeprom.bin */
-    if (!rom_loaded) load_eeprom();
-
-    /* read the bank count: */
-    count = *((u16 *)&(rom_data[0]));
-    return count;
-}
-
-/* Count in bits:
-
-Padded bit-packed storage:
-32 bits bank name
-(16 bits per preset for 8-bit program # + 8-bit controller #) * 4 presets = 64 bits
-4 bits padding
-4 bits for sequence count
-2 bits per sequence no * 8 sequences max = 16 bits for sequence program
-8 bits padding
-
-32 + 64 + 4 + 4 + 16 + 8 = 128 bits = 16 bytes
-*/
-const u8 bank_record_size = 16;
-
-/* Loads a bank into the specified arrays: */
-void bank_load(u16 bank_index, char name[BANK_NAME_MAXLENGTH], u8 bank[BANK_PRESET_COUNT], u8 bankcontroller[BANK_PRESET_COUNT], u8 bankmap[BANK_MAP_COUNT], u8 *bankmap_count) {
-    u16	count;
-    u16	addr;
-
-    /* load from eeprom.bin */
-    if (!rom_loaded) load_eeprom();
-
-    /* read the bank count: */
-    count = *((u16 *)&(rom_data[0]));
-    if (bank_index >= count) {
-        return;
-    }
-
-    /* load the bit-compressed data */
-    addr = 64 + (bank_index * bank_record_size);
-
-    name[0] = rom_data[addr + 0] & 0x7F;
-    name[1] = rom_data[addr + 1] & 0x7F;
-    name[2] = rom_data[addr + 2] & 0x7F;
-    name[3] = rom_data[addr + 3] & 0x7F;
-
-    bank[0] = rom_data[addr + 4] & 0x7F;
-    bank[1] = rom_data[addr + 5] & 0x7F;
-    bank[2] = rom_data[addr + 6] & 0x7F;
-    bank[3] = rom_data[addr + 7] & 0x7F;
-
-    bankcontroller[0] = rom_data[addr + 8] & 0x7F;
-    bankcontroller[1] = rom_data[addr + 9] & 0x7F;
-    bankcontroller[2] = rom_data[addr + 10] & 0x7F;
-    bankcontroller[3] = rom_data[addr + 11] & 0x7F;
-
-    /* count is stored 0-7, but means 1-8 so add 1 */
-    *bankmap_count = (rom_data[addr + 12] & 0x07) + 1;
-    /* load 8x 2-bit (0-3) values from the next few bytes for the sequence: */
-    bankmap[0] = ((rom_data[addr + 13] & 0xC0) >> 6);
-    bankmap[1] = ((rom_data[addr + 13] & 0x30) >> 4);
-    bankmap[2] = ((rom_data[addr + 13] & 0x0C) >> 2);
-    bankmap[3] = ((rom_data[addr + 13] & 0x03));
-    bankmap[4] = ((rom_data[addr + 14] & 0xC0) >> 6);
-    bankmap[5] = ((rom_data[addr + 14] & 0x30) >> 4);
-    bankmap[6] = ((rom_data[addr + 14] & 0x0C) >> 2);
-    bankmap[7] = ((rom_data[addr + 14] & 0x03));
-
-    /* 8 free bits left before next 16-byte boundary */
-}
-
-/* Load bank name for browsing through banks: */
-void bank_loadname(u16 bank_index, char name[BANK_NAME_MAXLENGTH]) {
-    u16	count;
-    u16	addr;
-
-    /* load from eeprom.bin */
-    if (!rom_loaded) load_eeprom();
-
-    /* read the bank count: */
-    count = *((u16 *)&(rom_data[0]));
-    if (bank_index >= count) {
-        return;
-    }
-
-    /* load the bit-compressed data */
-    addr = 64 + (bank_index * bank_record_size);
-
-    name[0] = rom_data[addr + 0] & 0x7F;
-    name[1] = rom_data[addr + 1] & 0x7F;
-    name[2] = rom_data[addr + 2] & 0x7F;
-    name[3] = rom_data[addr + 3] & 0x7F;
-}
-
-/* Stores the programs back to the bank: */
-void bank_store(u16 bank_index, u8 bank[BANK_PRESET_COUNT], u8 bankcontroller[BANK_PRESET_COUNT], u8 bankmap[BANK_MAP_COUNT], u8 bankmap_count) {
-    u8 chunk[64];
-    u16	addr, addrhi, addrlo;
-
-    addr = 64 + (bank_index * bank_record_size);
-    addrhi = addr & ~63;
-    addrlo = addr & 63;
-
-    /* load the 64-byte aligned chunk: */
-    read_eeprom(chunk, addrhi);
-
-    /* overwrite the bank program section for the bank record: */
-    chunk[addrlo + 4] = bank[0];
-    chunk[addrlo + 5] = bank[1];
-    chunk[addrlo + 6] = bank[2];
-    chunk[addrlo + 7] = bank[3];
-
-    chunk[addrlo + 8] = bankcontroller[0] & 0x7F;
-    chunk[addrlo + 9] = bankcontroller[1] & 0x7F;
-    chunk[addrlo + 10] = bankcontroller[2] & 0x7F;
-    chunk[addrlo + 11] = bankcontroller[3] & 0x7F;
-
-    /* count is stored 0-7, but means 1-8 so subtract 1 */
-    chunk[addrlo + 12] = (bankmap_count - 1) & 0x07;
-    /* store 8x 2-bit (0-3) values to the next few bytes for the sequence: */
-    chunk[addrlo + 13] = ((bankmap[0] & 0x03) << 6) |
-                       ((bankmap[1] & 0x03) << 4) |
-                       ((bankmap[2] & 0x03) << 2) |
-                        (bankmap[3] & 0x03);
-    chunk[addrlo + 14] = ((bankmap[4] & 0x03) << 6) |
-                       ((bankmap[5] & 0x03) << 4) |
-                       ((bankmap[6] & 0x03) << 2) |
-                        (bankmap[7] & 0x03);
-
-    /* write back the 64-byte chunk: */
-    write_eeprom(chunk, (64 + (bank_index * bank_record_size)) & ~63);
-}
-
-/* Look up a bank # in the sorted index */
-u16 bank_getsortedindex(u16 sort_index) {
-    u16	count;
-    u16	addr;
-
-    /* load from eeprom.bin */
-    if (!rom_loaded) load_eeprom();
-
-    /* read the bank count: */
-    count = *((u16 *)&(rom_data[0]));
-    if (sort_index >= count) {
-        return count;
-    }
-
-    /* read the bank index given the sort index location: */
-    addr = 64 + (count * bank_record_size) + (sort_index * sizeof(u16));
-    return *((u16 *)&(rom_data[addr]));
-}
-
 /* --------------- MIDI I/O functions: */
 
 /* Send multi-byte MIDI commands
@@ -709,4 +527,91 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
         midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8) | ((u32)data2 << 16));
     }
     printf("MIDI: %1X%1X %02X %02X\r\n", cmd, channel, data1, data2);
+}
+
+// --------------- Flash memory interface:
+
+static u8 flash_memory[1024] = {
+#include "../common/flash_init.h"
+    0
+};
+
+// Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
+void flash_load(u16 addr, u16 count, u8 *data) {
+    long file_size;
+    FILE *f;
+
+    // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
+    assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
+
+    f = fopen("flash.bin", "rb");
+    if (f == NULL) {
+        // Initialize new file with initial flash memory data:
+        f = fopen("flash.bin", "a+b");
+        fwrite(flash_memory, 1, 1024, f);
+        fclose(f);
+        // Reopen file for reading:
+        f = fopen("flash.bin", "rb");
+    }
+    if (f == NULL) {
+        memset(data, 0, count);
+        return;
+    }
+
+    // Find file size:
+    fseek(f, 0, SEEK_END);
+    file_size = ftell(f);
+
+    // Attempt to seek to the location in the file:
+    if (fseek(f, addr, SEEK_SET) != 0) {
+        fclose(f);
+        memset(data, 0, count);
+        return;
+    }
+    if (addr > file_size) {
+        // Address beyond end of file:
+        fclose(f);
+        memset(data, 0, count);
+        return;
+    }
+
+    size_t r = fread(data, 1, count, f);
+    if (r < count) {
+        // Zero the remainder of the buffer:
+        memset(data + r, 0, count - r);
+    }
+    fclose(f);
+}
+
+// Stores `count` bytes from `data` into flash memory at address `addr` (0-based where 0 is first available byte of available flash memory):
+void flash_store(u16 addr, u16 count, u8 *data) {
+    long p;
+    FILE *f;
+
+    // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
+    assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
+
+    // Create file or append to it:
+    f = fopen("flash.bin", "a+b");
+
+    // Find file size:
+    fseek(f, 0, SEEK_END);
+    p = ftell(f);
+
+    // Pad the end of the file until we reach `addr`:
+    if (addr > p) {
+        static u8 zeroes[64];
+
+        while (addr - p >= 64) {
+            p += (long)fwrite(zeroes, 1, 64, f);
+        }
+        if (addr - p > 0)
+            fwrite(zeroes, 1, addr - p, f);
+    }
+
+    fseek(f, addr, SEEK_SET);
+
+    size_t r = fwrite(data, 1, count, f);
+    assert(r == count);
+    fclose(f);
 }

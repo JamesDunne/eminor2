@@ -8,17 +8,14 @@
 */
 
 #define LEDS_MAX_ALPHAS 4
-#define BANK_PRESET_COUNT 4
-#define BANK_MAP_COUNT 8
-#define BANK_NAME_MAXLENGTH 4
 
-/* --------------- LED read-out display functions: */
+// --------------- LED read-out display functions:
 
-/* show 4 alphas on the 4-digit display */
-void leds_show_4alphas(char text[LEDS_MAX_ALPHAS]);
+// show 4 alphas on the 4-digit display
+extern void leds_show_4alphas(char text[LEDS_MAX_ALPHAS]);
 
-/* show single digit on the single digit display */
-void leds_show_1digit(u8 value);
+// show single digit on the single digit display
+extern void leds_show_1digit(u8 value);
 
 #define FSB_PRESET_1 28
 #define FSB_PRESET_2 31
@@ -30,7 +27,7 @@ void leds_show_1digit(u8 value);
 #define FSB_CONTROL_3 2
 #define FSB_CONTROL_4 3
 
-/* --------------- Momentary toggle foot-switches: */
+// --------------- Momentary toggle foot-switches:
 #define FSM_PRESET_1	0x10000000
 #define FSM_PRESET_2	0x80000000
 #define FSM_PRESET_3	0x40000000
@@ -41,59 +38,70 @@ void leds_show_1digit(u8 value);
 #define FSM_CONTROL_3	0x00000004
 #define FSM_CONTROL_4	0x00000008
 
-/* Poll up to 28 foot-switch toggles simultaneously.  PREV NEXT DEC  INC map to 28-31 bit positions. */
-u32 fsw_poll(void);
+// FX button enable bitmasks:
+#define fxm_compressor  0x01
+#define fxm_filter      0x02
+#define fxm_pitch       0x04
+#define fxm_chorus      0x08
+#define fxm_delay       0x10
+#define fxm_reverb      0x20
+#define fxm_noisegate   0x40
+#define fxm_eq          0x80
 
-/* Set currently active program foot-switch's LED indicator and disable all others */
-void fsw_led_set_active(int idx);
+// FX button labels:
+#define fxb_compressor  0
+#define fxb_filter      1
+#define fxb_pitch       2
+#define fxb_chorus      3
+#define fxb_delay       4
+#define fxb_reverb      5
+#define fxb_noisegate   6
+#define fxb_eq          7
 
-/* Explicitly enable a single LED without affecting the others */
-void fsw_led_enable(int idx);
+// Poll up to 28 foot-switch toggles simultaneously.  PREV NEXT DEC  INC map to 28-31 bit positions.
+extern u32 fsw_poll(void);
 
-/* Explicitly disable a single LED without affecting the others */
-void fsw_led_disable(int idx);
+// Set currently active program foot-switch's LED indicator and disable all others
+extern void fsw_led_set_active(int idx);
 
-/* --------------- External inputs: */
+// Explicitly enable a single LED without affecting the others
+extern void fsw_led_enable(int idx);
 
-/* Poll the slider switch to see which mode we're in: */
-u8 slider_poll(void);
+// Explicitly disable a single LED without affecting the others
+extern void fsw_led_disable(int idx);
 
-/* Poll the expression pedal's data (0-127): */
-u8 expr_poll(void);
+// --------------- External inputs:
 
-/* --------------- Data persistence functions: */
+// Poll the slider switch to see which mode we're in:
+extern u8 slider_poll(void);
 
-/* Gets number of stored banks */
-u16 banks_count(void);
+// Poll the expression pedal's data (0-127):
+extern u8 expr_poll(void);
 
-/* Loads a bank into the specified arrays: */
-void bank_load(u16 bank_index, char name[BANK_NAME_MAXLENGTH], u8 bank[BANK_PRESET_COUNT], u8 bankcontroller[BANK_PRESET_COUNT], u8 bankmap[BANK_MAP_COUNT], u8 *bankmap_count);
-/* Stores the programs back to the bank: */
-void bank_store(u16 bank_index, u8 bank[BANK_PRESET_COUNT], u8 bankcontroller[BANK_PRESET_COUNT], u8 bankmap[BANK_MAP_COUNT], u8 bankmap_count);
+// --------------- MIDI I/O functions:
 
-/* Load bank name for browsing through banks: */
-void bank_loadname(u16 bank_index, char name[BANK_NAME_MAXLENGTH]);
+// Send a single MIDI byte:
+extern void midi_send_byte(u8 data);
 
-/* Get the alphabetically sorted bank index */
-u16 bank_getsortedindex(u16 sort_index);
-
-/* --------------- MIDI I/O functions: */
-
-/* Send a single MIDI byte. */
-void midi_send_byte(u8 data);
-
-/* Send formatted MIDI commands.
-
-    0 <= cmd <= F       - MIDI command
-    0 <= channel <= F   - MIDI channel to send command to
-    00 <= data1 <= FF   - first data byte of MIDI command
-    00 <= data2 <= FF   - second (optional) data byte of MIDI command
+/* Send multi-byte MIDI commands
+0 <= cmd     <=  F   - MIDI command
+0 <= channel <=  F   - MIDI channel to send command to
+00 <= data1   <= FF   - first data byte of MIDI command
+00 <= data2   <= FF   - second (optional) data byte of MIDI command
 */
-void midi_send_cmd1(u8 cmd, u8 channel, u8 data1);
-void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);
+extern void midi_send_cmd1(u8 cmd, u8 channel, u8 data1);
+extern void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);
 
-/* --------------- Controller logic interface functions: */
+// --------------- Flash memory functions:
 
-void controller_init(void);
-void controller_10msec_timer(void);
-void controller_handle(void);
+// Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
+extern void flash_load(u16 addr, u16 count, u8 *data);
+
+// Stores `count` bytes from `data` into flash memory at address `addr` (0-based where 0 is first available byte of available flash memory):
+extern void flash_store(u16 addr, u16 count, u8 *data);
+
+// --------------- Controller logic interface functions:
+
+/* export */ void controller_init(void);
+/* export */ void controller_10msec_timer(void);
+/* export */ void controller_handle(void);

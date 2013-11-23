@@ -16,4 +16,7 @@
     <LocalDebuggerCommand>$(ProjectDir)$(TargetName)-$(PlatformShortName)$(TargetExt)</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup>
+    <ShowAllFiles>false</ShowAllFiles>
+  </PropertyGroup>
 </Project>

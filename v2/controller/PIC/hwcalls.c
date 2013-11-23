@@ -243,8 +243,12 @@ void flash_load(u16 addr, u16 count, u8 *data) {
     u8 i;
     u16 saddr;
 
-    // Copy data from ROM to destination:
+    // Check sanity of read to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
+    assert(((addr) & ~63) == (((addr + count - 1)) & ~63));
+    // Make sure read is in flash memory range:
     assert(addr + count < WRITABLE_SEG_LEN);
+
+    // Copy data from ROM to destination:
     for (i = 0, saddr = addr; i < count; i++, saddr++)
         data[i] = ROM_SAVEDATA[saddr];
 }
@@ -253,22 +257,26 @@ void flash_store(u16 addr, u16 count, u8 *data) {
     u8 i;
     u16 saddr, daddr;
 
+    // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
+    assert(((addr) & ~63) == (((addr + count - 1)) & ~63));
+    // Make sure write is in flash memory range:
+    assert(addr + count < WRITABLE_SEG_LEN);
+
     // Copy 64 byte aligned chunk of ROM into RAM so it can be put back in after ERASE completes.
-    saddr = (64 + addr) & ~63;
-	for (i = 0; i < 64; i++, saddr++) {
-		ProgmemBuffer[i] = ROM_SAVEDATA[saddr];
-	}
+    saddr = addr & ~63;
+    for (i = 0; i < 64; i++, saddr++) {
+        ProgmemBuffer[i] = ROM_SAVEDATA[saddr];
+    }
 
     // Copy new data into RAM buffer, assuming we don't cross a 64-byte chunk boundary:
-    saddr = (64 + addr) & ~63;
+    saddr = addr & ~63;
     daddr = addr - saddr;
-    assert(daddr + count < 64);     // that'd be bad, m'kay?
     for (i = 0; i < count; i++, daddr++)
         ProgmemBuffer[daddr] = data[i];
 
     // Start the ERASE operation:
     // +512 for debugging..
-    ProgMemAddr.s_form = ((64 + addr) & ~63) + WRITABLE_SEG_ADDR;
+    ProgMemAddr.s_form = (addr & ~63) + WRITABLE_SEG_ADDR;
     EraseProgMem();
 
     // arb will catch this and handle it later...
