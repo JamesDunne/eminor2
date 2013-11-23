@@ -82,13 +82,13 @@ void show_midi_output_devices() {
 
 // main entry point
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
-    WNDCLASSEX WndClass;
+    WNDCLASSEXW WndClass;
     MSG Msg;
     unsigned long result;
 
     zhInstance = hInstance;
 
-    WndClass.cbSize = sizeof(WNDCLASSEX);
+    WndClass.cbSize = sizeof(WNDCLASSEXW);
     WndClass.style = 0; // disable CS_DBLCLKS
     WndClass.lpfnWndProc = WndProc;
     WndClass.cbClsExtra = 0;
@@ -103,7 +103,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     WndClass.lpszClassName = L"MyClass";
 
     if (!RegisterClassExW(&WndClass)) {
-        MessageBox(0, L"Error Registering Class!", L"Error!", MB_ICONSTOP | MB_OK);
+        MessageBoxW(0, L"Error Registering Class!", L"Error!", MB_ICONSTOP | MB_OK);
         return 0;
     }
 

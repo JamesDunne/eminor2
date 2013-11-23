@@ -33,7 +33,7 @@ void	MIDI_COMM_ROUTINE() {
 		return;						//exit
 	}
 
-	tglbit(LedStates,2);
+	//tglbit(LedStates,2);
 
 //handle the received character:
 	if (RCSTAbits.OERR || RCSTAbits.FERR) {		//Overrun or framing error?

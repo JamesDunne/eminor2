@@ -14,10 +14,8 @@
 void	Process7Segs(void) {
 //	static unsigned char ComPointer;
 
-	if (mode == MODE_CONCERT) {
-		DispSegData[0].bit7 = true;
-	}
-
+    // power switch LED?
+    DispSegData[0].bit7 = true;
 
 	AllDigitsOff();
 	switch (ComPointer) {

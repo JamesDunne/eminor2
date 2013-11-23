@@ -7,9 +7,8 @@ Release/
 *.sdf
 *.opensdf
 *.ilk
-*.vcxproj.user
-*.vcxproj.filters
 *.exe
+*.pdb
 *.suo
 
 dist/
