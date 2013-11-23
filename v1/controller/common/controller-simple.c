@@ -85,25 +85,9 @@
 #define fxm_noisegate   0x40
 #define fxm_eq          0x80
 
-/* initial continuous controller toggle bits per preset: */
-u8 chan_effects[4] = {
-    fxm_compressor,
-    fxm_noisegate,
-    fxm_noisegate,
-    fxm_noisegate | fxm_delay
-};
+u8 chan_effects[4];
 
-/* continuous controller values: */
-u8 control_press_values[6] = {
-    // Top-row 4 controls:
-    gmaj_cc_delay,
-    gmaj_cc_chorus,
-    gmaj_cc_filter,
-    gmaj_cc_pitch,
-    // Top-row 2 controls in alternate mode:
-    gmaj_cc_compressor,
-    gmaj_cc_reverb
-};
+u8 control_press_values[6];
 
 u32 sw_curr, sw_last;
 
@@ -113,30 +97,17 @@ u8 gmaj_program = 0;
 // current switch mode; holding any preset button for 500ms enables alternate mode.
 u8 switch_mode = 0;
 
-/* timers for preset button hold time */
+// timers for preset button hold time
 u8 timer_control4 = 0, timer_control4_enable = 0;
 u8 timer_alt = 0;
 
-/* is tuner mute on or off? */
+// is tuner mute on or off?
 u8 mute_toggle = 0;
 u8 tap_toggle = 0;
 u32 control4_button_mask = 0;
 
-/* convert integer to ASCII in fixed number of chars, right-aligned */
-void itoa_fixed(u8 n, char s[LEDS_MAX_ALPHAS]) {
-    u8 i = LEDS_MAX_ALPHAS - 1;
-
-    do {
-        s[i--] = (n % 10) + '0';
-    } while ((n /= 10) > 0);
-
-    /* pad the left chars with spaces: */
-    for (; i > 0; --i) s[i] = ' ';
-    s[i] = ' ';
-}
-
-/* update 7-segment displays */
-void show_program(void) {
+// update 7-segment displays
+static void show_program(void) {
     char s[LEDS_MAX_ALPHAS];
     u8 i = LEDS_MAX_ALPHAS - 1;
 
@@ -147,7 +118,7 @@ void show_program(void) {
         s[i--] = (n % 10) + '0';
     } while ((n /= 10) > 0);
 
-    /* pad the left chars with spaces: */
+    // pad the left chars with spaces:
     for (; i > 0; --i) s[i] = ' ';
     s[i] = ' ';
 
@@ -165,18 +136,18 @@ void show_program(void) {
     leds_show_1digit(rjm_channel + 1);
 }
 
-/* determine if a footswitch was pressed: */
-u8 button_pressed(u32 mask) {
+// determine if a footswitch was pressed
+static u8 button_pressed(u32 mask) {
     return ((sw_curr & mask) == mask) && ((sw_last & mask) == 0);
 }
 
-/* determine if still holding footswitch: */
-u8 button_held(u32 mask) {
+// determine if still holding footswitch
+static u8 button_held(u32 mask) {
     return (sw_curr & mask) == mask;
 }
 
-/* determine if a footswitch was released: */
-u8 button_released(u32 mask) {
+// determine if a footswitch was released
+static u8 button_released(u32 mask) {
     return ((sw_last & mask) == mask) && ((sw_curr & mask) == 0);
 }
 
@@ -185,7 +156,7 @@ static void gmaj_cc_set(u8 cc, u8 val) {
     midi_send_cmd2(0xB, gmaj_midi_channel, cc, val);
 }
 
-void set_toggle_leds(void) {
+static void set_toggle_leds(void) {
     u8 fx = chan_effects[rjm_channel];
     if (switch_mode == 0) {
         if (fx & fxm_delay) fsw_led_enable(0); else fsw_led_disable(0);
@@ -216,7 +187,7 @@ static void update_effects_MIDI_state(void) {
     //gmaj_cc_set(gmaj_cc_reverb, (fx & fxm_reverb) ? 0x7F : 0x00);
 }
 
-void set_rjm_channel(u8 idx) {
+static void set_rjm_channel(u8 idx) {
     u8 pgm;
 
     if (idx == 0) pgm = 4;
@@ -234,7 +205,7 @@ void set_rjm_channel(u8 idx) {
         gmaj_cc_set(gmaj_cc_mute, mute_toggle);
     }
 
-    /* Send the MIDI PROGRAM CHANGE message to the RJM to switch amp channel: */
+    // Send the MIDI PROGRAM CHANGE message to the RJM to switch amp channel:
     midi_send_cmd1(0xC, rjm_midi_channel, pgm);
 
     // Send MIDI effects enable commands and set effects LEDs:
@@ -246,7 +217,7 @@ void set_rjm_channel(u8 idx) {
     set_toggle_leds();
 }
 
-void set_gmaj_program(void) {
+static void set_gmaj_program(void) {
     // Change g-major program:
     midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
 
@@ -259,7 +230,7 @@ void set_gmaj_program(void) {
     show_program();
 }
 
-void control_toggleidx(u8 idx) {
+static void control_toggleidx(u8 idx) {
     u8 togglevalue = 0x00;
     u8 idx_mask;
 
@@ -281,26 +252,36 @@ void control_toggleidx(u8 idx) {
     set_toggle_leds();
 }
 
-void gmaj_cc_toggle(u8 cc, u8* old) {
+static void gmaj_cc_toggle(u8 cc, u8* old) {
     if (*old != 0) *old = 0; else *old = 0x7F;
     gmaj_cc_set(cc, *old);
 }
 
-void reset_timer4(u32 mask) {
+static void reset_timer4(u32 mask) {
     control4_button_mask = mask;
     timer_control4 = 60;
     timer_control4_enable = 1;
 }
 
-/* ------------------------- Actual controller logic ------------------------- */
+// ------------------------- Actual controller logic -------------------------
 
-/* set the controller to an initial state */
+// set the controller to an initial state
 void controller_init(void) {
-    /* default bitfield states for preset programs: */
+    // default bitfield states for preset programs:
     chan_effects[0] = fxm_compressor;
     chan_effects[1] = fxm_noisegate;
     chan_effects[2] = fxm_noisegate;
     chan_effects[3] = fxm_noisegate | fxm_delay;
+
+    // continuous controller values:
+    // Top-row 4 controls:
+    control_press_values[0] = gmaj_cc_delay;
+    control_press_values[1] = gmaj_cc_chorus;
+    control_press_values[2] = gmaj_cc_filter;
+    control_press_values[3] = gmaj_cc_pitch;
+    // Top-row 2 controls in alternate mode:
+    control_press_values[4] = gmaj_cc_compressor;
+    control_press_values[5] = gmaj_cc_reverb;
 
     switch_mode = 0;
 
@@ -313,9 +294,9 @@ void controller_init(void) {
     set_rjm_channel(0);
 }
 
-/* called every 10ms */
+// called every 10ms
 void controller_10msec_timer(void) {
-    /* decrement the control4 timer if it's active */
+    // decrement the control4 timer if it's active
     if (timer_control4 > 0) --timer_control4;
 
     if (switch_mode != 0) {
@@ -329,13 +310,13 @@ void controller_10msec_timer(void) {
     }
 }
 
-/* main control loop */
+// main control loop
 void controller_handle(void) {
-    /* poll foot-switch depression status: */
+    // poll foot-switch depression status:
     sw_curr = fsw_poll();
 
     if (switch_mode == 0) {
-        /* one of BOTTOM preset 1-4 pressed: */
+        // one of BOTTOM preset 1-4 pressed:
         if (button_pressed(FSM_PRESET_1)) {
             if (rjm_channel != 0) {
                 set_rjm_channel(0);
@@ -373,12 +354,12 @@ void controller_handle(void) {
             reset_timer4(FSM_PRESET_4);
         }
 
-        /* break the timer if the button was released early */
+        // break the timer if the button was released early
         if ((timer_control4_enable != 0) && !button_held(control4_button_mask)) {
             timer_control4 = 0;
             timer_control4_enable = 0;
         }
-        /* check if the last preset button was held long enough */
+        // check if the last preset button was held long enough
         if ((timer_control4_enable != 0) && button_held(control4_button_mask) && (timer_control4 == 0)) {
             // Enable alternate switch mode:
             switch_mode = 1;
@@ -389,7 +370,7 @@ void controller_handle(void) {
             timer_control4_enable = 0;
         }
 
-        /* one of TOP control 1-4 pressed: */
+        // one of TOP control 1-4 pressed:
         if (button_pressed(FSM_CONTROL_1)) {
             control_toggleidx(0);
         }

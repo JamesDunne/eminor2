@@ -97,13 +97,3 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);
 void controller_init(void);
 void controller_10msec_timer(void);
 void controller_handle(void);
-
-u8 button_pressed(u32 mask);
-
-enum mainmode {
-	MODE_PRACTICE = 0,
-	MODE_CONCERT = 1,
-	MODE_UNDEFINED = 2
-};
-
-extern enum mainmode mode;
