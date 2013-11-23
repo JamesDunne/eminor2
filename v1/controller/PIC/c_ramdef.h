@@ -69,5 +69,5 @@ extern unsigned char USBDataPointer;
 extern unsigned char USBEP0DataInBuffer[64];
 extern unsigned char ResponseType;
 
-extern unsigned char midiInData[23];
-extern unsigned char midiInBufPtr;
+//extern unsigned char midiInData[23];
+//extern unsigned char midiInBufPtr;

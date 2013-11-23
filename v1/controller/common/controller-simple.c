@@ -36,18 +36,10 @@
     Written by James S. Dunne
     Original: 2007-04-05
     Updated:  2013-11-22
-*/
+    */
 
 #include "../common/types.h"
 #include "../common/hardware.h"
-
-// Set high bit #"Place" located in a register called "VAR"  // Place : 0 -> 7
-#define setbit(VAR,Place) VAR |= 1 << Place
-
-// Set low bit #"Place" located in a register called "VAR"  // Place : 0 -> 7
-#define clrbit(VAR,Place) VAR &= (1 << Place)^255
-#define chkbit(VAR,Place) (VAR & 1 << Place)
-#define tglbit(VAR,Place) VAR ^= 1 << Place
 
 // Hard-coded MIDI channel #s:
 #define	gmaj_midi_channel	0
@@ -85,18 +77,6 @@
 #define fxm_reverb      0x20
 #define fxm_noisegate   0x40
 #define fxm_eq          0x80
-
-// Top row of controller buttons activate these CCs:
-static u8 gmaj_cc_lookup[8] = {
-    gmaj_cc_compressor,
-    gmaj_cc_filter,
-    gmaj_cc_pitch,
-    gmaj_cc_chorus,
-    gmaj_cc_delay,
-    gmaj_cc_reverb,
-    gmaj_cc_noisegate,
-    gmaj_cc_eq
-};
 
 u32	sw_curr, sw_last;
 
