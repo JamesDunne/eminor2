@@ -62,7 +62,7 @@
 #define	BTN_SAMPLE_DELAY		5	//probably unnecessary (sampling time for buttons)
 
 //midi comm buffer length:
-#define	MAX_TX_LENGTH			32	//probably more than necessary
+#define	MAX_TX_LENGTH			40
 
 
 //Size of writable flash segment:

@@ -37,14 +37,6 @@ void testcrap(void) {
 */
 
 /*
-//Test to scroll text on the display
-	ScrollingDisplayLength = 37;
-	ScrollingDisplayIndex = ScrollingDisplayLength;
-	for (index=0;index<64;index++) ScrollingDisplayData[ScrollingDisplayLength-index] = DataStart[index];
-	Scroll7Segs = true;
-*/
-
-/*
 //Test to write data to the program memory
 	ProgMemAddr.s_form = 0x4000;
 	

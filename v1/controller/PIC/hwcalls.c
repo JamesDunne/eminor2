@@ -353,7 +353,7 @@ void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
 //	midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8));
 
 	MIDI_ENQUEUE(((cmd & 0xF) << 4) | (channel & 0xF));
-	MIDI_ENQUEUE(data1 & 0x7F);
+	MIDI_ENQUEUE(data1);
 }
 
 /* Send formatted MIDI commands.
@@ -368,6 +368,6 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 //	midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8) | ((u32)data2 << 16));
 
 	MIDI_ENQUEUE(((cmd & 0xF) << 4) | (channel & 0xF));
-	MIDI_ENQUEUE(data1 & 0x7F);
-	MIDI_ENQUEUE(data2 & 0x7F);
+	MIDI_ENQUEUE(data1);
+	MIDI_ENQUEUE(data2);
 }

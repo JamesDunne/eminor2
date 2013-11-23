@@ -16,7 +16,7 @@
     (o)     = SPST rugged foot-switch
     (*)     = Single on/off LED
     [ ... ] = LED 7-segment (or more) display
-    {\}		= slider switch
+    {\}     = slider switch
 
     PWR  MIDI OUT EXPR IN (opt)
     |      ||      ||
@@ -33,6 +33,11 @@
     |                    |
     \--------------------/
 
+    Alternate switch mode:
+
+    [ COMP] [ MUTE] [STORE] [ EXIT]
+    [  -5 ] [  -1 ] [  +1 ] [  +5 ]
+
     Written by James S. Dunne
     Original: 2007-04-05
     Updated:  2013-11-22
@@ -41,9 +46,11 @@
 #include "../common/types.h"
 #include "../common/hardware.h"
 
+#define step_program_inc_dec 5
+
 // Hard-coded MIDI channel #s:
-#define	gmaj_midi_channel	0
-#define	rjm_midi_channel	1
+#define gmaj_midi_channel   0
+#define rjm_midi_channel    1
 
 // G-major CC messages:
 #define gmaj_cc_taptempo    80
@@ -78,30 +85,42 @@
 #define fxm_noisegate   0x40
 #define fxm_eq          0x80
 
-u32	sw_curr, sw_last;
-
-u8	rjm_channel;
-
 /* initial continuous controller toggle bits per preset: */
-u8 chan_effects[4];
-u8 rjm_channel;
+u8 chan_effects[4] = {
+    fxm_compressor,
+    fxm_noisegate,
+    fxm_noisegate,
+    fxm_noisegate | fxm_delay
+};
 
 /* continuous controller values: */
-u8 control_press_values[4];
+u8 control_press_values[6] = {
+    // Top-row 4 controls:
+    gmaj_cc_delay,
+    gmaj_cc_chorus,
+    gmaj_cc_filter,
+    gmaj_cc_pitch,
+    // Top-row 2 controls in alternate mode:
+    gmaj_cc_compressor,
+    gmaj_cc_reverb
+};
+
+u32 sw_curr, sw_last;
+
+u8 rjm_channel = 0;
+u8 gmaj_program = 0;
+
+// current switch mode; holding any preset button for 500ms enables alternate mode.
+u8 switch_mode = 0;
 
 /* timers for preset button hold time */
-u8 timer_control4, timer_control4_enable;
-
-/* constant continuous controller numbers: */
-u8 control_value_tap_tempo, control_value_tuner_mute;
-
-/* current control on/off toggle bits */
-u8 preset_controltoggle;
+u8 timer_control4 = 0, timer_control4_enable = 0;
+u8 timer_alt = 0;
 
 /* is tuner mute on or off? */
-u8 flag_tuner_mute;
-u8 control_tuner_toggle;
-u32 control4_button_mask;
+u8 mute_toggle = 0;
+u8 tap_toggle = 0;
+u32 control4_button_mask = 0;
 
 /* convert integer to ASCII in fixed number of chars, right-aligned */
 void itoa_fixed(u8 n, char s[LEDS_MAX_ALPHAS]) {
@@ -116,15 +135,34 @@ void itoa_fixed(u8 n, char s[LEDS_MAX_ALPHAS]) {
     s[i] = ' ';
 }
 
-/* display a program value in decimal with a leading 'P': */
-void show_program(u8 value) {
-    char	a[LEDS_MAX_ALPHAS];
-    a[0] = 'P';
-    a[1] = 'r';
-    a[2] = 'o';
-    a[3] = 'g';
-    leds_show_4alphas(a);
-    leds_show_1digit(value + 1);
+/* update 7-segment displays */
+void show_program(void) {
+    char s[LEDS_MAX_ALPHAS];
+    u8 i = LEDS_MAX_ALPHAS - 1;
+
+    // Show g-major program number in 4-char display, right-aligned space padded:
+    u8 n = gmaj_program + 1;
+
+    do {
+        s[i--] = (n % 10) + '0';
+    } while ((n /= 10) > 0);
+
+    /* pad the left chars with spaces: */
+    for (; i > 0; --i) s[i] = ' ';
+    s[i] = ' ';
+
+    if (switch_mode != 0) {
+        // Alternate switch mode.
+
+        // Show 'E' in first position:
+        s[0] = 'E';
+    }
+
+    // Update 4-char display:
+    leds_show_4alphas(s);
+
+    // Show the channel # in the single-digit display:
+    leds_show_1digit(rjm_channel + 1);
 }
 
 /* determine if a footswitch was pressed: */
@@ -149,10 +187,20 @@ static void gmaj_cc_set(u8 cc, u8 val) {
 
 void set_toggle_leds(void) {
     u8 fx = chan_effects[rjm_channel];
-    if (fx & fxm_delay) fsw_led_enable(0); else fsw_led_disable(0);
-    if (fx & fxm_chorus) fsw_led_enable(1); else fsw_led_disable(1);
-    if (fx & fxm_filter) fsw_led_enable(2); else fsw_led_disable(2);
-    if (fx & fxm_pitch) fsw_led_enable(3); else fsw_led_disable(3);
+    if (switch_mode == 0) {
+        if (fx & fxm_delay) fsw_led_enable(0); else fsw_led_disable(0);
+        if (fx & fxm_chorus) fsw_led_enable(1); else fsw_led_disable(1);
+        if (fx & fxm_filter) fsw_led_enable(2); else fsw_led_disable(2);
+        if (fx & fxm_pitch) fsw_led_enable(3); else fsw_led_disable(3);
+    } else {
+        // Alternate switch mode:
+        if (fx & fxm_compressor) fsw_led_enable(0); else fsw_led_disable(0);
+        if (mute_toggle) fsw_led_enable(1); else fsw_led_disable(1);
+        // 3rd LED on if STORE held:
+        if (sw_curr & FSM_CONTROL_3) fsw_led_enable(2); else fsw_led_disable(2);
+        // 4th LED always off:
+        fsw_led_disable(3);
+    }
 }
 
 static void update_effects_MIDI_state(void) {
@@ -165,6 +213,7 @@ static void update_effects_MIDI_state(void) {
     gmaj_cc_set(gmaj_cc_filter, (fx & fxm_filter) ? 0x7F : 0x00);
     gmaj_cc_set(gmaj_cc_chorus, (fx & fxm_chorus) ? 0x7F : 0x00);
     gmaj_cc_set(gmaj_cc_compressor, (fx & fxm_compressor) ? 0x7F : 0x00);
+    //gmaj_cc_set(gmaj_cc_reverb, (fx & fxm_reverb) ? 0x7F : 0x00);
 }
 
 void set_rjm_channel(u8 idx) {
@@ -178,16 +227,36 @@ void set_rjm_channel(u8 idx) {
 
     rjm_channel = idx;
 
+    // Disable mute if enabled:
+    if (mute_toggle)
+    {
+        mute_toggle = 0x00;
+        gmaj_cc_set(gmaj_cc_mute, mute_toggle);
+    }
+
     /* Send the MIDI PROGRAM CHANGE message to the RJM to switch amp channel: */
     midi_send_cmd1(0xC, rjm_midi_channel, pgm);
 
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
 
-    /* Display the program value on the 4-digit display */
-    show_program(idx);
+    // Update 7-segment displays:
+    show_program();
 
     set_toggle_leds();
+}
+
+void set_gmaj_program(void) {
+    // Change g-major program:
+    midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
+
+    // TODO: load new channel states from flash!
+
+    // Update MIDI effects state:
+    update_effects_MIDI_state();
+
+    // Update 7-segment display:
+    show_program();
 }
 
 void control_toggleidx(u8 idx) {
@@ -198,6 +267,8 @@ void control_toggleidx(u8 idx) {
     else if (idx == 1) idx_mask = fxm_chorus;
     else if (idx == 2) idx_mask = fxm_filter;
     else if (idx == 3) idx_mask = fxm_pitch;
+    else if (idx == 4) idx_mask = fxm_compressor;
+    else if (idx == 5) idx_mask = fxm_reverb;
     else return;
 
     // Toggle on/off the selected continuous controller:
@@ -210,63 +281,33 @@ void control_toggleidx(u8 idx) {
     set_toggle_leds();
 }
 
-void control_on(u8 cc) {
-    gmaj_cc_set(cc, 0x7F);
-}
-
-void control_tgl(u8 cc, u8* old) {
+void gmaj_cc_toggle(u8 cc, u8* old) {
     if (*old != 0) *old = 0; else *old = 0x7F;
     gmaj_cc_set(cc, *old);
 }
 
-void control_off(u8 cc) {
-    gmaj_cc_set(cc, 0x00);
-}
-
-void enable_tuner_mute(void) {
-    char	a[LEDS_MAX_ALPHAS];
-    a[0] = 't';
-    a[1] = 'u';
-    a[2] = 'n';
-    a[3] = 'E';
-
-    leds_show_4alphas(a);
-    control_on(gmaj_cc_mute);
-    flag_tuner_mute = 1;
-}
-
-void reset_tuner_mute(u32 mask) {
+void reset_timer4(u32 mask) {
     control4_button_mask = mask;
-    timer_control4 = 75;
+    timer_control4 = 60;
     timer_control4_enable = 1;
-
-    if (flag_tuner_mute == 0) return;
-
-    flag_tuner_mute = 0;
-    control_off(gmaj_cc_mute);
-    show_program(rjm_channel);
 }
 
 /* ------------------------- Actual controller logic ------------------------- */
 
 /* set the controller to an initial state */
 void controller_init(void) {
-    /* controller numbers for Bn commands that will be toggled on|off with 0|127 data */
-    control_press_values[0] = gmaj_cc_delay;
-    control_press_values[1] = gmaj_cc_chorus;
-    control_press_values[2] = gmaj_cc_filter;
-    control_press_values[3] = gmaj_cc_pitch;
-
     /* default bitfield states for preset programs: */
     chan_effects[0] = fxm_compressor;
     chan_effects[1] = fxm_noisegate;
     chan_effects[2] = fxm_noisegate;
     chan_effects[3] = fxm_noisegate | fxm_delay;
 
+    switch_mode = 0;
+
     timer_control4 = 0;
     timer_control4_enable = 0;
-    control_tuner_toggle = 0;
-    flag_tuner_mute = 0;
+    tap_toggle = 0;
+    mute_toggle = 0;
     control4_button_mask = FSM_PRESET_1;
 
     set_rjm_channel(0);
@@ -276,6 +317,16 @@ void controller_init(void) {
 void controller_10msec_timer(void) {
     /* decrement the control4 timer if it's active */
     if (timer_control4 > 0) --timer_control4;
+
+    if (switch_mode != 0) {
+        // Flash 4th LED while in alternate mode.
+        if ((timer_alt++ & 15) <= 7) {
+            fsw_led_enable(3);
+        } else {
+            fsw_led_disable(3);
+        }
+        if (timer_alt >= 16) timer_alt = 0;
+    }
 }
 
 /* main control loop */
@@ -283,68 +334,127 @@ void controller_handle(void) {
     /* poll foot-switch depression status: */
     sw_curr = fsw_poll();
 
-    /* one of BOTTOM preset 1-4 pressed: */
-    if (button_pressed(FSM_PRESET_1)) {
-        if (rjm_channel != 0) {
-            set_rjm_channel(0);
-        } else {
-            // tap tempo function if preset is already active:
-            control_tgl(gmaj_cc_taptempo, &control_tuner_toggle);
+    if (switch_mode == 0) {
+        /* one of BOTTOM preset 1-4 pressed: */
+        if (button_pressed(FSM_PRESET_1)) {
+            if (rjm_channel != 0) {
+                set_rjm_channel(0);
+            } else {
+                // tap tempo function if preset is already active:
+                gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
+            }
+            reset_timer4(FSM_PRESET_1);
         }
-        reset_tuner_mute(FSM_PRESET_1);
-    }
-    if (button_pressed(FSM_PRESET_2)) {
-        if (rjm_channel != 1) {
-            set_rjm_channel(1);
-        } else {
-            // tap tempo function if preset is already active:
-            control_tgl(gmaj_cc_taptempo, &control_tuner_toggle);
+        if (button_pressed(FSM_PRESET_2)) {
+            if (rjm_channel != 1) {
+                set_rjm_channel(1);
+            } else {
+                // tap tempo function if preset is already active:
+                gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
+            }
+            reset_timer4(FSM_PRESET_2);
         }
-        reset_tuner_mute(FSM_PRESET_2);
-    }
-    if (button_pressed(FSM_PRESET_3)) {
-        if (rjm_channel != 2) {
-            set_rjm_channel(2);
-        } else {
-            // tap tempo function if preset is already active:
-            control_tgl(gmaj_cc_taptempo, &control_tuner_toggle);
+        if (button_pressed(FSM_PRESET_3)) {
+            if (rjm_channel != 2) {
+                set_rjm_channel(2);
+            } else {
+                // tap tempo function if preset is already active:
+                gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
+            }
+            reset_timer4(FSM_PRESET_3);
         }
-        reset_tuner_mute(FSM_PRESET_3);
-    }
-    if (button_pressed(FSM_PRESET_4)) {
-        if (rjm_channel != 3) {
-            set_rjm_channel(3);
-        } else {
-            // tap tempo function if preset is already active:
-            control_tgl(gmaj_cc_taptempo, &control_tuner_toggle);
+        if (button_pressed(FSM_PRESET_4)) {
+            if (rjm_channel != 3) {
+                set_rjm_channel(3);
+            } else {
+                // tap tempo function if preset is already active:
+                gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
+            }
+            reset_timer4(FSM_PRESET_4);
         }
-        reset_tuner_mute(FSM_PRESET_4);
-    }
 
-    /* check if the last tuner-mute button was held long enough */
-    if ((timer_control4_enable != 0) && button_held(control4_button_mask) && (timer_control4 == 0)) {
-        enable_tuner_mute();
-        timer_control4 = 0;
-        timer_control4_enable = 0;
-    }
-    /* break the tuner mute timer if the button was released early */
-    if ((timer_control4_enable != 0) && !button_held(control4_button_mask)) {
-        timer_control4 = 0;
-        timer_control4_enable = 0;
-    }
+        /* break the timer if the button was released early */
+        if ((timer_control4_enable != 0) && !button_held(control4_button_mask)) {
+            timer_control4 = 0;
+            timer_control4_enable = 0;
+        }
+        /* check if the last preset button was held long enough */
+        if ((timer_control4_enable != 0) && button_held(control4_button_mask) && (timer_control4 == 0)) {
+            // Enable alternate switch mode:
+            switch_mode = 1;
+            set_toggle_leds();
+            show_program();
 
-    /* one of TOP control 1-4 pressed: */
-    if (button_pressed(FSM_CONTROL_1)) {
-        control_toggleidx(0);
-    }
-    if (button_pressed(FSM_CONTROL_2)) {
-        control_toggleidx(1);
-    }
-    if (button_pressed(FSM_CONTROL_3)) {
-        control_toggleidx(2);
-    }
-    if (button_pressed(FSM_CONTROL_4)) {
-        control_toggleidx(3);
+            timer_control4 = 0;
+            timer_control4_enable = 0;
+        }
+
+        /* one of TOP control 1-4 pressed: */
+        if (button_pressed(FSM_CONTROL_1)) {
+            control_toggleidx(0);
+        }
+        if (button_pressed(FSM_CONTROL_2)) {
+            control_toggleidx(1);
+        }
+        if (button_pressed(FSM_CONTROL_3)) {
+            control_toggleidx(2);
+        }
+        if (button_pressed(FSM_CONTROL_4)) {
+            control_toggleidx(3);
+        }
+    } else {
+        // Alternate switch mode to easily repurpose foot switches:
+        //
+        //   [ COMP] [ MUTE] [STORE] [ EXIT]
+        //   [ -10 ] [  -1 ] [  +1 ] [ +10 ]
+        //
+        if (button_pressed(FSM_CONTROL_1)) {
+            control_toggleidx(4);
+        }
+        if (button_pressed(FSM_CONTROL_2)) {
+            gmaj_cc_toggle(gmaj_cc_mute, &mute_toggle);
+            set_toggle_leds();
+        }
+
+        if (button_pressed(FSM_CONTROL_3)) {
+            // TODO: store channel states to flash!
+            set_toggle_leds();
+        } else if (button_released(FSM_CONTROL_3)) {
+            set_toggle_leds();
+        }
+
+        if (button_pressed(FSM_CONTROL_4)) {
+            switch_mode = 0;
+            set_toggle_leds();
+            show_program();
+        }
+
+        // change g-major program:
+        if (button_pressed(FSM_PRESET_1)) {
+            if (gmaj_program < step_program_inc_dec) gmaj_program = 0;
+            else gmaj_program -= step_program_inc_dec;
+
+            set_gmaj_program();
+        }
+        if (button_pressed(FSM_PRESET_2)) {
+            if (gmaj_program < 1) gmaj_program = 0;
+            else gmaj_program--;
+
+            set_gmaj_program();
+        }
+
+        if (button_pressed(FSM_PRESET_3)) {
+            if (gmaj_program > 127 - 1) gmaj_program = 127;
+            else gmaj_program++;
+
+            set_gmaj_program();
+        }
+        if (button_pressed(FSM_PRESET_4)) {
+            if (gmaj_program > 127 - step_program_inc_dec) gmaj_program = 127;
+            else gmaj_program += step_program_inc_dec;
+
+            set_gmaj_program();
+        }
     }
 
     sw_last = sw_curr;

@@ -199,7 +199,7 @@ void paintFacePlate(HWND hwnd) {
 
     HFONT	fontLED;
     HPEN	penThick, penThin;
-    HBRUSH	brsWhite, brsRed, brsGreen, brsBlack;
+    HBRUSH	brsWhite, brsDarkRed, brsRed, brsGreen, brsBlack;
 
     int		hCount = 0, vCount = 0;
     double	inH, inV;
@@ -231,6 +231,7 @@ void paintFacePlate(HWND hwnd) {
     penThick = CreatePen(PS_SOLID, 2, RGB(0, 0, 0));
     penThin = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
     brsWhite = CreateSolidBrush(RGB(255, 255, 255));
+    brsDarkRed = CreateSolidBrush(RGB(120, 12, 3));
     brsRed = CreateSolidBrush(RGB(250, 25, 5));
     brsGreen = CreateSolidBrush(RGB(25, 250, 5));
     brsBlack = CreateSolidBrush(RGB(0, 0, 0));
@@ -296,7 +297,7 @@ void paintFacePlate(HWND hwnd) {
 
     /* draw 4x evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches */
     SelectObject(hDC, penThin);
-    SelectObject(hDC, brsRed);
+    SelectObject(hDC, brsDarkRed);
     for (hCount = 0; hCount < 4; ++hCount) {
         if (!led_active[hCount]) {
             dpi_CenterEllipse(hDC, 1.5 + (hCount * 2.0), 2.5, 0.2032, 0.2032);
@@ -315,23 +316,23 @@ void paintFacePlate(HWND hwnd) {
     SetBkColor(hDC, RGB(40, 10, 10));
     SetTextColor(hDC, RGB(255, 0, 0));
     SelectObject(hDC, fontLED);
-    dpi_TextOut(hDC, 1.02, 1.02, leds4_text, 4);
-    dpi_TextOut(hDC, 7.48, 1.02, leds1_text, 1);
+    dpi_TextOut(hDC, 6.78, 1.02, leds1_text, 1);
+    dpi_TextOut(hDC, 7.48, 1.02, leds4_text, 4);
     DeleteObject(fontLED);
 
-    /* draw PRACTICE/CONCERT slider-switch */
+    /* draw mode slider-switch */
     if (mode) {
         /* CONCERT mode */
-        SelectObject(hDC, brsBlack);
-        dpi_Rectangle(hDC, 5.35, 1.2, 5.5, 1.3);
+        SelectObject(hDC, brsDarkRed);
+        dpi_Rectangle(hDC, 4.35, 1.2, 4.5, 1.4);
         SelectObject(hDC, brsRed);
-        dpi_Rectangle(hDC, 5.5, 1.2, 5.65, 1.3);
+        dpi_Rectangle(hDC, 4.5, 1.2, 4.65, 1.4);
     } else {
         /* PRACTICE mode */
-        SelectObject(hDC, brsBlack);
-        dpi_Rectangle(hDC, 5.5, 1.2, 5.65, 1.3);
+        SelectObject(hDC, brsDarkRed);
+        dpi_Rectangle(hDC, 4.5, 1.2, 4.65, 1.4);
         SelectObject(hDC, brsRed);
-        dpi_Rectangle(hDC, 5.35, 1.2, 5.5, 1.3);
+        dpi_Rectangle(hDC, 4.35, 1.2, 4.5, 1.4);
     }
 
     // Copy memory buffer to screen:

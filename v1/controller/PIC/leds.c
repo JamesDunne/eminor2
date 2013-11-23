@@ -125,12 +125,7 @@ unsigned char AsciiTo7Seg(unsigned char chr) {
 }
 
 void	Scroll7SegDisp(void) {
-	unsigned char chars[5], i;
-
-	for (i=0;i<5;i++) chars[i] = ScrollingDisplayData[ScrollingDisplayIndex+i];
-	SetDispAscii(chars);
-	ScrollingDisplayIndex--;
-	if (ScrollingDisplayIndex == 0) ScrollingDisplayIndex = ScrollingDisplayLength;
+    // REMOVED by JSD.
 }
 
 rom unsigned char NumbersSegTable[10] = {

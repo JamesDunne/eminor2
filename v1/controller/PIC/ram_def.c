@@ -31,9 +31,9 @@ unsigned char SystickCntr5;
 
 unsigned char ComPointer;
 
-unsigned char ScrollingDisplayData[64];
-unsigned char ScrollingDisplayLength;
-unsigned char ScrollingDisplayIndex;
+//unsigned char ScrollingDisplayData[64];
+//unsigned char ScrollingDisplayLength;
+//unsigned char ScrollingDisplayIndex;
 
 TwoBytes ExpPedalAvg;
 
