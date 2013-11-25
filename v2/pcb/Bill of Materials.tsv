@@ -1,0 +1,40 @@
+Mounting	Item	Schematic part 	Eagle part	Eagle library	Notes	Supplier	Supplier URL	Supplier Part	Qty	Price	Total
+case	Hammond 1456WH3BKBU				Chassis (black) 20.078" x 6.305" 	Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=1456WH3BKBUvirtualkey54600000virtualkey546-1456WH3BKBU	546-1456WH3BKBU	1	$46.21	$46.21
+case	Rubber Feet for case								4	$0.00	$0.00
+case	8mm panel mount LEDs		(67-1168-ND)		nice bright green LED with plastic rim, panel mount	Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=SSI-LXH8080GDvirtualkey69600000virtualkey696-SSI-LXH8080GD	696-SSI-LXH8080GD	16	$0.97	$15.52
+case	foot switches				shaft diameter is 11.77mm; use a 12mm bit to drill a mounting hole	Other	http://www.bitcheslovemyswitches.com/#!/~/product/category=5027572&id=10220659	10220659	16	$1.99	$31.84
+case	toggle switch for power				SPST red illuminated	Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=CRE22F2BBRLEvirtualkey54010000virtualkey540-CRE22F2BBRLE	540-CRE22F2BBRLE	1	$1.22	$1.22
+case	+9V DC power jack				2.1mm barrel plug	Mouser	http://www.mouser.com/ProductDetail/Kobiconn/163-MJ21-EX/?qs=sGAEpiMZZMtnOp%252bbbqA00yiD66nQd2%252baY293N%252b5t6wI%3d	163-MJ21-EX	1	$2.77	$2.77
+case	+9V DC power supply (with >= 300mA, NEGATIVE shell, Positive Post)				2.1mm barrel plug				1		$0.00
+PCB	PIC18F4455_40	PIC18F4550_40	DIL40	microchip	4455 is compatible with 4550	Mouser	http://www.mouser.com/ProductDetail/Microchip-Technology/PIC18F4455-I-P/?qs=sGAEpiMZZMvqv2n3s2xjsbeKtMLkSi%252b7iwU8EyupEes%3d	579-PIC18F4455-I/P	1	$5.16	$5.16
+PCB	8MHz		QS	special	clock crystal	Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=FOXSLF%2f080-20virtualkey55910000virtualkey559-FOXS080-20-LF	559-FOXS080-20-LF	1	$0.49	$0.49
+PCB	7805 (MC78M05C)				5V regulator	Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=L7805CVvirtualkey51120000virtualkey511-L7805CV	511-L7805CV	1	$0.59	$0.59
+PCB	CD74HC4051E					Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=CD74HC4051Evirtualkey59500000virtualkey595-CD74HC4051E	595-CD74HC4051E	2	$0.62	$1.24
+PCB	TPIC6B596N		DIL20	tpic		Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=TPIC6B596Nvirtualkey59500000virtualkey595-TPIC6B596N	595-TPIC6B596N	2	$1.75	$3.50
+PCB	40 pin DIP socket for PIC					Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=5-1571552-2virtualkey57100000virtualkey571-5-1571552-2	571-5-1571552-2	1	$2.43	$2.43
+PCB	20 pin DIP sockets for shift registers					Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=1571552-6virtualkey57100000virtualkey571-1571552-6	571-1571552-6	2	$1.12	$2.24
+PCB	16 pin DIP sockets for multiplexers					Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=110-44-316-41-001000virtualkey57510000virtualkey575-11044316	575-11044316	2	$1.00	$2.00
+PCB	2x8 pin header for BTN and LED		MA08-2	con-lstb	2x 100mil pitch	Mouser	http://www.mouser.com/ProductDetail/TE-Connectivity-AMP/5-146256-4/?qs=sGAEpiMZZMs%252bGHln7q6pm7kMpRdL%2f3E74njei%252blGqSE%3d	571-5-146256-4	4	$0.59	$2.36
+PCB	40 position breakaway pin headers				break to size needed pin header	Digikey	http://www.digikey.com/product-detail/en/PREC040SAAN-RC/S1012EC-40-ND/2774814	S1012EC-40-ND	2	$0.51	$1.02
+PCB	1x2 pin header for PWR_CN/PWR_SW		02P	con-amp-quick	get a 40-pin header and break apart				2		$0.00
+PCB	1x5 pin header for ICD 		05PA	con-amp-quick	get a 40-pin header and break apart				1		$0.00
+PCB	2x8 ribbon cable				100mil pitch; 16-pin 2 row	Digikey	http://www.digikey.com/product-detail/en/H2MXS-1606M/H2MXS-1606M-ND/999459	H2MXS-1606M-ND	4	$1.00	$4.00
+PCB	1x2 ribbon cable				100mil pitch; 2-pin cable	Digikey	http://www.digikey.com/product-search/en?pv88=2&pv1119=6&FV=fff40018%2Cfff8009a&mnonly=0&newproducts=0&ColumnSort=0&page=1&quantity=0&ptm=0&fid=0&pageSize=25	1175-1261-ND	2	$1.40	$2.80
+PCB	MPSA06	2N2222A	TO18	transistor-npn		Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=P2N2222AGvirtualkey58410000virtualkey863-P2N2222AG	863-P2N2222AG	3	$0.38	$1.14
+PCB	1N4001		DO41-10	diode		Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=1N4001virtualkey51210000virtualkey512-1N4001	512-1N4001	1	$0.13	$0.13
+PCB	cap 15pF		C050-025X075	rcl	BC1005CT-ND	Digikey	http://www.digikey.com/product-detail/en/K220J15C0GF5TL2/BC1005CT-ND/286627	BC1005CT-ND	2	$0.34	$0.68
+PCB	cap .1uF		C050-025X075	rcl	.1uF ceramic 50V	Digikey	http://www.digikey.com/product-detail/en/C320C104M5R5TA/399-9776-ND/3726028	399-9776-ND	7	$0.29	$2.03
+PCB	cap 10uF		E2,5-6	rcl	16V-25V; electrolytic	Digikey	http://www.digikey.com/product-detail/en/EEA-GA1E100H/P15799CT-ND/3831166	P15799CT-ND	2	$0.35	$0.70
+PCB	res  220ohm		0207/10	rcl	1/4W 10%	Digikey	http://www.digikey.com/product-detail/en/CFR-25JB-52-220R/220QBK-ND/1295	220QBK-ND	18	$0.06	$1.06
+PCB	res   1K		0207/10	rcl	1/4W 10%	Digikey	http://www.digikey.com/product-detail/en/CFR-25JB-52-1K/1.0KQBK-ND/96	1.0KQBK-ND	1	$0.10	$0.10
+PCB	res 4.7K		0207/10	rcl	1/4W 10%	Digikey	http://www.digikey.com/product-detail/en/CFR-25JB-52-4K7/4.7KQBK-ND/1846	4.7KQBK-ND	1	$0.10	$0.10
+PCB	res  10K		0207/10	rcl	1/4W 10%	Digikey	http://www.digikey.com/product-detail/en/CFR-25JB-52-10K/10KQBK-ND/338	10KQBK-ND	4	$0.10	$0.40
+PCB	MIDI OUT female port				5-pin DIN	Other	http://www.sparkfun.com/products/9536	PRT-09536	1	$1.95	$1.95
+PCB	USB-B port					Other	http://www.sparkfun.com/products/139	PRT-00139	1	$1.25	$1.25
+PCB	test point PTR1PAD1-17		P1-17	testpad	don't need it	Mouser	http://www.mouser.com/Search/ProductDetail.aspx?R=5070virtualkey53400000virtualkey534-5070	534-5070	1	$0.19	$0.19
+PCB	mounting screws				Use motherboard Screws				4		$0.00
+PCB	washers								4		$0.00
+PCB	standoffs				Use motherboard Standoffs upside-down				4		$0.00
+PCB	PCB printing				Minimum 5 boards	Seeed	http://www.seeedstudio.com/		5		$25.90
+PCB	PCB shipping				Shipped from SZ, China	Seeed	http://www.seeedstudio.com/		1		$9.20
+											$170.222
