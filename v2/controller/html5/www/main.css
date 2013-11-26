@@ -35,13 +35,13 @@ h5 {
 nav > a {
     text-align: center;
     font-weight: bold;
-    background: #101020;
+    background: #121220;
     color: #fff;
     float: left;
     margin-top: 4px;
     margin-right: 1px;
-    padding: 12px 18px 12px 18px;
-    min-width: 6em;
+    padding: 10px 16px 10px 16px;
+    min-width: 5.5em;
 }
 
 dl {
