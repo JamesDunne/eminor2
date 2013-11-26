@@ -562,17 +562,36 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 // --------------- Flash memory interface:
 
+static u8 flash_memory[1024] = {
+#include "../common/flash_init.h"
+    0
+};
+
 // Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
 void flash_load(u16 addr, u16 count, u8 *data) {
-#if _DEBUG
-    long p;
-#endif
+    long file_size;
+    FILE *f;
 
-    FILE *f = fopen("flash.bin", "rb");
+    // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
+    assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
+
+    f = fopen("flash.bin", "rb");
+    if (f == NULL) {
+        // Initialize new file with initial flash memory data:
+        f = fopen("flash.bin", "a+b");
+        fwrite(flash_memory, 1, 1024, f);
+        fclose(f);
+        // Reopen file for reading:
+        f = fopen("flash.bin", "rb");
+    }
     if (f == NULL) {
         memset(data, 0, count);
         return;
     }
+
+    // Find file size:
+    fseek(f, 0, SEEK_END);
+    file_size = ftell(f);
 
     // Attempt to seek to the location in the file:
     if (fseek(f, addr, SEEK_SET) != 0) {
@@ -580,11 +599,12 @@ void flash_load(u16 addr, u16 count, u8 *data) {
         memset(data, 0, count);
         return;
     }
-
-#if _DEBUG
-    p = ftell(f);
-    assert(p == addr);
-#endif
+    if (addr > file_size) {
+        // Address beyond end of file:
+        fclose(f);
+        memset(data, 0, count);
+        return;
+    }
 
     size_t r = fread(data, 1, count, f);
     if (r < count) {
@@ -597,13 +617,10 @@ void flash_load(u16 addr, u16 count, u8 *data) {
 // Stores `count` bytes from `data` into flash memory at address `addr` (0-based where 0 is first available byte of available flash memory):
 void flash_store(u16 addr, u16 count, u8 *data) {
     long p;
-    u16 start_chunk, end_chunk;
     FILE *f;
 
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
-    start_chunk = (addr)& ~63;
-    end_chunk = ((addr + count - 1)) & ~63;
-    assert(start_chunk == end_chunk);
+    assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
 
     // Create file or append to it:
     f = fopen("flash.bin", "a+b");
@@ -624,12 +641,8 @@ void flash_store(u16 addr, u16 count, u8 *data) {
     }
 
     fseek(f, addr, SEEK_SET);
-    p = ftell(f);
-    assert(p == addr);
 
     size_t r = fwrite(data, 1, count, f);
-    if (r < count) {
-        assert(0);
-    }
+    assert(r == count);
     fclose(f);
 }

@@ -169,6 +169,7 @@
     <ClCompile Include="eminorv2.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\common\flash_init.h" />
     <ClInclude Include="..\common\hardware.h" />
     <ClInclude Include="..\common\types.h" />
   </ItemGroup>

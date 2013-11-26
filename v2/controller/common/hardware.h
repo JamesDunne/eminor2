@@ -6,6 +6,8 @@
     NOTE: it is expected that 'types.h' is #included before this file
 */
 
+// --------------- Momentary toggle foot-switches and LEDs:
+
 #define M_1 0x01U
 #define M_2 0x02U
 #define M_3 0x04U
@@ -14,6 +16,26 @@
 #define M_6 0x20U
 #define M_7 0x40U
 #define M_8 0x80U
+
+// FX button enable bitmasks:
+#define fxm_compressor  0x01
+#define fxm_filter      0x02
+#define fxm_pitch       0x04
+#define fxm_chorus      0x08
+#define fxm_delay       0x10
+#define fxm_reverb      0x20
+#define fxm_noisegate   0x40
+#define fxm_eq          0x80
+
+// FX button labels:
+#define fxb_compressor  0
+#define fxb_filter      1
+#define fxb_pitch       2
+#define fxb_chorus      3
+#define fxb_delay       4
+#define fxb_reverb      5
+#define fxb_noisegate   6
+#define fxb_eq          7
 
 // Foot switch and LED on/off states are represented with u16 bit-fields; the bottom row takes up LSBs (bits 0-7) and top row takes up MSBs (bits 8-15).
 
