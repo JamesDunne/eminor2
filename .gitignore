@@ -16,3 +16,4 @@ build/
 *.err
 *.map
 
+Thumbs.db
