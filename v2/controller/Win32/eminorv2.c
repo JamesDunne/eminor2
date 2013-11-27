@@ -276,12 +276,15 @@ BOOL dpi_TextOut(HDC hdc, double nXStart, double nYStart, LPCWSTR lpString, int 
 
 // paint the face plate window
 void paintFacePlate(HWND hwnd) {
-    HDC			hDC;
-    PAINTSTRUCT	ps;
+    HDC         hDC;
+    PAINTSTRUCT ps;
 
-    HFONT	fontLabel;
-    HPEN	penLCD, penThick, penThin, penGridThick, penGridThin;
-    HBRUSH	brsLCD, brsLCDBack, brsWhite, brsDarkSilver, brsDarkGreen, brsGreen, brsBlack;
+    HDC     lcdDC;
+    HBITMAP lcdBMP;
+
+    HFONT   fontLabel;
+    HPEN    penLCD, penThick, penThin, penGridThick, penGridThin;
+    HBRUSH  brsLCD, brsLCDBack, brsWhite, brsDarkSilver, brsDarkGreen, brsGreen, brsBlack;
 
     int		h = 0, v = 0;
     double	inH, inV;
@@ -382,8 +385,55 @@ void paintFacePlate(HWND hwnd) {
 
     const double lcdLeft = lcdCenterX - (70.4 * mmToIn * 0.5);
     const double lcdTop = lcdCenterY - (20.8 * mmToIn * 0.5);
+    const double lcdWidth = (70.4 * mmToIn);
+    const double lcdHeight = (20.8 * mmToIn);
 
     // Emulate an LCD with a 5x8 font:
+#if 1
+    RECT rect;
+    lcdDC = CreateCompatibleDC(orighdc);
+    // Create 
+    // an LCD pixel plus spacing is 12 screen pixels; lit pixel is 11 screen pixels
+    lcdBMP = CreateCompatibleBitmap(orighdc, (LCD_COLS * 6 - 1) * 12, (LCD_ROWS * 9 - 1) * 12);
+    SelectObject(lcdDC, lcdBMP);
+
+    SelectObject(lcdDC, penLCD);
+    SelectObject(lcdDC, brsLCDBack);
+    rect.left = 0;
+    rect.top = 0;
+    rect.right = (LCD_COLS * 6 - 1) * 12;
+    rect.bottom = (LCD_ROWS * 9 - 1) * 12;
+    FillRect(lcdDC, &rect, brsLCDBack);
+
+    SelectObject(lcdDC, penLCD);
+    SelectObject(lcdDC, brsLCD);
+    for (int r = 0; r < LCD_ROWS; ++r)
+    for (int c = 0; c < LCD_COLS; ++c)
+    for (int y = 0; y < 8; ++y) {
+        u8 ch = console_font_5x8[lcd_text[r][c] * 8 + y];
+        u8 b = (1 << 7);
+        for (int x = 0; x < 5; ++x, b >>= 1) {
+            if (ch & b) {
+                rect.left = (c * 12 * 6 + x * 12);
+                rect.top = (r * 12 * 9 + y * 12);
+                rect.right = (c * 12 * 6 + x * 12) + 12;    // use + 11 for authentic spacing
+                rect.bottom = (r * 12 * 9 + y * 12) + 12;   // use + 11 for authentic spacing
+                FillRect(lcdDC, &rect, brsLCD);
+            }
+        }
+    }
+
+    // Copy for debugging:
+    //BitBlt(Memhdc, 0, 0, (LCD_COLS * 6 - 1) * 12, (LCD_ROWS * 9 - 1) * 12, lcdDC, 0, 0, SRCCOPY);
+
+    // Stretch scaled LCD buffer down to main screen (HALFTONE provides an antialiasing effect):
+    SetStretchBltMode(hDC, HALFTONE);
+    StretchBlt(hDC, (int)(lcdLeft * dpi), (int)(lcdTop * dpi), (int)(lcdWidth * dpi), (int)(lcdHeight * dpi), lcdDC, 0, 0, (LCD_COLS * 6 - 1) * 12, (LCD_ROWS * 9 - 1) * 12, SRCCOPY);
+
+    DeleteObject(lcdBMP);
+    DeleteObject(lcdDC);
+
+#else
     SelectObject(hDC, penLCD);
     SelectObject(hDC, brsLCD);
     for (int r = 0; r < LCD_ROWS; ++r)
@@ -402,6 +452,7 @@ void paintFacePlate(HWND hwnd) {
             }
         }
     }
+#endif
 #endif
 
     // dpi label:
