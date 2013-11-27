@@ -33,10 +33,10 @@ const double hLeft = 1.0;
 const double hSpacing = 2.57;
 
 // From bottom going up:
-const double vStart = 5;
-const double vSpacing = 2.5;
+const double vStart = 5.5;
+const double vSpacing = 2.25;
 
-const double vLEDOffset = -0.5;
+const double vLEDOffset = -0.65;
 
 const double inLEDOuterDiam = (8 /*mm*/ * mmToIn);
 const double inFswOuterDiam = (12.2 /*mm*/ * mmToIn);
@@ -357,15 +357,31 @@ void paintFacePlate(HWND hwnd) {
 #endif
 
 #ifdef FEAT_LCD
+    // LCD dimensions taken from http://www.newhavendisplay.com/nhd0420d3znswbbwv3-p-5745.html
     const double lcdCenterX = (inWidth * 0.5);
+    const double lcdCenterY = 1.25;
 
-    // Draw a solid blue background:
+    // Draw screw mounting holes:
+    SelectObject(hDC, penThin);
+    SelectObject(hDC, NULL_BRUSH);
+    const double screwRadius = 1.25 * mmToIn;
+    dpi_CenterEllipse(hDC, lcdCenterX - (93 * mmToIn * 0.5), lcdCenterY - (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
+    dpi_CenterEllipse(hDC, lcdCenterX + (93 * mmToIn * 0.5), lcdCenterY - (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
+    dpi_CenterEllipse(hDC, lcdCenterX - (93 * mmToIn * 0.5), lcdCenterY + (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
+    dpi_CenterEllipse(hDC, lcdCenterX + (93 * mmToIn * 0.5), lcdCenterY + (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
+
+    // Draw a solid black background for beveled area:
+    SelectObject(hDC, penLCD);
+    SelectObject(hDC, brsBlack);
+    dpi_FillRect(hDC, lcdCenterX - ((87.3 * mmToIn) * 0.5), lcdCenterY - (41.7 * mmToIn * 0.5), lcdCenterX + ((87.3 * mmToIn) * 0.5), lcdCenterY + (41.7 * mmToIn * 0.5));
+
+    // Draw a solid blue background for LCD area:
     SelectObject(hDC, penLCD);
     SelectObject(hDC, brsLCDBack);
-    dpi_FillRect(hDC, lcdCenterX - ((76 * mmToIn) * 0.5), 0.2, lcdCenterX + ((76 * mmToIn) * 0.5), 0.2 + (25.2 * mmToIn));
+    dpi_FillRect(hDC, lcdCenterX - ((76 * mmToIn) * 0.5), lcdCenterY - (25.2 * mmToIn * 0.5), lcdCenterX + ((76 * mmToIn) * 0.5), lcdCenterY + (25.2 * mmToIn * 0.5));
 
-    const double lcdLeft = lcdCenterX - ((70.4 * mmToIn) * 0.5);
-    const double lcdTop = 0.2 + (2.2 * mmToIn);
+    const double lcdLeft = lcdCenterX - (70.4 * mmToIn * 0.5);
+    const double lcdTop = lcdCenterY - (20.8 * mmToIn * 0.5);
 
     // Emulate an LCD with a 5x8 font:
     SelectObject(hDC, penLCD);
@@ -432,11 +448,13 @@ void paintFacePlate(HWND hwnd) {
             else
                 SetTextColor(hDC, RGB(224, 224, 224));
 
+            SetTextAlign(hDC, TA_CENTER | VTA_TOP);
             dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.25 - (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
 
             // Label w/ the keyboard key:
             SetTextColor(hDC, RGB(96, 16, 16));
-            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.50 - (v * vSpacing), keylabels[v][h], 1);
+            SetTextAlign(hDC, TA_CENTER | VTA_BASELINE);
+            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.125 - (v * vSpacing), keylabels[v][h], 1);
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
