@@ -26,18 +26,19 @@ const double inWidth = 20.078;
 const double inHeight = 6.305;
 
 // Position and spacing of footswitches (from centers):
-const double vStart = 2.0;
 const double hLeft = 1.0;
 const double hSpacing = 2.57;
-const double vSpacing = 3.15;
 
-// was 0.2032
-const double inLEDOuterDiam = (8 /*mm*/ * 0.0254);
+const double vStart = 2;
+const double vSpacing = 3;
 
-// was 0.34026
-const double inFswOuterDiam = (12.2 /*mm*/ * 0.0254);
-// was 0.30
-const double inFswInnerDiam = (10 /*mm*/ * 0.0254);
+const double vLEDOffset = -0.5;
+
+#define mmToIn 0.0393701
+
+const double inLEDOuterDiam = (8 /*mm*/ * mmToIn);
+const double inFswOuterDiam = (12.2 /*mm*/ * mmToIn);
+const double inFswInnerDiam = (10 /*mm*/ * mmToIn);
 
 // button labels:
 static LPCWSTR labels[2][8] = {
@@ -220,8 +221,8 @@ BOOL dpi_Rectangle(HDC hdc, double left, double top, double right, double bottom
     return Rectangle(hdc,
         (int)floor(left * dpi),
         (int)floor(top * dpi),
-        (int)floor(right * dpi) + 1,
-        (int)floor(bottom * dpi) + 1
+        (int)ceil(right * dpi),
+        (int)ceil(bottom * dpi)
         );
 }
 
@@ -229,8 +230,8 @@ BOOL dpi_CenterEllipse(HDC hdc, double cX, double cY, double rW, double rH) {
     return Ellipse(hdc,
         (int)floor((cX - rW) * dpi),
         (int)floor((cY - rH) * dpi),
-        (int)floor((cX + rW) * dpi) + 1,
-        (int)floor((cY + rH) * dpi) + 1
+        (int)ceil((cX + rW) * dpi),
+        (int)ceil((cY + rH) * dpi)
         );
 }
 
@@ -244,7 +245,7 @@ void paintFacePlate(HWND hwnd) {
     PAINTSTRUCT	ps;
 
     HFONT	fontLCD, fontLabel;
-    HPEN	penThick, penThin, penGridThick, penGridThin;
+    HPEN	penLCD, penThick, penThin, penGridThick, penGridThin;
     HBRUSH	brsWhite, brsDarkSilver, brsDarkGreen, brsGreen, brsBlack;
 
     int		h = 0, v = 0;
@@ -269,6 +270,8 @@ void paintFacePlate(HWND hwnd) {
     penThick = CreatePen(PS_SOLID, 2, RGB(128, 128, 128));
     penThin = CreatePen(PS_SOLID, 1, RGB(128, 128, 128));
 
+    penLCD = CreatePen(PS_SOLID, 0, RGB(255, 255, 255));
+
     brsWhite = CreateSolidBrush(RGB(192, 192, 192));
     brsDarkSilver = CreateSolidBrush(RGB(96, 96, 96));
     brsDarkGreen = CreateSolidBrush(RGB(8, 30, 3));
@@ -281,8 +284,8 @@ void paintFacePlate(HWND hwnd) {
     SetBkMode(hDC, TRANSPARENT);
 
     fontLabel = CreateFont(
-        (int)((12.0) * 0.0254 * dpi),
-        (int)((4.0) * 0.0254 * dpi),
+        (int)((10.0) * mmToIn * dpi),
+        (int)((4.0) * mmToIn * dpi),
         0,
         0,
         FW_SEMIBOLD, FALSE, FALSE, FALSE,
@@ -296,8 +299,8 @@ void paintFacePlate(HWND hwnd) {
 
     // A 5x8 pixel font representing the LCD display's characteristics:
     fontLCD = CreateFont(
-        (int)((4.75) * 1.4 * 0.0254 * dpi),
-        (int)((2.95) * 1.15 * 0.0254 * dpi),
+        (int)((4.75) * 1.4 * mmToIn * dpi),
+        (int)((2.95) * 1.15 * mmToIn * dpi),
         0,
         0,
         FW_NORMAL, FALSE, FALSE, FALSE,
@@ -333,36 +336,25 @@ void paintFacePlate(HWND hwnd) {
 #endif
 
 #ifdef FEAT_LCD
-#if 0
-    // Draw LCD with GDI fonts (GDI has terrible scaling behavior):
-    SelectObject(hDC, fontLCD);
-    SetTextColor(hDC, RGB(255, 255, 255));
-    for (int r = 0; r < LCD_ROWS; ++r)
-        dpi_TextOut(hDC, 10 - (1.78 * 0.5), 0.25 + (r * (4.75 + 0.6) * 0.0254), lcd_text[r], min(20, (int)wcslen(lcd_text[r])));
-    SelectObject(hDC, fontLabel);
-    DeleteObject(fontLCD);
-#else
-    double fLeft = 10 - (1.78 * 0.5), fTop = 0.25;
     // Emulate an LCD with a 5x8 font:
-    SelectObject(hDC, penThin);
+    SelectObject(hDC, penLCD);
     SelectObject(hDC, brsWhite);
-    for (int r = 0; r < LCD_ROWS; ++r, fTop += (4.75 + 0.6) * 0.0254)
-    for (int c = 0; c < LCD_COLS; ++c, fLeft += (2.95 + 0.6) * 0.0254)
+    for (int r = 0; r < LCD_ROWS; ++r)
+    for (int c = 0; c < LCD_COLS; ++c)
     for (int y = 0; y < 8; ++y) {
         u8 ch = console_font_5x8[lcd_text[r][c] * 8 + y];
         u8 b = (1 << 7);
         for (int x = 0; x < 5; ++x, b >>= 1) {
             if (ch & b) {
                 dpi_Rectangle(hDC,
-                    (10 - (1.78 * 0.5)) + (((c * 0.6) + ((c * 5 + x) * 0.60)) * 0.0254),
-                                   0.25 + (((r * 0.6) + ((r * 5 + y) * 0.60)) * 0.0254),
-                    (10 - (1.78 * 0.5)) + (((c * 0.6) + ((c * 5 + x) * 0.60) + 0.5) * 0.0254),
-                                   0.25 + (((r * 0.6) + ((r * 5 + y) * 0.60) + 0.5) * 0.0254)
+                    (10 - (2.77 * 0.5)) + (((c * 0.6) + ((c * 5 + x) * 0.60)) * mmToIn),
+                                   0.20 + (((r * 0.6) + ((r * 5 + y) * 0.60)) * mmToIn),
+                    (10 - (2.77 * 0.5)) + (((c * 0.6) + ((c * 5 + x) * 0.60) + 0.5) * mmToIn),
+                                   0.20 + (((r * 0.6) + ((r * 5 + y) * 0.60) + 0.5) * mmToIn)
                 );
             }
         }
     }
-#endif
 #endif
 
     // dpi label:
@@ -392,12 +384,12 @@ void paintFacePlate(HWND hwnd) {
         u8 b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             SelectObject(hDC, penThick);
-            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam, inFswOuterDiam);
+            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam * 0.5, inFswOuterDiam * 0.5);
             SelectObject(hDC, penThin);
-            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswInnerDiam, inFswInnerDiam);
+            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswInnerDiam * 0.5, inFswInnerDiam * 0.5);
             if (fsw.byte & b) {
                 SelectObject(hDC, brsDarkSilver);
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam, inFswOuterDiam);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam * 0.5, inFswOuterDiam * 0.5);
                 SelectObject(hDC, brsWhite);
             }
 
@@ -409,11 +401,11 @@ void paintFacePlate(HWND hwnd) {
             else
                 SetTextColor(hDC, RGB(224, 224, 224));
 
-            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.5 + (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
+            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.25 + (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
 
             // Label w/ the keyboard key:
             SetTextColor(hDC, RGB(96, 16, 16));
-            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.75 + (v * vSpacing), keylabels[v][h], 1);
+            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.5 + (v * vSpacing), keylabels[v][h], 1);
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
@@ -424,7 +416,7 @@ void paintFacePlate(HWND hwnd) {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if ((led.byte & b) == 0) {
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), inLEDOuterDiam, inLEDOuterDiam);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset + (v * vSpacing), inLEDOuterDiam * 0.5, inLEDOuterDiam * 0.5);
             }
         }
 
@@ -433,7 +425,7 @@ void paintFacePlate(HWND hwnd) {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if (led.byte & b) {
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - 0.7 + (v * vSpacing), inLEDOuterDiam, inLEDOuterDiam);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset + (v * vSpacing), inLEDOuterDiam * 0.5, inLEDOuterDiam * 0.5);
             }
         }
     }
@@ -452,6 +444,8 @@ void paintFacePlate(HWND hwnd) {
     DeleteObject(penThin);
     DeleteObject(penGridThick);
     DeleteObject(penGridThin);
+
+    DeleteObject(penLCD);
 
     DeleteObject(fontLabel);
 
