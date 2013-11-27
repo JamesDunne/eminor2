@@ -3,9 +3,11 @@
 #include <winuser.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include <assert.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
+#include "font-5x8.h"
 
 typedef unsigned long u32;
 
@@ -30,23 +32,28 @@ const double hSpacing = 2.57;
 const double vSpacing = 3.15;
 
 // was 0.2032
-const double inLEDOuterDiam = (8 /*mm*/ * 0.01 * 2.54);
+const double inLEDOuterDiam = (8 /*mm*/ * 0.0254);
 
 // was 0.34026
-const double inFswOuterDiam = (12.2 /*mm*/ * 0.01 * 2.54);
+const double inFswOuterDiam = (12.2 /*mm*/ * 0.0254);
 // was 0.30
-const double inFswInnerDiam = (10 /*mm*/ * 0.01 * 2.54);
+const double inFswInnerDiam = (10 /*mm*/ * 0.0254);
 
 // button labels:
-static LPCTSTR labels[2][8] = {
+static LPCWSTR labels[2][8] = {
     { L"COMP", L"FILTER", L"PITCH", L"CHORUS", L"DELAY", L"REVERB", L"MUTE", L"PREV" },
     { L"CH1", L"CH1S", L"CH2", L"CH2S", L"CH3", L"CH3S", L"TAP/STORE", L"NEXT" }
 };
 
-static LPCTSTR keylabels[2][8] = {
+static LPCWSTR keylabels[2][8] = {
     { L"Q", L"W", L"E", L"R", L"T", L"Y", L"U", L"I" },
     { L"A", L"S", L"D", L"F", L"G", L"H", L"J", L"K" }
 };
+
+#ifdef FEAT_LCD
+// currently displayed LCD text in row X col format:
+WCHAR lcd_text[LCD_ROWS][LCD_COLS];
+#endif
 
 // foot-switch state
 static io16 fsw_state;
@@ -127,7 +134,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         return 0;
     }
 
-    #define TARGET_RESOLUTION 1         // 1-millisecond target resolution
+#define TARGET_RESOLUTION 1         // 1-millisecond target resolution
 
     TIMECAPS tc;
     UINT     wTimerRes;
@@ -211,19 +218,19 @@ BOOL dpi_LineTo(HDC hdc, double X, double Y) {
 
 BOOL dpi_Rectangle(HDC hdc, double left, double top, double right, double bottom) {
     return Rectangle(hdc,
-        (int)(left * dpi),
-        (int)(top * dpi),
-        (int)(right * dpi),
-        (int)(bottom * dpi)
+        (int)floor(left * dpi),
+        (int)floor(top * dpi),
+        (int)floor(right * dpi) + 1,
+        (int)floor(bottom * dpi) + 1
         );
 }
 
 BOOL dpi_CenterEllipse(HDC hdc, double cX, double cY, double rW, double rH) {
     return Ellipse(hdc,
-        (int)((cX - rW) * dpi),
-        (int)((cY - rH) * dpi),
-        (int)((cX + rW) * dpi),
-        (int)((cY + rH) * dpi)
+        (int)floor((cX - rW) * dpi),
+        (int)floor((cY - rH) * dpi),
+        (int)floor((cX + rW) * dpi) + 1,
+        (int)floor((cY + rH) * dpi) + 1
         );
 }
 
@@ -236,6 +243,7 @@ void paintFacePlate(HWND hwnd) {
     HDC			hDC;
     PAINTSTRUCT	ps;
 
+    HFONT	fontLCD, fontLabel;
     HPEN	penThick, penThin, penGridThick, penGridThin;
     HBRUSH	brsWhite, brsDarkSilver, brsDarkGreen, brsGreen, brsBlack;
 
@@ -246,6 +254,7 @@ void paintFacePlate(HWND hwnd) {
     GetClientRect(hwnd, &client_rect);
     int win_width = client_rect.right - client_rect.left;
     int win_height = client_rect.bottom + client_rect.left;
+
     HDC Memhdc;
     HDC orighdc;
     HBITMAP Membitmap;
@@ -271,6 +280,36 @@ void paintFacePlate(HWND hwnd) {
 
     SetBkMode(hDC, TRANSPARENT);
 
+    fontLabel = CreateFont(
+        (int)((12.0) * 0.0254 * dpi),
+        (int)((4.0) * 0.0254 * dpi),
+        0,
+        0,
+        FW_SEMIBOLD, FALSE, FALSE, FALSE,
+        ANSI_CHARSET,
+        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY,
+        DEFAULT_PITCH | FF_ROMAN,
+        // TODO: pick a best font and fallback to worse ones depending on availability.
+        L"Tahoma"
+    );
+
+    // A 5x8 pixel font representing the LCD display's characteristics:
+    fontLCD = CreateFont(
+        (int)((4.75) * 1.4 * 0.0254 * dpi),
+        (int)((2.95) * 1.15 * 0.0254 * dpi),
+        0,
+        0,
+        FW_NORMAL, FALSE, FALSE, FALSE,
+        ANSI_CHARSET,
+        OUT_OUTLINE_PRECIS,
+        CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY,
+        FIXED_PITCH | FF_MODERN,
+        // TODO: pick a best font and fallback to worse ones depending on availability.
+        L"Consolas"
+    );
+
 #if 1
     // draw grid:
     for (inH = 0; inH <= inWidth; inH += 0.1, h = (h + 1) % 10) {
@@ -293,11 +332,45 @@ void paintFacePlate(HWND hwnd) {
     }
 #endif
 
+#ifdef FEAT_LCD
+#if 0
+    // Draw LCD with GDI fonts (GDI has terrible scaling behavior):
+    SelectObject(hDC, fontLCD);
+    SetTextColor(hDC, RGB(255, 255, 255));
+    for (int r = 0; r < LCD_ROWS; ++r)
+        dpi_TextOut(hDC, 10 - (1.78 * 0.5), 0.25 + (r * (4.75 + 0.6) * 0.0254), lcd_text[r], min(20, (int)wcslen(lcd_text[r])));
+    SelectObject(hDC, fontLabel);
+    DeleteObject(fontLCD);
+#else
+    double fLeft = 10 - (1.78 * 0.5), fTop = 0.25;
+    // Emulate an LCD with a 5x8 font:
+    SelectObject(hDC, penThin);
+    SelectObject(hDC, brsWhite);
+    for (int r = 0; r < LCD_ROWS; ++r, fTop += (4.75 + 0.6) * 0.0254)
+    for (int c = 0; c < LCD_COLS; ++c, fLeft += (2.95 + 0.6) * 0.0254)
+    for (int y = 0; y < 8; ++y) {
+        u8 ch = console_font_5x8[lcd_text[r][c] * 8 + y];
+        u8 b = (1 << 7);
+        for (int x = 0; x < 5; ++x, b >>= 1) {
+            if (ch & b) {
+                dpi_Rectangle(hDC,
+                    (10 - (1.78 * 0.5)) + (((c * 0.6) + ((c * 5 + x) * 0.60)) * 0.0254),
+                                   0.25 + (((r * 0.6) + ((r * 5 + y) * 0.60)) * 0.0254),
+                    (10 - (1.78 * 0.5)) + (((c * 0.6) + ((c * 5 + x) * 0.60) + 0.5) * 0.0254),
+                                   0.25 + (((r * 0.6) + ((r * 5 + y) * 0.60) + 0.5) * 0.0254)
+                );
+            }
+        }
+    }
+#endif
+#endif
+
     // dpi label:
     SetTextAlign(hDC, TA_LEFT | VTA_TOP);
     wchar_t tmp[16];
     swprintf(tmp, 16, L"dpi: %3.2f", dpi);
     SetTextColor(hDC, RGB(100, 100, 100));
+    SelectObject(hDC, fontLabel);
     dpi_TextOut(hDC, 0.5, 0.5, tmp, (int)wcslen(tmp));
 
     SetTextAlign(hDC, TA_CENTER | VTA_TOP);
@@ -380,6 +453,8 @@ void paintFacePlate(HWND hwnd) {
     DeleteObject(penGridThick);
     DeleteObject(penGridThin);
 
+    DeleteObject(fontLabel);
+
     DeleteObject(Membitmap);
     DeleteDC(Memhdc);
     DeleteDC(orighdc);
@@ -409,34 +484,34 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             paintFacePlate(hwnd);
             break;
         case WM_LBUTTONDOWN: {
-            int h, b;
+                                 int h, b;
 
-            double x = (double)GET_X_LPARAM(lParam) / dpi,
-                y = (double)GET_Y_LPARAM(lParam) / dpi;
-            const double r_sqr = inFswOuterDiam * inFswOuterDiam;
+                                 double x = (double)GET_X_LPARAM(lParam) / dpi,
+                                     y = (double)GET_Y_LPARAM(lParam) / dpi;
+                                 const double r_sqr = inFswOuterDiam * inFswOuterDiam;
 
-            // Find out which foot-switch the mouse cursor is inside:
-            b = 1;
-            for (h = 0; h < 8; ++h, b <<= 1) {
-                double bx = (hLeft + (h * hSpacing));
-                double by = (vStart + (0 * vSpacing));
-                double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
-                if (dist_sqr <= r_sqr) {
-                    fsw_state.top.byte |= b;
-                }
-            }
-            b = 1;
-            for (h = 0; h < 8; ++h, b <<= 1) {
-                double bx = (hLeft + (h * hSpacing));
-                double by = (vStart + (1 * vSpacing));
-                double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
-                if (dist_sqr <= r_sqr) {
-                    fsw_state.bot.byte |= b;
-                }
-            }
+                                 // Find out which foot-switch the mouse cursor is inside:
+                                 b = 1;
+                                 for (h = 0; h < 8; ++h, b <<= 1) {
+                                     double bx = (hLeft + (h * hSpacing));
+                                     double by = (vStart + (0 * vSpacing));
+                                     double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
+                                     if (dist_sqr <= r_sqr) {
+                                         fsw_state.top.byte |= b;
+                                     }
+                                 }
+                                 b = 1;
+                                 for (h = 0; h < 8; ++h, b <<= 1) {
+                                     double bx = (hLeft + (h * hSpacing));
+                                     double by = (vStart + (1 * vSpacing));
+                                     double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
+                                     if (dist_sqr <= r_sqr) {
+                                         fsw_state.bot.byte |= b;
+                                     }
+                                 }
 
-            InvalidateRect(hwnd, NULL, TRUE);
-            break;
+                                 InvalidateRect(hwnd, NULL, TRUE);
+                                 break;
         }
         case WM_LBUTTONUP:
             fsw_state.bot.byte = 0;
@@ -486,7 +561,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
                     case '0': {
                                   dpi = defaultDpi;
                                   GetWindowRect(hwnd, &rect);
-                                  SetWindowPos(hwnd, 0, rect.left, rect.top, (int)(inWidth * dpi) + 16, (int)(inHeight * dpi) + 37, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+                                  SetWindowPos(hwnd, 0, rect.left, rect.top, (int)(inWidth * dpi) + 6, (int)(inHeight * dpi) + 28, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
                                   break;
                     }
                 }
@@ -522,6 +597,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
     return 0;
 }
 
+#ifdef FEAT_LCD
+// Update LCD display text:
+void lcd_update(char text[LCD_ROWS][LCD_COLS]) {
+    // Convert ASCII to UTF-16:
+    for (int r = 0; r < LCD_ROWS; ++r)
+    for (int c = 0; c < LCD_COLS; ++c)
+        lcd_text[r][c] = text[r][c];
+    // Request a UI repaint:
+    InvalidateRect(hwndMain, NULL, TRUE);
+}
+#endif
+
 // --------------- Momentary toggle foot-switches and LEDs interface:
 
 // Poll 16 foot-switch toggles simultaneously
@@ -531,9 +618,11 @@ u16 fsw_poll(void) {
 
 // Explicitly set the state of all 16 LEDs
 void led_set(u16 leds) {
-    led_state.bot.byte = leds & 0xFF;
-    led_state.top.byte = (leds >> 8) & 0xFF;
-    InvalidateRect(hwndMain, NULL, TRUE);
+    if ((led_state.bot.byte != (leds & 0xFF)) || (led_state.top.byte != ((leds >> 8) & 0xFF))) {
+        led_state.bot.byte = leds & 0xFF;
+        led_state.top.byte = (leds >> 8) & 0xFF;
+        InvalidateRect(hwndMain, NULL, TRUE);
+    }
 }
 
 // --------------- MIDI I/O interface:

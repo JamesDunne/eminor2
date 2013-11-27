@@ -298,6 +298,16 @@ void controller_init(void) {
     // Load new channel effect states:
     load_program_state();
     set_rjm_channel(0);
+
+#ifdef FEAT_LCD
+    const char test[LCD_ROWS][LCD_COLS] = {
+        "01234567890123456789",
+        "01234567890123456789",
+        "01234567890123456789",
+        "01234567890123456789"
+    };
+    lcd_update(test);
+#endif
 }
 
 // called every 10ms

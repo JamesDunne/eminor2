@@ -167,6 +167,9 @@
   <ItemGroup>
     <ClCompile Include="..\common\controller-simple.c" />
     <ClCompile Include="eminorv2.c" />
+    <ClInclude Include="font-5x8.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\flash_init.h" />

@@ -6,6 +6,11 @@
     NOTE: it is expected that 'types.h' is #included before this file
 */
 
+// Features enabled/disable:
+
+// Enable LCD display:
+#define FEAT_LCD
+
 // --------------- Momentary toggle foot-switches and LEDs:
 
 #define M_1 0x01U
@@ -45,12 +50,14 @@ extern u16 fsw_poll(void);
 // Explicitly set the state of all 16 LEDs:
 extern void led_set(u16 leds);
 
+#ifdef FEAT_LCD
 // Example LCD display: http://www.newhavendisplay.com/nhd0420d3znswbbwv3-p-5745.html 4x20 characters
 #define LCD_COLS    20
 #define LCD_ROWS    4
 
 // Update an LCD display:
 extern void lcd_update(char text[LCD_ROWS][LCD_COLS]);
+#endif
 
 // --------------- MIDI I/O functions:
 

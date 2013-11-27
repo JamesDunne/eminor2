@@ -21,6 +21,9 @@
     <ClCompile Include="eminorv2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="font-5x8.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\hardware.h">
