@@ -68,10 +68,13 @@ extern void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);
 
 // --------------- Flash memory functions:
 
-// Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
+// Flash addresses are 0-based where 0 is the first available byte of
+// non-program flash memory.
+
+// Load `count` bytes from flash memory at address `addr` into `data`:
 extern void flash_load(u16 addr, u16 count, u8 *data);
 
-// Stores `count` bytes from `data` into flash memory at address `addr` (0-based where 0 is first available byte of available flash memory):
+// Stores `count` bytes from `data` into flash memory at address `addr`:
 extern void flash_store(u16 addr, u16 count, u8 *data);
 
 // --------------- Controller logic interface functions:

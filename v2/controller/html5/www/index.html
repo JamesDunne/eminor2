@@ -21,7 +21,7 @@
     <h3>Hardware/firmware designed by <a href="https://github.com/jdunne525" target="_blank">Joseph R. Dunne</a></h3>
     <div class="content">
         <h5 style="margin-top: 10px"><a href="https://github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">Our GitHub Repository</a></h5>
-        <h5 style="">Last updated: 2013-11-21</h5>
+        <h5 style="">Last updated: 2013-11-27</h5>
     </div>
     <div style="margin-top: 16px">
         <div style="text-align: center; display: inline-block; vertical-align: top;">
@@ -45,7 +45,7 @@
         <p>The device is a 20" by 6" sloped console chassis sporting 2 rows of 8 evenly horizontally-spaced rugged foot-switches, each paired with an indicator LED.</p>
         <p>At the back of the device is a MIDI OUT port, a USB-B port, a power switch, and a 9V DV jack.</p>
 
-        <p><strong>NOTE: </strong>At this time, the prototype device is not yet assembled so there are no pictures of it to show. I still have the bill of materials to finalize and components to order before construction can begin. See below for more information.</p>
+        <p><strong>NOTE: </strong>At this time, the prototype device is not yet assembled so there are no pictures of it to show. See the <a href="#assembly">assembly section</a> for more information.</p>
     </div>
     <!-- Live demo here: -->
     <![if (!IE)|(gte IE 9)]>
@@ -121,22 +121,24 @@
         <p>
             Each channel foot-switch has an associated effects on/off state for the current g-major program. This state is stored in persistent memory (i.e. program flash on the PIC18, localStorage in HTML5, and a flash.bin file
             in Windows). Experiment with the channels above and watch how your effects state is preserved with the channel. This state is temporarily stored in RAM until the program is changed or the state is persisted by request.
-            To persist the state, hold down the TAP/STORE foot-switch for more than 1 second and it will be written to persistent storage. This allows for quick reprogramming on-stage, if necessary.
+            To persist the state, hold down the TAP/STORE foot-switch for more than 600ms and it will be written to persistent storage. This allows for quick reprogramming on-stage, if necessary.
         </p>
 
         <p>
-            An idea I'm toying with is to allow temporary effect enable/disable by holding down an effect control foot-switch for longer than 500ms. Once released, the effect would disable immediately instead of waiting for
-            another tap. This would help for quick passages that need effects only for a short time.
+            Holding down an effect control foot-switch for longer than 300ms will temporarily toggle the effect. Once released, the effect would toggle back to its original state instead of waiting for
+            another tap. This would help for quick passages that need effects only for a short time, e.g. quick melodic runs with a pitch shifting effect to create harmonies.
         </p>
 
         <h2 id="firmware">Firmware</h2>
         <p>
-            The primary controller logic for the project is written in entirely portable ISO C99 (C) code (<a href="https://github.com/JamesDunne/eminor2/blob/master/v2/controller/common/controller-simple.c" target="_blank">common/controller-simple.c</a>). The controller logic expects a hardware interface layer consisting of several functions to be implemented in the host.
-            Here's the C header file (abridged) for the hardware interface (<a href="https://github.com/JamesDunne/eminor2/blob/master/v2/controller/common/hardware.h" target="_blank">common/hardware.h</a>) that the host must implement:
+            The primary controller logic for the project is written in entirely portable ISO C99 (C) code (<a href="https://github.com/JamesDunne/eminor2/blob/master/v2/controller/common/controller-simple.c" target="_blank">common/controller-simple.c</a>).
+            The controller logic expects a hardware interface layer consisting of several functions to be implemented in the host. Here's the C header file (abridged) for the hardware interface
+            (<a href="https://github.com/JamesDunne/eminor2/blob/master/v2/controller/common/hardware.h" target="_blank">common/hardware.h</a>) that the host must implement:
         </p>
         <p>
             <pre class="code-block">
-<code data-language="c">// Foot switch and LED on/off states are represented with u16 bit-fields; the bottom row takes up LSBs (bits 0-7) and top row takes up MSBs (bits 8-15).
+<code data-language="c">// Foot switch and LED on/off states are represented with u16 bit-fields;
+// The bottom row takes up LSBs (bits 0-7) and the top row takes up MSBs (bits 8-15).
 
 // Poll 16 foot-switch toggles simultaneously into a bit field
 extern u16 fsw_poll(void);
@@ -158,9 +160,12 @@ extern void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);
 
 // --------------- Flash memory functions:
 
-// Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
+// Flash addresses are 0-based where 0 is the first available byte of
+// non-program flash memory.
+
+// Load `count` bytes from flash memory at address `addr` into `data`:
 extern void flash_load(u16 addr, u16 count, u8 *data);
-// Stores `count` bytes from `data` into flash memory at address `addr` (0-based where 0 is first available byte of available flash memory):
+// Stores `count` bytes from `data` into flash memory at address `addr`:
 extern void flash_store(u16 addr, u16 count, u8 *data);</code></pre>
         </p>
         <p>The controller implements three functions exported to the host:</p>
@@ -197,7 +202,8 @@ void controller_handle(void);</code></pre>
             <a href="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" alt="Schematic" style="max-width: 600px" /></a><br />
             <small>(click for larger version)</small>
         </div>
-        <p>I took the liberty of designing a PCB layout for the schematic as well. Unfortunately, due to PCB size constraints, some pin-mapping sins had to be committed so that the traces and ICs could all fit happily on the board. Look at the pin headers to see what I mean. This can be easily accommodated for in the physical wiring, or if you're lazy it can also be accommodated for in the firmware.</p>
+        <p>I took the liberty of designing a PCB layout for the schematic as well. Unfortunately, due to PCB size constraints, some pin-mapping sins had to be committed so that the traces and ICs could all fit happily on the board. Look at the pin headers for the BTN_* connectors in the schematic to see what I mean. This remapping can be easily accommodated for in the physical wiring or in the firmware, whichever you find easiest to do.
+        Of course, you are free to update the schematic and PCB layout to correct these things if you can find a better way.</p>
         <div style="text-align: center; margin-top: 1em">
             <a href="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/pcb.png" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/pcb.png" alt="PCB Layout" style="max-width: 600px" /></a><br />
             <small>(click for larger version)</small>
@@ -209,7 +215,7 @@ void controller_handle(void);</code></pre>
             The foot-switches we use come from <a href="http://www.bitcheslovemyswitches.com/#!/%7E/product/category=5027572&id=10220659" target="_blank">bitcheslovemyswitches.com</a>. They feel great and have very little noise, no louder than a cheap pen's click.
             Shout out to <a href="https://twitter.com/LawrenceScaduto" target="_blank">Lawrence Scaduto</a>, owner and proprietor, for being a big help in fulfilling my initial order!
         </p>
-        <p>The chassis we use is <a href="http://www.hammondmfg.com/dwg16.htm#15degree" target="_blank">Hammond Mfg.'s 1456WH3BKBU</a>, an aluminum sloped console with a usable surface area of 20.078" x 6.305" on the sloped face, perfect for a floorboard controller. On their datasheet they claim they can do factory modifications (drilling, milling, printing). I just might be interested in that... Definitely not looking forward to drilling holes manually for foot-switches and LEDs.</p>
+        <p>The chassis we use is <a href="http://www.hammondmfg.com/dwg16.htm#15degree" target="_blank">Hammond Mfg.'s 1456WH3BKBU</a>, an aluminum sloped console with a usable surface area of 20.078" x 6.305" on the sloped face, perfect for a floorboard controller. On their datasheet they claim they can do factory modifications (drilling, milling, printing), however one must order at least 25 units to qualify for this custom work.</p>
         <p>Our schematic does a good job of labelling all the values for the resistors and capacitors so there should be no problem there. Capacitors want to be in the 16V-25V tolerance range.</p>
         <p>I found MIDI and USB-B PCB-mounted parts at <a href="https://www.sparkfun.com/" target="_blank">sparkfun.com</a>.</p>
 

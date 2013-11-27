@@ -159,7 +159,7 @@ static void gmaj_toggle_cc(u8 idx) {
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
 
     // Update LEDs:
-    leds.top.byte ^= idxMask;
+    leds.top.byte = (chan_effects[rjm_channel] & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
     send_leds();
 }
 
@@ -267,7 +267,10 @@ static u8 is_bot_button_released(u8 mask) {
 // ------------------------- Actual controller logic -------------------------
 
 u8 timer_tapstore;
+const u8 timer_tapstore_timeout = 60;
 u8 timeout_flash;
+u8 timer_fx_held;
+const u8 timer_fx_timeout = 30;
 
 // set the controller to an initial state
 void controller_init(void) {
@@ -299,8 +302,20 @@ void controller_init(void) {
 
 // called every 10ms
 void controller_10msec_timer(void) {
-    if (fsw.bot.bits._7 && (timer_tapstore > 0))
-        timer_tapstore++;
+    // Increment timers:
+    if (fsw.bot.bits._7 && (timer_tapstore > 0)) timer_tapstore++;
+    if (timer_fx_held > 0) timer_fx_held++;
+
+    // Flash held LEDs:
+    if (timer_fx_held > timer_fx_timeout) {
+        // Flash top LEDs on/off:
+        if ((timer_fx_held & 15) >= 7) {
+            leds.top.byte = ((chan_effects[rjm_channel] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+        } else {
+            leds.top.byte = ((chan_effects[rjm_channel] | fsw.top.byte) & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+        }
+        send_leds();
+    }
 
     if (timeout_flash) {
         if (!--timeout_flash) {
@@ -329,20 +344,44 @@ void controller_handle(void) {
     // handle top 6 FX block buttons:
     if (is_top_button_pressed(M_1)) {
         gmaj_toggle_cc(0);
+        timer_fx_held = 1;
+    } else if (is_top_button_released(M_1) && (timer_fx_held > timer_fx_timeout)) {
+        timer_fx_held = 0;
+        gmaj_toggle_cc(0);
     }
     if (is_top_button_pressed(M_2)) {
+        gmaj_toggle_cc(1);
+        timer_fx_held = 1;
+    } else if (is_top_button_released(M_2) && (timer_fx_held > timer_fx_timeout)) {
+        timer_fx_held = 0;
         gmaj_toggle_cc(1);
     }
     if (is_top_button_pressed(M_3)) {
         gmaj_toggle_cc(2);
+        timer_fx_held = 1;
+    } else if (is_top_button_released(M_3) && (timer_fx_held > timer_fx_timeout)) {
+        timer_fx_held = 0;
+        gmaj_toggle_cc(2);
     }
     if (is_top_button_pressed(M_4)) {
+        gmaj_toggle_cc(3);
+        timer_fx_held = 1;
+    } else if (is_top_button_released(M_4) && (timer_fx_held > timer_fx_timeout)) {
+        timer_fx_held = 0;
         gmaj_toggle_cc(3);
     }
     if (is_top_button_pressed(M_5)) {
         gmaj_toggle_cc(4);
+        timer_fx_held = 1;
+    } else if (is_top_button_released(M_5) && (timer_fx_held > timer_fx_timeout)) {
+        timer_fx_held = 0;
+        gmaj_toggle_cc(4);
     }
     if (is_top_button_pressed(M_6)) {
+        gmaj_toggle_cc(5);
+        timer_fx_held = 1;
+    } else if (is_top_button_released(M_6) && (timer_fx_held > timer_fx_timeout)) {
+        timer_fx_held = 0;
         gmaj_toggle_cc(5);
     }
 
@@ -378,7 +417,6 @@ void controller_handle(void) {
         // mute:
         leds.top.byte ^= M_7;
         gmaj_cc_set(gmaj_cc_mute, (leds.top.bits._7) ? 0x7F : 0x00);
-        send_leds();
     }
     if (is_bot_button_pressed(M_7)) {
         // tap tempo function (does not use LED):
