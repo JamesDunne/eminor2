@@ -20,7 +20,8 @@ static HINSTANCE zhInstance = NULL;
 #define mmToIn 0.0393701
 
 // display scale factor (pixels per inch)
-const double defaultDpi = 55.4;    // NOTE(jsd): This is to-scale on my 40" Samsung HDTV 1080p
+// NOTE(jsd): 55.4 dpi is to-scale on my 40" Samsung HDTV 1080p
+const double defaultDpi = 55.4;
 static double dpi = 55.4;
 
 // Total width, height in inches:
@@ -33,7 +34,7 @@ const double hSpacing = 2.57;
 
 // From bottom going up:
 const double vStart = 5;
-const double vSpacing = 3;
+const double vSpacing = 2.5;
 
 const double vLEDOffset = -0.5;
 
@@ -219,12 +220,45 @@ BOOL dpi_LineTo(HDC hdc, double X, double Y) {
 }
 
 BOOL dpi_Rectangle(HDC hdc, double left, double top, double right, double bottom) {
-    return Rectangle(hdc,
-        (int)floor(left * dpi),
-        (int)floor(top * dpi),
-        (int)ceil(right * dpi),
-        (int)ceil(bottom * dpi)
-        );
+    int l, t, r, b;
+    BOOL drew = FALSE;
+    COLORREF c;
+    RECT rect;
+
+    l = (int)floor(left * dpi);
+    t = (int)floor(top * dpi);
+    r = (int)floor(right * dpi);
+    b = (int)floor(bottom * dpi);
+
+    if (r - l == 0) r = l + 1;
+    if (b - t == 0) b = t + 1;
+
+    rect.left = l;
+    rect.top = t;
+    rect.bottom = b;
+    rect.right = r;
+    return FrameRect(hdc, &rect, 0);
+}
+
+BOOL dpi_FillRect(HDC hdc, double left, double top, double right, double bottom) {
+    int l, t, r, b;
+    BOOL drew = FALSE;
+    COLORREF c;
+    RECT rect;
+
+    l = (int)floor(left * dpi);
+    t = (int)floor(top * dpi);
+    r = (int)floor(right * dpi);
+    b = (int)floor(bottom * dpi);
+
+    if (r - l == 0) r = l + 1;
+    if (b - t == 0) b = t + 1;
+
+    rect.left = l;
+    rect.top = t;
+    rect.bottom = b;
+    rect.right = r;
+    return FillRect(hdc, &rect, 0);
 }
 
 BOOL dpi_CenterEllipse(HDC hdc, double cX, double cY, double rW, double rH) {
@@ -245,9 +279,9 @@ void paintFacePlate(HWND hwnd) {
     HDC			hDC;
     PAINTSTRUCT	ps;
 
-    HFONT	fontLCD, fontLabel;
+    HFONT	fontLabel;
     HPEN	penLCD, penThick, penThin, penGridThick, penGridThin;
-    HBRUSH	brsWhite, brsDarkSilver, brsDarkGreen, brsGreen, brsBlack;
+    HBRUSH	brsLCD, brsLCDBack, brsWhite, brsDarkSilver, brsDarkGreen, brsGreen, brsBlack;
 
     int		h = 0, v = 0;
     double	inH, inV;
@@ -271,7 +305,9 @@ void paintFacePlate(HWND hwnd) {
     penThick = CreatePen(PS_SOLID, 2, RGB(128, 128, 128));
     penThin = CreatePen(PS_SOLID, 1, RGB(128, 128, 128));
 
-    penLCD = CreatePen(PS_SOLID, 0, RGB(255, 255, 255));
+    penLCD = CreatePen(PS_NULL, 1, RGB(255, 255, 255));
+    brsLCD = CreateSolidBrush(RGB(255, 255, 255));
+    brsLCDBack = CreateSolidBrush(RGB(0, 0, 192));
 
     brsWhite = CreateSolidBrush(RGB(192, 192, 192));
     brsDarkSilver = CreateSolidBrush(RGB(96, 96, 96));
@@ -280,7 +316,7 @@ void paintFacePlate(HWND hwnd) {
     brsBlack = CreateSolidBrush(RGB(0, 0, 0));
 
     SelectObject(hDC, brsBlack);
-    dpi_Rectangle(hDC, 0, 0, inWidth, inHeight);
+    dpi_FillRect(hDC, 0, 0, inWidth, inHeight);
 
     SetBkMode(hDC, TRANSPARENT);
 
@@ -296,22 +332,6 @@ void paintFacePlate(HWND hwnd) {
         DEFAULT_PITCH | FF_ROMAN,
         // TODO: pick a best font and fallback to worse ones depending on availability.
         L"Tahoma"
-    );
-
-    // A 5x8 pixel font representing the LCD display's characteristics:
-    fontLCD = CreateFont(
-        (int)((4.75) * 1.4 * mmToIn * dpi),
-        (int)((2.95) * 1.15 * mmToIn * dpi),
-        0,
-        0,
-        FW_NORMAL, FALSE, FALSE, FALSE,
-        ANSI_CHARSET,
-        OUT_OUTLINE_PRECIS,
-        CLIP_DEFAULT_PRECIS,
-        CLEARTYPE_QUALITY,
-        FIXED_PITCH | FF_MODERN,
-        // TODO: pick a best font and fallback to worse ones depending on availability.
-        L"Consolas"
     );
 
 #if 1
@@ -337,9 +357,19 @@ void paintFacePlate(HWND hwnd) {
 #endif
 
 #ifdef FEAT_LCD
+    const double lcdCenterX = (inWidth * 0.5);
+
+    // Draw a solid blue background:
+    SelectObject(hDC, penLCD);
+    SelectObject(hDC, brsLCDBack);
+    dpi_FillRect(hDC, lcdCenterX - ((76 * mmToIn) * 0.5), 0.2, lcdCenterX + ((76 * mmToIn) * 0.5), 0.2 + (25.2 * mmToIn));
+
+    const double lcdLeft = lcdCenterX - ((70.4 * mmToIn) * 0.5);
+    const double lcdTop = 0.2 + (2.2 * mmToIn);
+
     // Emulate an LCD with a 5x8 font:
     SelectObject(hDC, penLCD);
-    SelectObject(hDC, brsWhite);
+    SelectObject(hDC, brsLCD);
     for (int r = 0; r < LCD_ROWS; ++r)
     for (int c = 0; c < LCD_COLS; ++c)
     for (int y = 0; y < 8; ++y) {
@@ -347,11 +377,11 @@ void paintFacePlate(HWND hwnd) {
         u8 b = (1 << 7);
         for (int x = 0; x < 5; ++x, b >>= 1) {
             if (ch & b) {
-                dpi_Rectangle(hDC,
-                    (10 - (2.77 * 0.5)) + (((c * 0.6) + ((c * 5 + x) * 0.60)) * mmToIn),
-                                   0.20 + (((r * 0.6) + ((r * 5 + y) * 0.60)) * mmToIn),
-                    (10 - (2.77 * 0.5)) + (((c * 0.6) + ((c * 5 + x) * 0.60) + 0.5) * mmToIn),
-                                   0.20 + (((r * 0.6) + ((r * 5 + y) * 0.60) + 0.5) * mmToIn)
+                dpi_FillRect(hDC,
+                    lcdLeft + ((c * (2.95 + 0.6) + (x)* 0.6) * mmToIn),
+                    lcdTop + ((r * (4.75 + 0.6) + (y)* 0.6) * mmToIn),
+                    lcdLeft + (((c * (2.95 + 0.6) + (x)* 0.6) + 0.55) * mmToIn),
+                    lcdTop + (((r * (4.75 + 0.6) + (y)* 0.6) + 0.55) * mmToIn)
                 );
             }
         }
@@ -447,6 +477,8 @@ void paintFacePlate(HWND hwnd) {
     DeleteObject(penGridThin);
 
     DeleteObject(penLCD);
+    DeleteObject(brsLCD);
+    DeleteObject(brsLCDBack);
 
     DeleteObject(fontLabel);
 
@@ -516,10 +548,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
         case WM_MOUSEWHEEL:
             if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
                 // mwheel up
-                dpi += 0.25 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
+                dpi += 0.125 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
             } else {
                 // mwheel down
-                dpi -= 0.25 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
+                dpi -= 0.125 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
                 if (dpi < 1.0) dpi = 1.0;
             }
             GetWindowRect(hwnd, &rect);

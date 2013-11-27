@@ -301,7 +301,7 @@ void controller_init(void) {
 
 #ifdef FEAT_LCD
     const char test[LCD_ROWS][LCD_COLS] = {
-        "01234567890123456789",
+        "Testing...",
         "01234567890123456789",
         "01234567890123456789",
         "01234567890123456789"
