@@ -56,7 +56,7 @@ extern void led_set(u16 leds);
 #define LCD_ROWS    4
 
 // Update an LCD display:
-extern void lcd_update(char text[LCD_ROWS][LCD_COLS]);
+extern void lcd_update(const char text[LCD_ROWS][LCD_COLS]);
 #endif
 
 // --------------- MIDI I/O functions:

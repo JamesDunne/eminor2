@@ -17,6 +17,8 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 static HINSTANCE zhInstance = NULL;
 
+#define mmToIn 0.0393701
+
 // display scale factor (pixels per inch)
 const double defaultDpi = 55.4;    // NOTE(jsd): This is to-scale on my 40" Samsung HDTV 1080p
 static double dpi = 55.4;
@@ -29,26 +31,25 @@ const double inHeight = 6.305;
 const double hLeft = 1.0;
 const double hSpacing = 2.57;
 
-const double vStart = 2;
+// From bottom going up:
+const double vStart = 5;
 const double vSpacing = 3;
 
 const double vLEDOffset = -0.5;
-
-#define mmToIn 0.0393701
 
 const double inLEDOuterDiam = (8 /*mm*/ * mmToIn);
 const double inFswOuterDiam = (12.2 /*mm*/ * mmToIn);
 const double inFswInnerDiam = (10 /*mm*/ * mmToIn);
 
 // button labels:
-static LPCWSTR labels[2][8] = {
-    { L"COMP", L"FILTER", L"PITCH", L"CHORUS", L"DELAY", L"REVERB", L"MUTE", L"PREV" },
-    { L"CH1", L"CH1S", L"CH2", L"CH2S", L"CH3", L"CH3S", L"TAP/STORE", L"NEXT" }
+const static LPCWSTR labels[2][8] = {
+    { L"CH1", L"CH1S", L"CH2", L"CH2S", L"CH3", L"CH3S", L"TAP/STORE", L"NEXT" },
+    { L"COMP", L"FILTER", L"PITCH", L"CHORUS", L"DELAY", L"REVERB", L"MUTE", L"PREV" }
 };
 
-static LPCWSTR keylabels[2][8] = {
-    { L"Q", L"W", L"E", L"R", L"T", L"Y", L"U", L"I" },
-    { L"A", L"S", L"D", L"F", L"G", L"H", L"J", L"K" }
+const static LPCWSTR keylabels[2][8] = {
+    { L"A", L"S", L"D", L"F", L"G", L"H", L"J", L"K" },
+    { L"Q", L"W", L"E", L"R", L"T", L"Y", L"U", L"I" }
 };
 
 #ifdef FEAT_LCD
@@ -370,7 +371,7 @@ void paintFacePlate(HWND hwnd) {
     // 2 rows of foot switches:
     for (v = 0; v < 2; ++v) {
         b8 fsw, led;
-        if (v == 0) {
+        if (v == 1) {
             fsw = fsw_state.top;
             led = led_state.top;
         } else {
@@ -384,12 +385,12 @@ void paintFacePlate(HWND hwnd) {
         u8 b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             SelectObject(hDC, penThick);
-            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam * 0.5, inFswOuterDiam * 0.5);
+            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam * 0.5, inFswOuterDiam * 0.5);
             SelectObject(hDC, penThin);
-            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswInnerDiam * 0.5, inFswInnerDiam * 0.5);
+            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswInnerDiam * 0.5, inFswInnerDiam * 0.5);
             if (fsw.byte & b) {
                 SelectObject(hDC, brsDarkSilver);
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + (v * vSpacing), inFswOuterDiam * 0.5, inFswOuterDiam * 0.5);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam * 0.5, inFswOuterDiam * 0.5);
                 SelectObject(hDC, brsWhite);
             }
 
@@ -401,11 +402,11 @@ void paintFacePlate(HWND hwnd) {
             else
                 SetTextColor(hDC, RGB(224, 224, 224));
 
-            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.25 + (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
+            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.25 - (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
 
             // Label w/ the keyboard key:
             SetTextColor(hDC, RGB(96, 16, 16));
-            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.5 + (v * vSpacing), keylabels[v][h], 1);
+            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.50 - (v * vSpacing), keylabels[v][h], 1);
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
@@ -416,7 +417,7 @@ void paintFacePlate(HWND hwnd) {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if ((led.byte & b) == 0) {
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset + (v * vSpacing), inLEDOuterDiam * 0.5, inLEDOuterDiam * 0.5);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), inLEDOuterDiam * 0.5, inLEDOuterDiam * 0.5);
             }
         }
 
@@ -425,7 +426,7 @@ void paintFacePlate(HWND hwnd) {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if (led.byte & b) {
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset + (v * vSpacing), inLEDOuterDiam * 0.5, inLEDOuterDiam * 0.5);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), inLEDOuterDiam * 0.5, inLEDOuterDiam * 0.5);
             }
         }
     }
@@ -482,25 +483,25 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 
                                  double x = (double)GET_X_LPARAM(lParam) / dpi,
                                      y = (double)GET_Y_LPARAM(lParam) / dpi;
-                                 const double r_sqr = inFswOuterDiam * inFswOuterDiam;
+                                 const double r_sqr = (inFswOuterDiam * 0.5) * (inFswOuterDiam * 0.5);
 
                                  // Find out which foot-switch the mouse cursor is inside:
                                  b = 1;
                                  for (h = 0; h < 8; ++h, b <<= 1) {
                                      double bx = (hLeft + (h * hSpacing));
-                                     double by = (vStart + (0 * vSpacing));
+                                     double by = (vStart - (0 * vSpacing));
                                      double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
                                      if (dist_sqr <= r_sqr) {
-                                         fsw_state.top.byte |= b;
+                                         fsw_state.bot.byte |= b;
                                      }
                                  }
                                  b = 1;
                                  for (h = 0; h < 8; ++h, b <<= 1) {
                                      double bx = (hLeft + (h * hSpacing));
-                                     double by = (vStart + (1 * vSpacing));
+                                     double by = (vStart - (1 * vSpacing));
                                      double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
                                      if (dist_sqr <= r_sqr) {
-                                         fsw_state.bot.byte |= b;
+                                         fsw_state.top.byte |= b;
                                      }
                                  }
 
@@ -593,7 +594,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 
 #ifdef FEAT_LCD
 // Update LCD display text:
-void lcd_update(char text[LCD_ROWS][LCD_COLS]) {
+void lcd_update(const char text[LCD_ROWS][LCD_COLS]) {
     // Convert ASCII to UTF-16:
     for (int r = 0; r < LCD_ROWS; ++r)
     for (int c = 0; c < LCD_COLS; ++c)

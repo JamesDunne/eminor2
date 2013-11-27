@@ -19,35 +19,34 @@ var midiLogHeight = 240;
 
 var cvs, ctx;
 //var dpi = 55.4;
-var dpi = 42;
+/** @const */var dpi = 42;
 
-var labels = [
+/** @const */var labels = [
     ["CH1", "CH1S", "CH2", "CH2S", "CH3", "CH3S", "TAP/STORE", "NEXT"],
     ["COMP", "FILTER", "PITCH", "CHORUS", "DELAY", "REVERB", "MUTE", "PREV"]
 ];
 
-var keylabels = [
+/** @const */var keylabels = [
     ["A", "S", "D", "F", "G", "H", "J", "K"],
     ["Q", "W", "E", "R", "T", "Y", "U", "I"]
 ];
 
 // Total width, height in inches:
-var inWidth = 20.0;
-var inHeight = 7.0;
+/** @const */var inWidth = 20.078;
+/** @const */var inHeight = 6.305;
 
 // Position and spacing of footswitches (from centers):
-var vStart = 5.65;
-var hLeft = 1.0;
-var hSpacing = 2.57;
-var vSpacing = 3.15;
+/** @const */var hLeft = 1.0;
+/** @const */var hSpacing = 2.57;
 
-// was 0.2032
-var inLEDOuterDiam = (8 /*mm*/ * 0.01 * 2.54);
+/** @const */var vStart = 5;
+/** @const */var vSpacing = 3;
 
-// was 0.34026
-var inFswOuterDiam = (12.2 /*mm*/ * 0.01 * 2.54);
-// was 0.30
-var inFswInnerDiam = (10 /*mm*/ * 0.01 * 2.54);
+/** @const */var vLEDOffset = -0.5;
+
+/** @const */var inLEDOuterDiam = (8 /*mm*/ * 0.0393701);
+/** @const */var inFswOuterDiam = (12.2 /*mm*/ * 0.0393701);
+/** @const */var inFswInnerDiam = (10 /*mm*/ * 0.0393701);
 
 function dpi_MoveTo(X, Y) {
     ctx.moveTo(X * dpi, Y * dpi);
@@ -129,14 +128,14 @@ function renderUI() {
             ctx.lineWidth = 2;
             ctx.strokeStyle = "#808080";
             ctx.fillStyle = "#C0C0C0";
-            dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam);
+            dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam * 0.5);
 
             ctx.lineWidth = 1;
-            dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswInnerDiam);
+            dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswInnerDiam * 0.5);
             if (fsw_state & b) {
                 // Foot switch is depressed:
                 ctx.fillStyle = "#606060";
-                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam);
+                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam * 0.5);
             }
 
             // Set label color:
@@ -148,11 +147,11 @@ function renderUI() {
                 ctx.fillStyle = "#E0E0E0";
 
             ctx.lineWidth = 1;
-            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.5 - (v * vSpacing), labels[v][h]);
+            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.25 - (v * vSpacing), labels[v][h]);
 
             // Label w/ the keyboard key:
             ctx.fillStyle = "#601010";
-            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.75 - (v * vSpacing), keylabels[v][h]);
+            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.50 - (v * vSpacing), keylabels[v][h]);
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
@@ -164,7 +163,7 @@ function renderUI() {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if ((led_state & b) == 0) {
-                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - 0.7 - (v * vSpacing), inLEDOuterDiam);
+                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), inLEDOuterDiam * 0.5);
             }
         }
 
@@ -173,7 +172,7 @@ function renderUI() {
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             if (led_state & b) {
-                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - 0.7 - (v * vSpacing), inLEDOuterDiam);
+                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), inLEDOuterDiam * 0.5);
             }
         }
     }
@@ -248,7 +247,7 @@ function mousedown(e) {
         ex = hasOffset ? e.offsetX : (e.layerX - e.target.offsetLeft),
         ey = hasOffset ? e.offsetY : (e.layerY - e.target.offsetTop);
     var x = ex / dpi, y = ey / dpi;
-    var r_sqr = inFswOuterDiam * inFswOuterDiam;
+    var r_sqr = (inFswOuterDiam * 0.5) * (inFswOuterDiam * 0.5);
     var dist;
 
     // Find out which foot-switch we're nearest to:
@@ -298,6 +297,10 @@ function _led_set(leds) {
 
     led_state_bot = bot;
     led_state_top = top;
+}
+
+function _lcd_update(text_ptr) {
+    // TODO.
 }
 
 // called to send MIDI command with one data byte:
