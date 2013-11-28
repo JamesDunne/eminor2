@@ -389,14 +389,16 @@ void paintFacePlate(HWND hwnd) {
     const double lcdHeight = (20.8 * mmToIn);
 
     // Emulate an LCD with a 5x8 font:
-#if 1
+#   if 1
+    // Draw the LCD characters scaled up x12 and use StretchBlt to scale them back down:
     RECT rect;
+    // Create a scaled-up representation of the LCD screen itself:
     lcdDC = CreateCompatibleDC(orighdc);
-    // Create 
-    // an LCD pixel plus spacing is 12 screen pixels; lit pixel is 11 screen pixels
+    // One LCD pixel (plus spacing) is 12 screen pixels; the lit part of the LCD pixel is 11 screen pixels
     lcdBMP = CreateCompatibleBitmap(orighdc, (LCD_COLS * 6 - 1) * 12, (LCD_ROWS * 9 - 1) * 12);
     SelectObject(lcdDC, lcdBMP);
 
+    // Fill the blue background:
     SelectObject(lcdDC, penLCD);
     SelectObject(lcdDC, brsLCDBack);
     rect.left = 0;
@@ -410,14 +412,17 @@ void paintFacePlate(HWND hwnd) {
     for (int r = 0; r < LCD_ROWS; ++r)
     for (int c = 0; c < LCD_COLS; ++c)
     for (int y = 0; y < 8; ++y) {
+        // Grab font bitmap row (8 bits wide = 8 cols, MSB to left):
         u8 ch = console_font_5x8[lcd_text[r][c] * 8 + y];
         u8 b = (1 << 7);
-        for (int x = 0; x < 5; ++x, b >>= 1) {
+
+        rect.left = (c * 12 * 6);
+        rect.top = (r * 12 * 9 + y * 12);
+        rect.right = (c * 12 * 6) + 12;    // use + 11 for authentic spacing
+        rect.bottom = (r * 12 * 9 + y * 12) + 12;   // use + 11 for authentic spacing
+
+        for (int x = 0; x < 5; ++x, b >>= 1, rect.left += 12, rect.right += 12) {
             if (ch & b) {
-                rect.left = (c * 12 * 6 + x * 12);
-                rect.top = (r * 12 * 9 + y * 12);
-                rect.right = (c * 12 * 6 + x * 12) + 12;    // use + 11 for authentic spacing
-                rect.bottom = (r * 12 * 9 + y * 12) + 12;   // use + 11 for authentic spacing
                 FillRect(lcdDC, &rect, brsLCD);
             }
         }
@@ -432,8 +437,8 @@ void paintFacePlate(HWND hwnd) {
 
     DeleteObject(lcdBMP);
     DeleteObject(lcdDC);
-
-#else
+#   else
+    // Draw the LCD characters using dpi scale and whole-pixel units (looks awful):
     SelectObject(hDC, penLCD);
     SelectObject(hDC, brsLCD);
     for (int r = 0; r < LCD_ROWS; ++r)
@@ -452,7 +457,7 @@ void paintFacePlate(HWND hwnd) {
             }
         }
     }
-#endif
+#   endif
 #endif
 
     // dpi label:
