@@ -29,6 +29,7 @@
 // update MIDI state on repeated activations.
 
 #include <assert.h>
+#include <string.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
 
@@ -82,11 +83,6 @@ u8 midi_gmaj_program;
 // Current program data:
 struct program pr;
 
-// NOTE(jsd): Struct lengths must be divisors of 64 to avoid crossing 64-byte boundaries in flash!
-#define STATIC_ASSERT(cond,ident) typedef char _static_assert_##ident[(cond)?1:-1]
-#define COMPILE_ASSERT(cond) STATIC_ASSERT(cond,__LINE__)
-COMPILE_ASSERT(sizeof(struct program) == 32);
-
 // Loads a 6-bit bit field describing the initial on/off state of effects
 void load_program_state(void) {
 #if NOFLASH
@@ -99,7 +95,7 @@ void load_program_state(void) {
     pr.fx[5] = fxm_delay;
 #else
     // Load effects on/off state data from persistent storage:
-    flash_load((u16)gmaj_program * sizeof(struct program), sizeof(struct program), &pr);
+    flash_load((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
 #endif
 
 #if 0
@@ -117,7 +113,7 @@ void load_program_state(void) {
 void store_program_state(void) {
     // Store effects on/off state of current program:
     // NOTE(jsd): Use multiple of 8 to avoid crossing 64-byte boundaries in flash!
-    flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), pr.fx);
+    flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
 }
 
 char lcdtext_row_program[LCD_COLS];
@@ -324,7 +320,7 @@ void controller_init(void) {
 #ifdef FEAT_LCD
     strcpy(lcdtext_row_program, "Program:            ");
 
-    lcd_update_row(0, "01234567890123456789");
+    lcd_update_row(0, "");
     lcd_update_row(1, "");
     lcd_update_row(2, "");
     lcd_update_row(3, pr.name);

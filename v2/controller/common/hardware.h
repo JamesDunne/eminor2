@@ -16,8 +16,13 @@ struct program {
     u8 fx[6];
     u8 rjm_channel;
     u8 _padding;
-    u8 name[24];
+    char name[24];
 };
+
+// NOTE(jsd): Struct lengths must be divisors of 64 to avoid crossing 64-byte boundaries in flash!
+#define STATIC_ASSERT(cond,ident) typedef char _static_assert_##ident[(cond)?1:-1]
+#define COMPILE_ASSERT(cond) STATIC_ASSERT(cond,__LINE__)
+COMPILE_ASSERT(sizeof(struct program) == 32);
 
 // --------------- Momentary toggle foot-switches and LEDs:
 

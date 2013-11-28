@@ -779,6 +779,15 @@ void flash_load(u16 addr, u16 count, u8 *data) {
         f = fopen("flash.bin", "a+b");
         fwrite(flash_memory, 1, sizeof(struct program) * 128, f);
         fclose(f);
+
+        // Create flash.hex file:
+        FILE *ft = fopen("flash.hex", "w");
+        for (int i = 0; i < sizeof(struct program) * 128; ++i) {
+            u8 d = ((u8 *)flash_memory)[i];
+            fprintf(ft, "%02X", d);
+        }
+        fclose(ft);
+
         // Reopen file for reading:
         f = fopen("flash.bin", "rb");
     }
