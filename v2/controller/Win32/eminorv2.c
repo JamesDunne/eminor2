@@ -765,22 +765,15 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 #include "../common/flash_init.h"
 
-// Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
-void flash_load(u16 addr, u16 count, u8 *data) {
-    long file_size;
-    FILE *f;
-
-    // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
-    assert(((addr) & ~63) == (((addr + count - 1)) & ~63));
-
-    f = fopen("flash.bin", "rb");
+FILE *open_or_create_flash_file() {
+    FILE *f = fopen("flash.bin", "r+b");
     if (f == NULL) {
         // Initialize new file with initial flash memory data:
-        f = fopen("flash.bin", "a+b");
+        FILE *f = fopen("flash.bin", "a+b");
         fwrite(flash_memory, 1, sizeof(struct program) * 128, f);
         fclose(f);
 
-        // Create flash.hex file:
+        // Create flash.hex text file:
         FILE *ft = fopen("flash.hex", "w");
         for (int i = 0; i < sizeof(struct program) * 128; ++i) {
             u8 d = ((u8 *)flash_memory)[i];
@@ -789,8 +782,20 @@ void flash_load(u16 addr, u16 count, u8 *data) {
         fclose(ft);
 
         // Reopen file for reading:
-        f = fopen("flash.bin", "rb");
+        f = fopen("flash.bin", "r+b");
     }
+    return f;
+}
+
+// Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
+void flash_load(u16 addr, u16 count, u8 *data) {
+    long file_size;
+    FILE *f;
+
+    // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
+    assert(((addr) & ~63) == (((addr + count - 1)) & ~63));
+
+    f = open_or_create_flash_file();
     if (f == NULL) {
         memset(data, 0, count);
         return;
@@ -830,7 +835,10 @@ void flash_store(u16 addr, u16 count, u8 *data) {
     assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
 
     // Create file or append to it:
-    f = fopen("flash.bin", "a+b");
+    f = open_or_create_flash_file();
+    if (f == NULL) {
+        return;
+    }
 
     // Find file size:
     fseek(f, 0, SEEK_END);
@@ -847,7 +855,10 @@ void flash_store(u16 addr, u16 count, u8 *data) {
             fwrite(zeroes, 1, addr - p, f);
     }
 
+    // Seek to address to write:
     fseek(f, addr, SEEK_SET);
+    p = ftell(f);
+    assert(p == addr);
 
     size_t r = fwrite(data, 1, count, f);
     assert(r == count);
