@@ -11,6 +11,14 @@
 // Enable LCD display:
 #define FEAT_LCD
 
+// Program data structure loaded from / written to flash memory:
+struct program {
+    u8 fx[6];
+    u8 rjm_channel;
+    u8 _padding;
+    u8 name[24];
+};
+
 // --------------- Momentary toggle foot-switches and LEDs:
 
 #define M_1 0x01U
@@ -44,6 +52,10 @@
 
 // Foot switch and LED on/off states are represented with u16 bit-fields; the bottom row takes up LSBs (bits 0-7) and top row takes up MSBs (bits 8-15).
 
+#ifndef __MCC18
+#define rom
+#endif
+
 // Poll 16 foot-switch states:
 extern u16 fsw_poll(void);
 
@@ -51,12 +63,14 @@ extern u16 fsw_poll(void);
 extern void led_set(u16 leds);
 
 #ifdef FEAT_LCD
+
 // Example LCD display: http://www.newhavendisplay.com/nhd0420d3znswbbwv3-p-5745.html 4x20 characters
 #define LCD_COLS    20
 #define LCD_ROWS    4
 
 // Update an LCD display:
-extern void lcd_update(const char text[LCD_ROWS][LCD_COLS]);
+extern void lcd_update_row(u8 row, char text[LCD_COLS]);
+
 #endif
 
 // --------------- MIDI I/O functions:

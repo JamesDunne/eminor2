@@ -36,7 +36,7 @@ const double hSpacing = 2.57;
 const double vStart = 5.5;
 const double vSpacing = 2.25;
 
-const double vLEDOffset = -0.65;
+const double vLEDOffset = -0.55;
 
 const double inLEDOuterDiam = (8 /*mm*/ * mmToIn);
 const double inFswOuterDiam = (12.2 /*mm*/ * mmToIn);
@@ -221,8 +221,6 @@ BOOL dpi_LineTo(HDC hdc, double X, double Y) {
 
 BOOL dpi_Rectangle(HDC hdc, double left, double top, double right, double bottom) {
     int l, t, r, b;
-    BOOL drew = FALSE;
-    COLORREF c;
     RECT rect;
 
     l = (int)floor(left * dpi);
@@ -242,8 +240,6 @@ BOOL dpi_Rectangle(HDC hdc, double left, double top, double right, double bottom
 
 BOOL dpi_FillRect(HDC hdc, double left, double top, double right, double bottom) {
     int l, t, r, b;
-    BOOL drew = FALSE;
-    COLORREF c;
     RECT rect;
 
     l = (int)floor(left * dpi);
@@ -364,10 +360,14 @@ void paintFacePlate(HWND hwnd) {
     const double lcdCenterX = (inWidth * 0.5);
     const double lcdCenterY = 1.25;
 
+    // Draw PCB outline:
+    SelectObject(hDC, brsWhite);
+    dpi_Rectangle(hDC, lcdCenterX - ((98 * mmToIn) * 0.5), lcdCenterY - (60 * mmToIn * 0.5), lcdCenterX + ((98 * mmToIn) * 0.5), lcdCenterY + (60 * mmToIn * 0.5));
+
     // Draw screw mounting holes:
+    const double screwRadius = 1.25 * mmToIn;
     SelectObject(hDC, penThin);
     SelectObject(hDC, NULL_BRUSH);
-    const double screwRadius = 1.25 * mmToIn;
     dpi_CenterEllipse(hDC, lcdCenterX - (93 * mmToIn * 0.5), lcdCenterY - (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
     dpi_CenterEllipse(hDC, lcdCenterX + (93 * mmToIn * 0.5), lcdCenterY - (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
     dpi_CenterEllipse(hDC, lcdCenterX - (93 * mmToIn * 0.5), lcdCenterY + (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
@@ -413,8 +413,8 @@ void paintFacePlate(HWND hwnd) {
     for (int c = 0; c < LCD_COLS; ++c)
     for (int y = 0; y < 8; ++y) {
         // Grab font bitmap row (8 bits wide = 8 cols, MSB to left):
-        u8 ch = console_font_5x8[lcd_text[r][c] * 8 + y];
-        u8 b = (1 << 7);
+        u8 ch = console_font_5x8[(lcd_text[r][c] & 255) * 8 + y];
+        u8 b = (1 << 6);
 
         rect.left = (c * 12 * 6);
         rect.top = (r * 12 * 9 + y * 12);
@@ -444,7 +444,7 @@ void paintFacePlate(HWND hwnd) {
     for (int r = 0; r < LCD_ROWS; ++r)
     for (int c = 0; c < LCD_COLS; ++c)
     for (int y = 0; y < 8; ++y) {
-        u8 ch = console_font_5x8[lcd_text[r][c] * 8 + y];
+        u8 ch = console_font_5x8[(lcd_text[r][c] & 255) * 8 + y];
         u8 b = (1 << 7);
         for (int x = 0; x < 5; ++x, b >>= 1) {
             if (ch & b) {
@@ -699,15 +699,26 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 }
 
 #ifdef FEAT_LCD
+
 // Update LCD display text:
-void lcd_update(const char text[LCD_ROWS][LCD_COLS]) {
+void lcd_update_row(u8 row, char text[LCD_COLS]) {
+    assert(row < 4);
+
     // Convert ASCII to UTF-16:
-    for (int r = 0; r < LCD_ROWS; ++r)
-    for (int c = 0; c < LCD_COLS; ++c)
-        lcd_text[r][c] = text[r][c];
+    int c;
+    for (c = 0; c < LCD_COLS; ++c) {
+        if (text[c] == 0) break;
+        lcd_text[row][c] = (WCHAR)text[c];
+    }
+
+    // Clear the rest of the row if a NUL terminator was found:
+    for (; c < LCD_COLS; ++c)
+        lcd_text[row][c] = L' ';
+
     // Request a UI repaint:
     InvalidateRect(hwndMain, NULL, TRUE);
 }
+
 #endif
 
 // --------------- Momentary toggle foot-switches and LEDs interface:
@@ -752,10 +763,7 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 // --------------- Flash memory interface:
 
-static u8 flash_memory[1024] = {
 #include "../common/flash_init.h"
-    0
-};
 
 // Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
 void flash_load(u16 addr, u16 count, u8 *data) {
@@ -763,13 +771,13 @@ void flash_load(u16 addr, u16 count, u8 *data) {
     FILE *f;
 
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
-    assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
+    assert(((addr) & ~63) == (((addr + count - 1)) & ~63));
 
     f = fopen("flash.bin", "rb");
     if (f == NULL) {
         // Initialize new file with initial flash memory data:
         f = fopen("flash.bin", "a+b");
-        fwrite(flash_memory, 1, 1024, f);
+        fwrite(flash_memory, 1, sizeof(struct program) * 128, f);
         fclose(f);
         // Reopen file for reading:
         f = fopen("flash.bin", "rb");

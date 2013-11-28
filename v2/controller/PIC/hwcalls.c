@@ -202,6 +202,10 @@ void led_set(u16 leds){
     LedStatesBot = leds & 0xFF;
 }
 
+void lcd_update_row(u8 row, char text[LCD_COLS]) {
+    // TODO.
+}
+
 /* --------------- MIDI I/O functions: */
 
 /* Send formatted MIDI commands.
