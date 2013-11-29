@@ -116,7 +116,9 @@ void store_program_state(void) {
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
 }
 
+#ifdef FEAT_LCD
 char lcdtext_row_program[LCD_COLS];
+#endif
 
 static void send_leds(void) {
     // Update LEDs:
