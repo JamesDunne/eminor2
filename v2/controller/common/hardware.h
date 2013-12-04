@@ -11,18 +11,14 @@
 // Enable LCD display:
 #define FEAT_LCD
 
-// Program data structure loaded from / written to flash memory:
-struct program {
-    u8 fx[6];
-    u8 rjm_channel;
-    u8 _padding;
-    char name[24];
-};
+// --------------- Compiler hacks:
 
-// NOTE(jsd): Struct lengths must be divisors of 64 to avoid crossing 64-byte boundaries in flash!
 #define STATIC_ASSERT(cond,ident) typedef char _static_assert_##ident[(cond)?1:-1]
 #define COMPILE_ASSERT(cond) STATIC_ASSERT(cond,__LINE__)
-COMPILE_ASSERT(sizeof(struct program) == 32);
+
+#ifndef __MCC18
+#define rom
+#endif
 
 // --------------- Momentary toggle foot-switches and LEDs:
 
@@ -55,11 +51,8 @@ COMPILE_ASSERT(sizeof(struct program) == 32);
 #define fxb_noisegate   6
 #define fxb_eq          7
 
-// Foot switch and LED on/off states are represented with u16 bit-fields; the bottom row takes up LSBs (bits 0-7) and top row takes up MSBs (bits 8-15).
-
-#ifndef __MCC18
-#define rom
-#endif
+// Foot switch and LED on/off states are represented with u16 bit-fields;
+// the bottom row takes up LSBs (bits 0-7) and top row takes up MSBs (bits 8-15).
 
 // Poll 16 foot-switch states:
 extern u16 fsw_poll(void);
@@ -73,7 +66,8 @@ extern void led_set(u16 leds);
 #define LCD_COLS    20
 #define LCD_ROWS    4
 
-// Update an LCD display:
+// Update an LCD display's row:
+// A terminating NUL character will clear the rest of the row with empty space.
 extern void lcd_update_row(u8 row, char text[LCD_COLS]);
 
 #endif
@@ -108,3 +102,22 @@ extern void flash_store(u16 addr, u16 count, u8 *data);
 /* export */ void controller_init(void);
 /* export */ void controller_10msec_timer(void);
 /* export */ void controller_handle(void);
+
+// --------------- Non-standard / custom:
+
+// JSD's custom persistent data structures per program:
+
+// Program data structure loaded from / written to flash memory:
+struct program {
+    // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
+    char name[20];
+    // G-major effects enabled by default per channel (see fxm_*):
+    u8 fx[6];
+    // RJM program (0-127) assigned to each channel:
+    // 8th bit indicates that channel is the initial channel changed to when the program is activated.
+    u8 rjm[6];
+};
+
+// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
+// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
+COMPILE_ASSERT(sizeof(struct program) == 32);

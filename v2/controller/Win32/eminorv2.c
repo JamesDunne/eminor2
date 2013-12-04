@@ -13,8 +13,6 @@ typedef unsigned long u32;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-#define IDT_TIMER1 101
-
 static HINSTANCE zhInstance = NULL;
 
 #define mmToIn 0.0393701
@@ -153,12 +151,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     // TODO: really should FreeConsole() and fclose(stdout) later but it'll be open til process end anyway.
     AllocConsole();
     freopen("CONOUT$", "wb", stdout);
-
-    // Activate the 10ms timer:
-    SetTimer(hwndMain,         // handle to main window
-        IDT_TIMER1,            // timer identifier
-        10,                    // 10-ms interval
-        (TIMERPROC)NULL);      // no timer callback
 
     // display the possible MIDI output devices:
     show_midi_output_devices();

@@ -80,8 +80,14 @@ u8 next_gmaj_program;
 // Most recent changed-to g-major program via MIDI message:
 u8 midi_gmaj_program;
 
+u8 rjm_channel;
+
 // Current program data:
 struct program pr;
+
+#ifdef FEAT_LCD
+char lcdtext_row_program[LCD_COLS];
+#endif
 
 // Loads a 6-bit bit field describing the initial on/off state of effects
 void load_program_state(void) {
@@ -96,6 +102,11 @@ void load_program_state(void) {
 #else
     // Load effects on/off state data from persistent storage:
     flash_load((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+    for (int i = 0; i < 6; ++i)
+    if (pr.rjm[i] & M_8) {
+        rjm_channel = i;
+        break;
+    }
 #endif
 
 #if 0
@@ -112,13 +123,14 @@ void load_program_state(void) {
 
 void store_program_state(void) {
     // Store effects on/off state of current program:
-    // NOTE(jsd): Use multiple of 8 to avoid crossing 64-byte boundaries in flash!
+
+    // Update initial RJM channel bit and clear others:
+    for (int i = 0; i < 6; ++i)
+        pr.rjm[i] = pr.rjm[i] & ~M_8 | (rjm_channel == i ? M_8 : 0);
+
+    // Store program state:
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
 }
-
-#ifdef FEAT_LCD
-char lcdtext_row_program[LCD_COLS];
-#endif
 
 static void send_leds(void) {
     // Update LEDs:
@@ -170,22 +182,22 @@ static void gmaj_toggle_cc(u8 idx) {
     idxMask = (1 << idx);
 
     // Toggle on/off the selected continuous controller:
-    pr.fx[pr.rjm_channel] ^= idxMask;
+    pr.fx[rjm_channel] ^= idxMask;
 
     // Determine the MIDI value to use depending on the newly toggled state:
-    if (pr.fx[pr.rjm_channel] & idxMask) togglevalue = 0x7F;
+    if (pr.fx[rjm_channel] & idxMask) togglevalue = 0x7F;
 
     // Send MIDI command:
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
 
     // Update LEDs:
-    leds.top.byte = (pr.fx[pr.rjm_channel] & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+    leds.top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
     send_leds();
 }
 
 static void update_effects_MIDI_state(void) {
     b8 n;
-    n.byte = pr.fx[pr.rjm_channel];
+    n.byte = pr.fx[rjm_channel];
 
     // Assume all effects are off by default because g-major program change has just occurred.
 
@@ -230,11 +242,10 @@ static void update_effects_MIDI_state(void) {
 static void set_rjm_channel(u8 p) {
     assert(p < 6);
 
-    pr.rjm_channel = p;
+    rjm_channel = p;
 
     // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
-    // NOTE(jsd): add 4 for personal raisins; first 4 programs are reserved for existing v1 controller.
-    midi_send_cmd1(0xC, rjm_midi_channel, p + 4);
+    midi_send_cmd1(0xC, rjm_midi_channel, pr.rjm[p] & ~M_8);
 
     // Change to the g-major program:
     midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
@@ -263,13 +274,13 @@ static void set_gmaj_program(void) {
 
     // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
     // NOTE(jsd): add 4 for personal raisins; first 4 programs are reserved for existing v1 controller.
-    midi_send_cmd1(0xC, rjm_midi_channel, pr.rjm_channel + 4);
+    midi_send_cmd1(0xC, rjm_midi_channel, rjm_channel + 4);
 
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
 
     // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds.bot.byte = (1 << pr.rjm_channel) | (leds.bot.byte & (M_7 | M_8));
+    leds.bot.byte = (1 << rjm_channel) | (leds.bot.byte & (M_7 | M_8));
 
     send_leds();
 }
@@ -306,7 +317,7 @@ void controller_init(void) {
     timer_tapstore = 0;
     timeout_flash = 0;
 
-    pr.rjm_channel = 0;
+    rjm_channel = 0;
     gmaj_program = 0;
     next_gmaj_program = 0;
     midi_gmaj_program = 0;
@@ -344,9 +355,9 @@ void controller_10msec_timer(void) {
     if (timer_fx_held > timer_fx_timeout) {
         // Flash top LEDs on/off:
         if ((timer_fx_held & 15) >= 7) {
-            leds.top.byte = ((pr.fx[pr.rjm_channel] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+            leds.top.byte = ((pr.fx[rjm_channel] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
         } else {
-            leds.top.byte = ((pr.fx[pr.rjm_channel] | fsw.top.byte) & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+            leds.top.byte = ((pr.fx[rjm_channel] | fsw.top.byte) & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
         }
         send_leds();
     }
@@ -354,7 +365,7 @@ void controller_10msec_timer(void) {
     if (timeout_flash) {
         if (!--timeout_flash) {
             // Reset LED state:
-            leds.top.byte = (pr.fx[pr.rjm_channel] & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+            leds.top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
             send_leds();
         } else {
             // Flash top LEDs on/off:

@@ -16,7 +16,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 02: Even flow:
@@ -30,7 +37,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 03: Zero:
@@ -44,7 +58,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay | fxm_pitch)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 04: Wonderwall:
@@ -58,7 +79,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 2
+        .rjm = {
+            0,
+            1,
+            2 | M_8,
+            3,
+            4,
+            5
+        }
     },
 
     // 05: Buddy Holly:
@@ -72,7 +100,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 06: Plush:
@@ -86,7 +121,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate | fxm_chorus | fxm_eq),
             (fxm_noisegate | fxm_chorus | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 07: Come Out and Play:
@@ -100,7 +142,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 08: Drive:
@@ -114,7 +163,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 0
+        .rjm = {
+            0 | M_8,
+            1,
+            2,
+            3,
+            4,
+            5
+        }
     },
 
     // 09: When I Come Around:
@@ -128,7 +184,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 10: Glycerine:
@@ -142,7 +205,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 2
+        .rjm = {
+            0,
+            1,
+            2 | M_8,
+            3,
+            4,
+            5
+        }
     },
 
     // 11: Enter Sandman:
@@ -156,7 +226,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 0
+        .rjm = {
+            0 | M_8,
+            1,
+            2,
+            3,
+            4,
+            5
+        }
     },
 
     // 12: Crawling in the Dark:
@@ -170,7 +247,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 2
+        .rjm = {
+            0,
+            1,
+            2 | M_8,
+            3,
+            4,
+            5
+        }
     },
 
     // 13: Song 2:
@@ -179,12 +263,19 @@ struct program flash_memory[128] = {
         .fx = {
             (fxm_compressor | fxm_eq),
             (fxm_compressor | fxm_eq),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate)
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq)
         },
-        .rjm_channel = 0
+        .rjm = {
+            0 | M_8,
+            1,
+            0,
+            1,
+            0,
+            1
+        }
     },
 
     // 14: Sex Type Thing:
@@ -198,7 +289,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 15: Mr. Jones:
@@ -212,7 +310,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 2
+        .rjm = {
+            0,
+            1,
+            2 | M_8,
+            3,
+            4,
+            5
+        }
     },
 
     // 16: Counting Blue Cars:
@@ -226,7 +331,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate | fxm_delay),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 17: In Bloom:
@@ -234,13 +346,20 @@ struct program flash_memory[128] = {
         .name = "In Bloom",
         .fx = {
             (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq),
             (fxm_compressor | fxm_delay | fxm_eq),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate | fxm_delay)
+            (fxm_compressor | fxm_delay | fxm_eq),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq | fxm_delay)
         },
-        .rjm_channel = 0
+        .rjm = {
+            0 | M_8,
+            1,
+            0,
+            1,
+            0,
+            1
+        }
     },
 
     // 18: Hash Pipe:
@@ -254,7 +373,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 19: My Hero:
@@ -268,7 +394,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 20: Machinehead:
@@ -282,7 +415,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 2
+        .rjm = {
+            0,
+            1,
+            2 | M_8,
+            3,
+            4,
+            5
+        }
     },
 
     // 21: Holiday:
@@ -296,7 +436,14 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 4
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
     },
 
     // 22: Closing Time:
@@ -310,6 +457,34 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
-        .rjm_channel = 2
-    }
+        .rjm = {
+            0,
+            1,
+            2 | M_8,
+            3,
+            4,
+            5
+        }
+    },
+
+    // 23: Brainstew/Jaded:
+    {
+        .name = "Brainstew/Jaded",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate)
+        },
+        .rjm = {
+            0,
+            1,
+            2,
+            3,
+            4 | M_8,
+            5
+        }
+    },
 };
