@@ -100,9 +100,11 @@ void load_program_state(void) {
     pr.fx[4] = 0;
     pr.fx[5] = fxm_delay;
 #else
+    u8 i;
+
     // Load effects on/off state data from persistent storage:
     flash_load((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
-    for (int i = 0; i < 6; ++i)
+    for (i = 0; i < 6; ++i)
     if (pr.rjm[i] & M_8) {
         rjm_channel = i;
         break;
@@ -123,9 +125,10 @@ void load_program_state(void) {
 
 void store_program_state(void) {
     // Store effects on/off state of current program:
+    u8 i;
 
     // Update initial RJM channel bit and clear others:
-    for (int i = 0; i < 6; ++i)
+    for (i = 0; i < 6; ++i)
         pr.rjm[i] = pr.rjm[i] & ~M_8 | (rjm_channel == i ? M_8 : 0);
 
     // Store program state:
@@ -133,6 +136,9 @@ void store_program_state(void) {
 }
 
 static void send_leds(void) {
+    u8 n = gmaj_program + 1;
+    u8 i = LCD_COLS - 1;
+
     // Update LEDs:
     u16 tmp = (u16)leds.bot.byte | ((u16)leds.top.byte << 8);
     led_set(tmp);
@@ -141,8 +147,6 @@ static void send_leds(void) {
     // Update LCD display:
 
     // Show g-major program number, right-aligned space padded:
-    u8 n = gmaj_program + 1;
-    u8 i = LCD_COLS - 1;
 
     // Built-in `itoa()` impl:
     do {
