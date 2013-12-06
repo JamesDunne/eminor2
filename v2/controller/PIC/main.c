@@ -31,7 +31,27 @@ void testcrap(void) {
 
 void main() {
 	unsigned char chars[5], index;
+    u8 tmp = 0;
 
+#if 1
+	CLRWDT();
+	init();
+	CLRWDT();
+
+    MIDI_ENQUEUE(0xC0);
+    MIDI_ENQUEUE(0x01);
+
+    for(;;) {
+		CLRWDT();
+		ENABLE_ALL_INTERRUPTS();
+
+        MIDI_ENQUEUE(0xC0);
+        MIDI_ENQUEUE(tmp);
+        tmp = ((tmp + 1) & 0x7F);
+
+        MIDI_COMM_ROUTINE();
+    }
+#else
 	CLRWDT();
 	init();
 	CLRWDT();
@@ -86,6 +106,7 @@ void main() {
 
 		MIDI_COMM_ROUTINE();		//handles sending/receiving midi data
 	}
+#endif
 }
 
 void	ServiceUSB(void) {
