@@ -1,9 +1,16 @@
 
 A list of PCB design mistakes and construction mistakes made, noticed after PCBs arrived and components soldered on:
 
+Construction flaws:
   * ICD 5-pin header too close to MIDI socket; PICkit 3 is too fat to fit without adapter cable
   * used 30 gauge wire to relocate ICD header; should've used thicker gauge
   * Eagle package used for ceramic capacitors has spacing too wide; 100mil shorter is better, don't have to bend leads that way
   * didn't leave enough clearance around 16-pin pin headers; socket cables have extra width
   * NPN transistor pins are not angled; should've used a different Eagle package with coplanar pins
-  * could have used resistor arrays for LEDs
+
+Should have:
+  * planned top silk screen better; some labels can be moved to better locations
+  * add silk screen to bottom of PCB
+  * fewer prototyping vias
+  * redesigned mux pin mappings to be linear
+  * maybe should have used 220 ohm resistor arrays for LEDs
