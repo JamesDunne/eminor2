@@ -34,7 +34,7 @@ void	ServiceUSB(void);
 #pragma code	main_code=0xA2A
 
 void main() {
-    u8 tmp = 0, tmp2 = 0;
+    u8 tmp = 0, tmp2 = 0, tmp3 = 0;
 
 #if 1
     CLRWDT();
@@ -55,6 +55,7 @@ void main() {
             // This section runs every 10ms:
 			ControllerTiming = false;
 
+#if 0
             // Alternate LEDs every 500ms:
             tmp2++;
             if (tmp2 >= 0) {
@@ -69,6 +70,27 @@ void main() {
             MIDI_ENQUEUE(0xC0);
             MIDI_ENQUEUE(tmp);
             tmp = ((tmp + 1) & 0x7F);
+#else
+            // Read foot switches:
+            ReadButtons();
+
+            // Send a program change message for each foot switch pressed:
+            tmp2 = 1;
+            for (tmp = 0; tmp < 8; tmp++, tmp2 <<= 1) {
+                if ((ButtonStateBot & tmp2 == tmp2) && (tmp3 & tmp2 == 0)) {
+                    MIDI_ENQUEUE(0xC0);
+                    MIDI_ENQUEUE(tmp);
+                }
+            }
+            tmp3 = ButtonStateBot;
+
+            // Copy foot switch states to LED states:
+            LedStatesTop = ButtonStateTop;
+            LedStatesBot = ButtonStateBot;
+
+            // Update LEDs:
+            UpdateLeds();
+#endif
         }
 
         MIDI_COMM_ROUTINE();

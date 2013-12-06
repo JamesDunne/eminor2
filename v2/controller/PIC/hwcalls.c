@@ -130,10 +130,9 @@ void	ReadButtons(void) {
 	unsigned char BtnAddress, bitloc, i;
 	BitField TempButtons;
 
-	bitloc = 1;
-
     // read top buttons:
 	TempButtons.byte = 0;
+	bitloc = 1;
 	for (BtnAddress = 0; BtnAddress < 8; BtnAddress++) {
 		SetDipAddress(BtnAddress);
 
@@ -143,11 +142,10 @@ void	ReadButtons(void) {
 		bitloc <<= 1;										//shift the bit over to the next
 	}
 	ButtonStateTop = TempButtons.byte;
-	// all buttons are backwards logic, so simply invert the state of ButtonState.
-	ButtonStateTop = ~ButtonStateTop;
 
     // read bottom buttons:
 	TempButtons.byte = 0;
+	bitloc = 1;
 	for (BtnAddress = 8; BtnAddress < 16; BtnAddress++) {
 		SetDipAddress(BtnAddress);
 
@@ -157,7 +155,9 @@ void	ReadButtons(void) {
 		bitloc <<= 1;										//shift the bit over to the next
 	}
 	ButtonStateBot = TempButtons.byte;
-	// all buttons are backwards logic, so simply invert the state of ButtonState.
+
+    // all buttons are backwards logic, so simply invert the state of ButtonState.
+	ButtonStateTop = ~ButtonStateTop;
 	ButtonStateBot = ~ButtonStateBot;
 
     //diag break when a button is detected as pushed.
