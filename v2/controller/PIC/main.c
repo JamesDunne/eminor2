@@ -6,6 +6,14 @@
 //;#																		  #
 //;############################################################################
 
+#pragma config PLLDIV = 2
+#pragma config CPUDIV = OSC2_PLL3
+#pragma config FOSC = HSPLL_HS
+
+#pragma config LVP = OFF
+#pragma config WDT = OFF
+#pragma config WDTPS = 128
+#pragma config DEBUG = ON
 
 #include "c_system.h"
 #include "usb.h"
@@ -18,32 +26,30 @@ void	ServiceUSB(void);
 
 #pragma code	main_code=0xA2A
 
-/*
-rom unsigned char 	DataStart[64] = "    princess consuela banana hannoc  ";
-*/
-
-void testcrap(void) {
-/*
-    //Test to turn on every other LED
-	SendDataToShiftReg(0xAA);
-*/
-}
-
 void main() {
-	unsigned char chars[5], index;
-    u8 tmp = 0;
+    u8 tmp = 0, tmp2 = 0;
 
 #if 1
-	CLRWDT();
-	init();
-	CLRWDT();
-
-    MIDI_ENQUEUE(0xC0);
-    MIDI_ENQUEUE(0x01);
+    CLRWDT();
+    init();
+    CLRWDT();
 
     for(;;) {
-		CLRWDT();
-		ENABLE_ALL_INTERRUPTS();
+        CLRWDT();
+        ENABLE_ALL_INTERRUPTS();
+
+        // Alternate LEDs every 500ms:
+		if (ControllerTiming) {
+			ControllerTiming = false;
+            tmp2++;
+            if (tmp2 >= 0) {
+                SendDataToShiftReg16(0xAA, 0xAA);
+            } else if (tmp2 >= 50) {
+                SendDataToShiftReg16(0x55, 0x55);
+            } else if (tmp2 >= 100) {
+                tmp2 = 0;
+            }
+        }
 
         MIDI_ENQUEUE(0xC0);
         MIDI_ENQUEUE(tmp);
