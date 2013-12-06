@@ -6,14 +6,21 @@
 //;#																		  #
 //;############################################################################
 
-#pragma config PLLDIV = 2
-#pragma config CPUDIV = OSC2_PLL3
-#pragma config FOSC = HSPLL_HS
+// NOTE(jsd): This replaces config.asm section which is apparently commented out and/or not working as intended.
+#pragma config PLLDIV = 2, CPUDIV = OSC2_PLL3, USBDIV = 2
+#pragma config FOSC = HSPLL_HS, FCMEN = OFF, IESO = OFF
+#pragma config VREGEN = ON, PWRT=ON, BOR=ON, BORV=0
+#pragma config WDT = ON, WDTPS = 128
+#pragma config CCP2MX=ON, PBADEN=OFF, LPT1OSC=OFF, MCLRE=ON
+#pragma config STVREN=ON, LVP=OFF, ICPRT=OFF, XINST=OFF
+#pragma config CP0=OFF, CP1=OFF, CP2=OFF
+#pragma config CPB=OFF, CPD=OFF
+#pragma config WRT0=OFF, WRT1=OFF, WRT2=OFF
+#pragma config WRTC=OFF, WRTB=OFF, WRTD=OFF
+#pragma config EBTR0=OFF, EBTR1=OFF, EBTR2=OFF
+#pragma config EBTRB=OFF
 
-#pragma config LVP = OFF
-#pragma config WDT = OFF
-#pragma config WDTPS = 128
-#pragma config DEBUG = ON
+#pragma config DEBUG = OFF
 
 #include "c_system.h"
 #include "usb.h"
@@ -38,9 +45,17 @@ void main() {
         CLRWDT();
         ENABLE_ALL_INTERRUPTS();
 
-        // Alternate LEDs every 500ms:
+		if (Systick) {
+			Systick = false;
+			SystemTimeRoutine();		//1mS system time routine
+			continue;
+		}
+
 		if (ControllerTiming) {
+            // This section runs every 10ms:
 			ControllerTiming = false;
+
+            // Alternate LEDs every 500ms:
             tmp2++;
             if (tmp2 >= 0) {
                 SendDataToShiftReg16(0xAA, 0xAA);
@@ -49,11 +64,12 @@ void main() {
             } else if (tmp2 >= 100) {
                 tmp2 = 0;
             }
-        }
 
-        MIDI_ENQUEUE(0xC0);
-        MIDI_ENQUEUE(tmp);
-        tmp = ((tmp + 1) & 0x7F);
+            // Send a new program change message:
+            MIDI_ENQUEUE(0xC0);
+            MIDI_ENQUEUE(tmp);
+            tmp = ((tmp + 1) & 0x7F);
+        }
 
         MIDI_COMM_ROUTINE();
     }
