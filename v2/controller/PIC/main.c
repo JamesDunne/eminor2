@@ -55,22 +55,22 @@ void main() {
             // This section runs every 10ms:
 			ControllerTiming = false;
 
-#if 0
+#if 1
             // Alternate LEDs every 500ms:
             tmp2++;
-            if (tmp2 >= 0) {
-                SendDataToShiftReg16(0xAA, 0xAA);
-            } else if (tmp2 >= 50) {
-                SendDataToShiftReg16(0x55, 0x55);
-            } else if (tmp2 >= 100) {
+            if (tmp2 >= 32) {
                 tmp2 = 0;
+            } else if (tmp2 >= 16) {
+                SendDataToShiftReg16(0xAA, 0xAA);
+            } else if (tmp2 >= 0) {
+                SendDataToShiftReg16(0x55, 0x55);
             }
 
             // Send a new program change message:
-            MIDI_ENQUEUE(0xC0);
-            MIDI_ENQUEUE(tmp);
-            tmp = ((tmp + 1) & 0x7F);
-#else
+            //MIDI_ENQUEUE(0xC0);
+            //MIDI_ENQUEUE(tmp);
+            //tmp = ((tmp + 1) & 0x7F);
+#elif 0
             // Read foot switches:
             ReadButtons();
 
