@@ -17,7 +17,7 @@
 #define	BTN_S3_LAT                      LATA
 #define	BTN_S3_TRIS_BIT                 TRISAPINbits.TRISA0
 #define	BTN_S3_PORT                     PORTA
-#define	TRISAPIN0						(INPUT<<0)
+#define	TRISAPIN0						(OUTPUT<<0)
 #define	LATAPIN0						(false<<0)
 
 #define SHIFTREG_SRCK_BIT				1

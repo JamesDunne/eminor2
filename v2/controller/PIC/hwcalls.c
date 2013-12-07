@@ -167,14 +167,15 @@ void	ReadButtons(void) {
 }
 
 void SetDipAddress(unsigned char Address) {
+    // NOTE(jsd): BTN_S3 flipped is correct logic.
 	BTN_S0_LAT_BIT = false;
 	BTN_S1_LAT_BIT = false;
 	BTN_S2_LAT_BIT = false;
-    BTN_S3_LAT_BIT = false;
+    BTN_S3_LAT_BIT = true;
 	if (chkbit(Address,0)) BTN_S0_LAT_BIT = true;
 	if (chkbit(Address,1)) BTN_S1_LAT_BIT = true;
 	if (chkbit(Address,2)) BTN_S2_LAT_BIT = true;
-    if (chkbit(Address,3)) BTN_S3_LAT_BIT = true;
+    if (chkbit(Address,3)) BTN_S3_LAT_BIT = false;
 }
 
 /* --------------- LED read-out display functions: */

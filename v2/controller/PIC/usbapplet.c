@@ -1,6 +1,6 @@
 
 /** I N C L U D E S **********************************************************/
-#include "p18f4455.h"
+#include "p18f4550.h"
 #include "c_system.h"
 #include "typedefs.h"
 #include "usb.h"

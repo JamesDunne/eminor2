@@ -1,0 +1,220 @@
+>mcc18 -p=18f4550 --help-config
+Configuration settings available for processor PIC18F4550
+
+  PLL Prescaler Selection bits:
+    PLLDIV = 1          No prescale (4 MHz oscillator input drives PLL
+                        directly)
+    PLLDIV = 2          Divide by 2 (8 MHz oscillator input)
+    PLLDIV = 3          Divide by 3 (12 MHz oscillator input)
+    PLLDIV = 4          Divide by 4 (16 MHz oscillator input)
+    PLLDIV = 5          Divide by 5 (20 MHz oscillator input)
+    PLLDIV = 6          Divide by 6 (24 MHz oscillator input)
+    PLLDIV = 10         Divide by 10 (40 MHz oscillator input)
+    PLLDIV = 12         Divide by 12 (48 MHz oscillator input)
+
+  System Clock Postscaler Selection bits:
+    CPUDIV = OSC1_PLL2  [Primary Oscillator Src: /1][96 MHz PLL Src: /2]
+    CPUDIV = OSC2_PLL3  [Primary Oscillator Src: /2][96 MHz PLL Src: /3]
+    CPUDIV = OSC3_PLL4  [Primary Oscillator Src: /3][96 MHz PLL Src: /4]
+    CPUDIV = OSC4_PLL6  [Primary Oscillator Src: /4][96 MHz PLL Src: /6]
+
+  USB Clock Selection bit (used in Full-Speed USB mode only; UCFG:FSEN = 1):
+    USBDIV = 1          USB clock source comes directly from the primary
+                        oscillator block with no postscale
+    USBDIV = 2          USB clock source comes from the 96 MHz PLL divided by 2
+
+  Oscillator Selection bits:
+    FOSC = XT_XT        XT oscillator (XT)
+    FOSC = XTPLL_XT     XT oscillator, PLL enabled (XTPLL)
+    FOSC = ECIO_EC      EC oscillator, port function on RA6 (ECIO)
+    FOSC = EC_EC        EC oscillator, CLKO function on RA6 (EC)
+    FOSC = ECPLLIO_EC   EC oscillator, PLL enabled, port function on RA6
+                        (ECPIO)
+    FOSC = ECPLL_EC     EC oscillator, PLL enabled, CLKO function on RA6
+                        (ECPLL)
+    FOSC = INTOSCIO_EC  Internal oscillator, port function on RA6, EC used by
+                        USB (INTIO)
+    FOSC = INTOSC_EC    Internal oscillator, CLKO function on RA6, EC used by
+                        USB (INTCKO)
+    FOSC = INTOSC_XT    Internal oscillator, XT used by USB (INTXT)
+    FOSC = INTOSC_HS    Internal oscillator, HS oscillator used by USB (INTHS)
+    FOSC = HS           HS oscillator (HS)
+    FOSC = HSPLL_HS     HS oscillator, PLL enabled (HSPLL)
+
+  Fail-Safe Clock Monitor Enable bit:
+    FCMEN = OFF         Fail-Safe Clock Monitor disabled
+    FCMEN = ON          Fail-Safe Clock Monitor enabled
+
+  Internal/External Oscillator Switchover bit:
+    IESO = OFF          Oscillator Switchover mode disabled
+    IESO = ON           Oscillator Switchover mode enabled
+
+  Power-up Timer Enable bit:
+    PWRT = ON           PWRT enabled
+    PWRT = OFF          PWRT disabled
+
+  Brown-out Reset Enable bits:
+    BOR = OFF           Brown-out Reset disabled in hardware and software
+    BOR = SOFT          Brown-out Reset enabled and controlled by software
+                        (SBOREN is enabled)
+    BOR = ON_ACTIVE     Brown-out Reset enabled in hardware only and disabled
+                        in Sleep mode (SBOREN is disabled)
+    BOR = ON            Brown-out Reset enabled in hardware only (SBOREN is
+                        disabled)
+
+  Brown-out Reset Voltage bits:
+    BORV = 0            Maximum setting
+    BORV = 1
+    BORV = 2
+    BORV = 3            Minimum setting
+
+  USB Voltage Regulator Enable bit:
+    VREGEN = OFF        USB voltage regulator disabled
+    VREGEN = ON         USB voltage regulator enabled
+
+  Watchdog Timer Enable bit:
+    WDT = OFF           WDT disabled (control is placed on the SWDTEN bit)
+    WDT = ON            WDT enabled
+
+  Watchdog Timer Postscale Select bits:
+    WDTPS = 1           1:1
+    WDTPS = 2           1:2
+    WDTPS = 4           1:4
+    WDTPS = 8           1:8
+    WDTPS = 16          1:16
+    WDTPS = 32          1:32
+    WDTPS = 64          1:64
+    WDTPS = 128         1:128
+    WDTPS = 256         1:256
+    WDTPS = 512         1:512
+    WDTPS = 1024        1:1024
+    WDTPS = 2048        1:2048
+    WDTPS = 4096        1:4096
+    WDTPS = 8192        1:8192
+    WDTPS = 16384       1:16384
+    WDTPS = 32768       1:32768
+
+  CCP2 MUX bit:
+    CCP2MX = OFF        CCP2 input/output is multiplexed with RB3
+    CCP2MX = ON         CCP2 input/output is multiplexed with RC1
+
+  PORTB A/D Enable bit:
+    PBADEN = OFF        PORTB<4:0> pins are configured as digital I/O on Reset
+    PBADEN = ON         PORTB<4:0> pins are configured as analog input
+                        channels on Reset
+
+  Low-Power Timer 1 Oscillator Enable bit:
+    LPT1OSC = OFF       Timer1 configured for higher power operation
+    LPT1OSC = ON        Timer1 configured for low-power operation
+
+  MCLR Pin Enable bit:
+    MCLRE = OFF         RE3 input pin enabled; MCLR pin disabled
+    MCLRE = ON          MCLR pin enabled; RE3 input pin disabled
+
+  Stack Full/Underflow Reset Enable bit:
+    STVREN = OFF        Stack full/underflow will not cause Reset
+    STVREN = ON         Stack full/underflow will cause Reset
+
+  Single-Supply ICSP Enable bit:
+    LVP = OFF           Single-Supply ICSP disabled
+    LVP = ON            Single-Supply ICSP enabled
+
+  Dedicated In-Circuit Debug/Programming Port (ICPORT) Enable bit:
+    ICPRT = OFF         ICPORT disabled
+    ICPRT = ON          ICPORT enabled
+
+  Extended Instruction Set Enable bit:
+    XINST = OFF         Instruction set extension and Indexed Addressing mode
+                        disabled (Legacy mode)
+    XINST = ON          Instruction set extension and Indexed Addressing mode
+                        enabled
+
+  Background Debugger Enable bit:
+    DEBUG = ON          Background debugger enabled, RB6 and RB7 are dedicated
+                        to In-Circuit Debug
+    DEBUG = OFF         Background debugger disabled, RB6 and RB7 configured
+                        as general purpose I/O pins
+
+  Code Protection bit:
+    CP0 = ON            Block 0 (000800-001FFFh) is code-protected
+    CP0 = OFF           Block 0 (000800-001FFFh) is not code-protected
+
+  Code Protection bit:
+    CP1 = ON            Block 1 (002000-003FFFh) is code-protected
+    CP1 = OFF           Block 1 (002000-003FFFh) is not code-protected
+
+  Code Protection bit:
+    CP2 = ON            Block 2 (004000-005FFFh) is code-protected
+    CP2 = OFF           Block 2 (004000-005FFFh) is not code-protected
+
+  Code Protection bit:
+    CP3 = ON            Block 3 (006000-007FFFh) is code-protected
+    CP3 = OFF           Block 3 (006000-007FFFh) is not code-protected
+
+  Boot Block Code Protection bit:
+    CPB = ON            Boot block (000000-0007FFh) is code-protected
+    CPB = OFF           Boot block (000000-0007FFh) is not code-protected
+
+  Data EEPROM Code Protection bit:
+    CPD = ON            Data EEPROM is code-protected
+    CPD = OFF           Data EEPROM is not code-protected
+
+  Write Protection bit:
+    WRT0 = ON           Block 0 (000800-001FFFh) is write-protected
+    WRT0 = OFF          Block 0 (000800-001FFFh) is not write-protected
+
+  Write Protection bit:
+    WRT1 = ON           Block 1 (002000-003FFFh) is write-protected
+    WRT1 = OFF          Block 1 (002000-003FFFh) is not write-protected
+
+  Write Protection bit:
+    WRT2 = ON           Block 2 (004000-005FFFh) is write-protected
+    WRT2 = OFF          Block 2 (004000-005FFFh) is not write-protected
+
+  Write Protection bit:
+    WRT3 = ON           Block 3 (006000-007FFFh) is write-protected
+    WRT3 = OFF          Block 3 (006000-007FFFh) is not write-protected
+
+  Configuration Register Write Protection bit:
+    WRTC = ON           Configuration registers (300000-3000FFh) are
+                        write-protected
+    WRTC = OFF          Configuration registers (300000-3000FFh) are not
+                        write-protected
+
+  Boot Block Write Protection bit:
+    WRTB = ON           Boot block (000000-0007FFh) is write-protected
+    WRTB = OFF          Boot block (000000-0007FFh) is not write-protected
+
+  Data EEPROM Write Protection bit:
+    WRTD = ON           Data EEPROM is write-protected
+    WRTD = OFF          Data EEPROM is not write-protected
+
+  Table Read Protection bit:
+    EBTR0 = ON          Block 0 (000800-001FFFh) is protected from table reads
+                        executed in other blocks
+    EBTR0 = OFF         Block 0 (000800-001FFFh) is not protected from table
+                        reads executed in other blocks
+
+  Table Read Protection bit:
+    EBTR1 = ON          Block 1 (002000-003FFFh) is protected from table reads
+                        executed in other blocks
+    EBTR1 = OFF         Block 1 (002000-003FFFh) is not protected from table
+                        reads executed in other blocks
+
+  Table Read Protection bit:
+    EBTR2 = ON          Block 2 (004000-005FFFh) is protected from table reads
+                        executed in other blocks
+    EBTR2 = OFF         Block 2 (004000-005FFFh) is not protected from table
+                        reads executed in other blocks
+
+  Table Read Protection bit:
+    EBTR3 = ON          Block 3 (006000-007FFFh) is protected from table reads
+                        executed in other blocks
+    EBTR3 = OFF         Block 3 (006000-007FFFh) is not protected from table
+                        reads executed in other blocks
+
+  Boot Block Table Read Protection bit:
+    EBTRB = ON          Boot block (000000-0007FFh) is protected from table
+                        reads executed in other blocks
+    EBTRB = OFF         Boot block (000000-0007FFh) is not protected from
+                        table reads executed in other blocks

@@ -52,10 +52,12 @@ void main() {
 		}
 
 		if (ControllerTiming) {
+            u8 btn = ButtonStateBot;
+
             // This section runs every 10ms:
 			ControllerTiming = false;
 
-#if 1
+#if 0
             // Alternate LEDs every 500ms:
             tmp2++;
             if (tmp2 >= 32) {
@@ -70,23 +72,23 @@ void main() {
             //MIDI_ENQUEUE(0xC0);
             //MIDI_ENQUEUE(tmp);
             //tmp = ((tmp + 1) & 0x7F);
-#elif 0
+#else
             // Read foot switches:
             ReadButtons();
 
             // Send a program change message for each foot switch pressed:
             tmp2 = 1;
             for (tmp = 0; tmp < 8; tmp++, tmp2 <<= 1) {
-                if ((ButtonStateBot & tmp2 == tmp2) && (tmp3 & tmp2 == 0)) {
+                if ((btn & tmp2 == tmp2) && (tmp3 & tmp2 == 0)) {
                     MIDI_ENQUEUE(0xC0);
                     MIDI_ENQUEUE(tmp);
                 }
             }
-            tmp3 = ButtonStateBot;
+            tmp3 = btn;
 
             // Copy foot switch states to LED states:
-            LedStatesTop = ButtonStateTop;
-            LedStatesBot = ButtonStateBot;
+            LedStatesTop = ~btn;
+            LedStatesBot = btn;
 
             // Update LEDs:
             UpdateLeds();

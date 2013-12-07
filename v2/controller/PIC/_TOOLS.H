@@ -26,7 +26,7 @@
 
 // Set low bit #"Place" located in a register called "VAR"  // Place : 0 -> 7
 #define clrbit(VAR,Place) VAR &= (1 << Place)^255
-#define chkbit(VAR,Place) (VAR & 1 << Place)
+#define chkbit(VAR,Place) (VAR & (1 << Place))
 #define tglbit(VAR,Place) VAR ^= 1 << Place
 
 #define	jumpto(LOCATION) _asm goto	LOCATION	_endasm

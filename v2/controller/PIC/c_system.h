@@ -7,7 +7,7 @@
 //;#																		  #
 //;############################################################################
 #include "_tools.h"
-#include "p18f4455.h"
+#include "p18f4550.h"
 #include "c_cnstdef.h"
 #include "c_ramdef.h"
 #include "c_portdef.h"
