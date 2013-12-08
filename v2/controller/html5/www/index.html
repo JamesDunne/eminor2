@@ -17,11 +17,11 @@
 <body style="text-align: center">
     <h1>E-Minor V2 - a custom MIDI floorboard controller</h1>
 
-    <h3 style="margin-top: 10px">Software designed by <a href="https://github.com/JamesDunne" target="_blank">James S. Dunne</a></h3>
-    <h3>Hardware/firmware designed by <a href="https://github.com/jdunne525" target="_blank">Joseph R. Dunne</a></h3>
+    <h3 style="margin-top: 10px">Software designed by <a href="//github.com/JamesDunne" target="_blank">James S. Dunne</a></h3>
+    <h3>Hardware/firmware designed by <a href="//github.com/jdunne525" target="_blank">Joseph R. Dunne</a></h3>
     <div class="content">
-        <h5 style="margin-top: 10px"><a href="https://github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">Our GitHub Repository</a></h5>
-        <h5 style="">Last updated: 2013-11-27</h5>
+        <h5 style="margin-top: 10px"><a href="//github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">Our GitHub Repository</a></h5>
+        <h5 style="">Last updated: 2013-12-08</h5>
     </div>
     <div style="margin-top: 16px">
         <div style="text-align: center; display: inline-block; vertical-align: top;">
@@ -54,7 +54,7 @@
             <strong>A working demonstration:</strong><br />
             <canvas id="cvs" tabindex="1"></canvas><br />
             <span>(click to focus; use keyboard QWERTYUI and ASDFGHJK or mouse to activate foot-switches)</span><br />
-            <span><a href="https://github.com/JamesDunne/eminor2/tree/master/v2/controller/Win32" target="_blank">Download the Windows EXE version</a> to test with actual MIDI gear!</span>
+            <span><a href="//github.com/JamesDunne/eminor2/tree/master/v2/controller/Win32" target="_blank">Download the Windows EXE version</a> to test with actual MIDI gear!</span>
         </div>
         <div style="display: inline-block; vertical-align: top; width: 16em; text-align: left; white-space: normal">
             <h5>MIDI OUT:&nbsp;&nbsp;<a href="#" id="clearMidiOut">(clear)</a></h5>
@@ -91,8 +91,8 @@
     <div class="content">
         <h2 id="my-guitar-rig">My Guitar Rig</h2>
         <p>
-            My guitar rig consists of a <a href="http://www.mesaboogie.com/Product_Info/Mark_Series/mark5/mark5.html" target="_blank">MESA/Boogie&trade; Mark V</a> amplifier head, an
-            <a href="http://www.rjmmusic.com/miniampgizmo.php" target="_blank">RJM Mini Amp Gizmo</a>, and a <a href="http://www.tcelectronic.com/g-major/" target="_blank">t.c. electronics g-major</a>
+            My guitar rig consists of a <a href="//www.mesaboogie.com/Product_Info/Mark_Series/mark5/mark5.html" target="_blank">MESA/Boogie&trade; Mark V</a> amplifier head, an
+            <a href="//www.rjmmusic.com/miniampgizmo.php" target="_blank">RJM Mini Amp Gizmo</a>, and a <a href="//www.tcelectronic.com/g-major/" target="_blank">t.c. electronics g-major</a>
             rack effects unit. Since the Mark V itself is not MIDI-enabled, I use the Mini Amp Gizmo to translate MIDI commands into more primitive on/off signals sent to the Mark V head
             via its floorboard jack. Essentially, the Mini Amp Gizmo is acting as a floorboard controller for the Mark V but is MIDI controlled.
             The g-major is also MIDI controllable and can switch presets or enable/disable certain effects depending on the MIDI commands sent to it.
@@ -131,9 +131,9 @@
 
         <h2 id="firmware">Firmware</h2>
         <p>
-            The primary controller logic for the project is written in entirely portable ISO C99 (C) code (<a href="https://github.com/JamesDunne/eminor2/blob/master/v2/controller/common/controller-simple.c" target="_blank">common/controller-simple.c</a>).
+            The primary controller logic for the project is written in entirely portable ISO C99 (C) code (<a href="//github.com/JamesDunne/eminor2/blob/master/v2/controller/common/controller-simple.c" target="_blank">common/controller-simple.c</a>).
             The controller logic expects a hardware interface layer consisting of several functions to be implemented in the host. Here's the C header file (abridged) for the hardware interface
-            (<a href="https://github.com/JamesDunne/eminor2/blob/master/v2/controller/common/hardware.h" target="_blank">common/hardware.h</a>) that the host must implement:
+            (<a href="//github.com/JamesDunne/eminor2/blob/master/v2/controller/common/hardware.h" target="_blank">common/hardware.h</a>) that the host must implement:
         </p>
         <p>
             <pre class="code-block">
@@ -183,8 +183,8 @@ void controller_handle(void);</code></pre>
         <p>
             As of now, there are three hosts implemented for the portable controller logic written in C:
             <ul>
-                <li>This HTML5 javascript demo compiled from the C code using <a href="https://github.com/kripken/emscripten/wiki" target="_blank">Emscripten</a></li>
-                <li>A <a href="https://github.com/JamesDunne/eminor2/tree/master/v2/controller/Win32" target="_blank">Windows desktop application</a> test harness (see the readme.txt) which actually sends MIDI messages for testing</li>
+                <li>This HTML5 javascript demo compiled from the C code using <a href="//github.com/kripken/emscripten/wiki" target="_blank">Emscripten</a></li>
+                <li>A <a href="//github.com/JamesDunne/eminor2/tree/master/v2/controller/Win32" target="_blank">Windows desktop application</a> test harness (see the readme.txt) which actually sends MIDI messages for testing</li>
                 <li>PIC18 microcontroller firmware controlled by physical foot-switches</li>
             </ul>
             How's that for cross-platform portability?
@@ -196,43 +196,54 @@ void controller_handle(void);</code></pre>
         <p>To capture the foot-switch inputs, we use a pair of analog multiplexers (CD74HC4051E). Each mux can handle only 8 signals (pins A0-7) and uses 3 address lines (S0-S2) to select which signal pin to connect through to the A pin. The E' pin is used as a "fake" 4th address selector pin so we can choose which mux to read from (using a transistor). Reading of the foot-switch states is done in a tight loop (16 iterations) where the address lines are set incrementally and the BTN_IN bit is read and shifted into a bitfield and stored for later use by the portable controller logic.</p>
         <p>LED outputs are handled by a pair of shift registers (TPIC6B596N) daisy-chained together via their DO/DI pins. Each shift reg has 8 output pins. The latch pin is set low to allow the shift registers to buffer their data in and then once the latch is set high all the output pins instantaneously change. We send the shift registers data in a tight loop, strobing the SCK pin to push the bits through in MSB to LSB order.</p>
 
-        <p>We used CADSoft Eagle to design the schematic and PCB. You can find all the project files here: <a href="https://github.com/JamesDunne/eminor2/tree/master/v2/pcb" target="_blank">https://github.com/JamesDunne/eminor2/tree/master/v2/pcb</a></p>
+        <p>We used CADSoft Eagle to design the schematic and PCB. You can find all the project files <a href="//github.com/JamesDunne/eminor2/tree/master/v2/pcb" target="_blank">here</a>.</p>
         <p>Here is a screenshot of the schematic:</p>
         <div style="text-align: center; margin-top: 1em">
-            <a href="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" alt="Schematic" style="max-width: 600px" /></a><br />
+            <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/schematic.png" alt="Schematic" style="max-width: 600px" /></a><br />
             <small>(click for larger version)</small>
         </div>
         <p>I took the liberty of designing a PCB layout for the schematic as well. Unfortunately, due to PCB size constraints, some pin-mapping sins had to be committed so that the traces and ICs could all fit happily on the board. Look at the pin headers for the BTN_* connectors in the schematic to see what I mean. This remapping can be easily accommodated for in the physical wiring or in the firmware, whichever you find easiest to do.
         Of course, you are free to update the schematic and PCB layout to correct these things if you can find a better way.</p>
         <div style="text-align: center; margin-top: 1em">
-            <a href="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/pcb.png" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/pcb.png" alt="PCB Layout" style="max-width: 600px" /></a><br />
+            <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pcb.png" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pcb.png" alt="PCB Layout" style="max-width: 600px" /></a><br />
             <small>(click for larger version)</small>
         </div>
 
         <h2 id="bom">Bill of Materials</h2>
-        <p>Here's the <a href="https://github.com/JamesDunne/eminor2/blob/master/v2/pcb/Bill%20of%20Materials.tsv" target="_blank">bill of materials</a> in our GitHub repository, nicely formatted into a data table for us by GitHub. We also have a <a href="https://docs.google.com/spreadsheet/ccc?key=0Ah4nh0yGtjrgdHBYRjlqZkN1UXhrbTFLOTFnZWNGYkE#gid=0" target="_blank">Google Docs Spreadsheet</a> copy available if you prefer to work there.</p>
+        <p>Here's the <a href="//github.com/JamesDunne/eminor2/blob/master/v2/pcb/Bill%20of%20Materials.tsv" target="_blank">bill of materials</a> in our GitHub repository, nicely formatted into a data table for us by GitHub. We also have a <a href="//docs.google.com/spreadsheet/ccc?key=0Ah4nh0yGtjrgdHBYRjlqZkN1UXhrbTFLOTFnZWNGYkE#gid=0" target="_blank">Google Docs Spreadsheet</a> copy available if you prefer to work there.</p>
         <p>
-            The foot-switches we use come from <a href="http://www.bitcheslovemyswitches.com/#!/%7E/product/category=5027572&id=10220659" target="_blank">bitcheslovemyswitches.com</a>. They feel great and have very little noise, no louder than a cheap pen's click.
-            Shout out to <a href="https://twitter.com/LawrenceScaduto" target="_blank">Lawrence Scaduto</a>, owner and proprietor, for being a big help in fulfilling my initial order!
+            The foot-switches we use come from <a href="//www.bitcheslovemyswitches.com/#!/%7E/product/category=5027572&id=10220659" target="_blank">bitcheslovemyswitches.com</a>. They feel great and have very little noise, no louder than a cheap pen's click.
+            Shout out to <a href="//twitter.com/LawrenceScaduto" target="_blank">Lawrence Scaduto</a>, owner and proprietor, for being a big help in fulfilling my initial order!
         </p>
-        <p>The chassis we use is <a href="http://www.hammondmfg.com/dwg16.htm#15degree" target="_blank">Hammond Mfg.'s 1456WH3BKBU</a>, an aluminum sloped console with a usable surface area of 20.078" x 6.305" on the sloped face, perfect for a floorboard controller. On their datasheet they claim they can do factory modifications (drilling, milling, printing), however one must order at least 25 units to qualify for this custom work.</p>
+        <p>The chassis we use is <a href="//www.hammondmfg.com/dwg16.htm#15degree" target="_blank">Hammond Mfg.'s 1456WH3BKBU</a>, an aluminum sloped console with a usable surface area of 20.078" x 6.305" on the sloped face, perfect for a floorboard controller. On their datasheet they claim they can do factory modifications (drilling, milling, printing), however one must order at least 25 units to qualify for this custom work.</p>
         <p>Our schematic does a good job of labelling all the values for the resistors and capacitors so there should be no problem there. Capacitors want to be in the 16V-25V tolerance range.</p>
-        <p>I found MIDI and USB-B PCB-mounted parts at <a href="https://www.sparkfun.com/" target="_blank">sparkfun.com</a>.</p>
+        <p>I found MIDI and USB-B PCB-mounted parts at <a href="//www.sparkfun.com/" target="_blank">sparkfun.com</a>.</p>
 
         <h2 id="assembly">Assembly of Prototype</h2>
         <p>There's still much more to come as I'll be getting all the components put together and assembling the device myself in the next few weeks. Stay tuned!</p>
         <p><strong>2013-11-25:</strong> I just ordered my components from both Mouser and Digikey. My PCBs are still en route from China after 3 weeks. I'd suggest finding a manufacturer closer to home for your own build.</p>
-        <p><strong>2013-11-26:</strong> The shipment of PCBs finally arrived today. Check out some shots! (Special thanks to <a href="http://brianwellerphotography.com/" target="_blank">Brian Weller</a> for cleaning up and aligning these pictures I took on my camera phone)</p>
+        <p><strong>2013-11-26:</strong> The shipment of PCBs finally arrived today. Check out some shots! (Special thanks to <a href="//brianwellerphotography.com/" target="_blank">Brian Weller</a> for cleaning up and aligning these pictures I took on my camera phone)</p>
         <div style="text-align: center; margin-top: 1em">
             <strong>Front</strong><br/>
-            <a href="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/2013-11-26-pcb-front-aligned.jpg" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/2013-11-26-pcb-front-aligned.jpg" alt="Schematic" style="max-width: 600px" /></a><br/>
+            <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/2013-11-26-pcb-front-aligned.jpg" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/2013-11-26-pcb-front-aligned.jpg" alt="Schematic" style="max-width: 600px" /></a><br/>
             <small>(click for larger version)</small>
         </div>
         <div style="text-align: center; margin-top: 1em">
             <strong>Back</strong><br />
-            <a href="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/2013-11-26-pcb-back-aligned.jpg" target="_blank"><img src="https://raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/2013-11-26-pcb-back-aligned.jpg" alt="Schematic" style="max-width: 600px" /></a><br/>
+            <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/2013-11-26-pcb-back-aligned.jpg" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/2013-11-26-pcb-back-aligned.jpg" alt="Schematic" style="max-width: 600px" /></a><br/>
             <small>(click for larger version)</small>
         </div>
+        <p><strong>2013-12-08:</strong> Assembly of the PCB is complete! I put together a 10x sped-up video of me assembling and soldering. Check it out:</p>
+        <div style="text-align: center; margin-top: 1em">
+            <iframe width="560" height="315" src="//www.youtube.com/embed/_Ol__sfCgBg" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <p>I also ran some tests on the finished product and corrected some firmware bugs. MIDI output, LED outputs, and foot switch inputs are all working!</p>
+        <div style="text-align: center; margin-top: 1em">
+            <video width="320" height="240" controls>
+                <source src="//eminor2.bittwiddlers.org/PCB%20blinking%20demo.mp4" type="video/mp4">
+            </video>
+        </div>
+        <p>I did some more testing after I made that last video and wired up a foot switch for testing purposes but I didn't capture any video for it.</p>
     </div>
 </body>
 </html>
