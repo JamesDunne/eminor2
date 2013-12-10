@@ -1,12 +1,12 @@
 /*********************************************************************
  *
- *                Microchip USB C18 Firmware Version 1.0
+ *                Microchip USB C18 Firmware Version 1.2
  *
  *********************************************************************
  * FileName:        usbctrltrf.h
  * Dependencies:    See INCLUDES section below
  * Processor:       PIC18
- * Compiler:        C18 2.30.01+
+ * Compiler:        C18 3.11+
  * Company:         Microchip Technology, Inc.
  *
  * Software License Agreement
@@ -32,6 +32,7 @@
  * Author               Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Rawin Rojvanit       11/19/04    Original.
+ * Rawin Rojvanit       08/14/07    Bug fixes.
  ********************************************************************/
 #ifndef USBCTRLTRF_H
 #define USBCTRLTRF_H
@@ -45,6 +46,25 @@
 #define WAIT_SETUP          0
 #define CTRL_TRF_TX         1
 #define CTRL_TRF_RX         2
+
+/********************************************************************
+Bug Fix: May 14, 2007 (#F7)
+*********************************************************************
+For a control transfer read, if the host tries to read more data
+than what it has requested, the peripheral device should stall the
+extra IN transactions and the status stage. Typically, a host does
+not try to read more data than what it has requested. The original
+firmware did not handle this situation. Instead of stalling extra
+IN transactions, the device kept sending out zero length packets.
+
+The new definitions introduced is used to keep track if a short IN
+packet has been sent or not. From this the state machine can
+decide if it should stall future extra IN transactions or not.
+********************************************************************/
+/* Short Packet States - Used by Control Transfer Read  - CTRL_TRF_TX */
+#define SHORT_PKT_NOT_USED  0
+#define SHORT_PKT_PENDING   1
+#define SHORT_PKT_SENT      2
 
 /* USB PID: Token Types - See chapter 8 in the USB specification */
 #define SETUP_TOKEN         0b00001101
@@ -72,7 +92,7 @@ extern POINTER pDst;
 extern WORD wCount;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
-void USBCtrlEPService(void);
+byte USBCtrlEPService(void);			// Bug Fix - Work around, void->byte
 void USBCtrlTrfTxService(void);
 void USBCtrlTrfRxService(void);
 void USBCtrlEPServiceComplete(void);

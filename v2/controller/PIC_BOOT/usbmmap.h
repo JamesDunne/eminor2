@@ -39,7 +39,6 @@
 
 /** I N C L U D E S **********************************************************/
 #include "typedefs.h"
-#include "usb.h"
 
 /** D E F I N I T I O N S ****************************************************/
 
@@ -167,6 +166,9 @@ extern volatile far BDT ep15Bi;         //Endpoint #15 BD In
 extern volatile far CTRL_TRF_SETUP SetupPkt;
 extern volatile far CTRL_TRF_DATA CtrlTrfData;
 
-extern volatile far BOOT_DATA_PACKET dataPacket;
+#if defined(USB_USE_HID)
+extern volatile far unsigned char hid_report_out[HID_INT_OUT_EP_SIZE];
+extern volatile far unsigned char hid_report_in[HID_INT_IN_EP_SIZE];
+#endif
 
 #endif //USBMMAP_H

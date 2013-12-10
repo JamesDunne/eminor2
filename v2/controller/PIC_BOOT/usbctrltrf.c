@@ -1,12 +1,12 @@
 /*********************************************************************
  *
- *                Microchip USB C18 Firmware Version 1.0
+ *                Microchip USB C18 Firmware Version 1.3a
  *
  *********************************************************************
  * FileName:        usbctrltrf.c
  * Dependencies:    See INCLUDES section below
  * Processor:       PIC18
- * Compiler:        C18 2.30.01+
+ * Compiler:        C18 3.11+
  * Company:         Microchip Technology, Inc.
  *
  * Software License Agreement
@@ -32,35 +32,14 @@
  * Author               Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Rawin Rojvanit       11/19/04    Original.
+ * Rawin Rojvanit       05/14/07    Bug fixes.
+ * Fritz Schlunder		04/14/09	Improved SETUP response for hosts
+ *									with aggressive control transfer
+ *									timing.
  ********************************************************************/
- 
-/******************************************************************************
- * -usbctrltrf.c-
- * This file contains functions which handle the Control Transfer mechanism.
- * The only function that is of interest to an end user is the
- * USBCtrlTrfSetupHandler(), which has a section that calls different
- * USB request handlers. A default call to the USBCheckStdRequest always
- * exist and cannot be removed. USBCheckStdRequest contains handlers
- * for the requests specified in chapter 9 of the USB specification.
- * If a request cannot be serviced by USBCheckStdRequest, then it means the
- * request is a class specific request. All device class request handlers
- * in a project should be called from USBCtrlTrfSetupHandler().
- * If no handlers in the project know how to service a request, then the
- * ctrl_trf_session_owner variable would still have the value of MUID_NULL.
- * The MUID_NULL value would cause the USBCtrlEPServiceComplete() to stall
- * the control endpoint, effectively telling the USB host that the
- * request cannot be serviced.
- *
- * This is a mini-version of the actual usbctrltrf.c from the Microchip USB
- * Library. Some functions were optimized to handle byte only operation instead
- * of supporting both byte and word operations.
- * This helps to decrease the the bootload application size to fit
- * under 2KB, which is the size of the boot block.
- * 
- *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
-#include "c_micrdef.h"
+#include <p18cxxx.h>
 #include "typedefs.h"
 #include "usb.h"
 
@@ -73,13 +52,29 @@ POINTER pSrc;                       // Data source pointer
 POINTER pDst;                       // Data destination pointer
 WORD wCount;                        // Data counter
 
+/********************************************************************
+Bug Fix: May 14, 2007 (#F7)
+*********************************************************************
+For a control transfer read, if the host tries to read more data
+than what it has requested, the peripheral device should stall the
+extra IN transactions and the status stage. Typically, a host does
+not try to read more data than what it has requested. The original
+firmware did not handle this situation. Instead of stalling extra
+IN transactions, the device kept sending out zero length packets.
+
+The new variable introduced is used to keep track if a short IN
+packet has been sent or not. From this the state machine can
+decide if it should stall future extra IN transactions or not.
+********************************************************************/
+byte short_pkt_status;              // Flag used by Control Transfer Read
+
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void USBCtrlTrfSetupHandler(void);
 void USBCtrlTrfOutHandler(void);
 void USBCtrlTrfInHandler(void);
 
 /** D E C L A R A T I O N S **************************************************/
-#pragma code	USBBOOT
+#pragma code
 /******************************************************************************
  * Function:        void USBCtrlEPService(void)
  *
@@ -100,18 +95,54 @@ void USBCtrlTrfInHandler(void);
  *
  * Note:            None
  *****************************************************************************/
-void USBCtrlEPService(void)
-{   
+/********************************************************************
+Bug Fix: May 14, 2007
+********************************************************************/
+byte USBCtrlEPService(void)
+{
     if(USTAT == EP00_OUT)
     {
-        if(ep0Bo.Stat.PID == SETUP_TOKEN)           // EP0 SETUP
+        UIRbits.TRNIF = 0;
+
+		//If the current EP0 OUT buffer has a SETUP packet
+        if(ep0Bo.Stat.PID == SETUP_TOKEN)
+        {
+	        //Check if the SETUP transaction data went into the CtrlTrfData buffer.
+	        //If so, need to copy it to the SetupPkt buffer so that it can be 
+	        //processed correctly by USBCtrlTrfSetupHandler().
+	        if(ep0Bo.ADR == (byte*)(&CtrlTrfData))	
+	        {
+		        unsigned char setup_cnt;
+		
+		        ep0Bo.ADR = (byte*)(&SetupPkt);
+		        for(setup_cnt = 0; setup_cnt < sizeof(CTRL_TRF_SETUP); setup_cnt++)
+		        {
+		            *(((byte*)&SetupPkt)+setup_cnt) = *(((byte*)&CtrlTrfData)+setup_cnt);
+		        }//end for
+		    } 
+	        
+			//Handle the control transfer (parse the 8-byte SETUP command and figure out what to do)
             USBCtrlTrfSetupHandler();
-        else                                        // EP0 OUT
+        }
+        else
+        {
+			//Handle the DATA transfer
             USBCtrlTrfOutHandler();
+        }
+
+
     }
-    else if(USTAT == EP00_IN)                       // EP0 IN
+    else if(USTAT == EP00_IN)            	        // EP0 IN
+    {
+        UIRbits.TRNIF = 0;
         USBCtrlTrfInHandler();
-    
+    }
+    else
+    {
+        return 0;           // Return '0', if not an EP0 transaction
+    }
+    return 1;               // Return '1', if TRNIF has been cleared
+
 }//end USBCtrlEPService
 
 /******************************************************************************
@@ -158,24 +189,43 @@ void USBCtrlEPService(void)
 void USBCtrlTrfSetupHandler(void)
 {
     byte i;
+
+    /********************************************************************
+    Bug Fix: May 14, 2007 (#F7 - Partial 1/4)
+    *********************************************************************
+    For a control transfer read, if the host tries to read more data
+    than what it has requested, the peripheral device should stall the
+    extra IN transactions and the status stage. Typically, a host does
+    not try to read more data than what it has requested. The original
+    firmware did not handle this situation. Instead of stalling extra
+    IN transactions, the device kept sending out zero length packets.
     
+    This work around forces the IN endpoint back to be owned by the
+    CPU after if it was stalled previously. The short_pkt_status flag
+    is also re-initialized.
+    ********************************************************************/
+    if(ep0Bi.Stat.UOWN != 0)
+        ep0Bi.Stat._byte = _UCPU;           // Compensate for after a STALL
+    short_pkt_status = SHORT_PKT_NOT_USED;
+    /*******************************************************************/
+
     /* Stage 1 */
     ctrl_trf_state = WAIT_SETUP;
     ctrl_trf_session_owner = MUID_NULL;     // Set owner to NULL
     wCount._word = 0;
-    
+
     /* Stage 2 */
     USBCheckStdRequest();                   // See system\usb9\usb9.c
 
-    /* Modifiable Section */
-    
-    /* Insert other USB Device Class Request Handlers here */
-    
-    /* End Modifiable Section */
+    for(i=0;i < (sizeof(ClassReqHandler)/sizeof(pFunc));i++)
+    {
+        if(ctrl_trf_session_owner != MUID_NULL)break;
+        ClassReqHandler[i]();               // See autofiles\usbdsc.c
+    }//end while
 
     /* Stage 3 */
     USBCtrlEPServiceComplete();
-    
+
 }//end USBCtrlTrfSetupHandler
 
 /******************************************************************************
@@ -203,20 +253,30 @@ void USBCtrlTrfOutHandler(void)
     if(ctrl_trf_state == CTRL_TRF_RX)
     {
         USBCtrlTrfRxService();
-        
+
         /*
          * Don't have to worry about overwriting _KEEP bit
          * because if _KEEP was set, TRNIF would not have been
          * generated in the first place.
          */
+		ep0Bo.ADR = (byte*)(&CtrlTrfData);
+		ep0Bo.Cnt = EP0_BUFF_SIZE;
         if(ep0Bo.Stat.DTS == 0)
             ep0Bo.Stat._byte = _USIE|_DAT1|_DTSEN;
         else
             ep0Bo.Stat._byte = _USIE|_DAT0|_DTSEN;
     }
-    else    // CTRL_TRF_TX
-        USBPrepareForNextSetupTrf();
-    
+    else //In this case the last OUT transaction must have been a status stage of a CTRL_TRF_TX
+    {
+	    //Prepare EP0 OUT for the next SETUP transaction.
+		USBPrepareForNextSetupTrf();
+        ep0Bo.Cnt = EP0_BUFF_SIZE;
+        ep0Bo.ADR = (byte*)(&SetupPkt);
+        ep0Bo.Stat._byte = _USIE|_DAT0|_DTSEN|_BSTALL;			
+    }
+
+
+
 }//end USBCtrlTrfOutHandler
 
 /******************************************************************************
@@ -246,15 +306,39 @@ void USBCtrlTrfOutHandler(void)
 void USBCtrlTrfInHandler(void)
 {
     mUSBCheckAdrPendingState();         // Must check if in ADR_PENDING_STATE
-    
+
     if(ctrl_trf_state == CTRL_TRF_TX)
     {
         USBCtrlTrfTxService();
+
+        /********************************************************************
+        Bug Fix: May 14, 2007 (#F7 - Partial 2/4)
+        *********************************************************************
+        For a control transfer read, if the host tries to read more data
+        than what it has requested, the peripheral device should stall the
+        extra IN transactions and the status stage. Typically, a host does
+        not try to read more data than what it has requested. The original
+        firmware did not handle this situation. Instead of stalling extra
+        IN transactions, the device kept sending out zero length packets.
         
-        if(ep0Bi.Stat.DTS == 0)
-            ep0Bi.Stat._byte = _USIE|_DAT1|_DTSEN;
+        This work around checks if a short IN packet has been sent or not.
+        If it has, the IN endpoint will be set to install the next IN token.
+        If not, then the original endpoint setup code will be executed.
+        ********************************************************************/
+        if(short_pkt_status == SHORT_PKT_SENT)
+        {
+            // If a short packet has been sent, don't want to send any more,
+            // stall next time if host is still trying to read.
+            ep0Bi.Stat._byte = _USIE|_BSTALL;
+        }
+        /*******************************************************************/
         else
-            ep0Bi.Stat._byte = _USIE|_DAT0|_DTSEN;
+        {
+            if(ep0Bi.Stat.DTS == 0)
+                ep0Bi.Stat._byte = _USIE|_DAT1|_DTSEN;
+            else
+                ep0Bi.Stat._byte = _USIE|_DAT0|_DTSEN;
+        }//end if(...)else
     }
     else // CTRL_TRF_RX
         USBPrepareForNextSetupTrf();
@@ -283,43 +367,78 @@ void USBCtrlTrfInHandler(void)
  *                  be larger than 64 bytes.
  *****************************************************************************/
 void USBCtrlTrfTxService(void)
-{    
-    byte byte_to_send;
-    
+{
+    WORD byte_to_send;
+
     /*
      * First, have to figure out how many byte of data to send.
      */
     if(wCount._word < EP0_BUFF_SIZE)
-        byte_to_send = wCount._word;
+    {
+        byte_to_send._word = wCount._word;
+
+        /********************************************************************
+        Bug Fix: May 14, 2007 (#F7 - Partial 3/4)
+        *********************************************************************
+        For a control transfer read, if the host tries to read more data
+        than what it has requested, the peripheral device should stall the
+        extra IN transactions and the status stage. Typically, a host does
+        not try to read more data than what it has requested. The original
+        firmware did not handle this situation. Instead of stalling extra
+        IN transactions, the device kept sending out zero length packets.
+        
+        This work around updates the short_pkt_status flag to indicate
+        if a short packet has been sent or not.
+        ********************************************************************/
+        if(short_pkt_status == SHORT_PKT_NOT_USED)
+        {
+            short_pkt_status = SHORT_PKT_PENDING;
+        }
+        else if(short_pkt_status == SHORT_PKT_PENDING)
+        {
+            short_pkt_status = SHORT_PKT_SENT;
+        }//end if
+        /*******************************************************************/
+    }
     else
-        byte_to_send = EP0_BUFF_SIZE;
-    
-    ep0Bi.Cnt = byte_to_send;
-    
+        byte_to_send._word = EP0_BUFF_SIZE;
+
+    /*
+     * Next, load the number of bytes to send to BC9..0 in buffer descriptor
+     */
+    ep0Bi.Stat.BC9 = 0;
+    ep0Bi.Stat.BC8 = 0;
+    ep0Bi.Stat._byte |= MSB(byte_to_send);
+    ep0Bi.Cnt = LSB(byte_to_send);
+
     /*
      * Subtract the number of bytes just about to be sent from the total.
      */
-    wCount._word -= byte_to_send;
-    
+    wCount._word = wCount._word - byte_to_send._word;
+
     pDst.bRam = (byte*)&CtrlTrfData;        // Set destination pointer
 
-    while(byte_to_send)
+    if(usb_stat.ctrl_trf_mem == _ROM)       // Determine type of memory source
     {
-        if(usb_stat.ctrl_trf_mem == _ROM)
+        while(byte_to_send._word)
         {
             *pDst.bRam = *pSrc.bRom;
+            pDst.bRam++;
             pSrc.bRom++;
-        }
-        else
+            byte_to_send._word--;
+        }//end while(byte_to_send._word)
+    }
+    else // RAM
+    {
+        while(byte_to_send._word)
         {
             *pDst.bRam = *pSrc.bRam;
+            pDst.bRam++;
             pSrc.bRam++;
-        }//end if else
-        
-        pDst.bRam++;
-        byte_to_send--;
-    }//end while
-    
+            byte_to_send._word--;
+        }//end while(byte_to_send._word)
+    }//end if(usb_stat.ctrl_trf_mem == _ROM)
+
 }//end USBCtrlTrfTxService
 
 /******************************************************************************
@@ -344,25 +463,26 @@ void USBCtrlTrfTxService(void)
  *****************************************************************************/
 void USBCtrlTrfRxService(void)
 {
-    byte byte_to_read;
+    WORD byte_to_read;
 
-    byte_to_read = ep0Bo.Cnt;
-    
+    MSB(byte_to_read) = 0x03 & ep0Bo.Stat._byte;    // Filter out last 2 bits
+    LSB(byte_to_read) = ep0Bo.Cnt;
+
     /*
      * Accumulate total number of bytes read
      */
-    wCount._word = wCount._word + byte_to_read;
-    
+    wCount._word = wCount._word + byte_to_read._word;
+
     pSrc.bRam = (byte*)&CtrlTrfData;
 
-    while(byte_to_read)
+    while(byte_to_read._word)
     {
         *pDst.bRam = *pSrc.bRam;
         pDst.bRam++;
         pSrc.bRam++;
-        byte_to_read--;
-    }//end while(byte_to_read)    
-    
+        byte_to_read._word--;
+    }//end while(byte_to_read._word)
+
 }//end USBCtrlTrfRxService
 
 /******************************************************************************
@@ -395,6 +515,19 @@ void USBCtrlTrfRxService(void)
  *****************************************************************************/
 void USBCtrlEPServiceComplete(void)
 {
+    /********************************************************************
+    Bug Fix: May 14, 2007 (#AF1)
+    *********************************************************************
+    See silicon errata for 4550 A3. Now clearing PKTDIS before re-arming
+    any EP0 endpoints.
+    ********************************************************************/
+    /*
+     * PKTDIS bit is set when a Setup Transaction is received.
+     * Clear to resume packet processing.
+     */
+    UCONbits.PKTDIS = 0;
+    /*******************************************************************/
+
     if(ctrl_trf_session_owner == MUID_NULL)
     {
         /*
@@ -403,7 +536,7 @@ void USBCtrlEPServiceComplete(void)
          */
         ep0Bo.Cnt = EP0_BUFF_SIZE;
         ep0Bo.ADR = (byte*)&SetupPkt;
-        
+
         ep0Bo.Stat._byte = _USIE|_BSTALL;
         ep0Bi.Stat._byte = _USIE|_BSTALL;
     }
@@ -443,9 +576,9 @@ void USBCtrlEPServiceComplete(void)
              * should be pointed to SetupPkt.
              */
             ep0Bo.Cnt = EP0_BUFF_SIZE;
-            ep0Bo.ADR = (byte*)&SetupPkt;            
+            ep0Bo.ADR = (byte*)&SetupPkt;
             ep0Bo.Stat._byte = _USIE;           // Note: DTSEN is 0!
-    
+
             /*
              * 2. Prepare IN EP to transfer data, Cnt should have
              *    been initialized by responsible request owner.
@@ -476,12 +609,6 @@ void USBCtrlEPServiceComplete(void)
             ep0Bo.Stat._byte = _USIE|_DAT1|_DTSEN;
         }//end if(SetupPkt.DataDir == DEV_TO_HOST)
     }//end if(ctrl_trf_session_owner == MUID_NULL)
-    
-    /*
-     * PKTDIS bit is set when a Setup Transaction is received.
-     * Clear to resume packet processing.
-     */
-    UCONbits.PKTDIS = 0;
 
 }//end USBCtrlEPServiceComplete
 
@@ -504,10 +631,27 @@ void USBCtrlEPServiceComplete(void)
 void USBPrepareForNextSetupTrf(void)
 {
     ctrl_trf_state = WAIT_SETUP;            // See usbctrltrf.h
-    ep0Bo.Cnt = EP0_BUFF_SIZE;              // Defined in usbcfg.h
-    ep0Bo.ADR = (byte*)&SetupPkt;
-    ep0Bo.Stat._byte = _USIE|_DAT0|_DTSEN;  // EP0 buff dsc init, see usbmmap.h
-    ep0Bi.Stat._byte = _UCPU;               // EP0 IN buffer initialization
+
+    /********************************************************************
+    Bug Fix: May 14, 2007 (#F3)
+    *********************************************************************
+    In the original firmware, if an IN token is sent by the host
+    before a SETUP token is sent, the firmware would respond with an ACK.
+    This is not a correct response, the firmware should have sent a STALL.
+    This is a minor non-compliance since a compliant host should not
+    send an IN before sending a SETUP token. The fix allows a SETUP
+    transaction to be accepted while stalling IN transactions.
+    
+    Although this fix is known, it is not implemented because it
+    breaks the #AF1 fix in USBCtrlEPServiceComplete().
+    Since #AF1 fix is more important, this fix, #F3 is commented out.
+    ********************************************************************/
+    ep0Bi.Stat._byte = _UCPU;               // Should be removed
+    //ep0Bi.Stat._byte = _USIE|_BSTALL;     // Should be added #F3
+
+
 }//end USBPrepareForNextSetupTrf
+
+
 
 /** EOF usbctrltrf.c *********************************************************/

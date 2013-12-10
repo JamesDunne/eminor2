@@ -147,7 +147,7 @@
  * smaller program code.
  *
  *****************************************************************************/
-
+ 
 /** I N C L U D E S **********************************************************/
 #include "typedefs.h"
 #include "usb.h"
@@ -160,12 +160,22 @@ byte usb_active_cfg;            // Value of current configuration
 byte usb_alt_intf[MAX_NUM_INT]; // Array to keep track of the current alternate
                                 // setting for each interface ID
 
-/** U S B  F I X E D  L O C A T I O N  V A R I A B L E S *********************/
-#pragma udata usbram4=0x400     //See Linker Script,usb4:0x400-0x4FF(256-byte)
+/** USB FIXED LOCATION VARIABLES ***********************************/
+#if defined(__18CXX)
+	#if defined(__18F14K50) || defined(__18F13K50) || defined(__18LF14K50) || defined(__18LF13K50)
+		#pragma udata usbram2=0x200     //See Linker Script, dual port SRAM memory on these devices is:0x200-0x2FF(256-byte)
+	#elif defined(__18F47J53) || defined(__18F46J53) || defined(__18F27J53) || defined(__18F26J53) || defined(__18LF47J53) || defined(__18LF46J53) || defined(__18LF27J53) || defined(__18LF26J53)
+		#pragma udata USB_BDT=0xD00		//BDT in Bank 13 on these devices
+	#elif defined(__18F97J94) || defined(__18F87J94) || defined(__18F67J94) || defined(__18F96J99) || defined(__18F86J99) || defined(__18F66J99) || defined(__18F96J94) || defined(__18F86J94) || defined(__18F66J94) || defined(__18F95J94) || defined(__18F85J94) || defined(__18F65J94)
+		#pragma udata USB_BDT=0x100     // The USB BDT is located in Bank 1 on the PIC18F97J94 Family of devices
+	#else
+        #pragma udata USB_BDT=0x400     //Other PIC18 devices place the BDT in usb4:0x400-0x4FF(256-byte)
+	#endif
+#endif
 
 /******************************************************************************
  * Section A: Buffer Descriptor Table
- * - 0x400 - 0x4FF(max)
+ * - 0xX00 - 0xXFF( 256 bytes max)
  * - MAX_EP_NUMBER is defined in autofiles\usbcfg.h
  * - BDT data type is defined in system\usb\usbmmap.h
  *****************************************************************************/
@@ -269,11 +279,14 @@ volatile far CTRL_TRF_SETUP SetupPkt;
 volatile far CTRL_TRF_DATA CtrlTrfData;
 
 /******************************************************************************
- * Section C: Buffer
+ * Section C: HID Buffer
  ******************************************************************************
  *
  *****************************************************************************/
-volatile far BOOT_DATA_PACKET dataPacket;
+#if defined(USB_USE_HID)
+volatile far unsigned char hid_report_out[HID_INT_OUT_EP_SIZE];
+volatile far unsigned char hid_report_in[HID_INT_IN_EP_SIZE];
+#endif
 
 #pragma udata
 

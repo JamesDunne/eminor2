@@ -1,12 +1,12 @@
 /*********************************************************************
  *
- *                Microchip USB C18 Firmware Version 1.0
+ *                Microchip USB C18 Firmware Version 1.2
  *
  *********************************************************************
  * FileName:        usbdrv.h
  * Dependencies:    See INCLUDES section below
  * Processor:       PIC18
- * Compiler:        C18 2.30.01+
+ * Compiler:        C18 3.11+
  * Company:         Microchip Technology, Inc.
  *
  * Software License Agreement
@@ -32,6 +32,7 @@
  * Author               Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Rawin Rojvanit       11/19/04    Original.
+ * Rawin Rojvanit		05/14/07    Fixed endpoint definitions
  ********************************************************************/
 
 #ifndef USBDRV_H
@@ -78,38 +79,38 @@
 #define PIC_EP_NUM_MASK 0b01111000
 #define PIC_EP_DIR_MASK 0b00000100
 
-#define EP00_OUT    (0x00<<3)|(OUT<<2)
-#define EP00_IN     (0x00<<3)|(IN<<2)
-#define EP01_OUT    (0x01<<3)|(OUT<<2)
-#define EP01_IN     (0x01<<3)|(IN<<2)
-#define EP02_OUT    (0x02<<3)|(OUT<<2)
-#define EP02_IN     (0x02<<3)|(IN<<2)
-#define EP03_OUT    (0x03<<3)|(OUT<<2)
-#define EP03_IN     (0x03<<3)|(IN<<2)
-#define EP04_OUT    (0x04<<3)|(OUT<<2)
-#define EP04_IN     (0x04<<3)|(IN<<2)
-#define EP05_OUT    (0x05<<3)|(OUT<<2)
-#define EP05_IN     (0x05<<3)|(IN<<2)
-#define EP06_OUT    (0x06<<3)|(OUT<<2)
-#define EP06_IN     (0x06<<3)|(IN<<2)
-#define EP07_OUT    (0x07<<3)|(OUT<<2)
-#define EP07_IN     (0x07<<3)|(IN<<2)
-#define EP08_OUT    (0x08<<3)|(OUT<<2)
-#define EP08_IN     (0x08<<3)|(IN<<2)
-#define EP09_OUT    (0x09<<3)|(OUT<<2)
-#define EP09_IN     (0x09<<3)|(IN<<2)
-#define EP10_OUT    (0x0A<<3)|(OUT<<2)
-#define EP10_IN     (0x0A<<3)|(IN<<2)
-#define EP11_OUT    (0x0B<<3)|(OUT<<2)
-#define EP11_IN     (0x0B<<3)|(IN<<2)
-#define EP12_OUT    (0x0C<<3)|(OUT<<2)
-#define EP12_IN     (0x0C<<3)|(IN<<2)
-#define EP13_OUT    (0x0D<<3)|(OUT<<2)
-#define EP13_IN     (0x0D<<3)|(IN<<2)
-#define EP14_OUT    (0x0E<<3)|(OUT<<2)
-#define EP14_IN     (0x0E<<3)|(IN<<2)
-#define EP15_OUT    (0x0F<<3)|(OUT<<2)
-#define EP15_IN     (0x0F<<3)|(IN<<2)
+#define EP00_OUT    ((0x00<<3)|(OUT<<2))
+#define EP00_IN     ((0x00<<3)|(IN<<2))
+#define EP01_OUT    ((0x01<<3)|(OUT<<2))
+#define EP01_IN     ((0x01<<3)|(IN<<2))
+#define EP02_OUT    ((0x02<<3)|(OUT<<2))
+#define EP02_IN     ((0x02<<3)|(IN<<2))
+#define EP03_OUT    ((0x03<<3)|(OUT<<2))
+#define EP03_IN     ((0x03<<3)|(IN<<2))
+#define EP04_OUT    ((0x04<<3)|(OUT<<2))
+#define EP04_IN     ((0x04<<3)|(IN<<2))
+#define EP05_OUT    ((0x05<<3)|(OUT<<2))
+#define EP05_IN     ((0x05<<3)|(IN<<2))
+#define EP06_OUT    ((0x06<<3)|(OUT<<2))
+#define EP06_IN     ((0x06<<3)|(IN<<2))
+#define EP07_OUT    ((0x07<<3)|(OUT<<2))
+#define EP07_IN     ((0x07<<3)|(IN<<2))
+#define EP08_OUT    ((0x08<<3)|(OUT<<2))
+#define EP08_IN     ((0x08<<3)|(IN<<2))
+#define EP09_OUT    ((0x09<<3)|(OUT<<2))
+#define EP09_IN     ((0x09<<3)|(IN<<2))
+#define EP10_OUT    ((0x0A<<3)|(OUT<<2))
+#define EP10_IN     ((0x0A<<3)|(IN<<2))
+#define EP11_OUT    ((0x0B<<3)|(OUT<<2))
+#define EP11_IN     ((0x0B<<3)|(IN<<2))
+#define EP12_OUT    ((0x0C<<3)|(OUT<<2))
+#define EP12_IN     ((0x0C<<3)|(IN<<2))
+#define EP13_OUT    ((0x0D<<3)|(OUT<<2))
+#define EP13_IN     ((0x0D<<3)|(IN<<2))
+#define EP14_OUT    ((0x0E<<3)|(OUT<<2))
+#define EP14_IN     ((0x0E<<3)|(IN<<2))
+#define EP15_OUT    ((0x0F<<3)|(OUT<<2))
+#define EP15_IN     ((0x0F<<3)|(IN<<2))
 
 /******************************************************************************
  * Macro:           void mInitializeUSBDriver(void)
@@ -132,7 +133,10 @@
  *
  * Note:            None
  *****************************************************************************/
-#define mInitializeUSBDriver()      {UCFG = UCFG_VAL;}
+#define mInitializeUSBDriver()      {UCFG = UCFG_VAL;                       \
+                                     usb_device_state = DETACHED_STATE;     \
+                                     usb_stat._byte = 0x00;                 \
+                                     usb_active_cfg = 0x00;}
 
 /******************************************************************************
  * Macro:           void mDisableEP1to15(void)
@@ -151,12 +155,18 @@
  *
  * Note:            None
  *****************************************************************************/
-/*
-#define mDisableEP1to15()       UEP1=0x00;UEP2=0x00;UEP3=0x00;\
-                                UEP4=0x00;UEP5=0x00;UEP6=0x00;UEP7=0x00;\
-                                UEP8=0x00;UEP9=0x00;UEP10=0x00;UEP11=0x00;\
-                                UEP12=0x00;UEP13=0x00;UEP14=0x00;UEP15=0x00;
-*/
+//#if defined(__18F14K50) || defined(__18F13K50) || defined(__18LF14K50) || defined(__18LF13K50)
+//	#define mDisableEP1to15()       ClearArray((byte*)&UEP1,7);
+//#else
+//	#define mDisableEP1to15()       ClearArray((byte*)&UEP1,15);
+//#endif
+
+//Using below instead to save code space.  Dedicated bootloader project,
+//will never use UEP3+, therefore no need to really mess with those registers
+#define mDisableEP1to7()       UEP1=0x00;UEP2=0x00;UEP3=0x00;\
+                                UEP4=0x00;UEP5=0x00;UEP6=0x00;UEP7=0x00;
+//                                UEP8=0x00;UEP9=0x00;UEP10=0x00;UEP11=0x00;\
+//                                UEP12=0x00;UEP13=0x00;UEP14=0x00;UEP15=0x00;
 
 /******************************************************************************
  * Macro:           void mUSBBufferReady(buffer_dsc)
@@ -191,11 +201,13 @@
 /** T Y P E S ****************************************************************/
 
 /** E X T E R N S ************************************************************/
+extern unsigned int uint_delay_counter;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 void USBCheckBusStatus(void);
 void USBDriverService(void);
 void USBRemoteWakeup(void);
-void USBSoftDetach(void); 
+void USBSoftDetach(void);
 
+void ClearArray(byte* startAdr,byte count);
 #endif //USBDRV_H
