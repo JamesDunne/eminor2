@@ -15,6 +15,7 @@
       <itemPath>../common/types.h</itemPath>
       <itemPath>a_micrdef.inc</itemPath>
       <itemPath>assert.h</itemPath>
+      <itemPath>boot.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -31,13 +32,14 @@
       <itemPath>intslct.c</itemPath>
       <itemPath>init.c</itemPath>
       <itemPath>hwcalls.c</itemPath>
-      <itemPath>vectors.c</itemPath>
       <itemPath>eeprom.c</itemPath>
       <itemPath>writeprogmem.c</itemPath>
       <itemPath>systick.c</itemPath>
       <itemPath>../common/controller-simple.c</itemPath>
       <itemPath>comm_midi.c</itemPath>
       <itemPath>comm_lcd.c</itemPath>
+      <itemPath>BootUserStartup.c</itemPath>
+      <itemPath>UserAppCode.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
