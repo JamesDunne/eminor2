@@ -11,112 +11,48 @@
 #include "typedefs.h"
 #include "hardware.h"
 
-unsigned char	ADC_CONVERSION(unsigned char Channel) {
-	unsigned char tempcntr;
-	ADCON0 = Channel;
-
-//Wait for the converter's holding capacitor to charge up.
-ADC_CHARGING_DELAY_LOOP:
-	for(tempcntr = 10;tempcntr!=0;tempcntr--);
-
-//Start the conversion
-	ADCON0bits.GO = true;
-
-//Wait for the conversion to complete, then exit
-ADC_CONVERSION_DELAY:
-	for(;ADCON0bits.GO;);
-	
-	return ADRESH;
-}
+// -----------------------------------------------
 
 /* Send a single MIDI byte. */
 void midi_send_byte(u8 data) {
 	MIDI_ENQUEUE(data);
 }
 
-//******************************************************************************
-//JDunne 5/27/07 - Converted routine from assembly to C.  (used to be called SEND_TO_LATCHES)
-//------------------------------------------------------------------------------
-void	SendDataToShiftReg8(unsigned char dataToSend) {
-	unsigned char DataCounter;
-//SEND_SPEC_TO_LATCHES
-	DataCounter = 8;								//Load number of bits to be transfered
-
-//	bcf	SRCK_LAT_BIT						//Control clock signal, also prevent IIC start
-	SHIFTREG_RCK_LAT_BIT = true;			//Flush out garbage
-	SHIFTREG_RCK_LAT_BIT = false;
-
-//STL_TRANSMIT_BIT
-	do {
-		SHIFTREG_SRCK_LAT_BIT = false;				//Clear strobe pin
-		if (!chkbit(dataToSend, 7)) {		//MSB high?
-			SHIFTREG_SER_IN_LAT_BIT = false;		//No, set data signal low
-		}
-		else {								//MSB low?
-			SHIFTREG_SER_IN_LAT_BIT = true;		//No, release data signal
-		}
-		dataToSend <<=1;					//Shift next bit to MSB position
-		SHIFTREG_SRCK_LAT_BIT = true;
-
-//STL_RESET_CLOCK_LEVEL
-	} while (--DataCounter!=0);				//All 8 bits transfered? No, go transfer next bit
-
-//STL_STROBE
-	SHIFTREG_RCK_LAT_BIT = true;			//Strobe the data
-
-//STL_STROBE_DELAY
-	for (DataCounter = LATCH_STROBE_DELAY; DataCounter !=0;DataCounter--);		//Pause for data transfer from external latch_1's input to its output
-
-	SHIFTREG_RCK_LAT_BIT = false;
-	SHIFTREG_SER_IN_LAT_BIT = true;				//Release data signal
-	SHIFTREG_SRCK_LAT_BIT = true;			//Release serial clk
-}
-
 // Send MSBs first from hi to lo.
 void	SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
 	unsigned char DataCounter;
-//SEND_SPEC_TO_LATCHES
-	DataCounter = 8;								//Load number of bits to be transfered
+
+    DataCounter = 8;								//Load number of bits to be transfered
 
 //	bcf	SRCK_LAT_BIT						//Control clock signal, also prevent IIC start
 	SHIFTREG_RCK_LAT_BIT = true;			//Flush out garbage
 	SHIFTREG_RCK_LAT_BIT = false;
 
-//STL_TRANSMIT_BIT
 	do {
 		SHIFTREG_SRCK_LAT_BIT = false;				//Clear strobe pin
 		if (!chkbit(hi, 7)) {		//MSB high?
 			SHIFTREG_SER_IN_LAT_BIT = false;		//No, set data signal low
-		}
-		else {								//MSB low?
+		} else {								//MSB low?
 			SHIFTREG_SER_IN_LAT_BIT = true;		//No, release data signal
 		}
 		hi <<= 1;					//Shift next bit to MSB position
 		SHIFTREG_SRCK_LAT_BIT = true;
-
-//STL_RESET_CLOCK_LEVEL
 	} while (--DataCounter!=0);				//All 8 bits transfered? No, go transfer next bit
 
 	DataCounter = 8;								//Load number of bits to be transfered
-//STL_TRANSMIT_BIT
 	do {
 		SHIFTREG_SRCK_LAT_BIT = false;				//Clear strobe pin
 		if (!chkbit(lo, 7)) {		//MSB high?
 			SHIFTREG_SER_IN_LAT_BIT = false;		//No, set data signal low
-		}
-		else {								//MSB low?
+		} else {								//MSB low?
 			SHIFTREG_SER_IN_LAT_BIT = true;		//No, release data signal
 		}
 		lo <<= 1;					//Shift next bit to MSB position
 		SHIFTREG_SRCK_LAT_BIT = true;
-
-//STL_RESET_CLOCK_LEVEL
 	} while (--DataCounter!=0);				//All 8 bits transfered? No, go transfer next bit
 
-//STL_STROBE
 	SHIFTREG_RCK_LAT_BIT = true;			//Strobe the data
 
-//STL_STROBE_DELAY
 	for (DataCounter = LATCH_STROBE_DELAY; DataCounter !=0;DataCounter--);		//Pause for data transfer from external latch_1's input to its output
 
 	SHIFTREG_RCK_LAT_BIT = false;
@@ -125,12 +61,12 @@ void	SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
 }
 //------------------------------------------------------------------------------
 
-//returns data into ButtonState.
+//returns data into ButtonStateTop and ButtonStateBot.
 void	ReadButtons(void) {
 	unsigned char BtnAddress, bitloc, i;
 	BitField TempButtons;
 
-    // read top buttons:
+    // read bottom buttons:
 	TempButtons.byte = 0;
 	bitloc = 1;
 	for (BtnAddress = 0; BtnAddress < 8; BtnAddress++) {
@@ -141,9 +77,9 @@ void	ReadButtons(void) {
 		if (BTN_IN_PIN) TempButtons.byte |= bitloc;		//Or in the current bit if it is set.
 		bitloc <<= 1;										//shift the bit over to the next
 	}
-	ButtonStateTop = TempButtons.byte;
+	ButtonStateBot = TempButtons.byte;
 
-    // read bottom buttons:
+    // read top buttons:
 	TempButtons.byte = 0;
 	bitloc = 1;
 	for (BtnAddress = 8; BtnAddress < 16; BtnAddress++) {
@@ -154,16 +90,11 @@ void	ReadButtons(void) {
 		if (BTN_IN_PIN) TempButtons.byte |= bitloc;		//Or in the current bit if it is set.
 		bitloc <<= 1;										//shift the bit over to the next
 	}
-	ButtonStateBot = TempButtons.byte;
+	ButtonStateTop = TempButtons.byte;
 
     // all buttons are backwards logic, so simply invert the state of ButtonState.
 	ButtonStateTop = ~ButtonStateTop;
 	ButtonStateBot = ~ButtonStateBot;
-
-    //diag break when a button is detected as pushed.
-//	if (ButtonStateBot || ButtonStateTop) {
-//		nop();
-//	}
 }
 
 void SetDipAddress(unsigned char Address) {
@@ -171,11 +102,11 @@ void SetDipAddress(unsigned char Address) {
 	BTN_S0_LAT_BIT = false;
 	BTN_S1_LAT_BIT = false;
 	BTN_S2_LAT_BIT = false;
-    BTN_S3_LAT_BIT = true;
+    BTN_S3_LAT_BIT = false;
 	if (chkbit(Address,0)) BTN_S0_LAT_BIT = true;
 	if (chkbit(Address,1)) BTN_S1_LAT_BIT = true;
 	if (chkbit(Address,2)) BTN_S2_LAT_BIT = true;
-    if (chkbit(Address,3)) BTN_S3_LAT_BIT = false;
+    if (chkbit(Address,3)) BTN_S3_LAT_BIT = true;
 }
 
 /* --------------- LED read-out display functions: */

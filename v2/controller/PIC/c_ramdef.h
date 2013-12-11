@@ -15,12 +15,12 @@ near extern BitField CommFlags1;
 
 near extern BitField ArbFlags1;
 #define Systick				ArbFlags1.bit0
-#define	ExpPedalSvc			ArbFlags1.bit1
+#define	Unused1Svc			ArbFlags1.bit1
 #define	ButtonsSvc			ArbFlags1.bit2
 #define	Write0Pending		ArbFlags1.bit3
 #define	Write32Pending		ArbFlags1.bit4
 #define	HandleLeds			ArbFlags1.bit5
-#define	Handle7segs			ArbFlags1.bit6
+#define	HandleLCD			ArbFlags1.bit6
 #define	HandleController	ArbFlags1.bit7
 
 near extern BitField ArbFlags2;
@@ -36,32 +36,16 @@ extern TwoBytes NVRCommAddr;
 extern TwoBytes RAMCommAddr;
 extern TwoBytes ROMCommAddr;
 
-extern unsigned char DispNumOfCommons;
 extern unsigned char LedStatesTop;
 extern unsigned char LedStatesBot;
 extern unsigned char ButtonStateTop;
 extern unsigned char ButtonStateBot;
-extern unsigned char ExpPedalInst;
 extern unsigned char SystickCntr;
 extern unsigned char SystickCntr2;
 extern unsigned char SystickCntr3;
 extern unsigned char SystickCntr4;
 extern unsigned char SystickCntr5;
 
-extern unsigned char ComPointer;
-
-extern unsigned char ScrollingDisplayData[64];
-extern unsigned char ScrollingDisplayLength;
-extern unsigned char ScrollingDisplayIndex;
-
 extern unsigned char TxBuffer[MAX_TX_LENGTH];
 extern unsigned char TxBufPtr;
 extern unsigned char TxBufOutPtr;
-
-//---------------------USB stuff---------------------------------
-extern unsigned char USBDataPointer;
-extern unsigned char USBEP0DataInBuffer[64];
-extern unsigned char ResponseType;
-
-extern unsigned char midiInData[23];
-extern unsigned char midiInBufPtr;

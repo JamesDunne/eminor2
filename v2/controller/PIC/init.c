@@ -8,8 +8,6 @@
 
 
 #include "c_system.h"
-#include "usb.h"
-
 
 void init(void) {
 	CLEAR_RAM();
@@ -25,8 +23,6 @@ void init(void) {
 	TRISC = INIT_TRISC;
 	TRISD = INIT_TRISD;
 	TRISE = INIT_TRISE;
-
-	DispNumOfCommons = DISP_NUMBER_OF_COMMONS;
 
 //Initialize the USART control registers
 	TXSTA = INIT_TXSTA;
@@ -54,7 +50,4 @@ void init(void) {
 	T2CON = INIT_T2CON;				//enable the timer and set up the scalars
 	PIE1 = INIT_PIE1;
 	INTCONbits.GIEH = 1;          //enable interrupts
-
-
-	mInitializeUSBDriver();
 }

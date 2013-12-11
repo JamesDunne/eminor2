@@ -66,17 +66,17 @@
 #define	LATAPIN5						(false<<5)
 
 #define	INIT_TRISA		(TRISAPIN0+TRISAPIN1+TRISAPIN2+TRISAPIN3+TRISAPIN4+TRISAPIN5)
-#define	INIT_LATA	(LATAPIN0+LATAPIN1+LATAPIN2+LATAPIN3+LATAPIN4+LATAPIN5)
+#define	INIT_LATA	    (LATAPIN0+LATAPIN1+LATAPIN2+LATAPIN3+LATAPIN4+LATAPIN5)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //PORTB Definitions
-#define	DISP_SEG0_BIT					0
-#define	DISP_SEG0_PIN					PORTBbits.RB0	//Pin 33
-#define	DISP_SEG0_LAT_BIT				LATBbits.LATB0
-#define	DISP_SEG0_LAT					LATB
-#define	DISP_SEG0_TRIS_BIT				TRISBPINbits.TRISB0
-#define	DISP_SEG0_PORT					PORTB
+#define	LCD_TX_BIT					    0
+#define	LCD_TX_PIN					    PORTBbits.RB0	//Pin 33
+#define	LCD_TX_LAT_BIT				    LATBbits.LATB0
+#define	LCD_TX_LAT					    LATB
+#define	LCD_TX_TRIS_BIT				    TRISBPINbits.TRISB0
+#define	LCD_TX_PORT					    PORTB
 #define	TRISBPIN0						(OUTPUT<<0)
 #define	LATBPIN0						(false<<0)
 

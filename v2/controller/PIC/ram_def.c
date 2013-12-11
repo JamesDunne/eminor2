@@ -18,7 +18,6 @@ TwoBytes NVRCommAddr;
 TwoBytes RAMCommAddr;
 TwoBytes ROMCommAddr;
 
-unsigned char DispNumOfCommons;
 unsigned char LedStatesTop;
 unsigned char LedStatesBot;
 unsigned char ButtonStateTop;
@@ -29,8 +28,6 @@ unsigned char SystickCntr3;
 unsigned char SystickCntr4;
 unsigned char SystickCntr5;
 
-unsigned char ComPointer;
-
 unsigned char TxBuffer[MAX_TX_LENGTH];
 unsigned char TxBufPtr;
 unsigned char TxBufOutPtr;
@@ -40,8 +37,6 @@ unsigned char USBDataPointer;
 unsigned char USBEP0DataInBuffer[64];
 unsigned char ResponseType;
 
-unsigned char midiInData[23];
-unsigned char midiInBufPtr;
-
+// User-writable flash memory:
 #pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR		//Update lkr file if this is to change!!
 rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];

@@ -8,15 +8,6 @@
 
 
 #include "c_system.h"
-#include "usb.h"
-
-/*
-void	Write64BytesProgMem(rom unsigned char *RomPtr, unsigned char *RamPtr) {
-	ProgMemAddr = (unsigned short)RomPtr;
-	//if (ProgmemBuffer != (unsigned short)RamPtr) return;
-	WriteProgMem();
-}
-*/
 
 void StartWrite(void)
 {
@@ -26,8 +17,7 @@ void StartWrite(void)
     EECON2 = 0x55;
     EECON2 = 0xAA;
     EECON1bits.WR = 1;		//processor stall for approx 2mS..
-}//end StartWrite
-
+}
 
 //uses TwoBytes ProgMemAddr;
 //also uses ProgmemBuffer[64]
@@ -35,10 +25,6 @@ void StartWrite(void)
 void WriteProgMem(unsigned char index) //TESTED: Passed
 {
 	unsigned char counter;
-
-	//diag 
-	//return;
-
 
     /*
      * The write holding register for the 18F4550 family is
@@ -52,23 +38,17 @@ void WriteProgMem(unsigned char index) //TESTED: Passed
 
     //LEN = # of byte to write
 
-    for (counter = index; counter < index+32; counter++)
-    {
-        *(rom far char *)(ProgMemAddr.s_form+counter) = \
-        ProgmemBuffer[counter];
-        if ((counter & 0b00011111) == 0b00011111)
-        {
+    for (counter = index; counter < index+32; counter++) {
+        *(rom far char *)(ProgMemAddr.s_form+counter) = ProgmemBuffer[counter];
+        if ((counter & 0b00011111) == 0b00011111) {
             StartWrite();
-        }//end if
-    }//end for
-}//end WriteProgMem
+        }
+    }
+}
 
 //uses TwoBytes ProgMemAddr;
 void EraseProgMem(void) //TESTED: Passed
 {
-	//diag 
-	//return;
-
     //The most significant 16 bits of the address pointer points to the block
     //being erased. Bits5:0 are ignored. (In hardware).
 
@@ -81,7 +61,7 @@ void EraseProgMem(void) //TESTED: Passed
     TBLPTRU = 0;            // forces upper byte back to 0x00
                             // optional fix is to set large code model
                             // (for USER ID 0x20 0x00 0x00)
-}//end EraseProgMem
+}
 
 unsigned char ReadEE(unsigned char Addr) //TESTED: Passed
 {
@@ -90,7 +70,7 @@ unsigned char ReadEE(unsigned char Addr) //TESTED: Passed
 	//EEADRH = 0;
 	EECON1bits.RD = 1;
 	return (EEDATA);
-}//end ReadEE
+}
 
 unsigned char WriteEE(unsigned char Addr, unsigned char data) //TESTED: Passed
 {
@@ -103,7 +83,7 @@ unsigned char WriteEE(unsigned char Addr, unsigned char data) //TESTED: Passed
 	
 	return (true);
 //	while(EECON1_WR);       //Wait till WR bit is clear
-}//end WriteEE
+}
 
 /*
 //WriteConfig is different from WriteProgMem b/c it can write a byte

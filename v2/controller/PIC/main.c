@@ -23,15 +23,10 @@
 #pragma config DEBUG = OFF
 
 #include "c_system.h"
-#include "usb.h"
+#include "types.h"
 #include "hardware.h"
 
-void	ServiceUSB(void);
-
-//#define	RX_TRIS_BIT		TRISCbits.TRISC7		// Receive direction bit
-//#define	TX_TRIS_BIT		TRISCbits.TRISC6		// Transmit direction bit
-
-#pragma code	main_code=0xA2A
+#pragma code main_code=0xA2A
 
 void main() {
     u8 tmp = 0, tmp2 = 0, tmp3 = 0;
@@ -101,15 +96,12 @@ void main() {
 	CLRWDT();
 	init();
 	CLRWDT();
-	//testcrap();
 	controller_init();
 	CLRWDT();
 
 	for(;;) {
 		CLRWDT();
 		ENABLE_ALL_INTERRUPTS();
-
-		ServiceUSB();				//this must be at the top to ensure timely handling of usb events
 
 		if (Write0Pending) {
 			Write0Pending = false;
@@ -153,11 +145,4 @@ void main() {
 		MIDI_COMM_ROUTINE();		//handles sending/receiving midi data
 	}
 #endif
-}
-
-void	ServiceUSB(void) {
-	USBCheckBusStatus();                    // Must use polling method
-    if(UCFGbits.UTEYE!=1) {
-        USBDriverService();                 // Interrupt or polling method
-	}
 }

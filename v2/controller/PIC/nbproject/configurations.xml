@@ -8,10 +8,6 @@
       <itemPath>c_cnstdef.h</itemPath>
       <itemPath>c_portdef.h</itemPath>
       <itemPath>typedefs.h</itemPath>
-      <itemPath>usb.h</itemPath>
-      <itemPath>usbcfg.h</itemPath>
-      <itemPath>usbdsc.h</itemPath>
-      <itemPath>usbmmap.h</itemPath>
       <itemPath>c_ramdef.h</itemPath>
       <itemPath>c_system.h</itemPath>
       <itemPath>../common/hardware.h</itemPath>
@@ -30,11 +26,6 @@
                    projectFiles="true">
       <itemPath>main.c</itemPath>
       <itemPath>startup.c</itemPath>
-      <itemPath>usb.c</itemPath>
-      <itemPath>usbapplet.c</itemPath>
-      <itemPath>usbdescript.c</itemPath>
-      <itemPath>rs232.c</itemPath>
-      <itemPath>hid.c</itemPath>
       <itemPath>ram_def.c</itemPath>
       <itemPath>config.asm</itemPath>
       <itemPath>intslct.c</itemPath>
