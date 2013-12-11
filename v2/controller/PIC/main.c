@@ -7,10 +7,15 @@
 //;############################################################################
 
 // NOTE(jsd): This replaces config.asm section which is apparently commented out and/or not working as intended.
-#pragma config PLLDIV = 2, CPUDIV = OSC2_PLL3, USBDIV = 2
+
+#pragma config PLLDIV = 5, CPUDIV = OSC1_PLL2, USBDIV = 2		//For 20MHz crystal
+
+//#pragma config PLLDIV = 2, CPUDIV = OSC2_PLL3, USBDIV = 2		//For 8MHz crystal
+
+
 #pragma config FOSC = HSPLL_HS, FCMEN = OFF, IESO = OFF
 #pragma config VREGEN = ON, PWRT=ON, BOR=ON, BORV=0
-#pragma config WDT = ON, WDTPS = 128
+#pragma config WDT = ON, WDTPS = 32768							//IMPORTANT!!  Long watchdog timeout is REQUIRED for this bootloader!!
 #pragma config CCP2MX=ON, PBADEN=OFF, LPT1OSC=OFF, MCLRE=ON
 #pragma config STVREN=ON, LVP=OFF, ICPRT=OFF, XINST=OFF
 #pragma config CP0=OFF, CP1=OFF, CP2=OFF
@@ -26,7 +31,7 @@
 #include "types.h"
 #include "hardware.h"
 
-#pragma code main_code=0xA2A
+#pragma code main_code
 
 void main() {
     u8 tmp = 0, tmp2 = 0, tmp3 = 0;
@@ -102,6 +107,8 @@ void main() {
 	for(;;) {
 		CLRWDT();
 		ENABLE_ALL_INTERRUPTS();
+
+		//ServiceUSB();				//this must be at the top to ensure timely handling of usb events
 
 		if (Write0Pending) {
 			Write0Pending = false;

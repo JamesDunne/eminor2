@@ -22,15 +22,16 @@ LIBPATH .
 
 #FI
 
-  CODEPAGE   NAME=BootStartup  START=0x0000            END=0x0FF     PROTECTED
-  CODEPAGE   NAME=Bootloader   START=0x0200            END=0x17FF
+CODEPAGE   NAME=BootStartup  START=0x0000           END=0x0BF     PROTECTED
+CODEPAGE   NAME=Bootloader   START=0x0C0            END=0xFFF
 
 
 #IFDEF _DEBUGCODESTART
-  CODEPAGE   NAME=page       START=0x1800            END=_CODEEND     PROTECTED
+  CODEPAGE   NAME=page       START=0x1000            END=_CODEEND     PROTECTED
   CODEPAGE   NAME=debug      START=_DEBUGCODESTART   END=_CEND        PROTECTED
 #ELSE
-  CODEPAGE   NAME=page       START=0x1800            END=0x7FFF       PROTECTED
+	//Protect ICD section of flash to prevent messing up the debugger:
+  CODEPAGE   NAME=page       START=0x1000            END=0x7DBF       PROTECTED
 #FI
 
 CODEPAGE   NAME=idlocs     START=0x200000          END=0x200007       PROTECTED

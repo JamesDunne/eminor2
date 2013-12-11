@@ -1,5 +1,7 @@
 /* $Id: c018.c,v 1.2.14.1 2006/01/24 14:50:12 rhinec Exp $ */
 
+#include "boot.h"
+
 /* Copyright (c)1999 Microchip Technology */
 
 /* MPLAB-C18 startup code */
@@ -12,7 +14,7 @@ void _startup (void);
 extern near char __FPFLAGS;
 #define RND 6
 
-#pragma code _entry_scn=0x000A00
+#pragma code _entry_scn=REMAPPED_APPLICATION_RESET_VECTOR
 void
 _entry (void)
 {

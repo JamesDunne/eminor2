@@ -12,7 +12,7 @@
 
 #include "c_system.h"
 
-#pragma code InterruptVectorHigh = 0xA08
+#pragma code InterruptVectorHigh = 0x1008
 void
 InterruptVectorHigh (void)
 {

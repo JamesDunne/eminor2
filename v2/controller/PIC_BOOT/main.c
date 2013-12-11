@@ -164,6 +164,7 @@ must be shared between the bootloader and application firmware.
 #include "usb.h"                         
 #include "io_cfg.h"                     
 #include "BootPIC18NonJ.h"
+#include "boot.h"
 
 /** C O N F I G U R A T I O N ************************************************/
 // Note: For a complete list of the available config pragmas and their values, 
@@ -172,50 +173,73 @@ must be shared between the bootloader and application firmware.
 
 #if defined(PIC18F4550_PICDEM_FS_USB)		// Configuration bits for PICDEM FS USB Demo Board
  	#if defined(__18F4550) || defined(__18F4553)
-        #pragma config PLLDIV   = 5         // (20 MHz crystal on PICDEM FS USB board)
-        #pragma config CPUDIV   = OSC1_PLL2	
-        #pragma config USBDIV   = 2         // Clock source from 96MHz PLL/2
-        #pragma config FOSC     = HSPLL_HS
-        #pragma config FCMEN    = OFF
-        #pragma config IESO     = OFF
-        #pragma config PWRT     = OFF
-        #pragma config BOR      = ON
-        #pragma config BORV     = 3
-        #pragma config VREGEN   = ON		//USB Voltage Regulator
-        #pragma config WDT      = OFF
-        #pragma config WDTPS    = 32768
-        #pragma config MCLRE    = ON
-        #pragma config LPT1OSC  = OFF
-        #pragma config PBADEN   = OFF		//NOTE: modifying this value here won't have an effect
-        									//on the application.  See the top of the main() function.
-        									//By default the RB4 I/O pin is used to detect if the
-        									//firmware should enter the bootloader or the main application
-        									//firmware after a reset.  In order to do this, it needs to
-        									//configure RB4 as a digital input, thereby changing it from
-        									//the reset value according to this configuration bit.
-//      #pragma config CCP2MX   = ON
-        #pragma config STVREN   = ON
-        #pragma config LVP      = OFF
-//      #pragma config ICPRT    = OFF       // Dedicated In-Circuit Debug/Programming
-        #pragma config XINST    = OFF       // Extended Instruction Set
-        #pragma config CP0      = OFF
-        #pragma config CP1      = OFF
-//      #pragma config CP2      = OFF
-//      #pragma config CP3      = OFF
-        #pragma config CPB      = OFF
-//      #pragma config CPD      = OFF
-        #pragma config WRT0     = OFF
-        #pragma config WRT1     = OFF
-//      #pragma config WRT2     = OFF
-//      #pragma config WRT3     = OFF
-        #pragma config WRTB     = OFF       // Boot Block Write Protection
-        #pragma config WRTC     = OFF
-//      #pragma config WRTD     = OFF
-        #pragma config EBTR0    = OFF
-        #pragma config EBTR1    = OFF
-//      #pragma config EBTR2    = OFF
-//      #pragma config EBTR3    = OFF
-        #pragma config EBTRB    = OFF
+
+
+
+
+#pragma config PLLDIV = 5, CPUDIV = OSC1_PLL2, USBDIV = 2		//For 20MHz crystal
+
+//#pragma config PLLDIV = 2, CPUDIV = OSC2_PLL3, USBDIV = 2		//For 8MHz crystal
+
+
+#pragma config FOSC = HSPLL_HS, FCMEN = OFF, IESO = OFF
+#pragma config VREGEN = ON, PWRT=ON, BOR=ON, BORV=0
+#pragma config WDT = ON, WDTPS = 32768							//IMPORTANT!!  Long watchdog timeout is REQUIRED for this bootloader!!
+#pragma config CCP2MX=ON, PBADEN=OFF, LPT1OSC=OFF, MCLRE=ON
+#pragma config STVREN=ON, LVP=OFF, ICPRT=OFF, XINST=OFF
+#pragma config CP0=OFF, CP1=OFF, CP2=OFF
+#pragma config CPB=OFF, CPD=OFF
+#pragma config WRT0=OFF, WRT1=OFF, WRT2=OFF
+#pragma config WRTC=OFF, WRTB=OFF, WRTD=OFF
+#pragma config EBTR0=OFF, EBTR1=OFF, EBTR2=OFF
+#pragma config EBTRB=OFF
+
+
+//ORIGNAL:
+//        #pragma config PLLDIV   = 5         // (20 MHz crystal on PICDEM FS USB board)
+//        #pragma config CPUDIV   = OSC1_PLL2	
+//        #pragma config USBDIV   = 2         // Clock source from 96MHz PLL/2
+//        #pragma config FOSC     = HSPLL_HS
+//        #pragma config FCMEN    = OFF
+//        #pragma config IESO     = OFF
+//        #pragma config PWRT     = OFF
+//        #pragma config BOR      = ON
+//        #pragma config BORV     = 3
+//        #pragma config VREGEN   = ON		//USB Voltage Regulator
+//        #pragma config WDT      = OFF
+//        #pragma config WDTPS    = 32768
+//        #pragma config MCLRE    = ON
+//        #pragma config LPT1OSC  = OFF
+//        #pragma config PBADEN   = OFF		//NOTE: modifying this value here won't have an effect
+//        									//on the application.  See the top of the main() function.
+//        									//By default the RB4 I/O pin is used to detect if the
+//        									//firmware should enter the bootloader or the main application
+//        									//firmware after a reset.  In order to do this, it needs to
+//        									//configure RB4 as a digital input, thereby changing it from
+//        									//the reset value according to this configuration bit.
+////      #pragma config CCP2MX   = ON
+//        #pragma config STVREN   = ON
+//        #pragma config LVP      = OFF
+////      #pragma config ICPRT    = OFF       // Dedicated In-Circuit Debug/Programming
+//        #pragma config XINST    = OFF       // Extended Instruction Set
+//        #pragma config CP0      = OFF
+//        #pragma config CP1      = OFF
+////      #pragma config CP2      = OFF
+////      #pragma config CP3      = OFF
+//        #pragma config CPB      = OFF
+////      #pragma config CPD      = OFF
+//        #pragma config WRT0     = OFF
+//        #pragma config WRT1     = OFF
+////      #pragma config WRT2     = OFF
+////      #pragma config WRT3     = OFF
+//        #pragma config WRTB     = OFF       // Boot Block Write Protection
+//        #pragma config WRTC     = OFF
+////      #pragma config WRTD     = OFF
+//        #pragma config EBTR0    = OFF
+//        #pragma config EBTR1    = OFF
+////      #pragma config EBTR2    = OFF
+////      #pragma config EBTR3    = OFF
+//        #pragma config EBTRB    = OFF
 	#endif	//18F4550 and 18F4553
 
 
@@ -323,6 +347,8 @@ void LowVoltageCheck(void);
  * Note:            If adding code to this function, make sure to add it only
  *                  after the C initializer like code at the top of this function.
  *****************************************************************************/
+
+#pragma code boot_entry_vector = BOOT_MAIN
 void BootMain(void)
 {
 	//NOTE: The c018.o file is not included in the linker script for this project.

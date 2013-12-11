@@ -71,7 +71,9 @@
 #if defined(__18F4550)||defined(__18F2550)||defined(__18F45K50)||defined(__18LF45K50)||defined(__18F25K50)||defined(__18LF25K50)
 	#define StartPageToErase			64		 //The 4096 byte section from 0x000-0xFFF contains the bootloader and will not be erased
 	#define MaxPageToErase				511		 //Last 64 byte page of flash on the PIC18F4550
-	#define PROGRAM_MEM_STOP_ADDRESS	0x008000 //**MUST BE WORD ALIGNED (EVEN) ADDRESS.  This address does not get updated, but the one just below it does: IE: If AddressToStopPopulating = 0x200, 0x1FF is the last programmed address (0x200 not programmed)**	
+
+	//Note: Changed the following from 0x8000 to 0x7DC0 to protect the ICD section and prevent screwing up the PICKIT3 / other debugger.
+	#define PROGRAM_MEM_STOP_ADDRESS	0x007DC0 //**MUST BE WORD ALIGNED (EVEN) ADDRESS.  This address does not get updated, but the one just below it does: IE: If AddressToStopPopulating = 0x200, 0x1FF is the last programmed address (0x200 not programmed)**	
 	#define CONFIG_WORDS_START_ADDRESS	0x300000 //0x300000 is CONFIG space for PIC18F4550/PIC18F4553/PIC18F4450 family devices
 	#define CONFIG_WORDS_SECTION_LENGTH	14   	 //14 bytes worth of Configuration words on the PIC18F4550/PIC18F4553/PIC18F4450 family devices
 	#define UserIDAddress				0x200000 //User ID is 8 bytes starting at 0x200000

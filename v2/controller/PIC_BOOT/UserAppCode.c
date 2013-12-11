@@ -23,7 +23,7 @@
 
 
 
-//Placeholder code at address 0x1800 (the start of the non-bootloader firmware space)
+//Placeholder code at address 0x1000 (the start of the non-bootloader firmware space)
 //This gets overwritten when a real hex file gets programmed by the bootloader.
 //If however no hex file has been programmed (yet), might as well stay in the
 //bootloader firmware, even if the pushbutton or software entry attempt has not
@@ -37,3 +37,6 @@ void userApp(void)
 //Initialize with a valid application signature already loaded to allow the code to run at startup rather than jumping to bootload mode.
 #pragma	romdata	app_signature=APP_SIGNATURE_ADDRESS
 rom const unsigned short app_sig = {APP_SIGNATURE_VALUE};
+
+#pragma	romdata	app_version=APP_VERSION_ADDRESS
+rom const unsigned short app_ver = {APP_VERSION};

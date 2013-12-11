@@ -17,8 +17,8 @@
 #include <p18cxxx.h>
 #include "typedefs.h"
 #include "usb.h"
-#include "io_cfg.h"
-#include "BootPIC18NonJ.h"
+//#include "io_cfg.h"
+//#include "BootPIC18NonJ.h"
 #include "boot.h"
 
 
@@ -40,8 +40,8 @@ void BootMain(void);
 
 /****** Program memory vectors, constants, and application remapping*********************/
 //Be careful if modifying the below code.  The below code is absolute address sensitive.
-#pragma code _entry_scn=0x000000		//Reset vector is at 0x00.  Device begins executing code from 0x00 after a reset or POR event
-void _entry (void)
+#pragma code true_entry_scn=0x000000		//Reset vector is at 0x00.  Device begins executing code from 0x00 after a reset or POR event
+void true_entry (void)
 {
     _asm goto UninitializedMain _endasm
 }
@@ -63,7 +63,7 @@ void interrupt_at_low_vector(void)
     //Do not change the code in this function.  Doing so will shift the
     //addresses of things around, which will prevent proper operation.
     _asm goto REMAPPED_APPLICATION_LOW_ISR_VECTOR _endasm    //This goto is located at 0x0018.  This "goto" instruction takes 4 bytes of prog memory.
-    _asm goto BootMain _endasm  //This goto is located at address 0x001C.  This is the absolute
+    _asm goto BOOT_MAIN _endasm  //This goto is located at address 0x001C.  This is the absolute
                                 //entry vector value for jumping from the app into the bootloader
                                 //mode via software.  This goto is normally unreachable,
                                 //unless the application firmware executes an
@@ -104,30 +104,33 @@ void UninitializedMain(void)
     //Assuming the I/O pin check entry method is enabled, check the I/O pin value
     //to see if we should stay in bootloader mode, or jump to normal applicaiton
     //execution mode.
-	#ifdef ENABLE_IO_PIN_CHECK_BOOTLOADER_ENTRY
-        //Need to make sure the I/O pin is configured for digital mode so we
-        //can sense the digital level on the input pin.
-        mInitSwitch2();
 
-        //Check Bootload Mode Entry Condition from the I/O pin (ex: place a
-        //pushbutton and pull up resistor on the pin)
-    	if(sw2 == 1)
-    	{
-        	//If we get to here, the user is not pressing the pushbutton.  We
-        	//should default to jumping into application run mode in this case.
-        	//Restore default "reset" value of registers we may have modified temporarily.
-        	mDeInitSwitch2();
 
-            //Before going to application image however, make sure the image
-            //is properly signed and is intact.
-    		goto DoFlashSignatureCheck;
-    	}
-    	else
-    	{
-        	//User is pressing the pushbutton.  We should stay in bootloader mode
-            _asm goto BootMain _endasm
-        }
-	#endif //#ifdef ENABLE_IO_PIN_CHECK_BOOTLOADER_ENTRY
+	//TODO: Modify code here to check for I/O pin to allow entry into bootload mode!!
+
+
+	//Need to make sure the I/O pin is configured for digital mode so we
+	//can sense the digital level on the input pin.
+	TRISBbits.TRISB0 = TRUE;
+
+	//Check Bootload Mode Entry Condition from the I/O pin (ex: place a
+	//pushbutton and pull up resistor on the pin)
+	if(PORTBbits.RB0 == FALSE)
+	{
+		//If we get to here, the user is not pressing the pushbutton.  We
+		//should default to jumping into application run mode in this case.
+		//Restore default "reset" value of registers we may have modified temporarily.
+		//mDeInitSwitch2();
+
+		//Before going to application image however, make sure the image
+		//is properly signed and is intact.
+		goto DoFlashSignatureCheck;
+	}
+	else
+	{
+		//User is pressing the pushbutton.  We should stay in bootloader mode
+		_asm goto BOOT_MAIN _endasm
+	}
 
 DoFlashSignatureCheck:
     //Check if the application region flash signature is valid
@@ -145,7 +148,7 @@ DoFlashSignatureCheck:
         //try (again) to re-program a valid application image into the device.
 
     	//We should stay in bootloader mode
-        _asm goto BootMain _endasm
+        _asm goto BOOT_MAIN _endasm
     #else
 
         //Ideally we shouldn't get here.  It is not recommended for the user to
