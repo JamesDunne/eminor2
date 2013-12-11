@@ -15,7 +15,7 @@
 
 /* Send a single MIDI byte. */
 void midi_send_byte(u8 data) {
-	MIDI_ENQUEUE(data);
+	midi_enq(data);
 }
 
 // Send MSBs first from hi to lo.
@@ -62,9 +62,11 @@ void	SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
 //------------------------------------------------------------------------------
 
 //returns data into ButtonStateTop and ButtonStateBot.
-void	ReadButtons(void) {
+void ReadButtons(void) {
 	unsigned char BtnAddress, bitloc, i;
 	BitField TempButtons;
+
+    // TODO: remap hardware pins
 
     // read bottom buttons:
 	TempButtons.byte = 0;
@@ -98,7 +100,6 @@ void	ReadButtons(void) {
 }
 
 void SetDipAddress(unsigned char Address) {
-    // NOTE(jsd): BTN_S3 flipped is correct logic.
 	BTN_S0_LAT_BIT = false;
 	BTN_S1_LAT_BIT = false;
 	BTN_S2_LAT_BIT = false;
@@ -135,39 +136,35 @@ void led_set(u16 leds){
 }
 
 void lcd_update_row(u8 row, char text[LCD_COLS]) {
-    // TODO.
+    // Enqueue LCD update commands:
+    lcd_enq(0xFE);
+    // TODO ...
 }
 
 /* --------------- MIDI I/O functions: */
 
 /* Send formatted MIDI commands.
 
-	0 <= cmd <= F       - MIDI command
-	0 <= channel <= F   - MIDI channel to send command to
+	 0 <= cmd <= F      - MIDI command
+	 0 <= channel <= F  - MIDI channel to send command to
 	00 <= data1 <= 7F   - data byte of MIDI command
 */
 void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
-	/* send the MIDI command to the opened MIDI Mapper device: */
-//	midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8));
-
-	MIDI_ENQUEUE(((cmd & 0xF) << 4) | (channel & 0xF));
-	MIDI_ENQUEUE(data1 & 0x7F);
+	midi_enq(((cmd & 0xF) << 4) | (channel & 0xF));
+	midi_enq(data1 & 0x7F);
 }
 
 /* Send formatted MIDI commands.
 
-	0 <= cmd <= F       - MIDI command
-	0 <= channel <= F   - MIDI channel to send command to
+	 0 <= cmd <= F      - MIDI command
+	 0 <= channel <= F  - MIDI channel to send command to
 	00 <= data1 <= 7F   - first data byte of MIDI command
 	00 <= data2 <= 7F   - second (optional) data byte of MIDI command
 */
 void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
-	/* send the MIDI command to the opened MIDI Mapper device: */
-//	midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8) | ((u32)data2 << 16));
-
-	MIDI_ENQUEUE(((cmd & 0xF) << 4) | (channel & 0xF));
-	MIDI_ENQUEUE(data1 & 0x7F);
-	MIDI_ENQUEUE(data2 & 0x7F);
+	midi_enq(((cmd & 0xF) << 4) | (channel & 0xF));
+	midi_enq(data1 & 0x7F);
+	midi_enq(data2 & 0x7F);
 }
 
 // ---------------- FLASH interface:
@@ -211,7 +208,6 @@ void flash_store(u16 addr, u16 count, u8 *data) {
         ProgmemBuffer[daddr] = data[i];
 
     // Start the ERASE operation:
-    // +512 for debugging..
     ProgMemAddr.s_form = (addr & ~63) + WRITABLE_SEG_ADDR;
     EraseProgMem();
 

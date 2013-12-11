@@ -25,22 +25,26 @@
 //-----------------------------------------------------------------------------
 //generic function prototypes:
 void	CLEAR_RAM(void);		//asm function.
-void	RESET_MIDI_TX_BUFFER(void);
-void	SendDataToShiftReg8(unsigned char data1);
 void	SendDataToShiftReg16(unsigned char data1, unsigned char data2);
 void	SetDipAddress(unsigned char Address);
-void	MIDI_ENQUEUE(unsigned char Input);
 void	EraseProgMem(void);
 void	WriteProgMem(unsigned char index);
 
 //routine prototypes:
+void	InterruptHandlerHigh();
 void	SystemTimeRoutine(void);
-void	UpdateLeds(void);
-void	MIDI_COMM_ROUTINE(void);
-void	ReadButtons(void);
 void	init(void);
-void	PROCESS_COMM_REQUEST(void);
-void	InterruptHandlerHigh ();
+
+void	UpdateLeds(void);
+void	ReadButtons(void);
+
+void	midi_clear_buffer(void);
+void	midi_enq(unsigned char Input);
+void	midi_tx(void);
+
+void	lcd_clear_buffer(void);
+void	lcd_enq(unsigned char Input);
+//void	lcd_tx(void);
 
 extern rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];
 //-----------------------------------------------------------------------------

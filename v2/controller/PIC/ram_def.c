@@ -28,14 +28,13 @@ unsigned char SystickCntr3;
 unsigned char SystickCntr4;
 unsigned char SystickCntr5;
 
-unsigned char TxBuffer[MAX_TX_LENGTH];
-unsigned char TxBufPtr;
-unsigned char TxBufOutPtr;
+unsigned char MIDITxBuffer[MAX_MIDI_TX_LENGTH];
+unsigned char MIDITxBufPtr;
+unsigned char MIDITxBufOutPtr;
 
-//----------------------------USB stuff----------------------------------
-unsigned char USBDataPointer;
-unsigned char USBEP0DataInBuffer[64];
-unsigned char ResponseType;
+unsigned char LCDTxBuffer[MAX_LCD_TX_LENGTH];
+unsigned char LCDTxBufPtr;
+unsigned char LCDTxBufOutPtr;
 
 // User-writable flash memory:
 #pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR		//Update lkr file if this is to change!!

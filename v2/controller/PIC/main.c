@@ -64,8 +64,8 @@ void main() {
             }
 
             // Send a new program change message:
-            //MIDI_ENQUEUE(0xC0);
-            //MIDI_ENQUEUE(tmp);
+            //midi_enq(0xC0);
+            //midi_enq(tmp);
             //tmp = ((tmp + 1) & 0x7F);
 #else
             // Read foot switches:
@@ -75,8 +75,8 @@ void main() {
             tmp2 = 1;
             for (tmp = 0; tmp < 8; tmp++, tmp2 <<= 1) {
                 if ((btn & tmp2 == tmp2) && (tmp3 & tmp2 == 0)) {
-                    MIDI_ENQUEUE(0xC0);
-                    MIDI_ENQUEUE(tmp);
+                    midi_enq(0xC0);
+                    midi_enq(tmp);
                 }
             }
             tmp3 = btn;
@@ -90,7 +90,7 @@ void main() {
 #endif
         }
 
-        MIDI_COMM_ROUTINE();
+        midi_tx();
     }
 #else
 	CLRWDT();
@@ -142,7 +142,7 @@ void main() {
 			controller_10msec_timer();	//controller timing functions
 		}
 
-		MIDI_COMM_ROUTINE();		//handles sending/receiving midi data
+		midi_tx();		//handles sending/receiving midi data
 	}
 #endif
 }

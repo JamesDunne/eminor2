@@ -35,8 +35,9 @@
       <itemPath>eeprom.c</itemPath>
       <itemPath>writeprogmem.c</itemPath>
       <itemPath>systick.c</itemPath>
-      <itemPath>MidiComm.c</itemPath>
       <itemPath>../common/controller-simple.c</itemPath>
+      <itemPath>comm_midi.c</itemPath>
+      <itemPath>comm_lcd.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

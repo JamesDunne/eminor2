@@ -47,7 +47,8 @@
 #define	BTN_SAMPLE_DELAY		5	//probably unnecessary (sampling time for buttons)
 
 //midi comm buffer length:
-#define	MAX_TX_LENGTH			8	//probably more than necessary
+#define	MAX_MIDI_TX_LENGTH		32
+#define	MAX_LCD_TX_LENGTH		22
 
 //Size of writable flash segment:
 #define	WRITABLE_SEG_ADDR		0x4900		//Also update this in the lkr file if it needs to change!!

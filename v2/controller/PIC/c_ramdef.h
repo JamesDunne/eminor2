@@ -46,6 +46,10 @@ extern unsigned char SystickCntr3;
 extern unsigned char SystickCntr4;
 extern unsigned char SystickCntr5;
 
-extern unsigned char TxBuffer[MAX_TX_LENGTH];
-extern unsigned char TxBufPtr;
-extern unsigned char TxBufOutPtr;
+extern unsigned char MIDITxBuffer[MAX_MIDI_TX_LENGTH];
+extern unsigned char MIDITxBufPtr;
+extern unsigned char MIDITxBufOutPtr;
+
+extern unsigned char LCDTxBuffer[MAX_LCD_TX_LENGTH];
+extern unsigned char LCDTxBufPtr;
+extern unsigned char LCDTxBufOutPtr;
