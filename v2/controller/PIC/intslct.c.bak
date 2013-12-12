@@ -7,7 +7,7 @@
 * @date 2/02/05
 * @brief RS232/USB communication routine
 */
-//			*See Updates section at bottom of file*
+//          *See Updates section at bottom of file*
 //#######################################################################
 
 #include "c_system.h"
@@ -17,7 +17,7 @@ void
 InterruptVectorHigh (void)
 {
   _asm
-	goto InterruptHandlerHigh //jump to interrupt routine
+    goto InterruptHandlerHigh //jump to interrupt routine
   _endasm
 }
 
@@ -28,27 +28,27 @@ InterruptVectorHigh (void)
 #pragma code
 
 #pragma interrupt InterruptHandlerHigh
-void	InterruptHandlerHigh ()
+void    InterruptHandlerHigh ()
 {
 /*
-	if (INTCONbits.TMR0IF)
-	{                                   //check for TMR0 overflow
-		INTCONbits.TMR0IF = 0;            //clear interrupt flag
-		Systick = true;
-	}
+    if (INTCONbits.TMR0IF)
+    {                                   //check for TMR0 overflow
+        INTCONbits.TMR0IF = 0;            //clear interrupt flag
+        Systick = true;
+    }
 */
-	if (PIR1bits.TMR2IF){
-		PIR1bits.TMR2IF = 0;            //clear interrupt flag
+    if (PIR1bits.TMR2IF){
+        PIR1bits.TMR2IF = 0;            //clear interrupt flag
 
 //Every 250uS routine:
-		SystickCntr++;
-		if (SystickCntr == SYSTEM_TIME_1MS) {
-			SystickCntr = 0;
+        SystickCntr++;
+        if (SystickCntr == SYSTEM_TIME_1MS) {
+            SystickCntr = 0;
 //Every 1mS routine:
-			Systick = true;
-			//Process7Segs();
-		}
-	}
+            Systick = true;
+            //Process7Segs();
+        }
+    }
 }
 #pragma code
 //----------------------------------------------------------------------------

@@ -1,21 +1,19 @@
 //*;###########################################################################
-//;#			Author: Joe Dunne											  #
-//;#			Date 4/06/07					      						  #
-//;#			Main arbitrator									  			  #
-//;#			File Name: main.c   										  #
-//;#																		  #
+//;#            Author: Joe Dunne                                             #
+//;#            Date 4/06/07                                                  #
+//;#            Main arbitrator                                               #
+//;#            File Name: main.c                                             #
+//;#                                                                          #
 //;############################################################################
 
 // NOTE(jsd): This replaces config.asm section which is apparently commented out and/or not working as intended.
 
-#pragma config PLLDIV = 5, CPUDIV = OSC1_PLL2, USBDIV = 2		//For 20MHz crystal
-
-//#pragma config PLLDIV = 2, CPUDIV = OSC2_PLL3, USBDIV = 2		//For 8MHz crystal
-
+//#pragma config PLLDIV = 5, CPUDIV = OSC1_PLL2, USBDIV = 2       //For 20MHz crystal
+#pragma config PLLDIV = 2, CPUDIV = OSC2_PLL3, USBDIV = 2       //For 8MHz crystal
 
 #pragma config FOSC = HSPLL_HS, FCMEN = OFF, IESO = OFF
 #pragma config VREGEN = ON, PWRT=ON, BOR=ON, BORV=0
-#pragma config WDT = ON, WDTPS = 32768							//IMPORTANT!!  Long watchdog timeout is REQUIRED for this bootloader!!
+#pragma config WDT = ON, WDTPS = 32768                          //IMPORTANT!!  Long watchdog timeout is REQUIRED for this bootloader!!
 #pragma config CCP2MX=ON, PBADEN=OFF, LPT1OSC=OFF, MCLRE=ON
 #pragma config STVREN=ON, LVP=OFF, ICPRT=OFF, XINST=OFF
 #pragma config CP0=OFF, CP1=OFF, CP2=OFF
@@ -45,17 +43,17 @@ void main() {
         CLRWDT();
         ENABLE_ALL_INTERRUPTS();
 
-		if (Systick) {
-			Systick = false;
-			SystemTimeRoutine();		//1mS system time routine
-			continue;
-		}
+        if (Systick) {
+            Systick = false;
+            SystemTimeRoutine();        //1mS system time routine
+            continue;
+        }
 
-		if (ControllerTiming) {
+        if (ControllerTiming) {
             u8 btn = ButtonStateBot;
 
             // This section runs every 10ms:
-			ControllerTiming = false;
+            ControllerTiming = false;
 
 #if 0
             // Alternate LEDs every 500ms:
@@ -98,58 +96,56 @@ void main() {
         midi_tx();
     }
 #else
-	CLRWDT();
-	init();
-	CLRWDT();
-	controller_init();
-	CLRWDT();
+    CLRWDT();
+    init();
+    CLRWDT();
+    controller_init();
+    CLRWDT();
 
-	for(;;) {
-		CLRWDT();
-		ENABLE_ALL_INTERRUPTS();
+    for(;;) {
+        CLRWDT();
+        ENABLE_ALL_INTERRUPTS();
 
-		//ServiceUSB();				//this must be at the top to ensure timely handling of usb events
+        if (Write0Pending) {
+            Write0Pending = false;
+            WriteProgMem(0);            //write first set of 32 bytes.
+            continue;                   //continue so we can process pending USB routines
+        }
 
-		if (Write0Pending) {
-			Write0Pending = false;
-			WriteProgMem(0);			//write first set of 32 bytes.
-			continue;					//continue so we can process pending USB routines
-		}
+        if (Write32Pending) {
+            Write32Pending = false;
+            WriteProgMem(32);           //write second set of 32 bytes.
+            continue;                   //continue so we can process pending USB routines
+        }
 
-		if (Write32Pending) {
-			Write32Pending = false;
-			WriteProgMem(32);			//write second set of 32 bytes.
-			continue;					//continue so we can process pending USB routines
-		}
+        if (Systick) {
+            Systick = false;
+            SystemTimeRoutine();        //1mS system time routine
+            continue;
+        }
 
-		if (Systick) {
-			Systick = false;
-			SystemTimeRoutine();		//1mS system time routine
-			continue;
-		}
+        if (CheckButtons) {
+            CheckButtons = false;
+            ReadButtons();              //read buttons off the multiplexor
+            continue;
+        }
 
-		if (CheckButtons) {
-			CheckButtons = false;
-			ReadButtons();				//read buttons off the multiplexor
-			continue;
-		}
+        if (HandleLeds) {
+            HandleLeds = false;
+            UpdateLeds();               //handle leds
+        }
 
-		if (HandleLeds) {
-			HandleLeds = false;
-			UpdateLeds();				//handle leds
-		}
+        if (HandleController) {
+            HandleController = false;
+            controller_handle();        //handle UI and other midi commands
+        }
 
-		if (HandleController) {
-			HandleController = false;
-			controller_handle();		//handle UI and other midi commands
-		}
+        if (ControllerTiming) {
+            ControllerTiming = false;
+            controller_10msec_timer();  //controller timing functions
+        }
 
-		if (ControllerTiming) {
-			ControllerTiming = false;
-			controller_10msec_timer();	//controller timing functions
-		}
-
-		midi_tx();		//handles sending/receiving midi data
-	}
+        midi_tx();      //handles sending/receiving midi data
+    }
 #endif
 }

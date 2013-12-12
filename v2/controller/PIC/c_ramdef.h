@@ -4,32 +4,32 @@
 //----------------------------Access bank variables----------------------------------------
 
 near extern BitField CommFlags1;
-#define	ProcessCommRequest		CommFlags1.bit0
-#define	TildeFlg				CommFlags1.bit1
-#define	SendingOutString		CommFlags1.bit2
-#define	StringInEEPROM			CommFlags1.bit3
-#define	USBQuery				CommFlags1.bit4
-#define	ServiceEP1Data			CommFlags1.bit5
-#define	ProdTestCmdsAllowed		CommFlags1.bit6
-#define	StringInRAM				CommFlags1.bit7
+#define ProcessCommRequest      CommFlags1.bit0
+#define TildeFlg                CommFlags1.bit1
+#define SendingOutString        CommFlags1.bit2
+#define StringInEEPROM          CommFlags1.bit3
+#define USBQuery                CommFlags1.bit4
+#define ServiceEP1Data          CommFlags1.bit5
+#define ProdTestCmdsAllowed     CommFlags1.bit6
+#define StringInRAM             CommFlags1.bit7
 
 near extern BitField ArbFlags1;
-#define Systick				ArbFlags1.bit0
-#define	Unused1Svc			ArbFlags1.bit1
-#define	ButtonsSvc			ArbFlags1.bit2
-#define	Write0Pending		ArbFlags1.bit3
-#define	Write32Pending		ArbFlags1.bit4
-#define	HandleLeds			ArbFlags1.bit5
-#define	HandleLCD			ArbFlags1.bit6
-#define	HandleController	ArbFlags1.bit7
+#define Systick             ArbFlags1.bit0
+#define Unused1Svc          ArbFlags1.bit1
+#define ButtonsSvc          ArbFlags1.bit2
+#define Write0Pending       ArbFlags1.bit3
+#define Write32Pending      ArbFlags1.bit4
+#define HandleLeds          ArbFlags1.bit5
+#define HandleLCD           ArbFlags1.bit6
+#define HandleController    ArbFlags1.bit7
 
 near extern BitField ArbFlags2;
-#define	CheckButtons		ArbFlags2.bit0
-#define	ControllerTiming	ArbFlags2.bit1
+#define CheckButtons        ArbFlags2.bit0
+#define ControllerTiming    ArbFlags2.bit1
 
 //----------------------------Main variables----------------------------------------
 
-extern TwoBytes	ProgMemAddr;
+extern TwoBytes ProgMemAddr;
 extern unsigned char ProgmemBuffer[64];
 
 extern TwoBytes NVRCommAddr;

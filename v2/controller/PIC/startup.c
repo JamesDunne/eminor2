@@ -15,16 +15,13 @@ extern near char __FPFLAGS;
 #define RND 6
 
 #pragma code _entry_scn=REMAPPED_APPLICATION_RESET_VECTOR
-void
-_entry (void)
+void _entry (void)
 {
-_asm goto _startup _endasm
-
+    _asm goto _startup _endasm
 }
 
 #pragma code _startup_scn
-void
-_startup (void)
+void _startup (void)
 {
   _asm
     // Initialize the stack pointer
@@ -35,14 +32,14 @@ _startup (void)
 
     bcf __FPFLAGS,RND,0 // Initalize rounding flag for floating point libs
 
-	clrf	FSR0H, 0	//the 0 indicates its in access ram
-	clrf	FSR0L, 0
+    clrf    FSR0H, 0    //the 0 indicates its in access ram
+    clrf    FSR0L, 0
 
 RAMCLEAR:
-	CLRWDT
-	clrf	POSTINC0, 0
-	btfss	FSR0H, 3, 0
-	goto	RAMCLEAR
+    CLRWDT
+    clrf    POSTINC0, 0
+    btfss   FSR0H, 3, 0
+    goto    RAMCLEAR
 
 _endasm loop:
 

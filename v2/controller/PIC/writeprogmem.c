@@ -1,9 +1,9 @@
 //*;###########################################################################
-//;#			Author: Joe Dunne											  #
-//;#			Date 6/04/07					      						  #
-//;#			Write ProgMem access							  			  #
-//;#			File Name: writeprogmem.c   								  #
-//;#																		  #
+//;#            Author: Joe Dunne                                             #
+//;#            Date 6/04/07                                                  #
+//;#            Write ProgMem access                                          #
+//;#            File Name: writeprogmem.c                                     #
+//;#                                                                          #
 //;############################################################################
 
 
@@ -16,7 +16,7 @@ void StartWrite(void)
      */
     EECON2 = 0x55;
     EECON2 = 0xAA;
-    EECON1bits.WR = 1;		//processor stall for approx 2mS..
+    EECON1bits.WR = 1;      //processor stall for approx 2mS..
 }
 
 //uses TwoBytes ProgMemAddr;
@@ -24,7 +24,7 @@ void StartWrite(void)
 //NOTE: index should be either 0 or 32.  (0 for the first 32 bytes, 32 for the second)
 void WriteProgMem(unsigned char index) //TESTED: Passed
 {
-	unsigned char counter;
+    unsigned char counter;
 
     /*
      * The write holding register for the 18F4550 family is
@@ -55,8 +55,8 @@ void EraseProgMem(void) //TESTED: Passed
     //LEN = # of 64-byte block to erase
     EECON1 = 0b10010100;     //Setup writes: EEPGD=1,FREE=1,WREN=1
 
-	*(rom far char *)ProgMemAddr.s_form;  //Load TBLPTR
-	StartWrite();
+    *(rom far char *)ProgMemAddr.s_form;  //Load TBLPTR
+    StartWrite();
 
     TBLPTRU = 0;            // forces upper byte back to 0x00
                             // optional fix is to set large code model
@@ -66,23 +66,23 @@ void EraseProgMem(void) //TESTED: Passed
 unsigned char ReadEE(unsigned char Addr) //TESTED: Passed
 {
     EECON1 = 0x00;
-	EEADR = Addr;
-	//EEADRH = 0;
-	EECON1bits.RD = 1;
-	return (EEDATA);
+    EEADR = Addr;
+    //EEADRH = 0;
+    EECON1bits.RD = 1;
+    return (EEDATA);
 }
 
 unsigned char WriteEE(unsigned char Addr, unsigned char data) //TESTED: Passed
 {
-	if (EECON1bits.WR) return false;
-	EEADR = Addr;
-	//EEADRH = 0;
-	EEDATA = data;
-	EECON1 = 0b00000100;    //Setup writes: EEPGD=0,WREN=1
-	StartWrite();
-	
-	return (true);
-//	while(EECON1_WR);       //Wait till WR bit is clear
+    if (EECON1bits.WR) return false;
+    EEADR = Addr;
+    //EEADRH = 0;
+    EEDATA = data;
+    EECON1 = 0b00000100;    //Setup writes: EEPGD=0,WREN=1
+    StartWrite();
+    
+    return (true);
+//  while(EECON1_WR);       //Wait till WR bit is clear
 }
 
 /*

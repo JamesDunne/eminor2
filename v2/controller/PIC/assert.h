@@ -6,17 +6,17 @@
  */
 
 #ifndef ASSERT_H
-#define	ASSERT_H
+#define ASSERT_H
 
-#ifdef	__cplusplus
+#ifdef  __cplusplus
 extern "C" {
 #endif
 
 #define assert(e) ((void)0)
 
-#ifdef	__cplusplus
+#ifdef  __cplusplus
 }
 #endif
 
-#endif	/* ASSERT_H */
+#endif  /* ASSERT_H */
 

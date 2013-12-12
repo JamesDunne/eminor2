@@ -1,9 +1,9 @@
 //*;###########################################################################
-//;#			Author: Joe Dunne											  #
-//;#			Date 4/06/07					      						  #
-//;#			Main arbitrator									  			  #
-//;#			File Name: hwcalls.c   										  #
-//;#																		  #
+//;#            Author: Joe Dunne                                             #
+//;#            Date 4/06/07                                                  #
+//;#            Main arbitrator                                               #
+//;#            File Name: hwcalls.c                                          #
+//;#                                                                          #
 //;############################################################################
 
 #include "assert.h"
@@ -15,108 +15,108 @@
 
 /* Send a single MIDI byte. */
 void midi_send_byte(u8 data) {
-	midi_enq(data);
+    midi_enq(data);
 }
 
 // Send MSBs first from hi to lo.
-void	SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
-	unsigned char DataCounter;
+void    SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
+    unsigned char DataCounter;
 
-    DataCounter = 8;								//Load number of bits to be transfered
+    DataCounter = 8;                                //Load number of bits to be transfered
 
-//	bcf	SRCK_LAT_BIT						//Control clock signal, also prevent IIC start
-	SHIFTREG_RCK_LAT_BIT = true;			//Flush out garbage
-	SHIFTREG_RCK_LAT_BIT = false;
+//  bcf SRCK_LAT_BIT                        //Control clock signal, also prevent IIC start
+    SHIFTREG_RCK_LAT_BIT = true;            //Flush out garbage
+    SHIFTREG_RCK_LAT_BIT = false;
 
-	do {
-		SHIFTREG_SRCK_LAT_BIT = false;				//Clear strobe pin
-		if (!chkbit(hi, 7)) {		//MSB high?
-			SHIFTREG_SER_IN_LAT_BIT = false;		//No, set data signal low
-		} else {								//MSB low?
-			SHIFTREG_SER_IN_LAT_BIT = true;		//No, release data signal
-		}
-		hi <<= 1;					//Shift next bit to MSB position
-		SHIFTREG_SRCK_LAT_BIT = true;
-	} while (--DataCounter!=0);				//All 8 bits transfered? No, go transfer next bit
+    do {
+        SHIFTREG_SRCK_LAT_BIT = false;              //Clear strobe pin
+        if (!chkbit(hi, 7)) {       //MSB high?
+            SHIFTREG_SER_IN_LAT_BIT = false;        //No, set data signal low
+        } else {                                //MSB low?
+            SHIFTREG_SER_IN_LAT_BIT = true;     //No, release data signal
+        }
+        hi <<= 1;                   //Shift next bit to MSB position
+        SHIFTREG_SRCK_LAT_BIT = true;
+    } while (--DataCounter!=0);             //All 8 bits transfered? No, go transfer next bit
 
-	DataCounter = 8;								//Load number of bits to be transfered
-	do {
-		SHIFTREG_SRCK_LAT_BIT = false;				//Clear strobe pin
-		if (!chkbit(lo, 7)) {		//MSB high?
-			SHIFTREG_SER_IN_LAT_BIT = false;		//No, set data signal low
-		} else {								//MSB low?
-			SHIFTREG_SER_IN_LAT_BIT = true;		//No, release data signal
-		}
-		lo <<= 1;					//Shift next bit to MSB position
-		SHIFTREG_SRCK_LAT_BIT = true;
-	} while (--DataCounter!=0);				//All 8 bits transfered? No, go transfer next bit
+    DataCounter = 8;                                //Load number of bits to be transfered
+    do {
+        SHIFTREG_SRCK_LAT_BIT = false;              //Clear strobe pin
+        if (!chkbit(lo, 7)) {       //MSB high?
+            SHIFTREG_SER_IN_LAT_BIT = false;        //No, set data signal low
+        } else {                                //MSB low?
+            SHIFTREG_SER_IN_LAT_BIT = true;     //No, release data signal
+        }
+        lo <<= 1;                   //Shift next bit to MSB position
+        SHIFTREG_SRCK_LAT_BIT = true;
+    } while (--DataCounter!=0);             //All 8 bits transfered? No, go transfer next bit
 
-	SHIFTREG_RCK_LAT_BIT = true;			//Strobe the data
+    SHIFTREG_RCK_LAT_BIT = true;            //Strobe the data
 
-	for (DataCounter = LATCH_STROBE_DELAY; DataCounter !=0;DataCounter--);		//Pause for data transfer from external latch_1's input to its output
+    for (DataCounter = LATCH_STROBE_DELAY; DataCounter !=0;DataCounter--);      //Pause for data transfer from external latch_1's input to its output
 
-	SHIFTREG_RCK_LAT_BIT = false;
-	SHIFTREG_SER_IN_LAT_BIT = true;				//Release data signal
-	SHIFTREG_SRCK_LAT_BIT = true;			//Release serial clk
+    SHIFTREG_RCK_LAT_BIT = false;
+    SHIFTREG_SER_IN_LAT_BIT = true;             //Release data signal
+    SHIFTREG_SRCK_LAT_BIT = true;           //Release serial clk
 }
 //------------------------------------------------------------------------------
 
 //returns data into ButtonStateTop and ButtonStateBot.
 void ReadButtons(void) {
-	unsigned char BtnAddress, bitloc, i;
-	BitField TempButtons;
+    unsigned char BtnAddress, bitloc, i;
+    BitField TempButtons;
 
     // TODO: remap hardware pins
 
     // read bottom buttons:
-	TempButtons.byte = 0;
-	bitloc = 1;
-	for (BtnAddress = 0; BtnAddress < 8; BtnAddress++) {
-		SetDipAddress(BtnAddress);
+    TempButtons.byte = 0;
+    bitloc = 1;
+    for (BtnAddress = 0; BtnAddress < 8; BtnAddress++) {
+        SetDipAddress(BtnAddress);
 
-		for (i = BTN_SAMPLE_DELAY;i!=0;i--);		//delay for a sampling delay
+        for (i = BTN_SAMPLE_DELAY;i!=0;i--);        //delay for a sampling delay
 
-		if (BTN_IN_PIN) TempButtons.byte |= bitloc;		//Or in the current bit if it is set.
-		bitloc <<= 1;										//shift the bit over to the next
-	}
-	ButtonStateBot = TempButtons.byte;
+        if (BTN_IN_PIN) TempButtons.byte |= bitloc;     //Or in the current bit if it is set.
+        bitloc <<= 1;                                       //shift the bit over to the next
+    }
+    ButtonStateBot = TempButtons.byte;
 
     // read top buttons:
-	TempButtons.byte = 0;
-	bitloc = 1;
-	for (BtnAddress = 8; BtnAddress < 16; BtnAddress++) {
-		SetDipAddress(BtnAddress);
+    TempButtons.byte = 0;
+    bitloc = 1;
+    for (BtnAddress = 8; BtnAddress < 16; BtnAddress++) {
+        SetDipAddress(BtnAddress);
 
-		for (i = BTN_SAMPLE_DELAY;i!=0;i--);		//delay for a sampling delay
+        for (i = BTN_SAMPLE_DELAY;i!=0;i--);        //delay for a sampling delay
 
-		if (BTN_IN_PIN) TempButtons.byte |= bitloc;		//Or in the current bit if it is set.
-		bitloc <<= 1;										//shift the bit over to the next
-	}
-	ButtonStateTop = TempButtons.byte;
+        if (BTN_IN_PIN) TempButtons.byte |= bitloc;     //Or in the current bit if it is set.
+        bitloc <<= 1;                                       //shift the bit over to the next
+    }
+    ButtonStateTop = TempButtons.byte;
 
     // all buttons are backwards logic, so simply invert the state of ButtonState.
-	ButtonStateTop = ~ButtonStateTop;
-	ButtonStateBot = ~ButtonStateBot;
+    ButtonStateTop = ~ButtonStateTop;
+    ButtonStateBot = ~ButtonStateBot;
 }
 
 void SetDipAddress(unsigned char Address) {
-	BTN_S0_LAT_BIT = false;
-	BTN_S1_LAT_BIT = false;
-	BTN_S2_LAT_BIT = false;
+    BTN_S0_LAT_BIT = false;
+    BTN_S1_LAT_BIT = false;
+    BTN_S2_LAT_BIT = false;
     BTN_S3_LAT_BIT = false;
-	if (chkbit(Address,0)) BTN_S0_LAT_BIT = true;
-	if (chkbit(Address,1)) BTN_S1_LAT_BIT = true;
-	if (chkbit(Address,2)) BTN_S2_LAT_BIT = true;
+    if (chkbit(Address,0)) BTN_S0_LAT_BIT = true;
+    if (chkbit(Address,1)) BTN_S1_LAT_BIT = true;
+    if (chkbit(Address,2)) BTN_S2_LAT_BIT = true;
     if (chkbit(Address,3)) BTN_S3_LAT_BIT = true;
 }
 
 /* --------------- LED read-out display functions: */
 u16 fsw_poll() {
-	u16 fsw;
+    u16 fsw;
 
     fsw = ButtonStateBot | (ButtonStateTop << 8);
 
-	return fsw;
+    return fsw;
 }
 
 void UpdateLeds(void) {
@@ -126,7 +126,7 @@ void UpdateLeds(void) {
     top = LedStatesTop;
     bot = LedStatesBot;
 
-	SendDataToShiftReg16(LedStatesBot, LedStatesTop);
+    SendDataToShiftReg16(LedStatesBot, LedStatesTop);
 }
 
 /* Set currently active program foot-switch's LED indicator and disable all others */
@@ -145,26 +145,26 @@ void lcd_update_row(u8 row, char text[LCD_COLS]) {
 
 /* Send formatted MIDI commands.
 
-	 0 <= cmd <= F      - MIDI command
-	 0 <= channel <= F  - MIDI channel to send command to
-	00 <= data1 <= 7F   - data byte of MIDI command
+     0 <= cmd <= F      - MIDI command
+     0 <= channel <= F  - MIDI channel to send command to
+    00 <= data1 <= 7F   - data byte of MIDI command
 */
 void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
-	midi_enq(((cmd & 0xF) << 4) | (channel & 0xF));
-	midi_enq(data1 & 0x7F);
+    midi_enq(((cmd & 0xF) << 4) | (channel & 0xF));
+    midi_enq(data1 & 0x7F);
 }
 
 /* Send formatted MIDI commands.
 
-	 0 <= cmd <= F      - MIDI command
-	 0 <= channel <= F  - MIDI channel to send command to
-	00 <= data1 <= 7F   - first data byte of MIDI command
-	00 <= data2 <= 7F   - second (optional) data byte of MIDI command
+     0 <= cmd <= F      - MIDI command
+     0 <= channel <= F  - MIDI channel to send command to
+    00 <= data1 <= 7F   - first data byte of MIDI command
+    00 <= data2 <= 7F   - second (optional) data byte of MIDI command
 */
 void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
-	midi_enq(((cmd & 0xF) << 4) | (channel & 0xF));
-	midi_enq(data1 & 0x7F);
-	midi_enq(data2 & 0x7F);
+    midi_enq(((cmd & 0xF) << 4) | (channel & 0xF));
+    midi_enq(data1 & 0x7F);
+    midi_enq(data2 & 0x7F);
 }
 
 // ---------------- FLASH interface:

@@ -1,5 +1,5 @@
 //This file contains the global ram definitions for the project
-#include	"c_system.h"
+#include    "c_system.h"
 
 //----------------------------Access bank variables----------------------------------------
 
@@ -37,5 +37,5 @@ unsigned char LCDTxBufPtr;
 unsigned char LCDTxBufOutPtr;
 
 // User-writable flash memory:
-#pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR		//Update lkr file if this is to change!!
+#pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
 rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];

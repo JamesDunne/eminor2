@@ -11,8 +11,6 @@
 //#######################################################################
 
 
-
-
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
 #include "typedefs.h"
@@ -40,7 +38,7 @@ void BootMain(void);
 
 /****** Program memory vectors, constants, and application remapping*********************/
 //Be careful if modifying the below code.  The below code is absolute address sensitive.
-#pragma code true_entry_scn=0x000000		//Reset vector is at 0x00.  Device begins executing code from 0x00 after a reset or POR event
+#pragma code true_entry_scn=0x000000        //Reset vector is at 0x00.  Device begins executing code from 0x00 after a reset or POR event
 void true_entry (void)
 {
     _asm goto UninitializedMain _endasm
@@ -74,7 +72,7 @@ void interrupt_at_low_vector(void)
 
 
 /** D E C L A R A T I O N S **************************************************/
-#pragma code	BOOTSTARTUP
+#pragma code    BOOTSTARTUP
 /******************************************************************************
  * Function:        void UninitializedMain(void)
  *
@@ -106,31 +104,31 @@ void UninitializedMain(void)
     //execution mode.
 
 
-	//TODO: Modify code here to check for I/O pin to allow entry into bootload mode!!
+    //TODO: Modify code here to check for I/O pin to allow entry into bootload mode!!
 
 
-	//Need to make sure the I/O pin is configured for digital mode so we
-	//can sense the digital level on the input pin.
-	TRISBbits.TRISB0 = TRUE;
+    //Need to make sure the I/O pin is configured for digital mode so we
+    //can sense the digital level on the input pin.
+    TRISBbits.TRISB0 = TRUE;
 
-	//Check Bootload Mode Entry Condition from the I/O pin (ex: place a
-	//pushbutton and pull up resistor on the pin)
-	if(PORTBbits.RB0 == TRUE)
-	{
-		//If we get to here, the user is not pressing the pushbutton.  We
-		//should default to jumping into application run mode in this case.
-		//Restore default "reset" value of registers we may have modified temporarily.
-		//mDeInitSwitch2();
+    //Check Bootload Mode Entry Condition from the I/O pin (ex: place a
+    //pushbutton and pull up resistor on the pin)
+    if(PORTBbits.RB0 == TRUE)
+    {
+        //If we get to here, the user is not pressing the pushbutton.  We
+        //should default to jumping into application run mode in this case.
+        //Restore default "reset" value of registers we may have modified temporarily.
+        //mDeInitSwitch2();
 
-		//Before going to application image however, make sure the image
-		//is properly signed and is intact.
-		goto DoFlashSignatureCheck;
-	}
-	else
-	{
-		//User is pressing the pushbutton.  We should stay in bootloader mode
-		_asm goto BOOT_MAIN _endasm
-	}
+        //Before going to application image however, make sure the image
+        //is properly signed and is intact.
+        goto DoFlashSignatureCheck;
+    }
+    else
+    {
+        //User is pressing the pushbutton.  We should stay in bootloader mode
+        _asm goto BOOT_MAIN _endasm
+    }
 
 DoFlashSignatureCheck:
     //Check if the application region flash signature is valid
@@ -141,13 +139,13 @@ DoFlashSignatureCheck:
             //erase/program/verify operation was a success.
 
             //Go ahead and jump out of bootloader mode into the application run mode
-    		_asm goto REMAPPED_APPLICATION_RESET_VECTOR _endasm
+            _asm goto REMAPPED_APPLICATION_RESET_VECTOR _endasm
         }
         //else the application image is missing or corrupt.  In this case, we
         //need to stay in the bootloader mode, so the user has the ability to
         //try (again) to re-program a valid application image into the device.
 
-    	//We should stay in bootloader mode
+        //We should stay in bootloader mode
         _asm goto BOOT_MAIN _endasm
     #else
 

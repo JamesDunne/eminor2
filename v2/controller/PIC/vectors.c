@@ -1,9 +1,9 @@
 //*;###########################################################################
-//;#			Author: Joe Dunne											  #
-//;#			Date 4/06/07					      						  #
-//;#			vectors											  			  #
-//;#			File Name: vectors.c   										  #
-//;#																		  #
+//;#            Author: Joe Dunne                                             #
+//;#            Date 4/06/07                                                  #
+//;#            vectors                                                       #
+//;#            File Name: vectors.c                                          #
+//;#                                                                          #
 //;############################################################################
 
 
@@ -16,7 +16,7 @@ void
 RealInitVector (void)
 {
   _asm
-	goto 0x0A00 //jump to interrupt routine
+    goto 0x0A00 //jump to interrupt routine
   _endasm
 }
 
@@ -25,7 +25,7 @@ void
 RealInterruptVectorHigh (void)
 {
   _asm
-	goto InterruptHandlerHigh //jump to interrupt routine
+    goto InterruptHandlerHigh //jump to interrupt routine
   _endasm
 }
 
