@@ -45,4 +45,6 @@ TwoBytes tTimer1Value;
 
 // User-writable flash memory:
 #pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
-rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];
+rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN] = {
+#include "flash_rom_init.h"
+};

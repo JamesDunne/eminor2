@@ -19,7 +19,7 @@ void midi_send_byte(u8 data) {
 }
 
 // Send MSBs first from hi to lo.
-void    SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
+void SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
     unsigned char DataCounter;
 
     DataCounter = 8;                                //Load number of bits to be transfered
@@ -136,9 +136,29 @@ void led_set(u16 leds){
 }
 
 void lcd_update_row(u8 row, char text[LCD_COLS]) {
-    // Enqueue LCD update commands:
+	// TODO(jsd): Detect necessary changes and enqueue commands later when buffer has space
+    u8 i;
+
+	// Position cursor on start of row, col 1:
     lcd_enqueue(0xFE);
-    // TODO ...
+	lcd_enqueue(0x45);
+	switch (row) {
+		case 0: lcd_enqueue(0x00); break;
+		case 1: lcd_enqueue(0x40); break;
+		case 2: lcd_enqueue(0x14); break;
+		case 3: lcd_enqueue(0x54); break;
+	}
+
+	// Queue up the row of chars:
+	for (i = 0; i < LCD_COLS; ++i) {
+		u8 c = text[i];
+		if (c == 0) break;
+		lcd_enqueue(c);
+	}
+	// Space-pad to the right:
+	for (; i < LCD_COLS; ++i) {
+		lcd_enqueue(0x20);
+	}
 }
 
 /* --------------- MIDI I/O functions: */

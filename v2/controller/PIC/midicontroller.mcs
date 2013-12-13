@@ -13,7 +13,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File001]
 Location=C:\git\eminor2\v2\controller\PIC\Object\startup.o
 Folder=Intermediary
@@ -26,7 +26,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File002]
 Location=C:\git\eminor2\v2\controller\PIC\Object\ram_def.o
 Folder=Intermediary
@@ -39,7 +39,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File003]
 Location=C:\git\eminor2\v2\controller\PIC\Object\config.o
 Folder=Intermediary
@@ -52,7 +52,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=
 TraceCmdString=
-DebugOptions=/d__DEBUG=1
+DebugOptions=
 [File004]
 Location=C:\git\eminor2\v2\controller\PIC\Object\config.err
 Folder=Intermediary
@@ -65,7 +65,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=
 TraceCmdString=
-DebugOptions=/d__DEBUG=1
+DebugOptions=
 [File005]
 Location=C:\git\eminor2\v2\controller\PIC\Object\intslct.o
 Folder=Intermediary
@@ -78,7 +78,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File006]
 Location=C:\git\eminor2\v2\controller\PIC\Object\init.o
 Folder=Intermediary
@@ -91,7 +91,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File007]
 Location=C:\git\eminor2\v2\controller\PIC\Object\hwcalls.o
 Folder=Intermediary
@@ -104,7 +104,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File008]
 Location=C:\git\eminor2\v2\controller\PIC\Object\eeprom.o
 Folder=Intermediary
@@ -117,7 +117,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File009]
 Location=C:\git\eminor2\v2\controller\PIC\Object\writeprogmem.o
 Folder=Intermediary
@@ -130,7 +130,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File010]
 Location=C:\git\eminor2\v2\controller\PIC\Object\systick.o
 Folder=Intermediary
@@ -143,7 +143,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File011]
 Location=C:\git\eminor2\v2\controller\common\Object\controller-simple.o
 Folder=Intermediary
@@ -156,7 +156,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File012]
 Location=C:\git\eminor2\v2\controller\PIC\Object\bootcode.o
 Folder=Intermediary
@@ -169,7 +169,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File013]
 Location=C:\git\eminor2\v2\controller\PIC\Object\BootUserStartup.o
 Folder=Intermediary
@@ -182,7 +182,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File014]
 Location=C:\git\eminor2\v2\controller\PIC\Object\UserAppCode.o
 Folder=Intermediary
@@ -195,7 +195,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File015]
 Location=C:\git\eminor2\v2\controller\PIC\Object\comm_lcd.o
 Folder=Intermediary
@@ -208,7 +208,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File016]
 Location=C:\git\eminor2\v2\controller\PIC\Object\comm_midi.o
 Folder=Intermediary
@@ -221,7 +221,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
-DebugOptions=-D__DEBUG
+DebugOptions=
 [File017]
 Location=C:\git\eminor2\v2\controller\PIC\config.lst
 Folder=Output
@@ -234,7 +234,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=
 TraceCmdString=
-DebugOptions=/d__DEBUG=1
+DebugOptions=
 [File018]
 Location=C:\git\eminor2\v2\controller\PIC\midicontroller.cof
 Folder=Output
@@ -247,7 +247,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
 TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1
+DebugOptions=
 [File019]
 Location=C:\git\eminor2\v2\controller\PIC\midicontroller.hex
 Folder=Output
@@ -260,7 +260,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
 TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1
+DebugOptions=
 [File020]
 Location=C:\git\eminor2\v2\controller\PIC\midicontroller.map
 Folder=Output
@@ -273,7 +273,7 @@ SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eepr
 SuiteArgsString=
 ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
 TraceCmdString=
-DebugOptions=/z__MPLAB_DEBUG=1
+DebugOptions=
 [TOOL_LOC_STAMPS]
 tool_loc{49D3CA3F-D9A3-4518-9943-226A347E8CC7}=C:\mplabc18\v3.46\mpasm\mpasmwin.exe
 tool_loc{96C98149-AA1B-4CF9-B967-FAE79CAB663C}=C:\mplabc18\v3.46\bin\mplink.exe

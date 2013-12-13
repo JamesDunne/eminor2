@@ -43,7 +43,6 @@
 #define INIT_PR2            0xF9        //250uS interrupt
 #define INIT_PIE1           0b00000011  //enable pr2 to tmr2 match interrupt, TMR1IE on
 
-// 453 works for MPLAB SIM at 24MHz processor.
 // 32 MHz clock cycle.
 #define TMR1_BAUD9600_PERIOD    	834 // N counts * X ns = 104.167 us (9600 baud)
 #define TMR1_ISR_LATENCY			176	// latency to next ISR

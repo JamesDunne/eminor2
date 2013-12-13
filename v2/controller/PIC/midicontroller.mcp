@@ -53,6 +53,7 @@ file_025=.
 file_026=.
 file_027=.
 file_028=.
+file_029=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -83,6 +84,7 @@ file_025=no
 file_026=no
 file_027=no
 file_028=no
+file_029=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -113,6 +115,7 @@ file_025=no
 file_026=no
 file_027=no
 file_028=no
+file_029=no
 [FILE_INFO]
 file_000=main.c
 file_001=startup.c
@@ -142,7 +145,8 @@ file_024=..\common\types.h
 file_025=a_micrdef.inc
 file_026=assert.h
 file_027=boot.h
-file_028=18f4550.lkr
+file_028=flash_rom_init.h
+file_029=18f4550.lkr
 [SUITE_INFO]
 suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 suite_state=

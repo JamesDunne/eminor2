@@ -42,6 +42,7 @@ void    midi_clear_buffer(void);
 void    midi_enq(unsigned char Input);
 void    midi_tx(void);
 
+void    lcd_init(void);
 void    lcd_clear_buffer(void);
 void    lcd_enqueue(unsigned char Input);
 

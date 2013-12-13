@@ -760,17 +760,57 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 FILE *open_or_create_flash_file() {
     FILE *f = fopen("flash.bin", "r+b");
     if (f == NULL) {
+        const size_t flash_length = sizeof(struct program) * 128;
+
         // Initialize new file with initial flash memory data:
         FILE *f = fopen("flash.bin", "a+b");
-        fwrite(flash_memory, 1, sizeof(struct program) * 128, f);
+        fwrite(flash_memory, 1, flash_length, f);
         fclose(f);
 
         // Create flash.hex text file:
         FILE *ft = fopen("flash.hex", "w");
-        for (int i = 0; i < sizeof(struct program) * 128; ++i) {
+        for (int i = 0; i < flash_length; ++i) {
             u8 d = ((u8 *)flash_memory)[i];
             fprintf(ft, "%02X", d);
         }
+        fclose(ft);
+
+        // Create flash_rom_init.h for #include in PIC project:
+        ft = fopen("..\\PIC\\flash_rom_init.h", "w");
+#if 0
+        for (int i = 0; i < flash_length; ++i) {
+            u8 d = ((u8 *)flash_memory)[i];
+            fprintf(ft, "0x%02X", d);
+
+            if ((i & 31) == 31) fprintf(ft, ",\n");
+            else if (i < flash_length - 1) fprintf(ft, ", ");
+        }
+#else
+        for (int i = 0; i < 128; ++i) {
+            struct program *p = &flash_memory[i];
+
+            // Write program name in 'c','h','a','r' literals:
+            int c;
+            for (c = 0; c < 20; ++c) {
+                if (p->name[c] == 0) break;
+                fprintf(ft, "'%c', ", p->name[c]);
+            }
+            for (; c < 20; ++c) {
+                fprintf(ft, "0, ");
+            }
+
+            for (c = 0; c < 6; ++c) {
+                fprintf(ft, "0x%02X, ", p->fx[c]);
+            }
+
+            for (c = 0; c < 6; ++c) {
+                fprintf(ft, "0x%02X", p->rjm[c]);
+                if (c < 6 - 1) fprintf(ft, ", ");
+            }
+
+            if (i < 128 - 1) fprintf(ft, ",\n");
+        }
+#endif
         fclose(ft);
 
         // Reopen file for reading:

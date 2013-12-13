@@ -24,7 +24,11 @@
 #include "types.h"
 #include "hardware.h"
 
-void main() {
+#if 0
+
+#pragma code main_code
+
+void main_lcd_isr() {
 	u8 i;
 	u8 tmp;
 
@@ -32,26 +36,8 @@ void main() {
     init();
     CLRWDT();
 
-   	DISABLE_ALL_INTERRUPTS();
-	PIE1bits.TMR1IE = 0;
-
-	// Wait ~100ms for the LCD to boot up:
-	SWUART_TX_LAT_BIT = 1;
-	for (i=0; i<80; ++i) {
-		// ~10ms timer:
-		T1CONbits.TMR1ON = 0;
-		PIR1bits.TMR1IF = 0;
-		TMR1L = 0x00;
-		TMR1H = 0x00;
-		T1CONbits.TMR1ON = 1;
-		while (PIR1bits.TMR1IF == 0);
-		PIR1bits.TMR1IF = 0;
-	}
-
-	PIE1bits.TMR1IE = 1;
-
-	// Start up the SWUART timer interrupt:
-   	ENABLE_ALL_INTERRUPTS();
+	// Wait for the LCD to initialize:
+	lcd_init();
 
 	// DISPLAY BAUD rate:
 	//lcd_enqueue(0xFE);
@@ -88,8 +74,6 @@ void main() {
 	}
 }
 
-#if 0
-
 void SEND_BIT(unsigned char b) {
 	// Send bit:
 	if (b) SWUART_TX_LAT_BIT = 1;
@@ -106,8 +90,6 @@ void SEND_BIT(unsigned char b) {
 	TMR1H = (((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) >> 8) & 0xFF;
 	T1CONbits.TMR1ON = 1;
 }
-
-#pragma code main_code
 
 void main_lcd_bitbang_blocking() {
 	u8 i;
@@ -322,13 +304,30 @@ void main_test2() {
     }
 }
 
-void real_main() {
+#endif
+
+void main() {
     CLRWDT();
     init();
     CLRWDT();
-    controller_init();
+
+	// Wait for the LCD to initialize:
+	lcd_init();
     CLRWDT();
 
+	// Clear LCD screen:
+	lcd_enqueue(0xFE);
+	lcd_enqueue(0x51);
+
+    // Set contrast:
+    lcd_enqueue(0xFE);
+    lcd_enqueue(0x52);
+    lcd_enqueue(20);
+
+    // Initialize controller logic:
+    controller_init();
+
+    // Main event loop:
     for(;;) {
         CLRWDT();
         ENABLE_ALL_INTERRUPTS();
@@ -336,25 +335,21 @@ void real_main() {
         if (Write0Pending) {
             Write0Pending = false;
             WriteProgMem(0);            //write first set of 32 bytes.
-            continue;                   //continue so we can process pending USB routines
         }
 
         if (Write32Pending) {
             Write32Pending = false;
             WriteProgMem(32);           //write second set of 32 bytes.
-            continue;                   //continue so we can process pending USB routines
         }
 
         if (Systick) {
             Systick = false;
             SystemTimeRoutine();        //1mS system time routine
-            continue;
         }
 
         if (CheckButtons) {
             CheckButtons = false;
             ReadButtons();              //read buttons off the multiplexor
-            continue;
         }
 
         if (HandleLeds) {
@@ -374,6 +369,4 @@ void real_main() {
 
         midi_tx();      //handles sending/receiving midi data
     }
-}
-
-#endif
+} // real main

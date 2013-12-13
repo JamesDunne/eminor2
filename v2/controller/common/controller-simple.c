@@ -316,6 +316,8 @@ const u8 timer_fx_timeout = 30;
 
 // set the controller to an initial state
 void controller_init(void) {
+    u8 i;
+
     leds.top.byte = 0;
     leds.bot.byte = 0;
     timer_tapstore = 0;
@@ -335,12 +337,11 @@ void controller_init(void) {
     pr.fx[5] = fxm_delay;
 
 #ifdef FEAT_LCD
-    strcpy(lcdtext_row_program, "Program:            ");
+    for (i = 0; i < LCD_COLS; ++i)
+        lcdtext_row_program[i] = "Program:            "[i];
 
     lcd_update_row(0, "");
     lcd_update_row(1, "");
-    lcd_update_row(2, "");
-    lcd_update_row(3, pr.name);
 #endif
 
     // Load new channel effect states:

@@ -9,6 +9,33 @@
 // LCD communication is done with a bit-banged RS232 impl using timer interrupts
 // with RD7 as the TX pin. No RX is necessary.
 
+// Wait for the LCD to initialize.
+void lcd_init(void) {
+	unsigned char i;
+
+	// Disable timer interrupt:
+   	DISABLE_ALL_INTERRUPTS();
+	PIE1bits.TMR1IE = 0;
+
+	// Wait ~100ms for the LCD to boot up:
+	SWUART_TX_LAT_BIT = 1;
+	for (i=0; i<80; ++i) {
+		// ~10ms timer:
+		T1CONbits.TMR1ON = 0;
+		PIR1bits.TMR1IF = 0;
+		TMR1L = 0x00;
+		TMR1H = 0x00;
+		T1CONbits.TMR1ON = 1;
+		while (PIR1bits.TMR1IF == 0);
+		PIR1bits.TMR1IF = 0;
+	}
+
+	PIE1bits.TMR1IE = 1;
+
+	// Start up the SWUART timer interrupt:
+   	ENABLE_ALL_INTERRUPTS();
+}
+
 void lcd_enqueue(unsigned char v) {
     if (swuart_tx_bufptr >= MAX_LCD_TX_LENGTH) return;
     swuart_tx_buffer[swuart_tx_bufptr] = v;
