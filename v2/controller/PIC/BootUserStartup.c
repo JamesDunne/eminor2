@@ -41,7 +41,7 @@ void BootMain(void);
 #pragma code true_entry_scn=0x000000        //Reset vector is at 0x00.  Device begins executing code from 0x00 after a reset or POR event
 void true_entry (void)
 {
-    _asm goto UninitializedMain _endasm
+     _asm goto UninitializedMain _endasm
 }
 
 //The hardware high priority interrupt vector.  This bootloader firmware does

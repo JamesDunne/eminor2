@@ -28,10 +28,9 @@ void InterruptVectorHigh (void)
 #pragma interrupt InterruptHandlerHigh
 void InterruptHandlerHigh (void) {
     if (PIR1bits.TMR1IF) {
-		//reloadTimer1(TMR1_BAUD9600_PERIOD);
-
-		TMR1L = 0x8F;
-		TMR1H = 0xFD;
+		reloadTimer1(TMR1_BAUD9600_PERIOD);
+		//TMR1L = 0x00;
+		//TMR1H = 0x00;
 
         // Call to SWUART for timer1:
         swuart_tx_interrupt();
@@ -51,7 +50,7 @@ void InterruptHandlerHigh (void) {
             //Process7Segs();
         }
     }
-}
+ }
 #pragma code
 
 //----------------------------------------------------------------------------

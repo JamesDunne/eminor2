@@ -9,11 +9,12 @@
 // NOTE(jsd): This replaces config.asm section which is apparently commented out and/or not working as intended.
 
 //#pragma config PLLDIV = 5, CPUDIV = OSC1_PLL2, USBDIV = 2       //For 20MHz crystal
-#pragma config PLLDIV = 2, CPUDIV = OSC2_PLL3, USBDIV = 2       //For 8MHz crystal
+//#pragma config PLLDIV = 2, CPUDIV = OSC2_PLL3, USBDIV = 2       //For 8MHz crystal
+#pragma config PLLDIV = 2, CPUDIV = OSC1_PLL2, USBDIV = 2       //For 8MHz crystal
 
 #pragma config FOSC = HSPLL_HS, FCMEN = OFF, IESO = OFF
 #pragma config VREGEN = ON, PWRT=ON, BOR=ON, BORV=0
-#pragma config WDT = ON, WDTPS = 32768                          //IMPORTANT!!  Long watchdog timeout is REQUIRED for this bootloader!!
+//#pragma config WDT = ON, WDTPS = 32768                          //IMPORTANT!!  Long watchdog timeout is REQUIRED for this bootloader!!
 #pragma config CCP2MX=ON, PBADEN=OFF, LPT1OSC=OFF, MCLRE=ON
 #pragma config STVREN=ON, LVP=OFF, ICPRT=OFF, XINST=OFF
 #pragma config CP0=OFF, CP1=OFF, CP2=OFF
@@ -31,10 +32,67 @@
 
 #pragma code main_code
 
+void SEND_BIT(unsigned char b) {
+	u8 cnt = 0;
+
+	if (b) SWUART_TX_LAT_BIT = true;
+	else SWUART_TX_LAT_BIT = false;
+
+	// We want a 104.166666667 usec wait loop
+	for (; cnt < 13; cnt++) {}
+}
+
 void main() {
+#if 1
+	u8 tmp;
+	u8 cnt;
+
+    CLRWDT();
+    init();
+    CLRWDT();
+
+#define SEND_BYTE(b) \
+	SEND_BIT(0); \
+	SEND_BIT((b & 1)); \
+	SEND_BIT((b & 2)); \
+	SEND_BIT((b & 4)); \
+	SEND_BIT((b & 8)); \
+	SEND_BIT((b & 16)); \
+	SEND_BIT((b & 32)); \
+	SEND_BIT((b & 64)); \
+	SEND_BIT((b & 128)); \
+	SEND_BIT(1); \
+	SEND_BIT(1); \
+	SEND_BIT(1); \
+	SEND_BIT(1); \
+	SEND_BIT(1); \
+	SEND_BIT(1); \
+	SEND_BIT(1);
+
+	// Clear the line:
+	SEND_BIT(1);
+	SEND_BIT(1);
+	SEND_BIT(1);
+	SEND_BIT(1);
+	SEND_BIT(1);
+	SEND_BIT(1);
+	SEND_BIT(1);
+	SEND_BIT(1);
+	SEND_BIT(1);
+
+	// Send test data: "ABC"
+	SEND_BYTE(0x41);
+	SEND_BYTE(0x42);
+	SEND_BYTE(0x43);
+
+    for(;;) {
+    	//CLRWDT();
+    	//ENABLE_ALL_INTERRUPTS();
+	}
+#else
     u8 tmp = 0, tmp2 = 0, tmp3 = 0;
 
-#if 1
+#  if 1
     CLRWDT();
     init();
     CLRWDT();
@@ -55,7 +113,7 @@ void main() {
             // This section runs every 10ms:
             ControllerTiming = false;
 
-#if 0
+#    if 0
             // Alternate LEDs every 500ms:
             tmp2++;
             if (tmp2 >= 32) {
@@ -70,7 +128,7 @@ void main() {
             //midi_enq(0xC0);
             //midi_enq(tmp);
             //tmp = ((tmp + 1) & 0x7F);
-#else
+#    else
             // Read foot switches:
             ReadButtons();
 
@@ -101,18 +159,18 @@ void main() {
                     lcd_enqueue("01234567890123456789"[tmp]);
                 }
             }
-#endif
+#    endif
         }
 
         // Transmit next MIDI byte:
-        midi_tx();
+        //midi_tx();
 
         // Enable SWUART to TX LCD bytes if idle:
         if ((swuart_mode == SWUARTMODE_TX_IDLE) && (swuart_tx_bufptr > 0)) {
             swuart_tx_start();
         }
     }
-#else
+#  else
     CLRWDT();
     init();
     CLRWDT();
@@ -164,5 +222,6 @@ void main() {
 
         midi_tx();      //handles sending/receiving midi data
     }
+#  endif
 #endif
 }
