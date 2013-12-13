@@ -24,8 +24,6 @@ void init(void) {
     TRISD = INIT_TRISD;
     TRISE = INIT_TRISE;
 
-	CCP1CON = 0;
-
 //Initialize the USART control registers
     TXSTA = INIT_TXSTA;
     RCSTA = INIT_RCSTA;

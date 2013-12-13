@@ -45,7 +45,7 @@
 
 // 453 works for MPLAB SIM at 24MHz processor.
 //#define TMR1_BAUD9600_PERIOD    453    	// N counts * X ns = 104.167 us (9600 baud)
-#define TMR1_BAUD9600_PERIOD    400    	// N counts * X ns = 104.167 us (9600 baud)
+#define TMR1_BAUD9600_PERIOD    832    	// N counts * X ns = 104.167 us (9600 baud)
 
 #define TMR1_START_LATENCY      0		// Subtract ISR code latency (see assembly listing of ISR code and calculate cycles)
 #define TMR1_RELOAD_LATENCY     0

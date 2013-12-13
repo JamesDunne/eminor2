@@ -23,8 +23,6 @@
 #include "types.h"
 #include "hardware.h"
 
-#define BAUD9600_PERIOD	832
-
 void SEND_BIT(unsigned char b) {
 	// Send bit:
 	if (b) SWUART_TX_LAT_BIT = 1;
@@ -37,15 +35,16 @@ void SEND_BIT(unsigned char b) {
 
 	// Reset timer:
 	T1CONbits.TMR1ON = 0;
-	TMR1L = ((unsigned short)0xFFFF - (unsigned short)BAUD9600_PERIOD) & 0xFF;
-	TMR1H = (((unsigned short)0xFFFF - (unsigned short)BAUD9600_PERIOD) >> 8) & 0xFF;
+	TMR1L = ((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) & 0xFF;
+	TMR1H = (((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) >> 8) & 0xFF;
 	T1CONbits.TMR1ON = 1;
 }
 
 #pragma code main_code
 
 void main() {
-	u8	i;
+	u8 i;
+	u8 tmp;
 
     CLRWDT();
     init();
@@ -82,23 +81,24 @@ void main() {
 
 	// Set up timer1 to wait for next baud:
 	T1CONbits.TMR1ON = 0;
-	TMR1L = ((unsigned short)0xFFFF - (unsigned short)BAUD9600_PERIOD) & 0xFF;
-	TMR1H = (((unsigned short)0xFFFF - (unsigned short)BAUD9600_PERIOD) >> 8) & 0xFF;
+	TMR1L = ((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) & 0xFF;
+	TMR1H = (((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) >> 8) & 0xFF;
 	T1CONbits.TMR1ON = 1;
 
-	// CLS:
-	//SEND_BYTE(0xFE);
-	//SEND_BYTE(0x51);
-
 	// DISPLAY BAUD rate:
-	//SEND_BYTE(0xFE);
-	//SEND_BYTE(0x71);
+	SEND_BYTE(0xFE);
+	SEND_BYTE(0x71);
 
 	// SET BAUD rate:
 	//SEND_BYTE(0xFE);
 	//SEND_BYTE(0x61);
 	//SEND_BYTE(0x04);	// 9600 baud
 
+	// CLS:
+	//SEND_BYTE(0xFE);
+	//SEND_BYTE(0x51);
+
+#if 0
 	SEND_BYTE(0xAA);
 	SEND_BYTE(0xAA);
 	SEND_BYTE(0xAA);
@@ -120,9 +120,29 @@ void main() {
 	SEND_BYTE(0x41);
 	SEND_BYTE(0x42);
 	SEND_BYTE(0x43);
+#endif
 
+	// CLS:
+	SEND_BYTE(0xFE);
+	SEND_BYTE(0x51);
+
+	tmp = 0x41;
     for(;;) {
    		CLRWDT();
+
+		SEND_BYTE(tmp);
+		tmp++;
+		if (tmp > 0x7F) {
+			tmp = 0x41;
+
+			// CLS:
+			//SEND_BYTE(0xFE);
+			//SEND_BYTE(0x51);
+
+			// HOME CURSOR:
+			SEND_BYTE(0xFE);
+			SEND_BYTE(0x46);
+		}
 	}
 }
 
