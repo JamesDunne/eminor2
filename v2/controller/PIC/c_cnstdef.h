@@ -48,7 +48,7 @@
 
 //UART comm buffer lengths:
 #define MAX_MIDI_TX_LENGTH      32
-#define MAX_LCD_TX_LENGTH       22
+#define MAX_LCD_TX_LENGTH       23
 
 // SWUART modes:
 #define SWUARTMODE_TX_IDLE      0

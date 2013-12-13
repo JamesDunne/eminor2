@@ -74,7 +74,7 @@ void main() {
             // Read foot switches:
             ReadButtons();
 
-            // Send a program change message for each foot switch pressed:
+            // Send a MIDI program change message for each foot switch pressed:
             tmp2 = 1;
             for (tmp = 0; tmp < 8; tmp++, tmp2 <<= 1) {
                 if ((btn & tmp2 == tmp2) && (tmp3 & tmp2 == 0)) {
@@ -84,12 +84,23 @@ void main() {
             }
             tmp3 = btn;
 
-            // Copy foot switch states to LED states:
+            // Copy foot switch states to LED states for debugging:
             LedStatesTop = ~btn;
             LedStatesBot = btn;
 
             // Update LEDs:
             UpdateLeds();
+
+            // Update LCD when we have buffer space to do so:
+            if (swuart_tx_bufptr == 0) {
+                lcd_enqueue(0xFE);
+                lcd_enqueue(0x45);
+                lcd_enqueue(0x00);
+
+                for (tmp = 0; tmp < 20; tmp++) {
+                    lcd_enqueue("01234567890123456789"[tmp]);
+                }
+            }
 #endif
         }
 
