@@ -24,6 +24,8 @@ void init(void) {
     TRISD = INIT_TRISD;
     TRISE = INIT_TRISE;
 
+	CCP1CON = 0;
+
 //Initialize the USART control registers
     TXSTA = INIT_TXSTA;
     RCSTA = INIT_RCSTA;
@@ -52,6 +54,7 @@ void init(void) {
     TMR2 = 0;
     PR2 = INIT_PR2;
     T2CON = INIT_T2CON;             //enable the timer and set up the scalars
+
     PIE1 = INIT_PIE1;
     INTCONbits.GIEH = 1;          //enable interrupts
 }

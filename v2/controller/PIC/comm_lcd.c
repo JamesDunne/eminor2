@@ -29,11 +29,24 @@ void swuart_tx_start(void) {
     swuart_txbyte = swuart_tx_buffer[swuart_tx_bufoutptr];
 
     // Enable SWUART timer (timer 1):
-    startTimer1(TMR1_BAUD9600_PERIOD);
+    //startTimer1(TMR1_BAUD9600_PERIOD);
+
+	T1CONbits.TMR1ON = 0;
+	TMR1L = ((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) & 0xFF;	// 0x80
+	TMR1H = (((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) >> 8) & 0xFF;	// 0xFE
+	T1CONbits.TMR1ON = 1;
 }
 
 // ISR for SWUART:
 void swuart_tx_interrupt(void) {
+	//reloadTimer1(TMR1_BAUD9600_PERIOD);
+
+	PIR1bits.TMR1IF = 0;
+	T1CONbits.TMR1ON = 0;
+	TMR1L = ((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) & 0xFF;	// 0x80
+	TMR1H = (((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) >> 8) & 0xFF;	// 0xFE
+	T1CONbits.TMR1ON = 1;
+
     switch (swuart_mode) {
         case SWUARTMODE_TX_IDLE:
             // IDLE mode; do nothing.

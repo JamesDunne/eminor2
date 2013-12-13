@@ -17,6 +17,8 @@ build/
 *.map
 Object/
 *.o
+midicontroller.cof
+midicontroller.hex
 *.lst
 
 Thumbs.db

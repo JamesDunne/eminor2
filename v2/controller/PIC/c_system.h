@@ -51,29 +51,31 @@ void    swuart_tx_interrupt(void);
 extern rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];
 //-----------------------------------------------------------------------------
 
+// NOTE(jsd): These macros are just plain broken on the MPLAB SIM; unknown on PIC18.
+
 #define startTimer1(period)    {   \
-    T1CONbits.TMR1ON = false;   \
-    PIR1bits.TMR1IF = false;    \
+    T1CONbits.TMR1ON = 0;   \
+    PIR1bits.TMR1IF = 0;    \
     tTimer1Value.s_form = 0xFFFF - ((period) - TMR1_START_LATENCY);    \
     TMR1L = tTimer1Value.b_form.low;    \
     TMR1H = tTimer1Value.b_form.high;   \
-    T1CONbits.TMR1ON = true;    \
+    T1CONbits.TMR1ON = 1;    \
 }
 
 #define reloadTimer1(period)    {   \
-    T1CONbits.TMR1ON = false;   \
-    PIR1bits.TMR1IF = false;    \
+    T1CONbits.TMR1ON = 0;   \
+    PIR1bits.TMR1IF = 0;    \
     tTimer1Value.b_form.low = TMR1L;    \
     tTimer1Value.b_form.high = TMR1H;   \
     tTimer1Value.s_form -= (period) - TMR1_RELOAD_LATENCY;    \
     TMR1L = tTimer1Value.b_form.low;    \
     TMR1H = tTimer1Value.b_form.high;   \
-    T1CONbits.TMR1ON = true;    \
+    T1CONbits.TMR1ON = 1;    \
 }
 
 #define stopTimer1()    {   \
-    T1CONbits.TMR1ON = false;   \
-    PIR1bits.TMR1IF = false;    \
+    T1CONbits.TMR1ON = 0;   \
+    PIR1bits.TMR1IF = 0;    \
     TMR1L = 0;    \
     TMR1H = 0;   \
 }

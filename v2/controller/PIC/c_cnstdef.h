@@ -30,19 +30,25 @@
 #define SYSTEM_TIME_1S          100     //in 10mS counts
 
 //interrupts:
-#define INIT_INTCON         0x00        //disable global and enable TMR0 interrupt
-#define INIT_INTCON2        0x80        //PORTB pullups disabled
-//timing constants:
-#define INIT_T0CON          0x00        //timer0 disabled; default
-#define	INIT_T1CON          0x00        //timer1 disabled; 1:1 prescalar, 8-bit read
-#define INIT_T2CON          0x0D        //timer2 on, 1:4 prescale, 1:2 postscale
-#define INIT_PR2            0xF9        //250uS interrupt
-#define INIT_PIE1           0x02        //enable pr2 to tmr2 match interrupt
+#define INIT_INTCON         0b00100000  //interrupt on TMR0 overflow enabled
+#define INIT_INTCON2        0b10000000  //PORTB pullups disabled
 
-// 166.67ns is timer1 period assuming 1:1 with instruction clock.
-#define TMR1_BAUD9600_PERIOD    1     	// 625 counts * 166.67 ns = 104.2 us (bit timing at 9600 baud)
-#define TMR1_START_LATENCY      (0)  // Subtract ISR code latency (see assembly listing of ISR code and calculate cycles)
-#define TMR1_RELOAD_LATENCY     (0)
+//timing constants:
+#define INIT_T0CON          0b01000010  //timer0 disabled; 1:8 prescalar; 16-bit counter
+
+#define	INIT_T1CON          0b00000000  //timer1 disabled; 1:1 prescalar,  8-bit R/W
+
+#define INIT_T2CON          0x0D        //timer2 on, 1:4 prescale, 1:2 postscale
+
+#define INIT_PR2            0xF9        //250uS interrupt
+#define INIT_PIE1           0b00000011  //enable pr2 to tmr2 match interrupt, TMR1IE on
+
+// 453 works for MPLAB SIM at 24MHz processor.
+//#define TMR1_BAUD9600_PERIOD    453    	// N counts * X ns = 104.167 us (9600 baud)
+#define TMR1_BAUD9600_PERIOD    400    	// N counts * X ns = 104.167 us (9600 baud)
+
+#define TMR1_START_LATENCY      0		// Subtract ISR code latency (see assembly listing of ISR code and calculate cycles)
+#define TMR1_RELOAD_LATENCY     0
 
 #define LATCH_STROBE_DELAY      16  //4uS minimum (time for shift register bits)
 #define BTN_SAMPLE_DELAY        5   //probably unnecessary (sampling time for buttons)

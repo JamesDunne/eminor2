@@ -1,16 +1,9 @@
-//*;###########################################################################
-//;#            Author: Joe Dunne                                             #
-//;#            Date 4/06/07                                                  #
-//;#            Main arbitrator                                               #
-//;#            File Name: main.c                                             #
-//;#                                                                          #
-//;############################################################################
 
 // NOTE(jsd): This replaces config.asm section which is apparently commented out and/or not working as intended.
 
 //#pragma config PLLDIV = 5, CPUDIV = OSC1_PLL2, USBDIV = 2       //For 20MHz crystal
-//#pragma config PLLDIV = 2, CPUDIV = OSC2_PLL3, USBDIV = 2       //For 8MHz crystal
-#pragma config PLLDIV = 2, CPUDIV = OSC1_PLL2, USBDIV = 2       //For 8MHz crystal
+//#pragma config PLLDIV = 2, CPUDIV = OSC1_PLL2, USBDIV = 2       //For 8MHz crystal
+#pragma config PLLDIV = 2, CPUDIV = OSC2_PLL3, USBDIV = 2       //For 8MHz crystal
 
 #pragma config FOSC = HSPLL_HS, FCMEN = OFF, IESO = OFF
 #pragma config VREGEN = ON, PWRT=ON, BOR=ON, BORV=0
@@ -30,7 +23,145 @@
 #include "types.h"
 #include "hardware.h"
 
+#define BAUD9600_PERIOD	832
+
+void SEND_BIT(unsigned char b) {
+	// Send bit:
+	if (b) SWUART_TX_LAT_BIT = 1;
+	else SWUART_TX_LAT_BIT = 0;
+
+	// Wait for timer overflow:
+	while (PIR1bits.TMR1IF == 0);
+	// Clear timer overflow:
+	PIR1bits.TMR1IF = 0;
+
+	// Reset timer:
+	T1CONbits.TMR1ON = 0;
+	TMR1L = ((unsigned short)0xFFFF - (unsigned short)BAUD9600_PERIOD) & 0xFF;
+	TMR1H = (((unsigned short)0xFFFF - (unsigned short)BAUD9600_PERIOD) >> 8) & 0xFF;
+	T1CONbits.TMR1ON = 1;
+}
+
 #pragma code main_code
+
+void main() {
+	u8	i;
+
+    CLRWDT();
+    init();
+    CLRWDT();
+
+	// disable timer1 interrupt:
+	DISABLE_ALL_INTERRUPTS();
+	PIE1bits.TMR1IE = 0;
+
+#define SEND_BYTE(b) \
+	SEND_BIT(0); \
+	SEND_BIT((b & 1)); \
+	SEND_BIT((b & 2)); \
+	SEND_BIT((b & 4)); \
+	SEND_BIT((b & 8)); \
+	SEND_BIT((b & 16)); \
+	SEND_BIT((b & 32)); \
+	SEND_BIT((b & 64)); \
+	SEND_BIT((b & 128)); \
+	SEND_BIT(1);
+
+	// Wait ~100ms for the LCD to boot up:
+	SWUART_TX_LAT_BIT = 1;
+	for (i=0; i<80; ++i) {
+		// ~10ms timer:
+		T1CONbits.TMR1ON = 0;
+		PIR1bits.TMR1IF = 0;
+		TMR1L = 0x00;
+		TMR1H = 0x00;
+		T1CONbits.TMR1ON = 1;
+		while (PIR1bits.TMR1IF == 0);
+		PIR1bits.TMR1IF = 0;
+	}
+
+	// Set up timer1 to wait for next baud:
+	T1CONbits.TMR1ON = 0;
+	TMR1L = ((unsigned short)0xFFFF - (unsigned short)BAUD9600_PERIOD) & 0xFF;
+	TMR1H = (((unsigned short)0xFFFF - (unsigned short)BAUD9600_PERIOD) >> 8) & 0xFF;
+	T1CONbits.TMR1ON = 1;
+
+	// CLS:
+	//SEND_BYTE(0xFE);
+	//SEND_BYTE(0x51);
+
+	// DISPLAY BAUD rate:
+	//SEND_BYTE(0xFE);
+	//SEND_BYTE(0x71);
+
+	// SET BAUD rate:
+	//SEND_BYTE(0xFE);
+	//SEND_BYTE(0x61);
+	//SEND_BYTE(0x04);	// 9600 baud
+
+	SEND_BYTE(0xAA);
+	SEND_BYTE(0xAA);
+	SEND_BYTE(0xAA);
+	SEND_BYTE(0xAA);
+	SEND_BYTE(0xAA);
+
+	SEND_BYTE(0xAA);
+	SEND_BYTE(0xAA);
+	SEND_BYTE(0xAA);
+	SEND_BYTE(0xAA);
+	SEND_BYTE(0xAA);
+
+	SEND_BYTE(0x20);
+	SEND_BYTE(0x20);
+	SEND_BYTE(0x20);
+	SEND_BYTE(0x20);
+	SEND_BYTE(0x20);
+
+	SEND_BYTE(0x41);
+	SEND_BYTE(0x42);
+	SEND_BYTE(0x43);
+
+    for(;;) {
+   		CLRWDT();
+	}
+}
+
+#if 0
+
+void main_lcd_isr_test() {
+	u8 tmp;
+	u8 cnt;
+
+    CLRWDT();
+    init();
+    CLRWDT();
+
+	// Wait a bit for the LCD to boot up:
+	T1CONbits.TMR1ON = 0;
+	PIR1bits.TMR1IF = 0;
+	TMR1L = 0x00;
+	TMR1H = 0x00;
+	T1CONbits.TMR1ON = 1;
+	while (PIR1bits.TMR1IF == 0);
+
+	// DISPLAY BAUD rate:
+	lcd_enqueue(0xFE);
+	lcd_enqueue(0x71);
+	lcd_enqueue(0x00);
+
+	// SET BAUD rate:
+	//SEND_BYTE(0xFE);
+	//SEND_BYTE(0x61);
+	//SEND_BYTE(0x04);	// 9600 baud
+
+	// Start up the SWUART:
+	swuart_tx_start();
+   	ENABLE_ALL_INTERRUPTS();
+
+    for(;;) {
+   		CLRWDT();
+	}
+}
 
 void SEND_BIT(unsigned char b) {
 	u8 cnt = 0;
@@ -38,12 +169,10 @@ void SEND_BIT(unsigned char b) {
 	if (b) SWUART_TX_LAT_BIT = true;
 	else SWUART_TX_LAT_BIT = false;
 
-	// We want a 104.166666667 usec wait loop
 	for (; cnt < 13; cnt++) {}
 }
 
-void main() {
-#if 1
+void main_lcd1152k() {
 	u8 tmp;
 	u8 cnt;
 
@@ -67,6 +196,7 @@ void main() {
 	SEND_BIT(1); \
 	SEND_BIT(1); \
 	SEND_BIT(1); \
+	SEND_BIT(1); \
 	SEND_BIT(1);
 
 	// Clear the line:
@@ -80,19 +210,30 @@ void main() {
 	SEND_BIT(1);
 	SEND_BIT(1);
 
-	// Send test data: "ABC"
-	SEND_BYTE(0x41);
-	SEND_BYTE(0x42);
-	SEND_BYTE(0x43);
+	// DISPLAY BAUD rate:
+	SEND_BYTE(0xFE);
+	SEND_BYTE(0x71);
+	SEND_BYTE(0x00);
 
+	// SET BAUD rate:
+	//SEND_BYTE(0xFE);
+	//SEND_BYTE(0x61);
+	//SEND_BYTE(0x04);	// 9600 baud
+
+	tmp = 0x41;
     for(;;) {
     	//CLRWDT();
     	//ENABLE_ALL_INTERRUPTS();
+
+		//SEND_BYTE(tmp);
+		tmp++;
+		if (tmp > 0x7F) tmp = 0x41;
 	}
-#else
+}
+
+void main_test1() {
     u8 tmp = 0, tmp2 = 0, tmp3 = 0;
 
-#  if 1
     CLRWDT();
     init();
     CLRWDT();
@@ -113,7 +254,6 @@ void main() {
             // This section runs every 10ms:
             ControllerTiming = false;
 
-#    if 0
             // Alternate LEDs every 500ms:
             tmp2++;
             if (tmp2 >= 32) {
@@ -125,10 +265,39 @@ void main() {
             }
 
             // Send a new program change message:
-            //midi_enq(0xC0);
-            //midi_enq(tmp);
-            //tmp = ((tmp + 1) & 0x7F);
-#    else
+            midi_enq(0xC0);
+            midi_enq(tmp);
+            tmp = ((tmp + 1) & 0x7F);
+        }
+
+        // Transmit next MIDI byte:
+        midi_tx();
+    }
+}
+
+void main_test2() {
+    u8 tmp = 0, tmp2 = 0, tmp3 = 0;
+
+    CLRWDT();
+    init();
+    CLRWDT();
+
+    for(;;) {
+        CLRWDT();
+        ENABLE_ALL_INTERRUPTS();
+
+        if (Systick) {
+            Systick = false;
+            SystemTimeRoutine();        //1mS system time routine
+            continue;
+        }
+
+        if (ControllerTiming) {
+            u8 btn = ButtonStateBot;
+
+            // This section runs every 10ms:
+            ControllerTiming = false;
+
             // Read foot switches:
             ReadButtons();
 
@@ -159,18 +328,19 @@ void main() {
                     lcd_enqueue("01234567890123456789"[tmp]);
                 }
             }
-#    endif
         }
 
         // Transmit next MIDI byte:
-        //midi_tx();
+        midi_tx();
 
         // Enable SWUART to TX LCD bytes if idle:
         if ((swuart_mode == SWUARTMODE_TX_IDLE) && (swuart_tx_bufptr > 0)) {
             swuart_tx_start();
         }
     }
-#  else
+}
+
+void real_main() {
     CLRWDT();
     init();
     CLRWDT();
@@ -222,6 +392,6 @@ void main() {
 
         midi_tx();      //handles sending/receiving midi data
     }
-#  endif
-#endif
 }
+
+#endif
