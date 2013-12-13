@@ -46,7 +46,7 @@
 // 453 works for MPLAB SIM at 24MHz processor.
 // 32 MHz clock cycle.
 #define TMR1_BAUD9600_PERIOD    	834 // N counts * X ns = 104.167 us (9600 baud)
-#define TMR1_ISR_LATENCY			172	// latency to next ISR
+#define TMR1_ISR_LATENCY			176	// latency to next ISR
 
 #define TMR1_START_LATENCY      0		// Subtract ISR code latency (see assembly listing of ISR code and calculate cycles)
 #define TMR1_RELOAD_LATENCY     0
@@ -62,7 +62,6 @@
 #define SWUARTMODE_TX_IDLE      0
 #define SWUARTMODE_TX_START_BIT 1
 #define SWUARTMODE_TX_BYTE      2
-#define SWUARTMODE_TX_STOP_BIT  3
 
 //Size of writable flash segment:
 #define WRITABLE_SEG_ADDR       0x4900      //Also update this in the lkr file if it needs to change!!

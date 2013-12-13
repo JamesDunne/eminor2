@@ -39,6 +39,7 @@ unsigned char swuart_tx_bufoutptr;
 unsigned char swuart_txbyte;
 unsigned char swuart_txmask;
 unsigned char swuart_mode;
+unsigned char swuart_started;
 
 TwoBytes tTimer1Value;
 

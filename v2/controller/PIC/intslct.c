@@ -45,7 +45,8 @@ void InterruptHandlerHigh (void) {
             //Process7Segs();
         }
     }
- }
+}
+
 #pragma code
 
 //----------------------------------------------------------------------------

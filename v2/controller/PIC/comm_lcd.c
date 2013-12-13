@@ -13,6 +13,9 @@ void lcd_enqueue(unsigned char v) {
     if (swuart_tx_bufptr >= MAX_LCD_TX_LENGTH) return;
     swuart_tx_buffer[swuart_tx_bufptr] = v;
     swuart_tx_bufptr++;
+
+    if (swuart_started) return;
+	swuart_tx_start();
 }
 
 // -------------------------------- Software UART (SWUART) implementation:
@@ -20,12 +23,9 @@ void lcd_enqueue(unsigned char v) {
 void swuart_tx_start(void) {
     // TODO(jsd): Need critical section here? disable interrupts?
 
-    if (swuart_mode != SWUARTMODE_TX_IDLE) return;
-    if (swuart_tx_bufptr == swuart_tx_bufoutptr) return;
-
     // Set SWUART to TX mode:
     swuart_mode = SWUARTMODE_TX_START_BIT;
-    swuart_txbyte = swuart_tx_buffer[swuart_tx_bufoutptr];
+	swuart_started = 1;
 
     // Enable SWUART timer (timer 1):
 	T1CONbits.TMR1ON = 0;
@@ -48,8 +48,10 @@ void swuart_tx_interrupt(void) {
             // IDLE mode; do nothing.
             break;
         case SWUARTMODE_TX_START_BIT:
-            swuart_mode++;  // = SWUARTMODE_TX_BYTE;
+            swuart_mode = SWUARTMODE_TX_BYTE;
             swuart_txmask = 0x01;
+    		swuart_txbyte = swuart_tx_buffer[swuart_tx_bufoutptr];
+
             // Transmit start bit:
             SWUART_TX_LAT_BIT = 0;
             break;
@@ -62,6 +64,7 @@ void swuart_tx_interrupt(void) {
                 if (swuart_tx_bufoutptr >= swuart_tx_bufptr) {
                     // Ran out of bytes to transmit:
                     swuart_mode = SWUARTMODE_TX_IDLE;
+					swuart_started = 0;
                     // Reset TX buffer:
                     swuart_tx_bufoutptr = 0;
                     swuart_tx_bufptr = 0;

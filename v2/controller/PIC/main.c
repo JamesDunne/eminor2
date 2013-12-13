@@ -26,6 +26,7 @@
 
 void main() {
 	u8 i;
+	u8 tmp;
 
     CLRWDT();
     init();
@@ -49,6 +50,9 @@ void main() {
 
 	PIE1bits.TMR1IE = 1;
 
+	// Start up the SWUART timer interrupt:
+   	ENABLE_ALL_INTERRUPTS();
+
 	// DISPLAY BAUD rate:
 	//lcd_enqueue(0xFE);
 	//lcd_enqueue(0x71);
@@ -58,17 +62,29 @@ void main() {
 	//SEND_BYTE(0x61);
 	//SEND_BYTE(0x04);	// 9600 baud
 
-	lcd_enqueue(0x41);
-	lcd_enqueue(0x42);
-	lcd_enqueue(0x43);
-	lcd_enqueue(0x20);
+	// CLS:
+	lcd_enqueue(0xFE);
+	lcd_enqueue(0x51);
 
-	// Start up the SWUART:
-   	ENABLE_ALL_INTERRUPTS();
-	swuart_tx_start();
-
+	tmp = 0x30;
     for(;;) {
    		CLRWDT();
+
+		if (swuart_tx_bufptr < (MAX_LCD_TX_LENGTH - 4)) {
+			lcd_enqueue(tmp);
+			tmp++;
+			if (tmp > 0x7F) {
+				tmp = 0x30;
+
+				// CLS:
+				//SEND_BYTE(0xFE);
+				//SEND_BYTE(0x51);
+
+				// HOME CURSOR:
+				lcd_enqueue(0xFE);
+				lcd_enqueue(0x46);
+			}
+		}
 	}
 }
 

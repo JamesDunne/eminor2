@@ -57,5 +57,6 @@ extern unsigned char swuart_tx_bufoutptr;
 extern unsigned char swuart_txbyte;
 extern unsigned char swuart_txmask;
 extern unsigned char swuart_mode;
+extern unsigned char swuart_started;
 
 extern TwoBytes tTimer1Value;
