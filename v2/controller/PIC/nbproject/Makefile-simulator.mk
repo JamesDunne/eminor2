@@ -76,7 +76,7 @@ FIXDEPS=fixDeps
 
 MP_PROCESSOR_OPTION=18F4550
 MP_PROCESSOR_OPTION_LD=18f4550
-MP_LINKER_DEBUG_OPTION=
+MP_LINKER_DEBUG_OPTION= -u_DEBUGCODESTART=0x7dc0 -u_DEBUGCODELEN=0x240 -u_DEBUGDATASTART=0x3f4 -u_DEBUGDATALEN=0xb
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
@@ -84,7 +84,7 @@ ${OBJECTDIR}/config.o: config.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/config.o.d 
 	@${RM} ${OBJECTDIR}/config.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/config.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG  -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/config.lst\" -e\"${OBJECTDIR}/config.err\" $(ASM_OPTIONS)  -o\"${OBJECTDIR}/config.o\" config.asm 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/config.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_PK3=1 -q -p$(MP_PROCESSOR_OPTION)  -l\"${OBJECTDIR}/config.lst\" -e\"${OBJECTDIR}/config.err\" $(ASM_OPTIONS)  -o\"${OBJECTDIR}/config.o\" config.asm 
 	@${DEP_GEN} -d ${OBJECTDIR}/config.o 
 	@${FIXDEPS} "${OBJECTDIR}/config.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -106,7 +106,7 @@ ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/main.o.d 
 	@${RM} ${OBJECTDIR}/main.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/main.o   main.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/main.o   main.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/main.o 
 	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -114,7 +114,7 @@ ${OBJECTDIR}/startup.o: startup.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/startup.o.d 
 	@${RM} ${OBJECTDIR}/startup.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/startup.o   startup.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/startup.o   startup.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/startup.o 
 	@${FIXDEPS} "${OBJECTDIR}/startup.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -122,7 +122,7 @@ ${OBJECTDIR}/ram_def.o: ram_def.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/ram_def.o.d 
 	@${RM} ${OBJECTDIR}/ram_def.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/ram_def.o   ram_def.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/ram_def.o   ram_def.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/ram_def.o 
 	@${FIXDEPS} "${OBJECTDIR}/ram_def.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -130,7 +130,7 @@ ${OBJECTDIR}/intslct.o: intslct.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/intslct.o.d 
 	@${RM} ${OBJECTDIR}/intslct.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/intslct.o   intslct.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/intslct.o   intslct.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/intslct.o 
 	@${FIXDEPS} "${OBJECTDIR}/intslct.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -138,7 +138,7 @@ ${OBJECTDIR}/init.o: init.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/init.o.d 
 	@${RM} ${OBJECTDIR}/init.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/init.o   init.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/init.o   init.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/init.o 
 	@${FIXDEPS} "${OBJECTDIR}/init.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -146,7 +146,7 @@ ${OBJECTDIR}/hwcalls.o: hwcalls.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/hwcalls.o.d 
 	@${RM} ${OBJECTDIR}/hwcalls.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/hwcalls.o   hwcalls.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/hwcalls.o   hwcalls.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/hwcalls.o 
 	@${FIXDEPS} "${OBJECTDIR}/hwcalls.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -154,7 +154,7 @@ ${OBJECTDIR}/eeprom.o: eeprom.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/eeprom.o.d 
 	@${RM} ${OBJECTDIR}/eeprom.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/eeprom.o   eeprom.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/eeprom.o   eeprom.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/eeprom.o 
 	@${FIXDEPS} "${OBJECTDIR}/eeprom.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -162,7 +162,7 @@ ${OBJECTDIR}/writeprogmem.o: writeprogmem.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/writeprogmem.o.d 
 	@${RM} ${OBJECTDIR}/writeprogmem.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/writeprogmem.o   writeprogmem.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/writeprogmem.o   writeprogmem.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/writeprogmem.o 
 	@${FIXDEPS} "${OBJECTDIR}/writeprogmem.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -170,7 +170,7 @@ ${OBJECTDIR}/systick.o: systick.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/systick.o.d 
 	@${RM} ${OBJECTDIR}/systick.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/systick.o   systick.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/systick.o   systick.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/systick.o 
 	@${FIXDEPS} "${OBJECTDIR}/systick.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -178,7 +178,7 @@ ${OBJECTDIR}/_ext/1270477542/controller-simple.o: ../common/controller-simple.c 
 	@${MKDIR} ${OBJECTDIR}/_ext/1270477542 
 	@${RM} ${OBJECTDIR}/_ext/1270477542/controller-simple.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1270477542/controller-simple.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/_ext/1270477542/controller-simple.o   ../common/controller-simple.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/_ext/1270477542/controller-simple.o   ../common/controller-simple.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/_ext/1270477542/controller-simple.o 
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1270477542/controller-simple.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -186,7 +186,7 @@ ${OBJECTDIR}/comm_midi.o: comm_midi.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/comm_midi.o.d 
 	@${RM} ${OBJECTDIR}/comm_midi.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/comm_midi.o   comm_midi.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/comm_midi.o   comm_midi.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/comm_midi.o 
 	@${FIXDEPS} "${OBJECTDIR}/comm_midi.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -194,7 +194,7 @@ ${OBJECTDIR}/comm_lcd.o: comm_lcd.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/comm_lcd.o.d 
 	@${RM} ${OBJECTDIR}/comm_lcd.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/comm_lcd.o   comm_lcd.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/comm_lcd.o   comm_lcd.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/comm_lcd.o 
 	@${FIXDEPS} "${OBJECTDIR}/comm_lcd.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -202,7 +202,7 @@ ${OBJECTDIR}/BootUserStartup.o: BootUserStartup.c  nbproject/Makefile-${CND_CONF
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/BootUserStartup.o.d 
 	@${RM} ${OBJECTDIR}/BootUserStartup.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/BootUserStartup.o   BootUserStartup.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/BootUserStartup.o   BootUserStartup.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/BootUserStartup.o 
 	@${FIXDEPS} "${OBJECTDIR}/BootUserStartup.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -210,7 +210,7 @@ ${OBJECTDIR}/UserAppCode.o: UserAppCode.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/UserAppCode.o.d 
 	@${RM} ${OBJECTDIR}/UserAppCode.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/UserAppCode.o   UserAppCode.c  -nw 2060 -nw 2056 -nw 2055
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/UserAppCode.o   UserAppCode.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/UserAppCode.o 
 	@${FIXDEPS} "${OBJECTDIR}/UserAppCode.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
@@ -334,7 +334,7 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/PIC.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    18f4550.lkr
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_LD} $(MP_EXTRA_LD_PRE) "18f4550.lkr"  -p$(MP_PROCESSOR_OPTION_LD)  -w -x -u_DEBUG -m"$(BINDIR_)$(TARGETBASE).map" -w -l"../../../../../mplabc18/v3.46/lib" -l"."  -z__MPLAB_BUILD=1  -u_CRUNTIME -z__MPLAB_DEBUG=1 $(MP_LINKER_DEBUG_OPTION) -l ${MP_CC_DIR}\\..\\lib  -o dist/${CND_CONF}/${IMAGE_TYPE}/PIC.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}   
+	${MP_LD} $(MP_EXTRA_LD_PRE) "18f4550.lkr"  -p$(MP_PROCESSOR_OPTION_LD)  -w -x -u_DEBUG -m"$(BINDIR_)$(TARGETBASE).map" -w -l"../../../../../mplabc18/v3.46/lib" -l"."  -z__MPLAB_BUILD=1  -u_CRUNTIME -z__MPLAB_DEBUG=1 -z__MPLAB_DEBUGGER_PK3=1 $(MP_LINKER_DEBUG_OPTION) -l ${MP_CC_DIR}\\..\\lib  -o dist/${CND_CONF}/${IMAGE_TYPE}/PIC.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}   
 else
 dist/${CND_CONF}/${IMAGE_TYPE}/PIC.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   18f4550.lkr
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 

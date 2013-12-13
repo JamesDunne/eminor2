@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="62">
   <projectmakefile>Makefile</projectmakefile>
-  <defaultConf>1</defaultConf>
+  <defaultConf>0</defaultConf>
   <confs>
     <conf name="pickit3" type="2">
-      <platformToolSN></platformToolSN>
+      <platformToolSN>:=MPLABCommUSB:=04D8:=900A:=0002:=Microchip Technology Inc.:=PICkit 3:=BUR133650971:=x:=h:=en</platformToolSN>
       <languageToolchainDir>C:\mplabc18\v3.46\bin</languageToolchainDir>
       <mdbdebugger version="1">
         <placeholder1>place holder 1</placeholder1>

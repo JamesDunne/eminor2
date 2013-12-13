@@ -108,7 +108,9 @@ void main() {
         midi_tx();
 
         // Enable SWUART to TX LCD bytes if idle:
-        if (swuart_mode == SWUARTMODE_TX_IDLE) swuart_tx_start();
+        if ((swuart_mode == SWUARTMODE_TX_IDLE) && (swuart_tx_bufptr > 0)) {
+            swuart_tx_start();
+        }
     }
 #else
     CLRWDT();
