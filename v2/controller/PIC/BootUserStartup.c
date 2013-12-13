@@ -105,7 +105,7 @@ void UninitializedMain(void)
 
 
     //TODO: Modify code here to check for I/O pin to allow entry into bootload mode!!
-
+    goto DoFlashSignatureCheck;
 
     //Need to make sure the I/O pin is configured for digital mode so we
     //can sense the digital level on the input pin.
