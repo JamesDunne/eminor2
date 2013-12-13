@@ -42,21 +42,21 @@ void swuart_tx_interrupt(void) {
             swuart_mode++;  // = SWUARTMODE_TX_BYTE;
             swuart_txmask = 0x01;
             // Transmit start bit:
-            SWUART_TX_PIN = false;
+            SWUART_TX_LAT_BIT = false;
             break;
         case SWUARTMODE_TX_BYTE:
             if (swuart_txmask == 0) {
                 // Last bit has been transmitted; transmit stop bit:
-                SWUART_TX_PIN = true;
+                SWUART_TX_LAT_BIT = true;
                 swuart_mode++;  // = SWUARTMODE_TX_STOP_BIT;
                 break;
             }
 
             // Shift bit to transmit into carry flag:
             if (chkbit(swuart_txbyte, 0)) {
-                SWUART_TX_PIN = true;
+                SWUART_TX_LAT_BIT = true;
             } else {
-                SWUART_TX_PIN = false;
+                SWUART_TX_LAT_BIT = false;
             }
 
             swuart_txbyte >>= 1;

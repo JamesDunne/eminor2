@@ -15,5 +15,8 @@ dist/
 build/
 *.err
 *.map
+Object/
+*.o
+*.lst
 
 Thumbs.db
