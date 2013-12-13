@@ -259,12 +259,12 @@
 #define TRISDPIN6                       (OUTPUT<<6)
 #define LATDPIN6                        (false<<6)
 
-#define DISP_SEG1_BIT                   7
-#define DISP_SEG1_PIN                   PORTDbits.RD7   //Pin 30
-#define DISP_SEG1_LAT_BIT               LATDbits.LATD7
-#define DISP_SEG1_LAT                   LATD
-#define DISP_SEG1_TRIS_BIT              TRISDPINbits.TRISD7
-#define DISP_SEG1_PORT                  PORTD
+#define SWUART_TX_BIT                   7
+#define SWUART_TX_PIN                   PORTDbits.RD7   //Pin 30
+#define SWUART_TX_LAT_BIT               LATDbits.LATD7
+#define SWUART_TX_LAT                   LATD
+#define SWUART_TX_TRIS_BIT              TRISDPINbits.TRISD7
+#define SWUART_TX_PORT                  PORTD
 #define TRISDPIN7                       (OUTPUT<<7)
 #define LATDPIN7                        (false<<7)
 

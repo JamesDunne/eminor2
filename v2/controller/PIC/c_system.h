@@ -43,8 +43,37 @@ void    midi_enq(unsigned char Input);
 void    midi_tx(void);
 
 void    lcd_clear_buffer(void);
-void    lcd_enq(unsigned char Input);
-//void  lcd_tx(void);
+void    lcd_enqueue(unsigned char Input);
+
+void    swuart_tx_start(void);
+void    swuart_tx_interrupt(void);
 
 extern rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];
 //-----------------------------------------------------------------------------
+
+#define startTimer1(period)    {   \
+    T1CONbits.TMR1ON = false;   \
+    PIR1bits.TMR1IF = false;    \
+    tTimer1Value.s_form = 0xFFFF - ((period)-TMR1_START_LATENCY);    \
+    TMR1L = tTimer1Value.b_form.low;    \
+    TMR1H = tTimer1Value.b_form.high;   \
+    T1CONbits.TMR1ON = true;    \
+}
+
+#define reloadTimer1(period)    {   \
+    T1CONbits.TMR1ON = false;   \
+    PIR1bits.TMR1IF = false;    \
+    tTimer1Value.b_form.low = TMR1L;    \
+    tTimer1Value.b_form.high = TMR1H;   \
+    tTimer1Value.s_form -= (period)-TMR1_RELOAD_LATENCY;    \
+    TMR1L = tTimer1Value.b_form.low;    \
+    TMR1H = tTimer1Value.b_form.high;   \
+    T1CONbits.TMR1ON = true;    \
+}
+
+#define stopTimer1()    {   \
+    T1CONbits.TMR1ON = false;   \
+    PIR1bits.TMR1IF = false;    \
+    TMR1L = 0;    \
+    TMR1H = 0;   \
+}

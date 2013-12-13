@@ -45,6 +45,8 @@ void init(void) {
     TMR0L = 0;                    //clear timer
     T0CON = INIT_T0CON;           //set up timer0
 
+    T1CON = INIT_T1CON;           //set up timer1
+
     TMR2 = 0;
     PR2 = INIT_PR2;
     T2CON = INIT_T2CON;             //enable the timer and set up the scalars

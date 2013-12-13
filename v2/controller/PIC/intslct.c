@@ -13,14 +13,12 @@
 #include "c_system.h"
 
 #pragma code InterruptVectorHigh = 0x1008
-void
-InterruptVectorHigh (void)
+void InterruptVectorHigh (void)
 {
   _asm
     goto InterruptHandlerHigh //jump to interrupt routine
   _endasm
 }
-
 
 //----------------------------------------------------------------------------
 // High priority interrupt routine
@@ -28,8 +26,13 @@ InterruptVectorHigh (void)
 #pragma code
 
 #pragma interrupt InterruptHandlerHigh
-void    InterruptHandlerHigh ()
-{
+void InterruptHandlerHigh (void) {
+    if (PIR1bits.TMR1IF) {
+        // Call to SWUART for timer1:
+        PIR1bits.TMR1IF = 0;
+        swuart_tx_interrupt();
+    }
+
 /*
     if (INTCONbits.TMR0IF)
     {                                   //check for TMR0 overflow
@@ -37,15 +40,16 @@ void    InterruptHandlerHigh ()
         Systick = true;
     }
 */
+
     if (PIR1bits.TMR2IF) {
         PIR1bits.TMR2IF = 0;            //clear interrupt flag
 
-        //Every 250uS routine:
+        // Every 250uS routine:
         SystickCntr++;
         if (SystickCntr == SYSTEM_TIME_1MS) {
             SystickCntr = 0;
 
-            //Every 1mS routine:
+            // Every 1mS routine:
             Systick = true;
             //Process7Segs();
         }

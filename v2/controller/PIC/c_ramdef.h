@@ -50,6 +50,12 @@ extern unsigned char MIDITxBuffer[MAX_MIDI_TX_LENGTH];
 extern unsigned char MIDITxBufPtr;
 extern unsigned char MIDITxBufOutPtr;
 
-extern unsigned char LCDTxBuffer[MAX_LCD_TX_LENGTH];
-extern unsigned char LCDTxBufPtr;
-extern unsigned char LCDTxBufOutPtr;
+extern unsigned char swuart_tx_buffer[MAX_LCD_TX_LENGTH];
+extern unsigned char swuart_tx_bufptr;
+extern unsigned char swuart_tx_bufoutptr;
+
+extern unsigned char swuart_txbyte;
+extern unsigned char swuart_txmask;
+extern unsigned char swuart_mode;
+
+extern TwoBytes tTimer1Value;

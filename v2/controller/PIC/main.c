@@ -93,7 +93,11 @@ void main() {
 #endif
         }
 
+        // Transmit next MIDI byte:
         midi_tx();
+
+        // Enable SWUART to TX LCD bytes if idle:
+        if (swuart_mode == SWUARTMODE_TX_IDLE) swuart_tx_start();
     }
 #else
     CLRWDT();

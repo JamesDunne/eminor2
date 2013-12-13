@@ -137,7 +137,7 @@ void led_set(u16 leds){
 
 void lcd_update_row(u8 row, char text[LCD_COLS]) {
     // Enqueue LCD update commands:
-    lcd_enq(0xFE);
+    lcd_enqueue(0xFE);
     // TODO ...
 }
 

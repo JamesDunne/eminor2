@@ -32,9 +32,15 @@ unsigned char MIDITxBuffer[MAX_MIDI_TX_LENGTH];
 unsigned char MIDITxBufPtr;
 unsigned char MIDITxBufOutPtr;
 
-unsigned char LCDTxBuffer[MAX_LCD_TX_LENGTH];
-unsigned char LCDTxBufPtr;
-unsigned char LCDTxBufOutPtr;
+unsigned char swuart_tx_buffer[MAX_LCD_TX_LENGTH];
+unsigned char swuart_tx_bufptr;
+unsigned char swuart_tx_bufoutptr;
+
+unsigned char swuart_txbyte;
+unsigned char swuart_txmask;
+unsigned char swuart_mode;
+
+TwoBytes tTimer1Value;
 
 // User-writable flash memory:
 #pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
