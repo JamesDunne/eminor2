@@ -28,18 +28,11 @@ void InterruptVectorHigh (void)
 #pragma interrupt InterruptHandlerHigh
 void InterruptHandlerHigh (void) {
     if (PIR1bits.TMR1IF) {
+        reloadTimer1(TMR1_BAUD9600_PERIOD);
+
         // Call to SWUART for timer1:
-        PIR1bits.TMR1IF = 0;
         swuart_tx_interrupt();
     }
-
-/*
-    if (INTCONbits.TMR0IF)
-    {                                   //check for TMR0 overflow
-        INTCONbits.TMR0IF = 0;            //clear interrupt flag
-        Systick = true;
-    }
-*/
 
     if (PIR1bits.TMR2IF) {
         PIR1bits.TMR2IF = 0;            //clear interrupt flag

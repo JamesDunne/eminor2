@@ -42,6 +42,7 @@
 // 166.67ns is timer1 period assuming 1:1 with instruction clock.
 #define TMR1_BAUD9600_PERIOD    625     // 625 counts * 166.67 ns = 104.2 us (bit timing at 9600 baud)
 #define TMR1_START_LATENCY      (80*4)  // Subtract ISR code latency (see assembly listing of ISR code and calculate cycles)
+#define TMR1_RELOAD_LATENCY     (19*4)
 
 #define LATCH_STROBE_DELAY      16  //4uS minimum (time for shift register bits)
 #define BTN_SAMPLE_DELAY        5   //probably unnecessary (sampling time for buttons)

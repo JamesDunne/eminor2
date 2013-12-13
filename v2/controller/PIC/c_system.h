@@ -54,7 +54,7 @@ extern rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];
 #define startTimer1(period)    {   \
     T1CONbits.TMR1ON = false;   \
     PIR1bits.TMR1IF = false;    \
-    tTimer1Value.s_form = 0xFFFF - ((period)-TMR1_START_LATENCY);    \
+    tTimer1Value.s_form = 0xFFFF - ((period) - TMR1_START_LATENCY);    \
     TMR1L = tTimer1Value.b_form.low;    \
     TMR1H = tTimer1Value.b_form.high;   \
     T1CONbits.TMR1ON = true;    \
@@ -65,7 +65,7 @@ extern rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];
     PIR1bits.TMR1IF = false;    \
     tTimer1Value.b_form.low = TMR1L;    \
     tTimer1Value.b_form.high = TMR1H;   \
-    tTimer1Value.s_form -= (period)-TMR1_RELOAD_LATENCY;    \
+    tTimer1Value.s_form -= (period) - TMR1_RELOAD_LATENCY;    \
     TMR1L = tTimer1Value.b_form.low;    \
     TMR1H = tTimer1Value.b_form.high;   \
     T1CONbits.TMR1ON = true;    \
