@@ -2,6 +2,7 @@
 #include <windowsx.h>
 #include <winuser.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
 #include <math.h>
 #include <assert.h>
@@ -28,7 +29,7 @@ const double inHeight = 6.305;
 
 // Position and spacing of footswitches (from centers):
 const double hLeft = 1.0;
-const double hSpacing = 2.57;
+const double hSpacing = 2.5714285714285714285714285714286;
 
 // From bottom going up:
 const double vStart = 5.5;
@@ -55,6 +56,8 @@ const static LPCWSTR keylabels[2][8] = {
 // currently displayed LCD text in row X col format:
 WCHAR lcd_text[LCD_ROWS][LCD_COLS];
 #endif
+
+static bool show_dimensions = false;
 
 // foot-switch state
 static io16 fsw_state;
@@ -262,6 +265,36 @@ BOOL dpi_TextOut(HDC hdc, double nXStart, double nYStart, LPCWSTR lpString, int 
     return TextOutW(hdc, (int)(nXStart * dpi), (int)(nYStart * dpi), lpString, cbString);
 }
 
+// Draws a cross-hatch and labels the cX, cY point.
+BOOL dpi_Label(HDC hdc, double cX, double cY, COLORREF color, HFONT font, UINT align) {
+    wchar_t tmp[16];
+    swprintf(tmp, 16, L"%-2.3f, %-2.3f", cX, cY);
+
+    UINT old_ta = GetTextAlign(hdc);
+    COLORREF old_color = GetTextColor(hdc);
+    HFONT old_font = GetCurrentObject(hdc, OBJ_FONT);
+    HPEN old_pen = GetCurrentObject(hdc, OBJ_PEN);
+
+    SetTextColor(hdc, color);
+    SetTextAlign(hdc, align); // TA_CENTER | VTA_TOP
+    SelectObject(hdc, font);
+    SelectObject(hdc, GetStockPen(WHITE_PEN));
+
+    // Draw cross-hair:
+    dpi_MoveTo(hdc, cX, cY - 0.0525);
+    dpi_LineTo(hdc, cX, cY + 0.0525);
+    dpi_MoveTo(hdc, cX - 0.0525, cY);
+    dpi_LineTo(hdc, cX + 0.0525, cY);
+    // Label:
+    BOOL ret = TextOutW(hdc, (int)(cX * dpi), (int)(cY * dpi), tmp, wcslen(tmp));
+
+    SelectObject(hdc, old_pen);
+    SelectObject(hdc, old_font);
+    SetTextAlign(hdc, old_ta);
+    SetTextColor(hdc, old_color);
+    return ret;
+}
+
 // paint the face plate window
 void paintFacePlate(HWND hwnd) {
     HDC         hDC;
@@ -270,9 +303,11 @@ void paintFacePlate(HWND hwnd) {
     HDC     lcdDC;
     HBITMAP lcdBMP;
 
-    HFONT   fontLabel;
+    HFONT   fontLabel, fontDimLabel;
     HPEN    penLCD, penThick, penThin, penGridThick, penGridThin;
     HBRUSH  brsLCD, brsLCDBack, brsWhite, brsDarkSilver, brsDarkGreen, brsGreen, brsBlack;
+
+    COLORREF    dimLabelColor = RGB(240, 240, 120);
 
     int		h = 0, v = 0;
     double	inH, inV;
@@ -325,27 +360,44 @@ void paintFacePlate(HWND hwnd) {
         L"Tahoma"
     );
 
-#if 1
-    // draw grid:
-    for (inH = 0; inH <= inWidth; inH += 0.1, h = (h + 1) % 10) {
-        if (h == 0)
-            SelectObject(hDC, penGridThick);
-        else
-            SelectObject(hDC, penGridThin);
-        dpi_MoveTo(hDC, inH, 0);
-        dpi_LineTo(hDC, inH, inHeight);
+    fontDimLabel = CreateFont(
+        16,
+        5,
+        0,
+        0,
+        FW_SEMIBOLD, FALSE, FALSE, FALSE,
+        ANSI_CHARSET,
+        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        CLEARTYPE_QUALITY,
+        DEFAULT_PITCH | FF_ROMAN,
+        // TODO: pick a best font and fallback to worse ones depending on availability.
+        L"Tahoma"
+    );
 
-        v = 0;
-        for (inV = 0; inV <= inHeight; inV += 0.1, v = (v + 1) % 10) {
-            if (v == 0)
+    SetTextColor(hDC, RGB(100, 100, 100));
+    SelectObject(hDC, fontLabel);
+
+    // draw grid:
+    if (show_dimensions) {
+        for (inH = 0; inH <= inWidth; inH += 0.1, h = (h + 1) % 10) {
+            if (h == 0)
                 SelectObject(hDC, penGridThick);
             else
                 SelectObject(hDC, penGridThin);
-            dpi_MoveTo(hDC, 0, inV);
-            dpi_LineTo(hDC, inWidth, inV);
+            dpi_MoveTo(hDC, inH, 0);
+            dpi_LineTo(hDC, inH, inHeight);
+
+            v = 0;
+            for (inV = 0; inV <= inHeight; inV += 0.1, v = (v + 1) % 10) {
+                if (v == 0)
+                    SelectObject(hDC, penGridThick);
+                else
+                    SelectObject(hDC, penGridThin);
+                dpi_MoveTo(hDC, 0, inV);
+                dpi_LineTo(hDC, inWidth, inV);
+            }
         }
     }
-#endif
 
 #ifdef FEAT_LCD
     // LCD dimensions taken from http://www.newhavendisplay.com/nhd0420d3znswbbwv3-p-5745.html
@@ -381,7 +433,6 @@ void paintFacePlate(HWND hwnd) {
     const double lcdHeight = (20.8 * mmToIn);
 
     // Emulate an LCD with a 5x8 font:
-#   if 1
     // Draw the LCD characters scaled up x12 and use StretchBlt to scale them back down:
     RECT rect;
     // Create a scaled-up representation of the LCD screen itself:
@@ -429,36 +480,28 @@ void paintFacePlate(HWND hwnd) {
 
     DeleteObject(lcdBMP);
     DeleteObject(lcdDC);
-#   else
-    // Draw the LCD characters using dpi scale and whole-pixel units (looks awful):
-    SelectObject(hDC, penLCD);
-    SelectObject(hDC, brsLCD);
-    for (int r = 0; r < LCD_ROWS; ++r)
-    for (int c = 0; c < LCD_COLS; ++c)
-    for (int y = 0; y < 8; ++y) {
-        u8 ch = console_font_5x8[(lcd_text[r][c] & 255) * 8 + y];
-        u8 b = (1 << 7);
-        for (int x = 0; x < 5; ++x, b >>= 1) {
-            if (ch & b) {
-                dpi_FillRect(hDC,
-                    lcdLeft + ((c * (2.95 + 0.6) + (x)* 0.6) * mmToIn),
-                    lcdTop + ((r * (4.75 + 0.6) + (y)* 0.6) * mmToIn),
-                    lcdLeft + (((c * (2.95 + 0.6) + (x)* 0.6) + 0.55) * mmToIn),
-                    lcdTop + (((r * (4.75 + 0.6) + (y)* 0.6) + 0.55) * mmToIn)
-                );
-            }
-        }
+
+    if (show_dimensions) {
+        // 4 corners of LCD's PCB:
+        dpi_Label(hDC, lcdCenterX - ((98 * mmToIn) * 0.5), lcdCenterY - (60 * mmToIn * 0.5), dimLabelColor, fontDimLabel, TA_CENTER | VTA_TOP);
+        dpi_Label(hDC, lcdCenterX - ((98 * mmToIn) * 0.5), lcdCenterY + (60 * mmToIn * 0.5), dimLabelColor, fontDimLabel, TA_CENTER | VTA_TOP);
+        dpi_Label(hDC, lcdCenterX + ((98 * mmToIn) * 0.5), lcdCenterY + (60 * mmToIn * 0.5), dimLabelColor, fontDimLabel, TA_CENTER | VTA_TOP);
+        dpi_Label(hDC, lcdCenterX + ((98 * mmToIn) * 0.5), lcdCenterY - (60 * mmToIn * 0.5), dimLabelColor, fontDimLabel, TA_CENTER | VTA_TOP);
+        // 4 corners of LCD extruded part:
+        dpi_Label(hDC, lcdCenterX - ((87.3 * mmToIn) * 0.5), lcdCenterY - (41.7 * mmToIn * 0.5), dimLabelColor, fontDimLabel, TA_CENTER | VTA_TOP);
+        dpi_Label(hDC, lcdCenterX - ((87.3 * mmToIn) * 0.5), lcdCenterY + (41.7 * mmToIn * 0.5), dimLabelColor, fontDimLabel, TA_CENTER | VTA_TOP);
+        dpi_Label(hDC, lcdCenterX + ((87.3 * mmToIn) * 0.5), lcdCenterY + (41.7 * mmToIn * 0.5), dimLabelColor, fontDimLabel, TA_CENTER | VTA_TOP);
+        dpi_Label(hDC, lcdCenterX + ((87.3 * mmToIn) * 0.5), lcdCenterY - (41.7 * mmToIn * 0.5), dimLabelColor, fontDimLabel, TA_CENTER | VTA_TOP);
     }
-#   endif
 #endif
 
     // dpi label:
-    SetTextAlign(hDC, TA_LEFT | VTA_TOP);
     wchar_t tmp[16];
     swprintf(tmp, 16, L"dpi: %3.2f", dpi);
-    SetTextColor(hDC, RGB(100, 100, 100));
-    SelectObject(hDC, fontLabel);
-    dpi_TextOut(hDC, 0.5, 0.5, tmp, (int)wcslen(tmp));
+    if (show_dimensions) {
+        SetTextAlign(hDC, TA_LEFT | VTA_TOP);
+        dpi_TextOut(hDC, 0.5, 0.5, tmp, (int)wcslen(tmp));
+    }
 
     SetTextAlign(hDC, TA_CENTER | VTA_TOP);
 
@@ -473,19 +516,25 @@ void paintFacePlate(HWND hwnd) {
             led = led_state.bot;
         }
 
-        SelectObject(hDC, brsWhite);
+        if (!show_dimensions) {
+            SelectObject(hDC, brsWhite);
+        } else {
+            SelectObject(hDC, GetStockBrush(NULL_BRUSH));
+        }
 
         // draw 2 rows of 8 evenly spaced foot-switches
         u8 b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
             SelectObject(hDC, penThick);
             dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam * 0.5, inFswOuterDiam * 0.5);
-            SelectObject(hDC, penThin);
-            dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswInnerDiam * 0.5, inFswInnerDiam * 0.5);
-            if (fsw.byte & b) {
-                SelectObject(hDC, brsDarkSilver);
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam * 0.5, inFswOuterDiam * 0.5);
-                SelectObject(hDC, brsWhite);
+            if (!show_dimensions) {
+                SelectObject(hDC, penThin);
+                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswInnerDiam * 0.5, inFswInnerDiam * 0.5);
+                if (fsw.byte & b) {
+                    SelectObject(hDC, brsDarkSilver);
+                    dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam * 0.5, inFswOuterDiam * 0.5);
+                    SelectObject(hDC, brsWhite);
+                }
             }
 
             // Set label color:
@@ -500,29 +549,46 @@ void paintFacePlate(HWND hwnd) {
             dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.25 - (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));
 
             // Label w/ the keyboard key:
-            SetTextColor(hDC, RGB(96, 16, 16));
-            SetTextAlign(hDC, TA_CENTER | VTA_BASELINE);
-            dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.125 - (v * vSpacing), keylabels[v][h], 1);
+            if (!show_dimensions) {
+                SetTextColor(hDC, RGB(96, 16, 16));
+                SetTextAlign(hDC, TA_CENTER | VTA_BASELINE);
+                dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.125 - (v * vSpacing), keylabels[v][h], 1);
+            }
+
+            if (show_dimensions) {
+                dpi_Label(hDC, hLeft + (h * hSpacing), vStart - (v * vSpacing), dimLabelColor, fontDimLabel, TA_CENTER | VTA_TOP);
+            }
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
 
         // draw inactive LEDs:
         SelectObject(hDC, penThin);
-        SelectObject(hDC, brsDarkGreen);
+        if (!show_dimensions) {
+            SelectObject(hDC, brsDarkGreen);
+        } else {
+            SelectObject(hDC, GetStockBrush(NULL_BRUSH));
+        }
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
-            if ((led.byte & b) == 0) {
+            if (!show_dimensions) {
+                if ((led.byte & b) == 0) {
+                    dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), inLEDOuterDiam * 0.5, inLEDOuterDiam * 0.5);
+                }
+            } else {
                 dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), inLEDOuterDiam * 0.5, inLEDOuterDiam * 0.5);
+                dpi_Label(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), dimLabelColor, fontDimLabel, TA_CENTER | VTA_TOP);
             }
         }
 
         // draw active LEDs:
-        SelectObject(hDC, brsGreen);
-        b = 1;
-        for (h = 0; h < 8; ++h, b <<= 1) {
-            if (led.byte & b) {
-                dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), inLEDOuterDiam * 0.5, inLEDOuterDiam * 0.5);
+        if (!show_dimensions) {
+            SelectObject(hDC, brsGreen);
+            b = 1;
+            for (h = 0; h < 8; ++h, b <<= 1) {
+                if (led.byte & b) {
+                    dpi_CenterEllipse(hDC, hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), inLEDOuterDiam * 0.5, inLEDOuterDiam * 0.5);
+                }
             }
         }
     }
@@ -546,6 +612,7 @@ void paintFacePlate(HWND hwnd) {
     DeleteObject(brsLCD);
     DeleteObject(brsLCDBack);
 
+    DeleteObject(fontDimLabel);
     DeleteObject(fontLabel);
 
     DeleteObject(Membitmap);
@@ -681,6 +748,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
                 case 'H': case 'h': fsw_state.bot.bits._6 = 0; break;
                 case 'J': case 'j': fsw_state.bot.bits._7 = 0; break;
                 case 'K': case 'k': fsw_state.bot.bits._8 = 0; break;
+
+                    // <space> toggles showing dimensions:
+                case ' ': show_dimensions = !show_dimensions; break;
             }
             InvalidateRect(hwnd, NULL, TRUE);
             break;
@@ -825,7 +895,7 @@ void flash_load(u16 addr, u16 count, u8 *data) {
     FILE *f;
 
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
-    assert(((addr) & ~63) == (((addr + count - 1)) & ~63));
+    assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
 
     f = open_or_create_flash_file();
     if (f == NULL) {
