@@ -281,9 +281,9 @@ BOOL dpi_Label(HDC hdc, double cX, double cY, COLORREF color, HFONT font, UINT a
     SelectObject(hdc, GetStockPen(WHITE_PEN));
 
     // Draw cross-hair:
-    dpi_MoveTo(hdc, cX, cY - 0.0525);
+    dpi_MoveTo(hdc, cX, cY - 0.05);
     dpi_LineTo(hdc, cX, cY + 0.0525);
-    dpi_MoveTo(hdc, cX - 0.0525, cY);
+    dpi_MoveTo(hdc, cX - 0.05, cY);
     dpi_LineTo(hdc, cX + 0.0525, cY);
     // Label:
     BOOL ret = TextOutW(hdc, (int)(cX * dpi), (int)(cY * dpi), tmp, wcslen(tmp));
@@ -361,8 +361,8 @@ void paintFacePlate(HWND hwnd) {
     );
 
     fontDimLabel = CreateFont(
-        16,
-        5,
+        18,
+        6,
         0,
         0,
         FW_SEMIBOLD, FALSE, FALSE, FALSE,
@@ -411,7 +411,7 @@ void paintFacePlate(HWND hwnd) {
     // Draw screw mounting holes:
     const double screwRadius = 1.25 * mmToIn;
     SelectObject(hDC, penThin);
-    SelectObject(hDC, NULL_BRUSH);
+    SelectObject(hDC, GetStockBrush(NULL_BRUSH));
     dpi_CenterEllipse(hDC, lcdCenterX - (93 * mmToIn * 0.5), lcdCenterY - (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
     dpi_CenterEllipse(hDC, lcdCenterX + (93 * mmToIn * 0.5), lcdCenterY - (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
     dpi_CenterEllipse(hDC, lcdCenterX - (93 * mmToIn * 0.5), lcdCenterY + (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
@@ -441,42 +441,44 @@ void paintFacePlate(HWND hwnd) {
     lcdBMP = CreateCompatibleBitmap(orighdc, (LCD_COLS * 6 - 1) * 12, (LCD_ROWS * 9 - 1) * 12);
     SelectObject(lcdDC, lcdBMP);
 
-    // Fill the blue background:
-    SelectObject(lcdDC, penLCD);
-    SelectObject(lcdDC, brsLCDBack);
-    rect.left = 0;
-    rect.top = 0;
-    rect.right = (LCD_COLS * 6 - 1) * 12;
-    rect.bottom = (LCD_ROWS * 9 - 1) * 12;
-    FillRect(lcdDC, &rect, brsLCDBack);
+    if (!show_dimensions) {
+        // Fill the blue background:
+        SelectObject(lcdDC, penLCD);
+        SelectObject(lcdDC, brsLCDBack);
+        rect.left = 0;
+        rect.top = 0;
+        rect.right = (LCD_COLS * 6 - 1) * 12;
+        rect.bottom = (LCD_ROWS * 9 - 1) * 12;
+        FillRect(lcdDC, &rect, brsLCDBack);
 
-    SelectObject(lcdDC, penLCD);
-    SelectObject(lcdDC, brsLCD);
-    for (int r = 0; r < LCD_ROWS; ++r)
-    for (int c = 0; c < LCD_COLS; ++c)
-    for (int y = 0; y < 8; ++y) {
-        // Grab font bitmap row (8 bits wide = 8 cols, MSB to left):
-        u8 ch = console_font_5x8[(lcd_text[r][c] & 255) * 8 + y];
-        u8 b = (1 << 6);
+        SelectObject(lcdDC, penLCD);
+        SelectObject(lcdDC, brsLCD);
+        for (int r = 0; r < LCD_ROWS; ++r)
+        for (int c = 0; c < LCD_COLS; ++c)
+        for (int y = 0; y < 8; ++y) {
+            // Grab font bitmap row (8 bits wide = 8 cols, MSB to left):
+            u8 ch = console_font_5x8[(lcd_text[r][c] & 255) * 8 + y];
+            u8 b = (1 << 6);
 
-        rect.left = (c * 12 * 6);
-        rect.top = (r * 12 * 9 + y * 12);
-        rect.right = (c * 12 * 6) + 12;    // use + 11 for authentic spacing
-        rect.bottom = (r * 12 * 9 + y * 12) + 12;   // use + 11 for authentic spacing
+            rect.left = (c * 12 * 6);
+            rect.top = (r * 12 * 9 + y * 12);
+            rect.right = (c * 12 * 6) + 12;    // use + 11 for authentic spacing
+            rect.bottom = (r * 12 * 9 + y * 12) + 12;   // use + 11 for authentic spacing
 
-        for (int x = 0; x < 5; ++x, b >>= 1, rect.left += 12, rect.right += 12) {
-            if (ch & b) {
-                FillRect(lcdDC, &rect, brsLCD);
+            for (int x = 0; x < 5; ++x, b >>= 1, rect.left += 12, rect.right += 12) {
+                if (ch & b) {
+                    FillRect(lcdDC, &rect, brsLCD);
+                }
             }
         }
+
+        // Copy for debugging:
+        //BitBlt(Memhdc, 0, 0, (LCD_COLS * 6 - 1) * 12, (LCD_ROWS * 9 - 1) * 12, lcdDC, 0, 0, SRCCOPY);
+
+        // Stretch scaled LCD buffer down to main screen (HALFTONE provides an antialiasing effect):
+        SetStretchBltMode(hDC, HALFTONE);
+        StretchBlt(hDC, (int)(lcdLeft * dpi), (int)(lcdTop * dpi), (int)(lcdWidth * dpi), (int)(lcdHeight * dpi), lcdDC, 0, 0, (LCD_COLS * 6 - 1) * 12, (LCD_ROWS * 9 - 1) * 12, SRCCOPY);
     }
-
-    // Copy for debugging:
-    //BitBlt(Memhdc, 0, 0, (LCD_COLS * 6 - 1) * 12, (LCD_ROWS * 9 - 1) * 12, lcdDC, 0, 0, SRCCOPY);
-
-    // Stretch scaled LCD buffer down to main screen (HALFTONE provides an antialiasing effect):
-    SetStretchBltMode(hDC, HALFTONE);
-    StretchBlt(hDC, (int)(lcdLeft * dpi), (int)(lcdTop * dpi), (int)(lcdWidth * dpi), (int)(lcdHeight * dpi), lcdDC, 0, 0, (LCD_COLS * 6 - 1) * 12, (LCD_ROWS * 9 - 1) * 12, SRCCOPY);
 
     DeleteObject(lcdBMP);
     DeleteObject(lcdDC);
