@@ -6,6 +6,7 @@
     <meta name="author" content="James Dunne, Joe Dunne" />
     <meta name="keywords" content="MIDI, e-minor, PIC18, microcontroller, microprocessor, HTML5, javascript, controller, PCB, schematic, James Dunne, Joe Dunne" />
     <meta name="description" content="Project page for the e-minor v2 MIDI floorboard controller for guitar rig control." />
+    <meta name="viewport" content="width=device-width" />
 
     <link type="text/css" rel="stylesheet" href="main.css" />
 
@@ -219,9 +220,9 @@ void controller_handle(void);</code></pre>
         <p>Our schematic does a good job of labelling all the values for the resistors and capacitors so there should be no problem there. Capacitors want to be in the 16V-25V tolerance range.</p>
         <p>I found MIDI and USB-B PCB-mounted parts at <a href="//www.sparkfun.com/" target="_blank">sparkfun.com</a>.</p>
 
-        <h2 id="assembly">Assembly of Prototype</h2>
-        <p>There's still much more to come as I'll be getting all the components put together and assembling the device myself in the next few weeks. Stay tuned!</p>
+        <h2 id="assembly">Assembly Journal</h2>
         <p><strong>2013-11-25:</strong> I just ordered my components from both Mouser and Digikey. My PCBs are still en route from China after 3 weeks. I'd suggest finding a manufacturer closer to home for your own build.</p>
+        <hr/>
         <p><strong>2013-11-26:</strong> The shipment of PCBs finally arrived today. Check out some shots! (Special thanks to <a href="//brianwellerphotography.com/" target="_blank">Brian Weller</a> for cleaning up and aligning these pictures I took on my camera phone)</p>
         <div style="text-align: center; margin-top: 1em">
             <strong>Front</strong><br/>
@@ -233,6 +234,7 @@ void controller_handle(void);</code></pre>
             <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/2013-11-26-pcb-back-aligned.jpg" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/2013-11-26-pcb-back-aligned.jpg" alt="Schematic" style="max-width: 600px" /></a><br/>
             <small>(click for larger version)</small>
         </div>
+        <hr />
         <p><strong>2013-12-08:</strong> Assembly of the PCB is complete! I put together a 10x sped-up video of me assembling and soldering. Check it out:</p>
         <div style="text-align: center; margin-top: 1em">
             <iframe width="560" height="315" src="//www.youtube.com/embed/_Ol__sfCgBg" frameborder="0" allowfullscreen></iframe>
@@ -244,6 +246,56 @@ void controller_handle(void);</code></pre>
             </video>
         </div>
         <p>I did some more testing after I made that last video and wired up a foot switch for testing purposes but I didn't capture any video for it.</p>
+        <hr />
+        <p><strong>2013-12-13:</strong> I did a lot of work to get the LCD screen up and running with a bit-banged software RS232 UART. I can't use the on-board UART because that's in use by the MIDI already.</p>
+        <p>This was all quite a challenge because this LCD unit was given to me by my brother and he had set its baud rate to 115.2k instead of the default 9600 for his project. Let me just say that it's very difficult
+        to get a 32MHz PIC to reliably transmit at 115.2k with a bit-banged RS232 implementation but I managed to eek out 6 bytes reliably, which is thankfully more than enough to issue the "change baud rate" command to
+        the LCD.</p>
+        <p>After that hurdle was cleared, I had to practically rewrite my RS232 code for the 9600 baud rate since the 115.2k code was all quite a big ugly hack that was needed to just get the job done.</p>
+        <p>My first goal was to get a blocking version of the bit-banged RS232 working and reliably transmitting bytes to the LCD. I used the PIC's built-in TIMER1 to handle the precision timing required for RS232. The timer
+        works by incrementing a 16-bit register starting from some user-specified starting value up to 0xFFFF. Once it overflows past 0xFFFF, a special timer overflow bit (<code data-language="c">PIR1bits.TMR1IF</code>) is
+        set in the timer control register. Having that bit gives one the simple ability to busy-wait the CPU on that, which is just what I did with <code data-language="c">while (PIR1bits.TMR1IF == 0);</code> in between each
+        change of the TX pin to deliver the data.</p>
+        <p>The PIC's TIMER1 has several configurable timing sources but for this case it's best to leave it at its default configuration: incrementing the counter with each pulse of the 32MHz instruction clock, divided by 4.
+        This rate yields a timer period of 0.125uSec. All we need to do now is determine the proper countdown value to achieve 9600 baud so that we can twiddle the TX pin at that rate. Since a baud rate is just a measurement
+        of the time between sending bits in the raw RS232 protocol, we can calculate that 9600 baud is 1 sec / 9600 = 104.167 uSec. We can then divide that by 0.125uSec (our timer period) to find how many timer periods and we
+        get 833.333. In practice, values between 832 and 834 work just fine.</p>
+        <p>I encountered great difficulty in getting the bit transmission on the PIC side to synchronize with the bit receiving on the LCD side, even when I had the precise timer; it was like herding cats. The final solution
+        was to set the TX pin high for a very long time on start-up (~600ms) to allow the LCD to boot up/initialize before attempting to send the first start bit (low) of the first byte. From there it was standard RS232,
+        one start bit (low), 8 data bits, and one stop bit (high). Since the stop bit is high, it makes sense to "clear" the line by setting it high for an extended period of time.</p>
+        <p>Since I'm new to PICs and microcontrollers in general, I was unsure of what actual clock frequency the PIC was running at. For the longest time I was operating under the simplistic assumption that the instruction
+        clock cycle was 8MHz since that's the crystal's frequency. Obviously that was wrong. The PIC's datasheet was consulted. As it turns out, the instruction clock for the PIC18 is configured solely by the CPUDIV config
+        bits; it has nothing to do with the specific 8MHz crystal frequency. In my project, CPUDIV is set to OSC2_PLL3 which means that the PLL (at 96MHz) is divided by 3, yielding a 32MHz instruction clock. Simple enough in
+        retrospect, assuming you can decode the datasheet that is.</p>
+        <p>I would love to be able to tell you that the process of getting a working LCD was as simple and scientific as that explanation above, but that would be an outright lie at this point. The real process involved much
+        blood, sweat, tears, coffee, time, trial, and tons of error: just like real science! Thankfully I did learn many things about PIC timers and the RS232 protocol and I do now have a working LCD screen that is under my
+        control. In retrospect, I wonder if SPI or I<sup>2</sup>C would have been easier to set up than RS232?</p>
+        <div style="text-align: center; margin-top: 1em">
+            <strong>First successful LCD test (ask LCD to display its baud rate)</strong><br />
+            <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/raw/2013-12-13-055900-LCD-baud-rate.jpg" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/raw/2013-12-13-055900-LCD-baud-rate.jpg" alt="LCD test" style="max-width: 600px" /></a><br />
+            <small>(click for larger version)</small>
+        </div>
+        <div style="text-align: center; margin-top: 1em">
+            <strong>Second alpha LCD test (chars 0x41 to 0x7F)</strong><br />
+            <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/raw/2013-12-13-060000-LCD-alphas.jpg" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/raw/2013-12-13-060000-LCD-alphas.jpg" alt="LCD test 2" style="max-width: 600px" /></a><br />
+            <small>(click for larger version)</small>
+        </div>
+        <p>Getting a working blocking-mode RS232 implementation was a great first goal and was cause for much celebration, aka sleep. After the celebration, the next goal was to implement a non-blocking, interrupt-based
+        solution. This was much easier to do now that all the hard work had been done and proven.</p>
+        <p>I configured TIMER1 to trigger an interrupt when its overflow bit was set, and in the interrupt service routine (ISR) reset the timer countdown to the desired period minus a hefty fudge to accommodate for the
+        time the instructions running in the ISR would take to execute. The actual RS232 implementation is a simple state machine keeping track of sending the start bit, 8 data bits, and the final stop bit, plus some
+        additional code dealing with a FIFO buffer to keep the pipeline active as long as possible. MPLAB IDE 8's simulator and stopwatch feature came in handy for determining the timer fudge value.</p>
+        <div style="text-align: center; margin-top: 1em">
+            <strong>Later full alpha LCD test (chars 0x30 to 0x7F)</strong><br />
+            <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/raw/2013-12-13-130716-LCD-full-alphas.jpg" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/raw/2013-12-13-130716-LCD-full-alphas.jpg" alt="LCD test 3" style="max-width: 600px" /></a><br />
+            <small>(click for larger version)</small>
+        </div>
+        <p>Once the non-blocking RS232 was in place, I hooked it up to my regular MIDI controller software and tested it out. Everything is working great!</p>
+        <div style="text-align: center; margin-top: 1em">
+            <strong>Later full alpha LCD test (chars 0x30 to 0x7F)</strong><br />
+            <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/raw/2013-12-13-164014-LCD-real.jpg" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/raw/2013-12-13-164014-LCD-real.jpg" alt="LCD test 4" style="max-width: 600px" /></a><br />
+            <small>(click for larger version)</small>
+        </div>
     </div>
 </body>
 </html>

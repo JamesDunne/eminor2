@@ -129,7 +129,7 @@ void store_program_state(void) {
 
     // Update initial RJM channel bit and clear others:
     for (i = 0; i < 6; ++i)
-        pr.rjm[i] = pr.rjm[i] & ~M_8 | (rjm_channel == i ? M_8 : 0);
+        pr.rjm[i] = (pr.rjm[i] & ~M_8) | (rjm_channel == i ? M_8 : 0);
 
     // Store program state:
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
