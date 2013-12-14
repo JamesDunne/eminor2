@@ -6,7 +6,6 @@
     <meta name="author" content="James Dunne, Joe Dunne" />
     <meta name="keywords" content="MIDI, e-minor, PIC18, microcontroller, microprocessor, HTML5, javascript, controller, PCB, schematic, James Dunne, Joe Dunne" />
     <meta name="description" content="Project page for the e-minor v2 MIDI floorboard controller for guitar rig control." />
-    <meta name="viewport" content="width=device-width" />
 
     <link type="text/css" rel="stylesheet" href="main.css" />
 
@@ -22,7 +21,7 @@
     <h3>Hardware/firmware designed by <a href="//github.com/jdunne525" target="_blank">Joseph R. Dunne</a></h3>
     <div class="content">
         <h5 style="margin-top: 10px"><a href="//github.com/JamesDunne/eminor2/tree/master/v2" target="_blank">Our GitHub Repository</a></h5>
-        <h5 style="">Last updated: 2013-12-08</h5>
+        <h5 style="">Last updated: 2013-12-13</h5>
     </div>
     <div style="margin-top: 16px">
         <div style="text-align: center; display: inline-block; vertical-align: top;">
@@ -257,8 +256,8 @@ void controller_handle(void);</code></pre>
         set in the timer control register. Having that bit gives one the simple ability to busy-wait the CPU on that, which is just what I did with <code data-language="c">while (PIR1bits.TMR1IF == 0);</code> in between each
         change of the TX pin to deliver the data.</p>
         <p>The PIC's TIMER1 has several configurable timing sources but for this case it's best to leave it at its default configuration: incrementing the counter with each pulse of the 32MHz instruction clock, divided by 4.
-        This rate yields a timer period of 0.125uSec. All we need to do now is determine the proper countdown value to achieve 9600 baud so that we can twiddle the TX pin at that rate. Since a baud rate is just a measurement
-        of the time between sending bits in the raw RS232 protocol, we can calculate that 9600 baud is 1 sec / 9600 = 104.167 uSec. We can then divide that by 0.125uSec (our timer period) to find how many timer periods and we
+        This rate yields a timer period of 0.125 &mu;sec. All we need to do now is determine the proper countdown value to achieve 9600 baud so that we can twiddle the TX pin at that rate. Since a baud rate is just a measurement
+        of the time between sending bits in the raw RS232 protocol, we can calculate that 9600 baud is 1 sec / 9600 = 104.167 &mu;sec. We can then divide that by 0.125 &mu;sec (our timer period) to find how many timer periods and we
         get 833.333. In practice, values between 832 and 834 work just fine.</p>
         <p>I encountered great difficulty in getting the bit transmission on the PIC side to synchronize with the bit receiving on the LCD side, even when I had the precise timer; it was like herding cats. The final solution
         was to set the TX pin high for a very long time on start-up (~600ms) to allow the LCD to boot up/initialize before attempting to send the first start bit (low) of the first byte. From there it was standard RS232,
@@ -292,8 +291,16 @@ void controller_handle(void);</code></pre>
         </div>
         <p>Once the non-blocking RS232 was in place, I hooked it up to my regular MIDI controller software and tested it out. Everything is working great!</p>
         <div style="text-align: center; margin-top: 1em">
-            <strong>Later full alpha LCD test (chars 0x30 to 0x7F)</strong><br />
+            <strong>MIDI controller LCD test</strong><br />
             <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/raw/2013-12-13-164014-LCD-real.jpg" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/pics/raw/2013-12-13-164014-LCD-real.jpg" alt="LCD test 4" style="max-width: 600px" /></a><br />
+            <small>(click for larger version)</small>
+        </div>
+        <hr/>
+        <p><strong>2013-12-13:</strong> Since I suck at all things mechanical, I'm delegating the aluminum chassis drilling work to my brother who is much more skilled in such things than I am. In preparation for that, I
+        modified the Win32 test harness to show drilling coordinates (in inches currently) when the space bar is hit. All X,Y coordinates are relative to the origin at the top-left. Here's what that looks like:</p>
+        <div style="text-align: center; margin-top: 1em">
+            <strong>Chassis face plate dimensions</strong><br />
+            <a href="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/face-dimensions.png" target="_blank"><img src="//raw.github.com/JamesDunne/eminor2/master/v2/pcb/face-dimensions.png" alt="Face plate dimensions" style="max-width: 600px" /></a><br />
             <small>(click for larger version)</small>
         </div>
     </div>
