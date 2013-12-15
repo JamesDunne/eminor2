@@ -21,7 +21,7 @@ static HINSTANCE zhInstance = NULL;
 // display scale factor (pixels per inch)
 // NOTE(jsd): 55.4 dpi is to-scale on my 40" Samsung HDTV 1080p
 const double defaultDpi = 55.4;
-static double dpi = 55.4;
+static double dpi = 93.5;
 
 // Total width, height in inches:
 const double inWidth = 20.078;
@@ -32,12 +32,12 @@ const double hLeft = 1.0;
 const double hSpacing = 2.5714285714285714285714285714286;
 
 // From bottom going up:
-const double vStart = 5.5;
-const double vSpacing = 2.25;
+const double vStart = 5.6;
+const double vSpacing = 2.15;
 
-const double vLEDOffset = -0.55;
+const double vLEDOffset = -0.65;
 
-const double inLEDOuterDiam = (8 /*mm*/ * mmToIn);
+const double inLEDOuterDiam = (12 /*mm*/ * mmToIn);
 const double inFswOuterDiam = (12.2 /*mm*/ * mmToIn);
 const double inFswInnerDiam = (10 /*mm*/ * mmToIn);
 
