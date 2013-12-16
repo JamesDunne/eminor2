@@ -31,170 +31,170 @@
 #pragma code main_code
 
 void main_lcd_isr() {
-	u8 i;
-	u8 tmp;
+    u8 i;
+    u8 tmp;
 
     CLRWDT();
     init();
     CLRWDT();
 
-	// Wait for the LCD to initialize:
-	lcd_init();
+    // Wait for the LCD to initialize:
+    lcd_init();
 
-	// DISPLAY BAUD rate:
-	//lcd_enqueue(0xFE);
-	//lcd_enqueue(0x71);
+    // DISPLAY BAUD rate:
+    //lcd_enqueue(0xFE);
+    //lcd_enqueue(0x71);
 
-	// SET BAUD rate:
-	//SEND_BYTE(0xFE);
-	//SEND_BYTE(0x61);
-	//SEND_BYTE(0x04);	// 9600 baud
+    // SET BAUD rate:
+    //SEND_BYTE(0xFE);
+    //SEND_BYTE(0x61);
+    //SEND_BYTE(0x04);  // 9600 baud
 
-	// CLS:
-	lcd_enqueue(0xFE);
-	lcd_enqueue(0x51);
+    // CLS:
+    lcd_enqueue(0xFE);
+    lcd_enqueue(0x51);
 
-	tmp = 0x30;
+    tmp = 0x30;
     for(;;) {
-   		CLRWDT();
+        CLRWDT();
 
-		if (swuart_tx_bufptr < (MAX_LCD_TX_LENGTH - 4)) {
-			lcd_enqueue(tmp);
-			tmp++;
-			if (tmp > 0x7F) {
-				tmp = 0x30;
+        if (swuart_tx_bufptr < (MAX_LCD_TX_LENGTH - 4)) {
+            lcd_enqueue(tmp);
+            tmp++;
+            if (tmp > 0x7F) {
+                tmp = 0x30;
 
-				// CLS:
-				//SEND_BYTE(0xFE);
-				//SEND_BYTE(0x51);
+                // CLS:
+                //SEND_BYTE(0xFE);
+                //SEND_BYTE(0x51);
 
-				// HOME CURSOR:
-				lcd_enqueue(0xFE);
-				lcd_enqueue(0x46);
-			}
-		}
-	}
+                // HOME CURSOR:
+                lcd_enqueue(0xFE);
+                lcd_enqueue(0x46);
+            }
+        }
+    }
 }
 
 void SEND_BIT(unsigned char b) {
-	// Send bit:
-	if (b) SWUART_TX_LAT_BIT = 1;
-	else SWUART_TX_LAT_BIT = 0;
+    // Send bit:
+    if (b) SWUART_TX_LAT_BIT = 1;
+    else SWUART_TX_LAT_BIT = 0;
 
-	// Wait for timer overflow:
-	while (PIR1bits.TMR1IF == 0);
-	// Clear timer overflow:
-	PIR1bits.TMR1IF = 0;
+    // Wait for timer overflow:
+    while (PIR1bits.TMR1IF == 0);
+    // Clear timer overflow:
+    PIR1bits.TMR1IF = 0;
 
-	// Reset timer:
-	T1CONbits.TMR1ON = 0;
-	TMR1L = ((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) & 0xFF;
-	TMR1H = (((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) >> 8) & 0xFF;
-	T1CONbits.TMR1ON = 1;
+    // Reset timer:
+    T1CONbits.TMR1ON = 0;
+    TMR1L = ((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) & 0xFF;
+    TMR1H = (((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) >> 8) & 0xFF;
+    T1CONbits.TMR1ON = 1;
 }
 
 void main_lcd_bitbang_blocking() {
-	u8 i;
-	u8 tmp;
+    u8 i;
+    u8 tmp;
 
     CLRWDT();
     init();
     CLRWDT();
 
-	// disable timer1 interrupt:
-	DISABLE_ALL_INTERRUPTS();
-	PIE1bits.TMR1IE = 0;
+    // disable timer1 interrupt:
+    DISABLE_ALL_INTERRUPTS();
+    PIE1bits.TMR1IE = 0;
 
 #define SEND_BYTE(b) \
-	SEND_BIT(0); \
-	SEND_BIT((b & 1)); \
-	SEND_BIT((b & 2)); \
-	SEND_BIT((b & 4)); \
-	SEND_BIT((b & 8)); \
-	SEND_BIT((b & 16)); \
-	SEND_BIT((b & 32)); \
-	SEND_BIT((b & 64)); \
-	SEND_BIT((b & 128)); \
-	SEND_BIT(1);
+    SEND_BIT(0); \
+    SEND_BIT((b & 1)); \
+    SEND_BIT((b & 2)); \
+    SEND_BIT((b & 4)); \
+    SEND_BIT((b & 8)); \
+    SEND_BIT((b & 16)); \
+    SEND_BIT((b & 32)); \
+    SEND_BIT((b & 64)); \
+    SEND_BIT((b & 128)); \
+    SEND_BIT(1);
 
-	// Wait ~100ms for the LCD to boot up:
-	SWUART_TX_LAT_BIT = 1;
-	for (i=0; i<80; ++i) {
-		// ~10ms timer:
-		T1CONbits.TMR1ON = 0;
-		PIR1bits.TMR1IF = 0;
-		TMR1L = 0x00;
-		TMR1H = 0x00;
-		T1CONbits.TMR1ON = 1;
-		while (PIR1bits.TMR1IF == 0);
-		PIR1bits.TMR1IF = 0;
-	}
+    // Wait ~100ms for the LCD to boot up:
+    SWUART_TX_LAT_BIT = 1;
+    for (i=0; i<80; ++i) {
+        // ~10ms timer:
+        T1CONbits.TMR1ON = 0;
+        PIR1bits.TMR1IF = 0;
+        TMR1L = 0x00;
+        TMR1H = 0x00;
+        T1CONbits.TMR1ON = 1;
+        while (PIR1bits.TMR1IF == 0);
+        PIR1bits.TMR1IF = 0;
+    }
 
-	// Set up timer1 to wait for next baud:
-	T1CONbits.TMR1ON = 0;
-	TMR1L = ((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) & 0xFF;
-	TMR1H = (((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) >> 8) & 0xFF;
-	T1CONbits.TMR1ON = 1;
+    // Set up timer1 to wait for next baud:
+    T1CONbits.TMR1ON = 0;
+    TMR1L = ((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) & 0xFF;
+    TMR1H = (((unsigned short)0xFFFF - (unsigned short)TMR1_BAUD9600_PERIOD) >> 8) & 0xFF;
+    T1CONbits.TMR1ON = 1;
 
-	// DISPLAY BAUD rate:
-	SEND_BYTE(0xFE);
-	SEND_BYTE(0x71);
+    // DISPLAY BAUD rate:
+    SEND_BYTE(0xFE);
+    SEND_BYTE(0x71);
 
-	// SET BAUD rate:
-	//SEND_BYTE(0xFE);
-	//SEND_BYTE(0x61);
-	//SEND_BYTE(0x04);	// 9600 baud
+    // SET BAUD rate:
+    //SEND_BYTE(0xFE);
+    //SEND_BYTE(0x61);
+    //SEND_BYTE(0x04);  // 9600 baud
 
-	// CLS:
-	//SEND_BYTE(0xFE);
-	//SEND_BYTE(0x51);
+    // CLS:
+    //SEND_BYTE(0xFE);
+    //SEND_BYTE(0x51);
 
 #if 0
-	SEND_BYTE(0xAA);
-	SEND_BYTE(0xAA);
-	SEND_BYTE(0xAA);
-	SEND_BYTE(0xAA);
-	SEND_BYTE(0xAA);
+    SEND_BYTE(0xAA);
+    SEND_BYTE(0xAA);
+    SEND_BYTE(0xAA);
+    SEND_BYTE(0xAA);
+    SEND_BYTE(0xAA);
 
-	SEND_BYTE(0xAA);
-	SEND_BYTE(0xAA);
-	SEND_BYTE(0xAA);
-	SEND_BYTE(0xAA);
-	SEND_BYTE(0xAA);
+    SEND_BYTE(0xAA);
+    SEND_BYTE(0xAA);
+    SEND_BYTE(0xAA);
+    SEND_BYTE(0xAA);
+    SEND_BYTE(0xAA);
 
-	SEND_BYTE(0x20);
-	SEND_BYTE(0x20);
-	SEND_BYTE(0x20);
-	SEND_BYTE(0x20);
-	SEND_BYTE(0x20);
+    SEND_BYTE(0x20);
+    SEND_BYTE(0x20);
+    SEND_BYTE(0x20);
+    SEND_BYTE(0x20);
+    SEND_BYTE(0x20);
 
-	SEND_BYTE(0x41);
-	SEND_BYTE(0x42);
-	SEND_BYTE(0x43);
+    SEND_BYTE(0x41);
+    SEND_BYTE(0x42);
+    SEND_BYTE(0x43);
 #endif
 
-	// CLS:
-	SEND_BYTE(0xFE);
-	SEND_BYTE(0x51);
+    // CLS:
+    SEND_BYTE(0xFE);
+    SEND_BYTE(0x51);
 
-	tmp = 0x41;
+    tmp = 0x41;
     for(;;) {
-   		CLRWDT();
+        CLRWDT();
 
-		SEND_BYTE(tmp);
-		tmp++;
-		if (tmp > 0x7F) {
-			tmp = 0x41;
+        SEND_BYTE(tmp);
+        tmp++;
+        if (tmp > 0x7F) {
+            tmp = 0x41;
 
-			// CLS:
-			//SEND_BYTE(0xFE);
-			//SEND_BYTE(0x51);
+            // CLS:
+            //SEND_BYTE(0xFE);
+            //SEND_BYTE(0x51);
 
-			// HOME CURSOR:
-			SEND_BYTE(0xFE);
-			SEND_BYTE(0x46);
-		}
-	}
+            // HOME CURSOR:
+            SEND_BYTE(0xFE);
+            SEND_BYTE(0x46);
+        }
+    }
 }
 
 void main_test1() {

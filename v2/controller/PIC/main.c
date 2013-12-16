@@ -31,13 +31,13 @@ void main() {
     init();
     CLRWDT();
 
-	// Wait for the LCD to initialize:
-	lcd_init();
+    // Wait for the LCD to initialize:
+    lcd_init();
     CLRWDT();
 
-	// Clear LCD screen:
-	lcd_enqueue(0xFE);
-	lcd_enqueue(0x51);
+    // Clear LCD screen:
+    lcd_enqueue(0xFE);
+    lcd_enqueue(0x51);
 
     // Set contrast:
     lcd_enqueue(0xFE);

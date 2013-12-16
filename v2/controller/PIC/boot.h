@@ -19,6 +19,6 @@
 #define APP_SIGNATURE_ADDRESS            0x1006  //0x1806 and 0x1807 contains the "signature" WORD, indicating successful erase/program/verify operation
 #define APP_SIGNATURE_VALUE              0x600D  //leet "GOOD", implying that the erase/program was a success and the bootloader intentionally programmed the APP_SIGNATURE_ADDRESS with this value
 #define APP_VERSION_ADDRESS              0x1016  //0x1016 and 0x1017 should contain the application image firmware version number
-#define	APP_VERSION						0x0100	//Put user application version number here.
+#define APP_VERSION                     0x0100  //Put user application version number here.
 
-#define	BOOT_MAIN						0xC0	//Entry into bootload mode after hardware specific code.
+#define BOOT_MAIN                       0xC0    //Entry into bootload mode after hardware specific code.

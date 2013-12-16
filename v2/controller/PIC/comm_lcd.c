@@ -11,29 +11,29 @@
 
 // Wait for the LCD to initialize.
 void lcd_init(void) {
-	unsigned char i;
+    unsigned char i;
 
-	// Disable timer interrupt:
-   	DISABLE_ALL_INTERRUPTS();
-	PIE1bits.TMR1IE = 0;
+    // Disable timer interrupt:
+    DISABLE_ALL_INTERRUPTS();
+    PIE1bits.TMR1IE = 0;
 
-	// Wait ~100ms for the LCD to boot up:
-	SWUART_TX_LAT_BIT = 1;
-	for (i=0; i<80; ++i) {
-		// ~10ms timer:
-		T1CONbits.TMR1ON = 0;
-		PIR1bits.TMR1IF = 0;
-		TMR1L = 0x00;
-		TMR1H = 0x00;
-		T1CONbits.TMR1ON = 1;
-		while (PIR1bits.TMR1IF == 0);
-		PIR1bits.TMR1IF = 0;
-	}
+    // Wait ~100ms for the LCD to boot up:
+    SWUART_TX_LAT_BIT = 1;
+    for (i=0; i<80; ++i) {
+        // ~10ms timer:
+        T1CONbits.TMR1ON = 0;
+        PIR1bits.TMR1IF = 0;
+        TMR1L = 0x00;
+        TMR1H = 0x00;
+        T1CONbits.TMR1ON = 1;
+        while (PIR1bits.TMR1IF == 0);
+        PIR1bits.TMR1IF = 0;
+    }
 
-	PIE1bits.TMR1IE = 1;
+    PIE1bits.TMR1IE = 1;
 
-	// Start up the SWUART timer interrupt:
-   	ENABLE_ALL_INTERRUPTS();
+    // Start up the SWUART timer interrupt:
+    ENABLE_ALL_INTERRUPTS();
 }
 
 void lcd_enqueue(unsigned char v) {
@@ -42,7 +42,7 @@ void lcd_enqueue(unsigned char v) {
     swuart_tx_bufptr++;
 
     if (swuart_started) return;
-	swuart_tx_start();
+    swuart_tx_start();
 }
 
 // -------------------------------- Software UART (SWUART) implementation:
@@ -52,23 +52,23 @@ void swuart_tx_start(void) {
 
     // Set SWUART to TX mode:
     swuart_mode = SWUARTMODE_TX_START_BIT;
-	swuart_started = 1;
+    swuart_started = 1;
 
     // Enable SWUART timer (timer 1):
-	T1CONbits.TMR1ON = 0;
-	TMR1L = ((unsigned short)0xFFFF - ((unsigned short)TMR1_BAUD9600_PERIOD) - (unsigned short)2) & 0xFF;	// 0x80
-	TMR1H = (((unsigned short)0xFFFF - ((unsigned short)TMR1_BAUD9600_PERIOD) - (unsigned short)2) >> 8) & 0xFF;	// 0xFE
-	T1CONbits.TMR1ON = 1;
+    T1CONbits.TMR1ON = 0;
+    TMR1L = ((unsigned short)0xFFFF - ((unsigned short)TMR1_BAUD9600_PERIOD) - (unsigned short)2) & 0xFF;   // 0x80
+    TMR1H = (((unsigned short)0xFFFF - ((unsigned short)TMR1_BAUD9600_PERIOD) - (unsigned short)2) >> 8) & 0xFF;    // 0xFE
+    T1CONbits.TMR1ON = 1;
 }
 
 // ISR for SWUART:
 void swuart_tx_interrupt(void) {
-	// Reset timer:
-	PIR1bits.TMR1IF = 0;
-	T1CONbits.TMR1ON = 0;
-	TMR1L = ((unsigned short)0xFFFF - ((unsigned short)TMR1_BAUD9600_PERIOD - (unsigned short)TMR1_ISR_LATENCY)) & 0xFF;	// 0x80
-	TMR1H = (((unsigned short)0xFFFF - ((unsigned short)TMR1_BAUD9600_PERIOD - (unsigned short)TMR1_ISR_LATENCY)) >> 8) & 0xFF;	// 0xFE
-	T1CONbits.TMR1ON = 1;
+    // Reset timer:
+    PIR1bits.TMR1IF = 0;
+    T1CONbits.TMR1ON = 0;
+    TMR1L = ((unsigned short)0xFFFF - ((unsigned short)TMR1_BAUD9600_PERIOD - (unsigned short)TMR1_ISR_LATENCY)) & 0xFF;    // 0x80
+    TMR1H = (((unsigned short)0xFFFF - ((unsigned short)TMR1_BAUD9600_PERIOD - (unsigned short)TMR1_ISR_LATENCY)) >> 8) & 0xFF; // 0xFE
+    T1CONbits.TMR1ON = 1;
 
     switch (swuart_mode) {
         case SWUARTMODE_TX_IDLE:
@@ -77,7 +77,7 @@ void swuart_tx_interrupt(void) {
         case SWUARTMODE_TX_START_BIT:
             swuart_mode = SWUARTMODE_TX_BYTE;
             swuart_txmask = 0x01;
-    		swuart_txbyte = swuart_tx_buffer[swuart_tx_bufoutptr];
+            swuart_txbyte = swuart_tx_buffer[swuart_tx_bufoutptr];
 
             // Transmit start bit:
             SWUART_TX_LAT_BIT = 0;
@@ -91,7 +91,7 @@ void swuart_tx_interrupt(void) {
                 if (swuart_tx_bufoutptr >= swuart_tx_bufptr) {
                     // Ran out of bytes to transmit:
                     swuart_mode = SWUARTMODE_TX_IDLE;
-					swuart_started = 0;
+                    swuart_started = 0;
                     // Reset TX buffer:
                     swuart_tx_bufoutptr = 0;
                     swuart_tx_bufptr = 0;
