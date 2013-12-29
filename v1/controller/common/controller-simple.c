@@ -1,5 +1,5 @@
 /*
-    Programmable e-minor MIDI foot controller v2.
+    Programmable e-minor MIDI foot controller v1.
 
     Currently designed to work with:
     RJM Mini Amp Gizmo controlling a 3-channel Mark V amplifier
@@ -41,7 +41,7 @@
     Written by James S. Dunne
     Original: 2007-04-05
     Updated:  2013-11-22
-    */
+*/
 
 #include "../common/types.h"
 #include "../common/hardware.h"
@@ -75,6 +75,9 @@ u32 sw_curr, sw_last;
 u8 rjm_channel = 0;
 u8 gmaj_program = 0;
 
+u8 new_rjm_channel = 0;
+u8 new_gmaj_program = 0;
+
 // current switch mode; holding any preset button for 500ms enables alternate mode.
 u8 switch_mode = 0;
 
@@ -94,7 +97,7 @@ static void show_program(void) {
     u8 i = LEDS_MAX_ALPHAS - 1;
 
     // Show g-major program number in 4-char display, right-aligned space padded:
-    u8 n = gmaj_program + 1;
+    u8 n = new_gmaj_program + 1;
 
     do {
         s[i--] = (n % 10) + '0';
@@ -115,7 +118,7 @@ static void show_program(void) {
     leds_show_4alphas(s);
 
     // Show the channel # in the single-digit display:
-    leds_show_1digit(rjm_channel + 1);
+    leds_show_1digit(new_rjm_channel + 1);
 }
 
 // determine if a footswitch was pressed
@@ -187,35 +190,64 @@ static void set_rjm_channel(u8 idx) {
     else if (idx == 3) pgm = 9;
     else return;
 
-    rjm_channel = idx;
-
-    // Disable mute if enabled:
-    disable_mute();
-
-    // Send the MIDI PROGRAM CHANGE message to the RJM to switch amp channel:
-    midi_send_cmd1(0xC, rjm_midi_channel, pgm);
-
-    // Send MIDI effects enable commands and set effects LEDs:
-    update_effects_MIDI_state();
-
-    // Update 7-segment displays:
-    show_program();
-
-    set_toggle_leds();
+    new_rjm_channel = idx;
 }
 
-// changes to the next g-major program and loads initial effects state and
-// switches RJM to initial channel.
-static void set_gmaj_program(void) {
-    u8 tmp[8];
-    u8 new_rjm_channel;
+// activate sends MIDI messages to update external devices to current state
+static void activate(void) {
+    // Update g-major if we need to:
+    if (new_gmaj_program != gmaj_program) {
+        // Force both the g-major and RJM to update:
+        gmaj_program = new_gmaj_program;
 
-    // Change g-major program:
-    midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
+        // Send the MIDI PROGRAM CHANGE messages:
+        if (new_rjm_channel != rjm_channel) {
+            rjm_channel = new_rjm_channel;
+            midi_send_cmd1(0xC, rjm_midi_channel, rjm_channel);
+        }
+        midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
+
+        // Disable mute if enabled:
+        disable_mute();
+
+        // Send MIDI effects enable commands and set effects LEDs:
+        update_effects_MIDI_state();
+
+        // Update 7-segment displays:
+        show_program();
+
+        set_toggle_leds();
+
+        return;
+    }
+
+    // Update RJM if we need to:
+    if (new_rjm_channel != rjm_channel) {
+        rjm_channel = new_rjm_channel;
+
+        // Send the MIDI PROGRAM CHANGE message to the RJM to switch amp channel:
+        midi_send_cmd1(0xC, rjm_midi_channel, rjm_channel);
+
+        // Disable mute if enabled:
+        disable_mute();
+
+        // Send MIDI effects enable commands and set effects LEDs:
+        update_effects_MIDI_state();
+
+        // Update 7-segment displays:
+        show_program();
+
+        set_toggle_leds();
+    }
+}
+
+// prepares the next g-major program to load
+static void prepare_gmaj_program(void) {
+    u8 tmp[8];
 
     // Load channel states from flash memory:
     // NOTE(jsd): Use multiple of 8 to avoid crossing 64-byte boundaries in flash!
-    flash_load((u16)gmaj_program * 8, 8, tmp);
+    flash_load((u16)new_gmaj_program * 8, 8, tmp);
 
     // NOTE(jsd): Since user has no way to turn on/off these settings yet, we force them here.
     // All overdrive channels get noise gate on and clean channels don't:
@@ -239,9 +271,6 @@ static void set_gmaj_program(void) {
     else if (tmp[6] == 3) new_rjm_channel = 1;
     else if (tmp[6] == 4) new_rjm_channel = 2;
     else if (tmp[6] == 5) new_rjm_channel = 3;
-
-    // Set RJM channel and update MIDI effects state:
-    set_rjm_channel(new_rjm_channel);
 
     // Update 7-segment display:
     show_program();
@@ -310,7 +339,8 @@ void controller_init(void) {
 
     // Initialize g-major program to 0:
     gmaj_program = 0;
-    set_gmaj_program();
+    prepare_gmaj_program();
+    activate();
 }
 
 // called every 10ms
@@ -360,41 +390,45 @@ void controller_handle(void) {
         if (button_pressed(FSM_PRESET_1)) {
             if (rjm_channel != 0) {
                 set_rjm_channel(0);
-            } else {
+            } else if (gmaj_program == new_gmaj_program) {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
                 disable_mute();
             }
+            activate();
             reset_timer4(FSM_PRESET_1);
         }
         if (button_pressed(FSM_PRESET_2)) {
             if (rjm_channel != 1) {
                 set_rjm_channel(1);
-            } else {
+            } else if (gmaj_program == new_gmaj_program) {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
                 disable_mute();
             }
+            activate();
             reset_timer4(FSM_PRESET_2);
         }
         if (button_pressed(FSM_PRESET_3)) {
             if (rjm_channel != 2) {
                 set_rjm_channel(2);
-            } else {
+            } else if (gmaj_program == new_gmaj_program) {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
                 disable_mute();
             }
+            activate();
             reset_timer4(FSM_PRESET_3);
         }
         if (button_pressed(FSM_PRESET_4)) {
             if (rjm_channel != 3) {
                 set_rjm_channel(3);
-            } else {
+            } else if (gmaj_program == new_gmaj_program) {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
                 disable_mute();
             }
+            activate();
             reset_timer4(FSM_PRESET_4);
         }
 
@@ -431,7 +465,8 @@ void controller_handle(void) {
         // Alternate switch mode to easily repurpose foot switches:
         //
         //   [ COMP] [ MUTE] [STORE] [ EXIT]
-        //   [ -10 ] [  -1 ] [  +1 ] [ +10 ]
+        //
+        //   [  -5 ] [  -1 ] [  +1 ] [  +5 ]
         //
         if (button_pressed(FSM_CONTROL_1)) {
             control_toggleidx(4);
@@ -485,29 +520,29 @@ void controller_handle(void) {
 
         // change g-major program:
         if (button_pressed(FSM_PRESET_1)) {
-            if (gmaj_program < step_program_inc_dec) gmaj_program = 0;
-            else gmaj_program -= step_program_inc_dec;
+            if (new_gmaj_program < step_program_inc_dec) new_gmaj_program = 0;
+            else new_gmaj_program -= step_program_inc_dec;
 
-            set_gmaj_program();
+            prepare_gmaj_program();
         }
         if (button_pressed(FSM_PRESET_2)) {
-            if (gmaj_program < 1) gmaj_program = 0;
-            else gmaj_program--;
+            if (new_gmaj_program < 1) new_gmaj_program = 0;
+            else new_gmaj_program--;
 
-            set_gmaj_program();
+            prepare_gmaj_program();
         }
 
         if (button_pressed(FSM_PRESET_3)) {
-            if (gmaj_program > 127 - 1) gmaj_program = 127;
-            else gmaj_program++;
+            if (new_gmaj_program > 127 - 1) new_gmaj_program = 127;
+            else new_gmaj_program++;
 
-            set_gmaj_program();
+            prepare_gmaj_program();
         }
         if (button_pressed(FSM_PRESET_4)) {
-            if (gmaj_program > 127 - step_program_inc_dec) gmaj_program = 127;
-            else gmaj_program += step_program_inc_dec;
+            if (new_gmaj_program > 127 - step_program_inc_dec) new_gmaj_program = 127;
+            else new_gmaj_program += step_program_inc_dec;
 
-            set_gmaj_program();
+            prepare_gmaj_program();
         }
     }
 
