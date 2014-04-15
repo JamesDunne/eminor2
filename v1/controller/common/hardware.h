@@ -7,15 +7,26 @@
     NOTE: it is expected that 'types.h' is #included before this file
 */
 
-#define LEDS_MAX_ALPHAS 4
+// --------------- Compiler hacks:
+
+#define STATIC_ASSERT(cond,ident) typedef char _static_assert_##ident[(cond)?1:-1]
+#define COMPILE_ASSERT(cond) STATIC_ASSERT(cond,__LINE__)
+
+#ifndef __MCC18
+//#define rom
+#endif
 
 // --------------- LED read-out display functions:
+
+#define LEDS_MAX_ALPHAS 4
 
 // show 4 alphas on the 4-digit display
 extern void leds_show_4alphas(char text[LEDS_MAX_ALPHAS]);
 
 // show single digit on the single digit display
 extern void leds_show_1digit(u8 value);
+
+// --------------- Momentary toggle foot-switches and LEDs:
 
 #define FSB_PRESET_1 28
 #define FSB_PRESET_2 31
@@ -27,7 +38,6 @@ extern void leds_show_1digit(u8 value);
 #define FSB_CONTROL_3 2
 #define FSB_CONTROL_4 3
 
-// --------------- Momentary toggle foot-switches:
 #define FSM_PRESET_1	0x10000000
 #define FSM_PRESET_2	0x80000000
 #define FSM_PRESET_3	0x40000000
@@ -37,6 +47,15 @@ extern void leds_show_1digit(u8 value);
 #define FSM_CONTROL_2	0x00000002
 #define FSM_CONTROL_3	0x00000004
 #define FSM_CONTROL_4	0x00000008
+
+#define M_1 0x01U
+#define M_2 0x02U
+#define M_3 0x04U
+#define M_4 0x08U
+#define M_5 0x10U
+#define M_6 0x20U
+#define M_7 0x40U
+#define M_8 0x80U
 
 // FX button enable bitmasks:
 #define fxm_compressor  0x01
@@ -57,6 +76,9 @@ extern void leds_show_1digit(u8 value);
 #define fxb_reverb      5
 #define fxb_noisegate   6
 #define fxb_eq          7
+
+// MSB of the rjm[] indicates initial channel:
+#define m_channel_initial 0x80U
 
 // Poll up to 28 foot-switch toggles simultaneously.  PREV NEXT DEC  INC map to 28-31 bit positions.
 extern u32 fsw_poll(void);
@@ -105,3 +127,22 @@ extern void flash_store(u16 addr, u16 count, u8 *data);
 /* export */ void controller_init(void);
 /* export */ void controller_10msec_timer(void);
 /* export */ void controller_handle(void);
+
+// --------------- Non-standard / custom:
+
+// JSD's custom persistent data structures per program:
+
+// Program data structure loaded from / written to flash memory:
+struct program {
+    // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
+    char name[20];
+    // G-major effects enabled by default per channel (see fxm_*):
+    u8 fx[6];
+    // RJM program (0-127) assigned to each channel:
+    // 8th bit indicates that channel is the initial channel changed to when the program is activated.
+    u8 rjm[6];
+};
+
+// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
+// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
+COMPILE_ASSERT(sizeof(struct program) == 32);

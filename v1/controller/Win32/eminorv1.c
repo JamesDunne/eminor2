@@ -531,10 +531,80 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 // --------------- Flash memory interface:
 
-static u8 flash_memory[1024] = {
 #include "../common/flash_init.h"
-    0
-};
+
+const size_t flash_length = sizeof(struct program) * 128;
+
+void update_text_files() {
+    FILE *ft;
+
+    // Create flash.hex text file:
+    ft = fopen("flash.hex", "w");
+    for (int i = 0; i < flash_length; ++i) {
+        u8 d = ((u8 *)flash_memory)[i];
+        fprintf(ft, "%02X", d);
+    }
+    fclose(ft);
+
+    // Create flash_rom_init.h for #include in PIC project:
+    ft = fopen("..\\PIC\\flash_rom_init.h", "w");
+#if 0
+    for (int i = 0; i < flash_length; ++i) {
+        u8 d = ((u8 *)flash_memory)[i];
+        fprintf(ft, "0x%02X", d);
+
+        if ((i & 31) == 31) fprintf(ft, ",\n");
+        else if (i < flash_length - 1) fprintf(ft, ", ");
+    }
+#else
+    for (int i = 0; i < 128; ++i) {
+        struct program *p = &flash_memory[i];
+
+        // Write program name in 'c','h','a','r' literals:
+        int c;
+        for (c = 0; c < 20; ++c) {
+            if (p->name[c] == 0) break;
+            fprintf(ft, "'%c', ", p->name[c]);
+        }
+        for (; c < 20; ++c) {
+            fprintf(ft, "0, ");
+        }
+
+        for (c = 0; c < 6; ++c) {
+            fprintf(ft, "0x%02X, ", p->fx[c]);
+        }
+
+        for (c = 0; c < 6; ++c) {
+            fprintf(ft, "0x%02X", p->rjm[c]);
+            if (c < 6 - 1) fprintf(ft, ", ");
+        }
+
+        if (i < 128 - 1) fprintf(ft, ",\n");
+    }
+    fprintf(ft, "\n");
+#endif
+    fclose(ft);
+}
+
+
+FILE *open_or_create_flash_file() {
+    FILE *f;
+
+    f = fopen("flash.bin", "r+b");
+    if (f != NULL)
+        return f;
+
+    // Initialize new file with initial flash memory data:
+    f = fopen("flash.bin", "a+b");
+    fwrite(flash_memory, 1, flash_length, f);
+    fclose(f);
+
+    update_text_files();
+
+    // Reopen file for reading:
+    f = fopen("flash.bin", "r+b");
+    return f;
+}
 
 // Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
 void flash_load(u16 addr, u16 count, u8 *data) {
@@ -544,15 +614,7 @@ void flash_load(u16 addr, u16 count, u8 *data) {
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
     assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
 
-    f = fopen("flash.bin", "rb");
-    if (f == NULL) {
-        // Initialize new file with initial flash memory data:
-        f = fopen("flash.bin", "a+b");
-        fwrite(flash_memory, 1, 1024, f);
-        fclose(f);
-        // Reopen file for reading:
-        f = fopen("flash.bin", "rb");
-    }
+    f = open_or_create_flash_file();
     if (f == NULL) {
         memset(data, 0, count);
         return;
@@ -592,7 +654,10 @@ void flash_store(u16 addr, u16 count, u8 *data) {
     assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
 
     // Create file or append to it:
-    f = fopen("flash.bin", "a+b");
+    f = open_or_create_flash_file();
+    if (f == NULL) {
+        return;
+    }
 
     // Find file size:
     fseek(f, 0, SEEK_END);
@@ -609,9 +674,14 @@ void flash_store(u16 addr, u16 count, u8 *data) {
             fwrite(zeroes, 1, addr - p, f);
     }
 
+    // Seek to address to write:
     fseek(f, addr, SEEK_SET);
+    p = ftell(f);
+    assert(p == addr);
 
     size_t r = fwrite(data, 1, count, f);
     assert(r == count);
     fclose(f);
+
+    update_text_files();
 }

@@ -105,7 +105,7 @@ void load_program_state(void) {
     // Load effects on/off state data from persistent storage:
     flash_load((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
     for (i = 0; i < 6; ++i)
-    if (pr.rjm[i] & M_8) {
+    if (pr.rjm[i] & m_channel_initial) {
         rjm_channel = i;
         break;
     }
@@ -123,13 +123,13 @@ void load_program_state(void) {
 #endif
 }
 
-void store_program_state(void) {
+static void store_program_state(void) {
     // Store effects on/off state of current program:
     u8 i;
 
     // Update initial RJM channel bit and clear others:
     for (i = 0; i < 6; ++i)
-        pr.rjm[i] = (pr.rjm[i] & ~M_8) | (rjm_channel == i ? M_8 : 0);
+        pr.rjm[i] = (pr.rjm[i] & ~m_channel_initial) | (rjm_channel == i ? m_channel_initial : 0);
 
     // Store program state:
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
@@ -242,26 +242,26 @@ static void update_effects_MIDI_state(void) {
     }
 }
 
+static void rjm_activate() {
+    // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
+    midi_send_cmd1(0xC, rjm_midi_channel, (pr.rjm[rjm_channel] & ~m_channel_initial) + 4);
+
+    // Send MIDI effects enable commands and set effects LEDs:
+    update_effects_MIDI_state();
+
+    // Set only current program LED on bottom, preserve LEDs 7 and 8:
+    leds.bot.byte = (1 << rjm_channel) | (leds.bot.byte & (M_7 | M_8));
+
+    send_leds();
+}
+
 // Set RJM program to p (0-5)
 static void set_rjm_channel(u8 p) {
     assert(p < 6);
 
     rjm_channel = p;
 
-    // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
-    midi_send_cmd1(0xC, rjm_midi_channel, pr.rjm[p] & ~M_8);
-
-    // Change to the g-major program:
-    midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
-    midi_gmaj_program = gmaj_program;
-
-    // Send MIDI effects enable commands and set effects LEDs:
-    update_effects_MIDI_state();
-
-    // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds.bot.byte = (1 << p) | (leds.bot.byte & (M_7 | M_8));
-
-    send_leds();
+    rjm_activate();
 }
 
 // Set g-major program:
@@ -276,17 +276,7 @@ static void set_gmaj_program(void) {
     // Load new effect states:
     load_program_state();
 
-    // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
-    // NOTE(jsd): add 4 for personal raisins; first 4 programs are reserved for existing v1 controller.
-    midi_send_cmd1(0xC, rjm_midi_channel, rjm_channel + 4);
-
-    // Send MIDI effects enable commands and set effects LEDs:
-    update_effects_MIDI_state();
-
-    // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds.bot.byte = (1 << rjm_channel) | (leds.bot.byte & (M_7 | M_8));
-
-    send_leds();
+    rjm_activate();
 }
 
 // Determine if a footswitch was pressed
@@ -344,8 +334,6 @@ void controller_init(void) {
     lcd_update_row(1, "");
 #endif
 
-    // Load new channel effect states:
-    load_program_state();
     // Initialize program:
     set_gmaj_program();
 }
