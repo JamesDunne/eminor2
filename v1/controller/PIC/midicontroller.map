@@ -1,5 +1,5 @@
 MPLINK 4.48, Linker
-Linker Map File - Created Tue Apr 15 19:03:48 2014
+Linker Map File - Created Tue Apr 15 21:14:27 2014
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -10,77 +10,77 @@ Linker Map File - Created Tue Apr 15 19:03:48 2014
       InterruptVectorHigh       code   0x000a08    program   0x000006
                 main_code       code   0x000a2a    program   0x0000ae
                    .cinit    romdata   0x000ad8    program   0x00000e
-.code_controller-simple.o       code   0x000ae6    program   0x000c8c
-              .code_usb.o       code   0x001772    program   0x00071e
-          .code_hwcalls.o       code   0x001e90    program   0x0004ac
-             .code_leds.o       code   0x00233c    program   0x0002ec
-        .code_usbapplet.o       code   0x002628    program   0x000256
-            .code_rs232.o       code   0x00287e    program   0x00024e
-              .code_hid.o       code   0x002acc    program   0x00021c
-   .romdata_usbdescript.o    romdata   0x002ce8    program   0x000128
-        .romdata_tables.o    romdata   0x002e10    program   0x000100
-     .code_writeprogmem.o       code   0x002f10    program   0x0000ca
-          .code_intslct.o       code   0x002fda    program   0x0000aa
-         .code_MidiComm.o       code   0x003084    program   0x00009c
-             .code_init.o       code   0x003120    program   0x000070
-           .code_eeprom.o       code   0x003190    program   0x000056
-          .code_systick.o       code   0x0031e6    program   0x000044
-         .code_exppedal.o       code   0x00322a    program   0x00003a
-                    .code       code   0x003264    program   0x00002e
-          .romdata_leds.o    romdata   0x003292    program   0x000024
-             _startup_scn       code   0x0032b6    program   0x000022
-         .code_fxd0808u.o       code   0x0032d8    program   0x00001c
-.romdata_controller-simple.o    romdata   0x0032f4    program   0x000000
-        .idata_eeprom.o_i    romdata   0x0032f4    program   0x000000
-      .idata_fxd0808u.o_i    romdata   0x0032f4    program   0x000000
-        .romdata_eeprom.o    romdata   0x0032f4    program   0x000000
-      .romdata_MidiComm.o    romdata   0x0032f4    program   0x000000
-       .romdata_systick.o    romdata   0x0032f4    program   0x000000
-          .idata_leds.o_i    romdata   0x0032f4    program   0x000000
-      .romdata_fxd0808u.o    romdata   0x0032f4    program   0x000000
-       .idata_systick.o_i    romdata   0x0032f4    program   0x000000
-        .idata_tables.o_i    romdata   0x0032f4    program   0x000000
-      .romdata_exppedal.o    romdata   0x0032f4    program   0x000000
-      .idata_exppedal.o_i    romdata   0x0032f4    program   0x000000
-  .idata_writeprogmem.o_i    romdata   0x0032f4    program   0x000000
-  .romdata_writeprogmem.o    romdata   0x0032f4    program   0x000000
-.idata_controller-simple.o_i    romdata   0x0032f4    program   0x00000f
-          .idata_main.o_i    romdata   0x0032f4    program   0x000000
-          .romdata_main.o    romdata   0x0032f4    program   0x000000
-       .idata_startup.o_i    romdata   0x0032f4    program   0x000000
-       .romdata_startup.o    romdata   0x0032f4    program   0x000000
-           .idata_usb.o_i    romdata   0x0032f4    program   0x000000
-           .romdata_usb.o    romdata   0x0032f4    program   0x000000
-     .idata_usbapplet.o_i    romdata   0x0032f4    program   0x000000
-     .romdata_usbapplet.o    romdata   0x0032f4    program   0x000000
-   .idata_usbdescript.o_i    romdata   0x0032f4    program   0x000000
-         .idata_rs232.o_i    romdata   0x0032f4    program   0x000000
-         .romdata_rs232.o    romdata   0x0032f4    program   0x000000
-           .idata_hid.o_i    romdata   0x0032f4    program   0x000000
-           .romdata_hid.o    romdata   0x0032f4    program   0x000000
-       .romdata_vectors.o    romdata   0x0032f4    program   0x000000
-       .idata_vectors.o_i    romdata   0x0032f4    program   0x000000
-       .romdata_hwcalls.o    romdata   0x0032f4    program   0x000000
-       .idata_hwcalls.o_i    romdata   0x0032f4    program   0x000000
-          .romdata_init.o    romdata   0x0032f4    program   0x000000
-          .idata_init.o_i    romdata   0x0032f4    program   0x000000
-       .romdata_intslct.o    romdata   0x0032f4    program   0x000000
-       .idata_intslct.o_i    romdata   0x0032f4    program   0x000000
-       .romdata_ram_def.o    romdata   0x0032f4    program   0x000000
-       .idata_ram_def.o_i    romdata   0x0032f4    program   0x000000
-      .idata_MidiComm.o_i    romdata   0x003303    program   0x000000
-      .code_usbdescript.o       code   0x003304    program   0x000000
-          .code_ram_def.o       code   0x003304    program   0x000000
-           .code_tables.o       code   0x003304    program   0x000000
-          .code_startup.o       code   0x003304    program   0x000000
-             .code_main.o       code   0x003304    program   0x000000
-          .code_vectors.o       code   0x003304    program   0x000000
+.code_controller-simple.o       code   0x000ae6    program   0x000ccc
+              .code_usb.o       code   0x0017b2    program   0x00071e
+          .code_hwcalls.o       code   0x001ed0    program   0x0004ac
+             .code_leds.o       code   0x00237c    program   0x0002ec
+        .code_usbapplet.o       code   0x002668    program   0x000256
+            .code_rs232.o       code   0x0028be    program   0x00024e
+              .code_hid.o       code   0x002b0c    program   0x00021c
+   .romdata_usbdescript.o    romdata   0x002d28    program   0x000128
+        .romdata_tables.o    romdata   0x002e50    program   0x000100
+     .code_writeprogmem.o       code   0x002f50    program   0x0000ca
+          .code_intslct.o       code   0x00301a    program   0x0000aa
+         .code_MidiComm.o       code   0x0030c4    program   0x00009c
+             .code_init.o       code   0x003160    program   0x000070
+           .code_eeprom.o       code   0x0031d0    program   0x000056
+          .code_systick.o       code   0x003226    program   0x000044
+         .code_exppedal.o       code   0x00326a    program   0x00003a
+                    .code       code   0x0032a4    program   0x00002e
+          .romdata_leds.o    romdata   0x0032d2    program   0x000024
+             _startup_scn       code   0x0032f6    program   0x000022
+         .code_fxd0808u.o       code   0x003318    program   0x00001c
+.romdata_controller-simple.o    romdata   0x003334    program   0x000000
+        .idata_eeprom.o_i    romdata   0x003334    program   0x000000
+      .idata_fxd0808u.o_i    romdata   0x003334    program   0x000000
+        .romdata_eeprom.o    romdata   0x003334    program   0x000000
+      .romdata_MidiComm.o    romdata   0x003334    program   0x000000
+       .romdata_systick.o    romdata   0x003334    program   0x000000
+          .idata_leds.o_i    romdata   0x003334    program   0x000000
+      .romdata_fxd0808u.o    romdata   0x003334    program   0x000000
+       .idata_systick.o_i    romdata   0x003334    program   0x000000
+        .idata_tables.o_i    romdata   0x003334    program   0x000000
+      .romdata_exppedal.o    romdata   0x003334    program   0x000000
+      .idata_exppedal.o_i    romdata   0x003334    program   0x000000
+  .idata_writeprogmem.o_i    romdata   0x003334    program   0x000000
+  .romdata_writeprogmem.o    romdata   0x003334    program   0x000000
+.idata_controller-simple.o_i    romdata   0x003334    program   0x000010
+          .idata_main.o_i    romdata   0x003334    program   0x000000
+          .romdata_main.o    romdata   0x003334    program   0x000000
+       .idata_startup.o_i    romdata   0x003334    program   0x000000
+       .romdata_startup.o    romdata   0x003334    program   0x000000
+           .idata_usb.o_i    romdata   0x003334    program   0x000000
+           .romdata_usb.o    romdata   0x003334    program   0x000000
+     .idata_usbapplet.o_i    romdata   0x003334    program   0x000000
+     .romdata_usbapplet.o    romdata   0x003334    program   0x000000
+   .idata_usbdescript.o_i    romdata   0x003334    program   0x000000
+         .idata_rs232.o_i    romdata   0x003334    program   0x000000
+         .romdata_rs232.o    romdata   0x003334    program   0x000000
+           .idata_hid.o_i    romdata   0x003334    program   0x000000
+           .romdata_hid.o    romdata   0x003334    program   0x000000
+       .romdata_vectors.o    romdata   0x003334    program   0x000000
+       .idata_vectors.o_i    romdata   0x003334    program   0x000000
+       .romdata_hwcalls.o    romdata   0x003334    program   0x000000
+       .idata_hwcalls.o_i    romdata   0x003334    program   0x000000
+          .romdata_init.o    romdata   0x003334    program   0x000000
+          .idata_init.o_i    romdata   0x003334    program   0x000000
+       .romdata_intslct.o    romdata   0x003334    program   0x000000
+       .idata_intslct.o_i    romdata   0x003334    program   0x000000
+       .romdata_ram_def.o    romdata   0x003334    program   0x000000
+       .idata_ram_def.o_i    romdata   0x003334    program   0x000000
+      .idata_MidiComm.o_i    romdata   0x003344    program   0x000000
+      .code_usbdescript.o       code   0x003344    program   0x000000
+          .code_ram_def.o       code   0x003344    program   0x000000
+           .code_tables.o       code   0x003344    program   0x000000
+          .code_startup.o       code   0x003344    program   0x000000
+             .code_main.o       code   0x003344    program   0x000000
+          .code_vectors.o       code   0x003344    program   0x000000
               ROMSAVEDATA    romdata   0x004000    program   0x001fff
                 MATH_DATA      udata   0x000000       data   0x000010
                  .tmpdata      udata   0x000010       data   0x000008
                 accessram      udata   0x000018       data   0x000004
                      usb5      udata   0x000060       data   0x000011
-.idata_controller-simple.o      idata   0x000071       data   0x00000f
+.idata_controller-simple.o      idata   0x000071       data   0x000010
                      gpr1      udata   0x000100       data   0x0000c5
 .udata_controller-simple.o      udata   0x0001c5       data   0x00002e
        .udata_usbapplet.o      udata   0x0001f3       data   0x000001
@@ -136,96 +136,96 @@ Linker Map File - Created Tue Apr 15 19:03:48 2014
                             0x000008    0x00000d      
                             0x000a00    0x000a05      
                             0x000a08    0x000a0d      
-                            0x000a2a    0x003302      
+                            0x000a2a    0x003343      
                             0x004000    0x005ffe      
-            18672 out of 30530 program addresses used, program memory utilization is 61%
+            18737 out of 30530 program addresses used, program memory utilization is 61%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-           ADC_CONVERSION   0x001e90    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-             AllDigitsOff   0x002386    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-              AsciiTo7Seg   0x002576    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-                CLEAR_RAM   0x003264    program     extern C:\git\eminor2\v1\controller\PIC\config.asm
-          ClassReqHandler   0x002e0e    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-               ClearArray   0x001e66    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-                   EERead   0x003190    program     extern C:\git\eminor2\v1\controller\PIC\eeprom.c
-                  EEWrite   0x0031ae    program     extern C:\git\eminor2\v1\controller\PIC\eeprom.c
-EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e10    program     extern C:\git\eminor2\v1\controller\PIC\tables.c
-             EraseProgMem   0x002f7e    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
-             ExpPedalRead   0x00322a    program     extern C:\git\eminor2\v1\controller\PIC\exppedal.c
-                 FXD0808U   0x0032d8    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\fxd0808u.c
-      HIDGetReportHandler   0x002632    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
-                HIDInitEP   0x002bca    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
-              HIDRxReport   0x002c68    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
-      HIDSetReportHandler   0x002628    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
-              HIDTxReport   0x002bf4    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
-              HandleDigit   0x0023a2    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-     InterruptHandlerHigh   0x002fda    program     extern C:\git\eminor2\v1\controller\PIC\intslct.c
+           ADC_CONVERSION   0x001ed0    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+             AllDigitsOff   0x0023c6    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+              AsciiTo7Seg   0x0025b6    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+                CLEAR_RAM   0x0032a4    program     extern C:\git\eminor2\v1\controller\PIC\config.asm
+          ClassReqHandler   0x002e4e    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+               ClearArray   0x001ea6    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+                   EERead   0x0031d0    program     extern C:\git\eminor2\v1\controller\PIC\eeprom.c
+                  EEWrite   0x0031ee    program     extern C:\git\eminor2\v1\controller\PIC\eeprom.c
+EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e50    program     extern C:\git\eminor2\v1\controller\PIC\tables.c
+             EraseProgMem   0x002fbe    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+             ExpPedalRead   0x00326a    program     extern C:\git\eminor2\v1\controller\PIC\exppedal.c
+                 FXD0808U   0x003318    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\fxd0808u.c
+      HIDGetReportHandler   0x002672    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
+                HIDInitEP   0x002c0a    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
+              HIDRxReport   0x002ca8    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
+      HIDSetReportHandler   0x002668    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
+              HIDTxReport   0x002c34    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
+              HandleDigit   0x0023e2    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+     InterruptHandlerHigh   0x00301a    program     extern C:\git\eminor2\v1\controller\PIC\intslct.c
       InterruptVectorHigh   0x000a08    program     extern C:\git\eminor2\v1\controller\PIC\intslct.c
-          LettersSegTable   0x00329c    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-        MIDI_COMM_ROUTINE   0x003084    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
-             MIDI_ENQUEUE   0x0030ea    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
-                MfrString   0x002d20    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-          NumbersSegTable   0x003292    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-     PROCESS_COMM_REQUEST   0x00287e    program     extern C:\git\eminor2\v1\controller\PIC\rs232.c
-                PrdString   0x002d38    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-             Process7Segs   0x00233c    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-ProcessGenericTransferRead   0x002650    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
-ProcessGenericTransferWrite   0x0027bc    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
-                 RAMCLEAR   0x0032c6    program     static                          
-                RAMCLEAR1   0x003268    program     static C:\git\eminor2\v1\controller\PIC\config.asm
-     RESET_MIDI_TX_BUFFER   0x003116    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
+          LettersSegTable   0x0032dc    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+        MIDI_COMM_ROUTINE   0x0030c4    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
+             MIDI_ENQUEUE   0x00312a    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
+                MfrString   0x002d60    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+          NumbersSegTable   0x0032d2    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+     PROCESS_COMM_REQUEST   0x0028be    program     extern C:\git\eminor2\v1\controller\PIC\rs232.c
+                PrdString   0x002d78    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+             Process7Segs   0x00237c    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+ProcessGenericTransferRead   0x002690    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
+ProcessGenericTransferWrite   0x0027fc    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
+                 RAMCLEAR   0x003306    program     static                          
+                RAMCLEAR1   0x0032a8    program     static C:\git\eminor2\v1\controller\PIC\config.asm
+     RESET_MIDI_TX_BUFFER   0x003156    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
              ROM_SAVEDATA   0x004000    program     extern C:\git\eminor2\v1\controller\PIC\tables.c
-              ReadButtons   0x001f2a    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-                   ReadEE   0x002f92    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+              ReadButtons   0x001f6a    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+                   ReadEE   0x002fd2    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
            RealInitVector   0x000000    program     extern C:\git\eminor2\v1\controller\PIC\vectors.c
   RealInterruptVectorHigh   0x000008    program     extern C:\git\eminor2\v1\controller\PIC\vectors.c
-           Scroll7SegDisp   0x002626    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-       SendDataToShiftReg   0x001eda    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-                SerialNum   0x002d64    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+           Scroll7SegDisp   0x002666    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+       SendDataToShiftReg   0x001f1a    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+                SerialNum   0x002da4    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
                ServiceUSB   0x000aca    program     extern C:\git\eminor2\v1\controller\PIC\main.c
-            SetDipAddress   0x001fc6    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-             SetDispAscii   0x002448    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-               StartWrite   0x002f10    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
-        SystemTimeRoutine   0x0031e6    program     extern C:\git\eminor2\v1\controller\PIC\systick.c
-                    TXENQ   0x002aa0    program     extern C:\git\eminor2\v1\controller\PIC\rs232.c
-        USBCheckBusStatus   0x001d2a    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-       USBCheckHIDRequest   0x002acc    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
-       USBCheckStdRequest   0x001772    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-         USBCtrlEPService   0x001a54    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
- USBCtrlEPServiceComplete   0x001c8c    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-      USBCtrlTrfInHandler   0x001afe    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-     USBCtrlTrfOutHandler   0x001ae0    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-      USBCtrlTrfRxService   0x001c12    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-   USBCtrlTrfSetupHandler   0x001a78    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-      USBCtrlTrfTxService   0x001b3e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-         USBDriverService   0x001d62    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-          USBErrorHandler   0x001e24    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-         USBModuleDisable   0x001d54    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-          USBModuleEnable   0x001d46    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-USBPrepareForNextSetupTrf   0x001d10    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-  USBProtocolResetHandler   0x001e28    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-          USBRemoteWakeup   0x001df0    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-            USBSoftDetach   0x001d5e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-          USBStallHandler   0x001e18    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-  USBStdFeatureReqHandler   0x0019b2    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-      USBStdGetDscHandler   0x001820    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-   USBStdGetStatusHandler   0x001924    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-      USBStdSetCfgHandler   0x0018da    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-               USBSuspend   0x001dde    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-       USBWakeFromSuspend   0x001de8    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-               USB_CD_Ptr   0x002e02    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-               USB_SD_Ptr   0x002e06    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-          USB_SOF_Handler   0x001e14    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-               UpdateLeds   0x00203e    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-                  WriteEE   0x002fae    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
-             WriteProgMem   0x002f1c    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
-           ___do_lbl00002   0x0031d6    program     static                          
-           ___do_lbl00003   0x0031da    program     static                          
-           ___do_lbl00004   0x0031d4    program     static                          
+            SetDipAddress   0x002006    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+             SetDispAscii   0x002488    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+               StartWrite   0x002f50    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+        SystemTimeRoutine   0x003226    program     extern C:\git\eminor2\v1\controller\PIC\systick.c
+                    TXENQ   0x002ae0    program     extern C:\git\eminor2\v1\controller\PIC\rs232.c
+        USBCheckBusStatus   0x001d6a    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+       USBCheckHIDRequest   0x002b0c    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
+       USBCheckStdRequest   0x0017b2    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+         USBCtrlEPService   0x001a94    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+ USBCtrlEPServiceComplete   0x001ccc    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+      USBCtrlTrfInHandler   0x001b3e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+     USBCtrlTrfOutHandler   0x001b20    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+      USBCtrlTrfRxService   0x001c52    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+   USBCtrlTrfSetupHandler   0x001ab8    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+      USBCtrlTrfTxService   0x001b7e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+         USBDriverService   0x001da2    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+          USBErrorHandler   0x001e64    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+         USBModuleDisable   0x001d94    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+          USBModuleEnable   0x001d86    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+USBPrepareForNextSetupTrf   0x001d50    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+  USBProtocolResetHandler   0x001e68    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+          USBRemoteWakeup   0x001e30    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+            USBSoftDetach   0x001d9e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+          USBStallHandler   0x001e58    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+  USBStdFeatureReqHandler   0x0019f2    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+      USBStdGetDscHandler   0x001860    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+   USBStdGetStatusHandler   0x001964    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+      USBStdSetCfgHandler   0x00191a    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+               USBSuspend   0x001e1e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+       USBWakeFromSuspend   0x001e28    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+               USB_CD_Ptr   0x002e42    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+               USB_SD_Ptr   0x002e46    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+          USB_SOF_Handler   0x001e54    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+               UpdateLeds   0x00207e    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+                  WriteEE   0x002fee    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+             WriteProgMem   0x002f5c    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+           ___do_lbl00002   0x003216    program     static                          
+           ___do_lbl00003   0x00321a    program     static                          
+           ___do_lbl00004   0x003214    program     static                          
           ___for_lbl00002   0x000ab4    program     static                          
           ___for_lbl00003   0x000ab6    program     static                          
           ___for_lbl00012   0x000a46    program     static                          
@@ -239,63 +239,63 @@ USBPrepareForNextSetupTrf   0x001d10    program     extern C:\git\eminor2\v1\con
            ___if_lbl00011   0x000ab0    program     static                          
        ___return_lbl00000   0x000004    program     static                          
        ___return_lbl00000   0x000a0c    program     static                          
-       ___return_lbl00000   0x0032f2    program     static                          
+       ___return_lbl00000   0x003332    program     static                          
        ___return_lbl00000   0x000a04    program     static                          
-       ___return_lbl00001   0x0032d6    program     static                          
-       ___return_lbl00001   0x0031de    program     static                          
+       ___return_lbl00001   0x003316    program     static                          
+       ___return_lbl00001   0x00321e    program     static                          
        ___return_lbl00001   0x000ab6    program     static                          
        ___return_lbl00001   0x00000c    program     static                          
-       ___return_lbl00132   0x001e88    program     static                          
-        ___while_lbl00133   0x001e7a    program     static                          
-        ___while_lbl00134   0x001e88    program     static                          
-            __zero_memory   0x003272    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+       ___return_lbl00132   0x001ec8    program     static                          
+        ___while_lbl00133   0x001eba    program     static                          
+        ___while_lbl00134   0x001ec8    program     static                          
+            __zero_memory   0x0032b2    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    _entry   0x000a00    program     extern C:\git\eminor2\v1\controller\PIC\startup.c
-                 _startup   0x0032b6    program     extern C:\git\eminor2\v1\controller\PIC\startup.c
-                 activate   0x000fa2    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-              button_held   0x000c62    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-           button_pressed   0x000bd2    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-          button_released   0x000cbe    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-                    cfg01   0x002cfa    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-                compare_l   0x003288    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-        control_toggleidx   0x0010fc    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-  controller_10msec_timer   0x00128e    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-        controller_handle   0x001374    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-          controller_init   0x00124c    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-               device_dsc   0x002ce8    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-             disable_mute   0x000f74    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-                  endloop   0x0032ee    program     static                          
-                expr_poll   0x0020d0    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-               flash_load   0x0020d6    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-              flash_store   0x002170    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-          fsw_led_disable   0x00209c    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-           fsw_led_enable   0x002074    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-       fsw_led_set_active   0x002048    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-                 fsw_poll   0x001fea    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-              gmaj_cc_set   0x000d4e    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-           gmaj_cc_toggle   0x0011be    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-              hid_rpt_UPS   0x002d86    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-                     init   0x003120    program     extern C:\git\eminor2\v1\controller\PIC\init.c
-         leds_show_1digit   0x00254e    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-        leds_show_4alphas   0x0024c6    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-                     loop   0x0032e0    program     static                          
-                     loop   0x0032d0    program     static                          
-                   loop_h   0x003280    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   loop_l   0x00328a    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 _startup   0x0032f6    program     extern C:\git\eminor2\v1\controller\PIC\startup.c
+                 activate   0x000fc0    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+              button_held   0x000c80    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+           button_pressed   0x000bf0    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+          button_released   0x000cdc    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+                    cfg01   0x002d3a    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+                compare_l   0x0032c8    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+        control_toggleidx   0x00113a    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+  controller_10msec_timer   0x0012cc    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+        controller_handle   0x0013b2    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+          controller_init   0x00128a    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+               device_dsc   0x002d28    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+             disable_mute   0x000f92    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+                  endloop   0x00332e    program     static                          
+                expr_poll   0x002110    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+               flash_load   0x002116    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+              flash_store   0x0021b0    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+          fsw_led_disable   0x0020dc    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+           fsw_led_enable   0x0020b4    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+       fsw_led_set_active   0x002088    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+                 fsw_poll   0x00202a    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+              gmaj_cc_set   0x000d6c    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+           gmaj_cc_toggle   0x0011fc    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+              hid_rpt_UPS   0x002dc6    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+                     init   0x003160    program     extern C:\git\eminor2\v1\controller\PIC\init.c
+         leds_show_1digit   0x00258e    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+        leds_show_4alphas   0x002506    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+                     loop   0x003320    program     static                          
+                     loop   0x003310    program     static                          
+                   loop_h   0x0032c0    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   loop_l   0x0032ca    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      main   0x000a2c    program     extern C:\git\eminor2\v1\controller\PIC\main.c
-           midi_send_byte   0x001ebe    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-           midi_send_cmd1   0x0022c0    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-           midi_send_cmd2   0x0022f8    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-     prepare_gmaj_program   0x001092    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-             reset_timer4   0x00121a    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-                    sd000   0x002d1c    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-          set_rjm_channel   0x000f8c    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-          set_toggle_leds   0x000d7c    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+           midi_send_byte   0x001efe    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+           midi_send_cmd1   0x002300    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+           midi_send_cmd2   0x002338    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+     prepare_gmaj_program   0x0010d0    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+             reset_timer4   0x001258    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+                    sd000   0x002d5c    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+          set_rjm_channel   0x000faa    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+          set_toggle_leds   0x000d9a    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
              show_program   0x000ae6    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-              slider_poll   0x0020ca    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-      store_program_state   0x00100c    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+              slider_poll   0x00210a    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+      store_program_state   0x00104a    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
                  testcrap   0x000a2a    program     extern C:\git\eminor2\v1\controller\PIC\main.c
-update_effects_MIDI_state   0x000e8e    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-               zero_block   0x003280    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+update_effects_MIDI_state   0x000eac    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+               zero_block   0x0032c0    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    ADCON0   0x000fc2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                ADCON0bits   0x000fc2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    ADCON1   0x000fc1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -597,15 +597,15 @@ update_effects_MIDI_state   0x000e8e    program     static C:\git\eminor2\v1\con
                   __REMB1   0x000002       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                   __REMB2   0x000001       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                   __REMB3   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
-                  __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\usb.c
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\usbapplet.c
+                  __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\usb.c
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\hid.c
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\hwcalls.c
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\leds.c
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\writeprogmem.c
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\common\controller-simple.c
           active_protocol   0x00006f       data     extern C:\git\eminor2\v1\controller\PIC\hid.c
-     control4_button_mask   0x00007c       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+     control4_button_mask   0x00007d       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
      control_press_values   0x0001c5       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
    ctrl_trf_session_owner   0x000065       data     extern C:\git\eminor2\v1\controller\PIC\usb.c
            ctrl_trf_state   0x000064       data     extern C:\git\eminor2\v1\controller\PIC\usb.c
@@ -619,21 +619,22 @@ update_effects_MIDI_state   0x000e8e    program     static C:\git\eminor2\v1\con
            hid_report_out   0x000490       data     extern C:\git\eminor2\v1\controller\PIC\usb.c
            hid_rpt_rx_len   0x000070       data     extern C:\git\eminor2\v1\controller\PIC\hid.c
                 idle_rate   0x00006e       data     extern C:\git\eminor2\v1\controller\PIC\hid.c
-              mute_toggle   0x00007a       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-         new_gmaj_program   0x000074       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-          new_rjm_channel   0x000073       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+              mute_toggle   0x00007b       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+         new_gmaj_program   0x000075       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+          new_rjm_channel   0x000074       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+           old_rjm_actual   0x000073       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
                      pDst   0x000068       data     extern C:\git\eminor2\v1\controller\PIC\usb.c
                      pSrc   0x000066       data     extern C:\git\eminor2\v1\controller\PIC\usb.c
                        pr   0x0001d3       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
               rjm_channel   0x000071       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-                   stored   0x000079       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+                   stored   0x00007a       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
                   sw_curr   0x0001cb       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
                   sw_last   0x0001cf       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-              switch_mode   0x000075       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-               tap_toggle   0x00007b       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-                timer_alt   0x000078       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-           timer_control4   0x000076       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-    timer_control4_enable   0x000077       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+              switch_mode   0x000076       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+               tap_toggle   0x00007c       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+                timer_alt   0x000079       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+           timer_control4   0x000077       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+    timer_control4_enable   0x000078       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
            usb_active_cfg   0x000062       data     extern C:\git\eminor2\v1\controller\PIC\usb.c
              usb_alt_intf   0x000063       data     extern C:\git\eminor2\v1\controller\PIC\usb.c
          usb_device_state   0x000060       data     extern C:\git\eminor2\v1\controller\PIC\usb.c
@@ -669,132 +670,132 @@ update_effects_MIDI_state   0x000e8e    program     static C:\git\eminor2\v1\con
        ___return_lbl00001   0x000ab6    program     static                          
                ServiceUSB   0x000aca    program     extern C:\git\eminor2\v1\controller\PIC\main.c
              show_program   0x000ae6    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-           button_pressed   0x000bd2    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-              button_held   0x000c62    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-          button_released   0x000cbe    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-              gmaj_cc_set   0x000d4e    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-          set_toggle_leds   0x000d7c    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-update_effects_MIDI_state   0x000e8e    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-             disable_mute   0x000f74    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-          set_rjm_channel   0x000f8c    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-                 activate   0x000fa2    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-      store_program_state   0x00100c    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-     prepare_gmaj_program   0x001092    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-        control_toggleidx   0x0010fc    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-           gmaj_cc_toggle   0x0011be    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-             reset_timer4   0x00121a    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
-          controller_init   0x00124c    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-  controller_10msec_timer   0x00128e    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-        controller_handle   0x001374    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-       USBCheckStdRequest   0x001772    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-      USBStdGetDscHandler   0x001820    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-      USBStdSetCfgHandler   0x0018da    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-   USBStdGetStatusHandler   0x001924    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-  USBStdFeatureReqHandler   0x0019b2    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-         USBCtrlEPService   0x001a54    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-   USBCtrlTrfSetupHandler   0x001a78    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-     USBCtrlTrfOutHandler   0x001ae0    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-      USBCtrlTrfInHandler   0x001afe    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-      USBCtrlTrfTxService   0x001b3e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-      USBCtrlTrfRxService   0x001c12    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
- USBCtrlEPServiceComplete   0x001c8c    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-USBPrepareForNextSetupTrf   0x001d10    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-        USBCheckBusStatus   0x001d2a    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-          USBModuleEnable   0x001d46    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-         USBModuleDisable   0x001d54    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-            USBSoftDetach   0x001d5e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-         USBDriverService   0x001d62    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-               USBSuspend   0x001dde    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-       USBWakeFromSuspend   0x001de8    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-          USBRemoteWakeup   0x001df0    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-          USB_SOF_Handler   0x001e14    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-          USBStallHandler   0x001e18    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-          USBErrorHandler   0x001e24    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-  USBProtocolResetHandler   0x001e28    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-               ClearArray   0x001e66    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
-        ___while_lbl00133   0x001e7a    program     static                          
-        ___while_lbl00134   0x001e88    program     static                          
-       ___return_lbl00132   0x001e88    program     static                          
-           ADC_CONVERSION   0x001e90    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-           midi_send_byte   0x001ebe    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-       SendDataToShiftReg   0x001eda    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-              ReadButtons   0x001f2a    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-            SetDipAddress   0x001fc6    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-                 fsw_poll   0x001fea    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-               UpdateLeds   0x00203e    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-       fsw_led_set_active   0x002048    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-           fsw_led_enable   0x002074    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-          fsw_led_disable   0x00209c    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-              slider_poll   0x0020ca    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-                expr_poll   0x0020d0    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-               flash_load   0x0020d6    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-              flash_store   0x002170    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-           midi_send_cmd1   0x0022c0    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-           midi_send_cmd2   0x0022f8    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
-             Process7Segs   0x00233c    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-             AllDigitsOff   0x002386    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-              HandleDigit   0x0023a2    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-             SetDispAscii   0x002448    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-        leds_show_4alphas   0x0024c6    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-         leds_show_1digit   0x00254e    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-              AsciiTo7Seg   0x002576    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-           Scroll7SegDisp   0x002626    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-      HIDSetReportHandler   0x002628    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
-      HIDGetReportHandler   0x002632    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
-ProcessGenericTransferRead   0x002650    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
-ProcessGenericTransferWrite   0x0027bc    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
-     PROCESS_COMM_REQUEST   0x00287e    program     extern C:\git\eminor2\v1\controller\PIC\rs232.c
-                    TXENQ   0x002aa0    program     extern C:\git\eminor2\v1\controller\PIC\rs232.c
-       USBCheckHIDRequest   0x002acc    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
-                HIDInitEP   0x002bca    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
-              HIDTxReport   0x002bf4    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
-              HIDRxReport   0x002c68    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
-               device_dsc   0x002ce8    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-                    cfg01   0x002cfa    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-                    sd000   0x002d1c    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-                MfrString   0x002d20    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-                PrdString   0x002d38    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-                SerialNum   0x002d64    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-              hid_rpt_UPS   0x002d86    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-               USB_CD_Ptr   0x002e02    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-               USB_SD_Ptr   0x002e06    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-          ClassReqHandler   0x002e0e    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
-EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e10    program     extern C:\git\eminor2\v1\controller\PIC\tables.c
-               StartWrite   0x002f10    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
-             WriteProgMem   0x002f1c    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
-             EraseProgMem   0x002f7e    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
-                   ReadEE   0x002f92    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
-                  WriteEE   0x002fae    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
-     InterruptHandlerHigh   0x002fda    program     extern C:\git\eminor2\v1\controller\PIC\intslct.c
-        MIDI_COMM_ROUTINE   0x003084    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
-             MIDI_ENQUEUE   0x0030ea    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
-     RESET_MIDI_TX_BUFFER   0x003116    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
-                     init   0x003120    program     extern C:\git\eminor2\v1\controller\PIC\init.c
-                   EERead   0x003190    program     extern C:\git\eminor2\v1\controller\PIC\eeprom.c
-                  EEWrite   0x0031ae    program     extern C:\git\eminor2\v1\controller\PIC\eeprom.c
-           ___do_lbl00004   0x0031d4    program     static                          
-           ___do_lbl00002   0x0031d6    program     static                          
-           ___do_lbl00003   0x0031da    program     static                          
-       ___return_lbl00001   0x0031de    program     static                          
-        SystemTimeRoutine   0x0031e6    program     extern C:\git\eminor2\v1\controller\PIC\systick.c
-             ExpPedalRead   0x00322a    program     extern C:\git\eminor2\v1\controller\PIC\exppedal.c
-                CLEAR_RAM   0x003264    program     extern C:\git\eminor2\v1\controller\PIC\config.asm
-                RAMCLEAR1   0x003268    program     static C:\git\eminor2\v1\controller\PIC\config.asm
-            __zero_memory   0x003272    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   loop_h   0x003280    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-               zero_block   0x003280    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                compare_l   0x003288    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   loop_l   0x00328a    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-          NumbersSegTable   0x003292    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-          LettersSegTable   0x00329c    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
-                 _startup   0x0032b6    program     extern C:\git\eminor2\v1\controller\PIC\startup.c
-                 RAMCLEAR   0x0032c6    program     static                          
-                     loop   0x0032d0    program     static                          
-       ___return_lbl00001   0x0032d6    program     static                          
-                 FXD0808U   0x0032d8    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\fxd0808u.c
-                     loop   0x0032e0    program     static                          
-                  endloop   0x0032ee    program     static                          
-       ___return_lbl00000   0x0032f2    program     static                          
+           button_pressed   0x000bf0    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+              button_held   0x000c80    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+          button_released   0x000cdc    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+              gmaj_cc_set   0x000d6c    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+          set_toggle_leds   0x000d9a    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+update_effects_MIDI_state   0x000eac    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+             disable_mute   0x000f92    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+          set_rjm_channel   0x000faa    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+                 activate   0x000fc0    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+      store_program_state   0x00104a    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+     prepare_gmaj_program   0x0010d0    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+        control_toggleidx   0x00113a    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+           gmaj_cc_toggle   0x0011fc    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+             reset_timer4   0x001258    program     static C:\git\eminor2\v1\controller\common\controller-simple.c
+          controller_init   0x00128a    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+  controller_10msec_timer   0x0012cc    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+        controller_handle   0x0013b2    program     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+       USBCheckStdRequest   0x0017b2    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+      USBStdGetDscHandler   0x001860    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+      USBStdSetCfgHandler   0x00191a    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+   USBStdGetStatusHandler   0x001964    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+  USBStdFeatureReqHandler   0x0019f2    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+         USBCtrlEPService   0x001a94    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+   USBCtrlTrfSetupHandler   0x001ab8    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+     USBCtrlTrfOutHandler   0x001b20    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+      USBCtrlTrfInHandler   0x001b3e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+      USBCtrlTrfTxService   0x001b7e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+      USBCtrlTrfRxService   0x001c52    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+ USBCtrlEPServiceComplete   0x001ccc    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+USBPrepareForNextSetupTrf   0x001d50    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+        USBCheckBusStatus   0x001d6a    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+          USBModuleEnable   0x001d86    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+         USBModuleDisable   0x001d94    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+            USBSoftDetach   0x001d9e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+         USBDriverService   0x001da2    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+               USBSuspend   0x001e1e    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+       USBWakeFromSuspend   0x001e28    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+          USBRemoteWakeup   0x001e30    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+          USB_SOF_Handler   0x001e54    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+          USBStallHandler   0x001e58    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+          USBErrorHandler   0x001e64    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+  USBProtocolResetHandler   0x001e68    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+               ClearArray   0x001ea6    program     extern C:\git\eminor2\v1\controller\PIC\usb.c
+        ___while_lbl00133   0x001eba    program     static                          
+        ___while_lbl00134   0x001ec8    program     static                          
+       ___return_lbl00132   0x001ec8    program     static                          
+           ADC_CONVERSION   0x001ed0    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+           midi_send_byte   0x001efe    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+       SendDataToShiftReg   0x001f1a    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+              ReadButtons   0x001f6a    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+            SetDipAddress   0x002006    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+                 fsw_poll   0x00202a    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+               UpdateLeds   0x00207e    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+       fsw_led_set_active   0x002088    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+           fsw_led_enable   0x0020b4    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+          fsw_led_disable   0x0020dc    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+              slider_poll   0x00210a    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+                expr_poll   0x002110    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+               flash_load   0x002116    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+              flash_store   0x0021b0    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+           midi_send_cmd1   0x002300    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+           midi_send_cmd2   0x002338    program     extern C:\git\eminor2\v1\controller\PIC\hwcalls.c
+             Process7Segs   0x00237c    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+             AllDigitsOff   0x0023c6    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+              HandleDigit   0x0023e2    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+             SetDispAscii   0x002488    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+        leds_show_4alphas   0x002506    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+         leds_show_1digit   0x00258e    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+              AsciiTo7Seg   0x0025b6    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+           Scroll7SegDisp   0x002666    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+      HIDSetReportHandler   0x002668    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
+      HIDGetReportHandler   0x002672    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
+ProcessGenericTransferRead   0x002690    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
+ProcessGenericTransferWrite   0x0027fc    program     extern C:\git\eminor2\v1\controller\PIC\usbapplet.c
+     PROCESS_COMM_REQUEST   0x0028be    program     extern C:\git\eminor2\v1\controller\PIC\rs232.c
+                    TXENQ   0x002ae0    program     extern C:\git\eminor2\v1\controller\PIC\rs232.c
+       USBCheckHIDRequest   0x002b0c    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
+                HIDInitEP   0x002c0a    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
+              HIDTxReport   0x002c34    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
+              HIDRxReport   0x002ca8    program     extern C:\git\eminor2\v1\controller\PIC\hid.c
+               device_dsc   0x002d28    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+                    cfg01   0x002d3a    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+                    sd000   0x002d5c    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+                MfrString   0x002d60    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+                PrdString   0x002d78    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+                SerialNum   0x002da4    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+              hid_rpt_UPS   0x002dc6    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+               USB_CD_Ptr   0x002e42    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+               USB_SD_Ptr   0x002e46    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+          ClassReqHandler   0x002e4e    program     extern C:\git\eminor2\v1\controller\PIC\usbdescript.c
+EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e50    program     extern C:\git\eminor2\v1\controller\PIC\tables.c
+               StartWrite   0x002f50    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+             WriteProgMem   0x002f5c    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+             EraseProgMem   0x002fbe    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+                   ReadEE   0x002fd2    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+                  WriteEE   0x002fee    program     extern C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+     InterruptHandlerHigh   0x00301a    program     extern C:\git\eminor2\v1\controller\PIC\intslct.c
+        MIDI_COMM_ROUTINE   0x0030c4    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
+             MIDI_ENQUEUE   0x00312a    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
+     RESET_MIDI_TX_BUFFER   0x003156    program     extern C:\git\eminor2\v1\controller\PIC\MidiComm.c
+                     init   0x003160    program     extern C:\git\eminor2\v1\controller\PIC\init.c
+                   EERead   0x0031d0    program     extern C:\git\eminor2\v1\controller\PIC\eeprom.c
+                  EEWrite   0x0031ee    program     extern C:\git\eminor2\v1\controller\PIC\eeprom.c
+           ___do_lbl00004   0x003214    program     static                          
+           ___do_lbl00002   0x003216    program     static                          
+           ___do_lbl00003   0x00321a    program     static                          
+       ___return_lbl00001   0x00321e    program     static                          
+        SystemTimeRoutine   0x003226    program     extern C:\git\eminor2\v1\controller\PIC\systick.c
+             ExpPedalRead   0x00326a    program     extern C:\git\eminor2\v1\controller\PIC\exppedal.c
+                CLEAR_RAM   0x0032a4    program     extern C:\git\eminor2\v1\controller\PIC\config.asm
+                RAMCLEAR1   0x0032a8    program     static C:\git\eminor2\v1\controller\PIC\config.asm
+            __zero_memory   0x0032b2    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   loop_h   0x0032c0    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+               zero_block   0x0032c0    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                compare_l   0x0032c8    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   loop_l   0x0032ca    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+          NumbersSegTable   0x0032d2    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+          LettersSegTable   0x0032dc    program     extern C:\git\eminor2\v1\controller\PIC\leds.c
+                 _startup   0x0032f6    program     extern C:\git\eminor2\v1\controller\PIC\startup.c
+                 RAMCLEAR   0x003306    program     static                          
+                     loop   0x003310    program     static                          
+       ___return_lbl00001   0x003316    program     static                          
+                 FXD0808U   0x003318    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\fxd0808u.c
+                     loop   0x003320    program     static                          
+                  endloop   0x00332e    program     static                          
+       ___return_lbl00000   0x003332    program     static                          
              ROM_SAVEDATA   0x004000    program     extern C:\git\eminor2\v1\controller\PIC\tables.c
                  __AARGB7   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                   __REMB3   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
@@ -819,11 +820,11 @@ EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e10    program     extern C:\git\eminor2\v1\
                 __FPFLAGS   0x00000f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\cmath18.asm
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\hwcalls.c
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\leds.c
+                  __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\writeprogmem.c
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\hid.c
-                  __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\usbapplet.c
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\usb.c
                   __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\common\controller-simple.c
-                  __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\writeprogmem.c
+                  __tmp_0   0x000010       data     static C:\git\eminor2\v1\controller\PIC\usbapplet.c
                CommFlags1   0x000018       data     extern C:\git\eminor2\v1\controller\PIC\ram_def.c
                 ArbFlags1   0x000019       data     extern C:\git\eminor2\v1\controller\PIC\ram_def.c
                 ArbFlags2   0x00001a       data     extern C:\git\eminor2\v1\controller\PIC\ram_def.c
@@ -843,16 +844,17 @@ EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e10    program     extern C:\git\eminor2\v1\
            hid_rpt_rx_len   0x000070       data     extern C:\git\eminor2\v1\controller\PIC\hid.c
               rjm_channel   0x000071       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
              gmaj_program   0x000072       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-          new_rjm_channel   0x000073       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-         new_gmaj_program   0x000074       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-              switch_mode   0x000075       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-           timer_control4   0x000076       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-    timer_control4_enable   0x000077       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-                timer_alt   0x000078       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-                   stored   0x000079       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-              mute_toggle   0x00007a       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-               tap_toggle   0x00007b       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
-     control4_button_mask   0x00007c       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+           old_rjm_actual   0x000073       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+          new_rjm_channel   0x000074       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+         new_gmaj_program   0x000075       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+              switch_mode   0x000076       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+           timer_control4   0x000077       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+    timer_control4_enable   0x000078       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+                timer_alt   0x000079       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+                   stored   0x00007a       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+              mute_toggle   0x00007b       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+               tap_toggle   0x00007c       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
+     control4_button_mask   0x00007d       data     extern C:\git\eminor2\v1\controller\common\controller-simple.c
               DispSegData   0x000100       data     extern C:\git\eminor2\v1\controller\PIC\ram_def.c
               ProgMemAddr   0x000105       data     extern C:\git\eminor2\v1\controller\PIC\ram_def.c
             ProgmemBuffer   0x000107       data     extern C:\git\eminor2\v1\controller\PIC\ram_def.c
@@ -890,23 +892,23 @@ EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e10    program     extern C:\git\eminor2\v1\
            hid_report_out   0x000490       data     extern C:\git\eminor2\v1\controller\PIC\usb.c
             hid_report_in   0x000498       data     extern C:\git\eminor2\v1\controller\PIC\usb.c
                   SPPDATA   0x000f62       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-               SPPCFGbits   0x000f63       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    SPPCFG   0x000f63       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+               SPPCFGbits   0x000f63       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                SPPEPSbits   0x000f64       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    SPPEPS   0x000f64       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                SPPCONbits   0x000f65       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    SPPCON   0x000f65       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                UFRMLbits   0x000f66       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     UFRML   0x000f66       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                UFRMLbits   0x000f66       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UFRM   0x000f66       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                    UFRMH   0x000f67       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 UFRMHbits   0x000f67       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                    UFRMH   0x000f67       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                       UIR   0x000f68       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   UIRbits   0x000f68       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                       UIE   0x000f69       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   UIEbits   0x000f69       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 UEIRbits   0x000f6a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEIR   0x000f6a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 UEIRbits   0x000f6a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEIEbits   0x000f6b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEIE   0x000f6b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 USTATbits   0x000f6c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -917,8 +919,8 @@ EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e10    program     extern C:\git\eminor2\v1\
                     UADDR   0x000f6e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UCFGbits   0x000f6f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UCFG   0x000f6f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     UEP0   0x000f70       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP0bits   0x000f70       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     UEP0   0x000f70       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP1   0x000f71       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP1bits   0x000f71       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP2   0x000f72       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -927,8 +929,8 @@ EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e10    program     extern C:\git\eminor2\v1\
                  UEP3bits   0x000f73       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP4   0x000f74       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP4bits   0x000f74       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 UEP5bits   0x000f75       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP5   0x000f75       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 UEP5bits   0x000f75       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP6bits   0x000f76       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP6   0x000f76       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP7bits   0x000f77       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -991,8 +993,8 @@ EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e10    program     extern C:\git\eminor2\v1\
                  DDREbits   0x000f96       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   OSCTUNE   0x000f9b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               OSCTUNEbits   0x000f9b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 PIE1bits   0x000f9d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      PIE1   0x000f9d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 PIE1bits   0x000f9d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      PIR1   0x000f9e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  PIR1bits   0x000f9e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      IPR1   0x000f9f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -1024,10 +1026,10 @@ EXPP_PEDAL_LINEAR_CONV_TABLE   0x002e10    program     extern C:\git\eminor2\v1\
                     CMCON   0x000fb4       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                CVRCONbits   0x000fb5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    CVRCON   0x000fb5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+               CCP1ASbits   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   ECCP1AS   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               ECCP1ASbits   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    CCP1AS   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-               CCP1ASbits   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   CCP1DEL   0x000fb7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               CCP1DELbits   0x000fb7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
              ECCP1DELbits   0x000fb7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm

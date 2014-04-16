@@ -74,18 +74,18 @@ struct program flash_memory[128] = {
         .fx = {
             (fxm_compressor),
             (fxm_compressor),
-            (fxm_noisegate),
-            (fxm_noisegate),
+            (0),
+            (fxm_delay),
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
         },
         .rjm = {
                 0,
                 1,
-                2 | m_channel_initial,
+                2,
                 3,
-                4,
-                5
+                2 | m_channel_initial,
+                3
             }
     },
 
@@ -200,8 +200,8 @@ struct program flash_memory[128] = {
         .fx = {
             (fxm_compressor),
             (fxm_compressor),
-            (fxm_compressor),
-            (fxm_compressor | fxm_delay),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq | fxm_delay),
             (fxm_compressor | fxm_eq),
             (fxm_compressor | fxm_eq | fxm_delay)
         },
@@ -240,12 +240,12 @@ struct program flash_memory[128] = {
     {
         .name = "Crawling in the Dark",
         .fx = {
-            (fxm_compressor | fxm_chorus | fxm_delay),
-            (fxm_compressor | fxm_chorus | fxm_delay),
-            (fxm_noisegate | fxm_chorus | fxm_delay),
-            (fxm_noisegate | fxm_chorus | fxm_delay),
+            (fxm_compressor),
+            (fxm_compressor | fxm_filter | fxm_delay),
+            (fxm_noisegate | fxm_filter | fxm_delay),
+            (fxm_noisegate | fxm_filter | fxm_delay),
             (fxm_noisegate),
-            (fxm_noisegate | fxm_chorus | fxm_delay)
+            (fxm_noisegate | fxm_filter | fxm_delay)
         },
         .rjm = {
                 0,
@@ -313,9 +313,9 @@ struct program flash_memory[128] = {
         .rjm = {
                 0,
                 1,
-                2 | m_channel_initial,
-                3,
                 2,
+                3,
+                2 | m_channel_initial,
                 3
             }
     },
@@ -326,16 +326,16 @@ struct program flash_memory[128] = {
         .fx = {
             (fxm_compressor),
             (fxm_compressor),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate | fxm_delay),
-            (fxm_noisegate | fxm_delay)
+            (0),
+            (0),
+            (fxm_delay),
+            (fxm_delay)
         },
         .rjm = {
                 0,
                 1,
-                2,
-                3,
+                4,
+                5,
                 4 | m_channel_initial,
                 5
             }
@@ -346,11 +346,11 @@ struct program flash_memory[128] = {
         .name = "In Bloom",
         .fx = {
             (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_delay | fxm_eq),
+            (fxm_compressor | fxm_eq | fxm_delay),
             (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_delay | fxm_eq),
+            (fxm_compressor | fxm_eq | fxm_delay),
             (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_delay | fxm_eq)
+            (fxm_compressor | fxm_eq | fxm_delay)
         },
         .rjm = {
                 0 | m_channel_initial,
@@ -410,17 +410,17 @@ struct program flash_memory[128] = {
         .fx = {
             (fxm_compressor),
             (fxm_compressor),
-            (fxm_compressor),
-            (fxm_compressor | fxm_delay),
-            (fxm_compressor),
-            (fxm_compressor | fxm_delay)
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq | fxm_delay),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq | fxm_delay)
         },
         .rjm = {
                 0,
                 1,
-                2 | m_channel_initial,
-                3,
                 2,
+                3,
+                2 | m_channel_initial,
                 3
             }
     },
@@ -460,9 +460,9 @@ struct program flash_memory[128] = {
         .rjm = {
                 0,
                 1,
-                2 | m_channel_initial,
-                3,
                 2,
+                3,
+                2 | m_channel_initial,
                 3
             }
     },

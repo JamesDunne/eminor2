@@ -22,7 +22,7 @@
     |      ||      ||
     /--------------------\
     |                    |
-    | [8 8 8 8] {\}  [8] |
+    | {\}    [8 8 8 8 8] |
     |                    |
     | (*)  (*)  (*)  (*) |
     | (o)  (o)  (o)  (o) |
@@ -35,8 +35,8 @@
 
     Alternate switch mode:
 
-    [ COMP] [ MUTE] [STORE] [ EXIT]
-    [  -5 ] [  -1 ] [  +1 ] [  +5 ]
+    [ COMP ] [ MUTE ] [STORE ] [ EXIT ]
+    [  -5  ] [  -1  ] [  +1  ] [  +5  ]
 
     Written by James S. Dunne
     Original: 2007-04-05
@@ -72,6 +72,7 @@ u32 sw_curr, sw_last;
 // Initial bad values to force setting on init:
 u8 rjm_channel = 255;
 u8 gmaj_program = 255;
+u8 old_rjm_actual = 255;
 
 // Initial desired values:
 u8 new_rjm_channel = 0;
@@ -120,7 +121,13 @@ static void show_program(void) {
     leds_show_4alphas(s);
 
     // Show the channel # in the single-digit display:
-    leds_show_1digit(new_rjm_channel + 1);
+    switch (new_rjm_channel) {
+        case 0: leds_show_1digit(1); break;
+        case 2: leds_show_1digit(2); break;
+        case 4: leds_show_1digit(3); break;
+        case 5: leds_show_1digit(4); break;
+        default: break;
+    }
 }
 
 // determine if a footswitch was pressed
@@ -190,14 +197,23 @@ static void set_rjm_channel(u8 idx) {
 
 // activate sends MIDI messages to update external devices to current state
 static void activate(void) {
-    // Nothing to do?
-    if ((new_rjm_channel == rjm_channel) && (new_gmaj_program == gmaj_program))
+    u8 new_rjm_actual = (pr.rjm[new_rjm_channel] & ~m_channel_initial) + 4;
+
+    if (new_rjm_channel != rjm_channel)
+        rjm_channel = new_rjm_channel;
+
+    // Update 7-segment displays:
+    show_program();
+    set_toggle_leds();
+
+    // Nothing to change?
+    if ((new_rjm_actual == old_rjm_actual) && (new_gmaj_program == gmaj_program))
         return;
 
     // Update RJM if we need to:
-    if (new_rjm_channel != rjm_channel) {
-        rjm_channel = new_rjm_channel;
-        midi_send_cmd1(0xC, rjm_midi_channel, (pr.rjm[rjm_channel] & ~m_channel_initial) + 4);
+    if (new_rjm_actual != old_rjm_actual) {
+        old_rjm_actual = new_rjm_actual;
+        midi_send_cmd1(0xC, rjm_midi_channel, new_rjm_actual);
     }
 
     // Update g-major if we need to:
@@ -212,11 +228,6 @@ static void activate(void) {
 
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
-
-    // Update 7-segment displays:
-    show_program();
-
-    set_toggle_leds();
 }
 
 static void store_program_state(void) {
