@@ -189,7 +189,7 @@ static void update_effects_MIDI_state(void) {
 }
 
 // Disable mute if enabled
-static void disable_mute() {
+static void disable_mute(void) {
     if (mute_toggle)
     {
         mute_toggle = 0x00;
@@ -211,10 +211,6 @@ static void activate(void) {
     // Update 7-segment displays:
     show_program();
     set_toggle_leds();
-
-    // Nothing to change?
-    if ((new_rjm_actual == old_rjm_actual) && (new_gmaj_program == gmaj_program))
-        return;
 
     // Update RJM if we need to:
     if (new_rjm_actual != old_rjm_actual) {
