@@ -60,6 +60,7 @@ file_032=.
 file_033=.
 file_034=.
 file_035=.
+file_036=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -97,6 +98,7 @@ file_032=no
 file_033=no
 file_034=no
 file_035=no
+file_036=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -134,6 +136,7 @@ file_032=no
 file_033=no
 file_034=no
 file_035=no
+file_036=no
 [FILE_INFO]
 file_000=main.c
 file_001=startup.c
@@ -170,7 +173,8 @@ file_031=..\common\hardware.h
 file_032=_TOOLS.H
 file_033=..\common\types.h
 file_034=a_micrdef.inc
-file_035=18f4455.lkr
+file_035=flash_rom_init.h
+file_036=18f4455.lkr
 [SUITE_INFO]
 suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 suite_state=

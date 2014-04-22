@@ -94,21 +94,27 @@ u8 mute_toggle = 0;
 u8 tap_toggle = 0;
 u32 control4_button_mask = 0;
 
+// right-aligns an integer in base 10 at s[i] and pads spaces down to s[0]
+static void ralign_itoa10(u8 n, char *s, s8 i) {
+    //assert(s != 0);
+    //assert(i >= 0);
+
+    do {
+        s[i] = (n % 10) + '0';
+        if ((n /= 10) <= 0) break;
+        --i;
+    } while (i >= 0);
+
+    // pad the left chars with spaces:
+    for (--i; i >= 0; --i) s[i] = ' ';
+}
+
 // update 7-segment displays
 static void show_program(void) {
     char s[LEDS_MAX_ALPHAS];
-    u8 i = LEDS_MAX_ALPHAS - 1;
+    s8 i = LEDS_MAX_ALPHAS - 1;
 
-    // Show g-major program number in 4-char display, right-aligned space padded:
-    u8 n = new_gmaj_program + 1;
-
-    do {
-        s[i--] = (n % 10) + '0';
-    } while ((n /= 10) > 0);
-
-    // pad the left chars with spaces:
-    for (; i > 0; --i) s[i] = ' ';
-    s[i] = ' ';
+    ralign_itoa10(new_gmaj_program + 1, s, i);
 
     if (switch_mode != 0) {
         // Alternate switch mode.
@@ -248,6 +254,29 @@ static void prepare_gmaj_program(void) {
 
     // Load effects on/off state data from persistent storage:
     flash_load((u16)new_gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+    if (pr.name[0] == 0) {
+        // Empty program name? That signifies a zeroed-out program. Let's set up some reasonable defaults:
+
+        // Program name is the program number in decimal:
+        ralign_itoa10(new_gmaj_program + 1, pr.name, 3);
+        pr.name[4] = 0;
+
+        pr.rjm[0] = 0;
+        pr.rjm[1] = 1;
+        pr.rjm[2] = 2;
+        pr.rjm[3] = 3;
+        pr.rjm[4] = 4 | m_channel_initial;
+        pr.rjm[5] = 5;
+
+        pr.fx[0] = (fxm_compressor);
+        pr.fx[1] = (fxm_compressor);
+        pr.fx[2] = (fxm_noisegate);
+        pr.fx[3] = (fxm_noisegate);
+        pr.fx[4] = (fxm_noisegate);
+        pr.fx[5] = (fxm_noisegate | fxm_delay);
+    }
+
+    // Find the initial channel:
     for (i = 0; i < 6; ++i)
         if (pr.rjm[i] & m_channel_initial) {
             new_rjm_channel = i;

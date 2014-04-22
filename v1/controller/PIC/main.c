@@ -18,6 +18,7 @@ void	ServiceUSB(void);
 
 #pragma code	main_code=0xA2A
 
+#if 0
 /*
 rom unsigned char 	DataStart[64] = "    princess consuela banana hannoc  ";
 */
@@ -54,6 +55,7 @@ void testcrap(void) {
 	WriteProgMem();	//uses global ProgMemAddr and ProgmemBuffer[]
 */
 }
+#endif
 
 void main() {
 	unsigned char chars[5], index;

@@ -487,4 +487,46 @@ struct program flash_memory[128] = {
                 5
             }
     },
+
+    // 24: Bells:
+    {
+        .name = "Bells",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate | fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                2,
+                3,
+                4 | m_channel_initial,
+                5
+            }
+    },
+
+    // 25: Local H:
+    {
+        .name = "Local H",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate | fxm_delay | fxm_chorus),
+            (fxm_noisegate | fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                2 | m_channel_initial,
+                3,
+                2,
+                3
+            }
+    },
 };
