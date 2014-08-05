@@ -1,0 +1,92 @@
+programs:
+  - name: Everything Zen
+    gmaj_program: 10
+    rjm_initial:  4
+    scenes:
+      - rjm_channel: 1
+        rjm_solo: off
+        fx: [ compressor ]
+      - rjm_channel: 1
+        rjm_solo: on
+        fx: [ compressor ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ compressor, eq, delay ]
+      - rjm_channel: 2
+        rjm_solo: on
+        fx: [ compressor, eq ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ compressor, eq ]
+      - rjm_channel: 2
+        rjm_solo: on
+        fx: [ compressor, eq, delay ]
+
+  - name: Song 2
+    gmaj_program: 13
+    rjm_initial:  0
+    scenes:
+      - rjm_channel: 1
+        rjm_solo: off
+        fx: [ compressor, eq ]
+      - rjm_channel: 1
+        rjm_solo: off
+        fx: [ compressor, eq ]
+      - rjm_channel: 1
+        rjm_solo: on
+        fx: [ compressor, eq ]
+      - rjm_channel: 1
+        rjm_solo: on
+        fx: [ compressor, eq ]
+      - rjm_channel: 1
+        rjm_solo: off
+        fx: [ compressor, eq ]
+      - rjm_channel: 1
+        rjm_solo: on
+        fx: [ compressor, eq ]
+
+  - name: Zero
+    gmaj_program: 3
+    rjm_initial:  2
+    scenes:
+      - rjm_channel: 1
+        rjm_solo: off
+        fx: [ compressor ]
+      - rjm_channel: 1
+        rjm_solo: on
+        fx: [ compressor ]
+      - rjm_channel: 3
+        rjm_solo: off
+        fx: [ noisegate ]
+      - rjm_channel: 3
+        rjm_solo: on
+        fx: [ noisegate ]
+      - rjm_channel: 3
+        rjm_solo: on
+        fx: [ noisegate, delay ]
+      - rjm_channel: 3
+        rjm_solo: on
+        fx: [ noisegate, delay, pitch ]
+
+  - name: Brainstew
+    gmaj_program: 23
+    rjm_initial:  4
+    scenes:
+      - rjm_channel: 1
+        rjm_solo: off
+        fx: [ compressor ]
+      - rjm_channel: 1
+        rjm_solo: on
+        fx: [ compressor ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ noisegate ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ noisegate ]
+      - rjm_channel: 3
+        rjm_solo: off
+        fx: [ noisegate ]
+      - rjm_channel: 3
+        rjm_solo: on
+        fx: [ noisegate ]
