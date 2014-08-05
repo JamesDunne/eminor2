@@ -1,23 +1,24 @@
 package main
 
 import (
+	"bytes"
+	"fmt"
 	"io/ioutil"
 	"log"
+	//"strconv"
 )
 
 import "gopkg.in/yaml.v1"
 
-type GMajEffect int
-
 const (
-	Compressor GMajEffect = iota
-	Filter
-	Pitch
-	Chorus
-	Delay
-	Reverb
-	Noisegate
-	EQ
+	FX_Compressor uint8 = 1 << iota
+	FX_Filter
+	FX_Pitch
+	FX_Chorus
+	FX_Delay
+	FX_Reverb
+	FX_Noisegate
+	FX_EQ
 )
 
 type SceneDescriptor struct {
@@ -41,40 +42,88 @@ type Programs struct {
 
 func main() {
 	// Load YAML file:
-	bytes, err := ioutil.ReadFile("programs.yml")
+	ymlbytes, err := ioutil.ReadFile("programs.yml")
 	if err != nil {
 		panic(err)
 	}
 
 	// Parse YAML:
 	var programs Programs
-	err = yaml.Unmarshal(bytes, &programs)
+	err = yaml.Unmarshal(ymlbytes, &programs)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	log.Printf("%+v\n", programs)
+	fmt.Printf("%+v\n\n", programs)
 
 	// Translate to binary data for FLASH memory:
-	for _, _ = range programs.Programs {
-		// The C struct to translate to:
-		//struct program {
-		//    // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
-		//    char name[20];
+	for _, p := range programs.Programs {
+		buf := bytes.NewBuffer(make([]byte, 0, (5*20)+(5*12)+(1*11)))
 
-		//    // Initial RJM channel selection (0 to 6):
-		//    u8 rjm_initial;
-		//    // RJM channel descriptors mapped to 6 channel selector buttons (see rjm_*); 4 bits each channels, 6 channels, hence 4x6 = 24 bits = 3 octets:
-		//    u8 rjm_desc[3];
+		// Write the name first:
+		for j := 0; j < 20; j++ {
+			if j >= len(p.Name) {
+				buf.WriteString("0, ")
+				continue
+			}
+			c := p.Name[j]
+			if c < 32 {
+				fmt.Fprintf(buf, "%d, ", p.RJMInitial)
+			}
+			fmt.Fprintf(buf, "'%c', ", rune(c))
+		}
 
-		//    // G-major program number (1 to 128, 0 for unused):
-		//    u8 gmaj_program;
-		//    // G-major effects enabled by default per channel (see fxm_*):
-		//    u8 fx[6];
+		fmt.Fprintf(buf, "%d, ", p.RJMInitial)
 
-		//    // Reserved:
-		//    u8 _unused;
-		//};
+		// RJM channel descriptors:
+		s := p.SceneDescriptors
+		for j := 0; j < 3; j++ {
+			b := uint8((s[j*2+0].RJMChannel - 1) | ((s[j*2+1].RJMChannel - 1) << 4))
+			if s[j*2+0].RJMSolo {
+				b |= 0x04
+			}
+			if s[j*2+0].RJMEQ {
+				b |= 0x08
+			}
+			if s[j*2+1].RJMSolo {
+				b |= 0x40
+			}
+			if s[j*2+1].RJMEQ {
+				b |= 0x80
+			}
 
+			fmt.Fprintf(buf, "0x%02X, ", b)
+		}
+
+		// G-Major effects:
+		fmt.Fprintf(buf, "%d, ", p.GMajorProgram)
+		for j := 0; j < 6; j++ {
+			// Translate effect name strings into bit flags:
+			b := uint8(0)
+			for _, effect := range p.SceneDescriptors[j].FX {
+				if effect == "compressor" {
+					b |= FX_Compressor
+				} else if effect == "filter" {
+					b |= FX_Filter
+				} else if effect == "pitch" {
+					b |= FX_Pitch
+				} else if effect == "chorus" {
+					b |= FX_Chorus
+				} else if effect == "delay" {
+					b |= FX_Delay
+				} else if effect == "reverb" {
+					b |= FX_Reverb
+				} else if effect == "noisegate" {
+					b |= FX_Noisegate
+				} else if effect == "eq" {
+					b |= FX_EQ
+				}
+			}
+
+			fmt.Fprintf(buf, "0x%02X, ", b)
+		}
+
+		fmt.Fprintf(buf, "0")
+		fmt.Println(buf.String())
 	}
 }
