@@ -54,13 +54,17 @@ func main() {
 		log.Println(err)
 		return
 	}
-	fmt.Printf("%+v\n\n", programs)
+	//fmt.Printf("%+v\n\n", programs)
 
 	// Translate to binary data for FLASH memory:
 	for _, p := range programs.Programs {
 		buf := bytes.NewBuffer(make([]byte, 0, (5*20)+(5*12)+(1*11)))
 
 		// Write the name first:
+		if len(p.Name) > 20 {
+			panic(fmt.Errorf("Name is longer than 20 character limit: '%s'", p.Name))
+		}
+
 		for j := 0; j < 20; j++ {
 			if j >= len(p.Name) {
 				buf.WriteString("0, ")
@@ -123,7 +127,9 @@ func main() {
 			fmt.Fprintf(buf, "0x%02X, ", b)
 		}
 
+		// Unused:
 		fmt.Fprintf(buf, "0")
+
 		fmt.Println(buf.String())
 	}
 }
