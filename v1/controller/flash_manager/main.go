@@ -1,11 +1,11 @@
 package main
 
 import (
-	"bytes"
+	//"bytes"
 	"fmt"
 	"io/ioutil"
 	"log"
-	//"strconv"
+	"os"
 )
 
 import "gopkg.in/yaml.v1"
@@ -56,9 +56,16 @@ func main() {
 	}
 	//fmt.Printf("%+v\n\n", programs)
 
+	fo, err := os.OpenFile("../PIC/flash_rom_init.h", os.O_TRUNC|os.O_CREATE, 0644)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer fo.Close()
+
 	// Translate to binary data for FLASH memory:
-	for _, p := range programs.Programs {
-		buf := bytes.NewBuffer(make([]byte, 0, (5*20)+(5*12)+(1*11)))
+	for i, p := range programs.Programs {
+		//buf := bytes.NewBuffer(make([]byte, 0, (5*20)+(5*12)+(1*11)))
 
 		// Write the name first:
 		if len(p.Name) > 20 {
@@ -67,17 +74,17 @@ func main() {
 
 		for j := 0; j < 20; j++ {
 			if j >= len(p.Name) {
-				buf.WriteString("0, ")
+				fmt.Fprint(fo, "0, ")
 				continue
 			}
 			c := p.Name[j]
 			if c < 32 {
-				fmt.Fprintf(buf, "%d, ", p.RJMInitial)
+				fmt.Fprintf(fo, "%d, ", p.RJMInitial)
 			}
-			fmt.Fprintf(buf, "'%c', ", rune(c))
+			fmt.Fprintf(fo, "'%c', ", rune(c))
 		}
 
-		fmt.Fprintf(buf, "%d, ", p.RJMInitial)
+		fmt.Fprintf(fo, "%d, ", p.RJMInitial)
 
 		// RJM channel descriptors:
 		s := p.SceneDescriptors
@@ -96,11 +103,11 @@ func main() {
 				b |= 0x80
 			}
 
-			fmt.Fprintf(buf, "0x%02X, ", b)
+			fmt.Fprintf(fo, "0x%02X, ", b)
 		}
 
 		// G-Major effects:
-		fmt.Fprintf(buf, "%d, ", p.GMajorProgram)
+		fmt.Fprintf(fo, "%d, ", p.GMajorProgram)
 		for j := 0; j < 6; j++ {
 			// Translate effect name strings into bit flags:
 			b := uint8(0)
@@ -124,12 +131,17 @@ func main() {
 				}
 			}
 
-			fmt.Fprintf(buf, "0x%02X, ", b)
+			fmt.Fprintf(fo, "0x%02X, ", b)
 		}
 
 		// Unused:
-		fmt.Fprintf(buf, "0")
+		fmt.Fprintf(fo, "0")
 
-		fmt.Println(buf.String())
+		//fmt.Print(buf.String())
+		if i < len(programs.Programs)-1 {
+			fmt.Fprint(fo, ",\n")
+		} else {
+			fmt.Fprint(fo, "\n")
+		}
 	}
 }
