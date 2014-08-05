@@ -5,6 +5,196 @@
 // NOTE(jsd): This is specific to my setup.
 
 struct program flash_memory[128] = {
+    // 10: Everything Zen:
+    {
+        .gmaj_program = 10,
+        .name = "Everything Zen",
+        .rjm_initial = 4,
+        .rjm_desc = {
+            (rjm_channel_1) |
+            ((rjm_channel_1 | rjm_solo) << rjm_shift),
+            (rjm_channel_2) |
+            ((rjm_channel_2 | rjm_solo) << rjm_shift),
+            (rjm_channel_2) |
+            ((rjm_channel_2 | rjm_solo) << rjm_shift)
+        },
+        .fx = {
+                (fxm_compressor),
+                (fxm_compressor),
+                (fxm_compressor | fxm_eq | fxm_delay),
+                (fxm_compressor | fxm_eq),
+                (fxm_compressor | fxm_eq),
+                (fxm_compressor | fxm_eq | fxm_delay)
+            }
+    },
+
+    // 13: Song 2:
+    {
+        .gmaj_program = 13,
+        .name = "Song 2",
+        .fx = {
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq)
+        },
+        .rjm_initial = 0,
+        .rjm_desc = {
+                (rjm_channel_1) | ((rjm_channel_1 | rjm_solo) << rjm_shift),
+                (rjm_channel_1 | rjm_solo) | ((rjm_channel_1 | rjm_solo) << rjm_shift),
+                (rjm_channel_1) | ((rjm_channel_1 | rjm_solo) << rjm_shift)
+            }
+    },
+
+    // 03: Zero:
+    {
+        .name = "Zero",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate | fxm_delay),
+            (fxm_noisegate | fxm_delay | fxm_pitch)
+        },
+        .rjm = {
+                0,
+                1,
+                4 | m_channel_initial,
+                5,
+                5,
+                5
+            }
+    },
+
+        // 23: Brainstew:
+    {
+        .name = "Brainstew",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate)
+        },
+        .rjm = {
+                0,
+                1,
+                2,
+                3,
+                4 | m_channel_initial,
+                5
+            }
+    },
+
+    // 05: Buddy Holly:
+    {
+        .name = "Buddy Holly",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate | fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                2,
+                3,
+                4 | m_channel_initial,
+                5
+            }
+    },
+
+    // 25: Local H:
+    {
+        .name = "Local H",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate | fxm_delay | fxm_chorus),
+            (fxm_noisegate | fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                2 | m_channel_initial,
+                3,
+                2,
+                3
+            }
+    },
+
+    // 16: Counting Blue Cars:
+    {
+        .name = "Counting Blue Cars",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (0),
+            (0),
+            (fxm_delay),
+            (fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                4,
+                5,
+                4 | m_channel_initial,
+                5
+            }
+    },
+
+    // 21: Holiday:
+    {
+        .name = "Holiday",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate | fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                2,
+                3,
+                4 | m_channel_initial,
+                5
+            }
+    },
+
+    // 20: Machinehead:
+    {
+        .name = "Machinehead",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq | fxm_delay),
+            (fxm_compressor | fxm_eq),
+            (fxm_compressor | fxm_eq | fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                2,
+                3,
+                2 | m_channel_initial,
+                3
+            }
+    },
+
     // 01: Monkeywrench:
     {
         .name = "Monkeywrench",
@@ -22,6 +212,111 @@ struct program flash_memory[128] = {
                 2,
                 3,
                 4 | m_channel_initial,
+                5
+            }
+    },
+
+    // 12: Crawling in the Dark:
+    {
+        .name = "Crawling in the Dark",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor | fxm_filter | fxm_delay),
+            (fxm_noisegate | fxm_filter | fxm_delay),
+            (fxm_noisegate | fxm_filter | fxm_delay),
+            (fxm_noisegate),
+            (fxm_noisegate | fxm_filter | fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                2 | m_channel_initial,
+                3,
+                4,
+                3
+            }
+    },
+
+    // 06: Plush:
+    {
+        .name = "Plush",
+        .fx = {
+            (fxm_compressor | fxm_chorus),
+            (fxm_compressor | fxm_chorus | fxm_delay),
+            (fxm_noisegate | fxm_chorus | fxm_eq),
+            (fxm_noisegate | fxm_chorus | fxm_delay | fxm_eq),
+            (fxm_noisegate | fxm_chorus | fxm_eq),
+            (fxm_noisegate | fxm_chorus | fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                2,
+                3,
+                4 | m_channel_initial,
+                5
+            }
+    },
+
+    // 18: Hash Pipe:
+    {
+        .name = "Hash Pipe",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate | fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                2,
+                3,
+                4 | m_channel_initial,
+                5
+            }
+    },
+
+    // 22: Closing Time:
+    {
+        .name = "Closing Time",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_compressor | fxm_delay),
+            (fxm_compressor),
+            (fxm_compressor | fxm_delay)
+        },
+        .rjm = {
+                0,
+                1,
+                2,
+                3,
+                2 | m_channel_initial,
+                3
+            }
+    },
+
+    // 11: Enter Sandman:
+    {
+        .name = "Enter Sandman",
+        .fx = {
+            (fxm_compressor),
+            (fxm_compressor),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate),
+            (fxm_noisegate | fxm_delay)
+        },
+        .rjm = {
+                0 | m_channel_initial,
+                1,
+                2,
+                3,
+                4,
                 5
             }
     },
@@ -47,27 +342,6 @@ struct program flash_memory[128] = {
             }
     },
 
-    // 03: Zero:
-    {
-        .name = "Zero",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate | fxm_delay),
-            (fxm_noisegate | fxm_delay | fxm_pitch)
-        },
-        .rjm = {
-                0,
-                1,
-                4 | m_channel_initial,
-                5,
-                5,
-                5
-            }
-    },
-
     // 04: Wonderwall:
     {
         .name = "Wonderwall",
@@ -86,48 +360,6 @@ struct program flash_memory[128] = {
                 3,
                 2 | m_channel_initial,
                 3
-            }
-    },
-
-    // 05: Buddy Holly:
-    {
-        .name = "Buddy Holly",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate | fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                2,
-                3,
-                4 | m_channel_initial,
-                5
-            }
-    },
-
-    // 06: Plush:
-    {
-        .name = "Plush",
-        .fx = {
-            (fxm_compressor | fxm_chorus),
-            (fxm_compressor | fxm_chorus | fxm_delay),
-            (fxm_noisegate | fxm_chorus | fxm_eq),
-            (fxm_noisegate | fxm_chorus | fxm_delay | fxm_eq),
-            (fxm_noisegate | fxm_chorus | fxm_eq),
-            (fxm_noisegate | fxm_chorus | fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                2,
-                3,
-                4 | m_channel_initial,
-                5
             }
     },
 
@@ -194,90 +426,6 @@ struct program flash_memory[128] = {
             }
     },
 
-    // 10: Everything Zen:
-    {
-        .name = "Everything Zen",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_eq | fxm_delay),
-            (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_eq | fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                2,
-                3,
-                2 | m_channel_initial,
-                3
-            }
-    },
-
-    // 11: Enter Sandman:
-    {
-        .name = "Enter Sandman",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate | fxm_delay)
-        },
-        .rjm = {
-                0 | m_channel_initial,
-                1,
-                2,
-                3,
-                4,
-                5
-            }
-    },
-
-    // 12: Crawling in the Dark:
-    {
-        .name = "Crawling in the Dark",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor | fxm_filter | fxm_delay),
-            (fxm_noisegate | fxm_filter | fxm_delay),
-            (fxm_noisegate | fxm_filter | fxm_delay),
-            (fxm_noisegate),
-            (fxm_noisegate | fxm_filter | fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                2 | m_channel_initial,
-                3,
-                4,
-                3
-            }
-    },
-
-    // 13: Song 2:
-    {
-        .name = "Song 2",
-        .fx = {
-            (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_eq)
-        },
-        .rjm = {
-                0 | m_channel_initial,
-                1,
-                0,
-                1,
-                0,
-                1
-            }
-    },
-
     // 14: Sex Type Thing:
     {
         .name = "Sex Type Thing",
@@ -320,27 +468,6 @@ struct program flash_memory[128] = {
             }
     },
 
-    // 16: Counting Blue Cars:
-    {
-        .name = "Counting Blue Cars",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (0),
-            (0),
-            (fxm_delay),
-            (fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                4,
-                5,
-                4 | m_channel_initial,
-                5
-            }
-    },
-
     // 17: In Bloom:
     {
         .name = "In Bloom",
@@ -362,27 +489,6 @@ struct program flash_memory[128] = {
             }
     },
 
-    // 18: Hash Pipe:
-    {
-        .name = "Hash Pipe",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate | fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                2,
-                3,
-                4 | m_channel_initial,
-                5
-            }
-    },
-
     // 19: My Hero:
     {
         .name = "My Hero",
@@ -393,90 +499,6 @@ struct program flash_memory[128] = {
             (fxm_noisegate),
             (fxm_noisegate),
             (fxm_noisegate | fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                2,
-                3,
-                4 | m_channel_initial,
-                5
-            }
-    },
-
-    // 20: Machinehead:
-    {
-        .name = "Machinehead",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_eq | fxm_delay),
-            (fxm_compressor | fxm_eq),
-            (fxm_compressor | fxm_eq | fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                2,
-                3,
-                2 | m_channel_initial,
-                3
-            }
-    },
-
-    // 21: Holiday:
-    {
-        .name = "Holiday",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate | fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                2,
-                3,
-                4 | m_channel_initial,
-                5
-            }
-    },
-
-    // 22: Closing Time:
-    {
-        .name = "Closing Time",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_compressor | fxm_delay),
-            (fxm_compressor),
-            (fxm_compressor | fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                2,
-                3,
-                2 | m_channel_initial,
-                3
-            }
-    },
-
-    // 23: Brainstew:
-    {
-        .name = "Brainstew",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate)
         },
         .rjm = {
                 0,
@@ -506,27 +528,6 @@ struct program flash_memory[128] = {
                 3,
                 4 | m_channel_initial,
                 5
-            }
-    },
-
-    // 25: Local H:
-    {
-        .name = "Local H",
-        .fx = {
-            (fxm_compressor),
-            (fxm_compressor),
-            (fxm_noisegate),
-            (fxm_noisegate),
-            (fxm_noisegate | fxm_delay | fxm_chorus),
-            (fxm_noisegate | fxm_delay)
-        },
-        .rjm = {
-                0,
-                1,
-                2 | m_channel_initial,
-                3,
-                2,
-                3
             }
     },
 };

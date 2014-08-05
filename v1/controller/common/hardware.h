@@ -5,7 +5,7 @@
     LED "active" indicators above foot-switches.
 
     NOTE: it is expected that 'types.h' is #included before this file
-*/
+    */
 
 // --------------- Compiler hacks:
 
@@ -77,9 +77,6 @@ extern void leds_show_1digit(u8 value);
 #define fxb_noisegate   6
 #define fxb_eq          7
 
-// MSB of the rjm[] indicates initial channel:
-#define m_channel_initial 0x80U
-
 // Poll up to 28 foot-switch toggles simultaneously.  PREV NEXT DEC  INC map to 28-31 bit positions.
 extern u32 fsw_poll(void);
 
@@ -136,12 +133,41 @@ extern void flash_store(u16 addr, u16 count, u8 *data);
 struct program {
     // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
     char name[20];
+
+    // Initial RJM channel selection (0 to 6):
+    u8 rjm_initial;
+    // RJM channel descriptors mapped to 6 channel selector buttons (see rjm_*); 4 bits each channels, 6 channels, hence 4x6 = 24 bits = 3 octets:
+    u8 rjm_desc[3];
+
+    // G-major program number (1 to 128, 0 for unused):
+    u8 gmaj_program;
     // G-major effects enabled by default per channel (see fxm_*):
     u8 fx[6];
-    // RJM program (0-127) assigned to each channel:
-    // 8th bit indicates that channel is the initial channel changed to when the program is activated.
-    u8 rjm[6];
+
+    // Reserved:
+    u8 _unused;
 };
+
+// An RJM channel descriptor:
+
+// Mark V channel 1
+#define rjm_channel_1   0x00
+// Mark V channel 2
+#define rjm_channel_2   0x01
+// Mark V channel 3
+#define rjm_channel_3   0x02
+
+#define rjm_channel_mask        0x03
+
+// Mark V solo mode
+#define rjm_solo_mask           0x04
+#define rjm_solo_shr_to_1bit    2
+// Mark V EQ enable
+#define rjm_eq_mask             0x08
+#define rjm_eq_shr_to_1bit      3
+
+// Number of bits to shift to get 2nd bitset from u8:
+#define rjm_shr_to_4bits        4
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
 // Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.

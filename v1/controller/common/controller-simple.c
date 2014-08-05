@@ -71,12 +71,15 @@ u32 sw_curr, sw_last;
 
 // Initial bad values to force setting on init:
 u8 rjm_channel = 255;
+u8 emin_program = 255;
+
 u8 gmaj_program = 255;
 u8 old_rjm_actual = 255;
+u8 old_gmaj_program = 255;
 
 // Initial desired values:
 u8 new_rjm_channel = 0;
-u8 new_gmaj_program = 0;
+u8 new_emin_program = 0;
 
 // current switch mode; holding any preset button for 500ms enables alternate mode.
 u8 switch_mode = 0;
@@ -114,7 +117,7 @@ static void show_program(void) {
     char s[LEDS_MAX_ALPHAS];
     s8 i = LEDS_MAX_ALPHAS - 1;
 
-    ralign_itoa10(new_gmaj_program + 1, s, i);
+    ralign_itoa10(new_emin_program + 1, s, i);
 
     if (switch_mode != 0) {
         // Alternate switch mode.
@@ -203,7 +206,19 @@ static void set_rjm_channel(u8 idx) {
 
 // activate sends MIDI messages to update external devices to current state
 static void activate(void) {
-    u8 new_rjm_actual = (pr.rjm[new_rjm_channel] & ~m_channel_initial) + 4;
+    //if (new_rjm_channel > 5) return;
+
+    // Get the RJM channel descriptor:
+    u8 descidx = new_rjm_channel >> 1;
+    u8 rshr = (rjm_shr_to_4bits * (new_rjm_channel & 1));
+    u8 rdesc = (pr.rjm_desc[descidx] >> rshr) & 0x0F;
+
+    // RJM channels start at 4 and alternate solo mode off/on and then increment channel #s:
+    u8 mkv_chan = (rdesc & rjm_channel_mask);
+    u8 mkv_solo_bit = ((rdesc & rjm_solo_mask) >> rjm_solo_shr_to_1bit);
+    u8 new_rjm_actual = 4 + ((mkv_chan << 1) | mkv_solo_bit);
+
+    u8 new_gmaj_program = pr.gmaj_program - 1;
 
     if (new_rjm_channel != rjm_channel)
         rjm_channel = new_rjm_channel;
@@ -236,33 +251,32 @@ static void store_program_state(void) {
     // Store effects on/off state of current program:
     u8 i;
 
-    // Update initial RJM channel bit and clear others:
-    for (i = 0; i < 6; ++i)
-        pr.rjm[i] = (pr.rjm[i] & ~m_channel_initial) | (rjm_channel == i ? m_channel_initial : 0);
-
     // Store program state:
-    flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+    flash_store((u16)emin_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
 }
 
 // prepares the next g-major program to load
-static void prepare_gmaj_program(void) {
+static void prepare_emin_program(void) {
     u8 i;
 
     // Load effects on/off state data from persistent storage:
-    flash_load((u16)new_gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+    flash_load((u16)new_emin_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
     if (pr.name[0] == 0) {
         // Empty program name? That signifies a zeroed-out program. Let's set up some reasonable defaults:
 
         // Program name is the program number in decimal:
-        ralign_itoa10(new_gmaj_program + 1, pr.name, 3);
+        ralign_itoa10(new_emin_program + 1, pr.name, 3);
         pr.name[4] = 0;
 
-        pr.rjm[0] = 0;
-        pr.rjm[1] = 1;
-        pr.rjm[2] = 2;
-        pr.rjm[3] = 3;
-        pr.rjm[4] = 4 | m_channel_initial;
-        pr.rjm[5] = 5;
+        pr.gmaj_program = new_emin_program + 1;
+
+        pr.rjm_initial = 4;
+        pr.rjm_desc[0] = rjm_channel_1;
+        pr.rjm_desc[1] = rjm_channel_1 | rjm_solo_mask;
+        pr.rjm_desc[2] = rjm_channel_2;
+        pr.rjm_desc[3] = rjm_channel_2 | rjm_solo_mask;
+        pr.rjm_desc[4] = rjm_channel_3;
+        pr.rjm_desc[5] = rjm_channel_3 | rjm_solo_mask;
 
         pr.fx[0] = (fxm_compressor);
         pr.fx[1] = (fxm_compressor);
@@ -273,11 +287,7 @@ static void prepare_gmaj_program(void) {
     }
 
     // Find the initial channel:
-    for (i = 0; i < 6; ++i)
-        if (pr.rjm[i] & m_channel_initial) {
-            new_rjm_channel = i;
-            break;
-        }
+    new_rjm_channel = pr.rjm_initial;
 
     // Update 7-segment display:
     show_program();
@@ -320,7 +330,7 @@ static void reset_timer4(u32 mask) {
 
 // set the controller to an initial state
 void controller_init(void) {
-    // This should be overwritten instantly by prepare_gmaj_program()
+    // This should be overwritten instantly by prepare_emin_program()
     pr.fx[0] = 0;
     pr.fx[1] = fxm_delay;
     pr.fx[2] = 0;
@@ -347,8 +357,8 @@ void controller_init(void) {
     control4_button_mask = FSM_PRESET_1;
 
     // Initialize g-major program to 0:
-    gmaj_program = 0;
-    prepare_gmaj_program();
+    new_emin_program = 0;
+    prepare_emin_program();
     activate();
 }
 
@@ -399,7 +409,7 @@ void controller_handle(void) {
         if (button_pressed(FSM_PRESET_1)) {
             if (rjm_channel != 0) {
                 set_rjm_channel(0);
-            } else if (gmaj_program == new_gmaj_program) {
+            } else if (emin_program == new_emin_program) {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
                 disable_mute();
@@ -410,7 +420,7 @@ void controller_handle(void) {
         if (button_pressed(FSM_PRESET_2)) {
             if (rjm_channel != 2) {
                 set_rjm_channel(2);
-            } else if (gmaj_program == new_gmaj_program) {
+            } else if (emin_program == new_emin_program) {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
                 disable_mute();
@@ -421,7 +431,7 @@ void controller_handle(void) {
         if (button_pressed(FSM_PRESET_3)) {
             if (rjm_channel != 4) {
                 set_rjm_channel(4);
-            } else if (gmaj_program == new_gmaj_program) {
+            } else if (emin_program == new_emin_program) {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
                 disable_mute();
@@ -432,7 +442,7 @@ void controller_handle(void) {
         if (button_pressed(FSM_PRESET_4)) {
             if (rjm_channel != 5) {
                 set_rjm_channel(5);
-            } else if (gmaj_program == new_gmaj_program) {
+            } else if (emin_program == new_emin_program) {
                 // tap tempo function if preset is already active:
                 gmaj_cc_toggle(gmaj_cc_taptempo, &tap_toggle);
                 disable_mute();
@@ -511,29 +521,29 @@ void controller_handle(void) {
 
         // prepare next g-major program:
         if (button_pressed(FSM_PRESET_1)) {
-            if (new_gmaj_program < step_program_inc_dec) new_gmaj_program = 0;
-            else new_gmaj_program -= step_program_inc_dec;
+            if (new_emin_program < step_program_inc_dec) new_emin_program = 0;
+            else new_emin_program -= step_program_inc_dec;
 
-            prepare_gmaj_program();
+            prepare_emin_program();
         }
         if (button_pressed(FSM_PRESET_2)) {
-            if (new_gmaj_program < 1) new_gmaj_program = 0;
-            else new_gmaj_program--;
+            if (new_emin_program < 1) new_emin_program = 0;
+            else new_emin_program--;
 
-            prepare_gmaj_program();
+            prepare_emin_program();
         }
 
         if (button_pressed(FSM_PRESET_3)) {
-            if (new_gmaj_program > 127 - 1) new_gmaj_program = 127;
-            else new_gmaj_program++;
+            if (new_emin_program > 127 - 1) new_emin_program = 127;
+            else new_emin_program++;
 
-            prepare_gmaj_program();
+            prepare_emin_program();
         }
         if (button_pressed(FSM_PRESET_4)) {
-            if (new_gmaj_program > 127 - step_program_inc_dec) new_gmaj_program = 127;
-            else new_gmaj_program += step_program_inc_dec;
+            if (new_emin_program > 127 - step_program_inc_dec) new_emin_program = 127;
+            else new_emin_program += step_program_inc_dec;
 
-            prepare_gmaj_program();
+            prepare_emin_program();
         }
     }
 

@@ -531,10 +531,13 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 // --------------- Flash memory interface:
 
-#include "../common/flash_init.h"
+const unsigned char flash_memory[] = {
+#include "../PIC/flash_rom_init.h"
+};
 
 const size_t flash_length = sizeof(struct program) * 128;
 
+#if 0
 void update_text_files() {
     FILE *ft;
 
@@ -585,6 +588,7 @@ void update_text_files() {
 #endif
     fclose(ft);
 }
+#endif
 
 
 FILE *open_or_create_flash_file() {
@@ -599,7 +603,7 @@ FILE *open_or_create_flash_file() {
     fwrite(flash_memory, 1, flash_length, f);
     fclose(f);
 
-    update_text_files();
+    //update_text_files();
 
     // Reopen file for reading:
     f = fopen("flash.bin", "r+b");
@@ -683,5 +687,5 @@ void flash_store(u16 addr, u16 count, u8 *data) {
     assert(r == count);
     fclose(f);
 
-    update_text_files();
+    //update_text_files();
 }
