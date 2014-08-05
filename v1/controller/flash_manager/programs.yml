@@ -138,7 +138,7 @@ programs:
         fx: [ noisegate, delay ]
 
   - name: Counting Blue Cars
-    gmaj_program: 5
+    gmaj_program: 16
     rjm_initial:  4
     scenes:
       - rjm_channel: 1
