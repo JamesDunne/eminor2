@@ -5,22 +5,22 @@ programs:
     scenes:
       - rjm_channel: 1
         rjm_solo: off
-        fx: [ compressor ]
+        fx: [ noisegate, compressor ]
       - rjm_channel: 1
         rjm_solo: on
-        fx: [ compressor ]
+        fx: [ noisegate, compressor ]
       - rjm_channel: 2
         rjm_solo: off
-        fx: [ compressor, eq, delay ]
+        fx: [ noisegate, compressor, eq, delay ]
       - rjm_channel: 2
         rjm_solo: on
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
       - rjm_channel: 2
         rjm_solo: off
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
       - rjm_channel: 2
         rjm_solo: on
-        fx: [ compressor, eq, delay ]
+        fx: [ noisegate, compressor, eq, delay ]
 
   - name: Song 2
     gmaj_program: 13
@@ -28,22 +28,22 @@ programs:
     scenes:
       - rjm_channel: 1
         rjm_solo: off
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
       - rjm_channel: 1
         rjm_solo: off
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
       - rjm_channel: 1
         rjm_solo: on
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
       - rjm_channel: 1
         rjm_solo: on
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
       - rjm_channel: 1
         rjm_solo: off
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
       - rjm_channel: 1
         rjm_solo: on
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
 
   - name: Zero
     gmaj_program: 3
@@ -195,16 +195,16 @@ programs:
         fx: [ compressor ]
       - rjm_channel: 2
         rjm_solo: off
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
       - rjm_channel: 2
         rjm_solo: on
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
       - rjm_channel: 2
         rjm_solo: off
-        fx: [ compressor, eq ]
+        fx: [ noisegate, compressor, eq ]
       - rjm_channel: 2
         rjm_solo: off
-        fx: [ compressor, eq, delay ]
+        fx: [ noisegate, compressor, eq, delay ]
 
   - name: Monkeywrench
     gmaj_program: 1
