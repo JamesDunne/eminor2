@@ -2,292 +2,6 @@
 MagicCookie={0b13fe8c-dfe0-40eb-8900-6712719559a7}
 Version=1.0
 [File000]
-Location=C:\git\eminor2\v1\controller\PIC\Object\main.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File001]
-Location=C:\git\eminor2\v1\controller\PIC\Object\startup.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File002]
-Location=C:\git\eminor2\v1\controller\PIC\Object\usb.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File003]
-Location=C:\git\eminor2\v1\controller\PIC\Object\usbapplet.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File004]
-Location=C:\git\eminor2\v1\controller\PIC\Object\usbdescript.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File005]
-Location=C:\git\eminor2\v1\controller\PIC\Object\rs232.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File006]
-Location=C:\git\eminor2\v1\controller\PIC\Object\hid.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File007]
-Location=C:\git\eminor2\v1\controller\PIC\Object\ram_def.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File008]
-Location=C:\git\eminor2\v1\controller\PIC\Object\config.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={49D3CA3F-D9A3-4518-9943-226A347E8CC7}
-LanguageToolLocation=C:\mplabc18\v3.46\mpasm\mpasmwin.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=
-TraceCmdString=
-DebugOptions=
-[File009]
-Location=C:\git\eminor2\v1\controller\PIC\Object\config.err
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={49D3CA3F-D9A3-4518-9943-226A347E8CC7}
-LanguageToolLocation=C:\mplabc18\v3.46\mpasm\mpasmwin.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=
-TraceCmdString=
-DebugOptions=
-[File010]
-Location=C:\git\eminor2\v1\controller\PIC\Object\intslct.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File011]
-Location=C:\git\eminor2\v1\controller\PIC\Object\init.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File012]
-Location=C:\git\eminor2\v1\controller\PIC\Object\hwcalls.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File013]
-Location=C:\git\eminor2\v1\controller\PIC\Object\vectors.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File014]
-Location=C:\git\eminor2\v1\controller\PIC\Object\eeprom.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File015]
-Location=C:\git\eminor2\v1\controller\PIC\Object\leds.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File016]
-Location=C:\git\eminor2\v1\controller\PIC\Object\tables.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File017]
-Location=C:\git\eminor2\v1\controller\PIC\Object\writeprogmem.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File018]
-Location=C:\git\eminor2\v1\controller\PIC\Object\exppedal.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File019]
-Location=C:\git\eminor2\v1\controller\PIC\Object\systick.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File020]
-Location=C:\git\eminor2\v1\controller\PIC\Object\MidiComm.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File021]
-Location=C:\git\eminor2\v1\controller\common\Object\controller-simple.o
-Folder=Intermediary
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=-nw 2060 -nw 2056 -nw 2055
-TraceCmdString=
-DebugOptions=
-[File022]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\main.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -300,7 +14,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File023]
+[File001]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\startup.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -313,7 +27,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File024]
+[File002]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\usb.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -326,7 +40,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File025]
+[File003]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\usbapplet.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -339,7 +53,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File026]
+[File004]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\usbdescript.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -352,7 +66,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File027]
+[File005]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\rs232.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -365,7 +79,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File028]
+[File006]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\hid.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -378,7 +92,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File029]
+[File007]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\ram_def.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -391,7 +105,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File030]
+[File008]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\config.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -404,7 +118,7 @@ SuiteArgsString=
 ToolArgsString=
 TraceCmdString=
 DebugOptions=
-[File031]
+[File009]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\config.err
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -417,7 +131,7 @@ SuiteArgsString=
 ToolArgsString=
 TraceCmdString=
 DebugOptions=
-[File032]
+[File010]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\intslct.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -430,7 +144,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File033]
+[File011]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\init.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -443,7 +157,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File034]
+[File012]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\hwcalls.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -456,7 +170,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File035]
+[File013]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\vectors.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -469,7 +183,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File036]
+[File014]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\eeprom.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -482,7 +196,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File037]
+[File015]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\leds.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -495,7 +209,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File038]
+[File016]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\tables.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -508,7 +222,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File039]
+[File017]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\writeprogmem.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -521,7 +235,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File040]
+[File018]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\exppedal.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -534,7 +248,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File041]
+[File019]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\systick.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -547,7 +261,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File042]
+[File020]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\Object\MidiComm.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -560,7 +274,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File043]
+[File021]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\Object\controller-simple.o
 Folder=Intermediary
 DeviceName=PIC18F4455
@@ -573,59 +287,7 @@ SuiteArgsString=
 ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
-[File044]
-Location=C:\git\eminor2\v1\controller\PIC\config.lst
-Folder=Output
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={49D3CA3F-D9A3-4518-9943-226A347E8CC7}
-LanguageToolLocation=C:\mplabc18\v3.46\mpasm\mpasmwin.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=
-TraceCmdString=
-DebugOptions=
-[File045]
-Location=C:\git\eminor2\v1\controller\PIC\midicontroller.cof
-Folder=Output
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mplink.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
-TraceCmdString=
-DebugOptions=
-[File046]
-Location=C:\git\eminor2\v1\controller\PIC\midicontroller.hex
-Folder=Output
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mplink.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
-TraceCmdString=
-DebugOptions=
-[File047]
-Location=C:\git\eminor2\v1\controller\PIC\midicontroller.map
-Folder=Output
-DeviceName=PIC18F4455
-LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
-LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
-LanguageToolLocation=C:\mplabc18\v3.46\bin\mplink.exe
-PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\common;C:\mcc18\h||$(LIBDIR)|C:\mcc18\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|usb.c|usbapplet.c|usbdescript.c|rs232.c|hid.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|vectors.c|eeprom.c|leds.c|tables.c|writeprogmem.c|exppedal.c|systick.c|MidiComm.c|..\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4455.lkr||
-SuiteArgsString=
-ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
-TraceCmdString=
-DebugOptions=
-[File048]
+[File022]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\config.lst
 Folder=Output
 DeviceName=PIC18F4455
@@ -638,7 +300,7 @@ SuiteArgsString=
 ToolArgsString=
 TraceCmdString=
 DebugOptions=
-[File049]
+[File023]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\midicontroller.cof
 Folder=Output
 DeviceName=PIC18F4455
@@ -651,7 +313,7 @@ SuiteArgsString=
 ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
 TraceCmdString=
 DebugOptions=
-[File050]
+[File024]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\midicontroller.hex
 Folder=Output
 DeviceName=PIC18F4455
@@ -664,7 +326,7 @@ SuiteArgsString=
 ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
 TraceCmdString=
 DebugOptions=
-[File051]
+[File025]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\midicontroller.map
 Folder=Output
 DeviceName=PIC18F4455
