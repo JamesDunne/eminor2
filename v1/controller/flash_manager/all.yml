@@ -1,6 +1,4 @@
 programs:
-
-# 1
   - name: Everything Zen
     gmaj_program: 10
     rjm_initial:  4
@@ -41,7 +39,7 @@ programs:
         rjm_solo: on
         fx: [ noisegate, compressor, eq ]
       - rjm_channel: 1
-        rjm_solo: on
+        rjm_solo: off
         fx: [ noisegate, compressor, eq ]
       - rjm_channel: 1
         rjm_solo: on
@@ -93,7 +91,6 @@ programs:
         rjm_solo: on
         fx: [ noisegate ]
 
-# 5
   - name: Buddy Holly
     gmaj_program: 5
     rjm_initial:  4
@@ -134,7 +131,7 @@ programs:
         rjm_solo: off
         fx: [ noisegate ]
       - rjm_channel: 2
-        rjm_solo: off
+        rjm_solo: on
         fx: [ noisegate, delay, chorus ]
       - rjm_channel: 2
         rjm_solo: on
@@ -209,7 +206,6 @@ programs:
         rjm_solo: off
         fx: [ noisegate, compressor, eq, delay ]
 
-# 10
   - name: Monkeywrench
     gmaj_program: 1
     rjm_initial:  4
@@ -232,6 +228,29 @@ programs:
       - rjm_channel: 3
         rjm_solo: on
         fx: [ noisegate, delay ]
+
+  - name: Crawling in the Dark
+    gmaj_program: 12
+    rjm_initial:  2
+    scenes:
+      - rjm_channel: 1
+        rjm_solo: off
+        fx: [ compressor, filter, delay ]
+      - rjm_channel: 1
+        rjm_solo: on
+        fx: [ compressor, filter, delay ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ noisegate, filter, delay ]
+      - rjm_channel: 2
+        rjm_solo: on
+        fx: [ noisegate, filter, delay ]
+      - rjm_channel: 3
+        rjm_solo: off
+        fx: [ noisegate ]
+      - rjm_channel: 2
+        rjm_solo: on
+        fx: [ noisegate, filter, delay ]
 
   - name: Plush
     gmaj_program: 6
@@ -322,168 +341,5 @@ programs:
         rjm_solo: off
         fx: [ noisegate ]
       - rjm_channel: 3
-        rjm_solo: on
-        fx: [ noisegate, delay ]
-
-# 15
-  - name: When I Come Around
-    gmaj_program: 1
-    rjm_initial:  4
-    scenes:
-      - rjm_channel: 1
-        rjm_solo: off
-        fx: [ compressor ]
-      - rjm_channel: 1
-        rjm_solo: on
-        fx: [ compressor ]
-      - rjm_channel: 2
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: on
-        fx: [ noisegate ]
-      - rjm_channel: 3
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 3
-        rjm_solo: on
-        fx: [ noisegate, delay ]
-
-  - name: Lump
-    gmaj_program: 1
-    rjm_initial:  4
-    scenes:
-      - rjm_channel: 1
-        rjm_solo: off
-        fx: [ compressor ]
-      - rjm_channel: 1
-        rjm_solo: on
-        fx: [ compressor ]
-      - rjm_channel: 2
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: on
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: on
-        fx: [ noisegate, delay ]
-
-  - name: I Alone
-    gmaj_program: 1
-    rjm_initial:  4
-    scenes:
-      - rjm_channel: 1
-        rjm_solo: off
-        fx: [ compressor ]
-      - rjm_channel: 1
-        rjm_solo: on
-        fx: [ compressor ]
-      - rjm_channel: 2
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: on
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: on
-        fx: [ noisegate, delay ]
-
-  - name: Sex Type Thing
-    gmaj_program: 1
-    rjm_initial:  4
-    scenes:
-      - rjm_channel: 1
-        rjm_solo: off
-        fx: [ compressor ]
-      - rjm_channel: 1
-        rjm_solo: on
-        fx: [ compressor ]
-      - rjm_channel: 2
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: on
-        fx: [ noisegate ]
-      - rjm_channel: 3
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 3
-        rjm_solo: on
-        fx: [ noisegate, delay ]
-
-  - name: My Hero
-    gmaj_program: 1
-    rjm_initial:  4
-    scenes:
-      - rjm_channel: 1
-        rjm_solo: off
-        fx: [ compressor ]
-      - rjm_channel: 1
-        rjm_solo: on
-        fx: [ compressor ]
-      - rjm_channel: 2
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: on
-        fx: [ noisegate ]
-      - rjm_channel: 3
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 3
-        rjm_solo: on
-        fx: [ noisegate, delay ]
-
-# 20
-  - name: In Bloom
-    gmaj_program: 1
-    rjm_initial:  0
-    scenes:
-      - rjm_channel: 1
-        rjm_solo: off
-        fx: [ noisegate, compressor, eq ]
-      - rjm_channel: 1
-        rjm_solo: off
-        fx: [ noisegate, compressor, eq ]
-      - rjm_channel: 1
-        rjm_solo: on
-        fx: [ noisegate, compressor, eq ]
-      - rjm_channel: 1
-        rjm_solo: on
-        fx: [ noisegate, compressor, eq ]
-      - rjm_channel: 1
-        rjm_solo: on
-        fx: [ noisegate, compressor, eq ]
-      - rjm_channel: 1
-        rjm_solo: on
-        fx: [ noisegate, compressor, eq ]
-
-  - name: Two Princes
-    gmaj_program: 1
-    rjm_initial:  4
-    scenes:
-      - rjm_channel: 1
-        rjm_solo: off
-        fx: [ compressor ]
-      - rjm_channel: 1
-        rjm_solo: on
-        fx: [ compressor ]
-      - rjm_channel: 2
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: on
-        fx: [ noisegate ]
-      - rjm_channel: 2
-        rjm_solo: off
-        fx: [ noisegate ]
-      - rjm_channel: 2
         rjm_solo: on
         fx: [ noisegate, delay ]
