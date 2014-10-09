@@ -370,15 +370,15 @@ programs:
         fx: [ noisegate ]
       - rjm_channel: 2
         rjm_solo: on
-        fx: [ noisegate, delay ]
+        fx: [ noisegate ]
 
   - name: I Alone
     gmaj_program: 1
-    rjm_initial:  4
+    rjm_initial:  0
     scenes:
       - rjm_channel: 1
         rjm_solo: off
-        fx: [ compressor ]
+        fx: [ compressor, delay, chorus ]
       - rjm_channel: 1
         rjm_solo: on
         fx: [ compressor ]
@@ -443,7 +443,7 @@ programs:
 
 # 20
   - name: In Bloom
-    gmaj_program: 1
+    gmaj_program: 13
     rjm_initial:  0
     scenes:
       - rjm_channel: 1

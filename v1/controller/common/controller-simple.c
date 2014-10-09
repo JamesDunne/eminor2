@@ -240,6 +240,8 @@ static void activate(void) {
         midi_send_cmd1(0xC, gmaj_midi_channel, gmaj_program);
     }
 
+    emin_program = new_emin_program;
+
     // Disable mute if enabled:
     disable_mute();
 
@@ -250,6 +252,8 @@ static void activate(void) {
 static void store_program_state(void) {
     // Store effects on/off state of current program:
     u8 i;
+
+    pr.rjm_initial = new_rjm_channel;
 
     // Store program state:
     flash_store((u16)emin_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
