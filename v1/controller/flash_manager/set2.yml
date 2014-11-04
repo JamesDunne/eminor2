@@ -117,13 +117,13 @@ programs:
         fx: [ noisegate ]
 
 # 6
-  - name: Two Princes
+  - name: I Alone
     gmaj_program: 1
-    rjm_initial:  4
+    rjm_initial:  0
     scenes:
       - rjm_channel: 1
         rjm_solo: off
-        fx: [ compressor ]
+        fx: [ compressor, delay, chorus ]
       - rjm_channel: 1
         rjm_solo: on
         fx: [ compressor ]
@@ -163,13 +163,13 @@ programs:
         rjm_solo: on
         fx: [ noisegate, delay ]
 
-  - name: I Alone
+  - name: Cumbersome
     gmaj_program: 1
-    rjm_initial:  0
+    rjm_initial:  4
     scenes:
       - rjm_channel: 1
         rjm_solo: off
-        fx: [ compressor, delay, chorus ]
+        fx: [ compressor ]
       - rjm_channel: 1
         rjm_solo: on
         fx: [ compressor ]
@@ -185,6 +185,29 @@ programs:
       - rjm_channel: 2
         rjm_solo: on
         fx: [ noisegate, delay ]
+
+  - name: Machinehead
+    gmaj_program: 20
+    rjm_initial:  4
+    scenes:
+      - rjm_channel: 1
+        rjm_solo: off
+        fx: [ compressor ]
+      - rjm_channel: 1
+        rjm_solo: on
+        fx: [ compressor ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ noisegate, compressor, eq ]
+      - rjm_channel: 2
+        rjm_solo: on
+        fx: [ noisegate, compressor, eq ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ noisegate, compressor, eq ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ noisegate, compressor, eq, delay ]
 
   - name: Plush
     gmaj_program: 6
@@ -232,7 +255,7 @@ programs:
         rjm_solo: on
         fx: [ noisegate, delay ]
 
-# 11
+# 12
   - name: Monkeywrench
     gmaj_program: 1
     rjm_initial:  4
@@ -348,7 +371,7 @@ programs:
         rjm_solo: on
         fx: [ noisegate, delay ]
 
-# 16
+# 17
   - name: In Bloom
     gmaj_program: 13
     rjm_initial:  0
@@ -418,8 +441,8 @@ programs:
         rjm_solo: on
         fx: [ noisegate, delay ]
 
-  - name: Machinehead
-    gmaj_program: 20
+  - name: Hey Jealousy
+    gmaj_program: 1
     rjm_initial:  4
     scenes:
       - rjm_channel: 1
@@ -430,16 +453,16 @@ programs:
         fx: [ compressor ]
       - rjm_channel: 2
         rjm_solo: off
-        fx: [ noisegate, compressor, eq ]
+        fx: [ noisegate ]
       - rjm_channel: 2
         rjm_solo: on
-        fx: [ noisegate, compressor, eq ]
+        fx: [ noisegate ]
       - rjm_channel: 2
         rjm_solo: off
-        fx: [ noisegate, compressor, eq ]
+        fx: [ noisegate ]
       - rjm_channel: 2
-        rjm_solo: off
-        fx: [ noisegate, compressor, eq, delay ]
+        rjm_solo: on
+        fx: [ noisegate, delay ]
 
   - name: Closing Time
     gmaj_program: 22
@@ -464,7 +487,7 @@ programs:
         rjm_solo: on
         fx: [ noisegate, delay ]
 
-# 21
+# 22
   - name: Enter Sandman
     gmaj_program: 11
     rjm_initial:  0
