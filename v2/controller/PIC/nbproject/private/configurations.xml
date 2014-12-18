@@ -4,8 +4,8 @@
   <defaultConf>0</defaultConf>
   <confs>
     <conf name="pickit3" type="2">
-      <platformToolSN>:=MPLABCommUSB:=04D8:=900A:=0002:=Microchip Technology Inc.:=PICkit 3:=BUR133650971:=x:=h:=en</platformToolSN>
-      <languageToolchainDir>C:\mplabc18\v3.46\bin</languageToolchainDir>
+      <platformToolSN>:=MPLABComm-USB-Microchip:=&lt;vid>04D8:=&lt;pid>900A:=&lt;rev>0002:=&lt;man>Microchip Technology Inc.:=&lt;prod>PICkit 3:=&lt;sn>BUR133650971:=&lt;drv>x:=&lt;xpt>h:=end</platformToolSN>
+      <languageToolchainDir>G:\programs\mcc18v346\bin</languageToolchainDir>
       <mdbdebugger version="1">
         <placeholder1>place holder 1</placeholder1>
         <placeholder2>place holder 2</placeholder2>
@@ -23,7 +23,7 @@
     </conf>
     <conf name="simulator" type="2">
       <platformToolSN></platformToolSN>
-      <languageToolchainDir>C:\mplabc18\v3.46\bin</languageToolchainDir>
+      <languageToolchainDir>G:\programs\mcc18v346\bin</languageToolchainDir>
       <mdbdebugger version="1">
         <placeholder1>place holder 1</placeholder1>
         <placeholder2>place holder 2</placeholder2>

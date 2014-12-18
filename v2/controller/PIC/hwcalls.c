@@ -64,39 +64,56 @@ void SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
 //returns data into ButtonStateTop and ButtonStateBot.
 void ReadButtons(void) {
     unsigned char BtnAddress, bitloc, i;
-    BitField TempButtons;
-
-    // TODO: remap hardware pins
+    BitField TempButtons0;
+    BitField TempButtons1;
 
     // read bottom buttons:
-    TempButtons.byte = 0;
+    TempButtons0.byte = 0;
     bitloc = 1;
     for (BtnAddress = 0; BtnAddress < 8; BtnAddress++) {
         SetDipAddress(BtnAddress);
 
         for (i = BTN_SAMPLE_DELAY;i!=0;i--);        //delay for a sampling delay
 
-        if (BTN_IN_PIN) TempButtons.byte |= bitloc;     //Or in the current bit if it is set.
+        if (BTN_IN_PIN) TempButtons0.byte |= bitloc;     //Or in the current bit if it is set.
         bitloc <<= 1;                                       //shift the bit over to the next
     }
-    ButtonStateBot = TempButtons.byte;
+    //ButtonStateBot = TempButtons0.byte;
 
     // read top buttons:
-    TempButtons.byte = 0;
+    TempButtons1.byte = 0;
     bitloc = 1;
     for (BtnAddress = 8; BtnAddress < 16; BtnAddress++) {
         SetDipAddress(BtnAddress);
 
         for (i = BTN_SAMPLE_DELAY;i!=0;i--);        //delay for a sampling delay
 
-        if (BTN_IN_PIN) TempButtons.byte |= bitloc;     //Or in the current bit if it is set.
+        if (BTN_IN_PIN) TempButtons1.byte |= bitloc;     //Or in the current bit if it is set.
         bitloc <<= 1;                                       //shift the bit over to the next
     }
-    ButtonStateTop = TempButtons.byte;
+    //ButtonStateTop = TempButtons1.byte;
 
-    // all buttons are backwards logic, so simply invert the state of ButtonState.
-    ButtonStateTop = ~ButtonStateTop;
-    ButtonStateBot = ~ButtonStateBot;
+    //remap buttons:
+    ButtonStateBot = 0;
+    ButtonStateTop = 0;
+
+    if (!TempButtons0.bit0) setbit(ButtonStateBot, 5);
+    if (!TempButtons0.bit1) setbit(ButtonStateBot, 6);
+    if (!TempButtons0.bit2) setbit(ButtonStateBot, 7);
+    if (!TempButtons0.bit3) setbit(ButtonStateBot, 4);
+    if (!TempButtons0.bit4) setbit(ButtonStateBot, 0);
+    if (!TempButtons0.bit5) setbit(ButtonStateBot, 3);
+    if (!TempButtons0.bit6) setbit(ButtonStateBot, 1);
+    if (!TempButtons0.bit7) setbit(ButtonStateBot, 2);
+
+    if (!TempButtons1.bit0) setbit(ButtonStateTop, 5);
+    if (!TempButtons1.bit1) setbit(ButtonStateTop, 6);
+    if (!TempButtons1.bit2) setbit(ButtonStateTop, 7);
+    if (!TempButtons1.bit3) setbit(ButtonStateTop, 4);
+    if (!TempButtons1.bit4) setbit(ButtonStateTop, 0);
+    if (!TempButtons1.bit5) setbit(ButtonStateTop, 3);
+    if (!TempButtons1.bit6) setbit(ButtonStateTop, 1);
+    if (!TempButtons1.bit7) setbit(ButtonStateTop, 2);
 }
 
 void SetDipAddress(unsigned char Address) {
@@ -120,11 +137,8 @@ u16 fsw_poll() {
 }
 
 void UpdateLeds(void) {
-    u8 top, bot;
-
-    // LEDs are wired in reverse:
-    top = LedStatesTop;
-    bot = LedStatesBot;
+//    LedStatesTop = 0xFF;
+//    LedStatesBot = 0xFF;
 
     SendDataToShiftReg16(LedStatesBot, LedStatesTop);
 }
