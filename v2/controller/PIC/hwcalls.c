@@ -97,23 +97,23 @@ void ReadButtons(void) {
     ButtonStateBot = 0;
     ButtonStateTop = 0;
 
-    if (!TempButtons0.bit0) setbit(ButtonStateBot, 5);
-    if (!TempButtons0.bit1) setbit(ButtonStateBot, 6);
-    if (!TempButtons0.bit2) setbit(ButtonStateBot, 7);
-    if (!TempButtons0.bit3) setbit(ButtonStateBot, 4);
-    if (!TempButtons0.bit4) setbit(ButtonStateBot, 0);
-    if (!TempButtons0.bit5) setbit(ButtonStateBot, 3);
-    if (!TempButtons0.bit6) setbit(ButtonStateBot, 1);
-    if (!TempButtons0.bit7) setbit(ButtonStateBot, 2);
+    if (!TempButtons0.bit0) setbit(ButtonStateBot, 2);
+    if (!TempButtons0.bit1) setbit(ButtonStateBot, 0);
+    if (!TempButtons0.bit2) setbit(ButtonStateBot, 1);
+    if (!TempButtons0.bit3) setbit(ButtonStateBot, 3);
+    if (!TempButtons0.bit4) setbit(ButtonStateBot, 7);
+    if (!TempButtons0.bit5) setbit(ButtonStateBot, 4);
+    if (!TempButtons0.bit6) setbit(ButtonStateBot, 6);
+    if (!TempButtons0.bit7) setbit(ButtonStateBot, 5);
 
-    if (!TempButtons1.bit0) setbit(ButtonStateTop, 5);
-    if (!TempButtons1.bit1) setbit(ButtonStateTop, 6);
-    if (!TempButtons1.bit2) setbit(ButtonStateTop, 7);
-    if (!TempButtons1.bit3) setbit(ButtonStateTop, 4);
-    if (!TempButtons1.bit4) setbit(ButtonStateTop, 0);
-    if (!TempButtons1.bit5) setbit(ButtonStateTop, 3);
-    if (!TempButtons1.bit6) setbit(ButtonStateTop, 1);
-    if (!TempButtons1.bit7) setbit(ButtonStateTop, 2);
+    if (!TempButtons1.bit0) setbit(ButtonStateTop, 2);
+    if (!TempButtons1.bit1) setbit(ButtonStateTop, 1);
+    if (!TempButtons1.bit2) setbit(ButtonStateTop, 0);
+    if (!TempButtons1.bit3) setbit(ButtonStateTop, 3);
+    if (!TempButtons1.bit4) setbit(ButtonStateTop, 7);
+    if (!TempButtons1.bit5) setbit(ButtonStateTop, 4);
+    if (!TempButtons1.bit6) setbit(ButtonStateTop, 6);
+    if (!TempButtons1.bit7) setbit(ButtonStateTop, 5);
 }
 
 void SetDipAddress(unsigned char Address) {
@@ -137,10 +137,31 @@ u16 fsw_poll() {
 }
 
 void UpdateLeds(void) {
-//    LedStatesTop = 0xFF;
-//    LedStatesBot = 0xFF;
+    u8 top;
+    u8 bot;
+    
+    top = 0;
+    if (chkbit(LedStatesTop, 0)) setbit(top, 7);
+    if (chkbit(LedStatesTop, 1)) setbit(top, 6);
+    if (chkbit(LedStatesTop, 2)) setbit(top, 5);
+    if (chkbit(LedStatesTop, 3)) setbit(top, 4);
+    if (chkbit(LedStatesTop, 4)) setbit(top, 3);
+    if (chkbit(LedStatesTop, 5)) setbit(top, 2);
+    if (chkbit(LedStatesTop, 6)) setbit(top, 1);
+    if (chkbit(LedStatesTop, 7)) setbit(top, 0);
 
-    SendDataToShiftReg16(LedStatesBot, LedStatesTop);
+    bot = 0;
+    if (chkbit(LedStatesBot, 0)) setbit(bot, 7);
+    if (chkbit(LedStatesBot, 1)) setbit(bot, 6);
+    if (chkbit(LedStatesBot, 2)) setbit(bot, 5);
+    if (chkbit(LedStatesBot, 3)) setbit(bot, 4);
+    if (chkbit(LedStatesBot, 4)) setbit(bot, 3);
+    if (chkbit(LedStatesBot, 5)) setbit(bot, 2);
+    if (chkbit(LedStatesBot, 6)) setbit(bot, 1);
+    if (chkbit(LedStatesBot, 7)) setbit(bot, 0);
+
+
+    SendDataToShiftReg16(bot, top);
 }
 
 /* Set currently active program foot-switch's LED indicator and disable all others */
