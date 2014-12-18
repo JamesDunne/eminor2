@@ -275,8 +275,7 @@ rom unsigned char EXPP_PEDAL_LINEAR_CONV_TABLE[256] =
 
 #pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR		//Update lkr file if this is to change!!
 rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN] = {
-#include "../common/flash_init.h"
-0
+#include "flash_rom_init.h"
 };
 
 #pragma code

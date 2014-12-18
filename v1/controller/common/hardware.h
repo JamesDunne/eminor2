@@ -5,17 +5,28 @@
     LED "active" indicators above foot-switches.
 
     NOTE: it is expected that 'types.h' is #included before this file
-*/
+    */
 
-#define LEDS_MAX_ALPHAS 4
+// --------------- Compiler hacks:
+
+#define STATIC_ASSERT(cond,ident) typedef char _static_assert_##ident[(cond)?1:-1]
+#define COMPILE_ASSERT(cond) STATIC_ASSERT(cond,__LINE__)
+
+#ifndef __MCC18
+//#define rom
+#endif
 
 // --------------- LED read-out display functions:
+
+#define LEDS_MAX_ALPHAS 4
 
 // show 4 alphas on the 4-digit display
 extern void leds_show_4alphas(char text[LEDS_MAX_ALPHAS]);
 
 // show single digit on the single digit display
 extern void leds_show_1digit(u8 value);
+
+// --------------- Momentary toggle foot-switches and LEDs:
 
 #define FSB_PRESET_1 28
 #define FSB_PRESET_2 31
@@ -27,7 +38,6 @@ extern void leds_show_1digit(u8 value);
 #define FSB_CONTROL_3 2
 #define FSB_CONTROL_4 3
 
-// --------------- Momentary toggle foot-switches:
 #define FSM_PRESET_1	0x10000000
 #define FSM_PRESET_2	0x80000000
 #define FSM_PRESET_3	0x40000000
@@ -37,6 +47,15 @@ extern void leds_show_1digit(u8 value);
 #define FSM_CONTROL_2	0x00000002
 #define FSM_CONTROL_3	0x00000004
 #define FSM_CONTROL_4	0x00000008
+
+#define M_1 0x01U
+#define M_2 0x02U
+#define M_3 0x04U
+#define M_4 0x08U
+#define M_5 0x10U
+#define M_6 0x20U
+#define M_7 0x40U
+#define M_8 0x80U
 
 // FX button enable bitmasks:
 #define fxm_compressor  0x01
@@ -105,3 +124,51 @@ extern void flash_store(u16 addr, u16 count, u8 *data);
 /* export */ void controller_init(void);
 /* export */ void controller_10msec_timer(void);
 /* export */ void controller_handle(void);
+
+// --------------- Non-standard / custom:
+
+// JSD's custom persistent data structures per program:
+
+// Program data structure loaded from / written to flash memory:
+struct program {
+    // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
+    char name[20];
+
+    // Initial RJM channel selection (0 to 6):
+    u8 rjm_initial;
+    // RJM channel descriptors mapped to 6 channel selector buttons (see rjm_*); 4 bits each channels, 6 channels, hence 4x6 = 24 bits = 3 octets:
+    u8 rjm_desc[3];
+
+    // G-major program number (1 to 128, 0 for unused):
+    u8 gmaj_program;
+    // G-major effects enabled by default per channel (see fxm_*):
+    u8 fx[6];
+
+    // Reserved:
+    u8 _unused;
+};
+
+// An RJM channel descriptor:
+
+// Mark V channel 1
+#define rjm_channel_1   0x00
+// Mark V channel 2
+#define rjm_channel_2   0x01
+// Mark V channel 3
+#define rjm_channel_3   0x02
+
+#define rjm_channel_mask        0x03
+
+// Mark V solo mode
+#define rjm_solo_mask           0x04
+#define rjm_solo_shr_to_1bit    2
+// Mark V EQ enable
+#define rjm_eq_mask             0x08
+#define rjm_eq_shr_to_1bit      3
+
+// Number of bits to shift to get 2nd bitset from u8:
+#define rjm_shr_to_4bits        4
+
+// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
+// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
+COMPILE_ASSERT(sizeof(struct program) == 32);

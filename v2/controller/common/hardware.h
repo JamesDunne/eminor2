@@ -31,6 +31,8 @@
 #define M_7 0x40U
 #define M_8 0x80U
 
+#define m_channel_initial 0x80U
+
 // FX button enable bitmasks:
 #define fxm_compressor  0x01
 #define fxm_filter      0x02

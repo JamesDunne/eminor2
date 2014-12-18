@@ -171,9 +171,9 @@
     <ClCompile Include="eminorv1.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\flash_init.h" />
     <ClInclude Include="..\common\hardware.h" />
     <ClInclude Include="..\common\types.h" />
+    <ClInclude Include="..\PIC\flash_rom_init.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
