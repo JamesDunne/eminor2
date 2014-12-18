@@ -18,12 +18,14 @@
 //#include "io_cfg.h"
 //#include "BootPIC18NonJ.h"
 #include "boot.h"
-
+#include "c_portdef.h"
+#include "_tools.h"
+#include "c_cnstdef.h"
 
 /** Prototypes **********************************************************/
 void UninitializedMain(void);
 void BootMain(void);
-
+void bootNopFunc(void);
 
 //Never comment this out.  If you do, you won't be able to recover if the user
 //unplugs the USB cable (or power is lost) during an erase/program sequence,
@@ -103,17 +105,33 @@ void UninitializedMain(void)
     //to see if we should stay in bootloader mode, or jump to normal applicaiton
     //execution mode.
 
-
-    //TODO: Modify code here to check for I/O pin to allow entry into bootload mode!!
-    goto DoFlashSignatureCheck;
+    //set analog pins as digital:
+    ADCON0  = INIT_ADCON0;
+    ADCON1  = INIT_ADCON1;
+    ADCON2  = INIT_ADCON2;
 
     //Need to make sure the I/O pin is configured for digital mode so we
     //can sense the digital level on the input pin.
-    TRISBbits.TRISB0 = TRUE;
+    BTN_S0_TRIS_BIT = false;
+    BTN_S1_TRIS_BIT = false;
+    BTN_S2_TRIS_BIT = false;
+    BTN_S3_TRIS_BIT = false;
+    
+    //set multiplexor address to the bottom left button (address 0x02):
+    BTN_S0_LAT_BIT = false;
+    BTN_S1_LAT_BIT = true;
+    BTN_S2_LAT_BIT = false;
+    BTN_S3_LAT_BIT = false;
+
+    //give a short delay to ensure the multiplexor has time to read the pin:
+    bootNopFunc();
+    bootNopFunc();
+    bootNopFunc();
+
 
     //Check Bootload Mode Entry Condition from the I/O pin (ex: place a
     //pushbutton and pull up resistor on the pin)
-    if(PORTBbits.RB0 == TRUE)
+    if(BTN_IN_PIN)
     {
         //If we get to here, the user is not pressing the pushbutton.  We
         //should default to jumping into application run mode in this case.
@@ -157,3 +175,8 @@ DoFlashSignatureCheck:
 
     #endif
 }//end UninitializedMain
+
+void    bootNopFunc(void)
+{
+    //just return..
+}

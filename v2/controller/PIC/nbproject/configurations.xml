@@ -40,6 +40,7 @@
       <itemPath>comm_lcd.c</itemPath>
       <itemPath>BootUserStartup.c</itemPath>
       <itemPath>UserAppCode.c</itemPath>
+      <itemPath>bootcode.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -144,6 +145,7 @@
         <property key="ToolFirmwareFilePath"
                   value="G:\programs/MPLABX226/mplab_ide/mplablibs/modules/ext/PICKIT3.jar/PK3FW_013411.jam"/>
         <property key="ToolFirmwareOption.UseLatestFirmware" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

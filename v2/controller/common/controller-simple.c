@@ -155,6 +155,8 @@ static void send_leds(void) {
     for (; i > LCD_COLS - 3; --i) lcdtext_row_program[i] = ' ';
     lcdtext_row_program[i] = ' ';
 
+//    lcd_update_row(0, "");
+//    lcd_update_row(1, "");
     lcd_update_row(2, lcdtext_row_program);
     lcd_update_row(3, pr.name);
 #endif

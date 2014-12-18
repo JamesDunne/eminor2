@@ -98,8 +98,8 @@ void ReadButtons(void) {
     ButtonStateTop = 0;
 
     if (!TempButtons0.bit0) setbit(ButtonStateBot, 2);
-    if (!TempButtons0.bit1) setbit(ButtonStateBot, 0);
-    if (!TempButtons0.bit2) setbit(ButtonStateBot, 1);
+    if (!TempButtons0.bit1) setbit(ButtonStateBot, 1);
+    if (!TempButtons0.bit2) setbit(ButtonStateBot, 0);
     if (!TempButtons0.bit3) setbit(ButtonStateBot, 3);
     if (!TempButtons0.bit4) setbit(ButtonStateBot, 7);
     if (!TempButtons0.bit5) setbit(ButtonStateBot, 4);
@@ -131,7 +131,7 @@ void SetDipAddress(unsigned char Address) {
 u16 fsw_poll() {
     u16 fsw;
 
-    fsw = ButtonStateBot | (ButtonStateTop << 8);
+    fsw = ButtonStateBot | ((u16)ButtonStateTop << 8);
 
     return fsw;
 }

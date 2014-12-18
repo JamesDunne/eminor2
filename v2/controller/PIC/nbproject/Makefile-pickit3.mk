@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c startup.c ram_def.c config.asm intslct.c init.c hwcalls.c eeprom.c writeprogmem.c systick.c ../common/controller-simple.c comm_midi.c comm_lcd.c BootUserStartup.c UserAppCode.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c startup.c ram_def.c config.asm intslct.c init.c hwcalls.c eeprom.c writeprogmem.c systick.c ../common/controller-simple.c comm_midi.c comm_lcd.c BootUserStartup.c UserAppCode.c bootcode.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/startup.o ${OBJECTDIR}/ram_def.o ${OBJECTDIR}/config.o ${OBJECTDIR}/intslct.o ${OBJECTDIR}/init.o ${OBJECTDIR}/hwcalls.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/writeprogmem.o ${OBJECTDIR}/systick.o ${OBJECTDIR}/_ext/1270477542/controller-simple.o ${OBJECTDIR}/comm_midi.o ${OBJECTDIR}/comm_lcd.o ${OBJECTDIR}/BootUserStartup.o ${OBJECTDIR}/UserAppCode.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/startup.o.d ${OBJECTDIR}/ram_def.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/intslct.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/hwcalls.o.d ${OBJECTDIR}/eeprom.o.d ${OBJECTDIR}/writeprogmem.o.d ${OBJECTDIR}/systick.o.d ${OBJECTDIR}/_ext/1270477542/controller-simple.o.d ${OBJECTDIR}/comm_midi.o.d ${OBJECTDIR}/comm_lcd.o.d ${OBJECTDIR}/BootUserStartup.o.d ${OBJECTDIR}/UserAppCode.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/startup.o ${OBJECTDIR}/ram_def.o ${OBJECTDIR}/config.o ${OBJECTDIR}/intslct.o ${OBJECTDIR}/init.o ${OBJECTDIR}/hwcalls.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/writeprogmem.o ${OBJECTDIR}/systick.o ${OBJECTDIR}/_ext/1270477542/controller-simple.o ${OBJECTDIR}/comm_midi.o ${OBJECTDIR}/comm_lcd.o ${OBJECTDIR}/BootUserStartup.o ${OBJECTDIR}/UserAppCode.o ${OBJECTDIR}/bootcode.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/startup.o.d ${OBJECTDIR}/ram_def.o.d ${OBJECTDIR}/config.o.d ${OBJECTDIR}/intslct.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/hwcalls.o.d ${OBJECTDIR}/eeprom.o.d ${OBJECTDIR}/writeprogmem.o.d ${OBJECTDIR}/systick.o.d ${OBJECTDIR}/_ext/1270477542/controller-simple.o.d ${OBJECTDIR}/comm_midi.o.d ${OBJECTDIR}/comm_lcd.o.d ${OBJECTDIR}/BootUserStartup.o.d ${OBJECTDIR}/UserAppCode.o.d ${OBJECTDIR}/bootcode.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/startup.o ${OBJECTDIR}/ram_def.o ${OBJECTDIR}/config.o ${OBJECTDIR}/intslct.o ${OBJECTDIR}/init.o ${OBJECTDIR}/hwcalls.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/writeprogmem.o ${OBJECTDIR}/systick.o ${OBJECTDIR}/_ext/1270477542/controller-simple.o ${OBJECTDIR}/comm_midi.o ${OBJECTDIR}/comm_lcd.o ${OBJECTDIR}/BootUserStartup.o ${OBJECTDIR}/UserAppCode.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/startup.o ${OBJECTDIR}/ram_def.o ${OBJECTDIR}/config.o ${OBJECTDIR}/intslct.o ${OBJECTDIR}/init.o ${OBJECTDIR}/hwcalls.o ${OBJECTDIR}/eeprom.o ${OBJECTDIR}/writeprogmem.o ${OBJECTDIR}/systick.o ${OBJECTDIR}/_ext/1270477542/controller-simple.o ${OBJECTDIR}/comm_midi.o ${OBJECTDIR}/comm_lcd.o ${OBJECTDIR}/BootUserStartup.o ${OBJECTDIR}/UserAppCode.o ${OBJECTDIR}/bootcode.o
 
 # Source Files
-SOURCEFILES=main.c startup.c ram_def.c config.asm intslct.c init.c hwcalls.c eeprom.c writeprogmem.c systick.c ../common/controller-simple.c comm_midi.c comm_lcd.c BootUserStartup.c UserAppCode.c
+SOURCEFILES=main.c startup.c ram_def.c config.asm intslct.c init.c hwcalls.c eeprom.c writeprogmem.c systick.c ../common/controller-simple.c comm_midi.c comm_lcd.c BootUserStartup.c UserAppCode.c bootcode.c
 
 
 CFLAGS=
@@ -217,6 +217,14 @@ ${OBJECTDIR}/UserAppCode.o: UserAppCode.c  nbproject/Makefile-${CND_CONF}.mk
 	@${DEP_GEN} -d ${OBJECTDIR}/UserAppCode.o 
 	@${FIXDEPS} "${OBJECTDIR}/UserAppCode.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
+${OBJECTDIR}/bootcode.o: bootcode.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR} 
+	@${RM} ${OBJECTDIR}/bootcode.o.d 
+	@${RM} ${OBJECTDIR}/bootcode.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/bootcode.o   bootcode.c  -nw 2060 -nw 2056 -nw 2055
+	@${DEP_GEN} -d ${OBJECTDIR}/bootcode.o 
+	@${FIXDEPS} "${OBJECTDIR}/bootcode.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
 else
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
@@ -329,6 +337,14 @@ ${OBJECTDIR}/UserAppCode.o: UserAppCode.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/UserAppCode.o   UserAppCode.c  -nw 2060 -nw 2056 -nw 2055
 	@${DEP_GEN} -d ${OBJECTDIR}/UserAppCode.o 
 	@${FIXDEPS} "${OBJECTDIR}/UserAppCode.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
+${OBJECTDIR}/bootcode.o: bootcode.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR} 
+	@${RM} ${OBJECTDIR}/bootcode.o.d 
+	@${RM} ${OBJECTDIR}/bootcode.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -D__MCC18 -I"../common" -I"../../../../../mplabc18/v3.46/h" -I"." -ms -oa- -nw 2060 -nw 2056 -nw 2055  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/bootcode.o   bootcode.c  -nw 2060 -nw 2056 -nw 2055
+	@${DEP_GEN} -d ${OBJECTDIR}/bootcode.o 
+	@${FIXDEPS} "${OBJECTDIR}/bootcode.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
 endif
 
