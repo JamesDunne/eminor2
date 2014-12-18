@@ -22,7 +22,6 @@ void	SystemTimeRoutine(void) {
 		SystickCntr2 = 0;
 
 //10mS routines:
-		ExpPedalSvc = true;
 		HandleController = true;
 		HandleLeds = true;
 		ControllerTiming = true;

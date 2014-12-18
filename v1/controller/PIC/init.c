@@ -8,8 +8,6 @@
 
 
 #include "c_system.h"
-#include "usb.h"
-
 
 void init(void) {
 	CLEAR_RAM();
@@ -54,7 +52,4 @@ void init(void) {
 	T2CON = INIT_T2CON;				//enable the timer and set up the scalars
 	PIE1 = INIT_PIE1;
 	INTCONbits.GIEH = 1;          //enable interrupts
-
-
-	mInitializeUSBDriver();
 }

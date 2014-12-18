@@ -56,6 +56,3 @@ void	Scroll7SegDisp(void);
 extern rom unsigned char NumbersSegTable[10];
 extern rom unsigned char LettersSegTable[26];
 extern rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];
-extern rom unsigned char EXPP_PEDAL_LINEAR_CONV_TABLE[256];
-//-----------------------------------------------------------------------------
-//Update history:

@@ -15,7 +15,7 @@ near extern BitField CommFlags1;
 
 near extern BitField ArbFlags1;
 #define Systick				ArbFlags1.bit0
-#define	ExpPedalSvc			ArbFlags1.bit1
+//#define	ExpPedalSvc			ArbFlags1.bit1
 #define	ButtonsSvc			ArbFlags1.bit2
 #define	Write0Pending		ArbFlags1.bit3
 #define	Write32Pending		ArbFlags1.bit4
