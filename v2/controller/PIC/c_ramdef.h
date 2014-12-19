@@ -26,6 +26,7 @@ near extern BitField ArbFlags1;
 near extern BitField ArbFlags2;
 #define CheckButtons        ArbFlags2.bit0
 #define ControllerTiming    ArbFlags2.bit1
+#define LCDUpdate           ArbFlags2.bit2
 
 //----------------------------Main variables----------------------------------------
 
@@ -59,4 +60,8 @@ extern unsigned char swuart_txmask;
 extern unsigned char swuart_mode;
 extern unsigned char swuart_started;
 
+extern unsigned char LCDUpdateStage;
+
 extern TwoBytes tTimer1Value;
+
+extern unsigned char LCDRamMap[4][20];

@@ -67,6 +67,10 @@ void main() {
             SystemTimeRoutine();        //1mS system time routine
         }
 
+        if (LCDUpdate && swuart_mode == SWUARTMODE_TX_IDLE) {
+            lcd_update_screen();
+        }
+
         if (CheckButtons) {
             CheckButtons = false;
             ReadButtons();              //read buttons off the multiplexor

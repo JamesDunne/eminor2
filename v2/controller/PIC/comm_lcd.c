@@ -5,6 +5,8 @@
 //;############################################################################
 
 #include "c_system.h"
+#include "typedefs.h"
+#include "hardware.h"
 
 // LCD communication is done with a bit-banged RS232 impl using timer interrupts
 // with RD7 as the TX pin. No RX is necessary.
@@ -34,6 +36,33 @@ void lcd_init(void) {
 
     // Start up the SWUART timer interrupt:
     ENABLE_ALL_INTERRUPTS();
+}
+
+void lcd_update_screen(void) {
+    u8 i, row;
+
+    row = LCDUpdateStage;
+
+    // Position cursor on start of row, col 1:
+    lcd_enqueue(0xFE);
+    lcd_enqueue(0x45);
+    switch (row) {
+        case 0: lcd_enqueue(0x00); break;
+        case 1: lcd_enqueue(0x40); break;
+        case 2: lcd_enqueue(0x14); break;
+        case 3: lcd_enqueue(0x54); break;
+    }
+
+    // Queue up the row of chars:
+    for (i = 0; i < LCD_COLS; ++i) {
+        lcd_enqueue(LCDRamMap[row][i]);
+    }
+
+    LCDUpdateStage++;
+    if (LCDUpdateStage >= LCD_ROWS) {
+        LCDUpdateStage = 0;
+        LCDUpdate = false;
+    }
 }
 
 void lcd_enqueue(unsigned char v) {

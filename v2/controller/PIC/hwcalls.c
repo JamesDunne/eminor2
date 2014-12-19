@@ -171,28 +171,31 @@ void led_set(u16 leds){
 }
 
 void lcd_update_row(u8 row, char text[LCD_COLS]) {
-    // TODO(jsd): Detect necessary changes and enqueue commands later when buffer has space
-    u8 i;
+//    // TODO(jsd): Detect necessary changes and enqueue commands later when buffer has space
+    u8 i, Update;
 
-    // Position cursor on start of row, col 1:
-    lcd_enqueue(0xFE);
-    lcd_enqueue(0x45);
-    switch (row) {
-        case 0: lcd_enqueue(0x00); break;
-        case 1: lcd_enqueue(0x40); break;
-        case 2: lcd_enqueue(0x14); break;
-        case 3: lcd_enqueue(0x54); break;
-    }
+    Update = false;
 
     // Queue up the row of chars:
     for (i = 0; i < LCD_COLS; ++i) {
         u8 c = text[i];
         if (c == 0) break;
-        lcd_enqueue(c);
+        if (LCDRamMap[row][i] != c) {
+            LCDRamMap[row][i] = c;
+            Update = true;
+        }
     }
     // Space-pad to the right:
     for (; i < LCD_COLS; ++i) {
-        lcd_enqueue(0x20);
+        if (LCDRamMap[row][i] != 0x20) {
+            LCDRamMap[row][i] = 0x20;
+            Update = true;
+        }
+    }
+
+    if (Update) {
+        LCDUpdate = true;
+        LCDUpdateStage = 0;      //start at the beginning if the screen needs to be redrawn
     }
 }
 

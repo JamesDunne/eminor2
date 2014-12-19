@@ -43,8 +43,13 @@ unsigned char swuart_started;
 
 TwoBytes tTimer1Value;
 
+unsigned char LCDUpdateStage;
+
 // User-writable flash memory:
 #pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
 rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN] = {
 #include "flash_rom_init.h"
 };
+
+unsigned char LCDRamMap[4][20];
+
