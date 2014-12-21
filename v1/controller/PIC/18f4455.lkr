@@ -3,15 +3,16 @@
 // Sample linker script for the PIC18F4455 processor
 
 //LIBPATH C:\mcc18v303\lib
-LIBPATH J:\mcc18\lib
+//LIBPATH J:\mcc18\lib
 
 FILES clib.lib
 FILES p18f4455.lib
 
 CODEPAGE   NAME=fstart     START=0x000          END=0x029  		   PROTECTED
 CODEPAGE   NAME=vectors    START=0xA00          END=0xA29          PROTECTED
-CODEPAGE   NAME=page       START=0xA2A          END=0x28FF
-CODEPAGE   NAME=Writable   START=0x2900         END=0x7FFF         PROTECTED
+CODEPAGE   NAME=page       START=0xA2A          END=0x24FF
+CODEPAGE   NAME=Writable   START=0x2500         END=0x5FFF         PROTECTED
+
 CODEPAGE   NAME=idlocs     START=0x200000       END=0x200007       PROTECTED
 CODEPAGE   NAME=config     START=0x300000       END=0x30000D       PROTECTED
 CODEPAGE   NAME=devid      START=0x3FFFFE       END=0x3FFFFF       PROTECTED
