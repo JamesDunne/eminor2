@@ -98,6 +98,9 @@ u8 tap_toggle = 0;
 u32 control4_button_mask = 0;
 
 // right-aligns an integer in base 10 at s[i] and pads spaces down to s[0]
+#if 0
+
+// NOTE(jsd): Using modulus operator invokes a call to a clib function to perform. Yuck.
 static void ralign_itoa10(u8 n, char *s, s8 i) {
     //assert(s != 0);
     //assert(i >= 0);
@@ -111,6 +114,54 @@ static void ralign_itoa10(u8 n, char *s, s8 i) {
     // pad the left chars with spaces:
     for (--i; i >= 0; --i) s[i] = ' ';
 }
+
+#else
+
+// NOTE(jsd): This version avoids modulus and division entirely.
+static void ralign_itoa10(u8 n, char *s, s8 i)
+{
+	unsigned char d2, d1, d0, q;
+	d1 = (n>>4) & 0xF;
+	d2 = 0;
+
+	d0 = 6*(d1) + (n & 0xF);
+	q = (d0 * 0xCD) >> 11;
+	d0 = d0 - 10*q;
+
+	d1 = q + d1;
+	q = (d1 * 0xCD) >> 11;
+	d1 = d1 - 10*q;
+
+	d2 = q;
+	q = (d2 * 0x1A) >> 8;
+	d2 = d2 - 10*q;
+
+    // Write output:
+	s[3] = d0+'0';
+	if (d1>0 || d2>0) {
+	    s[2] = d1+'0';
+	} else {
+	    s[2] = ' ';
+	}
+	if (d2>0) {
+	    s[1] = d2+'0';
+	} else {
+	    s[1] = ' ';
+	}
+    s[0] = ' ';
+}
+
+//static void ralign_unittest() {
+//    u8 s[4];
+//    u8 n;
+//    for (n = 0; n <= 254; n++) {
+//        ralign_itoa10(n, s, 3);
+//        printf("%c%c%c%c\n", s[0], s[1], s[2], s[3]);
+//    }
+//    ralign_itoa10(255, s, 3);
+//    printf("%c%c%c%c\n", s[0], s[1], s[2], s[3]);
+//}
+#endif
 
 // update 7-segment displays
 static void show_program(void) {
