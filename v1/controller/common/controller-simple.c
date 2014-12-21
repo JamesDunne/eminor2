@@ -120,35 +120,28 @@ static void ralign_itoa10(u8 n, char *s, s8 i) {
 // NOTE(jsd): This version avoids modulus and division entirely.
 static void ralign_itoa10(u8 n, char *s, s8 i)
 {
-	unsigned char d2, d1, d0, q;
+	unsigned char d1, d, q;
 	d1 = (n>>4) & 0xF;
-	d2 = 0;
 
-	d0 = 6*(d1) + (n & 0xF);
-	q = (d0 * 0xCD) >> 11;
-	d0 = d0 - 10*q;
-
-	d1 = q + d1;
-	q = (d1 * 0xCD) >> 11;
-	d1 = d1 - 10*q;
-
-	d2 = q;
-	q = (d2 * 0x1A) >> 8;
-	d2 = d2 - 10*q;
-
-    // Write output:
-	s[3] = d0+'0';
-	if (d1>0 || d2>0) {
-	    s[2] = d1+'0';
-	} else {
-	    s[2] = ' ';
-	}
-	if (d2>0) {
-	    s[1] = d2+'0';
-	} else {
-	    s[1] = ' ';
-	}
     s[0] = ' ';
+    s[1] = ' ';
+    s[2] = ' ';
+
+	d = 6*(d1) + (n & 0xF);
+	q = (d * 0xCD) >> 11;
+	s[3] = '0' + (d - 10*q);
+
+	d = q + d1;
+    if (d > 0) {
+    	q = (d * 0xCD) >> 11;
+    	s[2] = '0' + (d - 10*q);
+
+    	d = q;
+    	if (d > 0) {
+    	    q = (d * 0x1A) >> 8;
+    	    s[1] = '0' + (d - 10*q);
+    	}
+    }
 }
 
 //static void ralign_unittest() {
