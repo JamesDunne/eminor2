@@ -45,6 +45,7 @@ void    midi_tx(void);
 void    lcd_init(void);
 void    lcd_clear_buffer(void);
 void    lcd_enqueue(unsigned char Input);
+void    lcd_update_screen(void);
 
 void    swuart_tx_start(void);
 void    swuart_tx_interrupt(void);
