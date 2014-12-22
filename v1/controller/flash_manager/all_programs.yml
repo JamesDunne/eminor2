@@ -615,7 +615,6 @@ programs:
       - rjm_channel: 2
         rjm_solo: on
         fx: [ noisegate, delay ]
-
   - name: Kryptonite
     gmaj_program: 29
     rjm_initial:  4

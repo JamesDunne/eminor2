@@ -40,21 +40,49 @@ type Programs struct {
 	Programs []Program `yaml:"programs"`
 }
 
-func main() {
+type Setlist struct {
+	Offset int   `yaml:"song_offset"`
+	Songs  []int `yaml:"songs"`
+}
+
+type Setlists struct {
+	Set  int       `yaml:"set"`
+	Sets []Setlist `yaml:"sets"`
+}
+
+func parse_yaml(path string, dest interface{}) error {
 	// Load YAML file:
-	ymlbytes, err := ioutil.ReadFile("programs.yml")
+	ymlbytes, err := ioutil.ReadFile(path)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	// Parse YAML:
+	err = yaml.Unmarshal(ymlbytes, dest)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func main() {
 	var programs Programs
-	err = yaml.Unmarshal(ymlbytes, &programs)
+	err := parse_yaml("all_programs.yml", &programs)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	//fmt.Printf("%+v\n\n", programs)
+
+	// Add setlist data:
+	var setlists Setlists
+	err = parse_yaml("setlists.yml", &setlists)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	//fmt.Printf("%+v\n\n", setlists)
 
 	fo, err := os.OpenFile("../PIC/flash_rom_init.h", os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
@@ -64,7 +92,10 @@ func main() {
 	defer fo.Close()
 
 	// Translate to binary data for FLASH memory:
-	for i, p := range programs.Programs {
+	songs := 0
+	for _, p := range programs.Programs {
+		songs++
+
 		// Write the name first:
 		if len(p.Name) > 20 {
 			panic(fmt.Errorf("Name is longer than 20 character limit: '%s'", p.Name))
@@ -135,7 +166,30 @@ func main() {
 		// Unused:
 		fmt.Fprintf(fo, "0")
 
-		if i < len(programs.Programs)-1 {
+		fmt.Fprint(fo, ",\n")
+	}
+
+	for songs = songs; songs < 128; songs++ {
+		fmt.Fprint(fo, "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0")
+
+		fmt.Fprint(fo, ",\n")
+	}
+
+	// Write setlist data:
+	for i, set := range setlists.Sets {
+		fmt.Fprintf(fo, "%d, ", byte(len(set.Songs)))
+		fmt.Fprintf(fo, "%d, ", byte(set.Offset))
+		for j := 0; j < 30; j++ {
+			if j >= len(set.Songs) {
+				fmt.Fprintf(fo, "0xFF")
+			} else {
+				fmt.Fprintf(fo, "0x%02X", byte(set.Songs[j]))
+			}
+			if j < 30-1 {
+				fmt.Fprint(fo, ", ")
+			}
+		}
+		if i < len(setlists.Sets)-1 {
 			fmt.Fprint(fo, ",\n")
 		} else {
 			fmt.Fprint(fo, "\n")

@@ -86,7 +86,7 @@ u8 switch_mode = 0;
 
 // Setlist mode or song mode
 u8 slider = 0, old_slider = 255;
-u8 setlist_mode = 0;
+u8 setlist_mode = 0, old_setlist_mode = 255;
 
 // Current program data:
 struct program pr;
@@ -407,6 +407,14 @@ void activate_mode() {
     if (setlist_mode == 0) {
         // Raw program mode:
 
+        if (old_setlist_mode == 1) {
+            // Switch from setlist program to emin_program:
+            new_emin_program = sl.entries[new_emin_program].program;
+            prepare_emin_program();
+            activate();
+        }
+
+        return;
     } else {
         // Setlist mode:
 
@@ -416,7 +424,23 @@ void activate_mode() {
         if (sl.count == 0) {
             // No songs in set; switch back to program mode:
             setlist_mode = 0;
+            return;
         }
+
+        if (old_setlist_mode == 0) {
+            // Switch from emin_program to setlist program:
+            u8 i;
+            for (i = 0; i < sl.count; i++) {
+                if (sl.entries[i].program == new_emin_program) {
+                    new_emin_program = i;
+                    break;
+                }
+            }
+            prepare_emin_program();
+            activate();
+        }
+
+        return;
     }
 }
 
@@ -456,6 +480,7 @@ void controller_init(void) {
 
     setlist_mode = slider;
     activate_mode();
+    old_setlist_mode = setlist_mode;
 
     // Initialize e-minor program to 0:
     new_emin_program = 0;
@@ -509,6 +534,7 @@ void controller_handle(void) {
 
         // activate_mode() can change setlist_mode if invalid data detected:
         activate_mode();
+        old_setlist_mode = setlist_mode;
 
         old_slider = slider;
     }
