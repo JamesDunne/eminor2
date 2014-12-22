@@ -148,6 +148,24 @@ struct program {
     u8 _unused;
 };
 
+// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
+// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
+COMPILE_ASSERT(sizeof(struct program) == 32);
+
+// Set list entry
+struct set_entry {
+    u8 program;
+};
+
+struct set_list {
+    u8 song_offset;                 // for very long set lists split in parts; unlikely to be used
+    struct set_entry entries[31];   // Use 0xFF for end-of-set marker
+};
+
+// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
+// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
+COMPILE_ASSERT(sizeof(struct set_list) == 32);
+
 // An RJM channel descriptor:
 
 // Mark V channel 1
@@ -168,7 +186,3 @@ struct program {
 
 // Number of bits to shift to get 2nd bitset from u8:
 #define rjm_shr_to_4bits        4
-
-// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
-// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
-COMPILE_ASSERT(sizeof(struct program) == 32);

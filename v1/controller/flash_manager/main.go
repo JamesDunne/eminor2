@@ -65,8 +65,6 @@ func main() {
 
 	// Translate to binary data for FLASH memory:
 	for i, p := range programs.Programs {
-		//buf := bytes.NewBuffer(make([]byte, 0, (5*20)+(5*12)+(1*11)))
-
 		// Write the name first:
 		if len(p.Name) > 20 {
 			panic(fmt.Errorf("Name is longer than 20 character limit: '%s'", p.Name))
@@ -137,7 +135,6 @@ func main() {
 		// Unused:
 		fmt.Fprintf(fo, "0")
 
-		//fmt.Print(buf.String())
 		if i < len(programs.Programs)-1 {
 			fmt.Fprint(fo, ",\n")
 		} else {
