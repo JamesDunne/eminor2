@@ -158,8 +158,9 @@ struct set_entry {
 };
 
 struct set_list {
+    u8 count;                       // number of songs in set list
     u8 song_offset;                 // for very long set lists split in parts; unlikely to be used
-    struct set_entry entries[31];   // Use 0xFF for end-of-set marker
+    struct set_entry entries[30];
 };
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!

@@ -84,8 +84,14 @@ u8 new_emin_program = 0;
 // current switch mode; holding any preset button for 500ms enables alternate mode.
 u8 switch_mode = 0;
 
+// Setlist mode or song mode
+u8 slider = 0, old_slider = 255;
+u8 setlist_mode = 0;
+
 // Current program data:
 struct program pr;
+// Current setlist data:
+struct set_list sl;
 
 // timers for preset button hold time
 u8 timer_control4 = 0, timer_control4_enable = 0;
@@ -118,7 +124,7 @@ static void ralign_itoa10(u8 n, char *s, s8 i) {
 #else
 
 // NOTE(jsd): This version avoids modulus and division entirely.
-static void ralign_itoa10(u8 n, char *s, s8 i)
+static void ralign_itoa10(u8 n, char s[4])
 {
 	unsigned char d1, d, q;
 	d1 = (n>>4) & 0xF;
@@ -148,10 +154,10 @@ static void ralign_itoa10(u8 n, char *s, s8 i)
 //    u8 s[4];
 //    u8 n;
 //    for (n = 0; n <= 254; n++) {
-//        ralign_itoa10(n, s, 3);
+//        ralign_itoa10(n, s);
 //        printf("%c%c%c%c\n", s[0], s[1], s[2], s[3]);
 //    }
-//    ralign_itoa10(255, s, 3);
+//    ralign_itoa10(255, s);
 //    printf("%c%c%c%c\n", s[0], s[1], s[2], s[3]);
 //}
 #endif
@@ -159,9 +165,12 @@ static void ralign_itoa10(u8 n, char *s, s8 i)
 // update 7-segment displays
 static void show_program(void) {
     char s[LEDS_MAX_ALPHAS];
-    s8 i = LEDS_MAX_ALPHAS - 1;
 
-    ralign_itoa10(new_emin_program + 1, s, i);
+    if (setlist_mode == 0) {
+        ralign_itoa10(new_emin_program + 1, s);
+    } else {
+        ralign_itoa10(new_emin_program + sl.song_offset + 1, s);
+    }
 
     if (switch_mode != 0) {
         // Alternate switch mode.
@@ -300,7 +309,16 @@ static void store_program_state(void) {
     pr.rjm_initial = new_rjm_channel;
 
     // Store program state:
-    flash_store((u16)emin_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+    if (setlist_mode == 0) {
+        // Raw program mode:
+        flash_store((u16)emin_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+    } else {
+        // Setlist mode:
+        u8 program = sl.entries[emin_program].program;
+        if (program != 0xFF) {
+            flash_store((u16)program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+        }
+    }
 }
 
 // prepares the next g-major program to load
@@ -308,12 +326,23 @@ static void prepare_emin_program(void) {
     u8 i;
 
     // Load effects on/off state data from persistent storage:
-    flash_load((u16)new_emin_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+    if (setlist_mode == 0) {
+        // Raw program selection:
+        flash_load((u16)new_emin_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+    } else {
+        // Setlist selection:
+        u8 program;
+        if (new_emin_program >= sl.count)
+            new_emin_program = sl.count - 1;
+        program = sl.entries[new_emin_program].program;
+        flash_load((u16)program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+    }
+
     if (pr.name[0] == 0) {
         // Empty program name? That signifies a zeroed-out program. Let's set up some reasonable defaults:
 
         // Program name is the program number in decimal:
-        ralign_itoa10(new_emin_program + 1, pr.name, 3);
+        ralign_itoa10(new_emin_program + sl.song_offset + 1, pr.name);
         pr.name[4] = 0;
 
         pr.gmaj_program = new_emin_program + 1;
@@ -374,6 +403,23 @@ static void reset_timer4(u32 mask) {
     timer_control4_enable = 1;
 }
 
+void activate_mode() {
+    if (setlist_mode == 0) {
+        // Raw program mode:
+
+    } else {
+        // Setlist mode:
+
+        // Load selected setlist:
+        const u8 setlist_index = 0;     // TODO: make user-selectable.
+        flash_load((u16)((128 * 0x20) + setlist_index * sizeof(struct set_list)), sizeof(struct set_list), &sl);
+        if (sl.count == 0) {
+            // No songs in set; switch back to program mode:
+            setlist_mode = 0;
+        }
+    }
+}
+
 // ------------------------- Actual controller logic -------------------------
 
 // set the controller to an initial state
@@ -404,7 +450,14 @@ void controller_init(void) {
     mute_toggle = 0;
     control4_button_mask = FSM_PRESET_1;
 
-    // Initialize g-major program to 0:
+    // Poll the setlist/program slider switch:
+    slider = slider_poll();
+    old_slider = slider;
+
+    setlist_mode = slider;
+    activate_mode();
+
+    // Initialize e-minor program to 0:
     new_emin_program = 0;
     prepare_emin_program();
     activate();
@@ -449,6 +502,17 @@ void controller_10msec_timer(void) {
 
 // main control loop
 void controller_handle(void) {
+    // Poll the setlist/program slider switch:
+    slider = slider_poll();
+    if (slider != old_slider) {
+        setlist_mode = slider;
+
+        // activate_mode() can change setlist_mode if invalid data detected:
+        activate_mode();
+
+        old_slider = slider;
+    }
+
     // poll foot-switch depression status:
     sw_curr = fsw_poll();
 
