@@ -323,16 +323,16 @@ void paintFacePlate(HWND hwnd) {
 
     /* draw mode slider-switch */
     if (mode) {
-        /* CONCERT mode */
-        SelectObject(hDC, brsDarkRed);
-        dpi_Rectangle(hDC, 4.35, 1.2, 4.5, 1.4);
+        /* SETLIST mode */
         SelectObject(hDC, brsRed);
+        dpi_Rectangle(hDC, 4.35, 1.2, 4.5, 1.4);
+        SelectObject(hDC, brsDarkRed);
         dpi_Rectangle(hDC, 4.5, 1.2, 4.65, 1.4);
     } else {
-        /* PRACTICE mode */
-        SelectObject(hDC, brsDarkRed);
-        dpi_Rectangle(hDC, 4.5, 1.2, 4.65, 1.4);
+        /* PROGRAM mode */
         SelectObject(hDC, brsRed);
+        dpi_Rectangle(hDC, 4.5, 1.2, 4.65, 1.4);
+        SelectObject(hDC, brsDarkRed);
         dpi_Rectangle(hDC, 4.35, 1.2, 4.5, 1.4);
     }
 

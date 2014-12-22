@@ -20,6 +20,7 @@ void main() {
 	init();
 	CLRWDT();
 	//testcrap();
+	ReadButtons();
 	controller_init();
 	CLRWDT();
 

@@ -104,12 +104,11 @@ u8 tap_toggle = 0;
 u32 control4_button_mask = 0;
 
 // right-aligns an integer in base 10 at s[i] and pads spaces down to s[0]
-#if 0
-
-// NOTE(jsd): Using modulus operator invokes a call to a clib function to perform. Yuck.
-static void ralign_itoa10(u8 n, char *s, s8 i) {
+// NOTE(jsd): Using modulus operator invokes a call to a CLIB.LIB function to perform. Yuck.
+static void ralign_itoa10(u8 n, char *s) {
     //assert(s != 0);
     //assert(i >= 0);
+    s8 i = 3;
 
     do {
         s[i] = (n % 10) + '0';
@@ -120,47 +119,6 @@ static void ralign_itoa10(u8 n, char *s, s8 i) {
     // pad the left chars with spaces:
     for (--i; i >= 0; --i) s[i] = ' ';
 }
-
-#else
-
-// NOTE(jsd): This version avoids modulus and division entirely.
-static void ralign_itoa10(u8 n, char s[4])
-{
-	unsigned char d1, d, q;
-	d1 = (n>>4) & 0xF;
-
-    s[0] = ' ';
-    s[1] = ' ';
-    s[2] = ' ';
-
-	d = 6*(d1) + (n & 0xF);
-	q = (d * 0xCD) >> 11;
-	s[3] = '0' + (d - 10*q);
-
-	d = q + d1;
-    if (d > 0) {
-    	q = (d * 0xCD) >> 11;
-    	s[2] = '0' + (d - 10*q);
-
-    	d = q;
-    	if (d > 0) {
-    	    q = (d * 0x1A) >> 8;
-    	    s[1] = '0' + (d - 10*q);
-    	}
-    }
-}
-
-//static void ralign_unittest() {
-//    u8 s[4];
-//    u8 n;
-//    for (n = 0; n <= 254; n++) {
-//        ralign_itoa10(n, s);
-//        printf("%c%c%c%c\n", s[0], s[1], s[2], s[3]);
-//    }
-//    ralign_itoa10(255, s);
-//    printf("%c%c%c%c\n", s[0], s[1], s[2], s[3]);
-//}
-#endif
 
 // update 7-segment displays
 static void show_program(void) {
@@ -403,7 +361,7 @@ static void reset_timer4(u32 mask) {
     timer_control4_enable = 1;
 }
 
-void activate_mode() {
+void activate_mode(void) {
     if (setlist_mode == 0) {
         // Raw program mode:
 
@@ -420,7 +378,7 @@ void activate_mode() {
 
         // Load selected setlist:
         const u8 setlist_index = 0;     // TODO: make user-selectable.
-        flash_load((u16)((128 * 0x20) + setlist_index * sizeof(struct set_list)), sizeof(struct set_list), &sl);
+        flash_load((u16)(128 * 0x20) + (u16)setlist_index * sizeof(struct set_list), sizeof(struct set_list), (u8 *)&sl);
         if (sl.count == 0) {
             // No songs in set; switch back to program mode:
             setlist_mode = 0;
@@ -448,6 +406,25 @@ void activate_mode() {
 
 // set the controller to an initial state
 void controller_init(void) {
+    // Initial bad values to force setting on init:
+    rjm_channel = 255;
+    emin_program = 255;
+    
+    gmaj_program = 255;
+    old_rjm_actual = 255;
+    old_gmaj_program = 255;
+    
+    new_rjm_channel = 0;
+    new_emin_program = 0;
+
+    switch_mode = 0;
+    
+    // Setlist mode or song mode
+    slider = 0;
+    old_slider = 255;
+    setlist_mode = 1;
+    old_setlist_mode = 255;
+
     // This should be overwritten instantly by prepare_emin_program()
     pr.fx[0] = 0;
     pr.fx[1] = fxm_delay;
@@ -455,6 +432,9 @@ void controller_init(void) {
     pr.fx[3] = fxm_delay;
     pr.fx[4] = 0;
     pr.fx[5] = fxm_delay;
+
+    sl.count = 0;
+    sl.song_offset = 0;
 
     // continuous controller values:
     // Top-row 4 controls:
@@ -477,8 +457,8 @@ void controller_init(void) {
     // Poll the setlist/program slider switch:
     slider = slider_poll();
     old_slider = slider;
-
     setlist_mode = slider;
+
     activate_mode();
     old_setlist_mode = setlist_mode;
 

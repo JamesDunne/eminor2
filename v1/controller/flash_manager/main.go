@@ -183,7 +183,7 @@ func main() {
 			if j >= len(set.Songs) {
 				fmt.Fprintf(fo, "0xFF")
 			} else {
-				fmt.Fprintf(fo, "0x%02X", byte(set.Songs[j]))
+				fmt.Fprintf(fo, "0x%02X", byte(set.Songs[j]-1))
 			}
 			if j < 30-1 {
 				fmt.Fprint(fo, ", ")
