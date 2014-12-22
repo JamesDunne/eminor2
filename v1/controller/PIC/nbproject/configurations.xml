@@ -8,10 +8,6 @@
       <itemPath>c_cnstdef.h</itemPath>
       <itemPath>c_portdef.h</itemPath>
       <itemPath>typedefs.h</itemPath>
-      <itemPath>usb.h</itemPath>
-      <itemPath>usbcfg.h</itemPath>
-      <itemPath>usbdsc.h</itemPath>
-      <itemPath>usbmmap.h</itemPath>
       <itemPath>c_ramdef.h</itemPath>
       <itemPath>c_system.h</itemPath>
       <itemPath>../common/hardware.h</itemPath>
@@ -30,11 +26,6 @@
                    projectFiles="true">
       <itemPath>main.c</itemPath>
       <itemPath>startup.c</itemPath>
-      <itemPath>usb.c</itemPath>
-      <itemPath>usbapplet.c</itemPath>
-      <itemPath>usbdescript.c</itemPath>
-      <itemPath>rs232.c</itemPath>
-      <itemPath>hid.c</itemPath>
       <itemPath>ram_def.c</itemPath>
       <itemPath>config.asm</itemPath>
       <itemPath>intslct.c</itemPath>
@@ -45,7 +36,6 @@
       <itemPath>leds.c</itemPath>
       <itemPath>tables.c</itemPath>
       <itemPath>writeprogmem.c</itemPath>
-      <itemPath>exppedal.c</itemPath>
       <itemPath>systick.c</itemPath>
       <itemPath>MidiComm.c</itemPath>
       <itemPath>../common/controller-simple.c</itemPath>
@@ -92,8 +82,8 @@
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
       <C18>
-        <property key="code-model" value="mS"/>
-        <property key="data-model" value="Oa-"/>
+        <property key="code-model" value="ms"/>
+        <property key="data-model" value="oa-"/>
         <property key="default-char-unsigned" value="false"/>
         <property key="enable-all-optimizations" value="true"/>
         <property key="enable-int-promotion" value="false"/>
@@ -110,7 +100,7 @@
         <property key="enable-ou" value="true"/>
         <property key="enable-ow" value="true"/>
         <property key="extra-include-directories"
-                  value="../common;../../../../../mcc18/h;.;"/>
+                  value="../common;../../../../../mcc18/h;."/>
         <property key="optimization-master" value="Custom"/>
         <property key="preprocessor-macros" value=""/>
         <property key="procedural-abstraction-passes" value="4"/>
@@ -143,9 +133,35 @@
         <property key="stack-analysis-mplink" value="false"/>
       </C18LanguageToolchain>
       <PICkit3PlatformTool>
-        <property key="tracecontrol.disablemacros" value="true"/>
-        <property key="tracecontrol.medium" value="0"/>
-        <property key="tracecontrol.select" value="0"/>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="Freeze Peripherals" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.end" value="0x5fff"/>
+        <property key="memories.programmemory.start" value="0x0"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmertogo.imagename" value=""/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.pgmspeed" value="2"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveprogramrange.end" value="0x5fff"/>
+        <property key="programoptions.preserveprogramrange.start" value="0x0"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VPPFirst"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="5.0"/>
       </PICkit3PlatformTool>
     </conf>
   </confs>

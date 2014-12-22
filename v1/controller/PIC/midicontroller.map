@@ -1,5 +1,5 @@
 MPLINK 4.48, Linker
-Linker Map File - Created Thu Dec 18 13:52:34 2014
+Linker Map File - Created Sun Dec 21 02:01:36 2014
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -10,66 +10,61 @@ Linker Map File - Created Thu Dec 18 13:52:34 2014
       InterruptVectorHigh       code   0x000a08    program   0x000006
                 main_code       code   0x000a2a    program   0x000092
                    .cinit    romdata   0x000abc    program   0x00000e
-.code_controller-simple.o       code   0x000aca    program   0x000d62
-          .code_hwcalls.o       code   0x00182c    program   0x0004ac
-             .code_leds.o       code   0x001cd8    program   0x0002ec
-     .code_writeprogmem.o       code   0x001fc4    program   0x0000ca
-          .code_intslct.o       code   0x00208e    program   0x0000aa
-         .code_MidiComm.o       code   0x002138    program   0x00009c
-             .code_init.o       code   0x0021d4    program   0x000060
-           .code_eeprom.o       code   0x002234    program   0x000056
-          .code_systick.o       code   0x00228a    program   0x000042
-                    .code       code   0x0022cc    program   0x00002e
-          .romdata_leds.o    romdata   0x0022fa    program   0x000024
-             _startup_scn       code   0x00231e    program   0x000022
-         .code_fxd0808u.o       code   0x002340    program   0x00001c
-.idata_controller-simple.o_i    romdata   0x00235c    program   0x000012
-.romdata_controller-simple.o    romdata   0x00235c    program   0x000000
-      .romdata_MidiComm.o    romdata   0x00235c    program   0x000000
-      .idata_fxd0808u.o_i    romdata   0x00235c    program   0x000000
-       .romdata_systick.o    romdata   0x00235c    program   0x000000
-       .idata_systick.o_i    romdata   0x00235c    program   0x000000
-      .romdata_fxd0808u.o    romdata   0x00235c    program   0x000000
-  .romdata_writeprogmem.o    romdata   0x00235c    program   0x000000
-  .idata_writeprogmem.o_i    romdata   0x00235c    program   0x000000
-        .romdata_tables.o    romdata   0x00235c    program   0x000000
-        .idata_tables.o_i    romdata   0x00235c    program   0x000000
-          .idata_main.o_i    romdata   0x00235c    program   0x000000
-       .romdata_startup.o    romdata   0x00235c    program   0x000000
-       .idata_ram_def.o_i    romdata   0x00235c    program   0x000000
-       .romdata_ram_def.o    romdata   0x00235c    program   0x000000
-       .idata_intslct.o_i    romdata   0x00235c    program   0x000000
-       .romdata_intslct.o    romdata   0x00235c    program   0x000000
-       .idata_startup.o_i    romdata   0x00235c    program   0x000000
-          .idata_init.o_i    romdata   0x00235c    program   0x000000
-          .romdata_init.o    romdata   0x00235c    program   0x000000
-       .idata_hwcalls.o_i    romdata   0x00235c    program   0x000000
-       .romdata_hwcalls.o    romdata   0x00235c    program   0x000000
-       .idata_vectors.o_i    romdata   0x00235c    program   0x000000
-       .romdata_vectors.o    romdata   0x00235c    program   0x000000
-          .romdata_main.o    romdata   0x00235c    program   0x000000
-        .idata_eeprom.o_i    romdata   0x00235c    program   0x000000
-        .romdata_eeprom.o    romdata   0x00235c    program   0x000000
-          .idata_leds.o_i    romdata   0x00235c    program   0x000000
-          .code_vectors.o       code   0x00236e    program   0x000000
-      .idata_MidiComm.o_i    romdata   0x00236e    program   0x000000
-           .code_tables.o       code   0x00236e    program   0x000000
-             .code_main.o       code   0x00236e    program   0x000000
-          .code_ram_def.o       code   0x00236e    program   0x000000
-          .code_startup.o       code   0x00236e    program   0x000000
+.code_controller-simple.o       code   0x000aca    program   0x000e7c
+          .code_hwcalls.o       code   0x001946    program   0x00047e
+             .code_leds.o       code   0x001dc4    program   0x0002ec
+     .code_writeprogmem.o       code   0x0020b0    program   0x0000ca
+          .code_intslct.o       code   0x00217a    program   0x0000aa
+         .code_MidiComm.o       code   0x002224    program   0x00009c
+             .code_init.o       code   0x0022c0    program   0x000060
+           .code_eeprom.o       code   0x002320    program   0x000056
+          .code_systick.o       code   0x002376    program   0x000042
+                    .code       code   0x0023b8    program   0x00002e
+          .romdata_leds.o    romdata   0x0023e6    program   0x000024
+             _startup_scn       code   0x00240a    program   0x000020
+          .idata_leds.o_i    romdata   0x00242a    program   0x000000
+        .romdata_eeprom.o    romdata   0x00242a    program   0x000000
+        .idata_tables.o_i    romdata   0x00242a    program   0x000000
+        .romdata_tables.o    romdata   0x00242a    program   0x000000
+  .idata_writeprogmem.o_i    romdata   0x00242a    program   0x000000
+  .romdata_writeprogmem.o    romdata   0x00242a    program   0x000000
+       .idata_systick.o_i    romdata   0x00242a    program   0x000000
+       .romdata_systick.o    romdata   0x00242a    program   0x000000
+      .romdata_MidiComm.o    romdata   0x00242a    program   0x000000
+.idata_controller-simple.o_i    romdata   0x00242a    program   0x000012
+.romdata_controller-simple.o    romdata   0x00242a    program   0x000000
+          .idata_main.o_i    romdata   0x00242a    program   0x000000
+          .romdata_main.o    romdata   0x00242a    program   0x000000
+       .idata_startup.o_i    romdata   0x00242a    program   0x000000
+       .romdata_startup.o    romdata   0x00242a    program   0x000000
+       .idata_ram_def.o_i    romdata   0x00242a    program   0x000000
+       .romdata_ram_def.o    romdata   0x00242a    program   0x000000
+       .idata_intslct.o_i    romdata   0x00242a    program   0x000000
+       .romdata_intslct.o    romdata   0x00242a    program   0x000000
+          .idata_init.o_i    romdata   0x00242a    program   0x000000
+          .romdata_init.o    romdata   0x00242a    program   0x000000
+       .idata_hwcalls.o_i    romdata   0x00242a    program   0x000000
+       .romdata_hwcalls.o    romdata   0x00242a    program   0x000000
+       .idata_vectors.o_i    romdata   0x00242a    program   0x000000
+       .romdata_vectors.o    romdata   0x00242a    program   0x000000
+        .idata_eeprom.o_i    romdata   0x00242a    program   0x000000
+           .code_tables.o       code   0x00243c    program   0x000000
+          .code_ram_def.o       code   0x00243c    program   0x000000
+      .idata_MidiComm.o_i    romdata   0x00243c    program   0x000000
+          .code_startup.o       code   0x00243c    program   0x000000
+             .code_main.o       code   0x00243c    program   0x000000
+          .code_vectors.o       code   0x00243c    program   0x000000
               ROMSAVEDATA    romdata   0x004000    program   0x001fff
-                MATH_DATA      udata   0x000000       data   0x000010
-                 .tmpdata      udata   0x000010       data   0x000008
-                accessram      udata   0x000018       data   0x000004
+                MATH_DATA      udata   0x000000       data   0x000009
+                 .tmpdata      udata   0x000009       data   0x000008
+                accessram      udata   0x000011       data   0x000004
 .idata_controller-simple.o      idata   0x000060       data   0x000012
                      gpr1      udata   0x000100       data   0x0000c5
 .udata_controller-simple.o      udata   0x0001c5       data   0x00002e
-        .idata_MidiComm.o      idata   0x0001f3       data   0x000000
         .udata_MidiComm.o      udata   0x0001f3       data   0x000000
-        .udata_fxd0808u.o      udata   0x0001f3       data   0x000000
-        .idata_fxd0808u.o      idata   0x0001f3       data   0x000000
          .idata_systick.o      idata   0x0001f3       data   0x000000
          .udata_systick.o      udata   0x0001f3       data   0x000000
+        .idata_MidiComm.o      idata   0x0001f3       data   0x000000
     .idata_writeprogmem.o      idata   0x0001f3       data   0x000000
     .udata_writeprogmem.o      udata   0x0001f3       data   0x000000
           .idata_tables.o      idata   0x0001f3       data   0x000000
@@ -77,21 +72,21 @@ Linker Map File - Created Thu Dec 18 13:52:34 2014
             .idata_leds.o      idata   0x0001f3       data   0x000000
             .udata_leds.o      udata   0x0001f3       data   0x000000
           .idata_eeprom.o      idata   0x0001f3       data   0x000000
-            .udata_main.o      udata   0x0001f3       data   0x000000
-            .idata_main.o      idata   0x0001f3       data   0x000000
-         .udata_startup.o      udata   0x0001f3       data   0x000000
-         .idata_startup.o      idata   0x0001f3       data   0x000000
-         .udata_ram_def.o      udata   0x0001f3       data   0x000000
-         .idata_ram_def.o      idata   0x0001f3       data   0x000000
-         .udata_intslct.o      udata   0x0001f3       data   0x000000
-         .idata_intslct.o      idata   0x0001f3       data   0x000000
-            .udata_init.o      udata   0x0001f3       data   0x000000
-            .idata_init.o      idata   0x0001f3       data   0x000000
-         .udata_hwcalls.o      udata   0x0001f3       data   0x000000
-         .idata_hwcalls.o      idata   0x0001f3       data   0x000000
-         .udata_vectors.o      udata   0x0001f3       data   0x000000
-         .idata_vectors.o      idata   0x0001f3       data   0x000000
           .udata_eeprom.o      udata   0x0001f3       data   0x000000
+         .idata_vectors.o      idata   0x0001f3       data   0x000000
+         .udata_vectors.o      udata   0x0001f3       data   0x000000
+         .idata_hwcalls.o      idata   0x0001f3       data   0x000000
+         .udata_hwcalls.o      udata   0x0001f3       data   0x000000
+            .idata_init.o      idata   0x0001f3       data   0x000000
+            .udata_init.o      udata   0x0001f3       data   0x000000
+         .idata_intslct.o      idata   0x0001f3       data   0x000000
+         .udata_intslct.o      udata   0x0001f3       data   0x000000
+         .idata_ram_def.o      idata   0x0001f3       data   0x000000
+         .udata_ram_def.o      udata   0x0001f3       data   0x000000
+         .idata_startup.o      idata   0x0001f3       data   0x000000
+         .udata_startup.o      udata   0x0001f3       data   0x000000
+            .idata_main.o      idata   0x0001f3       data   0x000000
+            .udata_main.o      udata   0x0001f3       data   0x000000
                    .stack      udata   0x000700       data   0x000100
             SFR_UNBANKED0      udata   0x000f62       data   0x00009e
 
@@ -104,51 +99,49 @@ Linker Map File - Created Thu Dec 18 13:52:34 2014
                             0x000008    0x00000d      
                             0x000a00    0x000a05      
                             0x000a08    0x000a0d      
-                            0x000a2a    0x00236d      
+                            0x000a2a    0x00243b      
                             0x004000    0x005ffe      
-            14683 out of 30530 program addresses used, program memory utilization is 48%
+            14889 out of 22338 program addresses used, program memory utilization is 66%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-           ADC_CONVERSION   0x00182c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-             AllDigitsOff   0x001d22    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-              AsciiTo7Seg   0x001f12    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-                CLEAR_RAM   0x0022cc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\config.asm
-                   EERead   0x002234    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\eeprom.c
-                  EEWrite   0x002252    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\eeprom.c
-             EraseProgMem   0x002032    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-                 FXD0808U   0x002340    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\fxd0808u.c
-              HandleDigit   0x001d3e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-     InterruptHandlerHigh   0x00208e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\intslct.c
+             AllDigitsOff   0x001e0e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+              AsciiTo7Seg   0x001ffe    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+                CLEAR_RAM   0x0023b8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\config.asm
+                   EERead   0x002320    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\eeprom.c
+                  EEWrite   0x00233e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\eeprom.c
+             EraseProgMem   0x00211e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+              HandleDigit   0x001e2a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+     InterruptHandlerHigh   0x00217a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\intslct.c
       InterruptVectorHigh   0x000a08    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\intslct.c
-          LettersSegTable   0x002304    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-        MIDI_COMM_ROUTINE   0x002138    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
-             MIDI_ENQUEUE   0x00219e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
-          NumbersSegTable   0x0022fa    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-             Process7Segs   0x001cd8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-                 RAMCLEAR   0x00232e    program     static                          
-                RAMCLEAR1   0x0022d0    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\config.asm
-     RESET_MIDI_TX_BUFFER   0x0021ca    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
+          LettersSegTable   0x0023f0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+        MIDI_COMM_ROUTINE   0x002224    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
+             MIDI_ENQUEUE   0x00228a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
+          NumbersSegTable   0x0023e6    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+             Process7Segs   0x001dc4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+                 RAMCLEAR   0x002418    program     static                          
+                RAMCLEAR1   0x0023bc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\config.asm
+     RESET_MIDI_TX_BUFFER   0x0022b6    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
              ROM_SAVEDATA   0x004000    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\tables.c
-              ReadButtons   0x0018c6    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-                   ReadEE   0x002046    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+              ReadButtons   0x0019b2    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+                   ReadEE   0x002132    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
            RealInitVector   0x000000    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\vectors.c
   RealInterruptVectorHigh   0x000008    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\vectors.c
-           Scroll7SegDisp   0x001fc2    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-       SendDataToShiftReg   0x001876    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-            SetDipAddress   0x001962    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-             SetDispAscii   0x001de4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-               StartWrite   0x001fc4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-        SystemTimeRoutine   0x00228a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\systick.c
-               UpdateLeds   0x0019da    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-                  WriteEE   0x002062    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-             WriteProgMem   0x001fd0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-           ___do_lbl00002   0x00227a    program     static                          
-           ___do_lbl00003   0x00227e    program     static                          
-           ___do_lbl00004   0x002278    program     static                          
+           Scroll7SegDisp   0x0020ae    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+       SendDataToShiftReg   0x001962    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+            SetDipAddress   0x001a4e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+             SetDispAscii   0x001ed0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+               StartWrite   0x0020b0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+        SystemTimeRoutine   0x002376    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\systick.c
+               UpdateLeds   0x001ac6    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+                  WriteEE   0x00214e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+             WriteProgMem   0x0020bc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+           ___do_lbl00002   0x002366    program     static                          
+           ___do_lbl00003   0x00236a    program     static                          
+           ___do_lbl00004   0x002364    program     static                          
           ___for_lbl00001   0x000aa6    program     static                          
           ___for_lbl00002   0x000aa8    program     static                          
           ___for_lbl00010   0x000a44    program     static                          
@@ -163,54 +156,51 @@ Linker Map File - Created Thu Dec 18 13:52:34 2014
        ___return_lbl00000   0x000aa8    program     static                          
        ___return_lbl00000   0x000a04    program     static                          
        ___return_lbl00000   0x000a0c    program     static                          
-       ___return_lbl00000   0x00235a    program     static                          
-       ___return_lbl00001   0x002282    program     static                          
        ___return_lbl00001   0x00000c    program     static                          
-       ___return_lbl00001   0x00233e    program     static                          
-            __zero_memory   0x0022da    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+       ___return_lbl00001   0x00236e    program     static                          
+       ___return_lbl00001   0x002428    program     static                          
+            __zero_memory   0x0023c6    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    _entry   0x000a00    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\startup.c
-                 _startup   0x00231e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\startup.c
-                 activate   0x000fc2    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-              button_held   0x000c82    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-           button_pressed   0x000bf2    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-          button_released   0x000cde    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-                compare_l   0x0022f0    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-        control_toggleidx   0x0011b2    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-  controller_10msec_timer   0x001344    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-        controller_handle   0x00142a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-          controller_init   0x001302    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-             disable_mute   0x000f94    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-                  endloop   0x002356    program     static                          
-                expr_poll   0x001a6c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-               flash_load   0x001a72    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-              flash_store   0x001b0c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-          fsw_led_disable   0x001a38    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-           fsw_led_enable   0x001a10    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-       fsw_led_set_active   0x0019e4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-                 fsw_poll   0x001986    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-              gmaj_cc_set   0x000d6e    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-           gmaj_cc_toggle   0x001274    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-                     init   0x0021d4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\init.c
-         leds_show_1digit   0x001eea    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-        leds_show_4alphas   0x001e62    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-                     loop   0x002348    program     static                          
-                     loop   0x002338    program     static                          
-                   loop_h   0x0022e8    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   loop_l   0x0022f2    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 _startup   0x00240a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\startup.c
+                 activate   0x0010dc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+              button_held   0x000d9c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+           button_pressed   0x000d0c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+          button_released   0x000df8    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+                compare_l   0x0023dc    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+        control_toggleidx   0x0012cc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+  controller_10msec_timer   0x00145e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+        controller_handle   0x001544    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+          controller_init   0x00141c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+             disable_mute   0x0010ae    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+                expr_poll   0x001b58    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+               flash_load   0x001b5e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+              flash_store   0x001bf8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+          fsw_led_disable   0x001b24    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+           fsw_led_enable   0x001afc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+       fsw_led_set_active   0x001ad0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+                 fsw_poll   0x001a72    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+              gmaj_cc_set   0x000e88    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+           gmaj_cc_toggle   0x00138e    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+                     init   0x0022c0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\init.c
+         leds_show_1digit   0x001fd6    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+        leds_show_4alphas   0x001f4e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+                     loop   0x002422    program     static                          
+                   loop_h   0x0023d4    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   loop_l   0x0023de    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      main   0x000a2a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\main.c
-           midi_send_byte   0x00185a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-           midi_send_cmd1   0x001c5c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-           midi_send_cmd2   0x001c94    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-     prepare_emin_program   0x001110    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+           midi_send_byte   0x001946    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+           midi_send_cmd1   0x001d48    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+           midi_send_cmd2   0x001d80    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+     prepare_emin_program   0x00122a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
             ralign_itoa10   0x000aca    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-             reset_timer4   0x0012d0    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-          set_rjm_channel   0x000fac    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-          set_toggle_leds   0x000d9c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-             show_program   0x000b68    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-              slider_poll   0x001a66    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-      store_program_state   0x0010c8    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-               zero_block   0x0022e8    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+             reset_timer4   0x0013ea    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+          set_rjm_channel   0x0010c6    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+          set_toggle_leds   0x000eb6    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+             show_program   0x000c82    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+              slider_poll   0x001b52    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+      store_program_state   0x0011e2    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+update_effects_MIDI_state   0x000fc8    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+               zero_block   0x0023d4    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    ADCON0   0x000fc2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                ADCON0bits   0x000fc2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    ADCON1   0x000fc1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -220,8 +210,8 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                     ADRES   0x000fc3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    ADRESH   0x000fc4       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    ADRESL   0x000fc3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                ArbFlags1   0x000019       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
-                ArbFlags2   0x00001a       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
+                ArbFlags1   0x000012       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
+                ArbFlags2   0x000013       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
                   BAUDCON   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               BAUDCONbits   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   BAUDCTL   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -247,7 +237,7 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                    CVRCON   0x000fb5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                CVRCONbits   0x000fb5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                ComPointer   0x000156       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
-               CommFlags1   0x000018       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
+               CommFlags1   0x000011       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
                      DDRA   0x000f92       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  DDRAbits   0x000f92       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      DDRB   0x000f93       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -310,7 +300,7 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                    LVDCON   0x000fd2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                LVDCONbits   0x000fd2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 LedStates   0x00014e       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
-               MiscFlags1   0x00001b       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
+               MiscFlags1   0x000014       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
               NVRCommAddr   0x000147       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
                    OSCCON   0x000fd3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                OSCCONbits   0x000fd3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -364,7 +354,6 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                 RCSTAbits   0x000fab       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               ROMCommAddr   0x00014b       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
              ResponseType   0x0001c4       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
-                     SIGN   0x00000e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\cmath18.asm
                     SPBRG   0x000faf       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    SPBRGH   0x000fb0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    SPPCFG   0x000f63       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -498,21 +487,14 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                  __AARGB6   0x000001       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                  __AARGB7   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                    __AEXP   0x000008       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
-                 __BARGB0   0x00000c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\barg.asm
-                 __BARGB1   0x00000b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\barg.asm
-                 __BARGB2   0x00000a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\barg.asm
-                 __BARGB3   0x000009       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\barg.asm
-                   __BEXP   0x00000d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\barg.asm
-                __FPFLAGS   0x00000f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\cmath18.asm
-            __FPFLAGSbits   0x00000f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\cmath18.asm
                   __REMB0   0x000003       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                   __REMB1   0x000002       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                   __REMB2   0x000001       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                   __REMB3   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+                  __tmp_0   0x000009       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+                  __tmp_0   0x000009       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+                  __tmp_0   0x000009       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+                  __tmp_0   0x000009       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
      control4_button_mask   0x00006e       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
      control_press_values   0x0001c5       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
              emin_program   0x000061       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
@@ -559,112 +541,99 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
        ___return_lbl00000   0x000aa8    program     static                          
           ___for_lbl00002   0x000aa8    program     static                          
             ralign_itoa10   0x000aca    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-             show_program   0x000b68    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-           button_pressed   0x000bf2    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-              button_held   0x000c82    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-          button_released   0x000cde    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-              gmaj_cc_set   0x000d6e    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-          set_toggle_leds   0x000d9c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-             disable_mute   0x000f94    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-          set_rjm_channel   0x000fac    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-                 activate   0x000fc2    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-      store_program_state   0x0010c8    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-     prepare_emin_program   0x001110    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-        control_toggleidx   0x0011b2    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-           gmaj_cc_toggle   0x001274    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-             reset_timer4   0x0012d0    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-          controller_init   0x001302    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-  controller_10msec_timer   0x001344    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-        controller_handle   0x00142a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-           ADC_CONVERSION   0x00182c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-           midi_send_byte   0x00185a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-       SendDataToShiftReg   0x001876    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-              ReadButtons   0x0018c6    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-            SetDipAddress   0x001962    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-                 fsw_poll   0x001986    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-               UpdateLeds   0x0019da    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-       fsw_led_set_active   0x0019e4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-           fsw_led_enable   0x001a10    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-          fsw_led_disable   0x001a38    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-              slider_poll   0x001a66    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-                expr_poll   0x001a6c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-               flash_load   0x001a72    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-              flash_store   0x001b0c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-           midi_send_cmd1   0x001c5c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-           midi_send_cmd2   0x001c94    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-             Process7Segs   0x001cd8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-             AllDigitsOff   0x001d22    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-              HandleDigit   0x001d3e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-             SetDispAscii   0x001de4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-        leds_show_4alphas   0x001e62    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-         leds_show_1digit   0x001eea    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-              AsciiTo7Seg   0x001f12    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-           Scroll7SegDisp   0x001fc2    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-               StartWrite   0x001fc4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-             WriteProgMem   0x001fd0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-             EraseProgMem   0x002032    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-                   ReadEE   0x002046    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-                  WriteEE   0x002062    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-     InterruptHandlerHigh   0x00208e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\intslct.c
-        MIDI_COMM_ROUTINE   0x002138    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
-             MIDI_ENQUEUE   0x00219e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
-     RESET_MIDI_TX_BUFFER   0x0021ca    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
-                     init   0x0021d4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\init.c
-                   EERead   0x002234    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\eeprom.c
-                  EEWrite   0x002252    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\eeprom.c
-           ___do_lbl00004   0x002278    program     static                          
-           ___do_lbl00002   0x00227a    program     static                          
-           ___do_lbl00003   0x00227e    program     static                          
-       ___return_lbl00001   0x002282    program     static                          
-        SystemTimeRoutine   0x00228a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\systick.c
-                CLEAR_RAM   0x0022cc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\config.asm
-                RAMCLEAR1   0x0022d0    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\config.asm
-            __zero_memory   0x0022da    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-               zero_block   0x0022e8    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   loop_h   0x0022e8    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                compare_l   0x0022f0    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   loop_l   0x0022f2    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-          NumbersSegTable   0x0022fa    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-          LettersSegTable   0x002304    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-                 _startup   0x00231e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\startup.c
-                 RAMCLEAR   0x00232e    program     static                          
-                     loop   0x002338    program     static                          
-       ___return_lbl00001   0x00233e    program     static                          
-                 FXD0808U   0x002340    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\fxd0808u.c
-                     loop   0x002348    program     static                          
-                  endloop   0x002356    program     static                          
-       ___return_lbl00000   0x00235a    program     static                          
+             show_program   0x000c82    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+           button_pressed   0x000d0c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+              button_held   0x000d9c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+          button_released   0x000df8    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+              gmaj_cc_set   0x000e88    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+          set_toggle_leds   0x000eb6    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+update_effects_MIDI_state   0x000fc8    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+             disable_mute   0x0010ae    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+          set_rjm_channel   0x0010c6    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+                 activate   0x0010dc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+      store_program_state   0x0011e2    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+     prepare_emin_program   0x00122a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+        control_toggleidx   0x0012cc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+           gmaj_cc_toggle   0x00138e    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+             reset_timer4   0x0013ea    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+          controller_init   0x00141c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+  controller_10msec_timer   0x00145e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+        controller_handle   0x001544    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+           midi_send_byte   0x001946    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+       SendDataToShiftReg   0x001962    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+              ReadButtons   0x0019b2    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+            SetDipAddress   0x001a4e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+                 fsw_poll   0x001a72    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+               UpdateLeds   0x001ac6    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+       fsw_led_set_active   0x001ad0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+           fsw_led_enable   0x001afc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+          fsw_led_disable   0x001b24    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+              slider_poll   0x001b52    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+                expr_poll   0x001b58    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+               flash_load   0x001b5e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+              flash_store   0x001bf8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+           midi_send_cmd1   0x001d48    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+           midi_send_cmd2   0x001d80    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+             Process7Segs   0x001dc4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+             AllDigitsOff   0x001e0e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+              HandleDigit   0x001e2a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+             SetDispAscii   0x001ed0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+        leds_show_4alphas   0x001f4e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+         leds_show_1digit   0x001fd6    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+              AsciiTo7Seg   0x001ffe    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+           Scroll7SegDisp   0x0020ae    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+               StartWrite   0x0020b0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+             WriteProgMem   0x0020bc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+             EraseProgMem   0x00211e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+                   ReadEE   0x002132    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+                  WriteEE   0x00214e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+     InterruptHandlerHigh   0x00217a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\intslct.c
+        MIDI_COMM_ROUTINE   0x002224    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
+             MIDI_ENQUEUE   0x00228a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
+     RESET_MIDI_TX_BUFFER   0x0022b6    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\MidiComm.c
+                     init   0x0022c0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\init.c
+                   EERead   0x002320    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\eeprom.c
+                  EEWrite   0x00233e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\eeprom.c
+           ___do_lbl00004   0x002364    program     static                          
+           ___do_lbl00002   0x002366    program     static                          
+           ___do_lbl00003   0x00236a    program     static                          
+       ___return_lbl00001   0x00236e    program     static                          
+        SystemTimeRoutine   0x002376    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\systick.c
+                CLEAR_RAM   0x0023b8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\config.asm
+                RAMCLEAR1   0x0023bc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\config.asm
+            __zero_memory   0x0023c6    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+               zero_block   0x0023d4    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   loop_h   0x0023d4    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                compare_l   0x0023dc    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   loop_l   0x0023de    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+          NumbersSegTable   0x0023e6    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+          LettersSegTable   0x0023f0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+                 _startup   0x00240a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\startup.c
+                 RAMCLEAR   0x002418    program     static                          
+                     loop   0x002422    program     static                          
+       ___return_lbl00001   0x002428    program     static                          
              ROM_SAVEDATA   0x004000    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\tables.c
-                  __REMB3   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                  __AARGB7   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
-                  __REMB2   0x000001       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
+                  __REMB3   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                  __AARGB6   0x000001       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
+                  __REMB2   0x000001       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                   __REMB1   0x000002       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                  __AARGB5   0x000002       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
-                  __REMB0   0x000003       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                  __AARGB4   0x000003       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
+                  __REMB0   0x000003       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                  __AARGB3   0x000004       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                  __AARGB2   0x000005       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                  __AARGB1   0x000006       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                  __AARGB0   0x000007       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                    __AEXP   0x000008       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
-                 __BARGB3   0x000009       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\barg.asm
-                 __BARGB2   0x00000a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\barg.asm
-                 __BARGB1   0x00000b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\barg.asm
-                 __BARGB0   0x00000c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\barg.asm
-                   __BEXP   0x00000d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\barg.asm
-                     SIGN   0x00000e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\cmath18.asm
-            __FPFLAGSbits   0x00000f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\cmath18.asm
-                __FPFLAGS   0x00000f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\cmath18.asm
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
-               CommFlags1   0x000018       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
-                ArbFlags1   0x000019       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
-                ArbFlags2   0x00001a       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
-               MiscFlags1   0x00001b       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
+                  __tmp_0   0x000009       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
+                  __tmp_0   0x000009       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\hwcalls.c
+                  __tmp_0   0x000009       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\leds.c
+                  __tmp_0   0x000009       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\writeprogmem.c
+               CommFlags1   0x000011       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
+                ArbFlags1   0x000012       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
+                ArbFlags2   0x000013       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
+               MiscFlags1   0x000014       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\PIC\ram_def.c
               rjm_channel   0x000060       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
              emin_program   0x000061       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
              gmaj_program   0x000062       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
@@ -708,8 +677,8 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                   sw_last   0x0001cf       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
                        pr   0x0001d3       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v1\controller\common\controller-simple.c
                   SPPDATA   0x000f62       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   SPPCFG   0x000f63       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                SPPCFGbits   0x000f63       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   SPPCFG   0x000f63       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    SPPEPS   0x000f64       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                SPPEPSbits   0x000f64       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    SPPCON   0x000f65       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -717,34 +686,34 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                      UFRM   0x000f66       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     UFRML   0x000f66       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 UFRMLbits   0x000f66       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                    UFRMH   0x000f67       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 UFRMHbits   0x000f67       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                  UIRbits   0x000f68       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                    UFRMH   0x000f67       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                       UIR   0x000f68       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                  UIEbits   0x000f69       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                  UIRbits   0x000f68       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                       UIE   0x000f69       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     UEIR   0x000f6a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                  UIEbits   0x000f69       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEIRbits   0x000f6a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     UEIE   0x000f6b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     UEIR   0x000f6a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEIEbits   0x000f6b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     UEIE   0x000f6b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     USTAT   0x000f6c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 USTATbits   0x000f6c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 UCONbits   0x000f6d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UCON   0x000f6d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 UCONbits   0x000f6d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     UADDR   0x000f6e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 UADDRbits   0x000f6e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     UCFG   0x000f6f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UCFGbits   0x000f6f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     UCFG   0x000f6f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP0   0x000f70       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP0bits   0x000f70       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     UEP1   0x000f71       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP1bits   0x000f71       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     UEP1   0x000f71       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP2   0x000f72       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP2bits   0x000f72       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP3   0x000f73       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP3bits   0x000f73       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     UEP4   0x000f74       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP4bits   0x000f74       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     UEP4   0x000f74       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP5bits   0x000f75       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP5   0x000f75       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP6   0x000f76       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -753,66 +722,66 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                  UEP7bits   0x000f77       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      UEP8   0x000f78       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP8bits   0x000f78       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     UEP9   0x000f79       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  UEP9bits   0x000f79       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                    UEP10   0x000f7a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     UEP9   0x000f79       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 UEP10bits   0x000f7a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                    UEP10   0x000f7a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 UEP11bits   0x000f7b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     UEP11   0x000f7b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                UEP12bits   0x000f7c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     UEP12   0x000f7c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                UEP12bits   0x000f7c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     UEP13   0x000f7d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 UEP13bits   0x000f7d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                UEP14bits   0x000f7e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     UEP14   0x000f7e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                UEP14bits   0x000f7e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 UEP15bits   0x000f7f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     UEP15   0x000f7f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                PORTAbits   0x000f80       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     PORTA   0x000f80       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                PORTAbits   0x000f80       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 PORTBbits   0x000f81       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     PORTB   0x000f81       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                PORTCbits   0x000f82       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     PORTC   0x000f82       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                PORTDbits   0x000f83       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                PORTCbits   0x000f82       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     PORTD   0x000f83       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                PORTDbits   0x000f83       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     PORTE   0x000f84       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 PORTEbits   0x000f84       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      LATA   0x000f89       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  LATAbits   0x000f89       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 LATBbits   0x000f8a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      LATB   0x000f8a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 LATBbits   0x000f8a       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  LATCbits   0x000f8b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      LATC   0x000f8b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     LATD   0x000f8c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  LATDbits   0x000f8c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     LATE   0x000f8d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     LATD   0x000f8c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  LATEbits   0x000f8d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 DDRAbits   0x000f92       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     LATE   0x000f8d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      DDRA   0x000f92       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 DDRAbits   0x000f92       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     TRISA   0x000f92       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 TRISAbits   0x000f92       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                    TRISB   0x000f93       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                TRISBbits   0x000f93       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      DDRB   0x000f93       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  DDRBbits   0x000f93       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                TRISBbits   0x000f93       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                    TRISB   0x000f93       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     TRISC   0x000f94       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 TRISCbits   0x000f94       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      DDRC   0x000f94       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  DDRCbits   0x000f94       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     DDRD   0x000f95       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 DDRDbits   0x000f95       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                TRISDbits   0x000f95       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     TRISD   0x000f95       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 DDREbits   0x000f96       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     DDRE   0x000f96       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 DDRDbits   0x000f95       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     DDRD   0x000f95       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                TRISDbits   0x000f95       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     TRISE   0x000f96       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 TRISEbits   0x000f96       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     DDRE   0x000f96       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 DDREbits   0x000f96       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   OSCTUNE   0x000f9b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               OSCTUNEbits   0x000f9b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 PIE1bits   0x000f9d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      PIE1   0x000f9d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 PIR1bits   0x000f9e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 PIE1bits   0x000f9d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      PIR1   0x000f9e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 PIR1bits   0x000f9e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  IPR1bits   0x000f9f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      IPR1   0x000f9f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      PIE2   0x000fa0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -821,8 +790,8 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                  PIR2bits   0x000fa1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      IPR2   0x000fa2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  IPR2bits   0x000fa2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   EECON1   0x000fa6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                EECON1bits   0x000fa6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   EECON1   0x000fa6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    EECON2   0x000fa7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    EEDATA   0x000fa8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     EEADR   0x000fa9       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -834,40 +803,40 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                     RCREG   0x000fae       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     SPBRG   0x000faf       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    SPBRGH   0x000fb0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                T3CONbits   0x000fb1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     T3CON   0x000fb1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                T3CONbits   0x000fb1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     TMR3L   0x000fb2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     TMR3H   0x000fb3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 CMCONbits   0x000fb4       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     CMCON   0x000fb4       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   CVRCON   0x000fb5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                CVRCONbits   0x000fb5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   CVRCON   0x000fb5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    CCP1AS   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                  ECCP1AS   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               ECCP1ASbits   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                  ECCP1AS   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                CCP1ASbits   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+             ECCP1DELbits   0x000fb7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               CCP1DELbits   0x000fb7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   CCP1DEL   0x000fb7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  ECCP1DEL   0x000fb7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-             ECCP1DELbits   0x000fb7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-              BAUDCONbits   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-              BAUDCTLbits   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   BAUDCON   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+              BAUDCONbits   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   BAUDCTL   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-              CCP2CONbits   0x000fba       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+              BAUDCTLbits   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   CCP2CON   0x000fba       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+              CCP2CONbits   0x000fba       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    CCPR2L   0x000fbb       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     CCPR2   0x000fbb       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    CCPR2H   0x000fbc       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-             ECCP1CONbits   0x000fbd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                 ECCP1CON   0x000fbd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-              CCP1CONbits   0x000fbd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   CCP1CON   0x000fbd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   CCPR1L   0x000fbe       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+              CCP1CONbits   0x000fbd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                 ECCP1CON   0x000fbd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+             ECCP1CONbits   0x000fbd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     CCPR1   0x000fbe       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   CCPR1L   0x000fbe       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    CCPR1H   0x000fbf       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-               ADCON2bits   0x000fc0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    ADCON2   0x000fc0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+               ADCON2bits   0x000fc0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                ADCON1bits   0x000fc1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    ADCON1   0x000fc1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    ADCON0   0x000fc2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -875,40 +844,40 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                    ADRESL   0x000fc3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     ADRES   0x000fc3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    ADRESH   0x000fc4       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                  SSPCON2   0x000fc5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               SSPCON2bits   0x000fc5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-              SSPCON1bits   0x000fc6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                  SSPCON2   0x000fc5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   SSPCON1   0x000fc6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+              SSPCON1bits   0x000fc6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               SSPSTATbits   0x000fc7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   SSPSTAT   0x000fc7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    SSPADD   0x000fc8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    SSPBUF   0x000fc9       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                    T2CON   0x000fca       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 T2CONbits   0x000fca       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                    T2CON   0x000fca       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                       PR2   0x000fcb       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      TMR2   0x000fcc       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                    T1CON   0x000fcd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 T1CONbits   0x000fcd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                    T1CON   0x000fcd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     TMR1L   0x000fce       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     TMR1H   0x000fcf       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                  RCONbits   0x000fd0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      RCON   0x000fd0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    WDTCON   0x000fd1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                WDTCONbits   0x000fd1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                  HLVDCON   0x000fd2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
               HLVDCONbits   0x000fd2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    LVDCON   0x000fd2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                LVDCONbits   0x000fd2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                  HLVDCON   0x000fd2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                   OSCCON   0x000fd3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                OSCCONbits   0x000fd3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                   OSCCON   0x000fd3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     T0CON   0x000fd5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                 T0CONbits   0x000fd5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     TMR0L   0x000fd6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     TMR0H   0x000fd7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-               STATUSbits   0x000fd8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    STATUS   0x000fd8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     FSR2   0x000fd9       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+               STATUSbits   0x000fd8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     FSR2L   0x000fd9       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     FSR2   0x000fd9       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     FSR2H   0x000fda       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    PLUSW2   0x000fdb       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   PREINC2   0x000fdc       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -916,8 +885,8 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                  POSTINC2   0x000fde       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     INDF2   0x000fdf       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                       BSR   0x000fe0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                    FSR1L   0x000fe1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      FSR1   0x000fe1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                    FSR1L   0x000fe1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     FSR1H   0x000fe2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    PLUSW1   0x000fe3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   PREINC1   0x000fe4       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -925,8 +894,8 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
                  POSTINC1   0x000fe6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     INDF1   0x000fe7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      WREG   0x000fe8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                     FSR0   0x000fe9       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     FSR0L   0x000fe9       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                     FSR0   0x000fe9       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     FSR0H   0x000fea       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    PLUSW0   0x000feb       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   PREINC0   0x000fec       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
@@ -939,12 +908,12 @@ update_effects_MIDI_state   0x000eae    program     static C:\git\go\src\github.
               INTCON2bits   0x000ff1       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    INTCON   0x000ff2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                INTCONbits   0x000ff2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                    PRODL   0x000ff3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                      PROD   0x000ff3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                    PRODL   0x000ff3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                     PRODH   0x000ff4       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    TABLAT   0x000ff5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
-                  TBLPTRL   0x000ff6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                    TBLPTR   0x000ff6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
+                  TBLPTRL   0x000ff6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   TBLPTRH   0x000ff7       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                   TBLPTRU   0x000ff8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
                        PC   0x000ff9       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4455.asm
