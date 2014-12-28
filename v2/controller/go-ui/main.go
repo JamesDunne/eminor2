@@ -2,7 +2,7 @@ package main
 
 import (
 	"image"
-	//"time"
+	"time"
 )
 import "github.com/andlabs/ui"
 
@@ -64,7 +64,7 @@ type canvasArea struct {
 // 		return img.SubImage(rect).(*image.RGBA)
 // 	}
 func (area *canvasArea) Paint(cliprect image.Rectangle) *image.RGBA {
-	return area.img
+	return area.img.SubImage(cliprect).(*image.RGBA)
 }
 
 // Mouse is called when the Area receives a mouse event.
@@ -88,15 +88,7 @@ func main() {
 
 	C.controller_init()
 
-	//timer_10ms := time.Tick(10 * time.Millisecond)
-	//for {
-	//	C.controller_handle()
-	//	select {
-	//	case <-timer_10ms:
-	//		C.controller_10msec_timer()
-	//	default:
-	//	}
-	//}
+	timer_10ms := time.Tick(10 * time.Millisecond)
 
 	go ui.Do(func() {
 		widthFloat := float64(inWidth * dpi)
@@ -104,6 +96,7 @@ func main() {
 		width := int(widthFloat)
 		height := int(heightFloat)
 
+		// Give ourselves a drawable canvas:
 		canvas := &canvasArea{
 			img: image.NewRGBA(image.Rect(0, 0, width, height)),
 		}
@@ -116,7 +109,20 @@ func main() {
 		})
 
 		w.Show()
+
+		// This *should* be in the main UI message loop, but the 'ui' package does not expose the message loop.
+		go func() {
+			for {
+				select {
+				case <-timer_10ms:
+					C.controller_10msec_timer()
+				default:
+					C.controller_handle()
+				}
+			}
+		}()
 	})
+
 	err := ui.Go()
 	if err != nil {
 		panic(err)
