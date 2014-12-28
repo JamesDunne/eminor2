@@ -827,10 +827,12 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 // --------------- Flash memory interface:
 
-#include "../common/flash_init.h"
-
-
-const size_t flash_length = sizeof(struct program) * 128;
+#define FLASH_LENGTH (sizeof(struct program) * 128 + sizeof(struct set_list) * 32)
+const size_t flash_length = FLASH_LENGTH;
+const unsigned char flash_memory[FLASH_LENGTH] = {
+#include "../PIC/flash_rom_init.h"
+};
+#undef FLASH_LENGTH
 
 void update_text_files() {
     FILE *ft;
@@ -843,6 +845,7 @@ void update_text_files() {
     }
     fclose(ft);
 
+#if 0
     // Create flash_rom_init.h for #include in PIC project:
     ft = fopen("..\\PIC\\flash_rom_init.h", "w");
 #if 0
@@ -881,6 +884,7 @@ void update_text_files() {
     fprintf(ft, "\n");
 #endif
     fclose(ft);
+#endif
 }
 
 

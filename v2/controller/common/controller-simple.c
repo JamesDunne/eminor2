@@ -29,7 +29,6 @@
 // update MIDI state on repeated activations.
 
 #include <assert.h>
-//#include <string.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
 
@@ -84,12 +83,23 @@ u8 rjm_channel;
 
 // Current program data:
 struct program pr;
+// Decoded RJM channels:
+u8 pr_rjm[6];
+struct set_list sl;
 
 #ifdef FEAT_LCD
 char lcdtext_row_program[LCD_COLS];
 #endif
 
-// Loads a 6-bit bit field describing the initial on/off state of effects
+static void ritoa(u8 *s, u8 n, s8 i) {
+    do {
+        s[i--] = (n % 10) + '0';
+    } while ((n /= 10) > 0);
+    for (; i > 0; --i) s[i] = ' ';
+    s[i] = ' ';
+}
+
+// Loads ROM describing the initial on/off state of effects
 void load_program_state(void) {
 #if NOFLASH
     // defaults: all SOLO channels get delay enabled
@@ -104,46 +114,76 @@ void load_program_state(void) {
 
     // Load effects on/off state data from persistent storage:
     flash_load((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
-    for (i = 0; i < 6; ++i)
-    if (pr.rjm[i] & m_channel_initial) {
-        rjm_channel = i;
-        break;
-    }
-#endif
 
-#if 0
-    // Since user has no way to turn on/off these settings yet, we force them here.
-    // All overdrive channels get noise gate on:
-    pr.fx[0] &= ~fxm_noisegate;
-    pr.fx[1] &= ~fxm_noisegate;
-    pr.fx[2] |= fxm_noisegate;
-    pr.fx[3] |= fxm_noisegate;
-    pr.fx[4] |= fxm_noisegate;
-    pr.fx[5] |= fxm_noisegate;
+    if (pr.name[0] == 0) {
+        // Empty program name? That signifies a zeroed-out program. Let's set up some reasonable defaults:
+
+        // Program name is the program number in decimal:
+        //ritoa(pr.name, gmaj_program + sl.song_offset + 1, 3);
+        ritoa(pr.name, gmaj_program + 1, 3);
+        pr.name[4] = 0;
+
+        pr.gmaj_program = gmaj_program + 1;
+
+        pr.rjm_initial = 4;
+        pr.rjm_desc[0] = (rjm_channel_1)
+                       | (rjm_channel_1 | rjm_solo_mask) << 4;
+        pr.rjm_desc[1] = (rjm_channel_2)
+                       | (rjm_channel_2 | rjm_solo_mask) << 4;
+        pr.rjm_desc[2] = (rjm_channel_3)
+                       | (rjm_channel_3 | rjm_solo_mask) << 4;
+
+        pr.fx[0] = (fxm_compressor);
+        pr.fx[1] = (fxm_compressor);
+        pr.fx[2] = (fxm_noisegate);
+        pr.fx[3] = (fxm_noisegate);
+        pr.fx[4] = (fxm_noisegate);
+        pr.fx[5] = (fxm_noisegate | fxm_delay);
+    }
+
+    for (i = 0; i < 6; ++i) {
+        // Get the RJM channel descriptor:
+        u8 descidx = i >> 1;
+        u8 rshr = (i & 1) << 2;
+        u8 rdesc = (pr.rjm_desc[descidx] >> rshr) & 0x0F;
+
+        // RJM channels start at 4 and alternate solo mode off/on and then increment channel #s:
+        u8 mkv_chan = (rdesc & rjm_channel_mask);
+        u8 mkv_solo_bit = ((rdesc & rjm_solo_mask) >> rjm_solo_shr_to_1bit);
+        u8 new_rjm_actual = 4 + ((mkv_chan << 1) | mkv_solo_bit);
+
+        pr_rjm[i] = new_rjm_actual;
+    }
+
+    // Find the initial channel:
+    rjm_channel = pr.rjm_initial;
 #endif
 }
 
 static void store_program_state(void) {
     // Store effects on/off state of current program:
-    u8 i;
-
-    // Update initial RJM channel bit and clear others:
-    for (i = 0; i < 6; ++i)
-        pr.rjm[i] = (pr.rjm[i] & ~m_channel_initial) | (rjm_channel == i ? m_channel_initial : 0);
+    pr.rjm_initial = rjm_channel;
 
     // Store program state:
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
 }
 
+u16 last_leds = 0xFFFF;
+
 static void send_leds(void) {
+    // Update LEDs:
+    u16 tmp = (u16)leds.bot.byte | ((u16)leds.top.byte << 8);
+    if (tmp != last_leds) {
+        led_set(tmp);
+        last_leds = tmp;
+    }
+}
+
+static void send_lcd(void) {
+#ifdef FEAT_LCD
     u8 n = gmaj_program + 1;
     u8 i = LCD_COLS - 1;
 
-    // Update LEDs:
-    u16 tmp = (u16)leds.bot.byte | ((u16)leds.top.byte << 8);
-    led_set(tmp);
-
-#ifdef FEAT_LCD
     // Update LCD display:
 
     // Show g-major program number, right-aligned space padded:
@@ -200,6 +240,7 @@ static void gmaj_toggle_cc(u8 idx) {
 }
 
 static void update_effects_MIDI_state(void) {
+#if FX_ASSUME_OFF
     b8 n;
     n.byte = pr.fx[rjm_channel];
 
@@ -240,11 +281,24 @@ static void update_effects_MIDI_state(void) {
         // turn on eq:
         gmaj_cc_set(gmaj_cc_lookup[7], 0x7F);
     }
+#else
+    u8 fx = pr.fx[rjm_channel];
+
+    // Assume g-major effects are in a random state so switch each on/off according to desired state:
+    gmaj_cc_set(gmaj_cc_noisegate, (fx & fxm_noisegate) ? 0x7F : 0x00);
+    gmaj_cc_set(gmaj_cc_delay, (fx & fxm_delay) ? 0x7F : 0x00);
+    gmaj_cc_set(gmaj_cc_pitch, (fx & fxm_pitch) ? 0x7F : 0x00);
+    gmaj_cc_set(gmaj_cc_filter, (fx & fxm_filter) ? 0x7F : 0x00);
+    gmaj_cc_set(gmaj_cc_chorus, (fx & fxm_chorus) ? 0x7F : 0x00);
+    gmaj_cc_set(gmaj_cc_compressor, (fx & fxm_compressor) ? 0x7F : 0x00);
+    gmaj_cc_set(gmaj_cc_reverb, (fx & fxm_reverb) ? 0x7F : 0x00);
+    gmaj_cc_set(gmaj_cc_eq, (fx & fxm_eq) ? 0x7F : 0x00);
+#endif
 }
 
 static void rjm_activate() {
     // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
-    midi_send_cmd1(0xC, rjm_midi_channel, (pr.rjm[rjm_channel] & ~m_channel_initial) + 4);
+    midi_send_cmd1(0xC, rjm_midi_channel, pr_rjm[rjm_channel]);
 
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
@@ -277,6 +331,7 @@ static void set_gmaj_program(void) {
     load_program_state();
 
     rjm_activate();
+    send_lcd();
 }
 
 // Determine if a footswitch was pressed
@@ -308,9 +363,11 @@ const u8 timer_fx_timeout = 30;
 void controller_init(void) {
     u8 i;
 
+    last_leds = 0xFFFF;
     leds.top.byte = 0;
     leds.bot.byte = 0;
     timer_tapstore = 0;
+    timer_fx_held = 0;
     timeout_flash = 0;
 
     rjm_channel = 0;
