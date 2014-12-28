@@ -306,12 +306,12 @@ static void prepare_emin_program(void) {
         pr.gmaj_program = new_emin_program + 1;
 
         pr.rjm_initial = 4;
-        pr.rjm_desc[0] = rjm_channel_1;
-        pr.rjm_desc[1] = rjm_channel_1 | rjm_solo_mask;
-        pr.rjm_desc[2] = rjm_channel_2;
-        pr.rjm_desc[3] = rjm_channel_2 | rjm_solo_mask;
-        pr.rjm_desc[4] = rjm_channel_3;
-        pr.rjm_desc[5] = rjm_channel_3 | rjm_solo_mask;
+        pr.rjm_desc[0] = (rjm_channel_1)
+            | (rjm_channel_1 | rjm_solo_mask) << 4;
+        pr.rjm_desc[1] = (rjm_channel_2)
+            | (rjm_channel_2 | rjm_solo_mask) << 4;
+        pr.rjm_desc[2] = (rjm_channel_3)
+            | (rjm_channel_3 | rjm_solo_mask) << 4;
 
         pr.fx[0] = (fxm_compressor);
         pr.fx[1] = (fxm_compressor);
