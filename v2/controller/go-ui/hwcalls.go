@@ -4,6 +4,15 @@ import "C"
 import "log"
 import "unsafe"
 
+var lcd [][]byte
+
+func hw_init() {
+	lcd = make([][]byte, 4, 4)
+	for i := 0; i < 4; i++ {
+		lcd[i] = make([]byte, 0, 20)
+	}
+}
+
 //export fsw_poll
 func fsw_poll() uint16 {
 	return 0
@@ -16,11 +25,17 @@ func led_set(leds uint16) {
 //export lcd_update_row
 func lcd_update_row(row byte, text *C.char) {
 	var i uintptr
-	row_text := make([]byte, 20, 20)
+	lcd[row] = lcd[row][0:0]
 	for i = 0; i < 20; i++ {
-		row_text[i] = byte(*(*C.char)(unsafe.Pointer(uintptr(unsafe.Pointer(text)) + i)))
+		var c = byte(*(*C.char)(unsafe.Pointer(uintptr(unsafe.Pointer(text)) + i)))
+		lcd[row] = append(lcd[row], c)
+		if c == 0 {
+			lcd[row] = lcd[row][0:i]
+			break
+		}
 	}
-	log.Printf("%2d: %s\n", row, row_text)
+
+	log.Printf("\n%s\n%s\n%s\n%s\n", lcd[0], lcd[1], lcd[2], lcd[3])
 }
 
 //export flash_load

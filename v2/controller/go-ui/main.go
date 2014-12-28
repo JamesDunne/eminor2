@@ -91,6 +91,8 @@ func main() {
 
 	timer_10ms := time.Tick(100 * time.Millisecond)
 
+	hw_init()
+
 	C.controller_init()
 	for {
 		select {

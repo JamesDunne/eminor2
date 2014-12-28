@@ -21,4 +21,7 @@ midicontroller.cof
 midicontroller.hex
 *.lst
 
+v2/controller/go-ui/go-ui
+
+.DS_Store
 Thumbs.db
