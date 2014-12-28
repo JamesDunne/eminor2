@@ -284,6 +284,9 @@ static void update_effects_MIDI_state(void) {
 #else
     u8 fx = pr.fx[rjm_channel];
 
+    // Reset top LEDs to new state, preserve LEDs 7 and 8:
+    leds.top.byte = (fx & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+
     // Assume g-major effects are in a random state so switch each on/off according to desired state:
     gmaj_cc_set(gmaj_cc_noisegate, (fx & fxm_noisegate) ? 0x7F : 0x00);
     gmaj_cc_set(gmaj_cc_delay, (fx & fxm_delay) ? 0x7F : 0x00);
