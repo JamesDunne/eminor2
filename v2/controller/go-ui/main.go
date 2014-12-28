@@ -108,7 +108,12 @@ func main() {
 			img: image.NewRGBA(image.Rect(0, 0, width, height)),
 		}
 		area := ui.NewArea(width, height, canvas)
-		w := ui.NewWindow("e-minor v2", width+6, height+28, area)
+		w := ui.NewWindow("e-minor v2", width+8*2, height+28*2, area)
+		w.SetMargined(false)
+		w.OnClosing(func() bool {
+			ui.Stop()
+			return true
+		})
 
 		w.Show()
 	})
