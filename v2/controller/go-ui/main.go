@@ -2,7 +2,7 @@ package main
 
 import (
 	"image"
-	"time"
+	//"time"
 )
 import "github.com/andlabs/ui"
 
@@ -64,7 +64,7 @@ type canvasArea struct {
 // 		return img.SubImage(rect).(*image.RGBA)
 // 	}
 func (area *canvasArea) Paint(cliprect image.Rectangle) *image.RGBA {
-	return nil
+	return area.img
 }
 
 // Mouse is called when the Area receives a mouse event.
@@ -84,28 +84,36 @@ func (area *canvasArea) Key(e ui.KeyEvent) (handled bool) {
 }
 
 func main() {
-	//widthFloat := float64(inWidth * dpi)
-	//heightFloat := float64(inHeight * dpi)
-	//width := int(widthFloat)
-	//height := int(heightFloat)
-
-	timer_10ms := time.Tick(10 * time.Millisecond)
-
 	hw_init()
 
 	C.controller_init()
-	for {
-		C.controller_handle()
-		select {
-		case <-timer_10ms:
-			C.controller_10msec_timer()
-		default:
+
+	//timer_10ms := time.Tick(10 * time.Millisecond)
+	//for {
+	//	C.controller_handle()
+	//	select {
+	//	case <-timer_10ms:
+	//		C.controller_10msec_timer()
+	//	default:
+	//	}
+	//}
+
+	go ui.Do(func() {
+		widthFloat := float64(inWidth * dpi)
+		heightFloat := float64(inHeight * dpi)
+		width := int(widthFloat)
+		height := int(heightFloat)
+
+		canvas := &canvasArea{
+			img: image.NewRGBA(image.Rect(0, 0, width, height)),
 		}
+		area := ui.NewArea(width, height, canvas)
+		w := ui.NewWindow("e-minor v2", width+6, height+28, area)
+
+		w.Show()
+	})
+	err := ui.Go()
+	if err != nil {
+		panic(err)
 	}
-
-	//area := ui.NewArea(width, height, &canvasArea{})
-	//w = ui.NewWindow("e-minor v2", width+6, height+28, nil)
-
-	//w.Show()
-	return
 }

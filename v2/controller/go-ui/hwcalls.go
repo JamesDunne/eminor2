@@ -40,6 +40,7 @@ func lcd_update_row(row byte, text *C.char) {
 
 //export flash_load
 func flash_load(addr, count uint16, data *byte) {
+	log.Printf("flash load @ %04x", addr)
 	var i int
 	for i = 0; i < int(count); i++ {
 		var c = (C.char)(flash_memory[int(addr)+i])
@@ -49,7 +50,7 @@ func flash_load(addr, count uint16, data *byte) {
 
 //export flash_store
 func flash_store(addr, count uint16, data *byte) {
-	log.Println("flash store")
+	log.Println("flash store @ %04x", addr)
 }
 
 // Send a single MIDI byte:
