@@ -2,6 +2,7 @@ package main
 
 import (
 	"image"
+	"time"
 )
 import "github.com/andlabs/ui"
 
@@ -88,9 +89,15 @@ func main() {
 	//width := int(widthFloat)
 	//height := int(heightFloat)
 
+	timer_10ms := time.Tick(100 * time.Millisecond)
+
 	C.controller_init()
 	for {
-		C.controller_10msec_timer()
+		select {
+		case <-timer_10ms:
+			C.controller_10msec_timer()
+		default:
+		}
 		C.controller_handle()
 	}
 
