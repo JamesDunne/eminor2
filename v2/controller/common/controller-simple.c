@@ -29,7 +29,7 @@
 // update MIDI state on repeated activations.
 
 #include <assert.h>
-#include <string.h>
+//#include <string.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
 
