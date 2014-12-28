@@ -16,7 +16,7 @@
     CMP    FLT    PIT    CHO    DLY    RVB    MUTE    PREV
 
     *      *      *      *      *      *
-    1      1S     2      2S     3      3S    TAP     NEXT
+    1      1S     2      2S     3      3S     TAP     NEXT
 
     Written by
     James S. Dunne

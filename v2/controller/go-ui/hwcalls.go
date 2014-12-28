@@ -35,15 +35,21 @@ func lcd_update_row(row byte, text *C.char) {
 		}
 	}
 
-	log.Printf("\n%s\n%s\n%s\n%s\n", lcd[0], lcd[1], lcd[2], lcd[3])
+	//log.Printf("\n%s\n%s\n%s\n%s\n", lcd[0], lcd[1], lcd[2], lcd[3])
 }
 
 //export flash_load
 func flash_load(addr, count uint16, data *byte) {
+	var i int
+	for i = 0; i < int(count); i++ {
+		var c = (C.char)(flash_memory[int(addr)+i])
+		*(*C.char)(unsafe.Pointer(uintptr(unsafe.Pointer(data)) + uintptr(i))) = c
+	}
 }
 
 //export flash_store
 func flash_store(addr, count uint16, data *byte) {
+	log.Println("flash store")
 }
 
 // Send a single MIDI byte:

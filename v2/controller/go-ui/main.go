@@ -89,18 +89,18 @@ func main() {
 	//width := int(widthFloat)
 	//height := int(heightFloat)
 
-	timer_10ms := time.Tick(100 * time.Millisecond)
+	timer_10ms := time.Tick(10 * time.Millisecond)
 
 	hw_init()
 
 	C.controller_init()
 	for {
+		C.controller_handle()
 		select {
 		case <-timer_10ms:
 			C.controller_10msec_timer()
 		default:
 		}
-		C.controller_handle()
 	}
 
 	//area := ui.NewArea(width, height, &canvasArea{})
