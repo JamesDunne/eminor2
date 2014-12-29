@@ -105,8 +105,7 @@ static void axe_set_program(u8 program) {
     update_7seg();
 }
 
-static void axe_set_scene(u8 scene) {
-    axe_scene = scene;
+static void axe_reset_scene(void) {
     axe_midi_cc_set(axe_cc_scene, axe_scene);
 
     if (axe_scene == 0) {
@@ -134,6 +133,11 @@ static void axe_set_scene(u8 scene) {
         fsw_led_disable(2);
     }
     update_7seg();
+}
+
+static void axe_set_scene(u8 scene) {
+    axe_scene = scene;
+    axe_reset_scene();
 }
 
 // ------------------------- Actual controller logic -------------------------
@@ -172,15 +176,19 @@ void controller_handle(void) {
     // one of TOP control 1-4 pressed:
     if (button_pressed(FSM_CONTROL_1)) {
         axe_set_program(0);
+        axe_reset_scene();
     }
     if (button_pressed(FSM_CONTROL_2)) {
         axe_set_program(1);
+        axe_reset_scene();
     }
     if (button_pressed(FSM_CONTROL_3)) {
         axe_set_program(2);
+        axe_reset_scene();
     }
     if (button_pressed(FSM_CONTROL_4)) {
         axe_set_program(3);
+        axe_reset_scene();
     }
 
     sw_last = sw_curr;

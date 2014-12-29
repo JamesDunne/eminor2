@@ -107,7 +107,7 @@ void	SetDipAddress(unsigned char Address) {
 }
 
 /* --------------- LED read-out display functions: */
-u8 fsw_poll(){
+u8 fsw_poll(void) {
     return ButtonState;
 }
 
