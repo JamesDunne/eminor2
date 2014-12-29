@@ -785,13 +785,12 @@ void lcd_row_updated(u8 row) {
     // Convert ASCII to UTF-16:
     int c;
     for (c = 0; c < LCD_COLS; ++c) {
-        if (lcd_ascii[row][c] == 0) break;
+        if (lcd_ascii[row][c] == 0) {
+            lcd_text[row][c] = 1;
+            continue;
+        }
         lcd_text[row][c] = (WCHAR)lcd_ascii[row][c];
     }
-
-    // Clear the rest of the row if a NUL terminator was found:
-    for (; c < LCD_COLS; ++c)
-        lcd_text[row][c] = L' ';
 
     // Request a UI repaint:
     InvalidateRect(hwndMain, NULL, TRUE);

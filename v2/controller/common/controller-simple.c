@@ -176,7 +176,7 @@ static void store_program_state(void) {
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
 }
 
-u16 last_leds = 0xFFFF;
+u16 last_leds;
 
 static void send_leds(void) {
     // Update LEDs:
@@ -206,8 +206,12 @@ static void send_lcd(void) {
     lcd_row_updated(2);
 
     // Show program name:
-    for (i = 0; i < LCD_COLS; i++)
+    for (i = 0; i < LCD_COLS; i++) {
         lcd_rows[3][i] = pr.name[i];
+        if (pr.name[i] == 0) break;
+    }
+    for (; i < LCD_COLS; i++)
+        lcd_rows[3][i] = ' ';
     lcd_row_updated(3);
 #endif
 }
@@ -413,9 +417,9 @@ u8 timer_fx_held;
 u8 timer_sw_held;
 u8 timer_np_held, timer_np_advanced;
 
-const u8 timer_tapstore_timeout = 75;
-const u8 timer_fx_timeout = 30;
-const u8 timer_sw_timeout = 30;
+#define timer_tapstore_timeout  75
+#define timer_fx_timeout        30
+#define timer_sw_timeout        75
 
 // set the controller to an initial state
 void controller_init(void) {
@@ -474,8 +478,18 @@ void controller_init(void) {
 void controller_10msec_timer(void) {
     // Increment timers:
     if (fsw.bot.bits._7 && (timer_tapstore > 0)) timer_tapstore++;
-    if (timer_fx_held > 0) timer_fx_held++;
-    if (timer_sw_held > 0) timer_sw_held++;
+    if (timer_fx_held > 0) {
+        timer_fx_held++;
+        if (timer_fx_held >= timer_fx_timeout + 15)
+            timer_fx_held = timer_fx_timeout;
+    }
+
+    if (timer_sw_held > 0) {
+        timer_sw_held++;
+        if (timer_sw_held >= timer_sw_timeout + 15)
+            timer_sw_held = timer_sw_timeout;
+    }
+
     if (timer_np_held > 0) {
         timer_np_held++;
         // Loop timer to allow infinite hold time:
