@@ -185,21 +185,26 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     ShowWindow(hwndMain, nCmdShow);
     UpdateWindow(hwndMain);
 
+    PeekMessage(&Msg, NULL, 0, 0, PM_NOREMOVE);
+
     // default Win32 message pump
     DWORD timeLast = timeGetTime();
-    while (GetMessage(&Msg, NULL, 0, 0)) {
-        TranslateMessage(&Msg);
-        DispatchMessage(&Msg);
+    while (Msg.message != WM_QUIT) {
+        if (PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE)) {
+            TranslateMessage(&Msg);
+            DispatchMessage(&Msg);
+        } else {
+            // handle the 10ms timer:
+            DWORD timeCurr = timeGetTime();
+            if (timeCurr - timeLast >= 10) {
+                controller_10msec_timer();
+                timeLast = timeCurr;
+            }
 
-        // handle the 10ms timer:
-        DWORD timeCurr = timeGetTime();
-        if (timeCurr - timeLast >= 10) {
-            controller_10msec_timer();
-            timeLast = timeCurr;
+            // give control to the logic controller:
+            controller_handle();
+            Sleep(1);
         }
-
-        // give control to the logic controller:
-        controller_handle();
     }
 
     return 0;

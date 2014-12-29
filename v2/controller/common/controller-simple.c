@@ -406,12 +406,15 @@ static u8 is_bot_button_released(u8 mask) {
 
 // ------------------------- Actual controller logic -------------------------
 
-u8 timer_tapstore;
-const u8 timer_tapstore_timeout = 50;
 u8 timeout_flash;
+
+u8 timer_tapstore;
 u8 timer_fx_held;
-const u8 timer_fx_timeout = 10;
 u8 timer_sw_held;
+u8 timer_np_held, timer_np_advanced;
+
+const u8 timer_tapstore_timeout = 50;
+const u8 timer_fx_timeout = 10;
 const u8 timer_sw_timeout = 10;
 
 // set the controller to an initial state
@@ -427,8 +430,13 @@ void controller_init(void) {
     last_leds = 0xFFFF;
     leds.top.byte = 0;
     leds.bot.byte = 0;
+
     timer_tapstore = 0;
     timer_fx_held = 0;
+    timer_sw_held = 0;
+    timer_np_held = 0;
+    timer_np_advanced = 0;
+
     timeout_flash = 0;
 
     rjm_channel = 0;
@@ -468,6 +476,14 @@ void controller_10msec_timer(void) {
     if (fsw.bot.bits._7 && (timer_tapstore > 0)) timer_tapstore++;
     if (timer_fx_held > 0) timer_fx_held++;
     if (timer_sw_held > 0) timer_sw_held++;
+    if (timer_np_held > 0) {
+        timer_np_held++;
+        // Loop timer to allow infinite hold time:
+        if (timer_np_held >= 8) {
+            timer_np_held = 1;
+            timer_np_advanced = 1;
+        }
+    }
 
     // Flash held LEDs:
     if (timer_sw_held > timer_sw_timeout) {
@@ -507,6 +523,26 @@ void controller_10msec_timer(void) {
             send_leds();
         }
     }
+}
+
+void prog_next(void) {
+    if (next_gmaj_program != 127) next_gmaj_program++;
+    set_gmaj_program();
+}
+
+void prog_prev(void) {
+    if (next_gmaj_program != 0) next_gmaj_program--;
+    set_gmaj_program();
+}
+
+void song_next(void) {
+    if (slp < sl.count - 1) slp++;
+    set_gmaj_program();
+}
+
+void song_prev(void) {
+    if (slp != 0) slp--;
+    set_gmaj_program();
 }
 
 // main control loop
@@ -641,27 +677,59 @@ void controller_handle(void) {
 
     if (mode == 0) {
         // Program mode:
+
+        // NEXT
         if (is_bot_button_pressed(M_8)) {
-            // next g-major program:
-            if (next_gmaj_program != 127) next_gmaj_program++;
-            set_gmaj_program();
+            timer_np_held = 1;
+            prog_next();
+        } else if (is_bot_button_released(M_8)) {
+            timer_np_held = 0;
+        } else if ((fsw.bot.byte & M_8) == M_8) {
+            if (timer_np_advanced) {
+                timer_np_advanced = 0;
+                prog_next();
+            }
         }
+
+        // PREV
         if (is_top_button_pressed(M_8)) {
-            // prev g-major program:
-            if (next_gmaj_program != 0) next_gmaj_program--;
-            set_gmaj_program();
+            timer_np_held = 1;
+            prog_prev();
+        } else if (is_top_button_released(M_8)) {
+            timer_np_held = 0;
+        } else if ((fsw.top.byte & M_8) == M_8) {
+            if (timer_np_advanced) {
+                timer_np_advanced = 0;
+                prog_prev();
+            }
         }
     } else {
         // Setlist mode:
+
+        // NEXT
         if (is_bot_button_pressed(M_8)) {
-            // next g-major program:
-            if (slp < sl.count - 1) slp++;
-            set_gmaj_program();
+            timer_np_held = 1;
+            song_next();
+        } else if (is_bot_button_released(M_8)) {
+            timer_np_held = 0;
+        } else if ((fsw.bot.byte & M_8) == M_8) {
+            if (timer_np_advanced) {
+                timer_np_advanced = 0;
+                song_next();
+            }
         }
+
+        // PREV
         if (is_top_button_pressed(M_8)) {
-            // prev g-major program:
-            if (slp != 0) slp--;
-            set_gmaj_program();
+            timer_np_held = 1;
+            song_prev();
+        } else if (is_top_button_released(M_8)) {
+            timer_np_held = 0;
+        } else if ((fsw.top.byte & M_8) == M_8) {
+            if (timer_np_advanced) {
+                timer_np_advanced = 0;
+                song_prev();
+            }
         }
     }
 
