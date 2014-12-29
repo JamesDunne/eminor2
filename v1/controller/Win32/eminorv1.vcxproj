@@ -167,7 +167,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\controller-simple.c" />
+    <ClCompile Include="..\common\controller-axefx.c" />
+    <ClCompile Include="..\common\controller-rjm.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="eminorv1.c" />
   </ItemGroup>
   <ItemGroup>

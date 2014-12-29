@@ -460,15 +460,15 @@ void leds_show_1digit(u8 value) {
 /* --------------- Momentary toggle foot-switches: */
 
 /* Poll up to 28 foot-switch toggles simultaneously.  DEC INC ENTER NEXT map to 28-31 bit positions. */
-u32 fsw_poll(void) {
-    return ((u32)pushed[0] << FSB_CONTROL_1) |
-           ((u32)pushed[1] << FSB_CONTROL_2) |
-           ((u32)pushed[2] << FSB_CONTROL_3) |
-           ((u32)pushed[3] << FSB_CONTROL_4) |
-           ((u32)pushed[4] << FSB_PRESET_1) |
-           ((u32)pushed[5] << FSB_PRESET_2) |
-           ((u32)pushed[6] << FSB_PRESET_3) |
-           ((u32)pushed[7] << FSB_PRESET_4);
+u8 fsw_poll(void) {
+    return ((u8)pushed[0] << FSB_CONTROL_1) |
+           ((u8)pushed[1] << FSB_CONTROL_2) |
+           ((u8)pushed[2] << FSB_CONTROL_3) |
+           ((u8)pushed[3] << FSB_CONTROL_4) |
+           ((u8)pushed[4] << FSB_PRESET_1) |
+           ((u8)pushed[5] << FSB_PRESET_2) |
+           ((u8)pushed[6] << FSB_PRESET_3) |
+           ((u8)pushed[7] << FSB_PRESET_4);
 }
 
 /* Set currently active program foot-switch's LED indicator and disable all others */

@@ -67,7 +67,7 @@
 
 u8 control_press_values[6];
 
-u32 sw_curr, sw_last;
+u8 sw_curr, sw_last;
 
 // Initial bad values to force setting on init:
 u8 rjm_channel = 255;
@@ -101,7 +101,7 @@ u8 stored = 0;
 // is tuner mute on or off?
 u8 mute_toggle = 0;
 u8 tap_toggle = 0;
-u32 control4_button_mask = 0;
+u8 control4_button_mask = 0;
 
 // right-aligns an integer in base 10 at s[i] and pads spaces down to s[0]
 // NOTE(jsd): Using modulus operator invokes a call to a CLIB.LIB function to perform. Yuck.
@@ -151,17 +151,17 @@ static void show_program(void) {
 }
 
 // determine if a footswitch was pressed
-static u8 button_pressed(u32 mask) {
+static u8 button_pressed(u8 mask) {
     return ((sw_curr & mask) == mask) && ((sw_last & mask) == 0);
 }
 
 // determine if still holding footswitch
-static u8 button_held(u32 mask) {
+static u8 button_held(u8 mask) {
     return (sw_curr & mask) == mask;
 }
 
 // determine if a footswitch was released
-static u8 button_released(u32 mask) {
+static u8 button_released(u8 mask) {
     return ((sw_last & mask) == mask) && ((sw_curr & mask) == 0);
 }
 
@@ -355,7 +355,7 @@ static void gmaj_cc_toggle(u8 cc, u8* old) {
     gmaj_cc_set(cc, *old);
 }
 
-static void reset_timer4(u32 mask) {
+static void reset_timer4(u8 mask) {
     control4_button_mask = mask;
     timer_control4 = 60;
     timer_control4_enable = 1;

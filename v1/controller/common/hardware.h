@@ -28,25 +28,25 @@ extern void leds_show_1digit(u8 value);
 
 // --------------- Momentary toggle foot-switches and LEDs:
 
-#define FSB_PRESET_1 28
-#define FSB_PRESET_2 31
-#define FSB_PRESET_3 30
-#define FSB_PRESET_4 29
+#define FSB_CONTROL_1   0
+#define FSB_CONTROL_2   1
+#define FSB_CONTROL_3   2
+#define FSB_CONTROL_4   3
 
-#define FSB_CONTROL_1 0
-#define FSB_CONTROL_2 1
-#define FSB_CONTROL_3 2
-#define FSB_CONTROL_4 3
+#define FSB_PRESET_1    4
+#define FSB_PRESET_2    7
+#define FSB_PRESET_3    6
+#define FSB_PRESET_4    5
 
-#define FSM_PRESET_1	0x10000000
-#define FSM_PRESET_2	0x80000000
-#define FSM_PRESET_3	0x40000000
-#define FSM_PRESET_4	0x20000000
+#define FSM_CONTROL_1	0x01U
+#define FSM_CONTROL_2	0x02U
+#define FSM_CONTROL_3	0x04U
+#define FSM_CONTROL_4	0x08U
 
-#define FSM_CONTROL_1	0x00000001
-#define FSM_CONTROL_2	0x00000002
-#define FSM_CONTROL_3	0x00000004
-#define FSM_CONTROL_4	0x00000008
+#define FSM_PRESET_1	0x10U
+#define FSM_PRESET_2	0x80U
+#define FSM_PRESET_3	0x40U
+#define FSM_PRESET_4	0x20U
 
 #define M_1 0x01U
 #define M_2 0x02U
@@ -57,28 +57,8 @@ extern void leds_show_1digit(u8 value);
 #define M_7 0x40U
 #define M_8 0x80U
 
-// FX button enable bitmasks:
-#define fxm_compressor  0x01
-#define fxm_filter      0x02
-#define fxm_pitch       0x04
-#define fxm_chorus      0x08
-#define fxm_delay       0x10
-#define fxm_reverb      0x20
-#define fxm_noisegate   0x40
-#define fxm_eq          0x80
-
-// FX button labels:
-#define fxb_compressor  0
-#define fxb_filter      1
-#define fxb_pitch       2
-#define fxb_chorus      3
-#define fxb_delay       4
-#define fxb_reverb      5
-#define fxb_noisegate   6
-#define fxb_eq          7
-
-// Poll up to 28 foot-switch toggles simultaneously.  PREV NEXT DEC  INC map to 28-31 bit positions.
-extern u32 fsw_poll(void);
+// Poll up to 8 foot-switch toggles simultaneously.  PREV NEXT DEC  INC map to 28-31 bit positions.
+extern u8 fsw_poll(void);
 
 // Set currently active program foot-switch's LED indicator and disable all others
 extern void fsw_led_set_active(int idx);
@@ -187,3 +167,23 @@ COMPILE_ASSERT(sizeof(struct set_list) == 32);
 
 // Number of bits to shift to get 2nd bitset from u8:
 #define rjm_shr_to_4bits        4
+
+// FX button enable bitmasks:
+#define fxm_compressor  0x01
+#define fxm_filter      0x02
+#define fxm_pitch       0x04
+#define fxm_chorus      0x08
+#define fxm_delay       0x10
+#define fxm_reverb      0x20
+#define fxm_noisegate   0x40
+#define fxm_eq          0x80
+
+// FX button labels:
+#define fxb_compressor  0
+#define fxb_filter      1
+#define fxb_pitch       2
+#define fxb_chorus      3
+#define fxb_delay       4
+#define fxb_reverb      5
+#define fxb_noisegate   6
+#define fxb_eq          7
