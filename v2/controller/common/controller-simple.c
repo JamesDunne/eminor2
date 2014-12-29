@@ -36,8 +36,8 @@
 #define tglbit(VAR,Place) VAR ^= (1 << Place)
 
 // Hard-coded MIDI channel #s:
-#define	gmaj_midi_channel	0
-#define	rjm_midi_channel	1
+#define	gmaj_midi_channel   0
+#define	rjm_midi_channel    1
 
 // G-major CC messages:
 #define gmaj_cc_taptempo    80
@@ -76,8 +76,6 @@ u8 toggle_tap;
 u8 gmaj_program;
 // Next g-major program to update to:
 u8 next_gmaj_program;
-// Most recent changed-to g-major program via MIDI message:
-u8 midi_gmaj_program;
 
 u8 rjm_channel;
 
@@ -85,7 +83,15 @@ u8 rjm_channel;
 struct program pr;
 // Decoded RJM channels:
 u8 pr_rjm[6];
+
+// Current set list:
 struct set_list sl;
+// Current set list index:
+u8 sli, last_sli;
+// Current program within current set list:
+u8 slp, last_slp;
+
+u8 mode;
 
 #ifdef FEAT_LCD
 char lcdtext_row_program[LCD_COLS];
@@ -323,18 +329,37 @@ static void set_rjm_channel(u8 p) {
 
 // Set g-major program:
 static void set_gmaj_program(void) {
+    // Load program from setlist:
+    if (mode == 1) {
+        next_gmaj_program = sl.entries[slp].program;
+    }
+
     // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
     midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
 
     // Update internal state:
     gmaj_program = next_gmaj_program;
-    midi_gmaj_program = next_gmaj_program;
 
     // Load new effect states:
     load_program_state();
 
     rjm_activate();
     send_lcd();
+}
+
+static void switch_mode(u8 new_mode) {
+    mode = new_mode;
+    if (mode == 0) {
+        // Non-set mode:
+    } else {
+        // Set mode:
+        flash_load((u16)(128 * 0x20) + (u16)sli * sizeof(struct set_list), sizeof(struct set_list), (u8 *)&sl);
+        if (sl.count == 0) {
+            // No songs in set; switch back to program mode:
+            mode = 0;
+            return;
+        }
+    }
 }
 
 // Determine if a footswitch was pressed
@@ -361,10 +386,18 @@ const u8 timer_tapstore_timeout = 60;
 u8 timeout_flash;
 u8 timer_fx_held;
 const u8 timer_fx_timeout = 30;
+u8 timer_sw_held;
+const u8 timer_sw_timeout = 30;
 
 // set the controller to an initial state
 void controller_init(void) {
     u8 i;
+
+    mode = 0;
+    last_sli = 255;
+    last_slp = 255;
+    sli = 0;
+    slp = 0;
 
     last_leds = 0xFFFF;
     leds.top.byte = 0;
@@ -376,7 +409,6 @@ void controller_init(void) {
     rjm_channel = 0;
     gmaj_program = 0;
     next_gmaj_program = 0;
-    midi_gmaj_program = 0;
 
     // This should be overwritten instantly by load_program_state()
     pr.fx[0] = 0;
@@ -403,6 +435,7 @@ void controller_10msec_timer(void) {
     // Increment timers:
     if (fsw.bot.bits._7 && (timer_tapstore > 0)) timer_tapstore++;
     if (timer_fx_held > 0) timer_fx_held++;
+    if (timer_sw_held > 0) timer_sw_held++;
 
     // Flash held LEDs:
     if (timer_fx_held > timer_fx_timeout) {
@@ -485,13 +518,28 @@ void controller_handle(void) {
 
     // handle bottom 6 amp selector buttons:
     if (is_bot_button_pressed(M_1)) {
-        set_rjm_channel(0);
-        reset_tuner_mute();
+        timer_sw_held = 1;
+    } else if (is_bot_button_released(M_1)) {
+        if (timer_sw_held > timer_sw_timeout) {
+            switch_mode(0);
+        } else {
+            set_rjm_channel(0);
+            reset_tuner_mute();
+        }
+        timer_sw_held = 0;
     }
     if (is_bot_button_pressed(M_2)) {
-        set_rjm_channel(1);
-        reset_tuner_mute();
+        timer_sw_held = 1;
+    } else if (is_bot_button_released(M_2)) {
+        if (timer_sw_held > timer_sw_timeout) {
+            switch_mode(1);
+        } else {
+            set_rjm_channel(1);
+            reset_tuner_mute();
+        }
+        timer_sw_held = 0;
     }
+
     if (is_bot_button_pressed(M_3)) {
         set_rjm_channel(2);
         reset_tuner_mute();
@@ -536,15 +584,30 @@ void controller_handle(void) {
     // Turn on the TAP LED while the TAP button is held:
     leds.bot.bits._7 = fsw.bot.bits._7;
 
-    if (is_top_button_pressed(M_8)) {
-        // prev g-major program:
-        if (next_gmaj_program != 0) next_gmaj_program--;
-        set_gmaj_program();
-    }
-    if (is_bot_button_pressed(M_8)) {
-        // next g-major program:
-        if (next_gmaj_program != 127) next_gmaj_program++;
-        set_gmaj_program();
+    if (mode == 0) {
+        // Program mode:
+        if (is_bot_button_pressed(M_8)) {
+            // next g-major program:
+            if (next_gmaj_program != 127) next_gmaj_program++;
+            set_gmaj_program();
+        }
+        if (is_top_button_pressed(M_8)) {
+            // prev g-major program:
+            if (next_gmaj_program != 0) next_gmaj_program--;
+            set_gmaj_program();
+        }
+    } else {
+        // Setlist mode:
+        if (is_bot_button_pressed(M_8)) {
+            // next g-major program:
+            if (slp < sl.count) slp++;
+            set_gmaj_program();
+        }
+        if (is_top_button_pressed(M_8)) {
+            // prev g-major program:
+            if (slp != 0) slp--;
+            set_gmaj_program();
+        }
     }
 
     // NEXT/PREV LEDs:
