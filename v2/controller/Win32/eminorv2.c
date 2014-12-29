@@ -203,6 +203,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
             // give control to the logic controller:
             controller_handle();
+
+            // yield CPU since we don't need much:
             Sleep(1);
         }
     }

@@ -413,9 +413,9 @@ u8 timer_fx_held;
 u8 timer_sw_held;
 u8 timer_np_held, timer_np_advanced;
 
-const u8 timer_tapstore_timeout = 50;
-const u8 timer_fx_timeout = 10;
-const u8 timer_sw_timeout = 10;
+const u8 timer_tapstore_timeout = 75;
+const u8 timer_fx_timeout = 30;
+const u8 timer_sw_timeout = 30;
 
 // set the controller to an initial state
 void controller_init(void) {
@@ -479,9 +479,9 @@ void controller_10msec_timer(void) {
     if (timer_np_held > 0) {
         timer_np_held++;
         // Loop timer to allow infinite hold time:
-        if (timer_np_held >= 8) {
-            timer_np_held = 1;
+        if (timer_np_held >= 50) {
             timer_np_advanced = 1;
+            timer_np_held = 40;
         }
     }
 
