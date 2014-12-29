@@ -170,33 +170,14 @@ void led_set(u16 leds){
     LedStatesBot = leds & 0xFF;
 }
 
-void lcd_update_row(u8 row, char text[LCD_COLS]) {
-//    // TODO(jsd): Detect necessary changes and enqueue commands later when buffer has space
-    u8 i, Update;
+char *lcd_row_get(u8 row) {
+    assert(row < 4);
+    return LCDRamMap[row];
+}
 
-    Update = false;
-
-    // Queue up the row of chars:
-    for (i = 0; i < LCD_COLS; ++i) {
-        u8 c = text[i];
-        if (c == 0) break;
-        if (LCDRamMap[row][i] != c) {
-            LCDRamMap[row][i] = c;
-            Update = true;
-        }
-    }
-    // Space-pad to the right:
-    for (; i < LCD_COLS; ++i) {
-        if (LCDRamMap[row][i] != 0x20) {
-            LCDRamMap[row][i] = 0x20;
-            Update = true;
-        }
-    }
-
-    if (Update) {
-        LCDUpdate = true;
-        LCDUpdateStage = 0;      //start at the beginning if the screen needs to be redrawn
-    }
+void lcd_row_updated(u8 row) {
+    LCDUpdate = true;
+    LCDUpdateStage = 0;      //start at the beginning if the screen needs to be redrawn
 }
 
 /* --------------- MIDI I/O functions: */

@@ -311,7 +311,7 @@ static void update_effects_MIDI_state(void) {
 #endif
 }
 
-static void rjm_activate() {
+static void rjm_activate(void) {
     // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
     midi_send_cmd1(0xC, rjm_midi_channel, pr_rjm[rjm_channel]);
 
