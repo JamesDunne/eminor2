@@ -18,7 +18,6 @@ build/
 Object/
 *.o
 midicontroller.cof
-midicontroller.hex
 *.lst
 
 v2/controller/go-ui/go-ui
