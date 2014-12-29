@@ -187,27 +187,25 @@ static void send_leds(void) {
     }
 }
 
+// Update LCD display:
 static void send_lcd(void) {
 #ifdef FEAT_LCD
     u8 n = gmaj_program + 1;
-    u8 i = LCD_COLS - 1;
+    s8 i;
 
-    // Update LCD display:
+    // Show setlist index:
     if (mode == 1) {
-        ritoa(lcd_rows[1], slp + 1, 19);
+        i = ritoa(lcd_rows[1], slp + 1, LCD_COLS - 1);
+        for (; i > LCD_COLS - 3; --i) lcd_rows[1][i] = ' ';
         lcd_row_updated(1);
     }
 
     // Show g-major program number, right-aligned space padded:
-
-    // Built-in `itoa()` impl:
-    do {
-        lcd_rows[2][i--] = (n % 10) + '0';
-    } while ((n /= 10) > 0);
-    for (; i > LCD_COLS - 3; --i) lcd_rows[2][i] = ' ';
-    lcd_rows[2][i] = ' ';
+    i = ritoa(lcd_rows[2], gmaj_program + 1, LCD_COLS - 1);
+    for (; i > LCD_COLS - 4; --i) lcd_rows[2][i] = ' ';
     lcd_row_updated(2);
 
+    // Show program name:
     for (i = 0; i < LCD_COLS; i++)
         lcd_rows[3][i] = pr.name[i];
     lcd_row_updated(3);
@@ -363,6 +361,9 @@ static void switch_mode(u8 new_mode) {
         // Set mode:
         flash_load((u16)(128 * 0x20) + (u16)sli * sizeof(struct set_list), sizeof(struct set_list), (u8 *)&sl);
         if (sl.count > 0) {
+            slp = 0;
+            set_gmaj_program();
+
             for (i = 0; i < LCD_COLS; i++) {
                 lcd_rows[0][i] = "Setlist mode        "[i];
                 lcd_rows[1][i] = "Set index        #  "[i];
@@ -654,7 +655,7 @@ void controller_handle(void) {
         // Setlist mode:
         if (is_bot_button_pressed(M_8)) {
             // next g-major program:
-            if (slp < sl.count) slp++;
+            if (slp < sl.count - 1) slp++;
             set_gmaj_program();
         }
         if (is_top_button_pressed(M_8)) {
