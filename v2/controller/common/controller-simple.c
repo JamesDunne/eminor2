@@ -500,7 +500,7 @@ void controller_10msec_timer(void) {
     }
 
     // Flash held LEDs:
-    if (timer_sw_held > timer_sw_timeout) {
+    if (timer_sw_held >= timer_sw_timeout) {
         // Flash top LEDs on/off:
         if ((timer_sw_held & 15) >= 7) {
             if (fsw.bot.bits._1) leds.bot.bits._1 = 1;
@@ -512,7 +512,7 @@ void controller_10msec_timer(void) {
         send_leds();
     }
 
-    if (timer_fx_held > timer_fx_timeout) {
+    if (timer_fx_held >= timer_fx_timeout) {
         // Flash top LEDs on/off:
         if ((timer_fx_held & 15) >= 7) {
             leds.top.byte = ((pr.fx[rjm_channel] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
@@ -613,12 +613,11 @@ void controller_handle(void) {
     // handle bottom 6 amp selector buttons:
     if (is_bot_button_pressed(M_1)) {
         timer_sw_held = 1;
+        set_rjm_channel(0);
+        reset_tuner_mute();
     } else if (is_bot_button_released(M_1)) {
         if (timer_sw_held > timer_sw_timeout) {
             switch_mode(0);
-        } else {
-            set_rjm_channel(0);
-            reset_tuner_mute();
         }
 
         timer_sw_held = 0;
@@ -630,12 +629,11 @@ void controller_handle(void) {
     }
     if (is_bot_button_pressed(M_2)) {
         timer_sw_held = 1;
+        set_rjm_channel(1);
+        reset_tuner_mute();
     } else if (is_bot_button_released(M_2)) {
         if (timer_sw_held > timer_sw_timeout) {
             switch_mode(1);
-        } else {
-            set_rjm_channel(1);
-            reset_tuner_mute();
         }
         timer_sw_held = 0;
 
@@ -645,19 +643,19 @@ void controller_handle(void) {
         send_leds();
     }
 
-    if (is_bot_button_released(M_3)) {
+    if (is_bot_button_pressed(M_3)) {
         set_rjm_channel(2);
         reset_tuner_mute();
     }
-    if (is_bot_button_released(M_4)) {
+    if (is_bot_button_pressed(M_4)) {
         set_rjm_channel(3);
         reset_tuner_mute();
     }
-    if (is_bot_button_released(M_5)) {
+    if (is_bot_button_pressed(M_5)) {
         set_rjm_channel(4);
         reset_tuner_mute();
     }
-    if (is_bot_button_released(M_6)) {
+    if (is_bot_button_pressed(M_6)) {
         set_rjm_channel(5);
         reset_tuner_mute();
     }
@@ -670,7 +668,7 @@ void controller_handle(void) {
         gmaj_cc_set(gmaj_cc_mute, (leds.top.bits._7) ? 0x7F : 0x00);
     }
     if (is_bot_button_pressed(M_7)) {
-        // tap tempo function (does not use LED):
+        // tap tempo function:
         toggle_tap = ~toggle_tap & 0x7F;
         gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
         // start timer for STORE:
