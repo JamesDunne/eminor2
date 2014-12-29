@@ -107,14 +107,8 @@ void	SetDipAddress(unsigned char Address) {
 }
 
 /* --------------- LED read-out display functions: */
-u32 fsw_poll(){
-	FourBytes TempButtons;
-
-	TempButtons.l_form = 0;
-	TempButtons.b_form.byte3 = ButtonState&(unsigned char)0xF0;
-	TempButtons.b_form.byte0 = ButtonState&(unsigned char)0x0F;
-
-	return TempButtons.l_form;
+u8 fsw_poll(){
+    return ButtonState;
 }
 
 void	UpdateLeds(void) {
