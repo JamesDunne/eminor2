@@ -55,6 +55,7 @@ const static LPCWSTR keylabels[2][8] = {
 #ifdef FEAT_LCD
 // currently displayed LCD text in row X col format:
 WCHAR lcd_text[LCD_ROWS][LCD_COLS];
+char lcd_ascii[LCD_ROWS][LCD_COLS];
 #endif
 
 static bool show_dimensions = false;
@@ -764,15 +765,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 
 #ifdef FEAT_LCD
 
+// Pass back the LCD text buffer for the given row:
+char *lcd_row_get(u8 row) {
+    assert(row < 4);
+    return lcd_ascii[row];
+}
+
 // Update LCD display text:
-void lcd_update_row(u8 row, char text[LCD_COLS]) {
+void lcd_row_updated(u8 row) {
     assert(row < 4);
 
     // Convert ASCII to UTF-16:
     int c;
     for (c = 0; c < LCD_COLS; ++c) {
-        if (text[c] == 0) break;
-        lcd_text[row][c] = (WCHAR)text[c];
+        if (lcd_ascii[row][c] == 0) break;
+        lcd_text[row][c] = (WCHAR)lcd_ascii[row][c];
     }
 
     // Clear the rest of the row if a NUL terminator was found:

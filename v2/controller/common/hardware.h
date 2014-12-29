@@ -70,7 +70,8 @@ extern void led_set(u16 leds);
 
 // Update an LCD display's row:
 // A terminating NUL character will clear the rest of the row with empty space.
-extern void lcd_update_row(u8 row, char text[LCD_COLS]);
+extern void lcd_row_updated(u8 row);
+extern char *lcd_row_get(u8 row);
 
 #endif
 

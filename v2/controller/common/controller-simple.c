@@ -94,15 +94,14 @@ u8 slp, last_slp;
 u8 mode;
 
 #ifdef FEAT_LCD
-char lcdtext_row_program[LCD_COLS];
+char *lcd_rows[LCD_ROWS];
 #endif
 
-static void ritoa(u8 *s, u8 n, s8 i) {
+static s8 ritoa(u8 *s, u8 n, s8 i) {
     do {
         s[i--] = (n % 10) + '0';
     } while ((n /= 10) > 0);
-    for (; i > 0; --i) s[i] = ' ';
-    s[i] = ' ';
+    return i;
 }
 
 // Loads ROM describing the initial on/off state of effects
@@ -126,6 +125,9 @@ void load_program_state(void) {
 
         // Program name is the program number in decimal:
         //ritoa(pr.name, gmaj_program + sl.song_offset + 1, 3);
+        pr.name[0] = ' ';
+        pr.name[1] = ' ';
+        pr.name[2] = ' ';
         ritoa(pr.name, gmaj_program + 1, 3);
         pr.name[4] = 0;
 
@@ -191,18 +193,24 @@ static void send_lcd(void) {
     u8 i = LCD_COLS - 1;
 
     // Update LCD display:
+    if (mode == 1) {
+        ritoa(lcd_rows[1], slp + 1, 19);
+        lcd_row_updated(1);
+    }
 
     // Show g-major program number, right-aligned space padded:
 
     // Built-in `itoa()` impl:
     do {
-        lcdtext_row_program[i--] = (n % 10) + '0';
+        lcd_rows[2][i--] = (n % 10) + '0';
     } while ((n /= 10) > 0);
-    for (; i > LCD_COLS - 3; --i) lcdtext_row_program[i] = ' ';
-    lcdtext_row_program[i] = ' ';
+    for (; i > LCD_COLS - 3; --i) lcd_rows[2][i] = ' ';
+    lcd_rows[2][i] = ' ';
+    lcd_row_updated(2);
 
-    lcd_update_row(2, lcdtext_row_program);
-    lcd_update_row(3, pr.name);
+    for (i = 0; i < LCD_COLS; i++)
+        lcd_rows[3][i] = pr.name[i];
+    lcd_row_updated(3);
 #endif
 }
 
@@ -348,17 +356,33 @@ static void set_gmaj_program(void) {
 }
 
 static void switch_mode(u8 new_mode) {
+    u8 i;
+
     mode = new_mode;
-    if (mode == 0) {
-        // Non-set mode:
-    } else {
+    if (mode == 1) {
         // Set mode:
         flash_load((u16)(128 * 0x20) + (u16)sli * sizeof(struct set_list), sizeof(struct set_list), (u8 *)&sl);
-        if (sl.count == 0) {
+        if (sl.count > 0) {
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[0][i] = "Setlist mode        "[i];
+                lcd_rows[1][i] = "Set index        #  "[i];
+            }
+            ritoa(lcd_rows[1], slp + 1, 19);
+            lcd_row_updated(0);
+            lcd_row_updated(1);
+        } else {
             // No songs in set; switch back to program mode:
             mode = 0;
-            return;
         }
+    }
+    if (mode == 0) {
+        // Program mode:
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[0][i] = "Program mode        "[i];
+            lcd_rows[1][i] = "                    "[i];
+        }
+        lcd_row_updated(0);
+        lcd_row_updated(1);
     }
 }
 
@@ -382,12 +406,12 @@ static u8 is_bot_button_released(u8 mask) {
 // ------------------------- Actual controller logic -------------------------
 
 u8 timer_tapstore;
-const u8 timer_tapstore_timeout = 60;
+const u8 timer_tapstore_timeout = 50;
 u8 timeout_flash;
 u8 timer_fx_held;
-const u8 timer_fx_timeout = 30;
+const u8 timer_fx_timeout = 10;
 u8 timer_sw_held;
-const u8 timer_sw_timeout = 30;
+const u8 timer_sw_timeout = 10;
 
 // set the controller to an initial state
 void controller_init(void) {
@@ -419,11 +443,18 @@ void controller_init(void) {
     pr.fx[5] = fxm_delay;
 
 #ifdef FEAT_LCD
-    for (i = 0; i < LCD_COLS; ++i)
-        lcdtext_row_program[i] = "Program:            "[i];
+    for (i = 0; i < LCD_ROWS; ++i)
+        lcd_rows[i] = lcd_row_get(i);
 
-    lcd_update_row(0, "");
-    lcd_update_row(1, "");
+    for (i = 0; i < LCD_COLS; ++i) {
+        lcd_rows[0][i] = "Program mode        "[i];
+        lcd_rows[1][i] = "                    "[i];
+        lcd_rows[2][i] = "Program:            "[i];
+        lcd_rows[3][i] = "                    "[i];
+    }
+
+    lcd_row_updated(0);
+    lcd_row_updated(1);
 #endif
 
     // Initialize program:
@@ -438,6 +469,18 @@ void controller_10msec_timer(void) {
     if (timer_sw_held > 0) timer_sw_held++;
 
     // Flash held LEDs:
+    if (timer_sw_held > timer_sw_timeout) {
+        // Flash top LEDs on/off:
+        if ((timer_sw_held & 15) >= 7) {
+            if (fsw.bot.bits._1) leds.bot.bits._1 = 1;
+            if (fsw.bot.bits._2) leds.bot.bits._2 = 1;
+        } else {
+            if (fsw.bot.bits._1) leds.bot.bits._1 = 0;
+            if (fsw.bot.bits._2) leds.bot.bits._2 = 0;
+        }
+        send_leds();
+    }
+
     if (timer_fx_held > timer_fx_timeout) {
         // Flash top LEDs on/off:
         if ((timer_fx_held & 15) >= 7) {
@@ -526,7 +569,13 @@ void controller_handle(void) {
             set_rjm_channel(0);
             reset_tuner_mute();
         }
+
         timer_sw_held = 0;
+
+        // Set only current program LED on bottom, preserve LEDs 7 and 8:
+        leds.bot.byte = (1 << rjm_channel) | (leds.bot.byte & (M_7 | M_8));
+
+        send_leds();
     }
     if (is_bot_button_pressed(M_2)) {
         timer_sw_held = 1;
@@ -538,21 +587,26 @@ void controller_handle(void) {
             reset_tuner_mute();
         }
         timer_sw_held = 0;
+
+        // Set only current program LED on bottom, preserve LEDs 7 and 8:
+        leds.bot.byte = (1 << rjm_channel) | (leds.bot.byte & (M_7 | M_8));
+
+        send_leds();
     }
 
-    if (is_bot_button_pressed(M_3)) {
+    if (is_bot_button_released(M_3)) {
         set_rjm_channel(2);
         reset_tuner_mute();
     }
-    if (is_bot_button_pressed(M_4)) {
+    if (is_bot_button_released(M_4)) {
         set_rjm_channel(3);
         reset_tuner_mute();
     }
-    if (is_bot_button_pressed(M_5)) {
+    if (is_bot_button_released(M_5)) {
         set_rjm_channel(4);
         reset_tuner_mute();
     }
-    if (is_bot_button_pressed(M_6)) {
+    if (is_bot_button_released(M_6)) {
         set_rjm_channel(5);
         reset_tuner_mute();
     }
@@ -571,8 +625,8 @@ void controller_handle(void) {
         // start timer for STORE:
         timer_tapstore = 1;
     }
-    // TAP/STORE released after 600ms?
-    if ((timer_tapstore >= 60) && fsw.bot.bits._7) {
+    // TAP/STORE released after timeout?
+    if ((timer_tapstore >= timer_tapstore_timeout) && fsw.bot.bits._7) {
         // STORE:
         store_program_state();
         // flash LEDs for 800ms:
