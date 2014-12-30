@@ -190,7 +190,7 @@ void lcd_row_updated(u8 row) {
 */
 void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
     midi_enq(((cmd & 0xF) << 4) | (channel & 0xF));
-    midi_enq(data1 & 0x7F);
+    midi_enq(data1);
 }
 
 /* Send formatted MIDI commands.
@@ -202,8 +202,8 @@ void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
 */
 void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
     midi_enq(((cmd & 0xF) << 4) | (channel & 0xF));
-    midi_enq(data1 & 0x7F);
-    midi_enq(data2 & 0x7F);
+    midi_enq(data1);
+    midi_enq(data2);
 }
 
 // ---------------- FLASH interface:

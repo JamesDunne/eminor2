@@ -53,16 +53,7 @@
 #define gmaj_cc_eq          91
 
 // Top row of controller buttons activate these CCs:
-static u8 gmaj_cc_lookup[8] = {
-    gmaj_cc_compressor,
-    gmaj_cc_filter,
-    gmaj_cc_pitch,
-    gmaj_cc_chorus,
-    gmaj_cc_delay,
-    gmaj_cc_reverb,
-    gmaj_cc_noisegate,
-    gmaj_cc_eq
-};
+u8 gmaj_cc_lookup[8];
 
 // Current and previous button state:
 io16 fsw, fsw_last;
@@ -446,6 +437,15 @@ void controller_init(void) {
     rjm_channel = 0;
     gmaj_program = 0;
     next_gmaj_program = 0;
+    
+    gmaj_cc_lookup[0] = gmaj_cc_compressor;
+    gmaj_cc_lookup[1] = gmaj_cc_filter;
+    gmaj_cc_lookup[2] = gmaj_cc_pitch;
+    gmaj_cc_lookup[3] = gmaj_cc_chorus;
+    gmaj_cc_lookup[4] = gmaj_cc_delay;
+    gmaj_cc_lookup[5] = gmaj_cc_reverb;
+    gmaj_cc_lookup[6] = gmaj_cc_noisegate;
+    gmaj_cc_lookup[7] = gmaj_cc_eq;
 
     // This should be overwritten instantly by load_program_state()
     pr.fx[0] = 0;

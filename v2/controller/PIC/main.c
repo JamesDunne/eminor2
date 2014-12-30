@@ -45,6 +45,7 @@ void main() {
     lcd_enqueue(20);
 
     // Initialize controller logic:
+    ReadButtons();
     controller_init();
 
     // Main event loop:
