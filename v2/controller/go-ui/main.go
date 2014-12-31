@@ -5,9 +5,7 @@ import (
 	"time"
 )
 import "github.com/andlabs/ui"
-
-//#include "../common/controller-simple.c"
-import "C"
+import "github.com/JamesDunne/eminor2/v2/controller/go-ui/simulation"
 
 const mmToIn = 0.0393701
 
@@ -84,9 +82,7 @@ func (area *canvasArea) Key(e ui.KeyEvent) (handled bool) {
 }
 
 func main() {
-	hw_init()
-
-	C.controller_init()
+	simulation.Init()
 
 	timer_10ms := time.Tick(10 * time.Millisecond)
 
@@ -115,9 +111,9 @@ func main() {
 			for {
 				select {
 				case <-timer_10ms:
-					C.controller_10msec_timer()
+					simulation.Timer_10msec()
 				default:
-					C.controller_handle()
+					simulation.Handle()
 				}
 			}
 		}()

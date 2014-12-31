@@ -1,10 +1,11 @@
-package main
+package simulation
 
 import "C"
-import "log"
+import "fmt"
 import "unsafe"
 
 var lcd [][]byte
+var lcd_rows [4][20]byte
 
 func hw_init() {
 	lcd = make([][]byte, 4, 4)
@@ -22,25 +23,19 @@ func fsw_poll() uint16 {
 func led_set(leds uint16) {
 }
 
-//export lcd_update_row
-func lcd_update_row(row byte, text *C.char) {
-	var i uintptr
-	lcd[row] = lcd[row][0:0]
-	for i = 0; i < 20; i++ {
-		var c = byte(*(*C.char)(unsafe.Pointer(uintptr(unsafe.Pointer(text)) + i)))
-		lcd[row] = append(lcd[row], c)
-		if c == 0 {
-			lcd[row] = lcd[row][0:i]
-			break
-		}
-	}
+//export lcd_row_updated
+func lcd_row_updated(row byte) {
+	fmt.Printf("LCD:\n[%s]\n[%s]\n[%s]\n[%s]\n\n", lcd_rows[0], lcd_rows[1], lcd_rows[2], lcd_rows[3])
+}
 
-	//log.Printf("\n%s\n%s\n%s\n%s\n", lcd[0], lcd[1], lcd[2], lcd[3])
+//export lcd_row_get
+func lcd_row_get(row byte) *C.char {
+	return (*C.char)(unsafe.Pointer(&lcd_rows[row][0]))
 }
 
 //export flash_load
 func flash_load(addr, count uint16, data *byte) {
-	log.Printf("flash load @ %04x", addr)
+	fmt.Printf("flash load @ %04x\n", addr)
 	var i int
 	for i = 0; i < int(count); i++ {
 		var c = (C.char)(flash_memory[int(addr)+i])
@@ -50,7 +45,7 @@ func flash_load(addr, count uint16, data *byte) {
 
 //export flash_store
 func flash_store(addr, count uint16, data *byte) {
-	log.Println("flash store @ %04x", addr)
+	fmt.Println("flash store @ %04x\n", addr)
 }
 
 // Send a single MIDI byte:
@@ -58,10 +53,10 @@ func flash_store(addr, count uint16, data *byte) {
 
 //export midi_send_cmd1
 func midi_send_cmd1(cmd, channel, data1 byte) {
-	log.Printf("%02X %02X\n", (cmd<<4)|channel, data1)
+	fmt.Printf("%02X %02X\n", (cmd<<4)|channel, data1)
 }
 
 //export midi_send_cmd2
 func midi_send_cmd2(cmd, channel, data1, data2 byte) {
-	log.Printf("%02X %02X %02X\n", (cmd<<4)|channel, data1, data2)
+	fmt.Printf("%02X %02X %02X\n", (cmd<<4)|channel, data1, data2)
 }
