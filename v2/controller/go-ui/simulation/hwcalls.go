@@ -4,23 +4,21 @@ import "C"
 import "fmt"
 import "unsafe"
 
-var lcd [][]byte
 var lcd_rows [4][20]byte
+var _fsw uint16
+var _leds uint16
 
 func hw_init() {
-	lcd = make([][]byte, 4, 4)
-	for i := 0; i < 4; i++ {
-		lcd[i] = make([]byte, 0, 20)
-	}
 }
 
 //export fsw_poll
 func fsw_poll() uint16 {
-	return 0
+	return _fsw
 }
 
 //export led_set
 func led_set(leds uint16) {
+	_leds = leds
 }
 
 //export lcd_row_updated

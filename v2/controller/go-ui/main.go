@@ -2,10 +2,12 @@ package main
 
 import (
 	"image"
+	"image/color"
 	"time"
 )
 import "github.com/andlabs/ui"
 import "github.com/JamesDunne/eminor2/v2/controller/go-ui/simulation"
+import "code.google.com/p/draw2d/draw2d"
 
 const mmToIn = 0.0393701
 
@@ -52,22 +54,19 @@ type canvasArea struct {
 // Before Paint() is called, this region is cleared with a system-defined background color.
 // You MUST handle this event, and you MUST return a valid image, otherwise deadlocks and panicking will occur.
 // The image returned must have the same size as rect (but does not have to have the same origin points).
-// Example:
-// 	imgFromFile, _, err := image.Decode(file)
-// 	if err != nil { panic(err) }
-// 	img := image.NewRGBA(imgFromFile.Rect)
-// 	draw.Draw(img, img.Rect, imgFromFile, image.ZP, draw.Over)
-// 	// ...
-// 	func (h *myAreaHandler) Paint(rect image.Rectangle) *image.RGBA {
-// 		return img.SubImage(rect).(*image.RGBA)
-// 	}
 func (area *canvasArea) Paint(cliprect image.Rectangle) *image.RGBA {
+	//area.img.SetRGBA(0, 0, color.RGBA{0, 0, 0, 255})
+	dc := draw2d.NewGraphicContext(area.img)
+	dc.Save()
+	dc.SetFillColor(color.Black)
+	draw2d.Ellipse(dc, 16, 16, 8, 8)
+	dc.FillStroke()
+	dc.Restore()
+
 	return area.img.SubImage(cliprect).(*image.RGBA)
 }
 
 // Mouse is called when the Area receives a mouse event.
-// You are allowed to do nothing in this handler (to ignore mouse events).
-// See MouseEvent for details.
 // After handling the mouse event, package ui will decide whether to perform platform-dependent event chain continuation based on that platform's designated action (so it is not possible to override global mouse events this way).
 func (area *canvasArea) Mouse(e ui.MouseEvent) {
 	return
@@ -75,8 +74,6 @@ func (area *canvasArea) Mouse(e ui.MouseEvent) {
 
 // Key is called when the Area receives a keyboard event.
 // Return true to indicate that you handled the event; return false to indicate that you did not and let the system handle the event.
-// You are allowed to do nothing in this handler (to ignore keyboard events); in this case, return false.
-// See KeyEvent for details.
 func (area *canvasArea) Key(e ui.KeyEvent) (handled bool) {
 	return false
 }
