@@ -84,17 +84,29 @@ func main() {
 	}
 	//fmt.Printf("%+v\n\n", setlists)
 
-	fo, err := os.OpenFile("../PIC/flash_rom_init.h", os.O_TRUNC|os.O_CREATE, 0644)
+	fo, err := os.OpenFile("../PIC/flash_rom_init.h", os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	defer fo.Close()
+	defer func() {
+		err = fo.Close()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		fmt.Println("Closed.")
+	}()
 
 	// Translate to binary data for FLASH memory:
 	songs := 0
 	for i, p := range programs.Programs {
-		fmt.Printf("%3d) %s\n", i+1, p.Name)
+		_, err = fmt.Printf("%3d) %s\n", i+1, p.Name)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
 		songs++
 
 		// Write the name first:
@@ -109,7 +121,12 @@ func main() {
 			}
 			c := p.Name[j]
 			if c < 32 {
-				fmt.Fprintf(fo, "%d, ", p.RJMInitial)
+				_, err = fmt.Fprintf(fo, "%d, ", p.RJMInitial)
+				if err != nil {
+					log.Println(err)
+					return
+				}
+
 			}
 			fmt.Fprintf(fo, "'%c', ", rune(c))
 		}
@@ -165,7 +182,7 @@ func main() {
 		}
 
 		// Unused:
-		fmt.Fprintf(fo, "0")
+		fmt.Fprint(fo, "0")
 
 		fmt.Fprint(fo, ",\n")
 	}
