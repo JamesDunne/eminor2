@@ -785,6 +785,7 @@ void lcd_row_updated(u8 row) {
     // Convert ASCII to UTF-16:
     int c;
     for (c = 0; c < LCD_COLS; ++c) {
+		// Display NUL characters which show up on hardware:
         if (lcd_ascii[row][c] == 0) {
             lcd_text[row][c] = 1;
             continue;
