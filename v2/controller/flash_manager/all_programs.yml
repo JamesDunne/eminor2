@@ -45,7 +45,7 @@ programs:
         fx: [ noisegate, delay ]
   - name: Zero
     gmaj_program: 3
-    rjm_initial:  2
+    rjm_initial:  4
     scenes:
       - rjm_channel: 1
         rjm_solo: off
@@ -58,10 +58,10 @@ programs:
         fx: [ noisegate ]
       - rjm_channel: 3
         rjm_solo: on
-        fx: [ noisegate ]
-      - rjm_channel: 3
-        rjm_solo: on
         fx: [ noisegate, delay ]
+      - rjm_channel: 3
+        rjm_solo: off
+        fx: [ noisegate ]
       - rjm_channel: 3
         rjm_solo: on
         fx: [ noisegate, delay, pitch ]
@@ -211,8 +211,8 @@ programs:
         rjm_solo: off
         fx: [ noisegate, eq, delay ]
       - rjm_channel: 2
-        rjm_solo: on
-        fx: [ noisegate, eq ]
+        rjm_solo: off
+        fx: [ noisegate, eq, delay ]
       - rjm_channel: 2
         rjm_solo: off
         fx: [ noisegate, eq ]

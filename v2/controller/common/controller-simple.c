@@ -359,6 +359,7 @@ static void switch_mode(u8 new_mode) {
             slp = 0;
             set_gmaj_program();
 
+#ifdef FEAT_LCD
             for (i = 0; i < LCD_COLS; i++) {
                 lcd_rows[0][i] = "Setlist mode        "[i];
                 lcd_rows[1][i] = "Set index        #  "[i];
@@ -366,6 +367,7 @@ static void switch_mode(u8 new_mode) {
             ritoa(lcd_rows[1], slp + 1, 19);
             lcd_row_updated(0);
             lcd_row_updated(1);
+#endif
         } else {
             // No songs in set; switch back to program mode:
             mode = 0;
@@ -373,12 +375,14 @@ static void switch_mode(u8 new_mode) {
     }
     if (mode == 0) {
         // Program mode:
+#ifdef FEAT_LCD
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[0][i] = "Program mode        "[i];
             lcd_rows[1][i] = "                    "[i];
         }
         lcd_row_updated(0);
         lcd_row_updated(1);
+#endif
     }
 }
 
@@ -416,7 +420,7 @@ u8 timer_np_held, timer_np_advanced;
 void controller_init(void) {
     u8 i;
 
-    mode = 0;
+    mode = 1;
     last_sli = 255;
     last_slp = 255;
     sli = 0;
@@ -460,15 +464,14 @@ void controller_init(void) {
         lcd_rows[i] = lcd_row_get(i);
 
     for (i = 0; i < LCD_COLS; ++i) {
-        lcd_rows[0][i] = "Program mode        "[i];
+        lcd_rows[0][i] = "Setlist mode        "[i];
         lcd_rows[1][i] = "                    "[i];
         lcd_rows[2][i] = "Program:            "[i];
         lcd_rows[3][i] = "                    "[i];
     }
-
-    lcd_row_updated(0);
-    lcd_row_updated(1);
 #endif
+
+    switch_mode(1);
 
     // Initialize program:
     set_gmaj_program();
@@ -495,7 +498,7 @@ void controller_10msec_timer(void) {
         // Loop timer to allow infinite hold time:
         if (timer_np_held >= 50) {
             timer_np_advanced = 1;
-            timer_np_held = 40;
+            timer_np_held = 35;
         }
     }
 
