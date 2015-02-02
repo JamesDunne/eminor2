@@ -12,11 +12,13 @@
     RJM listens for program change messages with program #s 1-6
 
     Footswitch layout:
-    *      *      *      *      *      *      *
-    CMP    FLT    PIT    CHO    DLY    RVB    MUTE    PREV
+     *      *      *      *      *      *      *       *
+    CMP    FLT    PIT    CHO    DLY    RVB    PROG    PREV
+                                              MUTE
 
-    *      *      *      *      *      *
-    1      1S     2      2S     3      3S     TAP     NEXT
+     *      *      *      *      *      *      *       *
+     1      1S     2      2S     3      3S    TAP     NEXT
+                                             STORE
 
     Written by
     James S. Dunne
@@ -82,7 +84,13 @@ u8 sli, last_sli;
 // Current program within current set list:
 u8 slp, last_slp;
 
+// Setlist or program mode:
 u8 mode;
+
+// Programming mode if non-zero:
+u8 programming_mode;
+
+io16 leds_mode[2];
 
 #ifdef FEAT_LCD
 char *lcd_rows[LCD_ROWS];
@@ -348,6 +356,40 @@ static void set_gmaj_program(void) {
     send_lcd();
 }
 
+#ifdef FEAT_LCD
+static void lcd_display_mode(void) {
+    u8 i;
+    if (programming_mode) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[0][i] = "Programming         "[i];
+            lcd_rows[1][i] = "********************"[i];
+        }
+        lcd_row_updated(0);
+        lcd_row_updated(1);
+        return;
+    }
+
+    if (mode == 0) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[0][i] = "Program mode        "[i];
+            lcd_rows[1][i] = "                    "[i];
+        }
+    } else {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[0][i] = "Setlist mode        "[i];
+            lcd_rows[1][i] = "Set index        #  "[i];
+        }
+        ritoa(lcd_rows[1], slp + 1, 19);
+    }
+    lcd_row_updated(0);
+    lcd_row_updated(1);
+}
+#else
+static void lcd_display_mode(void) {
+    return;
+}
+#endif
+
 static void switch_mode(u8 new_mode) {
     u8 i;
 
@@ -358,32 +400,21 @@ static void switch_mode(u8 new_mode) {
         if (sl.count > 0) {
             slp = 0;
             set_gmaj_program();
-
-#ifdef FEAT_LCD
-            for (i = 0; i < LCD_COLS; i++) {
-                lcd_rows[0][i] = "Setlist mode        "[i];
-                lcd_rows[1][i] = "Set index        #  "[i];
-            }
-            ritoa(lcd_rows[1], slp + 1, 19);
-            lcd_row_updated(0);
-            lcd_row_updated(1);
-#endif
         } else {
             // No songs in set; switch back to program mode:
             mode = 0;
         }
     }
-    if (mode == 0) {
-        // Program mode:
-#ifdef FEAT_LCD
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = "Program mode        "[i];
-            lcd_rows[1][i] = "                    "[i];
-        }
-        lcd_row_updated(0);
-        lcd_row_updated(1);
-#endif
-    }
+
+    lcd_display_mode();
+}
+
+static void switch_programming_mode(u8 new_mode) {
+    leds_mode[programming_mode] = leds;
+    leds = leds_mode[new_mode];
+
+    programming_mode = new_mode;
+    lcd_display_mode();
 }
 
 // Determine if a footswitch was pressed
@@ -410,17 +441,25 @@ u8 timeout_flash;
 u8 timer_tapstore;
 u8 timer_fx_held;
 u8 timer_sw_held;
+u8 timer_prog_held;
 u8 timer_np_held, timer_np_advanced;
 
 #define timer_tapstore_timeout  75
 #define timer_fx_timeout        30
 #define timer_sw_timeout        75
+#define timer_prog_timeout      75
 
 // set the controller to an initial state
 void controller_init(void) {
     u8 i;
 
     mode = 1;
+    programming_mode = 0;
+    leds_mode[0].top.byte = 0;
+    leds_mode[0].bot.byte = 0;
+    leds_mode[1].top.byte = 0;
+    leds_mode[1].bot.byte = 0;
+
     last_sli = 255;
     last_slp = 255;
     sli = 0;
@@ -435,6 +474,7 @@ void controller_init(void) {
     timer_sw_held = 0;
     timer_np_held = 0;
     timer_np_advanced = 0;
+    timer_prog_held = 0;
 
     timeout_flash = 0;
 
@@ -491,6 +531,12 @@ void controller_10msec_timer(void) {
         timer_sw_held++;
         if (timer_sw_held >= timer_sw_timeout + 15)
             timer_sw_held = timer_sw_timeout;
+    }
+
+    if (timer_prog_held > 0) {
+        timer_prog_held++;
+        if (timer_prog_held >= timer_prog_timeout + 15)
+            timer_prog_held = timer_prog_timeout;
     }
 
     if (timer_np_held > 0) {
@@ -562,13 +608,7 @@ void song_prev(void) {
     set_gmaj_program();
 }
 
-// main control loop
-void controller_handle(void) {
-    // poll foot-switch depression status:
-    u16 tmp = fsw_poll();
-    fsw.bot.byte = tmp & 0xFF;
-    fsw.top.byte = (tmp >> 8) & 0xFF;
-
+void handle_mode_0(void) {
     // handle top 6 FX block buttons:
     if (is_top_button_pressed(M_1)) {
         gmaj_toggle_cc(0);
@@ -666,17 +706,22 @@ void controller_handle(void) {
     // handle remaining 4 functions:
 
     if (is_top_button_pressed(M_7)) {
-        // mute:
-        leds.top.byte ^= M_7;
-        gmaj_cc_set(gmaj_cc_mute, (leds.top.bits._7) ? 0x7F : 0x00);
+        // programming or mute:
+        timer_prog_held = 1;
+    } else if (fsw.top.bits._7) {
+        if (timer_prog_held >= timer_prog_timeout) {
+            // programming mode:
+            timer_prog_held = 0;
+            switch_programming_mode(1);
+        }
+    } else if (is_top_button_released(M_7)) {
+        if (timer_prog_held != 0) {
+            // mute:
+            leds.top.byte ^= M_7;
+            gmaj_cc_set(gmaj_cc_mute, (leds.top.bits._7) ? 0x7F : 0x00);
+        }
     }
-    if (is_bot_button_pressed(M_7)) {
-        // tap tempo function:
-        toggle_tap = ~toggle_tap & 0x7F;
-        gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
-        // start timer for STORE:
-        timer_tapstore = 1;
-    }
+
     // TAP/STORE released after timeout?
     if ((timer_tapstore >= timer_tapstore_timeout) && fsw.bot.bits._7) {
         // STORE:
@@ -685,6 +730,13 @@ void controller_handle(void) {
         timeout_flash = 80;
         // disable STORE timer:
         timer_tapstore = 0;
+    }
+    if (is_bot_button_pressed(M_7)) {
+        // tap tempo function:
+        toggle_tap = ~toggle_tap & 0x7F;
+        gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
+        // start timer for STORE:
+        timer_tapstore = 1;
     }
 
     // Turn on the TAP LED while the TAP button is held:
@@ -753,6 +805,28 @@ void controller_handle(void) {
     leds.bot.bits._8 = fsw.bot.bits._8;
 
     send_leds();
+}
+
+void handle_mode_1(void) {
+    if (is_top_button_pressed(M_7)) {
+        switch_programming_mode(0);
+    }
+
+    send_leds();
+}
+
+// main control loop
+void controller_handle(void) {
+    // poll foot-switch depression status:
+    u16 tmp = fsw_poll();
+    fsw.bot.byte = tmp & 0xFF;
+    fsw.top.byte = (tmp >> 8) & 0xFF;
+
+    if (programming_mode == 0) {
+        handle_mode_0();
+    } else if (programming_mode == 1) {
+        handle_mode_1();
+    }
 
     // Record the previous switch state:
     fsw_last = fsw;
