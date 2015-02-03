@@ -90,6 +90,9 @@ u8 mode;
 // Programming mode if non-zero:
 u8 programming_mode;
 
+u8 mode_1_alt;
+u8 mode_1_select;
+
 io16 leds_mode[2];
 
 #ifdef FEAT_LCD
@@ -415,6 +418,29 @@ static void switch_programming_mode(u8 new_mode) {
 
     programming_mode = new_mode;
     lcd_display_mode();
+}
+
+static void switch_mode_1_alt(u8 new_mode) {
+    if (new_mode == 0) {
+        leds.top.byte = 0;
+        leds.bot.byte = 0;
+    } else if (new_mode == 1) {
+        leds.top.byte = 1 << mode_1_select;
+        leds.bot.byte = 1 << (pr_rjm[mode_1_select] - 4);
+    }
+    mode_1_alt = new_mode;
+}
+
+static void remap_preset(u8 preset, u8 new_rjm_channel) {
+    // Get the RJM channel descriptor:
+    u8 descidx = preset >> 1;
+    u8 rshr = (preset & 1) << 2;
+    u8 mask = 0xF0 >> rshr;
+
+    // Update the RJM descriptor while preserving the other half:
+    pr.rjm_desc[descidx] = (pr.rjm_desc[descidx] & mask) | (new_rjm_channel << rshr);
+
+    pr_rjm[preset] = 4 + new_rjm_channel;
 }
 
 // Determine if a footswitch was pressed
@@ -808,8 +834,69 @@ void handle_mode_0(void) {
 }
 
 void handle_mode_1(void) {
-    if (is_top_button_pressed(M_7)) {
-        switch_programming_mode(0);
+    // Select channel to reprogram first, then select channel to map it to.
+    if (mode_1_alt == 0) {
+        // Select channel to reprogram:
+        if (is_bot_button_pressed(M_1)) {
+            mode_1_select = 0;
+            switch_mode_1_alt(1);
+        }
+        if (is_bot_button_pressed(M_2)) {
+            mode_1_select = 1;
+            switch_mode_1_alt(1);
+        }
+        if (is_bot_button_pressed(M_3)) {
+            mode_1_select = 2;
+            switch_mode_1_alt(1);
+        }
+        if (is_bot_button_pressed(M_4)) {
+            mode_1_select = 3;
+            switch_mode_1_alt(1);
+        }
+        if (is_bot_button_pressed(M_5)) {
+            mode_1_select = 4;
+            switch_mode_1_alt(1);
+        }
+        if (is_bot_button_pressed(M_6)) {
+            mode_1_select = 5;
+            switch_mode_1_alt(1);
+        }
+
+        // Exit programming when PROG button is pressed:
+        if (is_top_button_pressed(M_7)) {
+            switch_programming_mode(0);
+        }
+    } else {
+        // Choose which amp channel to reprogram as:
+        if (is_bot_button_pressed(M_1)) {
+            remap_preset(mode_1_select, 0);
+            switch_mode_1_alt(0);
+        }
+        if (is_bot_button_pressed(M_2)) {
+            remap_preset(mode_1_select, 1);
+            switch_mode_1_alt(0);
+        }
+        if (is_bot_button_pressed(M_3)) {
+            remap_preset(mode_1_select, 2);
+            switch_mode_1_alt(0);
+        }
+        if (is_bot_button_pressed(M_4)) {
+            remap_preset(mode_1_select, 3);
+            switch_mode_1_alt(0);
+        }
+        if (is_bot_button_pressed(M_5)) {
+            remap_preset(mode_1_select, 4);
+            switch_mode_1_alt(0);
+        }
+        if (is_bot_button_pressed(M_6)) {
+            remap_preset(mode_1_select, 5);
+            switch_mode_1_alt(0);
+        }
+
+        // Exit reprogram mode to cancel:
+        if (is_top_button_pressed(M_7)) {
+            switch_mode_1_alt(0);
+        }
     }
 
     send_leds();
