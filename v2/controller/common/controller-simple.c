@@ -364,7 +364,7 @@ static void lcd_display_mode(void) {
     u8 i;
     if (programming_mode) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = "Programming         "[i];
+            lcd_rows[0][i] = " -- Programming --  "[i];
             lcd_rows[1][i] = "********************"[i];
         }
         lcd_row_updated(0);
@@ -681,37 +681,13 @@ void handle_mode_0(void) {
 
     // handle bottom 6 amp selector buttons:
     if (is_bot_button_pressed(M_1)) {
-        timer_sw_held = 1;
         set_rjm_channel(0);
         reset_tuner_mute();
-    } else if (is_bot_button_released(M_1)) {
-        if (timer_sw_held > timer_sw_timeout) {
-            switch_mode(0);
-        }
-
-        timer_sw_held = 0;
-
-        // Set only current program LED on bottom, preserve LEDs 7 and 8:
-        leds.bot.byte = (1 << rjm_channel) | (leds.bot.byte & (M_7 | M_8));
-
-        send_leds();
     }
     if (is_bot_button_pressed(M_2)) {
-        timer_sw_held = 1;
         set_rjm_channel(1);
         reset_tuner_mute();
-    } else if (is_bot_button_released(M_2)) {
-        if (timer_sw_held > timer_sw_timeout) {
-            switch_mode(1);
-        }
-        timer_sw_held = 0;
-
-        // Set only current program LED on bottom, preserve LEDs 7 and 8:
-        leds.bot.byte = (1 << rjm_channel) | (leds.bot.byte & (M_7 | M_8));
-
-        send_leds();
     }
-
     if (is_bot_button_pressed(M_3)) {
         set_rjm_channel(2);
         reset_tuner_mute();
@@ -862,6 +838,22 @@ void handle_mode_1(void) {
             switch_mode_1_alt(1);
         }
 
+
+        // Switch setlist/program modes:
+        if (is_top_button_pressed(M_1)) {
+            switch_mode(0);
+        }
+        if (is_top_button_pressed(M_2)) {
+            switch_mode(1);
+        }
+        if (is_top_button_pressed(M_3)) {
+        }
+        if (is_top_button_pressed(M_4)) {
+        }
+        if (is_top_button_pressed(M_5)) {
+        }
+        if (is_top_button_pressed(M_6)) {
+        }
         // Exit programming when PROG button is pressed:
         if (is_top_button_pressed(M_7)) {
             switch_programming_mode(0);
