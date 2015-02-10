@@ -57,10 +57,18 @@
 // Top row of controller buttons activate these CCs:
 u8 gmaj_cc_lookup[8];
 
+// Programming mode if non-zero:
+u8 programming_mode;
+
+// Setlist or program mode:
+u8 setlist_mode;
+
 // Current and previous button state:
 io16 fsw, fsw_last;
-// Current LED state:
-io16 leds;
+// Current LED state per `programming_mode`:
+io16 leds[2];
+
+u16 curr_leds, last_leds;
 
 // Toggle value for tap tempo:
 u8 toggle_tap;
@@ -84,16 +92,8 @@ u8 sli, last_sli;
 // Current program within current set list:
 u8 slp, last_slp;
 
-// Setlist or program mode:
-u8 mode;
-
-// Programming mode if non-zero:
-u8 programming_mode;
-
 u8 mode_1_alt;
 u8 mode_1_select;
-
-io16 leds_mode[2];
 
 #ifdef FEAT_LCD
 char *lcd_rows[LCD_ROWS];
@@ -178,34 +178,45 @@ static void store_program_state(void) {
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
 }
 
-u16 last_leds;
-
 static void send_leds(void) {
     // Update LEDs:
-    u16 tmp = (u16)leds.bot.byte | ((u16)leds.top.byte << 8);
-    if (tmp != last_leds) {
-        led_set(tmp);
-        last_leds = tmp;
+    curr_leds = (u16)leds[programming_mode].bot.byte | ((u16)leds[programming_mode].top.byte << 8);
+    if (curr_leds != last_leds) {
+        led_set(curr_leds);
+        last_leds = curr_leds;
     }
 }
 
 // Update LCD display:
-static void send_lcd(void) {
+static void update_lcd(void) {
 #ifdef FEAT_LCD
-    u8 n = gmaj_program + 1;
     s8 i;
 
-    // Show setlist index:
-    if (mode == 1) {
-        i = ritoa(lcd_rows[1], slp + 1, LCD_COLS - 1);
-        for (; i > LCD_COLS - 3; --i) lcd_rows[1][i] = ' ';
-        lcd_row_updated(1);
+    if (programming_mode) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[0][i] = " -- Programming --  "[i];
+        }
+    } else {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[0][i] = "                    "[i];
+        }
+    }
+
+    if (setlist_mode == 0) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[1][i] = "Program mode        "[i];
+        }
+    } else {
+        // Show setlist index:
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[1][i] = "Set index        #  "[i];
+        }
+        ritoa(lcd_rows[1], slp + 1, LCD_COLS - 1);
     }
 
     // Show g-major program number, right-aligned space padded:
     i = ritoa(lcd_rows[2], gmaj_program + 1, LCD_COLS - 1);
     for (; i > LCD_COLS - 4; --i) lcd_rows[2][i] = ' ';
-    lcd_row_updated(2);
 
     // Show program name:
     for (i = 0; i < LCD_COLS; i++) {
@@ -214,7 +225,8 @@ static void send_lcd(void) {
     }
     for (; i < LCD_COLS; i++)
         lcd_rows[3][i] = ' ';
-    lcd_row_updated(3);
+
+    lcd_updated_all();
 #endif
 }
 
@@ -226,8 +238,8 @@ static void gmaj_cc_set(u8 cc, u8 val) {
 // Reset g-major mute to off if on
 static void reset_tuner_mute(void) {
     // Turn off mute if enabled:
-    if (leds.top.bits._7) {
-        leds.top.bits._7 = 0;
+    if (leds[0].top.bits._7) {
+        leds[0].top.bits._7 = 0;
         gmaj_cc_set(gmaj_cc_mute, 0x00);
         send_leds();
     }
@@ -253,7 +265,7 @@ static void gmaj_toggle_cc(u8 idx) {
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
 
     // Update LEDs:
-    leds.top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+    leds[0].top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
     send_leds();
 }
 
@@ -265,7 +277,7 @@ static void update_effects_MIDI_state(void) {
     // Assume all effects are off by default because g-major program change has just occurred.
 
     // Reset top LEDs to new state, preserve LEDs 7 and 8:
-    leds.top.byte = (n.byte & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+    leds[0].top.byte = (n.byte & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
 
     if (n.bits._7) {
         // turn on noise gate:
@@ -303,7 +315,7 @@ static void update_effects_MIDI_state(void) {
     u8 fx = pr.fx[rjm_channel];
 
     // Reset top LEDs to new state, preserve LEDs 7 and 8:
-    leds.top.byte = (fx & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+    leds[0].top.byte = (fx & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
 
     // Assume g-major effects are in a random state so switch each on/off according to desired state:
     gmaj_cc_set(gmaj_cc_noisegate, (fx & fxm_noisegate) ? 0x7F : 0x00);
@@ -325,7 +337,7 @@ static void rjm_activate(void) {
     update_effects_MIDI_state();
 
     // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds.bot.byte = (1 << rjm_channel) | (leds.bot.byte & (M_7 | M_8));
+    leds[0].bot.byte = (1 << rjm_channel) | (leds[0].bot.byte & (M_7 | M_8));
 
     send_leds();
 }
@@ -342,7 +354,7 @@ static void set_rjm_channel(u8 p) {
 // Set g-major program:
 static void set_gmaj_program(void) {
     // Load program from setlist:
-    if (mode == 1) {
+    if (setlist_mode == 1) {
         next_gmaj_program = sl.entries[slp].program;
     }
 
@@ -356,48 +368,15 @@ static void set_gmaj_program(void) {
     load_program_state();
 
     rjm_activate();
-    send_lcd();
-}
 
-#ifdef FEAT_LCD
-static void lcd_display_mode(void) {
-    u8 i;
-    if (programming_mode) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = " -- Programming --  "[i];
-            lcd_rows[1][i] = "********************"[i];
-        }
-        lcd_row_updated(0);
-        lcd_row_updated(1);
-        return;
-    }
-
-    if (mode == 0) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = "Program mode        "[i];
-            lcd_rows[1][i] = "                    "[i];
-        }
-    } else {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = "Setlist mode        "[i];
-            lcd_rows[1][i] = "Set index        #  "[i];
-        }
-        ritoa(lcd_rows[1], slp + 1, 19);
-    }
-    lcd_row_updated(0);
-    lcd_row_updated(1);
+    update_lcd();
 }
-#else
-static void lcd_display_mode(void) {
-    return;
-}
-#endif
 
 static void switch_mode(u8 new_mode) {
     u8 i;
 
-    mode = new_mode;
-    if (mode == 1) {
+    setlist_mode = new_mode;
+    if (setlist_mode == 1) {
         // Set mode:
         flash_load((u16)(128 * 0x20) + (u16)sli * sizeof(struct set_list), sizeof(struct set_list), (u8 *)&sl);
         if (sl.count > 0) {
@@ -405,28 +384,28 @@ static void switch_mode(u8 new_mode) {
             set_gmaj_program();
         } else {
             // No songs in set; switch back to program mode:
-            mode = 0;
+            setlist_mode = 0;
         }
     }
 
-    lcd_display_mode();
+    update_lcd();
 }
 
 static void switch_programming_mode(u8 new_mode) {
-    leds_mode[programming_mode] = leds;
-    leds = leds_mode[new_mode];
+    leds[1].top.byte = 0;
+    leds[1].bot.byte = 0;
 
     programming_mode = new_mode;
-    lcd_display_mode();
+    update_lcd();
 }
 
 static void switch_mode_1_alt(u8 new_mode) {
     if (new_mode == 0) {
-        leds.top.byte = 0;
-        leds.bot.byte = 0;
+        leds[1].top.byte = 0;
+        leds[1].bot.byte = 0;
     } else if (new_mode == 1) {
-        leds.top.byte = 1 << mode_1_select;
-        leds.bot.byte = 1 << (pr_rjm[mode_1_select] - 4);
+        leds[1].top.byte = 1 << mode_1_select;
+        leds[1].bot.byte = 1 << (pr_rjm[mode_1_select] - 4);
     }
     mode_1_alt = new_mode;
 }
@@ -479,21 +458,20 @@ u8 timer_np_held, timer_np_advanced;
 void controller_init(void) {
     u8 i;
 
-    mode = 1;
+    setlist_mode = 1;
     programming_mode = 0;
-    leds_mode[0].top.byte = 0;
-    leds_mode[0].bot.byte = 0;
-    leds_mode[1].top.byte = 0;
-    leds_mode[1].bot.byte = 0;
+    leds[0].top.byte = 0;
+    leds[0].bot.byte = 0;
+    leds[1].top.byte = 0;
+    leds[1].bot.byte = 0;
 
     last_sli = 255;
     last_slp = 255;
     sli = 0;
     slp = 0;
 
-    last_leds = 0xFFFF;
-    leds.top.byte = 0;
-    leds.bot.byte = 0;
+    curr_leds = 0x0000U;
+    last_leds = 0xFFFFU;
 
     timer_tapstore = 0;
     timer_fx_held = 0;
@@ -530,11 +508,13 @@ void controller_init(void) {
         lcd_rows[i] = lcd_row_get(i);
 
     for (i = 0; i < LCD_COLS; ++i) {
-        lcd_rows[0][i] = "Setlist mode        "[i];
-        lcd_rows[1][i] = "                    "[i];
+        lcd_rows[0][i] = "                    "[i];
+        lcd_rows[1][i] = "Setlist mode        "[i];
         lcd_rows[2][i] = "Program:            "[i];
         lcd_rows[3][i] = "                    "[i];
     }
+
+    update_lcd();
 #endif
 
     switch_mode(1);
@@ -578,11 +558,11 @@ void controller_10msec_timer(void) {
     if (timer_sw_held >= timer_sw_timeout) {
         // Flash top LEDs on/off:
         if ((timer_sw_held & 15) >= 7) {
-            if (fsw.bot.bits._1) leds.bot.bits._1 = 1;
-            if (fsw.bot.bits._2) leds.bot.bits._2 = 1;
+            if (fsw.bot.bits._1) leds[0].bot.bits._1 = 1;
+            if (fsw.bot.bits._2) leds[0].bot.bits._2 = 1;
         } else {
-            if (fsw.bot.bits._1) leds.bot.bits._1 = 0;
-            if (fsw.bot.bits._2) leds.bot.bits._2 = 0;
+            if (fsw.bot.bits._1) leds[0].bot.bits._1 = 0;
+            if (fsw.bot.bits._2) leds[0].bot.bits._2 = 0;
         }
         send_leds();
     }
@@ -590,9 +570,9 @@ void controller_10msec_timer(void) {
     if (timer_fx_held >= timer_fx_timeout) {
         // Flash top LEDs on/off:
         if ((timer_fx_held & 15) >= 7) {
-            leds.top.byte = ((pr.fx[rjm_channel] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+            leds[0].top.byte = ((pr.fx[rjm_channel] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
         } else {
-            leds.top.byte = ((pr.fx[rjm_channel] | fsw.top.byte) & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+            leds[0].top.byte = ((pr.fx[rjm_channel] | fsw.top.byte) & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
         }
         send_leds();
     }
@@ -600,14 +580,14 @@ void controller_10msec_timer(void) {
     if (timeout_flash) {
         if (!--timeout_flash) {
             // Reset LED state:
-            leds.top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds.top.byte & (M_7 | M_8));
+            leds[0].top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
             send_leds();
         } else {
             // Flash top LEDs on/off:
             if ((timeout_flash & 15) >= 7) {
-                leds.top.byte = (M_1 | M_2 | M_3 | M_4 | M_5 | M_6) | (leds.top.byte & (M_7 | M_8));
+                leds[0].top.byte = (M_1 | M_2 | M_3 | M_4 | M_5 | M_6) | (leds[0].top.byte & (M_7 | M_8));
             } else {
-                leds.top.byte = (leds.top.byte & (M_7 | M_8));
+                leds[0].top.byte = (leds[0].top.byte & (M_7 | M_8));
             }
             send_leds();
         }
@@ -719,8 +699,8 @@ void handle_mode_0(void) {
     } else if (is_top_button_released(M_7)) {
         if (timer_prog_held != 0) {
             // mute:
-            leds.top.byte ^= M_7;
-            gmaj_cc_set(gmaj_cc_mute, (leds.top.bits._7) ? 0x7F : 0x00);
+            leds[0].top.byte ^= M_7;
+            gmaj_cc_set(gmaj_cc_mute, (leds[0].top.bits._7) ? 0x7F : 0x00);
         }
     }
 
@@ -742,9 +722,9 @@ void handle_mode_0(void) {
     }
 
     // Turn on the TAP LED while the TAP button is held:
-    leds.bot.bits._7 = fsw.bot.bits._7;
+    leds[0].bot.bits._7 = fsw.bot.bits._7;
 
-    if (mode == 0) {
+    if (setlist_mode == 0) {
         // Program mode:
 
         // NEXT
@@ -803,8 +783,8 @@ void handle_mode_0(void) {
     }
 
     // NEXT/PREV LEDs:
-    leds.top.bits._8 = fsw.top.bits._8;
-    leds.bot.bits._8 = fsw.bot.bits._8;
+    leds[0].top.bits._8 = fsw.top.bits._8;
+    leds[0].bot.bits._8 = fsw.bot.bits._8;
 
     send_leds();
 }

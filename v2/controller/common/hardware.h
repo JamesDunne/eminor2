@@ -68,10 +68,14 @@ extern void led_set(u16 leds);
 #define LCD_COLS    20
 #define LCD_ROWS    4
 
-// Update an LCD display's row:
+// Get pointer to a specific LCD row:
 // A terminating NUL character will clear the rest of the row with empty space.
-extern void lcd_row_updated(u8 row);
 extern char *lcd_row_get(u8 row);
+
+// Mark the LCD display row as updated:
+extern void lcd_updated_row(u8 row);
+// Update all LCD display rows as updated:
+extern void lcd_updated_all();
 
 #endif
 

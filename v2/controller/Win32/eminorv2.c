@@ -779,7 +779,7 @@ char *lcd_row_get(u8 row) {
 }
 
 // Update LCD display text:
-void lcd_row_updated(u8 row) {
+void lcd_updated_row(u8 row) {
     assert(row < 4);
 
     // Convert ASCII to UTF-16:
@@ -791,6 +791,25 @@ void lcd_row_updated(u8 row) {
             continue;
         }
         lcd_text[row][c] = (WCHAR)lcd_ascii[row][c];
+    }
+
+    // Request a UI repaint:
+    InvalidateRect(hwndMain, NULL, TRUE);
+}
+
+// Update all LCD display text:
+void lcd_updated_all(void) {
+    // Convert ASCII to UTF-16:
+    int c, row;
+    for (row = 0; row < LCD_ROWS; ++row) {
+        for (c = 0; c < LCD_COLS; ++c) {
+            // Display NUL characters which show up on hardware:
+            if (lcd_ascii[row][c] == 0) {
+                lcd_text[row][c] = 1;
+                continue;
+            }
+            lcd_text[row][c] = (WCHAR)lcd_ascii[row][c];
+        }
     }
 
     // Request a UI repaint:
