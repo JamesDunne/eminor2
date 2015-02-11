@@ -144,9 +144,16 @@ struct set_entry {
 
 struct set_list {
     u8 count;                       // number of songs in set list
-    u8 song_offset;                 // for very long set lists split in parts; unlikely to be used
-    struct set_entry entries[30];
+    u8 d0, d1;                      // date of show (see DATES below)
+    struct set_entry entries[29];
 };
+
+// DATES since 2014 are stored in 16 bits in the following form: (LSB on right)
+//  yyyyyyym mmmddddd
+//  |||||||| ||||||||
+//  |||||||| |||\++++ day of month [0..30]
+//  |||||||\-+++----- month [0..11]
+//  \++++++---------- year since 2014 [0..127]
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
 // Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.

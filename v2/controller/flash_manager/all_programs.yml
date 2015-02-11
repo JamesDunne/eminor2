@@ -359,7 +359,7 @@ programs:
         rjm_solo: off
         fx: [ noisegate, compressor, eq ]
       - rjm_channel: 1
-        rjm_solo: off
+        rjm_solo: on
         fx: [ noisegate, compressor, eq ]
       - rjm_channel: 1
         rjm_solo: on
@@ -683,6 +683,50 @@ programs:
         fx: [ noisegate, delay ]
   - name: My Own Worst Enemy
     gmaj_program: 32
+    rjm_initial:  4
+    scenes:
+      - rjm_channel: 1
+        rjm_solo: off
+        fx: [ compressor ]
+      - rjm_channel: 1
+        rjm_solo: on
+        fx: [ compressor ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ noisegate ]
+      - rjm_channel: 2
+        rjm_solo: on
+        fx: [ noisegate ]
+      - rjm_channel: 3
+        rjm_solo: off
+        fx: [ noisegate ]
+      - rjm_channel: 3
+        rjm_solo: on
+        fx: [ noisegate ]
+  - name: The Middle
+    gmaj_program: 33
+    rjm_initial:  4
+    scenes:
+      - rjm_channel: 1
+        rjm_solo: off
+        fx: [ ]
+      - rjm_channel: 1
+        rjm_solo: on
+        fx: [ ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ compressor, chorus, delay ]
+      - rjm_channel: 2
+        rjm_solo: off
+        fx: [ ]
+      - rjm_channel: 2
+        rjm_solo: on
+        fx: [ ]
+  - name: Bullet w/ Butterfly
+    gmaj_program: 34
     rjm_initial:  4
     scenes:
       - rjm_channel: 1

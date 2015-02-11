@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
+	"time"
 )
 
 import "gopkg.in/yaml.v1"
@@ -41,8 +43,8 @@ type Programs struct {
 }
 
 type Setlist struct {
-	Offset int   `yaml:"song_offset"`
-	Songs  []int `yaml:"songs"`
+	Date  string   `yaml:"date"`
+	Songs []string `yaml:"songs"`
 }
 
 type Setlists struct {
@@ -99,6 +101,7 @@ func main() {
 	}()
 
 	// Translate to binary data for FLASH memory:
+	songs_by_name := make(map[string]int)
 	songs := 0
 	for i, p := range programs.Programs {
 		_, err = fmt.Printf("%3d) %s\n", i+1, p.Name)
@@ -113,6 +116,9 @@ func main() {
 		if len(p.Name) > 20 {
 			panic(fmt.Errorf("Name is longer than 20 character limit: '%s'", p.Name))
 		}
+
+		// Record the name-to-index mapping:
+		songs_by_name[strings.ToLower(p.Name)] = i
 
 		for j := 0; j < 20; j++ {
 			if j >= len(p.Name) {
@@ -193,19 +199,61 @@ func main() {
 		fmt.Fprint(fo, ",\n")
 	}
 
+	const max_set_length = 29
+
 	// Write setlist data:
 	for i, set := range setlists.Sets {
-		fmt.Printf("Set list %d\n", i+1)
+		fmt.Printf("Set #%d\n", i+1)
+		if len(set.Songs) > max_set_length {
+			panic(fmt.Errorf("Set list cannot have more than %d songs; %d songs currently.", max_set_length, len(set.Songs)))
+		}
+
+		fmt.Printf("  Songs: %d\n", len(set.Songs))
 		fmt.Fprintf(fo, "%d, ", byte(len(set.Songs)))
-		fmt.Fprintf(fo, "%d, ", byte(set.Offset))
-		for j := 0; j < 30; j++ {
+
+		// dates since 2014 stored in 16 bits:
+		//  yyyyyyym mmmddddd
+		//  |||||||| ||||||||
+		//  |||||||| |||\++++ day of month [0..30]
+		//  |||||||\-+++----- month [0..11]
+		//  \++++++---------- year since 2014 [0..127]
+
+		// Parse date string using `time` package:
+		t, err := time.Parse("2006-01-02", set.Date)
+		if err != nil {
+			panic(fmt.Errorf("Error parsing date: '%s'", set.Date))
+		}
+
+		// Offset our dd, mm, yyyy values for encoding:
+		dd := (t.Day() - 1)
+		mm := (int(t.Month()) - 1)
+		yyyy := (t.Year() - 2014)
+
+		// Encode date as 16-bit packed value:
+		d0 := byte((dd & 31) | ((mm & 7) << 5))
+		d1 := byte(((mm >> 3) & 1) | ((yyyy & 127) << 1))
+
+		// Write the two 8-bit values for the date:
+		fmt.Fprintf(fo, "%d, %d, ", d0, d1)
+		fmt.Printf("  Date:  %04d-%02d-%02d\n", yyyy+2014, mm+1, dd+1)
+
+		// Write out the song indices for the setlist:
+		for j := 0; j < max_set_length; j++ {
 			if j >= len(set.Songs) {
 				fmt.Fprintf(fo, "0xFF")
 			} else {
-				fmt.Fprintf(fo, "0x%02X", byte(set.Songs[j]-1))
-				fmt.Printf("  %2d) %s\n", j+1, programs.Programs[set.Songs[j]-1].Name)
+				// Look up song by name, case-insensitive:
+				song_name := strings.ToLower(set.Songs[j])
+				song_index, exists := songs_by_name[song_name]
+				if !exists {
+					panic(fmt.Errorf("Song name not found in all_programs.yml: '%s'", set.Songs[j]))
+				}
+
+				// Write out song index:
+				fmt.Fprintf(fo, "0x%02X", byte(song_index))
+				fmt.Printf("  %2d) %3d %s\n", j+1, song_index+1, programs.Programs[song_index].Name)
 			}
-			if j < 30-1 {
+			if j < max_set_length-1 {
 				fmt.Fprint(fo, ", ")
 			}
 		}
