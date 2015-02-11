@@ -153,6 +153,15 @@ struct set_list {
 COMPILE_ASSERT(sizeof(struct set_list) == 32);
 
 // An RJM channel descriptor:
+//
+// 8 bits describes two RJM channels:
+//
+//   QSCCqscc
+//   ||||
+//   ||CC = channel number [0..2]
+//   ||-S = solo enable
+//   |--Q = EQ enable
+
 
 // Mark V channel 1
 #define rjm_channel_1   0x00

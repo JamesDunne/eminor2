@@ -160,7 +160,7 @@ void load_program_state(void) {
         // RJM channels start at 4 and alternate solo mode off/on and then increment channel #s:
         u8 mkv_chan = (rdesc & rjm_channel_mask);
         u8 mkv_solo_bit = ((rdesc & rjm_solo_mask) >> rjm_solo_shr_to_1bit);
-        u8 new_rjm_actual = 4 + ((mkv_chan << 1) | mkv_solo_bit);
+        u8 new_rjm_actual = ((mkv_chan << 1) | mkv_solo_bit);
 
         pr_rjm[i] = new_rjm_actual;
     }
@@ -332,7 +332,7 @@ static void update_effects_MIDI_state(void) {
 
 static void rjm_activate(void) {
     // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
-    midi_send_cmd1(0xC, rjm_midi_channel, pr_rjm[rjm_channel]);
+    midi_send_cmd1(0xC, rjm_midi_channel, pr_rjm[rjm_channel] + 4);
 
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
@@ -405,7 +405,7 @@ static void switch_mode_1_alt(u8 new_mode) {
         // Show the selected preset on the bottom:
         leds[1].bot.byte = 1 << mode_1_select;
         // Show the current mapping on the top:
-        leds[1].top.byte = 1 << (pr_rjm[mode_1_select] - 4);
+        leds[1].top.byte = 1 << pr_rjm[mode_1_select];
     }
     mode_1_alt = new_mode;
 }
@@ -413,13 +413,18 @@ static void switch_mode_1_alt(u8 new_mode) {
 static void remap_preset(u8 preset, u8 new_rjm_channel) {
     // Get the RJM channel descriptor:
     u8 descidx = preset >> 1;
-    u8 rshr = (preset & 1) << 2;
-    u8 mask = 0xF0 >> rshr;
+    u8 lshr = (preset & 1) << 2;
+    u8 mask = 0xF0 >> lshr;
+
+    u8 new_desc = ((new_rjm_channel >> 1) & rjm_channel_mask)
+        | ((new_rjm_channel & 1) << rjm_solo_shr_to_1bit);
+    // NOTE: we ignore EQ bit here; it's not really used anyway.
 
     // Update the RJM descriptor while preserving the other half:
-    pr.rjm_desc[descidx] = (pr.rjm_desc[descidx] & mask) | (new_rjm_channel << rshr);
+    pr.rjm_desc[descidx] = (pr.rjm_desc[descidx] & mask)
+        | (new_desc << lshr);
 
-    pr_rjm[preset] = 4 + new_rjm_channel;
+    pr_rjm[preset] = new_rjm_channel;
 }
 
 // Determine if a footswitch was pressed
