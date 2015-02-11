@@ -870,18 +870,18 @@ void handle_mode_1(void) {
         }
 
         if (is_bot_button_pressed(M_8)) {
-            //// Next setlist:
-            //if (sli < 31) {
-            //    sli++;
-            //    switch_mode(setlist_mode);
-            //}
+            // Next setlist:
+            if (sli < 31) {
+                sli++;
+                switch_mode(setlist_mode);
+            }
         }
         if (is_top_button_pressed(M_8)) {
-            //// Prev setlist:
-            //if (sli > 0) {
-            //    sli--;
-            //    switch_mode(setlist_mode);
-            //}
+            // Prev setlist:
+            if (sli > 0) {
+                sli--;
+                switch_mode(setlist_mode);
+            }
         }
     } else {
         // Choose which amp channel to reprogram as:
