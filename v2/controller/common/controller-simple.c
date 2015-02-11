@@ -209,9 +209,10 @@ static void update_lcd(void) {
     } else {
         // Show setlist index:
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = "Set index        #  "[i];
+            lcd_rows[1][i] = "Set #       song #  "[i];
         }
-        ritoa(lcd_rows[1], slp + 1, LCD_COLS - 1);
+        ritoa(lcd_rows[1], sli + 1, 6);
+        ritoa(lcd_rows[1], slp + 1, 19);
     }
 
     // Show g-major program number, right-aligned space padded:
@@ -379,13 +380,10 @@ static void switch_mode(u8 new_mode) {
     if (setlist_mode == 1) {
         // Set mode:
         flash_load((u16)(128 * 0x20) + (u16)sli * sizeof(struct set_list), sizeof(struct set_list), (u8 *)&sl);
-        if (sl.count > 0) {
-            slp = 0;
-            set_gmaj_program();
-        } else {
-            // No songs in set; switch back to program mode:
-            setlist_mode = 0;
-        }
+        slp = 0;
+        set_gmaj_program();
+
+        // No songs in set if `sl.count == 0`.
     }
 
     update_lcd();
@@ -404,8 +402,10 @@ static void switch_mode_1_alt(u8 new_mode) {
         leds[1].top.byte = 0;
         leds[1].bot.byte = 0;
     } else if (new_mode == 1) {
-        leds[1].top.byte = 1 << mode_1_select;
-        leds[1].bot.byte = 1 << (pr_rjm[mode_1_select] - 4);
+        // Show the selected preset on the bottom:
+        leds[1].bot.byte = 1 << mode_1_select;
+        // Show the current mapping on the top:
+        leds[1].top.byte = 1 << (pr_rjm[mode_1_select] - 4);
     }
     mode_1_alt = new_mode;
 }
@@ -605,6 +605,7 @@ void prog_prev(void) {
 }
 
 void song_next(void) {
+    if (sl.count == 0) return;
     if (slp < sl.count - 1) slp++;
     set_gmaj_program();
 }
@@ -821,10 +822,12 @@ void handle_mode_1(void) {
 
         // Switch setlist/program modes:
         if (is_top_button_pressed(M_1)) {
-            switch_mode(0);
+            // Switch to setlist mode:
+            switch_mode(1);
         }
         if (is_top_button_pressed(M_2)) {
-            switch_mode(1);
+            // Switch to program mode:
+            switch_mode(0);
         }
         if (is_top_button_pressed(M_3)) {
         }
@@ -837,6 +840,21 @@ void handle_mode_1(void) {
         // Exit programming when PROG button is pressed:
         if (is_top_button_pressed(M_7)) {
             switch_programming_mode(0);
+        }
+
+        if (is_bot_button_pressed(M_8)) {
+            //// Next setlist:
+            //if (sli < 31) {
+            //    sli++;
+            //    switch_mode(setlist_mode);
+            //}
+        }
+        if (is_top_button_pressed(M_8)) {
+            //// Prev setlist:
+            //if (sli > 0) {
+            //    sli--;
+            //    switch_mode(setlist_mode);
+            //}
         }
     } else {
         // Choose which amp channel to reprogram as:

@@ -180,6 +180,12 @@ void lcd_row_updated(u8 row) {
     LCDUpdateStage = 0;      //start at the beginning if the screen needs to be redrawn
 }
 
+// Marks entire LCD screen as ready to be sent:
+void lcd_updated_all(void) {
+    LCDUpdate = true;
+    LCDUpdateStage = 0;      //start at the beginning if the screen needs to be redrawn
+}    
+
 /* --------------- MIDI I/O functions: */
 
 /* Send formatted MIDI commands.

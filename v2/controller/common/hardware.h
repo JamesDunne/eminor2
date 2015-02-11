@@ -75,7 +75,7 @@ extern char *lcd_row_get(u8 row);
 // Mark the LCD display row as updated:
 extern void lcd_updated_row(u8 row);
 // Update all LCD display rows as updated:
-extern void lcd_updated_all();
+extern void lcd_updated_all(void);
 
 #endif
 
