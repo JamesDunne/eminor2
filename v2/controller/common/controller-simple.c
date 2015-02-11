@@ -106,6 +106,20 @@ static s8 ritoa(u8 *s, u8 n, s8 i) {
     return i;
 }
 
+static s8 litoa(u8 *s, u8 n, s8 i) {
+    // Write the integer to temporary storage:
+    u8 tmp[3];
+    s8 c = 0;
+    do {
+        tmp[c++] = (n % 10) + '0';
+    } while ((n /= 10) > 0);
+    // Write the left-aligned integer to the destination:
+    for (c--; c >= 0; c--, i++) {
+        s[i] = tmp[c];
+    }
+    return i;
+}
+
 // Loads ROM describing the initial on/off state of effects
 void load_program_state(void) {
 #if NOFLASH
@@ -207,11 +221,19 @@ static void update_lcd(void) {
             lcd_rows[1][i] = "Program mode        "[i];
         }
     } else {
-        // Show setlist index:
+        // Show setlist data:
+        u8 yyyy = sl.d1 >> 1;
+        u8 mm = ((sl.d1 & 1) << 4) | (sl.d0 >> 5);
+        u8 dd = (sl.d0 & 31);
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = "Set #       song #  "[i];
+            lcd_rows[1][i] = " 0) 2014-01-01   # 0"[i];
         }
-        ritoa(lcd_rows[1], sli + 1, 6);
+        litoa(lcd_rows[1], sli + 1, 1);
+
+        ritoa(lcd_rows[1], yyyy + 14, 7);
+        ritoa(lcd_rows[1], mm + 1, 10);
+        ritoa(lcd_rows[1], dd + 1, 13);
+
         ritoa(lcd_rows[1], slp + 1, 19);
     }
 
@@ -514,7 +536,7 @@ void controller_init(void) {
 
     for (i = 0; i < LCD_COLS; ++i) {
         lcd_rows[0][i] = "                    "[i];
-        lcd_rows[1][i] = "Setlist mode        "[i];
+        lcd_rows[1][i] = "                    "[i];
         lcd_rows[2][i] = "Program:            "[i];
         lcd_rows[3][i] = "                    "[i];
     }
