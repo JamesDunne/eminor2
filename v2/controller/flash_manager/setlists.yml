@@ -1,5 +1,45 @@
-set: 4
 sets:
+  - date: "2014-08-22"
+    songs:
+    - Everything Zen
+    - Song 2
+    - Zero
+    - Brainstew
+    - Buddy Holly
+    - Bound for the Floor
+    - Counting Blue Cars
+    - Holiday
+    - Machinehead
+    - Monkeywrench
+    - Crawling in the Dark
+    - Plush
+    - Hash Pipe
+    - Closing Time
+    - Enter Sandman
+  - date: "2014-11-22"
+    songs:
+    - Everything Zen
+    - Song 2
+    - Zero
+    - My Hero
+    - Brainstew
+    - I Alone
+    - Buddy Holly
+    - Cumbersome
+    - Machinehead
+    - Plush
+    - Holiday
+    - Monkeywrench
+    - Lump
+    - Bound for the Floor
+    - Counting Blue Cars
+    - Hash Pipe
+    - In Bloom
+    - When I Come Around
+    - Sex Type Thing
+    - Hey Jealousy
+    - Closing Time
+    - Enter Sandman
   - date: "2015-01-16"
     songs:
     - Everything Zen
@@ -19,4 +59,27 @@ sets:
     - Dammit
   - date: "2015-02-28"
     songs:
-    - 
+    - My Own Worst Enemy
+    - Holiday
+    - Dammit
+    - Cumbersome
+    - Machinehead
+    - Buddy Holly
+    - In Bloom
+    - The Middle
+    - When I Come Around
+    - Bound for the Floor
+    - Plush
+    - Hash Pipe
+    - Hey Jealousy
+    - Bullet With Butterfly Wings
+    - Brainstew
+    - Monkeywrench
+    - Lump
+    - Counting Blue Cars
+    - Zero
+    - Song 2
+    - My Hero
+    - Sex Type Thing
+    - Everything Zen
+    - Enter Sandman

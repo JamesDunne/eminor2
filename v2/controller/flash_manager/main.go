@@ -100,6 +100,8 @@ func main() {
 		fmt.Println("Closed.")
 	}()
 
+	const song_name_max_length = 20
+
 	// Translate to binary data for FLASH memory:
 	songs_by_name := make(map[string]int)
 	songs := 0
@@ -114,7 +116,7 @@ func main() {
 
 		// Write the name first:
 		if len(p.Name) > 20 {
-			panic(fmt.Errorf("Name is longer than 20 character limit: '%s'", p.Name))
+			fmt.Printf("Name is longer than 20 character limit: '%s', %d chars\n", p.Name, len(p.Name))
 		}
 
 		// Record the name-to-index mapping:
@@ -201,8 +203,9 @@ func main() {
 
 	const max_set_length = 29
 
-	// Write setlist data:
-	for i, set := range setlists.Sets {
+	// Write setlist data in reverse order of sets:
+	for i := len(setlists.Sets) - 1; i >= 0; i-- {
+		set := setlists.Sets[i]
 		fmt.Printf("Set #%d\n", i+1)
 		if len(set.Songs) > max_set_length {
 			panic(fmt.Errorf("Set list cannot have more than %d songs; %d songs currently.", max_set_length, len(set.Songs)))
@@ -257,7 +260,7 @@ func main() {
 				fmt.Fprint(fo, ", ")
 			}
 		}
-		if i < len(setlists.Sets)-1 {
+		if i > 0 {
 			fmt.Fprint(fo, ",\n")
 		} else {
 			fmt.Fprint(fo, "\n")
