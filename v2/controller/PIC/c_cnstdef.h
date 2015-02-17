@@ -44,7 +44,7 @@
 #define INIT_PIE1           0b00000011  //enable pr2 to tmr2 match interrupt, TMR1IE on
 
 // 32 MHz clock cycle.
-#define TMR1_BAUD9600_PERIOD    	834 // N counts * X ns = 104.167 us (9600 baud)
+#define TMR1_BAUD9600_PERIOD    	820 // N counts * X ns = 104.167 us (9600 baud)
 #define TMR1_ISR_LATENCY			176	// latency to next ISR
 
 #define TMR1_START_LATENCY      0		// Subtract ISR code latency (see assembly listing of ISR code and calculate cycles)
@@ -59,8 +59,9 @@
 
 // SWUART modes:
 #define SWUARTMODE_TX_IDLE      0
-#define SWUARTMODE_TX_START_BIT 1
-#define SWUARTMODE_TX_BYTE      2
+#define SWUARTMODE_TX_PAUSE     1
+#define SWUARTMODE_TX_START_BIT 2
+#define SWUARTMODE_TX_BYTE      3
 
 //Size of writable flash segment:
 #define WRITABLE_SEG_ADDR       0x4900      //Also update this in the lkr file if it needs to change!!
