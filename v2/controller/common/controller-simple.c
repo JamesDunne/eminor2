@@ -105,6 +105,7 @@ u16 curr_leds, last_leds;
 
 // Toggle value for tap tempo:
 u8 toggle_tap;
+u8 is_muted;
 
 // Current g-major program # (0-127):
 u8 gmaj_program;
@@ -350,8 +351,8 @@ static void gmaj_cc_set(u8 cc, u8 val) {
 // Reset g-major mute to off if on
 static void reset_tuner_mute(void) {
     // Turn off mute if enabled:
-    if (leds[0].top.bits._7) {
-        leds[0].top.bits._7 = 0;
+    if (is_muted) {
+        is_muted = 0;
         gmaj_cc_set(gmaj_cc_mute, 0x00);
         send_leds();
     }
@@ -568,6 +569,9 @@ void controller_init(void) {
 
     timeout_flash = 0;
 
+    is_muted = 0;
+    toggle_tap = 0;
+
     rjm_channel = 0;
     gmaj_program = 0;
     next_gmaj_program = 0;
@@ -621,9 +625,10 @@ void controller_10msec_timer(void) {
 #define inc_timer_loop(name) \
     if (timer_held_##name > 0) { \
         timer_held_##name++; \
-        if (timer_held_##name >= (timer_timeout_##name + timer_loop_##name)) \
+        if (timer_held_##name >= (timer_timeout_##name + timer_loop_##name)) { \
             timer_held_##name = timer_timeout_##name; \
             timer_looped_##name = 1; \
+        } \
     }
 
     inc_timer(fx)
@@ -754,6 +759,7 @@ void handle_mode_0(void) {
         timer_held_mute = 1;
     } else if (is_held_mute() && is_timer_elapsed(mute)) {
         // Send mute:
+        is_muted = 1;
         gmaj_cc_set(gmaj_cc_mute, 0x7F);
         timer_held_mute = 0;
     } else if (is_released_mute()) {
