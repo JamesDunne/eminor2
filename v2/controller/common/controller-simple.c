@@ -161,8 +161,8 @@ declare_timer(prog);
 
 // next/prev loops and sets timer_looped_nextprev = 1 on each loop around.
 declare_timer_looper(nextprev);
-#define timer_timeout_nextprev  40
-#define timer_loop_nextprev     15
+#define timer_timeout_nextprev  45
+#define timer_loop_nextprev     10
 
 // Determine if a footswitch was pressed
 static u8 is_top_button_pressed(u8 mask) {
@@ -224,20 +224,20 @@ void load_program_state(void) {
     u8 i;
 
     // Load effects on/off state data from persistent storage:
-    flash_load((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+    flash_load((u16)next_gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
 
     if (pr.name[0] == 0) {
         // Empty program name? That signifies a zeroed-out program. Let's set up some reasonable defaults:
 
         // Program name is the program number in decimal:
-        //ritoa(pr.name, gmaj_program + sl.song_offset + 1, 3);
+        //ritoa(pr.name, next_gmaj_program + sl.song_offset + 1, 3);
         pr.name[0] = ' ';
         pr.name[1] = ' ';
         pr.name[2] = ' ';
-        ritoa(pr.name, gmaj_program + 1, 3);
+        ritoa(pr.name, next_gmaj_program + 1, 3);
         pr.name[4] = 0;
 
-        pr.gmaj_program = gmaj_program + 1;
+        pr.gmaj_program = next_gmaj_program + 1;
 
         pr.rjm_initial = 4;
         pr.rjm_desc[0] = (rjm_channel_1)
@@ -328,7 +328,7 @@ static void update_lcd(void) {
     }
 
     // Show g-major program number, right-aligned space padded:
-    i = ritoa(lcd_rows[2], gmaj_program + 1, LCD_COLS - 1);
+    i = ritoa(lcd_rows[2], next_gmaj_program + 1, LCD_COLS - 1);
     for (; i > LCD_COLS - 4; --i) lcd_rows[2][i] = ' ';
 
     // Show program name:
@@ -459,8 +459,21 @@ static void rjm_activate(void) {
 static void set_rjm_channel(u8 p) {
     assert(p < 6);
 
+    // Switch g-major program:
+    if (next_gmaj_program != gmaj_program) {
+        // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
+        midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
+
+        // Update internal state:
+        gmaj_program = next_gmaj_program;
+    }
+
+    // Keep track of the last-activated setlist program:
+    last_slp = slp;
+
     rjm_channel = p;
 
+    // Switch RJM channel and set up effects on/off:
     rjm_activate();
 }
 
@@ -471,17 +484,16 @@ static void set_gmaj_program(void) {
         next_gmaj_program = sl.entries[slp].program;
     }
 
-    // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
-    midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
-
-    // Update internal state:
-    gmaj_program = next_gmaj_program;
-
-    // Load new effect states:
+    // Load new effect states but don't switch MIDI yet:
     load_program_state();
 
-    rjm_activate();
+    // Set only current program LED on bottom, preserve LEDs 7 and 8:
+    leds[0].bot.byte = (1 << rjm_channel) | (leds[0].bot.byte & (M_7 | M_8));
 
+    // Update LEDs:
+    send_leds();
+
+    // Update LCD:
     update_lcd();
 }
 
@@ -552,8 +564,8 @@ void controller_init(void) {
     leds[1].top.byte = 0;
     leds[1].bot.byte = 0;
 
-    last_sli = 255;
-    last_slp = 255;
+    last_sli = 0;
+    last_slp = 0;
     sli = 0;
     slp = 0;
 
@@ -611,6 +623,7 @@ void controller_init(void) {
 
     // Initialize program:
     set_gmaj_program();
+    rjm_activate();
 }
 
 // called every 10ms
@@ -813,9 +826,13 @@ void handle_mode_0(void) {
 
     // CANCEL held to engage PROG:
     if (is_pressed_cancel()) {
-        // programming mode?
+        // Cancel pending program change:
+        next_gmaj_program = gmaj_program;
+        slp = last_slp;
+        set_gmaj_program();
+
+        // Start a timer to check if changing to programming mode:
         timer_held_prog = 1;
-        //cancel_();
     } else if (is_held_cancel() && is_timer_elapsed(prog)) {
         // programming mode:
         timer_held_prog = 0;
