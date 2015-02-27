@@ -62,6 +62,31 @@
 #define gmaj_cc_noisegate   90
 #define gmaj_cc_eq          91
 
+#define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
+#define is_held(rowname, mask) is_##rowname##_button_held(mask)
+#define is_released(rowname, mask) is_##rowname##_button_released(mask)
+
+// Define our buttons by name:
+#define is_pressed_mute()       is_pressed(bot, M_1)
+#define is_held_mute()          is_held(bot, M_1)
+#define is_released_mute()      is_released(bot, M_1)
+
+#define is_pressed_tapstore()   is_pressed(bot, M_7)
+#define is_held_tapstore()      is_held(bot, M_7)
+#define is_released_tapstore()  is_released(bot, M_7)
+
+#define is_pressed_cancel()     is_pressed(bot, M_8)
+#define is_held_cancel()        is_held(bot, M_8)
+#define is_released_cancel()    is_released(bot, M_8)
+
+#define is_pressed_prev()       is_pressed(top, M_7)
+#define is_held_prev()          is_held(top, M_7)
+#define is_released_prev()      is_released(top, M_7)
+
+#define is_pressed_next()       is_pressed(top, M_8)
+#define is_held_next()          is_held(top, M_8)
+#define is_released_next()      is_released(top, M_8)
+
 // Top row of controller buttons activate these CCs:
 u8 gmaj_cc_lookup[8];
 
@@ -162,18 +187,6 @@ static u8 is_top_button_held(u8 mask) {
 static u8 is_bot_button_held(u8 mask) {
     return ((fsw.bot.byte & mask) != 0);
 }
-
-#define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
-#define is_held(rowname, mask) is_##rowname##_button_held(mask)
-#define is_released(rowname, mask) is_##rowname##_button_released(mask)
-
-#define is_pressed_mute()       is_pressed(bot, M_1)
-#define is_held_mute()          is_held(bot, M_1)
-#define is_released_mute()      is_released(bot, M_1)
-
-#define is_pressed_tapstore()   is_pressed(bot, M_7)
-#define is_held_tapstore()      is_held(bot, M_7)
-#define is_released_tapstore()  is_released(bot, M_7)
 
 static s8 ritoa(u8 *s, u8 n, s8 i) {
     do {
@@ -770,41 +783,35 @@ void handle_mode_0(void) {
 
     // handle remaining 4 functions:
 
-    if (is_top_button_pressed(M_7)) {
-        // programming or mute:
-        timer_held_prog = 1;
-    } else if (fsw.top.bits._7) {
-        if (is_timer_elapsed(prog)) {
-            // programming mode:
-            timer_held_prog = 0;
-            switch_programming_mode(1);
-        }
-    } else if (is_top_button_released(M_7)) {
-        if (timer_held_prog != 0) {
-            // mute:
-            leds[0].top.byte ^= M_7;
-            gmaj_cc_set(gmaj_cc_mute, (leds[0].top.bits._7) ? 0x7F : 0x00);
-        }
-    }
-
     // TAP/STORE released after timeout?
-    if (is_held_tapstore() && is_timer_elapsed(tapstore)) {
-        // STORE:
-        store_program_state();
-        // flash LEDs for 800ms:
-        timeout_flash = 80;
-        // disable STORE timer:
-        timer_held_tapstore = 0;
-    }
     if (is_pressed_tapstore()) {
         // tap tempo function:
         toggle_tap = ~toggle_tap & 0x7F;
         gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
         // start timer for STORE:
         timer_held_tapstore = 1;
-    }
-    if (is_released_tapstore()) {
+    } else if (is_held_tapstore() && is_timer_elapsed(tapstore)) {
+        // STORE:
+        store_program_state();
+        // flash LEDs for 800ms:
+        timeout_flash = 80;
+        // disable STORE timer:
         timer_held_tapstore = 0;
+    } else if (is_released_tapstore()) {
+        timer_held_tapstore = 0;
+    }
+
+    // CANCEL held to engage PROG:
+    if (is_pressed_cancel()) {
+        // programming mode?
+        timer_held_prog = 1;
+        //cancel_();
+    } else if (is_held_cancel() && is_timer_elapsed(prog)) {
+        // programming mode:
+        timer_held_prog = 0;
+        switch_programming_mode(1);
+    } else if (is_released_cancel()) {
+        timer_held_prog = 0;
     }
 
     // Turn on the TAP LED while the TAP button is held:
@@ -814,12 +821,12 @@ void handle_mode_0(void) {
         // Program mode:
 
         // NEXT
-        if (is_bot_button_pressed(M_8)) {
+        if (is_pressed_next()) {
             timer_held_nextprev = 1;
             prog_next();
-        } else if (is_bot_button_released(M_8)) {
+        } else if (is_released_next()) {
             timer_held_nextprev = 0;
-        } else if ((fsw.bot.byte & M_8) == M_8) {
+        } else if (is_held_next()) {
             if (timer_looped_nextprev) {
                 timer_looped_nextprev = 0;
                 prog_next();
@@ -827,12 +834,12 @@ void handle_mode_0(void) {
         }
 
         // PREV
-        if (is_top_button_pressed(M_8)) {
+        if (is_pressed_prev()) {
             timer_held_nextprev = 1;
             prog_prev();
-        } else if (is_top_button_released(M_8)) {
+        } else if (is_released_prev()) {
             timer_held_nextprev = 0;
-        } else if ((fsw.top.byte & M_8) == M_8) {
+        } else if (is_held_prev()) {
             if (timer_looped_nextprev) {
                 timer_looped_nextprev = 0;
                 prog_prev();
@@ -842,12 +849,12 @@ void handle_mode_0(void) {
         // Setlist mode:
 
         // NEXT
-        if (is_bot_button_pressed(M_8)) {
+        if (is_pressed_next()) {
             timer_held_nextprev = 1;
             song_next();
-        } else if (is_bot_button_released(M_8)) {
+        } else if (is_released_next()) {
             timer_held_nextprev = 0;
-        } else if ((fsw.bot.byte & M_8) == M_8) {
+        } else if (is_held_next()) {
             if (timer_looped_nextprev) {
                 timer_looped_nextprev = 0;
                 song_next();
@@ -855,12 +862,12 @@ void handle_mode_0(void) {
         }
 
         // PREV
-        if (is_top_button_pressed(M_8)) {
+        if (is_pressed_prev()) {
             timer_held_nextprev = 1;
             song_prev();
-        } else if (is_top_button_released(M_8)) {
+        } else if (is_released_prev()) {
             timer_held_nextprev = 0;
-        } else if ((fsw.top.byte & M_8) == M_8) {
+        } else if (is_held_prev()) {
             if (timer_looped_nextprev) {
                 timer_looped_nextprev = 0;
                 song_prev();
@@ -870,7 +877,7 @@ void handle_mode_0(void) {
 
     // NEXT/PREV LEDs:
     leds[0].top.bits._8 = fsw.top.bits._8;
-    leds[0].bot.bits._8 = fsw.bot.bits._8;
+    leds[0].top.bits._7 = fsw.top.bits._7;
 
     send_leds();
 }
