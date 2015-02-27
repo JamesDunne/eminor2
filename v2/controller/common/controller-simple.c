@@ -635,6 +635,7 @@ void controller_10msec_timer(void) {
     inc_timer(sw)
     inc_timer(tapstore)
     inc_timer(mute)
+    inc_timer(prog)
     inc_timer_loop(nextprev)
 
     //if (timer_np_held > 0) {
@@ -756,6 +757,9 @@ void handle_mode_0(void) {
     if (is_bot_button_pressed(M_1)) {
         set_rjm_channel(0);
         reset_tuner_mute();
+    }
+
+    if (is_pressed_mute()) {
         timer_held_mute = 1;
     } else if (is_held_mute() && is_timer_elapsed(mute)) {
         // Send mute:
@@ -917,7 +921,6 @@ void handle_mode_1(void) {
             switch_mode_1_alt(1);
         }
 
-
         // Switch setlist/program modes:
         if (is_top_button_pressed(M_1)) {
             // Switch to setlist mode:
@@ -935,19 +938,21 @@ void handle_mode_1(void) {
         }
         if (is_top_button_pressed(M_6)) {
         }
-        // Exit programming when PROG button is pressed:
-        if (is_top_button_pressed(M_7)) {
+
+        // Exit programming when CANCEL button is pressed:
+        if (is_pressed_cancel()) {
             switch_programming_mode(0);
         }
 
-        if (is_bot_button_pressed(M_8)) {
+        // NEXT/PREV change setlists:
+        if (is_pressed_next()) {
             // Next setlist:
             if (sli < 31) {
                 sli++;
                 switch_mode(setlist_mode);
             }
         }
-        if (is_top_button_pressed(M_8)) {
+        if (is_pressed_prev()) {
             // Prev setlist:
             if (sli > 0) {
                 sli--;
@@ -982,7 +987,7 @@ void handle_mode_1(void) {
         }
 
         // Exit reprogram mode to cancel:
-        if (is_top_button_pressed(M_7)) {
+        if (is_pressed_cancel()) {
             switch_mode_1_alt(0);
         }
     }
