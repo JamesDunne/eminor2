@@ -19,6 +19,14 @@
      *      *      *      *      *      *      *       *
      1      1S     2      2S     3      3S    TAP     NEXT
                                              STORE
+------------------------------------------------------------
+     *      *      *      *      *      *      *       *
+    CMP    FLT    PIT    CHO    DLY    RVB    PREV    NEXT
+
+
+     *      *      *      *      *      *      *       *
+     1      1S     2      2S     3      3S    TAP    CANCEL
+    MUTE                                     STORE        
 
     Written by
     James S. Dunne
