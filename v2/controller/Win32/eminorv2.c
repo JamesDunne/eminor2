@@ -43,8 +43,8 @@ const double inFswInnerDiam = (10 /*mm*/ * mmToIn);
 
 // button labels:
 const static LPCWSTR labels[2][8] = {
-    { L"CH1", L"CH1S", L"CH2", L"CH2S", L"CH3", L"CH3S", L"TAP/STORE", L"NEXT" },
-    { L"COMP", L"FILTER", L"PITCH", L"CHORUS", L"DELAY", L"REVERB", L"MUTE", L"PREV" }
+    { L"CH1", L"CH1S", L"CH2", L"CH2S", L"CH3", L"CH3S", L"TAP/STORE", L"CANCEL" },
+    { L"COMP", L"FILTER", L"PITCH", L"CHORUS", L"DELAY", L"REVERB", L"PREV", L"NEXT" }
 };
 
 const static LPCWSTR keylabels[2][8] = {

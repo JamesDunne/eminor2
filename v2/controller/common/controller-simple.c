@@ -26,7 +26,7 @@
 
      *      *      *      *      *      *      *       *
      1      1S     2      2S     3      3S    TAP    CANCEL
-    MUTE                                     STORE        
+    MUTE                                     STORE    PROG
 
     Written by
     James S. Dunne
@@ -106,6 +106,74 @@ u8 mode_1_select;
 #ifdef FEAT_LCD
 char *lcd_rows[LCD_ROWS];
 #endif
+
+// Countdown timer for flashing LEDs:
+u8 timeout_flash;
+
+#define declare_timer(name) u8 timer_held_##name
+#define declare_timer_looper(name) u8 timer_held_##name, timer_looped_##name
+
+#define is_timer_elapsed(name) (timer_held_##name >= (timer_timeout_##name + 1))
+
+#define init_timer(name) timer_held_##name = 0
+#define init_timer_looper(name) timer_held_##name = 0, timer_looped_##name = 0
+
+declare_timer(tapstore);
+#define timer_timeout_tapstore  75
+
+declare_timer(fx);
+#define timer_timeout_fx        30
+
+declare_timer(sw);
+#define timer_timeout_sw        75
+
+declare_timer(mute);
+#define timer_timeout_mute      75
+
+declare_timer(prog);
+#define timer_timeout_prog      75
+
+// next/prev loops and sets timer_looped_nextprev = 1 on each loop around.
+declare_timer_looper(nextprev);
+#define timer_timeout_nextprev  40
+#define timer_loop_nextprev     15
+
+// Determine if a footswitch was pressed
+static u8 is_top_button_pressed(u8 mask) {
+    return ((fsw.top.byte & mask) == mask) && ((fsw_last.top.byte & mask) == 0);
+}
+
+static u8 is_bot_button_pressed(u8 mask) {
+    return ((fsw.bot.byte & mask) == mask) && ((fsw_last.bot.byte & mask) == 0);
+}
+
+static u8 is_top_button_released(u8 mask) {
+    return ((fsw_last.top.byte & mask) == mask) && ((fsw.top.byte & mask) == 0);
+}
+
+static u8 is_bot_button_released(u8 mask) {
+    return ((fsw_last.bot.byte & mask) == mask) && ((fsw.bot.byte & mask) == 0);
+}
+
+static u8 is_top_button_held(u8 mask) {
+    return ((fsw.top.byte & mask) != 0);
+}
+
+static u8 is_bot_button_held(u8 mask) {
+    return ((fsw.bot.byte & mask) != 0);
+}
+
+#define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
+#define is_held(rowname, mask) is_##rowname##_button_held(mask)
+#define is_released(rowname, mask) is_##rowname##_button_released(mask)
+
+#define is_pressed_mute()       is_pressed(bot, M_1)
+#define is_held_mute()          is_held(bot, M_1)
+#define is_released_mute()      is_released(bot, M_1)
+
+#define is_pressed_tapstore()   is_pressed(bot, M_7)
+#define is_held_tapstore()      is_held(bot, M_7)
+#define is_released_tapstore()  is_released(bot, M_7)
 
 static s8 ritoa(u8 *s, u8 n, s8 i) {
     do {
@@ -457,37 +525,7 @@ static void remap_preset(u8 preset, u8 new_rjm_channel) {
     pr_rjm[preset] = new_rjm_channel;
 }
 
-// Determine if a footswitch was pressed
-static u8 is_top_button_pressed(u8 mask) {
-    return ((fsw.top.byte & mask) == mask) && ((fsw_last.top.byte & mask) == 0);
-}
-
-static u8 is_bot_button_pressed(u8 mask) {
-    return ((fsw.bot.byte & mask) == mask) && ((fsw_last.bot.byte & mask) == 0);
-}
-
-static u8 is_top_button_released(u8 mask) {
-    return ((fsw_last.top.byte & mask) == mask) && ((fsw.top.byte & mask) == 0);
-}
-
-static u8 is_bot_button_released(u8 mask) {
-    return ((fsw_last.bot.byte & mask) == mask) && ((fsw.bot.byte & mask) == 0);
-}
-
 // ------------------------- Actual controller logic -------------------------
-
-u8 timeout_flash;
-
-u8 timer_tapstore;
-u8 timer_fx_held;
-u8 timer_sw_held;
-u8 timer_prog_held;
-u8 timer_np_held, timer_np_advanced;
-
-#define timer_tapstore_timeout  75
-#define timer_fx_timeout        30
-#define timer_sw_timeout        75
-#define timer_prog_timeout      75
 
 // set the controller to an initial state
 void controller_init(void) {
@@ -508,12 +546,12 @@ void controller_init(void) {
     curr_leds = 0x0000U;
     last_leds = 0xFFFFU;
 
-    timer_tapstore = 0;
-    timer_fx_held = 0;
-    timer_sw_held = 0;
-    timer_np_held = 0;
-    timer_np_advanced = 0;
-    timer_prog_held = 0;
+    init_timer(tapstore);
+    init_timer(fx);
+    init_timer(sw);
+    init_timer(mute);
+    init_timer(prog);
+    init_timer_looper(nextprev);
 
     timeout_flash = 0;
 
@@ -561,38 +599,39 @@ void controller_init(void) {
 // called every 10ms
 void controller_10msec_timer(void) {
     // Increment timers:
-    if (fsw.bot.bits._7 && (timer_tapstore > 0)) timer_tapstore++;
-    if (timer_fx_held > 0) {
-        timer_fx_held++;
-        if (timer_fx_held >= timer_fx_timeout + 15)
-            timer_fx_held = timer_fx_timeout;
+#define inc_timer(name) \
+    if (timer_held_##name > 0) { \
+        timer_held_##name++; \
+        if (timer_held_##name >= 254) \
+            timer_held_##name = 254; \
+    }
+#define inc_timer_loop(name) \
+    if (timer_held_##name > 0) { \
+        timer_held_##name++; \
+        if (timer_held_##name >= (timer_timeout_##name + timer_loop_##name)) \
+            timer_held_##name = timer_timeout_##name; \
+            timer_looped_##name = 1; \
     }
 
-    if (timer_sw_held > 0) {
-        timer_sw_held++;
-        if (timer_sw_held >= timer_sw_timeout + 15)
-            timer_sw_held = timer_sw_timeout;
-    }
+    inc_timer(fx)
+    inc_timer(sw)
+    inc_timer(tapstore)
+    inc_timer(mute)
+    inc_timer_loop(nextprev)
 
-    if (timer_prog_held > 0) {
-        timer_prog_held++;
-        if (timer_prog_held >= timer_prog_timeout + 15)
-            timer_prog_held = timer_prog_timeout;
-    }
-
-    if (timer_np_held > 0) {
-        timer_np_held++;
-        // Loop timer to allow infinite hold time:
-        if (timer_np_held >= 50) {
-            timer_np_advanced = 1;
-            timer_np_held = 35;
-        }
-    }
+    //if (timer_np_held > 0) {
+    //    timer_np_held++;
+    //    // Loop timer to allow infinite hold time:
+    //    if (timer_np_held >= 50) {
+    //        timer_np_advanced = 1;
+    //        timer_np_held = 35;
+    //    }
+    //}
 
     // Flash held LEDs:
-    if (timer_sw_held >= timer_sw_timeout) {
+    if (is_timer_elapsed(sw)) {
         // Flash top LEDs on/off:
-        if ((timer_sw_held & 15) >= 7) {
+        if ((timer_held_sw & 15) >= 7) {
             if (fsw.bot.bits._1) leds[0].bot.bits._1 = 1;
             if (fsw.bot.bits._2) leds[0].bot.bits._2 = 1;
         } else {
@@ -602,9 +641,9 @@ void controller_10msec_timer(void) {
         send_leds();
     }
 
-    if (timer_fx_held >= timer_fx_timeout) {
+    if (is_timer_elapsed(fx)) {
         // Flash top LEDs on/off:
-        if ((timer_fx_held & 15) >= 7) {
+        if ((timer_held_fx & 15) >= 7) {
             leds[0].top.byte = ((pr.fx[rjm_channel] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
         } else {
             leds[0].top.byte = ((pr.fx[rjm_channel] | fsw.top.byte) & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
@@ -654,44 +693,44 @@ void handle_mode_0(void) {
     // handle top 6 FX block buttons:
     if (is_top_button_pressed(M_1)) {
         gmaj_toggle_cc(0);
-        timer_fx_held = 1;
-    } else if (is_top_button_released(M_1) && (timer_fx_held > timer_fx_timeout)) {
-        timer_fx_held = 0;
+        timer_held_fx = 1;
+    } else if (is_top_button_released(M_1) && is_timer_elapsed(fx)) {
+        timer_held_fx = 0;
         gmaj_toggle_cc(0);
     }
     if (is_top_button_pressed(M_2)) {
         gmaj_toggle_cc(1);
-        timer_fx_held = 1;
-    } else if (is_top_button_released(M_2) && (timer_fx_held > timer_fx_timeout)) {
-        timer_fx_held = 0;
+        timer_held_fx = 1;
+    } else if (is_top_button_released(M_2) && is_timer_elapsed(fx)) {
+        timer_held_fx = 0;
         gmaj_toggle_cc(1);
     }
     if (is_top_button_pressed(M_3)) {
         gmaj_toggle_cc(2);
-        timer_fx_held = 1;
-    } else if (is_top_button_released(M_3) && (timer_fx_held > timer_fx_timeout)) {
-        timer_fx_held = 0;
+        timer_held_fx = 1;
+    } else if (is_top_button_released(M_3) && is_timer_elapsed(fx)) {
+        timer_held_fx = 0;
         gmaj_toggle_cc(2);
     }
     if (is_top_button_pressed(M_4)) {
         gmaj_toggle_cc(3);
-        timer_fx_held = 1;
-    } else if (is_top_button_released(M_4) && (timer_fx_held > timer_fx_timeout)) {
-        timer_fx_held = 0;
+        timer_held_fx = 1;
+    } else if (is_top_button_released(M_4) && is_timer_elapsed(fx)) {
+        timer_held_fx = 0;
         gmaj_toggle_cc(3);
     }
     if (is_top_button_pressed(M_5)) {
         gmaj_toggle_cc(4);
-        timer_fx_held = 1;
-    } else if (is_top_button_released(M_5) && (timer_fx_held > timer_fx_timeout)) {
-        timer_fx_held = 0;
+        timer_held_fx = 1;
+    } else if (is_top_button_released(M_5) && is_timer_elapsed(fx)) {
+        timer_held_fx = 0;
         gmaj_toggle_cc(4);
     }
     if (is_top_button_pressed(M_6)) {
         gmaj_toggle_cc(5);
-        timer_fx_held = 1;
-    } else if (is_top_button_released(M_6) && (timer_fx_held > timer_fx_timeout)) {
-        timer_fx_held = 0;
+        timer_held_fx = 1;
+    } else if (is_top_button_released(M_6) && is_timer_elapsed(fx)) {
+        timer_held_fx = 0;
         gmaj_toggle_cc(5);
     }
 
@@ -699,7 +738,15 @@ void handle_mode_0(void) {
     if (is_bot_button_pressed(M_1)) {
         set_rjm_channel(0);
         reset_tuner_mute();
+        timer_held_mute = 1;
+    } else if (is_held_mute() && is_timer_elapsed(mute)) {
+        // Send mute:
+        gmaj_cc_set(gmaj_cc_mute, 0x7F);
+        timer_held_mute = 0;
+    } else if (is_released_mute()) {
+        timer_held_mute = 0;
     }
+
     if (is_bot_button_pressed(M_2)) {
         set_rjm_channel(1);
         reset_tuner_mute();
@@ -725,15 +772,15 @@ void handle_mode_0(void) {
 
     if (is_top_button_pressed(M_7)) {
         // programming or mute:
-        timer_prog_held = 1;
+        timer_held_prog = 1;
     } else if (fsw.top.bits._7) {
-        if (timer_prog_held >= timer_prog_timeout) {
+        if (is_timer_elapsed(prog)) {
             // programming mode:
-            timer_prog_held = 0;
+            timer_held_prog = 0;
             switch_programming_mode(1);
         }
     } else if (is_top_button_released(M_7)) {
-        if (timer_prog_held != 0) {
+        if (timer_held_prog != 0) {
             // mute:
             leds[0].top.byte ^= M_7;
             gmaj_cc_set(gmaj_cc_mute, (leds[0].top.bits._7) ? 0x7F : 0x00);
@@ -741,20 +788,23 @@ void handle_mode_0(void) {
     }
 
     // TAP/STORE released after timeout?
-    if ((timer_tapstore >= timer_tapstore_timeout) && fsw.bot.bits._7) {
+    if (is_held_tapstore() && is_timer_elapsed(tapstore)) {
         // STORE:
         store_program_state();
         // flash LEDs for 800ms:
         timeout_flash = 80;
         // disable STORE timer:
-        timer_tapstore = 0;
+        timer_held_tapstore = 0;
     }
-    if (is_bot_button_pressed(M_7)) {
+    if (is_pressed_tapstore()) {
         // tap tempo function:
         toggle_tap = ~toggle_tap & 0x7F;
         gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
         // start timer for STORE:
-        timer_tapstore = 1;
+        timer_held_tapstore = 1;
+    }
+    if (is_released_tapstore()) {
+        timer_held_tapstore = 0;
     }
 
     // Turn on the TAP LED while the TAP button is held:
@@ -765,26 +815,26 @@ void handle_mode_0(void) {
 
         // NEXT
         if (is_bot_button_pressed(M_8)) {
-            timer_np_held = 1;
+            timer_held_nextprev = 1;
             prog_next();
         } else if (is_bot_button_released(M_8)) {
-            timer_np_held = 0;
+            timer_held_nextprev = 0;
         } else if ((fsw.bot.byte & M_8) == M_8) {
-            if (timer_np_advanced) {
-                timer_np_advanced = 0;
+            if (timer_looped_nextprev) {
+                timer_looped_nextprev = 0;
                 prog_next();
             }
         }
 
         // PREV
         if (is_top_button_pressed(M_8)) {
-            timer_np_held = 1;
+            timer_held_nextprev = 1;
             prog_prev();
         } else if (is_top_button_released(M_8)) {
-            timer_np_held = 0;
+            timer_held_nextprev = 0;
         } else if ((fsw.top.byte & M_8) == M_8) {
-            if (timer_np_advanced) {
-                timer_np_advanced = 0;
+            if (timer_looped_nextprev) {
+                timer_looped_nextprev = 0;
                 prog_prev();
             }
         }
@@ -793,26 +843,26 @@ void handle_mode_0(void) {
 
         // NEXT
         if (is_bot_button_pressed(M_8)) {
-            timer_np_held = 1;
+            timer_held_nextprev = 1;
             song_next();
         } else if (is_bot_button_released(M_8)) {
-            timer_np_held = 0;
+            timer_held_nextprev = 0;
         } else if ((fsw.bot.byte & M_8) == M_8) {
-            if (timer_np_advanced) {
-                timer_np_advanced = 0;
+            if (timer_looped_nextprev) {
+                timer_looped_nextprev = 0;
                 song_next();
             }
         }
 
         // PREV
         if (is_top_button_pressed(M_8)) {
-            timer_np_held = 1;
+            timer_held_nextprev = 1;
             song_prev();
         } else if (is_top_button_released(M_8)) {
-            timer_np_held = 0;
+            timer_held_nextprev = 0;
         } else if ((fsw.top.byte & M_8) == M_8) {
-            if (timer_np_advanced) {
-                timer_np_advanced = 0;
+            if (timer_looped_nextprev) {
+                timer_looped_nextprev = 0;
                 song_prev();
             }
         }
