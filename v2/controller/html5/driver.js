@@ -26,8 +26,8 @@ var cvs, ctx;
 /** @const */var mmToIn = 0.0393701;
 
 /** @const */var labels = [
-    ["CH1", "CH1S", "CH2", "CH2S", "CH3", "CH3S", "TAP/STORE", "NEXT"],
-    ["COMP", "FILTER", "PITCH", "CHORUS", "DELAY", "REVERB", "MUTE", "PREV"]
+    ["CH1", "CH1S", "CH2", "CH2S", "CH3", "CH3S", "TAP/STORE", "CANCEL"],
+    ["COMP", "FILTER", "PITCH", "CHORUS", "DELAY", "REVERB", "PREV", "NEXT"]
 ];
 
 /** @const */var keylabels = [
