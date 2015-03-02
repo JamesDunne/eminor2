@@ -170,7 +170,7 @@ void led_set(u16 leds){
     LedStatesBot = leds & 0xFF;
 }
 
-char *lcd_row_get(u8 row) {
+u8 *lcd_row_get(u8 row) {
     assert(row < 4);
     return LCDRamMap[row];
 }
