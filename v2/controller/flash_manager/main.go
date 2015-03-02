@@ -26,7 +26,7 @@ const (
 type SceneDescriptor struct {
 	RJMChannel int  `yaml:"rjm_channel"`
 	RJMSolo    bool `yaml:"rjm_solo"`
-	RJMEQ      bool `yaml:"rjm_eq"`
+	RJMEQ      bool `yaml:"rjm_eq,omitempty"`
 
 	FX []string `yaml:"fx,flow"`
 }
