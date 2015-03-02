@@ -286,6 +286,16 @@ static void send_leds(void) {
     }
 }
 
+static void set_rjm_leds(void) {
+    // Set only current program LED on bottom, preserve LEDs 7 and 8:
+    leds[0].bot.byte = (1 << rjm_channel) | (leds[0].bot.byte & (M_7 | M_8));
+}
+
+static void clear_rjm_leds(void) {
+    // Preserve only LEDs 7 and 8 (clear LEDS 1-6):
+    leds[0].bot.byte &= (M_7 | M_8);
+}
+
 // Update LCD display:
 static void update_lcd(void) {
 #ifdef FEAT_LCD
@@ -350,13 +360,25 @@ static void gmaj_cc_set(u8 cc, u8 val) {
     midi_send_cmd2(0xB, gmaj_midi_channel, cc, val);
 }
 
+static void enable_mute(void) {
+    is_muted = 1;
+    gmaj_cc_set(gmaj_cc_mute, 0x7F);
+    clear_rjm_leds();
+    send_leds();
+}
+
+static void disable_mute(void) {
+    is_muted = 0;
+    gmaj_cc_set(gmaj_cc_mute, 0x00);
+    set_rjm_leds();
+    send_leds();
+}
+
 // Reset g-major mute to off if on
 static void reset_tuner_mute(void) {
     // Turn off mute if enabled:
     if (is_muted) {
-        is_muted = 0;
-        gmaj_cc_set(gmaj_cc_mute, 0x00);
-        send_leds();
+        disable_mute();
     }
 }
 
@@ -442,16 +464,6 @@ static void update_effects_MIDI_state(void) {
     gmaj_cc_set(gmaj_cc_reverb, (fx & fxm_reverb) ? 0x7F : 0x00);
     gmaj_cc_set(gmaj_cc_eq, (fx & fxm_eq) ? 0x7F : 0x00);
 #endif
-}
-
-static void set_rjm_leds(void) {
-    // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds[0].bot.byte = (1 << rjm_channel) | (leds[0].bot.byte & (M_7 | M_8));
-}
-
-static void clear_rjm_leds(void) {
-    // Preserve only LEDs 7 and 8 (clear LEDS 1-6):
-    leds[0].bot.byte &= (M_7 | M_8);
 }
 
 static void rjm_activate(void) {
@@ -801,8 +813,7 @@ void handle_mode_0(void) {
         timer_held_mute = 1;
     } else if (is_held_mute() && is_timer_elapsed(mute)) {
         // Send mute:
-        is_muted = 1;
-        gmaj_cc_set(gmaj_cc_mute, 0x7F);
+        enable_mute();
         timer_held_mute = 0;
     } else if (is_released_mute()) {
         timer_held_mute = 0;
@@ -852,9 +863,14 @@ void handle_mode_0(void) {
     // CANCEL held to engage PROG:
     if (is_pressed_cancel()) {
         // Cancel pending program change:
-        next_gmaj_program = gmaj_program;
-        slp = last_slp;
-        set_gmaj_program();
+        if (next_gmaj_program != gmaj_program) {
+            next_gmaj_program = gmaj_program;
+            slp = last_slp;
+            set_gmaj_program();
+        } else {
+            // If no pending program change, just unmute:
+            reset_tuner_mute();
+        }
 
         // Start a timer to check if changing to programming mode:
         timer_held_prog = 1;
