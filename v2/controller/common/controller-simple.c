@@ -12,14 +12,7 @@
     RJM listens for program change messages with program #s 1-6
 
     Footswitch layout:
-     *      *      *      *      *      *      *       *
-    CMP    FLT    PIT    CHO    DLY    RVB    PROG    PREV
-                                              MUTE
 
-     *      *      *      *      *      *      *       *
-     1      1S     2      2S     3      3S    TAP     NEXT
-                                             STORE
-------------------------------------------------------------
      *      *      *      *      *      *      *       *
     CMP    FLT    PIT    CHO    DLY    RVB    PREV    NEXT
 
@@ -130,7 +123,7 @@ u8 mode_1_alt;
 u8 mode_1_select;
 
 #ifdef FEAT_LCD
-char *lcd_rows[LCD_ROWS];
+u8 *lcd_rows[LCD_ROWS];
 #endif
 
 // Countdown timer for flashing LEDs:

@@ -70,7 +70,7 @@ extern void led_set(u16 leds);
 
 // Get pointer to a specific LCD row:
 // A terminating NUL character will clear the rest of the row with empty space.
-extern char *lcd_row_get(u8 row);
+extern u8 *lcd_row_get(u8 row);
 
 // Mark the LCD display row as updated:
 extern void lcd_updated_row(u8 row);
@@ -117,7 +117,7 @@ extern void flash_store(u16 addr, u16 count, u8 *data);
 // Program data structure loaded from / written to flash memory:
 struct program {
     // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
-    char name[20];
+    u8 name[20];
 
     // Initial RJM channel selection (0 to 6):
     u8 rjm_initial;
