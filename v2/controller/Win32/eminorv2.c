@@ -55,7 +55,7 @@ const static LPCWSTR keylabels[2][8] = {
 #ifdef FEAT_LCD
 // currently displayed LCD text in row X col format:
 WCHAR lcd_text[LCD_ROWS][LCD_COLS];
-char lcd_ascii[LCD_ROWS][LCD_COLS];
+u8 lcd_ascii[LCD_ROWS][LCD_COLS];
 #endif
 
 static bool show_dimensions = false;
@@ -294,7 +294,7 @@ BOOL dpi_Label(HDC hdc, double cX, double cY, COLORREF color, HFONT font, UINT a
     dpi_MoveTo(hdc, cX - 0.05, cY);
     dpi_LineTo(hdc, cX + 0.0525, cY);
     // Label:
-    BOOL ret = TextOutW(hdc, (int)(cX * dpi), (int)(cY * dpi), tmp, wcslen(tmp));
+    BOOL ret = TextOutW(hdc, (int)(cX * dpi), (int)(cY * dpi), tmp, (int)wcslen(tmp));
 
     SelectObject(hdc, old_pen);
     SelectObject(hdc, old_font);
@@ -654,34 +654,34 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             paintFacePlate(hwnd);
             break;
         case WM_LBUTTONDOWN: {
-                                 int h, b;
+            int h, b;
 
-                                 double x = (double)GET_X_LPARAM(lParam) / dpi,
-                                     y = (double)GET_Y_LPARAM(lParam) / dpi;
-                                 const double r_sqr = (inFswOuterDiam * 0.5) * (inFswOuterDiam * 0.5);
+            double x = (double)GET_X_LPARAM(lParam) / dpi,
+                y = (double)GET_Y_LPARAM(lParam) / dpi;
+            const double r_sqr = (inFswOuterDiam * 0.5) * (inFswOuterDiam * 0.5);
 
-                                 // Find out which foot-switch the mouse cursor is inside:
-                                 b = 1;
-                                 for (h = 0; h < 8; ++h, b <<= 1) {
-                                     double bx = (hLeft + (h * hSpacing));
-                                     double by = (vStart - (0 * vSpacing));
-                                     double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
-                                     if (dist_sqr <= r_sqr) {
-                                         fsw_state.bot.byte |= b;
-                                     }
-                                 }
-                                 b = 1;
-                                 for (h = 0; h < 8; ++h, b <<= 1) {
-                                     double bx = (hLeft + (h * hSpacing));
-                                     double by = (vStart - (1 * vSpacing));
-                                     double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
-                                     if (dist_sqr <= r_sqr) {
-                                         fsw_state.top.byte |= b;
-                                     }
-                                 }
+            // Find out which foot-switch the mouse cursor is inside:
+            b = 1;
+            for (h = 0; h < 8; ++h, b <<= 1) {
+                double bx = (hLeft + (h * hSpacing));
+                double by = (vStart - (0 * vSpacing));
+                double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
+                if (dist_sqr <= r_sqr) {
+                    fsw_state.bot.byte |= b;
+                }
+            }
+            b = 1;
+            for (h = 0; h < 8; ++h, b <<= 1) {
+                double bx = (hLeft + (h * hSpacing));
+                double by = (vStart - (1 * vSpacing));
+                double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
+                if (dist_sqr <= r_sqr) {
+                    fsw_state.top.byte |= b;
+                }
+            }
 
-                                 InvalidateRect(hwnd, NULL, TRUE);
-                                 break;
+            InvalidateRect(hwnd, NULL, TRUE);
+            break;
         }
         case WM_LBUTTONUP:
             fsw_state.bot.byte = 0;
@@ -729,10 +729,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
                     case 'K': case 'k': fsw_state.bot.bits._8 = 1; break;
 
                     case '0': {
-                                  dpi = defaultDpi;
-                                  GetWindowRect(hwnd, &rect);
-                                  SetWindowPos(hwnd, 0, rect.left, rect.top, (int)(inWidth * dpi) + 6, (int)(inHeight * dpi) + 28, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
-                                  break;
+                        dpi = defaultDpi;
+                        GetWindowRect(hwnd, &rect);
+                        SetWindowPos(hwnd, 0, rect.left, rect.top, (int)(inWidth * dpi) + 6, (int)(inHeight * dpi) + 28, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+                        break;
                     }
                 }
                 InvalidateRect(hwnd, NULL, TRUE);
@@ -773,7 +773,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 #ifdef FEAT_LCD
 
 // Pass back the LCD text buffer for the given row:
-char *lcd_row_get(u8 row) {
+u8 *lcd_row_get(u8 row) {
     assert(row < 4);
     return lcd_ascii[row];
 }
@@ -785,7 +785,7 @@ void lcd_updated_row(u8 row) {
     // Convert ASCII to UTF-16:
     int c;
     for (c = 0; c < LCD_COLS; ++c) {
-		// Display NUL characters which show up on hardware:
+        // Display NUL characters which show up on hardware:
         if (lcd_ascii[row][c] == 0) {
             lcd_text[row][c] = 1;
             continue;
@@ -862,160 +862,23 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 #define FLASH_LENGTH (sizeof(struct program) * 128 + sizeof(struct set_list) * 32)
 const size_t flash_length = FLASH_LENGTH;
-const unsigned char flash_memory[FLASH_LENGTH] = {
+u8 flash_memory[FLASH_LENGTH] = {
 #include "../PIC/flash_rom_init.h"
 };
 #undef FLASH_LENGTH
 
-void update_text_files() {
-    FILE *ft;
-
-    // Create flash.hex text file:
-    ft = fopen("flash.hex", "w");
-    for (int i = 0; i < flash_length; ++i) {
-        u8 d = ((u8 *)flash_memory)[i];
-        fprintf(ft, "%02X", d);
-    }
-    fclose(ft);
-
-#if 0
-    // Create flash_rom_init.h for #include in PIC project:
-    ft = fopen("..\\PIC\\flash_rom_init.h", "w");
-#if 0
-    for (int i = 0; i < flash_length; ++i) {
-        u8 d = ((u8 *)flash_memory)[i];
-        fprintf(ft, "0x%02X", d);
-
-        if ((i & 31) == 31) fprintf(ft, ",\n");
-        else if (i < flash_length - 1) fprintf(ft, ", ");
-    }
-#else
-    for (int i = 0; i < 128; ++i) {
-        struct program *p = &flash_memory[i];
-
-        // Write program name in 'c','h','a','r' literals:
-        int c;
-        for (c = 0; c < 20; ++c) {
-            if (p->name[c] == 0) break;
-            fprintf(ft, "'%c', ", p->name[c]);
-        }
-        for (; c < 20; ++c) {
-            fprintf(ft, "0, ");
-        }
-
-        for (c = 0; c < 6; ++c) {
-            fprintf(ft, "0x%02X, ", p->fx[c]);
-        }
-
-        for (c = 0; c < 6; ++c) {
-            fprintf(ft, "0x%02X", p->rjm[c]);
-            if (c < 6 - 1) fprintf(ft, ", ");
-        }
-
-        if (i < 128 - 1) fprintf(ft, ",\n");
-    }
-    fprintf(ft, "\n");
-#endif
-    fclose(ft);
-#endif
-}
-
-
-FILE *open_or_create_flash_file() {
-    FILE *f;
-
-    f = fopen("flash.bin", "r+b");
-    if (f != NULL)
-        return f;
-
-    // Initialize new file with initial flash memory data:
-    f = fopen("flash.bin", "a+b");
-    fwrite(flash_memory, 1, flash_length, f);
-    fclose(f);
-
-    update_text_files();
-
-    // Reopen file for reading:
-    f = fopen("flash.bin", "r+b");
-    return f;
-}
-
 // Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
 void flash_load(u16 addr, u16 count, u8 *data) {
-    long file_size;
-    FILE *f;
-
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
     assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
 
-    f = open_or_create_flash_file();
-    if (f == NULL) {
-        memset(data, 0, count);
-        return;
-    }
-
-    // Find file size:
-    fseek(f, 0, SEEK_END);
-    file_size = ftell(f);
-
-    // Attempt to seek to the location in the file:
-    if (fseek(f, addr, SEEK_SET) != 0) {
-        fclose(f);
-        memset(data, 0, count);
-        return;
-    }
-    if (addr > file_size) {
-        // Address beyond end of file:
-        fclose(f);
-        memset(data, 0, count);
-        return;
-    }
-
-    size_t r = fread(data, 1, count, f);
-    if (r < count) {
-        // Zero the remainder of the buffer:
-        memset(data + r, 0, count - r);
-    }
-    fclose(f);
+    memcpy((void *)data, (void *)&flash_memory[addr], count);
 }
 
 // Stores `count` bytes from `data` into flash memory at address `addr` (0-based where 0 is first available byte of available flash memory):
 void flash_store(u16 addr, u16 count, u8 *data) {
-    long p;
-    FILE *f;
-
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
     assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
 
-    // Create file or append to it:
-    f = open_or_create_flash_file();
-    if (f == NULL) {
-        return;
-    }
-
-    // Find file size:
-    fseek(f, 0, SEEK_END);
-    p = ftell(f);
-
-    // Pad the end of the file until we reach `addr`:
-    if (addr > p) {
-        static u8 zeroes[64];
-
-        while (addr - p >= 64) {
-            p += (long)fwrite(zeroes, 1, 64, f);
-        }
-        if (addr - p > 0)
-            fwrite(zeroes, 1, addr - p, f);
-    }
-
-    // Seek to address to write:
-    fseek(f, addr, SEEK_SET);
-    p = ftell(f);
-    assert(p == addr);
-
-    size_t r = fwrite(data, 1, count, f);
-    assert(r == count);
-    fclose(f);
-
-    update_text_files();
+    memcpy((void *)&flash_memory[addr], (void *)data, count);
 }
