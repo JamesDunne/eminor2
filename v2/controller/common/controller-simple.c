@@ -152,6 +152,8 @@ declare_timer(mute);
 declare_timer(prog);
 #define timer_timeout_prog      75
 
+declare_timer(flash);
+
 // next/prev loops and sets timer_looped_nextprev = 1 on each loop around.
 declare_timer_looper(nextprev);
 #define timer_timeout_nextprev  45
@@ -291,11 +293,18 @@ static void update_lcd(void) {
 
     if (programming_mode) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = " -- Programming --  "[i];
+            lcd_rows[0][i] =     " -- Programming --  "[i];
         }
     } else {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = "                    "[i];
+        if (next_gmaj_program != gmaj_program) {
+            // Pending program change:
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[0][i] = "PENDING             "[i];
+            }
+        } else {
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[0][i] =     "                    "[i];
+            }
         }
     }
 
@@ -435,7 +444,30 @@ static void update_effects_MIDI_state(void) {
 #endif
 }
 
+static void set_rjm_leds(void) {
+    // Set only current program LED on bottom, preserve LEDs 7 and 8:
+    leds[0].bot.byte = (1 << rjm_channel) | (leds[0].bot.byte & (M_7 | M_8));
+}
+
+static void clear_rjm_leds(void) {
+    // Preserve only LEDs 7 and 8 (clear LEDS 1-6):
+    leds[0].bot.byte &= (M_7 | M_8);
+}
+
 static void rjm_activate(void) {
+    // Switch g-major program if needed:
+    if (next_gmaj_program != gmaj_program) {
+        timer_held_flash = 0;
+
+        // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
+        midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
+
+        // Update internal state:
+        gmaj_program = next_gmaj_program;
+
+        update_lcd();
+    }
+
     // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
     midi_send_cmd1(0xC, rjm_midi_channel, pr_rjm[rjm_channel] + 4);
 
@@ -443,7 +475,7 @@ static void rjm_activate(void) {
     update_effects_MIDI_state();
 
     // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds[0].bot.byte = (1 << rjm_channel) | (leds[0].bot.byte & (M_7 | M_8));
+    set_rjm_leds();
 
     send_leds();
 }
@@ -451,15 +483,6 @@ static void rjm_activate(void) {
 // Set RJM program to p (0-5)
 static void set_rjm_channel(u8 p) {
     assert(p < 6);
-
-    // Switch g-major program:
-    if (next_gmaj_program != gmaj_program) {
-        // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
-        midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
-
-        // Update internal state:
-        gmaj_program = next_gmaj_program;
-    }
 
     // Keep track of the last-activated setlist program:
     last_slp = slp;
@@ -475,6 +498,12 @@ static void set_gmaj_program(void) {
     // Load program from setlist:
     if (setlist_mode == 1) {
         next_gmaj_program = sl.entries[slp].program;
+    }
+
+    if (next_gmaj_program != gmaj_program) {
+        timer_held_flash = 1;
+    } else {
+        timer_held_flash = 0;
     }
 
     // Load new effect states but don't switch MIDI yet:
@@ -570,6 +599,7 @@ void controller_init(void) {
     init_timer(sw);
     init_timer(mute);
     init_timer(prog);
+    init_timer(flash);
     init_timer_looper(nextprev);
 
     timeout_flash = 0;
@@ -578,9 +608,9 @@ void controller_init(void) {
     toggle_tap = 0;
 
     rjm_channel = 0;
-    gmaj_program = 0;
+    gmaj_program = 255;
     next_gmaj_program = 0;
-    
+
     gmaj_cc_lookup[0] = gmaj_cc_compressor;
     gmaj_cc_lookup[1] = gmaj_cc_filter;
     gmaj_cc_lookup[2] = gmaj_cc_pitch;
@@ -625,8 +655,8 @@ void controller_10msec_timer(void) {
 #define inc_timer(name) \
     if (timer_held_##name > 0) { \
         timer_held_##name++; \
-        if (timer_held_##name >= 254) \
-            timer_held_##name = 254; \
+        if (timer_held_##name >= 240) \
+            timer_held_##name = 128; \
     }
 #define inc_timer_loop(name) \
     if (timer_held_##name > 0) { \
@@ -644,14 +674,16 @@ void controller_10msec_timer(void) {
     inc_timer(prog)
     inc_timer_loop(nextprev)
 
-    //if (timer_np_held > 0) {
-    //    timer_np_held++;
-    //    // Loop timer to allow infinite hold time:
-    //    if (timer_np_held >= 50) {
-    //        timer_np_advanced = 1;
-    //        timer_np_held = 35;
-    //    }
-    //}
+    inc_timer(flash)
+
+    // Flash pending channel LED:
+    if (next_gmaj_program != gmaj_program) {
+        if ((timer_held_flash & 15) >= 7) {
+            set_rjm_leds();
+        } else {
+            clear_rjm_leds();
+        }
+    }
 
     // Flash held LEDs:
     if (is_timer_elapsed(sw)) {
