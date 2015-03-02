@@ -705,7 +705,7 @@ programs:
         fx: [ noisegate ]
   - name: The Middle
     gmaj_program: 33
-    rjm_initial:  4
+    rjm_initial:  2
     scenes:
       - rjm_channel: 1
         rjm_solo: off
@@ -717,13 +717,13 @@ programs:
         rjm_solo: off
         fx: [ ]
       - rjm_channel: 2
-        rjm_solo: off
-        fx: [ compressor, chorus, delay ]
-      - rjm_channel: 2
-        rjm_solo: off
+        rjm_solo: on
         fx: [ ]
       - rjm_channel: 2
-        rjm_solo: on
+        rjm_solo: off
+        fx: [ compressor, filter, delay ]
+      - rjm_channel: 2
+        rjm_solo: off
         fx: [ ]
   - name: Bullet With Butterfly Wings
     gmaj_program: 34

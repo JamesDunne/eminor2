@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-import "gopkg.in/yaml.v1"
+import "gopkg.in/yaml.v2"
 
 const (
 	FX_Compressor uint8 = 1 << iota
@@ -28,7 +28,7 @@ type SceneDescriptor struct {
 	RJMSolo    bool `yaml:"rjm_solo"`
 	RJMEQ      bool `yaml:"rjm_eq"`
 
-	FX []string `yaml:"fx"`
+	FX []string `yaml:"fx,flow"`
 }
 
 type Program struct {
@@ -39,7 +39,7 @@ type Program struct {
 }
 
 type Programs struct {
-	Programs []Program `yaml:"programs"`
+	Programs []*Program `yaml:"programs"`
 }
 
 type Setlist struct {
@@ -76,6 +76,27 @@ func main() {
 		return
 	}
 	//fmt.Printf("%+v\n\n", programs)
+
+	// NOTE(jsd): Enable this to rewrite YAML data.
+	if false {
+		// Update YAML data:
+		for _, pr := range programs.Programs {
+			pr.RJMInitial += 1
+		}
+
+		// Rewrite YAML file:
+		out_text, err := yaml.Marshal(&programs)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		err = ioutil.WriteFile("all_programs.gen.yml", out_text, 0644)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
 
 	// Add setlist data:
 	var setlists Setlists
@@ -122,6 +143,7 @@ func main() {
 		// Record the name-to-index mapping:
 		songs_by_name[strings.ToLower(p.Name)] = i
 
+		// Copy name characters:
 		for j := 0; j < 20; j++ {
 			if j >= len(p.Name) {
 				fmt.Fprint(fo, "0, ")
@@ -129,17 +151,14 @@ func main() {
 			}
 			c := p.Name[j]
 			if c < 32 {
-				_, err = fmt.Fprintf(fo, "%d, ", p.RJMInitial)
-				if err != nil {
-					log.Println(err)
-					return
-				}
+				fmt.Fprint(fo, "0, ")
 
 			}
 			fmt.Fprintf(fo, "'%c', ", rune(c))
 		}
 
-		fmt.Fprintf(fo, "%d, ", p.RJMInitial)
+		// Initial channel:
+		fmt.Fprintf(fo, "%d, ", p.RJMInitial-1)
 
 		// RJM channel descriptors:
 		s := p.SceneDescriptors
