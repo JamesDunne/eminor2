@@ -727,7 +727,7 @@ programs:
     fx: []
 - name: Bullet With Butterfly Wings
   gmaj_program: 34
-  rjm_initial: 5
+  rjm_initial: 1
   scenes:
   - rjm_channel: 1
     rjm_solo: false
