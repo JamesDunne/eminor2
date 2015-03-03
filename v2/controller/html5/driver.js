@@ -42,16 +42,16 @@ var cvs, ctx;
 
 // Position and spacing of footswitches (from centers):
 /** @const */var hLeft = 1.0;
-/** @const */var hSpacing = 2.57;
+/** @const */var hSpacing = 2.5714285714285714285714285714286;
 
-/** @const */var vStart = 5.5;
-/** @const */var vSpacing = 2.25;
+/** @const */var vStart = 5.6;
+/** @const */var vSpacing = 2.15;
 
-/** @const */var vLEDOffset = -0.55;
+/** @const */var vLEDOffset = -0.65;
 
-/** @const */var inLEDOuterDiam = (8 /*mm*/ * 0.0393701);
-/** @const */var inFswOuterDiam = (12.2 /*mm*/ * 0.0393701);
-/** @const */var inFswInnerDiam = (10 /*mm*/ * 0.0393701);
+/** @const */var inLEDOuterDiam = (12 /*mm*/ * mmToIn);
+/** @const */var inFswOuterDiam = (12.2 /*mm*/ * mmToIn);
+/** @const */var inFswInnerDiam = (10 /*mm*/ * mmToIn);
 
 function dpi_MoveTo(X, Y) {
     ctx.moveTo(X * dpi, Y * dpi);
@@ -178,13 +178,13 @@ function renderUI() {
             // Label w/ the keyboard key:
             ctx.fillStyle = "#601010";
             ctx.textBaseline = "alphabetic";
-            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.125 - (v * vSpacing), keylabels[v][h]);
+            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.10 - (v * vSpacing), keylabels[v][h]);
         }
 
         // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
 
         // draw inactive LEDs:
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 2;
         ctx.strokeStyle = "#202020";
         ctx.fillStyle = "#081E03";
         b = 1;
