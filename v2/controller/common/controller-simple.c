@@ -13,12 +13,12 @@
 
     Footswitch layout:
 
-     *      *      *      *      *      *      *       *
+    *      *      *      *      *      *      *       *
     CMP    FLT    PIT    CHO    DLY    RVB    PREV    NEXT
 
 
-     *      *      *      *      *      *      *       *
-     1      1S     2      2S     3      3S    TAP    CANCEL
+    *      *      *      *      *      *      *       *
+    1      1S     2      2S     3      3S    TAP    CANCEL
     MUTE                                     STORE    PROG
 
     Written by
@@ -105,12 +105,12 @@ u8 gmaj_program;
 // Next g-major program to update to:
 u8 next_gmaj_program;
 
-u8 rjm_channel;
+u8 rjm_channel, live_rjm_channel;
 
 // Current program data:
 struct program pr;
-// Decoded RJM channels:
-u8 pr_rjm[6];
+// Decoded RJM channels (0-based channel number, alternating SOLO modes):
+u8 pr_rjm[6], live_pr_rjm[6];
 
 // Current set list:
 struct set_list sl;
@@ -303,20 +303,37 @@ static void update_lcd(void) {
 
     if (programming_mode) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] =     " -- Programming --  "[i];
+            lcd_rows[0][i] = " -- Programming --  "[i];
         }
     } else {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[0][i] = "                    "[i];
+        }
+        if (is_muted) {
+            // Muted:
+            for (i = 0; i < 4; i++) {
+                lcd_rows[0][i] = "MUTE"[i];
+            }
+        }
+
+        {
+            // RJM channel name of live setting:
+            u8 ch = live_pr_rjm[live_rjm_channel];
+            lcd_rows[0][6 + 0] = 'C';
+            lcd_rows[0][6 + 1] = 'H';
+            lcd_rows[0][6 + 2] = '1' + (ch >> 1);
+            lcd_rows[0][6 + 3] = (ch & 1) ? 'S' : ' ';
+        }
+
         if (next_gmaj_program != gmaj_program) {
             // Pending program change:
-            for (i = 0; i < LCD_COLS; i++) {
-                lcd_rows[0][i] = "PENDING             "[i];
-            }
-        } else {
-            for (i = 0; i < LCD_COLS; i++) {
-                lcd_rows[0][i] =     "                    "[i];
+            for (i = 0; i < 7; i++) {
+                lcd_rows[0][i + 13] = "PENDING"[i];
             }
         }
     }
+
+    // "MUTE  CH1S   PENDING"
 
     if (setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
@@ -365,6 +382,7 @@ static void enable_mute(void) {
     gmaj_cc_set(gmaj_cc_mute, 0x7F);
     clear_rjm_leds();
     send_leds();
+    update_lcd();
 }
 
 static void disable_mute(void) {
@@ -372,6 +390,7 @@ static void disable_mute(void) {
     gmaj_cc_set(gmaj_cc_mute, 0x00);
     set_rjm_leds();
     send_leds();
+    update_lcd();
 }
 
 // Reset g-major mute to off if on
@@ -467,6 +486,8 @@ static void update_effects_MIDI_state(void) {
 }
 
 static void rjm_activate(void) {
+    u8 i;
+
     // Switch g-major program if needed:
     if (next_gmaj_program != gmaj_program) {
         timer_held_flash = 0;
@@ -476,9 +497,11 @@ static void rjm_activate(void) {
 
         // Update internal state:
         gmaj_program = next_gmaj_program;
-
-        update_lcd();
     }
+
+    live_rjm_channel = rjm_channel;
+    for (i = 0; i < 6; i++)
+        live_pr_rjm[i] = pr_rjm[i];
 
     // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
     midi_send_cmd1(0xC, rjm_midi_channel, pr_rjm[rjm_channel] + 4);
@@ -490,6 +513,8 @@ static void rjm_activate(void) {
     set_rjm_leds();
 
     send_leds();
+
+    update_lcd();
 }
 
 // Set RJM program to p (0-5)
@@ -506,23 +531,32 @@ static void set_rjm_channel(u8 p) {
 }
 
 // Set g-major program:
-static void set_gmaj_program(void) {
+static void set_gmaj_program_only(void) {
     // Load program from setlist:
     if (setlist_mode == 1) {
         next_gmaj_program = sl.entries[slp].program;
     }
 
     if (next_gmaj_program != gmaj_program) {
-        timer_held_flash = 1;
+        // Only start flashing timer; otherwise leave current timer loop alone:
+        if (timer_held_flash == 0) {
+            timer_held_flash = 1;
+        }
     } else {
         timer_held_flash = 0;
     }
 
     // Load new effect states but don't switch MIDI yet:
     load_program_state();
+}
+
+static void set_gmaj_program(void) {
+    set_gmaj_program_only();
 
     // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds[0].bot.byte = (1 << rjm_channel) | (leds[0].bot.byte & (M_7 | M_8));
+    if (timer_held_flash == 0) {
+        set_rjm_leds();
+    }
 
     // Update LEDs:
     send_leds();
@@ -666,17 +700,17 @@ void controller_10msec_timer(void) {
     // Increment timers:
 #define inc_timer(name) \
     if (timer_held_##name > 0) { \
-        timer_held_##name++; \
-        if (timer_held_##name >= 240) \
-            timer_held_##name = 128; \
+    timer_held_##name++; \
+    if (timer_held_##name >= 240) \
+    timer_held_##name = 128; \
     }
 #define inc_timer_loop(name) \
     if (timer_held_##name > 0) { \
-        timer_held_##name++; \
-        if (timer_held_##name >= (timer_timeout_##name + timer_loop_##name)) { \
-            timer_held_##name = timer_timeout_##name; \
-            timer_looped_##name = 1; \
-        } \
+    timer_held_##name++; \
+    if (timer_held_##name >= (timer_timeout_##name + timer_loop_##name)) { \
+    timer_held_##name = timer_timeout_##name; \
+    timer_looped_##name = 1; \
+    } \
     }
 
     inc_timer(fx)
@@ -866,7 +900,19 @@ void handle_mode_0(void) {
         if (next_gmaj_program != gmaj_program) {
             next_gmaj_program = gmaj_program;
             slp = last_slp;
-            set_gmaj_program();
+            set_gmaj_program_only();
+
+            // Revert to current live RJM channel:
+            rjm_channel = live_rjm_channel;
+
+            // Set only current program LED on bottom, preserve LEDs 7 and 8:
+            set_rjm_leds();
+
+            // Update LEDs:
+            send_leds();
+
+            // Update LCD:
+            update_lcd();
         } else {
             // If no pending program change, just unmute:
             reset_tuner_mute();
