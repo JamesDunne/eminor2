@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "../common/types.h"
 #include "../common/hardware.h"
 
