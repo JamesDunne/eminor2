@@ -256,26 +256,32 @@ func main() {
 		d1 := byte(((mm >> 3) & 1) | ((yyyy & 127) << 1))
 
 		// Write the two 8-bit values for the date:
-		fmt.Fprintf(fo, "%d, %d, ", d0, d1)
+		fmt.Fprintf(fo, "0x%02X, 0x%02X, ", d0, d1)
 		fmt.Printf("  Date:  %04d-%02d-%02d\n", yyyy+2014, mm+1, dd+1)
 
 		// Write out the song indices for the setlist:
-		for j := 0; j < max_set_length; j++ {
-			if j >= len(set.Songs) {
+		for j, n := 0, 0; j < max_set_length; n++ {
+			if n >= len(set.Songs) {
 				fmt.Fprintf(fo, "0xFF")
+				j++
 			} else {
 				// Look up song by name, case-insensitive:
-				song_name := strings.ToLower(set.Songs[j])
+				song_name := strings.ToLower(set.Songs[n])
+				if strings.HasPrefix(song_name, "break: ") {
+					continue
+				}
+
 				song_index, exists := songs_by_name[song_name]
 				if !exists {
-					panic(fmt.Errorf("Song name not found in all_programs.yml: '%s'", set.Songs[j]))
+					panic(fmt.Errorf("Song name not found in all_programs.yml: '%s'", set.Songs[n]))
 				}
 
 				// Write out song index:
-				fmt.Fprintf(fo, "0x%02X", byte(song_index))
+				fmt.Fprintf(fo, "%3d", byte(song_index))
 				fmt.Printf("  %2d) %3d %s\n", j+1, song_index+1, programs.Programs[song_index].Name)
+				j++
 			}
-			if j < max_set_length-1 {
+			if j < max_set_length {
 				fmt.Fprint(fo, ", ")
 			}
 		}
