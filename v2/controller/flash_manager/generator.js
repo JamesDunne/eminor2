@@ -1,8 +1,3 @@
-// This is a Google Apps Script.
-// It generates a set list document ready for printing based on
-// setlist.json data, currently pasted at the bottom of the script file.
-// Run `test` function to generate.
-
 var defaultStyle = {};
 defaultStyle[DocumentApp.Attribute.LINE_SPACING] = 1.0;
 defaultStyle[DocumentApp.Attribute.SPACING_BEFORE] = 0;
@@ -14,6 +9,13 @@ var styCenter = {};
 styCenter[DocumentApp.Attribute.HORIZONTAL_ALIGNMENT] = DocumentApp.HorizontalAlignment.CENTER;
 var styRight = {};
 styRight[DocumentApp.Attribute.HORIZONTAL_ALIGNMENT] = DocumentApp.HorizontalAlignment.RIGHT;
+
+function test() {
+  var result = UrlFetchApp.fetch("https://github.com/JamesDunne/eminor2/raw/master/v2/controller/flash_manager/setlist.json");
+  var setlistData = JSON.parse(result.getContentText());
+
+  generateSetlist(setlistData);
+}
 
 function setZeroMargin(style) {
   style[DocumentApp.Attribute.MARGIN_BOTTOM] = 0;
@@ -166,9 +168,9 @@ function generateSetlist(sd) {
   }
 }
 
-function test() {
-  // TODO(jsd): Use HTTPResponse to fetch this from, say, raw.github.com?
-  var setlistData = {
+// Example data pulled from setlist.json URL above:
+function sampleSetlistData() {
+  return {
     "date": "2015-03-14",
     "songs": [
       {
@@ -286,6 +288,4 @@ function test() {
       }
     ]
   };
-
-  generateSetlist(setlistData);
 }
