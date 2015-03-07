@@ -21,7 +21,7 @@ midicontroller.cof
 *.lst
 
 v2/controller/go-ui/go-ui
-
+v2/controller/flash_manager/flash_manager
 v2/controller/Win32/flash.bin
 
 .DS_Store
