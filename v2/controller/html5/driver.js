@@ -22,8 +22,7 @@ var midiLog;
 var midiLogHeight = 240;
 
 var cvs, ctx;
-//var dpi = 55.4;
-/** @const */var dpi = 42;
+var dpi = 50;
 /** @const */var mmToIn = 0.0393701;
 
 /** @const */var labels = [
@@ -132,7 +131,7 @@ function renderUI() {
 
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.font = '11px Consolas';
+    ctx.font = '' + ((7/40)*dpi).toString() + 'pt Courier New';
     ctx.lineWidth = 1;
     ctx.fillStyle = "#C0C0C0";
     for (v = 0; v < 4; ++v) {
@@ -141,7 +140,7 @@ function renderUI() {
     }
 
     ctx.textAlign = "center";
-    ctx.font = '9pt Arial Bold';
+    ctx.font = '' + ((9/40)*dpi).toString() + 'pt Arial Bold';
 
     // draw 2 rows of foot switches and LEDs, starting at bottom row and moving up:
     for (v = 0; v < 2; ++v) {

@@ -2,18 +2,38 @@
 
 <html>
 <head>
-    <title>Demo moved!</title>
-    <meta http-equiv="refresh" content="0; url=/" />
-    <style type="text/css">
-        body {
-            background: #03030a;
-            color: #999;
-            font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
-            font-size: 16px;
-        }
-    </style>
+    <title>Demo</title>
+    <link type="text/css" rel="stylesheet" href="main.css" />
+
+    <![if (!IE)|(gte IE 9)]>
+    <script type="text/javascript" src="all.min.js"></script>
+	<script type="text/javascript">
+	dpi = 72;
+	</script>
+    <![endif]>
 </head>
 <body>
-    <p> You are being redirected to <a href="/"> the main page</a> .</p> <p> If you are not redirected after a few seconds, please click on the link above!</p>
+    <!-- Live demo here: -->
+    <![if (!IE)|(gte IE 9)]>
+    <div id="demo" style="text-align: center; margin-top: 2em; margin-left: 0em; margin-right: 0em; white-space: nowrap; font-size: 12pt">
+        <div style="display: block; vertical-align: top">
+            <strong>A working demonstration:</strong><br />
+            <canvas id="cvs" tabindex="1"></canvas><br />
+            <span>(click to focus; use keyboard QWERTYUI and ASDFGHJK or mouse to activate foot-switches)</span><br />
+            <span><a href="//github.com/JamesDunne/eminor2/tree/master/v2/controller/Win32" target="_blank">Download the Windows EXE version</a> to test with actual MIDI gear!</span>
+        </div>
+        <div style="display: block; vertical-align: top; width: 16em; text-align: left; white-space: normal">
+            <h5>MIDI OUT:&nbsp;&nbsp;<a href="#" id="clearMidiOut">(clear)</a></h5>
+            <pre id="midiLog" style="height: 240px; width: 14em"></pre>
+        </div>
+    </div>
+    <![endif]>
+    <!--[if (IE)&(lt IE 9)]>
+    <div id="demo" style="border: 2px solid red; text-align: center; margin-top: 2em; margin-left: 2em; margin-right: 2em; margin-bottom: 2em; white-space: nowrap; font-size: 12pt">
+        Sorry, this interactive demo requires HTML5 features. This is something your browser does not support; please upgrade to a better browser.<br/>
+        Here is a screenshot of how it would appear in a modern browser:<br/>
+        <img src="/demo.png" alt="demo screenshot" />
+    </div>
+    <![endif]-->
 </body>
 </html>
