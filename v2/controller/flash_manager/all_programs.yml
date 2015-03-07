@@ -1,5 +1,6 @@
 programs:
 - name: Monkeywrench
+  starts: Bremer 4 ct
   gmaj_program: 1
   rjm_initial: 5
   scenes:
@@ -44,6 +45,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Zero
+  starts: Jim
   gmaj_program: 3
   rjm_initial: 5
   scenes:
@@ -88,6 +90,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, compressor, eq, delay]
 - name: Buddy Holly
+  starts: Glaz+Bremer
   gmaj_program: 5
   rjm_initial: 5
   scenes:
@@ -110,6 +113,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Plush
+  starts: Bremer 2 ct
   gmaj_program: 6
   rjm_initial: 5
   scenes:
@@ -176,6 +180,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, compressor, eq, delay]
 - name: When I Come Around
+  starts: Jim
   gmaj_program: 9
   rjm_initial: 5
   scenes:
@@ -198,6 +203,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Everything Zen
+  starts: Glaz
   gmaj_program: 10
   rjm_initial: 6
   scenes:
@@ -220,6 +226,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, eq, delay]
 - name: Enter Sandman
+  starts: Glaz
   gmaj_program: 11
   rjm_initial: 1
   scenes:
@@ -242,6 +249,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Crawling in the Dark
+  starts: Jim
   gmaj_program: 12
   rjm_initial: 5
   scenes:
@@ -264,6 +272,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Song 2
+  starts: Bremer
   gmaj_program: 13
   rjm_initial: 1
   scenes:
@@ -286,6 +295,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, compressor, eq]
 - name: Sex Type Thing
+  starts: Bremer 4 ct
   gmaj_program: 14
   rjm_initial: 5
   scenes:
@@ -308,6 +318,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Mr Jones
+  starts: Jim
   gmaj_program: 15
   rjm_initial: 4
   scenes:
@@ -330,6 +341,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, compressor, eq, delay]
 - name: Counting Blue Cars
+  starts: Bremer 4 ct
   gmaj_program: 16
   rjm_initial: 5
   scenes:
@@ -352,6 +364,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: In Bloom
+  starts: Bremer 4 ct
   gmaj_program: 17
   rjm_initial: 1
   scenes:
@@ -374,6 +387,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, compressor, eq]
 - name: Hash Pipe
+  starts: Bremer+Adam
   gmaj_program: 18
   rjm_initial: 5
   scenes:
@@ -396,6 +410,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: My Hero
+  starts: Bremer+Adam
   gmaj_program: 19
   rjm_initial: 5
   scenes:
@@ -418,6 +433,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Machinehead
+  starts: Jim
   gmaj_program: 20
   rjm_initial: 5
   scenes:
@@ -440,6 +456,7 @@ programs:
     rjm_solo: false
     fx: [noisegate, compressor, eq, delay]
 - name: Holiday
+  starts: Jim
   gmaj_program: 21
   rjm_initial: 5
   scenes:
@@ -462,6 +479,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Closing Time
+  starts: Glaz
   gmaj_program: 22
   rjm_initial: 5
   scenes:
@@ -484,6 +502,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Brainstew
+  starts: Jim
   gmaj_program: 23
   rjm_initial: 5
   scenes:
@@ -506,6 +525,7 @@ programs:
     rjm_solo: true
     fx: [noisegate]
 - name: Bound for the Floor
+  starts: Jim
   gmaj_program: 24
   rjm_initial: 3
   scenes:
@@ -550,6 +570,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Cumbersome
+  starts: Jim
   gmaj_program: 26
   rjm_initial: 5
   scenes:
@@ -572,6 +593,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Lump
+  starts: Bremer+Glaz
   gmaj_program: 27
   rjm_initial: 5
   scenes:
@@ -594,6 +616,7 @@ programs:
     rjm_solo: true
     fx: [noisegate]
 - name: Hey Jealousy
+  starts: Bremer 4 ct
   gmaj_program: 28
   rjm_initial: 5
   scenes:
@@ -616,6 +639,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Kryptonite
+  starts: Glaz
   gmaj_program: 29
   rjm_initial: 5
   scenes:
@@ -638,6 +662,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: Dammit
+  starts: Jim
   gmaj_program: 30
   rjm_initial: 5
   scenes:
@@ -682,6 +707,7 @@ programs:
     rjm_solo: true
     fx: [noisegate, delay]
 - name: My Own Worst Enemy
+  starts: Jim
   gmaj_program: 32
   rjm_initial: 5
   scenes:
@@ -704,6 +730,7 @@ programs:
     rjm_solo: true
     fx: [noisegate]
 - name: The Middle
+  starts: Glaz
   gmaj_program: 33
   rjm_initial: 3
   scenes:
@@ -726,6 +753,7 @@ programs:
     rjm_solo: false
     fx: []
 - name: Bullet With Butterfly Wings
+  starts: Glaz
   gmaj_program: 34
   rjm_initial: 1
   scenes:

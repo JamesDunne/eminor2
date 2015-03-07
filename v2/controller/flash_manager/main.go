@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	//"bytes"
 	"fmt"
 	"io/ioutil"
@@ -33,6 +34,7 @@ type SceneDescriptor struct {
 
 type Program struct {
 	Name             string            `yaml:"name"`
+	Starts           string            `yaml:"starts,omitempty"`
 	GMajorProgram    int               `yaml:"gmaj_program"`
 	RJMInitial       int               `yaml:"rjm_initial"`
 	SceneDescriptors []SceneDescriptor `yaml:"scenes"`
@@ -289,6 +291,76 @@ func main() {
 			fmt.Fprint(fo, ",\n")
 		} else {
 			fmt.Fprint(fo, "\n")
+		}
+	}
+
+	// Generate JSON for Google Docs setlist generator script:
+	{
+		fjson, err := os.OpenFile("setlist.json", os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		defer func() {
+			err = fjson.Close()
+			if err != nil {
+				log.Println(err)
+				return
+			}
+		}()
+
+		set := setlists.Sets[len(setlists.Sets)-1]
+
+		// Set up a temporary struct to marshal JSON data to:
+		setlistData := struct {
+			Date  string        `json:"date"`
+			Songs []interface{} `json:"songs"`
+		}{
+			Date:  set.Date,
+			Songs: make([]interface{}, 0, len(set.Songs)),
+		}
+
+		j := 0
+		for _, song_name := range set.Songs {
+			// Look up song by name, case-insensitive:
+			name_lower := strings.ToLower(song_name)
+			if strings.HasPrefix(name_lower, "break: ") {
+				// Write out break text:
+				setlistData.Songs = append(setlistData.Songs, &struct {
+					BreakText string `json:"breakText"`
+				}{
+					BreakText: song_name[len("break: "):],
+				})
+				continue
+			}
+
+			// We know we'll find the song; we would've panic()d above already.
+			song_index, _ := songs_by_name[name_lower]
+			j++
+
+			// Write out song index:
+			prog := programs.Programs[song_index]
+			setlistData.Songs = append(setlistData.Songs, &struct {
+				Index  int    `json:"i"`
+				Title  string `json:"title"`
+				Starts string `json:"starts"`
+			}{
+				Index:  j,
+				Title:  prog.Name,
+				Starts: prog.Starts,
+			})
+		}
+
+		bytes, err := json.MarshalIndent(setlistData, "", "  ")
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		_, err = fjson.Write(bytes)
+		if err != nil {
+			log.Println(err)
+			return
 		}
 	}
 }
