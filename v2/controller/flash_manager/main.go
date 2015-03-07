@@ -45,8 +45,9 @@ type Programs struct {
 }
 
 type Setlist struct {
-	Date  string   `yaml:"date"`
-	Songs []string `yaml:"songs"`
+	Date      string   `yaml:"date"`
+	Songs     []string `yaml:"songs"`
+	SongNames []string
 }
 
 type Setlists struct {
@@ -232,8 +233,16 @@ func main() {
 			panic(fmt.Errorf("Set list cannot have more than %d songs; %d songs currently.", max_set_length, len(set.Songs)))
 		}
 
-		fmt.Printf("  Songs: %d\n", len(set.Songs))
-		fmt.Fprintf(fo, "%d, ", byte(len(set.Songs)))
+		set.SongNames = make([]string, 0, len(set.Songs))
+		for _, text := range set.Songs {
+			if strings.HasPrefix(text, "BREAK: ") {
+				continue
+			}
+			set.SongNames = append(set.SongNames, text)
+		}
+
+		fmt.Printf("  Songs: %d\n", len(set.SongNames))
+		fmt.Fprintf(fo, "%d, ", byte(len(set.SongNames)))
 
 		// dates since 2014 stored in 16 bits:
 		//  yyyyyyym mmmddddd
@@ -262,28 +271,22 @@ func main() {
 		fmt.Printf("  Date:  %04d-%02d-%02d\n", yyyy+2014, mm+1, dd+1)
 
 		// Write out the song indices for the setlist:
-		for j, n := 0, 0; j < max_set_length; n++ {
-			if n >= len(set.Songs) {
+		for j := 0; j < max_set_length; j++ {
+			if j >= len(set.SongNames) {
 				fmt.Fprintf(fo, "0xFF")
-				j++
 			} else {
 				// Look up song by name, case-insensitive:
-				song_name := strings.ToLower(set.Songs[n])
-				if strings.HasPrefix(song_name, "break: ") {
-					continue
-				}
-
+				song_name := strings.ToLower(set.SongNames[j])
 				song_index, exists := songs_by_name[song_name]
 				if !exists {
-					panic(fmt.Errorf("Song name not found in all_programs.yml: '%s'", set.Songs[n]))
+					panic(fmt.Errorf("Song name not found in all_programs.yml: '%s'", set.SongNames[j]))
 				}
 
 				// Write out song index:
-				fmt.Fprintf(fo, "%3d", byte(song_index))
+				fmt.Fprintf(fo, "%2d", byte(song_index))
 				fmt.Printf("  %2d) %3d %s\n", j+1, song_index+1, programs.Programs[song_index].Name)
-				j++
 			}
-			if j < max_set_length {
+			if j < max_set_length-1 {
 				fmt.Fprint(fo, ", ")
 			}
 		}
