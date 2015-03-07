@@ -145,6 +145,17 @@ extern u16 fsw_poll(void);
 // Explicitly set the state of all 16 LEDs
 extern void led_set(u16 leds);
 
+// --------------- LCD screen functions:
+
+// Get pointer to a specific LCD row:
+// A terminating NUL character will clear the rest of the row with empty space.
+extern u8 *lcd_row_get(u8 row);
+
+// Mark the LCD display row as updated:
+extern void lcd_updated_row(u8 row);
+// Update all LCD display rows as updated:
+extern void lcd_updated_all(void);
+
 // --------------- MIDI I/O functions:
 
 // Send a single MIDI byte
@@ -183,7 +194,7 @@ void controller_handle(void);</code></pre>
         <p>
             As of now, there are three hosts implemented for the portable controller logic written in C:
             <ul>
-                <li>This HTML5 javascript demo compiled from the C code using <a href="//github.com/kripken/emscripten/wiki" target="_blank">Emscripten</a></li>
+                <li>This <a href="/demo.html" target="_blank">HTML5 javascript demo</a> compiled from the C code using <a href="//github.com/kripken/emscripten/wiki" target="_blank">Emscripten</a></li>
                 <li>A <a href="//github.com/JamesDunne/eminor2/tree/master/v2/controller/Win32" target="_blank">Windows desktop application</a> test harness (see the readme.txt) which actually sends MIDI messages for testing</li>
                 <li>PIC18 microcontroller firmware controlled by physical foot-switches</li>
             </ul>
