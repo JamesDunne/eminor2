@@ -10,7 +10,8 @@ styCenter[DocumentApp.Attribute.HORIZONTAL_ALIGNMENT] = DocumentApp.HorizontalAl
 var styRight = {};
 styRight[DocumentApp.Attribute.HORIZONTAL_ALIGNMENT] = DocumentApp.HorizontalAlignment.RIGHT;
 
-function test() {
+// Main function:
+function main() {
   var result = UrlFetchApp.fetch("https://github.com/JamesDunne/eminor2/raw/master/v2/controller/flash_manager/setlist.json");
   var setlistData = JSON.parse(result.getContentText());
 
@@ -42,6 +43,7 @@ function generateSetlist(sd) {
   // Create a new Google Doc named 'Hello, world!'
   var doc = DocumentApp.openByUrl("https://docs.google.com/document/d/1fxlTpBh1ztBa5ngESu1RObN7MRI7KV7EGqO6hOSVa2A/edit");
   //var doc = DocumentApp.create(sd.date);
+  doc.setName(sd.date);
 
   var body = doc.getBody();
   body.clear();
