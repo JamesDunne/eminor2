@@ -1,3 +1,3157 @@
+//----------------------------------------------------------------------
+//
+// ECMAScript 5 Polyfills
+//
+//----------------------------------------------------------------------
+
+//----------------------------------------------------------------------
+// ES5 15.2 Object Objects
+//----------------------------------------------------------------------
+
+//
+// ES5 15.2.3 Properties of the Object Constructor
+//
+
+// ES5 15.2.3.2 Object.getPrototypeOf ( O )
+// From http://ejohn.org/blog/objectgetprototypeof/
+// NOTE: won't work for typical function T() {}; T.prototype = {}; new T; case
+// since the constructor property is destroyed.
+if (!Object.getPrototypeOf) {
+  Object.getPrototypeOf = function (o) {
+    if (o !== Object(o)) { throw new TypeError("Object.getPrototypeOf called on non-object"); }
+    return o.__proto__ || o.constructor.prototype || Object.prototype;
+  };
+}
+
+//    // ES5 15.2.3.3 Object.getOwnPropertyDescriptor ( O, P )
+//    if (typeof Object.getOwnPropertyDescriptor !== "function") {
+//        Object.getOwnPropertyDescriptor = function (o, name) {
+//            if (o !== Object(o)) { throw new TypeError(); }
+//            if (o.hasOwnProperty(name)) {
+//                return {
+//                    value: o[name],
+//                    enumerable: true,
+//                    writable: true,
+//                    configurable: true
+//                };
+//            }
+//        };
+//    }
+
+// ES5 15.2.3.4 Object.getOwnPropertyNames ( O )
+if (typeof Object.getOwnPropertyNames !== "function") {
+  Object.getOwnPropertyNames = function (o) {
+    if (o !== Object(o)) { throw new TypeError("Object.getOwnPropertyNames called on non-object"); }
+    var props = [], p;
+    for (p in o) {
+      if (Object.prototype.hasOwnProperty.call(o, p)) {
+        props.push(p);
+      }
+    }
+    return props;
+  };
+}
+
+// ES5 15.2.3.5 Object.create ( O [, Properties] )
+if (typeof Object.create !== "function") {
+  Object.create = function (prototype, properties) {
+    "use strict";
+    if (typeof prototype !== "object") { throw new TypeError(); }
+    /** @constructor */
+    function Ctor() {}
+    Ctor.prototype = prototype;
+    var o = new Ctor();
+    if (prototype) { o.constructor = Ctor; }
+    if (arguments.length > 1) {
+      if (properties !== Object(properties)) { throw new TypeError(); }
+      Object.defineProperties(o, properties);
+    }
+    return o;
+  };
+}
+
+// ES 15.2.3.6 Object.defineProperty ( O, P, Attributes )
+// Partial support for most common case - getters, setters, and values
+(function() {
+  if (!Object.defineProperty ||
+      !(function () { try { Object.defineProperty({}, 'x', {}); return true; } catch (e) { return false; } } ())) {
+    var orig = Object.defineProperty;
+    Object.defineProperty = function (o, prop, desc) {
+      "use strict";
+
+      // In IE8 try built-in implementation for defining properties on DOM prototypes.
+      if (orig) { try { return orig(o, prop, desc); } catch (e) {} }
+
+      if (o !== Object(o)) { throw new TypeError("Object.defineProperty called on non-object"); }
+      if (Object.prototype.__defineGetter__ && ('get' in desc)) {
+        Object.prototype.__defineGetter__.call(o, prop, desc.get);
+      }
+      if (Object.prototype.__defineSetter__ && ('set' in desc)) {
+        Object.prototype.__defineSetter__.call(o, prop, desc.set);
+      }
+      if ('value' in desc) {
+        o[prop] = desc.value;
+      }
+      return o;
+    };
+  }
+}());
+
+// ES 15.2.3.7 Object.defineProperties ( O, Properties )
+if (typeof Object.defineProperties !== "function") {
+  Object.defineProperties = function (o, properties) {
+    "use strict";
+    if (o !== Object(o)) { throw new TypeError("Object.defineProperties called on non-object"); }
+    var name;
+    for (name in properties) {
+      if (Object.prototype.hasOwnProperty.call(properties, name)) {
+        Object.defineProperty(o, name, properties[name]);
+      }
+    }
+    return o;
+  };
+}
+
+
+// ES5 15.2.3.14 Object.keys ( O )
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/keys
+if (!Object.keys) {
+  Object.keys = function (o) {
+    if (o !== Object(o)) { throw new TypeError('Object.keys called on non-object'); }
+    var ret = [], p;
+    for (p in o) {
+      if (Object.prototype.hasOwnProperty.call(o, p)) {
+        ret.push(p);
+      }
+    }
+    return ret;
+  };
+}
+
+//----------------------------------------------------------------------
+// ES5 15.3 Function Objects
+//----------------------------------------------------------------------
+
+//
+// ES5 15.3.4 Properties of the Function Prototype Object
+//
+
+// ES5 15.3.4.5 Function.prototype.bind ( thisArg [, arg1 [, arg2, ... ]] )
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function (o) {
+    if (typeof this !== 'function') { throw new TypeError("Bind must be called on a function"); }
+    var slice = [].slice,
+        args = slice.call(arguments, 1),
+        self = this,
+        bound = function () {
+          return self.apply(this instanceof nop ? this : (o || {}),
+                            args.concat(slice.call(arguments)));
+        };
+
+    /** @constructor */
+    function nop() {}
+    nop.prototype = self.prototype;
+
+    bound.prototype = new nop();
+
+    return bound;
+  };
+}
+
+
+//----------------------------------------------------------------------
+// ES5 15.4 Array Objects
+//----------------------------------------------------------------------
+
+//
+// ES5 15.4.3 Properties of the Array Constructor
+//
+
+
+// ES5 15.4.3.2 Array.isArray ( arg )
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
+Array.isArray = Array.isArray || function (o) { return Boolean(o && Object.prototype.toString.call(Object(o)) === '[object Array]'); };
+
+
+//
+// ES5 15.4.4 Properties of the Array Prototype Object
+//
+
+// ES5 15.4.4.14 Array.prototype.indexOf ( searchElement [ , fromIndex ] )
+// From https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function (searchElement /*, fromIndex */) {
+    "use strict";
+
+    if (this === void 0 || this === null) { throw new TypeError(); }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (len === 0) { return -1; }
+
+    var n = 0;
+    if (arguments.length > 0) {
+      n = Number(arguments[1]);
+      if (isNaN(n)) {
+        n = 0;
+      } else if (n !== 0 && n !== (1 / 0) && n !== -(1 / 0)) {
+        n = (n > 0 || -1) * Math.floor(Math.abs(n));
+      }
+    }
+
+    if (n >= len) { return -1; }
+
+    var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+
+    for (; k < len; k++) {
+      if (k in t && t[k] === searchElement) {
+        return k;
+      }
+    }
+    return -1;
+  };
+}
+
+// ES5 15.4.4.15 Array.prototype.lastIndexOf ( searchElement [ , fromIndex ] )
+// From https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
+if (!Array.prototype.lastIndexOf) {
+  Array.prototype.lastIndexOf = function (searchElement /*, fromIndex*/) {
+    "use strict";
+
+    if (this === void 0 || this === null) { throw new TypeError(); }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (len === 0) { return -1; }
+
+    var n = len;
+    if (arguments.length > 1) {
+      n = Number(arguments[1]);
+      if (n !== n) {
+        n = 0;
+      } else if (n !== 0 && n !== (1 / 0) && n !== -(1 / 0)) {
+        n = (n > 0 || -1) * Math.floor(Math.abs(n));
+      }
+    }
+
+    var k = n >= 0 ? Math.min(n, len - 1) : len - Math.abs(n);
+
+    for (; k >= 0; k--) {
+      if (k in t && t[k] === searchElement) {
+        return k;
+      }
+    }
+    return -1;
+  };
+}
+
+// ES5 15.4.4.16 Array.prototype.every ( callbackfn [ , thisArg ] )
+// From https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/every
+if (!Array.prototype.every) {
+  Array.prototype.every = function (fun /*, thisp */) {
+    "use strict";
+
+    if (this === void 0 || this === null) { throw new TypeError(); }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== "function") { throw new TypeError(); }
+
+    var thisp = arguments[1], i;
+    for (i = 0; i < len; i++) {
+      if (i in t && !fun.call(thisp, t[i], i, t)) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+}
+
+// ES5 15.4.4.17 Array.prototype.some ( callbackfn [ , thisArg ] )
+// From https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
+if (!Array.prototype.some) {
+  Array.prototype.some = function (fun /*, thisp */) {
+    "use strict";
+
+    if (this === void 0 || this === null) { throw new TypeError(); }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== "function") { throw new TypeError(); }
+
+    var thisp = arguments[1], i;
+    for (i = 0; i < len; i++) {
+      if (i in t && fun.call(thisp, t[i], i, t)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+}
+
+// ES5 15.4.4.18 Array.prototype.forEach ( callbackfn [ , thisArg ] )
+// From https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/forEach
+if (!Array.prototype.forEach) {
+  Array.prototype.forEach = function (fun /*, thisp */) {
+    "use strict";
+
+    if (this === void 0 || this === null) { throw new TypeError(); }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== "function") { throw new TypeError(); }
+
+    var thisp = arguments[1], i;
+    for (i = 0; i < len; i++) {
+      if (i in t) {
+        fun.call(thisp, t[i], i, t);
+      }
+    }
+  };
+}
+
+
+// ES5 15.4.4.19 Array.prototype.map ( callbackfn [ , thisArg ] )
+// From https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/Map
+if (!Array.prototype.map) {
+  Array.prototype.map = function (fun /*, thisp */) {
+    "use strict";
+
+    if (this === void 0 || this === null) { throw new TypeError(); }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== "function") { throw new TypeError(); }
+
+    var res = []; res.length = len;
+    var thisp = arguments[1], i;
+    for (i = 0; i < len; i++) {
+      if (i in t) {
+        res[i] = fun.call(thisp, t[i], i, t);
+      }
+    }
+
+    return res;
+  };
+}
+
+// ES5 15.4.4.20 Array.prototype.filter ( callbackfn [ , thisArg ] )
+// From https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/Filter
+if (!Array.prototype.filter) {
+  Array.prototype.filter = function (fun /*, thisp */) {
+    "use strict";
+
+    if (this === void 0 || this === null) { throw new TypeError(); }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== "function") { throw new TypeError(); }
+
+    var res = [];
+    var thisp = arguments[1], i;
+    for (i = 0; i < len; i++) {
+      if (i in t) {
+        var val = t[i]; // in case fun mutates this
+        if (fun.call(thisp, val, i, t)) {
+          res.push(val);
+        }
+      }
+    }
+
+    return res;
+  };
+}
+
+
+// ES5 15.4.4.21 Array.prototype.reduce ( callbackfn [ , initialValue ] )
+// From https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/Reduce
+if (!Array.prototype.reduce) {
+  Array.prototype.reduce = function (fun /*, initialValue */) {
+    "use strict";
+
+    if (this === void 0 || this === null) { throw new TypeError(); }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== "function") { throw new TypeError(); }
+
+    // no value to return if no initial value and an empty array
+    if (len === 0 && arguments.length === 1) { throw new TypeError(); }
+
+    var k = 0;
+    var accumulator;
+    if (arguments.length >= 2) {
+      accumulator = arguments[1];
+    } else {
+      do {
+        if (k in t) {
+          accumulator = t[k++];
+          break;
+        }
+
+        // if array contains no values, no initial value to return
+        if (++k >= len) { throw new TypeError(); }
+      }
+      while (true);
+    }
+
+    while (k < len) {
+      if (k in t) {
+        accumulator = fun.call(undefined, accumulator, t[k], k, t);
+      }
+      k++;
+    }
+
+    return accumulator;
+  };
+}
+
+
+// ES5 15.4.4.22 Array.prototype.reduceRight ( callbackfn [, initialValue ] )
+// From https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/ReduceRight
+if (!Array.prototype.reduceRight) {
+  Array.prototype.reduceRight = function (callbackfn /*, initialValue */) {
+    "use strict";
+
+    if (this === void 0 || this === null) { throw new TypeError(); }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof callbackfn !== "function") { throw new TypeError(); }
+
+    // no value to return if no initial value, empty array
+    if (len === 0 && arguments.length === 1) { throw new TypeError(); }
+
+    var k = len - 1;
+    var accumulator;
+    if (arguments.length >= 2) {
+      accumulator = arguments[1];
+    } else {
+      do {
+        if (k in this) {
+          accumulator = this[k--];
+          break;
+        }
+
+        // if array contains no values, no initial value to return
+        if (--k < 0) { throw new TypeError(); }
+      }
+      while (true);
+    }
+
+    while (k >= 0) {
+      if (k in t) {
+        accumulator = callbackfn.call(undefined, accumulator, t[k], k, t);
+      }
+      k--;
+    }
+
+    return accumulator;
+  };
+}
+
+
+//----------------------------------------------------------------------
+// ES5 15.5 String Objects
+//----------------------------------------------------------------------
+
+//
+// ES5 15.5.4 Properties of the String Prototype Object
+//
+
+
+// ES5 15.5.4.20 String.prototype.trim()
+if (!String.prototype.trim) {
+  String.prototype.trim = function () {
+    return String(this).replace(/^\s+/, '').replace(/\s+$/, '');
+  };
+}
+
+
+
+//----------------------------------------------------------------------
+// ES5 15.9 Date Objects
+//----------------------------------------------------------------------
+
+
+//
+// ES 15.9.4 Properties of the Date Constructor
+//
+
+// ES5 15.9.4.4 Date.now ( )
+// From https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Date/now
+if (!Date.now) {
+  Date.now = function now() {
+    return Number(new Date());
+  };
+}
+
+
+//
+// ES5 15.9.5 Properties of the Date Prototype Object
+//
+
+// ES5 15.9.4.43 Date.prototype.toISOString ( )
+// Inspired by http://www.json.org/json2.js
+if (!Date.prototype.toISOString) {
+  Date.prototype.toISOString = function () {
+    function pad2(n) { return ('00' + n).slice(-2); }
+    function pad3(n) { return ('000' + n).slice(-3); }
+
+    return this.getUTCFullYear() + '-' +
+      pad2(this.getUTCMonth() + 1) + '-' +
+      pad2(this.getUTCDate()) + 'T' +
+      pad2(this.getUTCHours()) + ':' +
+      pad2(this.getUTCMinutes()) + ':' +
+      pad2(this.getUTCSeconds()) + '.' +
+      pad3(this.getUTCMilliseconds()) + 'Z';
+  };
+}
+//----------------------------------------------------------------------
+//
+// Browser Polyfills
+//
+// This assumes ES5 or ES3 + es5.js
+//
+//----------------------------------------------------------------------
+
+if ('window' in this && 'document' in this) {
+
+  //----------------------------------------------------------------------
+  //
+  // Web Standards Polyfills
+  //
+  //----------------------------------------------------------------------
+
+  //
+  // document.head (HTML5)
+  //
+  document.head = document.head || document.getElementsByTagName('head')[0];
+
+  //
+  // XMLHttpRequest (http://www.w3.org/TR/XMLHttpRequest/)
+  //
+  window.XMLHttpRequest = window.XMLHttpRequest || function () {
+    /*global ActiveXObject*/
+    try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); } catch (e1) { }
+    try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); } catch (e2) { }
+    try { return new ActiveXObject("Msxml2.XMLHTTP"); } catch (e3) { }
+    throw new Error("This browser does not support XMLHttpRequest.");
+  };
+  XMLHttpRequest.UNSENT = 0;
+  XMLHttpRequest.OPENED = 1;
+  XMLHttpRequest.HEADERS_RECEIVED = 2;
+  XMLHttpRequest.LOADING = 3;
+  XMLHttpRequest.DONE = 4;
+
+  //----------------------------------------------------------------------
+  //
+  // Performance
+  //
+  //----------------------------------------------------------------------
+
+  // requestAnimationFrame
+  // http://www.w3.org/TR/animation-timing/
+  (function() {
+    var TARGET_FPS = 60,
+        requests = Object.create(null),
+        raf_handle = 1,
+        timeout_handle = -1;
+
+    function isVisible(element) {
+      return element.offsetWidth > 0 && element.offsetHeight > 0;
+    }
+
+    function onFrameTimer() {
+      var cur_requests = requests;
+
+      requests = Object.create(null);
+      timeout_handle = -1;
+
+      Object.keys(cur_requests).forEach(function(id) {
+        var request = cur_requests[id];
+        if (!request.element || isVisible(request.element)) {
+          request.callback(Date.now());
+        }
+      });
+    }
+
+    function requestAnimationFrame(callback, element) {
+      var cb_handle = raf_handle++;
+      requests[cb_handle] = {callback: callback, element: element};
+
+      if (timeout_handle === -1) {
+        timeout_handle = window.setTimeout(onFrameTimer, 1000 / TARGET_FPS);
+      }
+
+      return cb_handle;
+    }
+
+    function cancelAnimationFrame(handle) {
+      delete requests[handle];
+
+      if (Object.keys(requests).length === 0) {
+        window.clearTimeout(timeout_handle);
+        timeout_handle = -1;
+      }
+    }
+
+    window.requestAnimationFrame =
+      window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      window.msRequestAnimationFrame ||
+      requestAnimationFrame;
+
+    // NOTE: Older versions of the spec called this "cancelRequestAnimationFrame"
+    window.cancelAnimationFrame = window.cancelRequestAnimationFrame =
+      window.cancelAnimationFrame || window.cancelRequestAnimationFrame ||
+      window.webkitCancelAnimationFrame || window.webkitCancelRequestAnimationFrame ||
+      window.mozCancelAnimationFrame || window.mozCancelRequestAnimationFrame ||
+      window.oCancelAnimationFrame || window.oCancelRequestAnimationFrame ||
+      window.msCancelAnimationFrame || window.msCancelRequestAnimationFrame ||
+      cancelAnimationFrame;
+  }());
+
+  // setImmediate
+  // https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/setImmediate/Overview.html
+  (function () {
+    function setImmediate(callback, args) {
+      var params = [].slice.call(arguments, 1), i;
+      return window.setTimeout(function() {
+        callback.apply(null, params);
+      }, 0);
+    }
+
+    function clearImmediate(handle) {
+      window.clearTimeout(handle);
+    }
+
+    window.setImmediate =
+      window.setImmediate ||
+      window.msSetImmediate ||
+      setImmediate;
+
+    window.clearImmediate =
+      window.clearImmediate ||
+      window.msClearImmediate ||
+      clearImmediate;
+  } ());
+
+  //----------------------------------------------------------------------
+  //
+  // DOM
+  //
+  //----------------------------------------------------------------------
+
+  //
+  // Selectors API Level 1 (http://www.w3.org/TR/selectors-api/)
+  // http://ajaxian.com/archives/creating-a-queryselector-for-ie-that-runs-at-native-speed
+  //
+  if (!document.querySelectorAll) {
+    document.querySelectorAll = function (selectors) {
+      var style = document.createElement('style'), elements = [], element;
+      document.documentElement.firstChild.appendChild(style);
+      document._qsa = [];
+
+      style.styleSheet.cssText = selectors + '{x-qsa:expression(document._qsa && document._qsa.push(this))}';
+      window.scrollBy(0, 0);
+      style.parentNode.removeChild(style);
+
+      while (document._qsa.length) {
+        element = document._qsa.shift();
+        element.style.removeAttribute('x-qsa');
+        elements.push(element);
+      }
+      document._qsa = null;
+      return elements;
+    };
+  }
+
+  if (!document.querySelector) {
+    document.querySelector = function (selectors) {
+      var elements = document.querySelectorAll(selectors);
+      return (elements.length) ? elements[0] : null;
+    };
+  }
+
+  if (!document.getElementsByClassName) {
+    document.getElementsByClassName = function (classNames) {
+      classNames = String(classNames).replace(/^|\s+/g, '.');
+      return document.querySelectorAll(classNames);
+    };
+  }
+
+  // Fix for IE8-'s Element.getBoundingClientRect()
+  if ('TextRectangle' in this && !('width' in TextRectangle.prototype)) {
+    Object.defineProperties(TextRectangle.prototype, {
+      'width': { get: function() { return this.right - this.left; } },
+      'height': { get: function() { return this.bottom - this.top; } }
+    });
+  }
+
+  //
+  // DOM Enumerations (http://www.w3.org/TR/DOM-Level-2-Core/)
+  //
+  window.Node = window.Node || function Node() { throw new TypeError("Illegal constructor"); };
+  Node.ELEMENT_NODE = 1;
+  Node.ATTRIBUTE_NODE = 2;
+  Node.TEXT_NODE = 3;
+  Node.CDATA_SECTION_NODE = 4;
+  Node.ENTITY_REFERENCE_NODE = 5;
+  Node.ENTITY_NODE = 6;
+  Node.PROCESSING_INSTRUCTION_NODE = 7;
+  Node.COMMENT_NODE = 8;
+  Node.DOCUMENT_NODE = 9;
+  Node.DOCUMENT_TYPE_NODE = 10;
+  Node.DOCUMENT_FRAGMENT_NODE = 11;
+  Node.NOTATION_NODE = 12;
+
+  window.DOMException = window.DOMException || function DOMException() { throw new TypeError("Illegal constructor"); };
+  DOMException.INDEX_SIZE_ERR = 1;
+  DOMException.DOMSTRING_SIZE_ERR = 2;
+  DOMException.HIERARCHY_REQUEST_ERR = 3;
+  DOMException.WRONG_DOCUMENT_ERR = 4;
+  DOMException.INVALID_CHARACTER_ERR = 5;
+  DOMException.NO_DATA_ALLOWED_ERR = 6;
+  DOMException.NO_MODIFICATION_ALLOWED_ERR = 7;
+  DOMException.NOT_FOUND_ERR = 8;
+  DOMException.NOT_SUPPORTED_ERR = 9;
+  DOMException.INUSE_ATTRIBUTE_ERR = 10;
+  DOMException.INVALID_STATE_ERR = 11;
+  DOMException.SYNTAX_ERR = 12;
+  DOMException.INVALID_MODIFICATION_ERR = 13;
+  DOMException.NAMESPACE_ERR = 14;
+  DOMException.INVALID_ACCESS_ERR = 15;
+
+  //
+  // Events and EventTargets
+  //
+
+  (function(){
+    if (!('Element' in window) || Element.prototype.addEventListener || !Object.defineProperty)
+      return;
+
+    // interface Event
+
+    // PhaseType (const unsigned short)
+    Event.CAPTURING_PHASE = 1;
+    Event.AT_TARGET       = 2;
+    Event.BUBBLING_PHASE  = 3;
+
+    Object.defineProperty(Event.prototype, 'CAPTURING_PHASE', { get: function() { return 1; } });
+    Object.defineProperty(Event.prototype, 'AT_TARGET',       { get: function() { return 2; } });
+    Object.defineProperty(Event.prototype, 'BUBBLING_HASE',   { get: function() { return 3; } });
+
+    Object.defineProperty(Event.prototype, 'target', {
+      get: function() {
+        return this.srcElement;
+      }
+    });
+
+    Object.defineProperty(Event.prototype, 'currentTarget', {
+      get: function() {
+        return this._currentTarget;
+      }
+    });
+
+    Object.defineProperty(Event.prototype, 'eventPhase', {
+      get: function() {
+        return (this.srcElement === this.currentTarget) ? Event.AT_TARGET : Event.BUBBLING_PHASE;
+      }
+    });
+
+    Object.defineProperty(Event.prototype, 'bubbles', {
+      get: function() {
+        switch (this.type) {
+          // Mouse
+        case 'click':
+        case 'dblclick':
+        case 'mousedown':
+        case 'mouseup':
+        case 'mouseover':
+        case 'mousemove':
+        case 'mouseout':
+        case 'mousewheel':
+          // Keyboard
+        case 'keydown':
+        case 'keypress':
+        case 'keyup':
+          // Frame/Object
+        case 'resize':
+        case 'scroll':
+          // Form
+        case 'select':
+        case 'change':
+        case 'submit':
+        case 'reset':
+          return true;
+        }
+        return false;
+      }
+    });
+
+    Object.defineProperty(Event.prototype, 'cancelable', {
+      get: function() {
+        switch (this.type) {
+          // Mouse
+        case 'click':
+        case 'dblclick':
+        case 'mousedown':
+        case 'mouseup':
+        case 'mouseover':
+        case 'mouseout':
+        case 'mousewheel':
+          // Keyboard
+        case 'keydown':
+        case 'keypress':
+        case 'keyup':
+          // Form
+        case 'submit':
+          return true;
+        }
+        return false;
+      }
+    });
+
+    Object.defineProperty(Event.prototype, 'timeStamp', {
+      get: function() {
+        return this._timeStamp;
+      }
+    });
+
+    Event.prototype.stopPropagation = function() {
+      this.cancelBubble = true;
+    };
+
+    Event.prototype.preventDefault = function() {
+      this.returnValue = false;
+    };
+
+    Object.defineProperty(Event.prototype, 'defaultPrevented', {
+      get: function() {
+        return this.returnValue === false;
+      }
+    });
+
+
+    // interface EventTarget
+
+    function addEventListener(type, listener, useCapture) {
+      if (type === 'DOMContentLoaded') type = 'load';
+      var target = this;
+      var f = function(e) {
+        e._timeStamp = Number(new Date);
+        e._currentTarget = target;
+        listener.call(this, e);
+        e._currentTarget = null;
+      };
+      this['_' + type + listener] = f;
+      this.attachEvent('on' + type, f);
+    }
+
+    function removeEventListener(type, listener, useCapture) {
+      if (type === 'DOMContentLoaded') type = 'load';
+      var f = this['_' + type + listener];
+      if (f) {
+        this.detachEvent('on' + type, f);
+        this['_' + type + listener] = null;
+      }
+    }
+
+    var p1 = Window.prototype, p2 = HTMLDocument.prototype, p3 = Element.prototype;
+    p1.addEventListener    = p2.addEventListener    = p3.addEventListener    = addEventListener;
+    p1.removeEventListener = p2.removeEventListener = p3.removeEventListener = removeEventListener;
+
+  }());
+
+  // Shim for DOM Events for IE7-
+  // http://www.quirksmode.org/blog/archives/2005/10/_and_the_winner_1.html
+  // Use addEvent(object, event, handler) instead of object.addEventListener(event, handler)
+
+  window.addEvent = function (obj, type, fn) {
+    if (obj.addEventListener) {
+      obj.addEventListener(type, fn, false);
+    } else if (obj.attachEvent) {
+      obj["e" + type + fn] = fn;
+      obj[type + fn] = function () {
+        var e = window.event;
+        e.currentTarget = obj;
+        e.preventDefault = function () { e.returnValue = false; };
+        e.stopPropagation = function () { e.cancelBubble = true; };
+        e.target = e.srcElement;
+        e.timeStamp = Number(new Date);
+        obj["e" + type + fn].call(this, e);
+      };
+      obj.attachEvent("on" + type, obj[type + fn]);
+    }
+  };
+
+  window.removeEvent = function (obj, type, fn) {
+    if (obj.removeEventListener) {
+      obj.removeEventListener(type, fn, false);
+    } else if (obj.detachEvent) {
+      obj.detachEvent("on" + type, obj[type + fn]);
+      obj[type + fn] = null;
+      obj["e" + type + fn] = null;
+    }
+  };
+
+  //----------------------------------------------------------------------
+  //
+  // DOMTokenList - classList and relList shims
+  //
+  //----------------------------------------------------------------------
+
+  // Shim for http://www.whatwg.org/specs/web-apps/current-work/multipage/elements.html#dom-classlist
+  // Use getClassList(elem) instead of elem.classList() if IE7- support is needed
+  // Use getRelList(elem) instead of elem.relList() if IE7- support is needed
+
+  (function () {
+
+    /** @constructor */
+    function DOMTokenListShim(o, p) {
+      function split(s) { return s.length ? s.split(/\s+/g) : []; }
+
+      // NOTE: This does not exactly match the spec.
+      function removeTokenFromString(token, string) {
+        var tokens = split(string),
+            index = tokens.indexOf(token);
+        if (index !== -1) {
+          tokens.splice(index, 1);
+        }
+        return tokens.join(' ');
+      }
+
+      Object.defineProperties(
+        this,
+        {
+          length: {
+            get: function () { return split(o[p]).length; }
+          },
+
+          item: {
+            value: function (idx) {
+              var tokens = split(o[p]);
+              return 0 <= idx && idx < tokens.length ? tokens[idx] : null;
+            }
+          },
+
+          contains: {
+            value: function (token) {
+              token = String(token);
+              if (token.length === 0) { throw new SyntaxError(); }
+              if (/\s/.test(token)) { throw new Error("InvalidCharacterError"); }
+              var tokens = split(o[p]);
+
+              return tokens.indexOf(token) !== -1;
+            }
+          },
+
+          add: {
+            value: function (tokens___) {
+              tokens = Array.prototype.slice.call(arguments).map(String);
+              if (tokens.some(function(token) { return token.length === 0; })) {
+                throw new SyntaxError();
+              }
+              if (tokens.some(function(token) { return /\s/.test(token); })) {
+                throw new Error("InvalidCharacterError");
+              }
+
+              try {
+                var underlying_string = o[p];
+                var token_list = split(underlying_string);
+                tokens = tokens.filter(function(token) { return token_list.indexOf(token) === -1; });
+                if (tokens.length === 0) {
+                  return;
+                }
+                if (underlying_string.length !== 0 && !/\s$/.test(underlying_string)) {
+                  underlying_string += ' ';
+                }
+                underlying_string += tokens.join(' ');
+                o[p] = underlying_string;
+              } finally {
+                var length = split(o[p]).length;
+                if (this.length !== length) { this.length = length; }
+              }
+            }
+          },
+
+          remove: {
+            value: function (tokens___) {
+              tokens = Array.prototype.slice.call(arguments).map(String);
+              if (tokens.some(function(token) { return token.length === 0; })) {
+                throw new SyntaxError();
+              }
+              if (tokens.some(function(token) { return /\s/.test(token); })) {
+                throw new Error("InvalidCharacterError");
+              }
+
+              try {
+                var underlying_string = o[p];
+                tokens.forEach(function(token) {
+                  underlying_string = removeTokenFromString(token, underlying_string);
+                });
+                o[p] = underlying_string;
+              } finally {
+                var length = split(o[p]).length;
+                if (this.length !== length) { this.length = length; }
+              }
+            }
+          },
+
+          toggle: {
+            value: function (token, force) {
+              try {
+                token = String(token);
+                if (token.length === 0) { throw new SyntaxError(); }
+                if (/\s/.test(token)) { throw new Error("InvalidCharacterError"); }
+                var tokens = split(o[p]),
+                    index = tokens.indexOf(token);
+
+                if (index !== -1 && (!force || force === (void 0))) {
+                  o[p] = removeTokenFromString(token, o[p]);
+                  return false;
+                }
+                if (index !== -1 && force) {
+                  return true;
+                }
+                var underlying_string = o[p];
+                if (underlying_string.length !== 0 && !/\s$/.test(underlying_string)) {
+                  underlying_string += ' ';
+                }
+                underlying_string += token;
+                o[p] = underlying_string;
+                return true;
+              } finally {
+                var length = split(o[p]).length;
+                if (this.length !== length) { this.length = length; }
+              }
+            }
+          },
+
+          toString: {
+            value: function () {
+              return o[p];
+            }
+          }
+        });
+      if (!('length' in this)) {
+        // In case getters are not supported
+        this.length = split(o[p]).length;
+      } else {
+        // If they are, shim in index getters (up to 100)
+        for (var i = 0; i < 100; ++i) {
+          Object.defineProperty(this, String(i), {
+            get: (function(n) { return function () { return this.item(n); }; }(i))
+          });
+        }
+      }
+    }
+
+    function addToElementPrototype(p, f) {
+      if ('Element' in window && Element.prototype && Object.defineProperty) {
+        Object.defineProperty(Element.prototype, p, { get: f });
+      }
+    }
+
+    if ('classList' in document.createElement('span')) {
+      window.getClassList = function (elem) { return elem.classList; };
+    } else {
+      window.getClassList = function (elem) { return new DOMTokenListShim(elem, 'className'); };
+      addToElementPrototype('classList', function() { return new DOMTokenListShim(this, 'className'); } );
+    }
+
+    if ('relList' in document.createElement('link')) {
+      window.getRelList = function (elem) { return elem.relList; };
+    } else {
+      window.getRelList = function (elem) { return new DOMTokenListShim(elem, 'rel'); };
+      addToElementPrototype('relList', function() { return new DOMTokenListShim(this, 'rel'); } );
+    }
+  }());
+
+  if (!('dataset' in document.createElement('span')) &&
+      'Element' in window && Element.prototype && Object.defineProperty) {
+    Object.defineProperty(Element.prototype, 'dataset', { get: function() {
+      var result = Object.create(null);
+      for (var i = 0; i < this.attributes.length; ++i) {
+        var attr = this.attributes[i];
+        if (attr.specified && attr.name.substring(0, 5) === 'data-') {
+          (function(element, name) {
+            Object.defineProperty(result, name, {
+              get: function() {
+                return element.getAttribute('data-' + name);
+              },
+              set: function(value) {
+                element.setAttribute('data-' + name, value);
+              }});
+          }(this, attr.name.substring(5)));
+        }
+      }
+        return result;
+    }});
+  }
+}
+
+//
+// Base64 utility methods (HTML5)
+//
+(function (global) {
+  var B64_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  global.atob = global.atob || function (input) {
+    input = String(input);
+    var position = 0,
+        output = [],
+        buffer = 0, bits = 0, n;
+
+    input = input.replace(/\s/g, '');
+    if ((input.length % 4) === 0) { input = input.replace(/=+$/, ''); }
+    if ((input.length % 4) === 1) { throw new Error("InvalidCharacterError"); }
+    if (/[^+/0-9A-Za-z]/.test(input)) { throw new Error("InvalidCharacterError"); }
+
+    while (position < input.length) {
+      n = B64_ALPHABET.indexOf(input.charAt(position));
+      buffer = (buffer << 6) | n;
+      bits += 6;
+
+      if (bits === 24) {
+        output.push(String.fromCharCode((buffer >> 16) & 0xFF));
+        output.push(String.fromCharCode((buffer >>  8) & 0xFF));
+        output.push(String.fromCharCode(buffer & 0xFF));
+        bits = 0;
+        buffer = 0;
+      }
+      position += 1;
+    }
+
+    if (bits === 12) {
+      buffer = buffer >> 4;
+      output.push(String.fromCharCode(buffer & 0xFF));
+    } else if (bits === 18) {
+      buffer = buffer >> 2;
+      output.push(String.fromCharCode((buffer >> 8) & 0xFF));
+      output.push(String.fromCharCode(buffer & 0xFF));
+    }
+
+    return output.join('');
+  };
+
+  global.btoa = global.btoa || function (input) {
+    input = String(input);
+    var position = 0,
+        out = [],
+        o1, o2, o3,
+        e1, e2, e3, e4;
+
+    if (/[^\x00-\xFF]/.test(input)) { throw new Error("InvalidCharacterError"); }
+
+    while (position < input.length) {
+      o1 = input.charCodeAt(position++);
+      o2 = input.charCodeAt(position++);
+      o3 = input.charCodeAt(position++);
+
+      // 111111 112222 222233 333333
+      e1 = o1 >> 2;
+      e2 = ((o1 & 0x3) << 4) | (o2 >> 4);
+      e3 = ((o2 & 0xf) << 2) | (o3 >> 6);
+      e4 = o3 & 0x3f;
+
+      if (position === input.length + 2) {
+        e3 = 64; e4 = 64;
+      }
+      else if (position === input.length + 1) {
+        e4 = 64;
+      }
+
+      out.push(B64_ALPHABET.charAt(e1),
+               B64_ALPHABET.charAt(e2),
+               B64_ALPHABET.charAt(e3),
+               B64_ALPHABET.charAt(e4));
+    }
+
+    return out.join('');
+  };
+} (this));
+
+
+//----------------------------------------------------------------------
+//
+// Non-standard JavaScript (Mozilla) functions
+//
+//----------------------------------------------------------------------
+
+(function () {
+  // JavaScript 1.8.1
+  String.prototype.trimLeft = String.prototype.trimLeft || function () {
+    return String(this).replace(/^\s+/, '');
+  };
+
+  // JavaScript 1.8.1
+  String.prototype.trimRight = String.prototype.trimRight || function () {
+    return String(this).replace(/\s+$/, '');
+  };
+
+  // JavaScript 1.?
+  var ESCAPES = {
+    //'\x00': '\\0', Special case in FF3.6, removed by FF10
+    '\b': '\\b',
+    '\t': '\\t',
+    '\n': '\\n',
+    '\f': '\\f',
+    '\r': '\\r',
+    '"' : '\\"',
+    '\\': '\\\\'
+  };
+  String.prototype.quote = String.prototype.quote || function() {
+    return '"' + String(this).replace(/[\x00-\x1F"\\\x7F-\uFFFF]/g, function(c) {
+      if (Object.prototype.hasOwnProperty.call(ESCAPES, c)) {
+        return ESCAPES[c];
+      } else if (c.charCodeAt(0) <= 0xFF) {
+        return '\\x' + ('00' + c.charCodeAt(0).toString(16).toUpperCase()).slice(-2);
+      } else {
+        return '\\u' + ('0000' + c.charCodeAt(0).toString(16).toUpperCase()).slice(-4);
+      }
+    }) + '"';
+  };
+}());
+/*
+ Copyright (c) 2010, Linden Research, Inc.
+ Copyright (c) 2012, Joshua Bell
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ $/LicenseInfo$
+ */
+
+// Original can be found at:
+//   https://bitbucket.org/lindenlab/llsd
+// Modifications by Joshua Bell inexorabletash@gmail.com
+//   https://github.com/inexorabletash/polyfill
+
+// ES3/ES5 implementation of the Krhonos Typed Array Specification
+//   Ref: http://www.khronos.org/registry/typedarray/specs/latest/
+//   Date: 2011-02-01
+//
+// Variations:
+//  * Allows typed_array.get/set() as alias for subscripts (typed_array[])
+
+
+(function(global) {
+  "use strict";
+  var undefined = (void 0); // Paranoia
+
+  // Beyond this value, index getters/setters (i.e. array[0], array[1]) are so slow to
+  // create, and consume so much memory, that the browser appears frozen.
+  var MAX_ARRAY_LENGTH = 1e5;
+
+  // Approximations of internal ECMAScript conversion functions
+  var ECMAScript = (function() {
+    // Stash a copy in case other scripts modify these
+    var opts = Object.prototype.toString,
+        ophop = Object.prototype.hasOwnProperty;
+
+    return {
+      // Class returns internal [[Class]] property, used to avoid cross-frame instanceof issues:
+      Class: function(v) { return opts.call(v).replace(/^\[object *|\]$/g, ''); },
+      HasProperty: function(o, p) { return p in o; },
+      HasOwnProperty: function(o, p) { return ophop.call(o, p); },
+      IsCallable: function(o) { return typeof o === 'function'; },
+      ToInt32: function(v) { return v >> 0; },
+      ToUint32: function(v) { return v >>> 0; }
+    };
+  }());
+
+  // Snapshot intrinsics
+  var LN2 = Math.LN2,
+      abs = Math.abs,
+      floor = Math.floor,
+      log = Math.log,
+      min = Math.min,
+      pow = Math.pow,
+      round = Math.round;
+
+  // ES5: lock down object properties
+  function configureProperties(obj) {
+    if (Object.getOwnPropertyNames && Object.defineProperty) {
+      var props = Object.getOwnPropertyNames(obj), i;
+      for (i = 0; i < props.length; i += 1) {
+        Object.defineProperty(obj, props[i], {
+          value: obj[props[i]],
+          writable: false,
+          enumerable: false,
+          configurable: false
+        });
+      }
+    }
+  }
+
+  // emulate ES5 getter/setter API using legacy APIs
+  // http://blogs.msdn.com/b/ie/archive/2010/09/07/transitioning-existing-code-to-the-es5-getter-setter-apis.aspx
+  // (second clause tests for Object.defineProperty() in IE<9 that only supports extending DOM prototypes, but
+  // note that IE<9 does not support __defineGetter__ or __defineSetter__ so it just renders the method harmless)
+  if (!Object.defineProperty ||
+       !(function() { try { Object.defineProperty({}, 'x', {}); return true; } catch (e) { return false; } }())) {
+    Object.defineProperty = function(o, p, desc) {
+      if (!o === Object(o)) throw new TypeError("Object.defineProperty called on non-object");
+      if (ECMAScript.HasProperty(desc, 'get') && Object.prototype.__defineGetter__) { Object.prototype.__defineGetter__.call(o, p, desc.get); }
+      if (ECMAScript.HasProperty(desc, 'set') && Object.prototype.__defineSetter__) { Object.prototype.__defineSetter__.call(o, p, desc.set); }
+      if (ECMAScript.HasProperty(desc, 'value')) { o[p] = desc.value; }
+      return o;
+    };
+  }
+
+  if (!Object.getOwnPropertyNames) {
+    Object.getOwnPropertyNames = function getOwnPropertyNames(o) {
+      if (o !== Object(o)) throw new TypeError("Object.getOwnPropertyNames called on non-object");
+      var props = [], p;
+      for (p in o) {
+        if (ECMAScript.HasOwnProperty(o, p)) {
+          props.push(p);
+        }
+      }
+      return props;
+    };
+  }
+
+  // ES5: Make obj[index] an alias for obj._getter(index)/obj._setter(index, value)
+  // for index in 0 ... obj.length
+  function makeArrayAccessors(obj) {
+    if (!Object.defineProperty) { return; }
+
+    if (obj.length > MAX_ARRAY_LENGTH) throw new RangeError("Array too large for polyfill");
+
+    function makeArrayAccessor(index) {
+      Object.defineProperty(obj, index, {
+        'get': function() { return obj._getter(index); },
+        'set': function(v) { obj._setter(index, v); },
+        enumerable: true,
+        configurable: false
+      });
+    }
+
+    var i;
+    for (i = 0; i < obj.length; i += 1) {
+      makeArrayAccessor(i);
+    }
+  }
+
+  // Internal conversion functions:
+  //    pack<Type>()   - take a number (interpreted as Type), output a byte array
+  //    unpack<Type>() - take a byte array, output a Type-like number
+
+  function as_signed(value, bits) { var s = 32 - bits; return (value << s) >> s; }
+  function as_unsigned(value, bits) { var s = 32 - bits; return (value << s) >>> s; }
+
+  function packI8(n) { return [n & 0xff]; }
+  function unpackI8(bytes) { return as_signed(bytes[0], 8); }
+
+  function packU8(n) { return [n & 0xff]; }
+  function unpackU8(bytes) { return as_unsigned(bytes[0], 8); }
+
+  function packU8Clamped(n) { n = round(Number(n)); return [n < 0 ? 0 : n > 0xff ? 0xff : n & 0xff]; }
+
+  function packI16(n) { return [(n >> 8) & 0xff, n & 0xff]; }
+  function unpackI16(bytes) { return as_signed(bytes[0] << 8 | bytes[1], 16); }
+
+  function packU16(n) { return [(n >> 8) & 0xff, n & 0xff]; }
+  function unpackU16(bytes) { return as_unsigned(bytes[0] << 8 | bytes[1], 16); }
+
+  function packI32(n) { return [(n >> 24) & 0xff, (n >> 16) & 0xff, (n >> 8) & 0xff, n & 0xff]; }
+  function unpackI32(bytes) { return as_signed(bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3], 32); }
+
+  function packU32(n) { return [(n >> 24) & 0xff, (n >> 16) & 0xff, (n >> 8) & 0xff, n & 0xff]; }
+  function unpackU32(bytes) { return as_unsigned(bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3], 32); }
+
+  function packIEEE754(v, ebits, fbits) {
+
+    var bias = (1 << (ebits - 1)) - 1,
+        s, e, f, ln,
+        i, bits, str, bytes;
+
+    function roundToEven(n) {
+      var w = floor(n), f = n - w;
+      if (f < 0.5)
+        return w;
+      if (f > 0.5)
+        return w + 1;
+      return w % 2 ? w + 1 : w;
+    }
+
+    // Compute sign, exponent, fraction
+    if (v !== v) {
+      // NaN
+      // http://dev.w3.org/2006/webapi/WebIDL/#es-type-mapping
+      e = (1 << ebits) - 1; f = pow(2, fbits - 1); s = 0;
+    } else if (v === Infinity || v === -Infinity) {
+      e = (1 << ebits) - 1; f = 0; s = (v < 0) ? 1 : 0;
+    } else if (v === 0) {
+      e = 0; f = 0; s = (1 / v === -Infinity) ? 1 : 0;
+    } else {
+      s = v < 0;
+      v = abs(v);
+
+      if (v >= pow(2, 1 - bias)) {
+        e = min(floor(log(v) / LN2), 1023);
+        f = roundToEven(v / pow(2, e) * pow(2, fbits));
+        if (f / pow(2, fbits) >= 2) {
+          e = e + 1;
+          f = 1;
+        }
+        if (e > bias) {
+          // Overflow
+          e = (1 << ebits) - 1;
+          f = 0;
+        } else {
+          // Normalized
+          e = e + bias;
+          f = f - pow(2, fbits);
+        }
+      } else {
+        // Denormalized
+        e = 0;
+        f = roundToEven(v / pow(2, 1 - bias - fbits));
+      }
+    }
+
+    // Pack sign, exponent, fraction
+    bits = [];
+    for (i = fbits; i; i -= 1) { bits.push(f % 2 ? 1 : 0); f = floor(f / 2); }
+    for (i = ebits; i; i -= 1) { bits.push(e % 2 ? 1 : 0); e = floor(e / 2); }
+    bits.push(s ? 1 : 0);
+    bits.reverse();
+    str = bits.join('');
+
+    // Bits to bytes
+    bytes = [];
+    while (str.length) {
+      bytes.push(parseInt(str.substring(0, 8), 2));
+      str = str.substring(8);
+    }
+    return bytes;
+  }
+
+  function unpackIEEE754(bytes, ebits, fbits) {
+
+    // Bytes to bits
+    var bits = [], i, j, b, str,
+        bias, s, e, f;
+
+    for (i = bytes.length; i; i -= 1) {
+      b = bytes[i - 1];
+      for (j = 8; j; j -= 1) {
+        bits.push(b % 2 ? 1 : 0); b = b >> 1;
+      }
+    }
+    bits.reverse();
+    str = bits.join('');
+
+    // Unpack sign, exponent, fraction
+    bias = (1 << (ebits - 1)) - 1;
+    s = parseInt(str.substring(0, 1), 2) ? -1 : 1;
+    e = parseInt(str.substring(1, 1 + ebits), 2);
+    f = parseInt(str.substring(1 + ebits), 2);
+
+    // Produce number
+    if (e === (1 << ebits) - 1) {
+      return f !== 0 ? NaN : s * Infinity;
+    } else if (e > 0) {
+      // Normalized
+      return s * pow(2, e - bias) * (1 + f / pow(2, fbits));
+    } else if (f !== 0) {
+      // Denormalized
+      return s * pow(2, -(bias - 1)) * (f / pow(2, fbits));
+    } else {
+      return s < 0 ? -0 : 0;
+    }
+  }
+
+  function unpackF64(b) { return unpackIEEE754(b, 11, 52); }
+  function packF64(v) { return packIEEE754(v, 11, 52); }
+  function unpackF32(b) { return unpackIEEE754(b, 8, 23); }
+  function packF32(v) { return packIEEE754(v, 8, 23); }
+
+
+  //
+  // 3 The ArrayBuffer Type
+  //
+
+  (function() {
+
+    /** @constructor */
+    var ArrayBuffer = function ArrayBuffer(length) {
+      length = ECMAScript.ToInt32(length);
+      if (length < 0) throw new RangeError('ArrayBuffer size is not a small enough positive integer.');
+
+      this.byteLength = length;
+      this._bytes = [];
+      this._bytes.length = length;
+
+      var i;
+      for (i = 0; i < this.byteLength; i += 1) {
+        this._bytes[i] = 0;
+      }
+
+      configureProperties(this);
+    };
+
+    global.ArrayBuffer = global.ArrayBuffer || ArrayBuffer;
+
+    //
+    // 4 The ArrayBufferView Type
+    //
+
+    // NOTE: this constructor is not exported
+    /** @constructor */
+    var ArrayBufferView = function ArrayBufferView() {
+      //this.buffer = null;
+      //this.byteOffset = 0;
+      //this.byteLength = 0;
+    };
+
+    //
+    // 5 The Typed Array View Types
+    //
+
+    function makeConstructor(bytesPerElement, pack, unpack) {
+      // Each TypedArray type requires a distinct constructor instance with
+      // identical logic, which this produces.
+
+      var ctor;
+      ctor = function(buffer, byteOffset, length) {
+        var array, sequence, i, s;
+
+        if (!arguments.length || typeof arguments[0] === 'number') {
+          // Constructor(unsigned long length)
+          this.length = ECMAScript.ToInt32(arguments[0]);
+          if (length < 0) throw new RangeError('ArrayBufferView size is not a small enough positive integer.');
+
+          this.byteLength = this.length * this.BYTES_PER_ELEMENT;
+          this.buffer = new ArrayBuffer(this.byteLength);
+          this.byteOffset = 0;
+        } else if (typeof arguments[0] === 'object' && arguments[0].constructor === ctor) {
+          // Constructor(TypedArray array)
+          array = arguments[0];
+
+          this.length = array.length;
+          this.byteLength = this.length * this.BYTES_PER_ELEMENT;
+          this.buffer = new ArrayBuffer(this.byteLength);
+          this.byteOffset = 0;
+
+          for (i = 0; i < this.length; i += 1) {
+            this._setter(i, array._getter(i));
+          }
+        } else if (typeof arguments[0] === 'object' &&
+                   !(arguments[0] instanceof ArrayBuffer || ECMAScript.Class(arguments[0]) === 'ArrayBuffer')) {
+          // Constructor(sequence<type> array)
+          sequence = arguments[0];
+
+          this.length = ECMAScript.ToUint32(sequence.length);
+          this.byteLength = this.length * this.BYTES_PER_ELEMENT;
+          this.buffer = new ArrayBuffer(this.byteLength);
+          this.byteOffset = 0;
+
+          for (i = 0; i < this.length; i += 1) {
+            s = sequence[i];
+            this._setter(i, Number(s));
+          }
+        } else if (typeof arguments[0] === 'object' &&
+                   (arguments[0] instanceof ArrayBuffer || ECMAScript.Class(arguments[0]) === 'ArrayBuffer')) {
+          // Constructor(ArrayBuffer buffer,
+          //             optional unsigned long byteOffset, optional unsigned long length)
+          this.buffer = buffer;
+
+          this.byteOffset = ECMAScript.ToUint32(byteOffset);
+          if (this.byteOffset > this.buffer.byteLength) {
+            throw new RangeError("byteOffset out of range");
+          }
+
+          if (this.byteOffset % this.BYTES_PER_ELEMENT) {
+            // The given byteOffset must be a multiple of the element
+            // size of the specific type, otherwise an exception is raised.
+            throw new RangeError("ArrayBuffer length minus the byteOffset is not a multiple of the element size.");
+          }
+
+          if (arguments.length < 3) {
+            this.byteLength = this.buffer.byteLength - this.byteOffset;
+
+            if (this.byteLength % this.BYTES_PER_ELEMENT) {
+              throw new RangeError("length of buffer minus byteOffset not a multiple of the element size");
+            }
+            this.length = this.byteLength / this.BYTES_PER_ELEMENT;
+          } else {
+            this.length = ECMAScript.ToUint32(length);
+            this.byteLength = this.length * this.BYTES_PER_ELEMENT;
+          }
+
+          if ((this.byteOffset + this.byteLength) > this.buffer.byteLength) {
+            throw new RangeError("byteOffset and length reference an area beyond the end of the buffer");
+          }
+        } else {
+          throw new TypeError("Unexpected argument type(s)");
+        }
+
+        this.constructor = ctor;
+
+        configureProperties(this);
+        makeArrayAccessors(this);
+      };
+
+      ctor.prototype = new ArrayBufferView();
+      ctor.prototype.BYTES_PER_ELEMENT = bytesPerElement;
+      ctor.prototype._pack = pack;
+      ctor.prototype._unpack = unpack;
+      ctor.BYTES_PER_ELEMENT = bytesPerElement;
+
+      // getter type (unsigned long index);
+      ctor.prototype._getter = function(index) {
+        if (arguments.length < 1) throw new SyntaxError("Not enough arguments");
+
+        index = ECMAScript.ToUint32(index);
+        if (index >= this.length) {
+          return undefined;
+        }
+
+        var bytes = [], i, o;
+        for (i = 0, o = this.byteOffset + index * this.BYTES_PER_ELEMENT;
+             i < this.BYTES_PER_ELEMENT;
+             i += 1, o += 1) {
+          bytes.push(this.buffer._bytes[o]);
+        }
+        return this._unpack(bytes);
+      };
+
+      // NONSTANDARD: convenience alias for getter: type get(unsigned long index);
+      ctor.prototype.get = ctor.prototype._getter;
+
+      // setter void (unsigned long index, type value);
+      ctor.prototype._setter = function(index, value) {
+        if (arguments.length < 2) throw new SyntaxError("Not enough arguments");
+
+        index = ECMAScript.ToUint32(index);
+        if (index >= this.length) {
+          return undefined;
+        }
+
+        var bytes = this._pack(value), i, o;
+        for (i = 0, o = this.byteOffset + index * this.BYTES_PER_ELEMENT;
+             i < this.BYTES_PER_ELEMENT;
+             i += 1, o += 1) {
+          this.buffer._bytes[o] = bytes[i];
+        }
+      };
+
+      // void set(TypedArray array, optional unsigned long offset);
+      // void set(sequence<type> array, optional unsigned long offset);
+      ctor.prototype.set = function(index, value) {
+        if (arguments.length < 1) throw new SyntaxError("Not enough arguments");
+        var array, sequence, offset, len,
+            i, s, d,
+            byteOffset, byteLength, tmp;
+
+        if (typeof arguments[0] === 'object' && arguments[0].constructor === this.constructor) {
+          // void set(TypedArray array, optional unsigned long offset);
+          array = arguments[0];
+          offset = ECMAScript.ToUint32(arguments[1]);
+
+          if (offset + array.length > this.length) {
+            throw new RangeError("Offset plus length of array is out of range");
+          }
+
+          byteOffset = this.byteOffset + offset * this.BYTES_PER_ELEMENT;
+          byteLength = array.length * this.BYTES_PER_ELEMENT;
+
+          if (array.buffer === this.buffer) {
+            tmp = [];
+            for (i = 0, s = array.byteOffset; i < byteLength; i += 1, s += 1) {
+              tmp[i] = array.buffer._bytes[s];
+            }
+            for (i = 0, d = byteOffset; i < byteLength; i += 1, d += 1) {
+              this.buffer._bytes[d] = tmp[i];
+            }
+          } else {
+            for (i = 0, s = array.byteOffset, d = byteOffset;
+                 i < byteLength; i += 1, s += 1, d += 1) {
+              this.buffer._bytes[d] = array.buffer._bytes[s];
+            }
+          }
+        } else if (typeof arguments[0] === 'object' && typeof arguments[0].length !== 'undefined') {
+          // void set(sequence<type> array, optional unsigned long offset);
+          sequence = arguments[0];
+          len = ECMAScript.ToUint32(sequence.length);
+          offset = ECMAScript.ToUint32(arguments[1]);
+
+          if (offset + len > this.length) {
+            throw new RangeError("Offset plus length of array is out of range");
+          }
+
+          for (i = 0; i < len; i += 1) {
+            s = sequence[i];
+            this._setter(offset + i, Number(s));
+          }
+        } else {
+          throw new TypeError("Unexpected argument type(s)");
+        }
+      };
+
+      // TypedArray subarray(long begin, optional long end);
+      ctor.prototype.subarray = function(start, end) {
+        function clamp(v, min, max) { return v < min ? min : v > max ? max : v; }
+
+        start = ECMAScript.ToInt32(start);
+        end = ECMAScript.ToInt32(end);
+
+        if (arguments.length < 1) { start = 0; }
+        if (arguments.length < 2) { end = this.length; }
+
+        if (start < 0) { start = this.length + start; }
+        if (end < 0) { end = this.length + end; }
+
+        start = clamp(start, 0, this.length);
+        end = clamp(end, 0, this.length);
+
+        var len = end - start;
+        if (len < 0) {
+          len = 0;
+        }
+
+        return new this.constructor(
+          this.buffer, this.byteOffset + start * this.BYTES_PER_ELEMENT, len);
+      };
+
+      return ctor;
+    }
+
+    var Int8Array = makeConstructor(1, packI8, unpackI8);
+    var Uint8Array = makeConstructor(1, packU8, unpackU8);
+    var Uint8ClampedArray = makeConstructor(1, packU8Clamped, unpackU8);
+    var Int16Array = makeConstructor(2, packI16, unpackI16);
+    var Uint16Array = makeConstructor(2, packU16, unpackU16);
+    var Int32Array = makeConstructor(4, packI32, unpackI32);
+    var Uint32Array = makeConstructor(4, packU32, unpackU32);
+    var Float32Array = makeConstructor(4, packF32, unpackF32);
+    var Float64Array = makeConstructor(8, packF64, unpackF64);
+
+    global.Int8Array = global.Int8Array || Int8Array;
+    global.Uint8Array = global.Uint8Array || Uint8Array;
+    global.Uint8ClampedArray = global.Uint8ClampedArray || Uint8ClampedArray;
+    global.Int16Array = global.Int16Array || Int16Array;
+    global.Uint16Array = global.Uint16Array || Uint16Array;
+    global.Int32Array = global.Int32Array || Int32Array;
+    global.Uint32Array = global.Uint32Array || Uint32Array;
+    global.Float32Array = global.Float32Array || Float32Array;
+    global.Float64Array = global.Float64Array || Float64Array;
+  }());
+
+  //
+  // 6 The DataView View Type
+  //
+
+  (function() {
+    function r(array, index) {
+      return ECMAScript.IsCallable(array.get) ? array.get(index) : array[index];
+    }
+
+    var IS_BIG_ENDIAN = (function() {
+      var u16array = new Uint16Array([0x1234]),
+          u8array = new Uint8Array(u16array.buffer);
+      return r(u8array, 0) === 0x12;
+    }());
+
+    // Constructor(ArrayBuffer buffer,
+    //             optional unsigned long byteOffset,
+    //             optional unsigned long byteLength)
+    /** @constructor */
+    var DataView = function DataView(buffer, byteOffset, byteLength) {
+      if (arguments.length === 0) {
+        buffer = new ArrayBuffer(0);
+      } else if (!(buffer instanceof ArrayBuffer || ECMAScript.Class(buffer) === 'ArrayBuffer')) {
+        throw new TypeError("TypeError");
+      }
+
+      this.buffer = buffer || new ArrayBuffer(0);
+
+      this.byteOffset = ECMAScript.ToUint32(byteOffset);
+      if (this.byteOffset > this.buffer.byteLength) {
+        throw new RangeError("byteOffset out of range");
+      }
+
+      if (arguments.length < 3) {
+        this.byteLength = this.buffer.byteLength - this.byteOffset;
+      } else {
+        this.byteLength = ECMAScript.ToUint32(byteLength);
+      }
+
+      if ((this.byteOffset + this.byteLength) > this.buffer.byteLength) {
+        throw new RangeError("byteOffset and length reference an area beyond the end of the buffer");
+      }
+
+      configureProperties(this);
+    };
+
+    function makeGetter(arrayType) {
+      return function(byteOffset, littleEndian) {
+
+        byteOffset = ECMAScript.ToUint32(byteOffset);
+
+        if (byteOffset + arrayType.BYTES_PER_ELEMENT > this.byteLength) {
+          throw new RangeError("Array index out of range");
+        }
+        byteOffset += this.byteOffset;
+
+        var uint8Array = new Uint8Array(this.buffer, byteOffset, arrayType.BYTES_PER_ELEMENT),
+            bytes = [], i;
+        for (i = 0; i < arrayType.BYTES_PER_ELEMENT; i += 1) {
+          bytes.push(r(uint8Array, i));
+        }
+
+        if (Boolean(littleEndian) === Boolean(IS_BIG_ENDIAN)) {
+          bytes.reverse();
+        }
+
+        return r(new arrayType(new Uint8Array(bytes).buffer), 0);
+      };
+    }
+
+    DataView.prototype.getUint8 = makeGetter(Uint8Array);
+    DataView.prototype.getInt8 = makeGetter(Int8Array);
+    DataView.prototype.getUint16 = makeGetter(Uint16Array);
+    DataView.prototype.getInt16 = makeGetter(Int16Array);
+    DataView.prototype.getUint32 = makeGetter(Uint32Array);
+    DataView.prototype.getInt32 = makeGetter(Int32Array);
+    DataView.prototype.getFloat32 = makeGetter(Float32Array);
+    DataView.prototype.getFloat64 = makeGetter(Float64Array);
+
+    function makeSetter(arrayType) {
+      return function(byteOffset, value, littleEndian) {
+
+        byteOffset = ECMAScript.ToUint32(byteOffset);
+        if (byteOffset + arrayType.BYTES_PER_ELEMENT > this.byteLength) {
+          throw new RangeError("Array index out of range");
+        }
+
+        // Get bytes
+        var typeArray = new arrayType([value]),
+            byteArray = new Uint8Array(typeArray.buffer),
+            bytes = [], i, byteView;
+
+        for (i = 0; i < arrayType.BYTES_PER_ELEMENT; i += 1) {
+          bytes.push(r(byteArray, i));
+        }
+
+        // Flip if necessary
+        if (Boolean(littleEndian) === Boolean(IS_BIG_ENDIAN)) {
+          bytes.reverse();
+        }
+
+        // Write them
+        byteView = new Uint8Array(this.buffer, byteOffset, arrayType.BYTES_PER_ELEMENT);
+        byteView.set(bytes);
+      };
+    }
+
+    DataView.prototype.setUint8 = makeSetter(Uint8Array);
+    DataView.prototype.setInt8 = makeSetter(Int8Array);
+    DataView.prototype.setUint16 = makeSetter(Uint16Array);
+    DataView.prototype.setInt16 = makeSetter(Int16Array);
+    DataView.prototype.setUint32 = makeSetter(Uint32Array);
+    DataView.prototype.setInt32 = makeSetter(Int32Array);
+    DataView.prototype.setFloat32 = makeSetter(Float32Array);
+    DataView.prototype.setFloat64 = makeSetter(Float64Array);
+
+    global.DataView = global.DataView || DataView;
+
+  }());
+
+}(this));
+// Storage polyfill by Remy Sharp
+// https://gist.github.com/350433
+// Needed for IE7-
+
+// Dependencies:
+//  JSON (use json2.js if necessary)
+
+// Tweaks by Joshua Bell (inexorabletash@gmail.com)
+//  * URI-encode item keys
+//  * Use String() for stringifying
+//  * added length
+
+if (!window.localStorage || !window.sessionStorage) (function() {
+
+    var Storage = function(type) {
+        function createCookie(name, value, days) {
+            var date, expires;
+
+            if (days) {
+                date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toGMTString();
+            } else {
+                expires = "";
+            }
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        function readCookie(name) {
+            var nameEQ = name + "=",
+                ca = document.cookie.split(';'),
+                i, c;
+
+            for (i = 0; i < ca.length; i++) {
+                c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                }
+
+                if (c.indexOf(nameEQ) == 0) {
+                    return c.substring(nameEQ.length, c.length);
+                }
+            }
+            return null;
+        }
+
+        function setData(data) {
+            data = JSON.stringify(data);
+            if (type == 'session') {
+                window.name = data;
+            } else {
+                createCookie('localStorage', data, 365);
+            }
+        }
+
+        function clearData() {
+            if (type == 'session') {
+                window.name = '';
+            } else {
+                createCookie('localStorage', '', 365);
+            }
+        }
+
+        function getData() {
+            var data = type == 'session' ? window.name : readCookie('localStorage');
+            return data ? JSON.parse(data) : {};
+        }
+
+
+        // initialise if there's already data
+        var data = getData();
+
+        function numKeys() {
+            var n = 0;
+            for (var k in data) {
+                if (data.hasOwnProperty(k)) {
+                    n += 1;
+                }
+            }
+            return n;
+        }
+
+        return {
+            clear: function() {
+                data = {};
+                clearData();
+                this.length = numKeys();
+            },
+            getItem: function(key) {
+                key = encodeURIComponent(key);
+                return data[key] === undefined ? null : data[key];
+            },
+            key: function(i) {
+                // not perfect, but works
+                var ctr = 0;
+                for (var k in data) {
+                    if (ctr == i) return decodeURIComponent(k);
+                    else ctr++;
+                }
+                return null;
+            },
+            removeItem: function(key) {
+                key = encodeURIComponent(key);
+                delete data[key];
+                setData(data);
+                this.length = numKeys();
+            },
+            setItem: function(key, value) {
+                key = encodeURIComponent(key);
+                data[key] = String(value);
+                setData(data);
+                this.length = numKeys();
+            },
+            length: 0
+        };
+    };
+
+    if (!window.localStorage) window.localStorage = new Storage('local');
+    if (!window.sessionStorage) window.sessionStorage = new Storage('session');
+
+})();
+// Depends on ECMAScript 5 or appropriate polyfill for:
+//  Array.prototype.map, JSON.stringify
+
+(function () {
+  var MAX_LINES = 1000,
+      CONSOLE_CSS = "#SHIMCONSOLE { visibility: hidden; position: fixed; z-index: 9999; left: 0; right: 0; bottom: 0; height: 200px; border-top: solid 1px #808080; overflow: auto; word-wrap: break-word; padding: 5px; background-color: #eeeeee; color: #000000; font-family: monospace; font-size: 10pt; font-weight: normal; font-style: normal; }"
+        + "#SHIMCONSOLE .SHIMCONSOLE_GROUP { margin-left: 20px; }"
+        + "#SHIMCONSOLE .SHIMCONSOLE_ERROR { color: #ff0000; }"
+        + "#SHIMCONSOLE .SHIMCONSOLE_WARN { color: #ff8000; }",
+      FORMAT_REGEXP = /([^%]|%([\-+0]*)(\d+)?(\.\d+)?([%sdilfox]))/g;
+
+  function Console() {
+
+    // Add stylesheet
+    (function () {
+      var style = document.createElement('style');
+      (document.getElementsByTagName('HEAD')[0] || document.documentElement).appendChild(style);
+      if ('styleSheet' in style) {
+        style.styleSheet.cssText = CONSOLE_CSS;
+      } else {
+        style.appendChild(document.createTextNode(CONSOLE_CSS));
+      }
+    }());
+
+    var display;
+    var counts = {};
+    var times = {};
+    var groups = [];
+
+    display = document.createElement('div');
+    display.id = 'SHIMCONSOLE';
+    (document.body || document.documentElement).appendChild(display);
+
+    function format(o) {
+      var span = document.createElement('span'), text, color, classOf;
+      switch (typeof o) {
+      case 'undefined':
+        text = String(o);
+        color = 'gray';
+        break;
+      case 'boolean':
+        text = String(o);
+        color = 'green';
+        break;
+      case 'number':
+        text = String(o);
+        color = 'blue';
+        break;
+      case 'string':
+        text = o;
+        break;
+      default: // object and null
+        if (!o) {
+          text = String(o);
+          color = 'gray';
+        } else {
+          classOf = Object.prototype.toString.call(o);
+          if (classOf === '[object Array]' || classOf === '[object Object]') {
+            try {
+              text = JSON.stringify(o);
+            } catch (e) {
+              // Cyclic, use fallback
+              text = classOf;
+            }
+          } else {
+            text = String(o);
+          }
+        }
+      }
+
+      span.appendChild(document.createTextNode(text));
+      if (color) {
+        span.style.color = color;
+      }
+      return span;
+    }
+
+    function show(args, type, prefix) {
+      if (!args.length) {
+        return;
+      }
+      var line = document.createElement('div');
+      line.className = 'SHIMCONSOLE_' + type;
+
+      line.style.whiteSpace = 'pre';
+
+      if (prefix) {
+          line.appendChild(document.createTextNode(prefix));
+      }
+
+      function trunc(n) {
+        return n < 0 ? Math.ceil(n) : Math.floor(n);
+      }
+      function repl(str, unit, flags, width, precision, specifier) {
+        if (unit.charAt(0) != '%' || !args.length) {
+          return unit;
+        } else if (specifier === '%') {
+          return '%';
+        }
+        var arg = args.shift();
+        switch (specifier) {
+        case 's': return String(arg);
+        case 'd':
+        case 'i':
+        case 'l': return String(trunc(Number(arg)));
+        case 'f': return String(Number(arg));
+        default:
+        case 'o':
+          try {
+            return JSON.stringify(arg);
+          } catch (e) {
+            return String(arg);
+          }
+        }
+        return void 0;
+      }
+
+      if (typeof args[0] === 'string') {
+        line.appendChild(document.createTextNode(args.shift().replace(FORMAT_REGEXP, repl)));
+        line.appendChild(document.createTextNode(' '));
+      }
+
+      // pretty-print remaining arguments
+      while (args.length) {
+        line.appendChild(format(args.shift()));
+        line.appendChild(document.createTextNode(' '));
+      }
+      var parent = groups.length ? groups[groups.length - 1] : display;
+      parent.appendChild(line);
+
+      while (display.children.length > MAX_LINES) {
+        display.removeChild(display.firstChild);
+      }
+      display.scrollTop = display.scrollHeight;
+      display.style.visibility = 'visible';
+    }
+
+    function toArray(a) {
+      var result = [], i;
+      for (i = 0; i < a.length; i += 1) {
+        result[i] = a[i];
+      }
+      return result;
+    }
+
+    this.log = function log(messageObject) { show(toArray(arguments), 'LOG'); };
+    this.debug = function debug(messageObject) { show(toArray(arguments), 'DEBUG'); };
+    this.info = function info(messageObject) { show(toArray(arguments), 'INFO'); };
+    this.warn = function warn(messageObject) { show(toArray(arguments), 'WARN', 'Warning: '); };
+    this.error = function error(messageObject) { show(toArray(arguments), 'ERROR', 'Error: '); };
+
+    this.assert = function assert(a, messageObject) {
+      if (!a) {
+        var args = toArray(arguments);
+        args.shift();
+        show(args, 'ERROR', 'Assertion failed: ');
+      }
+    };
+
+    this.count = function count(name) {
+      name = (name || '');
+      if (!(('$' + name) in counts)) {
+        counts['$' + name] = 0;
+      }
+      counts['$' + name] += 1;
+      show([name + ": " + counts['$' + name]], 'INFO');
+    };
+
+    this.time = function time(name) {
+      name = (name || '');
+      times['$' + name] = Number(new Date);
+    };
+    this.timeEnd = function timeEnd(name) {
+      name = (name || '');
+      if (('$' + name) in times) {
+        show([name + ": " + (Number(new Date) - times['$' + name]) + "ms"], 'INFO');
+        delete times['$' + name];
+      }
+    };
+
+    this.group = function group(name) {
+      name = (name || '');
+      show(['>' + name], 'INFO');
+      var div = document.createElement('div');
+      div.className = 'SHIMCONSOLE_GROUP';
+      var parent = groups.length ? groups[groups.length - 1] : display;
+      parent.appendChild(div);
+      groups.push(div);
+    };
+    this.groupEnd = function groupEnd() {
+      groups.pop();
+    };
+
+    this.dir = function dir(name) {
+      show([name], 'INFO');
+    };
+    this.dirxml = this.dir;
+
+    this.trace = function trace() {
+      try {
+        this.wont.work = 0;
+      } catch (e) {
+        if (e.stack) {
+          show([e.stack.replace(/^[^\n]*\n/, 'Stack trace:\n')], 'INFO');
+        }
+      }
+    };
+
+    this.clear = function clear() {
+      while (display.children.length) {
+        display.removeChild(display.firstChild);
+      }
+    };
+  }
+
+  window.console = window.console || new Console();
+}());
+/**
+ * Copyright 2013 Craig Campbell
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Rainbow is a simple code syntax highlighter
+ *
+ * @preserve @version 1.2
+ * @url rainbowco.de
+ */
+window['Rainbow'] = (function() {
+
+    /**
+     * array of replacements to process at the end
+     *
+     * @type {Object}
+     */
+    var replacements = {},
+
+        /**
+         * an array of start and end positions of blocks to be replaced
+         *
+         * @type {Object}
+         */
+        replacement_positions = {},
+
+        /**
+         * an array of the language patterns specified for each language
+         *
+         * @type {Object}
+         */
+        language_patterns = {},
+
+        /**
+         * an array of languages and whether they should bypass the default patterns
+         *
+         * @type {Object}
+         */
+        bypass_defaults = {},
+
+        /**
+         * processing level
+         *
+         * replacements are stored at this level so if there is a sub block of code
+         * (for example php inside of html) it runs at a different level
+         *
+         * @type {number}
+         */
+        CURRENT_LEVEL = 0,
+
+        /**
+         * constant used to refer to the default language
+         *
+         * @type {number}
+         */
+        DEFAULT_LANGUAGE = 0,
+
+        /**
+         * used as counters so we can selectively call setTimeout
+         * after processing a certain number of matches/replacements
+         *
+         * @type {number}
+         */
+        match_counter = 0,
+
+        /**
+         * @type {number}
+         */
+        replacement_counter = 0,
+
+        /**
+         * @type {null|string}
+         */
+        global_class,
+
+        /**
+         * @type {null|Function}
+         */
+        onHighlight;
+
+    /**
+     * cross browser get attribute for an element
+     *
+     * @see http://stackoverflow.com/questions/3755227/cross-browser-javascript-getattribute-method
+     *
+     * @param {Node} el
+     * @param {string} attr     attribute you are trying to get
+     * @returns {string|number}
+     */
+    function _attr(el, attr, attrs, i) {
+        var result = (el.getAttribute && el.getAttribute(attr)) || 0;
+
+        if (!result) {
+            attrs = el.attributes;
+
+            for (i = 0; i < attrs.length; ++i) {
+                if (attrs[i].nodeName === attr) {
+                    return attrs[i].nodeValue;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * adds a class to a given code block
+     *
+     * @param {Element} el
+     * @param {string} class_name   class name to add
+     * @returns void
+     */
+    function _addClass(el, class_name) {
+        el.className += el.className ? ' ' + class_name : class_name;
+    }
+
+    /**
+     * checks if a block has a given class
+     *
+     * @param {Element} el
+     * @param {string} class_name   class name to check for
+     * @returns {boolean}
+     */
+    function _hasClass(el, class_name) {
+        return (' ' + el.className + ' ').indexOf(' ' + class_name + ' ') > -1;
+    }
+
+    /**
+     * gets the language for this block of code
+     *
+     * @param {Element} block
+     * @returns {string|null}
+     */
+    function _getLanguageForBlock(block) {
+
+        // if this doesn't have a language but the parent does then use that
+        // this means if for example you have: <pre data-language="php">
+        // with a bunch of <code> blocks inside then you do not have
+        // to specify the language for each block
+        var language = _attr(block, 'data-language') || _attr(block.parentNode, 'data-language');
+
+        // this adds support for specifying language via a css class
+        // you can use the Google Code Prettify style: <pre class="lang-php">
+        // or the HTML5 style: <pre><code class="language-php">
+        if (!language) {
+            var pattern = /\blang(?:uage)?-(\w+)/,
+                match = block.className.match(pattern) || block.parentNode.className.match(pattern);
+
+            if (match) {
+                language = match[1];
+            }
+        }
+
+        return language;
+    }
+
+    /**
+     * makes sure html entities are always used for tags
+     *
+     * @param {string} code
+     * @returns {string}
+     */
+    function _htmlEntities(code) {
+        return code.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&(?![\w\#]+;)/g, '&amp;');
+    }
+
+    /**
+     * determines if a new match intersects with an existing one
+     *
+     * @param {number} start1    start position of existing match
+     * @param {number} end1      end position of existing match
+     * @param {number} start2    start position of new match
+     * @param {number} end2      end position of new match
+     * @returns {boolean}
+     */
+    function _intersects(start1, end1, start2, end2) {
+        if (start2 >= start1 && start2 < end1) {
+            return true;
+        }
+
+        return end2 > start1 && end2 < end1;
+    }
+
+    /**
+     * determines if two different matches have complete overlap with each other
+     *
+     * @param {number} start1   start position of existing match
+     * @param {number} end1     end position of existing match
+     * @param {number} start2   start position of new match
+     * @param {number} end2     end position of new match
+     * @returns {boolean}
+     */
+    function _hasCompleteOverlap(start1, end1, start2, end2) {
+
+        // if the starting and end positions are exactly the same
+        // then the first one should stay and this one should be ignored
+        if (start2 == start1 && end2 == end1) {
+            return false;
+        }
+
+        return start2 <= start1 && end2 >= end1;
+    }
+
+    /**
+     * determines if the match passed in falls inside of an existing match
+     * this prevents a regex pattern from matching inside of a bigger pattern
+     *
+     * @param {number} start - start position of new match
+     * @param {number} end - end position of new match
+     * @returns {boolean}
+     */
+    function _matchIsInsideOtherMatch(start, end) {
+        for (var key in replacement_positions[CURRENT_LEVEL]) {
+            key = parseInt(key, 10);
+
+            // if this block completely overlaps with another block
+            // then we should remove the other block and return false
+            if (_hasCompleteOverlap(key, replacement_positions[CURRENT_LEVEL][key], start, end)) {
+                delete replacement_positions[CURRENT_LEVEL][key];
+                delete replacements[CURRENT_LEVEL][key];
+            }
+
+            if (_intersects(key, replacement_positions[CURRENT_LEVEL][key], start, end)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * takes a string of code and wraps it in a span tag based on the name
+     *
+     * @param {string} name     name of the pattern (ie keyword.regex)
+     * @param {string} code     block of code to wrap
+     * @returns {string}
+     */
+    function _wrapCodeInSpan(name, code) {
+        return '<span class="' + name.replace(/\./g, ' ') + (global_class ? ' ' + global_class : '') + '">' + code + '</span>';
+    }
+
+    /**
+     * finds out the position of group match for a regular expression
+     *
+     * @see http://stackoverflow.com/questions/1985594/how-to-find-index-of-groups-in-match
+     *
+     * @param {Object} match
+     * @param {number} group_number
+     * @returns {number}
+     */
+    function _indexOfGroup(match, group_number) {
+        var index = 0,
+            i;
+
+        for (i = 1; i < group_number; ++i) {
+            if (match[i]) {
+                index += match[i].length;
+            }
+        }
+
+        return index;
+    }
+
+    /**
+     * matches a regex pattern against a block of code
+     * finds all matches that should be processed and stores the positions
+     * of where they should be replaced within the string
+     *
+     * this is where pretty much all the work is done but it should not
+     * be called directly
+     *
+     * @param {RegExp} pattern
+     * @param {string} code
+     * @returns void
+     */
+    function _processPattern(regex, pattern, code, callback)
+    {
+        if (typeof regex === "undefined" || regex === null) {
+            //console.warn("undefined regular expression")
+            return callback();
+        }
+        var match = regex.exec(code);
+
+        if (!match) {
+            return callback();
+        }
+
+        ++match_counter;
+
+        // treat match 0 the same way as name
+        if (!pattern['name'] && typeof pattern['matches'][0] == 'string') {
+            pattern['name'] = pattern['matches'][0];
+            delete pattern['matches'][0];
+        }
+
+        var replacement = match[0],
+            start_pos = match.index,
+            end_pos = match[0].length + start_pos,
+
+            /**
+             * callback to process the next match of this pattern
+             */
+            processNext = function() {
+                var nextCall = function() {
+                    _processPattern(regex, pattern, code, callback);
+                };
+
+                // every 100 items we process let's call set timeout
+                // to let the ui breathe a little
+                return match_counter % 100 > 0 ? nextCall() : setTimeout(nextCall, 0);
+            };
+
+        // if this is not a child match and it falls inside of another
+        // match that already happened we should skip it and continue processing
+        if (_matchIsInsideOtherMatch(start_pos, end_pos)) {
+            return processNext();
+        }
+
+        /**
+         * callback for when a match was successfully processed
+         *
+         * @param {string} replacement
+         * @returns void
+         */
+        var onMatchSuccess = function(replacement) {
+                // if this match has a name then wrap it in a span tag
+                if (pattern['name']) {
+                    replacement = _wrapCodeInSpan(pattern['name'], replacement);
+                }
+
+                // console.log('LEVEL', CURRENT_LEVEL, 'replace', match[0], 'with', replacement, 'at position', start_pos, 'to', end_pos);
+
+                // store what needs to be replaced with what at this position
+                if (!replacements[CURRENT_LEVEL]) {
+                    replacements[CURRENT_LEVEL] = {};
+                    replacement_positions[CURRENT_LEVEL] = {};
+                }
+
+                replacements[CURRENT_LEVEL][start_pos] = {
+                    'replace': match[0],
+                    'with': replacement
+                };
+
+                // store the range of this match so we can use it for comparisons
+                // with other matches later
+                replacement_positions[CURRENT_LEVEL][start_pos] = end_pos;
+
+                // process the next match
+                processNext();
+            },
+
+            // if this pattern has sub matches for different groups in the regex
+            // then we should process them one at a time by rerunning them through
+            // this function to generate the new replacement
+            //
+            // we run through them backwards because the match position of earlier
+            // matches will not change depending on what gets replaced in later
+            // matches
+            group_keys = keys(pattern['matches']),
+
+            /**
+             * callback for processing a sub group
+             *
+             * @param {number} i
+             * @param {Array} group_keys
+             * @param {Function} callback
+             */
+            processGroup = function(i, group_keys, callback) {
+                if (i >= group_keys.length) {
+                    return callback(replacement);
+                }
+
+                var processNextGroup = function() {
+                        processGroup(++i, group_keys, callback);
+                    },
+                    block = match[group_keys[i]];
+
+                // if there is no match here then move on
+                if (!block) {
+                    return processNextGroup();
+                }
+
+                var group = pattern['matches'][group_keys[i]],
+                    language = group['language'],
+
+                    /**
+                     * process group is what group we should use to actually process
+                     * this match group
+                     *
+                     * for example if the subgroup pattern looks like this
+                     * 2: {
+                     *     'name': 'keyword',
+                     *     'pattern': /true/g
+                     * }
+                     *
+                     * then we use that as is, but if it looks like this
+                     *
+                     * 2: {
+                     *     'name': 'keyword',
+                     *     'matches': {
+                     *          'name': 'special',
+                     *          'pattern': /whatever/g
+                     *      }
+                     * }
+                     *
+                     * we treat the 'matches' part as the pattern and keep
+                     * the name around to wrap it with later
+                     */
+                    process_group = group['name'] && group['matches'] ? group['matches'] : group,
+
+                    /**
+                     * takes the code block matched at this group, replaces it
+                     * with the highlighted block, and optionally wraps it with
+                     * a span with a name
+                     *
+                     * @param {string} block
+                     * @param {string} replace_block
+                     * @param {string|null} match_name
+                     */
+                    _replaceAndContinue = function(block, replace_block, match_name) {
+                        replacement = _replaceAtPosition(_indexOfGroup(match, group_keys[i]), block, match_name ? _wrapCodeInSpan(match_name, replace_block) : replace_block, replacement);
+                        processNextGroup();
+                    };
+
+                // if this is a sublanguage go and process the block using that language
+                if (language) {
+                    return _highlightBlockForLanguage(block, language, function(code) {
+                        _replaceAndContinue(block, code);
+                    });
+                }
+
+                // if this is a string then this match is directly mapped to selector
+                // so all we have to do is wrap it in a span and continue
+                if (typeof group === 'string') {
+                    return _replaceAndContinue(block, block, group);
+                }
+
+                // the process group can be a single pattern or an array of patterns
+                // _processCodeWithPatterns always expects an array so we convert it here
+                _processCodeWithPatterns(block, process_group.length ? process_group : [process_group], function(code) {
+                    _replaceAndContinue(block, code, group['matches'] ? group['name'] : 0);
+                });
+            };
+
+        processGroup(0, group_keys, onMatchSuccess);
+    }
+
+    /**
+     * should a language bypass the default patterns?
+     *
+     * if you call Rainbow.extend() and pass true as the third argument
+     * it will bypass the defaults
+     */
+    function _bypassDefaultPatterns(language)
+    {
+        return bypass_defaults[language];
+    }
+
+    /**
+     * returns a list of regex patterns for this language
+     *
+     * @param {string} language
+     * @returns {Array}
+     */
+    function _getPatternsForLanguage(language) {
+        var patterns = language_patterns[language] || [],
+            default_patterns = language_patterns[DEFAULT_LANGUAGE] || [];
+
+        return _bypassDefaultPatterns(language) ? patterns : patterns.concat(default_patterns);
+    }
+
+    /**
+     * substring replace call to replace part of a string at a certain position
+     *
+     * @param {number} position         the position where the replacement should happen
+     * @param {string} replace          the text we want to replace
+     * @param {string} replace_with     the text we want to replace it with
+     * @param {string} code             the code we are doing the replacing in
+     * @returns {string}
+     */
+    function _replaceAtPosition(position, replace, replace_with, code) {
+        var sub_string = code.substr(position);
+        return code.substr(0, position) + sub_string.replace(replace, replace_with);
+    }
+
+   /**
+     * sorts an object by index descending
+     *
+     * @param {Object} object
+     * @return {Array}
+     */
+    function keys(object) {
+        var locations = [],
+            replacement,
+            pos;
+
+        for(var location in object) {
+            if (object.hasOwnProperty(location)) {
+                locations.push(location);
+            }
+        }
+
+        // numeric descending
+        return locations.sort(function(a, b) {
+            return b - a;
+        });
+    }
+
+    /**
+     * processes a block of code using specified patterns
+     *
+     * @param {string} code
+     * @param {Array} patterns
+     * @returns void
+     */
+    function _processCodeWithPatterns(code, patterns, callback)
+    {
+        // we have to increase the level here so that the
+        // replacements will not conflict with each other when
+        // processing sub blocks of code
+        ++CURRENT_LEVEL;
+
+        // patterns are processed one at a time through this function
+        function _workOnPatterns(patterns, i)
+        {
+            // still have patterns to process, keep going
+            if (i < patterns.length) {
+                return _processPattern(patterns[i]['pattern'], patterns[i], code, function() {
+                    _workOnPatterns(patterns, ++i);
+                });
+            }
+
+            // we are done processing the patterns
+            // process the replacements and update the DOM
+            _processReplacements(code, function(code) {
+
+                // when we are done processing replacements
+                // we are done at this level so we can go back down
+                delete replacements[CURRENT_LEVEL];
+                delete replacement_positions[CURRENT_LEVEL];
+                --CURRENT_LEVEL;
+                callback(code);
+            });
+        }
+
+        _workOnPatterns(patterns, 0);
+    }
+
+    /**
+     * process replacements in the string of code to actually update the markup
+     *
+     * @param {string} code         the code to process replacements in
+     * @param {Function} onComplete   what to do when we are done processing
+     * @returns void
+     */
+    function _processReplacements(code, onComplete) {
+
+        /**
+         * processes a single replacement
+         *
+         * @param {string} code
+         * @param {Array} positions
+         * @param {number} i
+         * @param {Function} onComplete
+         * @returns void
+         */
+        function _processReplacement(code, positions, i, onComplete) {
+            if (i < positions.length) {
+                ++replacement_counter;
+                var pos = positions[i],
+                    replacement = replacements[CURRENT_LEVEL][pos];
+                code = _replaceAtPosition(pos, replacement['replace'], replacement['with'], code);
+
+                // process next function
+                var next = function() {
+                    _processReplacement(code, positions, ++i, onComplete);
+                };
+
+                // use a timeout every 250 to not freeze up the UI
+                return replacement_counter % 250 > 0 ? next() : setTimeout(next, 0);
+            }
+
+            onComplete(code);
+        }
+
+        var string_positions = keys(replacements[CURRENT_LEVEL]);
+        _processReplacement(code, string_positions, 0, onComplete);
+    }
+
+    /**
+     * takes a string of code and highlights it according to the language specified
+     *
+     * @param {string} code
+     * @param {string} language
+     * @param {Function} onComplete
+     * @returns void
+     */
+    function _highlightBlockForLanguage(code, language, onComplete) {
+        var patterns = _getPatternsForLanguage(language);
+        _processCodeWithPatterns(_htmlEntities(code), patterns, onComplete);
+    }
+
+    /**
+     * highlight an individual code block
+     *
+     * @param {Array} code_blocks
+     * @param {number} i
+     * @returns void
+     */
+    function _highlightCodeBlock(code_blocks, i, onComplete) {
+        if (i < code_blocks.length) {
+            var block = code_blocks[i],
+                language = _getLanguageForBlock(block);
+
+            if (!_hasClass(block, 'rainbow') && language) {
+                language = language.toLowerCase();
+
+                _addClass(block, 'rainbow');
+
+                return _highlightBlockForLanguage(block.innerHTML, language, function(code) {
+                    block.innerHTML = code;
+
+                    // reset the replacement arrays
+                    replacements = {};
+                    replacement_positions = {};
+
+                    // if you have a listener attached tell it that this block is now highlighted
+                    if (onHighlight) {
+                        onHighlight(block, language);
+                    }
+
+                    // process the next block
+                    setTimeout(function() {
+                        _highlightCodeBlock(code_blocks, ++i, onComplete);
+                    }, 0);
+                });
+            }
+            return _highlightCodeBlock(code_blocks, ++i, onComplete);
+        }
+
+        if (onComplete) {
+            onComplete();
+        }
+    }
+
+    /**
+     * start highlighting all the code blocks
+     *
+     * @returns void
+     */
+    function _highlight(node, onComplete) {
+
+        // the first argument can be an Event or a DOM Element
+        // I was originally checking instanceof Event but that makes it break
+        // when using mootools
+        //
+        // @see https://github.com/ccampbell/rainbow/issues/32
+        //
+        node = node && typeof node.getElementsByTagName == 'function' ? node : document;
+
+        var pre_blocks = node.getElementsByTagName('pre'),
+            code_blocks = node.getElementsByTagName('code'),
+            i,
+            final_pre_blocks = [],
+            final_code_blocks = [];
+
+        // first loop through all pre blocks to find which ones to highlight
+        // also strip whitespace
+        for (i = 0; i < pre_blocks.length; ++i) {
+
+            // strip whitespace around code tags when they are inside of a pre tag
+            // this makes the themes look better because you can't accidentally
+            // add extra linebreaks at the start and end
+            //
+            // when the pre tag contains a code tag then strip any extra whitespace
+            // for example
+            // <pre>
+            //      <code>var foo = true;</code>
+            // </pre>
+            //
+            // will become
+            // <pre><code>var foo = true;</code></pre>
+            //
+            // if you want to preserve whitespace you can use a pre tag on its own
+            // without a code tag inside of it
+            if (pre_blocks[i].getElementsByTagName('code').length) {
+                pre_blocks[i].innerHTML = pre_blocks[i].innerHTML.replace(/^\s+/, '').replace(/\s+$/, '');
+                continue;
+            }
+
+            // if the pre block has no code blocks then we are going to want to
+            // process it directly
+            final_pre_blocks.push(pre_blocks[i]);
+        }
+
+        // @see http://stackoverflow.com/questions/2735067/how-to-convert-a-dom-node-list-to-an-array-in-javascript
+        // we are going to process all <code> blocks
+        for (i = 0; i < code_blocks.length; ++i) {
+            final_code_blocks.push(code_blocks[i]);
+        }
+
+        _highlightCodeBlock(final_code_blocks.concat(final_pre_blocks), 0, onComplete);
+    }
+
+    /**
+     * public methods
+     */
+    return {
+
+        /**
+         * extends the language pattern matches
+         *
+         * @param {*} language     name of language
+         * @param {*} patterns      array of patterns to add on
+         * @param {boolean|null} bypass      if true this will bypass the default language patterns
+         */
+        extend: function(language, patterns, bypass) {
+
+            // if there is only one argument then we assume that we want to
+            // extend the default language rules
+            if (arguments.length == 1) {
+                patterns = language;
+                language = DEFAULT_LANGUAGE;
+            }
+
+            bypass_defaults[language] = bypass;
+            language_patterns[language] = patterns.concat(language_patterns[language] || []);
+        },
+
+        /**
+         * call back to let you do stuff in your app after a piece of code has been highlighted
+         *
+         * @param {Function} callback
+         */
+        onHighlight: function(callback) {
+            onHighlight = callback;
+        },
+
+        /**
+         * method to set a global class that will be applied to all spans
+         *
+         * @param {string} class_name
+         */
+        addClass: function(class_name) {
+            global_class = class_name;
+        },
+
+        /**
+         * starts the magic rainbow
+         *
+         * @returns void
+         */
+        color: function() {
+
+            // if you want to straight up highlight a string you can pass the string of code,
+            // the language, and a callback function
+            if (typeof arguments[0] == 'string') {
+                return _highlightBlockForLanguage(arguments[0], arguments[1], arguments[2]);
+            }
+
+            // if you pass a callback function then we rerun the color function
+            // on all the code and call the callback function on complete
+            if (typeof arguments[0] == 'function') {
+                return _highlight(0, arguments[0]);
+            }
+
+            // otherwise we use whatever node you passed in with an optional
+            // callback function as the second parameter
+            _highlight(arguments[0], arguments[1]);
+        }
+    };
+}) ();
+
+/**
+ * adds event listener to start highlighting
+ */
+(function() {
+    if (document.addEventListener) {
+        return document.addEventListener('DOMContentLoaded', Rainbow.color, false);
+    }
+    window.attachEvent('onload', Rainbow.color);
+}) ();
+
+// When using Google closure compiler in advanced mode some methods
+// get renamed.  This keeps a public reference to these methods so they can
+// still be referenced from outside this library.
+Rainbow["onHighlight"] = Rainbow.onHighlight;
+Rainbow["addClass"] = Rainbow.addClass;
+/**
+ * C patterns
+ *
+ * @author Daniel Holden
+ * @author Craig Campbell
+ * @version 1.0.7
+ */
+Rainbow.extend('c', [
+    {
+        'name': 'meta.preprocessor',
+        'matches': {
+            1: [
+                {
+                    'matches': {
+                        1: 'keyword.define',
+                        2: 'entity.name'
+                    },
+                    'pattern': /(\w+)\s(\w+)\b/g
+                },
+                {
+                    'name': 'keyword.define',
+                    'pattern': /endif/g
+                },
+                {
+                    'name': 'constant.numeric',
+                    'pattern': /\d+/g
+                },
+                {
+                    'matches': {
+                        1: 'keyword.include',
+                        2: 'string'
+                    },
+                    'pattern': /(include)\s(.*?)$/g
+                }
+            ]
+        },
+        'pattern': /\#([\S\s]*?)$/gm
+    },
+    {
+        'name': 'keyword',
+        'pattern': /\b(do|goto|typedef)\b/g
+    },
+    {
+        'name': 'entity.label',
+        'pattern': /\w+:/g
+    },
+    {
+        'matches': {
+            1: 'storage.type',
+            3: 'storage.type',
+            4: 'entity.name.function'
+        },
+        'pattern': /\b((un)?signed|const)? ?(void|char|short|int|long|float|double)\*? +((\w+)(?= ?\())?/g
+    },
+    {
+        'matches': {
+            2: 'entity.name.function'
+        },
+        'pattern': /(\w|\*) +((\w+)(?= ?\())/g
+    },
+    {
+        'name': 'storage.modifier',
+        'pattern': /\b(static|extern|auto|register|volatile|inline)\b/g
+    },
+    {
+        'name': 'support.type',
+        'pattern': /\b(struct|union|enum)\b/g
+    }
+]);
+/**
+ * Generic language patterns
+ *
+ * @author Craig Campbell
+ * @version 1.0.11
+ */
+Rainbow.extend([
+    {
+        'matches': {
+            1: [
+                {
+                    'name': 'keyword.operator',
+                    'pattern': /\=|\+/g
+                },
+                {
+                    'name': 'keyword.dot',
+                    'pattern': /\./g
+                }
+            ],
+            2: {
+                'name': 'string',
+                'matches': {
+                    'name': 'constant.character.escape',
+                    'pattern': /\\('|"){1}/g
+                }
+            }
+        },
+        'pattern': /(\(|\s|\[|\=|:|\+|\.)(('|")([^\\\1]|\\.)*?(\3))/gm
+    },
+    {
+        'name': 'comment',
+        'pattern': /\/\*[\s\S]*?\*\/|(\/\/|\#)[\s\S]*?$/gm
+    },
+    {
+        'name': 'constant.numeric',
+        'pattern': /\b(\d+(\.\d+)?(e(\+|\-)?\d+)?(f|d)?|0x[\da-f]+)\b/gi
+    },
+    {
+        'matches': {
+            1: 'keyword'
+        },
+        'pattern': /\b(and|array|as|b(ool(ean)?|reak)|c(ase|atch|har|lass|on(st|tinue))|d(ef|elete|o(uble)?)|e(cho|lse(if)?|xit|xtends|xcept)|f(inally|loat|or(each)?|unction)|global|if|import|int(eger)?|long|new|object|or|pr(int|ivate|otected)|public|return|self|st(ring|ruct|atic)|switch|th(en|is|row)|try|(un)?signed|var|void|while)(?=\(|\b)/gi
+    },
+    {
+        'name': 'constant.language',
+        'pattern': /true|false|null/g
+    },
+    {
+        'name': 'keyword.operator',
+        'pattern': /\+|\!|\-|&(gt|lt|amp);|\||\*|\=/g
+    },
+    {
+        'matches': {
+            1: 'function.call'
+        },
+        'pattern': /(\w+?)(?=\()/g
+    },
+    {
+        'matches': {
+            1: 'storage.function',
+            2: 'entity.name.function'
+        },
+        'pattern': /(function)\s(.*?)(?=\()/g
+    }
+]);
 // The Module object: Our interface to the outside world. We import
 // and export values on it, and do the work to get that through
 // closure compiler if necessary. There are various ways Module can be used:
@@ -27856,3 +31010,467 @@ run();
 
 
 
+"use strict";
+
+// This javascript code initializes the demo on DOMContentLoaded event.
+
+// Document elements expected to exist:
+//   <canvas id="cvs"></canvas>
+//   <pre id="midiLog"></pre>
+
+// Global state:
+var ui_modified = false;
+var fsw_state = 0;
+var led_state_top = 0;
+var led_state_bot = 0;
+var lcd_rows = ['01234567890123456789', '01234567890123456789', '01234567890123456789', '01234567890123456789'];
+var lcd_rows_text_ptrs = [0,0,0,0];
+/** @const */var flash_size = 4096;
+var flash = null;
+
+// ----------------------------- UI code:
+
+var midiLog;
+var midiLogHeight = 240;
+
+var cvs, ctx;
+var dpi = 50;
+/** @const */var mmToIn = 0.0393701;
+
+/** @const */var labels = [
+    ["CH1", "CH1S", "CH2", "CH2S", "CH3", "CH3S", "TAP/STORE", "CANCEL"],
+    ["COMP", "FILTER", "PITCH", "CHORUS", "DELAY", "REVERB", "PREV", "NEXT"]
+];
+
+/** @const */var keylabels = [
+    ["A", "S", "D", "F", "G", "H", "J", "K"],
+    ["Q", "W", "E", "R", "T", "Y", "U", "I"]
+];
+
+// Total width, height in inches:
+/** @const */var inWidth = 20.078;
+/** @const */var inHeight = 6.305;
+
+// Position and spacing of footswitches (from centers):
+/** @const */var hLeft = 1.0;
+/** @const */var hSpacing = 2.5714285714285714285714285714286;
+
+/** @const */var vStart = 5.6;
+/** @const */var vSpacing = 2.15;
+
+/** @const */var vLEDOffset = -0.65;
+
+/** @const */var inLEDOuterDiam = (12 /*mm*/ * mmToIn);
+/** @const */var inFswOuterDiam = (12.2 /*mm*/ * mmToIn);
+/** @const */var inFswInnerDiam = (10 /*mm*/ * mmToIn);
+
+function dpi_MoveTo(X, Y) {
+    ctx.moveTo(X * dpi, Y * dpi);
+}
+
+function dpi_LineTo(X, Y) {
+    ctx.lineTo(X * dpi, Y * dpi);
+}
+
+function dpi_CenterCircle(cX, cY, r) {
+    ctx.arc(cX * dpi, cY * dpi, r * dpi, 0, 2 * Math.PI);
+}
+
+function dpi_FillRect(l, t, r, b) {
+    ctx.fillRect(l * dpi, t * dpi, (r - l) * dpi, (b - t) * dpi);
+}
+
+function dpi_FillAndStrokeCircle(cX, cY, r) {
+    ctx.beginPath();
+    ctx.arc(cX * dpi, cY * dpi, r * dpi, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cX * dpi, cY * dpi, r * dpi, 0, 2 * Math.PI);
+    ctx.stroke();
+}
+
+function dpi_TextOut(nXStart, nYStart, lpString) {
+    ctx.fillText(lpString, nXStart * dpi, nYStart * dpi);
+}
+
+function renderUI() {
+    ctx.save();
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
+
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, cvs.width, cvs.height);
+    ctx.strokeStyle = "#808080";
+    ctx.strokeRect(0, 0, cvs.width, cvs.height);
+
+    var h, inH, v, inV;
+
+    if (false) {
+        // draw grid:
+        ctx.strokeStyle = "#202020";
+        h = 0;
+        for (inH = 0; inH <= inWidth; inH += 0.1, h = (h + 1) % 10) {
+            if (h == 0) {
+                ctx.lineWidth = 2;
+            } else {
+                ctx.lineWidth = 1;
+            }
+            ctx.beginPath();
+            dpi_MoveTo(inH, 0);
+            dpi_LineTo(inH, inHeight);
+            ctx.stroke();
+
+            v = 0;
+            for (inV = 0; inV <= inHeight; inV += 0.1, v = (v + 1) % 10) {
+                if (v == 0) {
+                    ctx.lineWidth = 2;
+                } else {
+                    ctx.lineWidth = 1;
+                }
+                ctx.beginPath();
+                dpi_MoveTo(0, inV);
+                dpi_LineTo(inWidth, inV);
+                ctx.stroke();
+            }
+        }
+    }
+
+    // draw LCD display (4x20 chars):
+    /** @const */var lcdCenterX = (inWidth * 0.5);
+    /** @const */var lcdCenterY = 1.25;
+
+    ctx.fillStyle = "#000090";
+    dpi_FillRect(lcdCenterX - ((76 * mmToIn) * 0.5), lcdCenterY - (25.2 * mmToIn * 0.5), lcdCenterX + ((76 * mmToIn) * 0.5), lcdCenterY + (25.2 * mmToIn * 0.5));
+
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.font = '' + ((7/40)*dpi).toString() + 'pt Courier New';
+    ctx.lineWidth = 1;
+    ctx.fillStyle = "#C0C0C0";
+    for (v = 0; v < 4; ++v) {
+        if (lcd_rows[v] === undefined) continue;
+        dpi_TextOut(lcdCenterX - (70.4 * mmToIn * 0.5), lcdCenterY - (20.8 * mmToIn * 0.5) + (v * 4.76 * mmToIn), lcd_rows[v]);
+    }
+
+    ctx.textAlign = "center";
+    ctx.font = '' + ((9/40)*dpi).toString() + 'pt Arial Bold';
+
+    // draw 2 rows of foot switches and LEDs, starting at bottom row and moving up:
+    for (v = 0; v < 2; ++v) {
+        var led_state = (v == 0) ? led_state_bot : led_state_top;
+
+        // draw 8 evenly spaced foot-switches
+        var b = 1 << (v * 8);
+        for (h = 0; h < 8; ++h, b <<= 1) {
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#808080";
+            ctx.fillStyle = "#C0C0C0";
+            dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam * 0.5);
+
+            ctx.lineWidth = 1;
+            dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswInnerDiam * 0.5);
+            if (fsw_state & b) {
+                // Foot switch is depressed:
+                ctx.fillStyle = "#606060";
+                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart - (v * vSpacing), inFswOuterDiam * 0.5);
+            }
+
+            // Set label color:
+            if (v == 0 && h < 6)
+                ctx.fillStyle = "#4040C0";
+            else if (v == 1 && h < 6)
+                ctx.fillStyle = "#40C040";
+            else
+                ctx.fillStyle = "#E0E0E0";
+
+            ctx.lineWidth = 1;
+            ctx.textBaseline = "top";
+            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.25 - (v * vSpacing), labels[v][h]);
+
+            // Label w/ the keyboard key:
+            ctx.fillStyle = "#601010";
+            ctx.textBaseline = "alphabetic";
+            dpi_TextOut(hLeft + (h * hSpacing), vStart + 0.10 - (v * vSpacing), keylabels[v][h]);
+        }
+
+        // 8 evenly spaced 8mm (203.2mil) LEDs above 1-4 preset switches
+
+        // draw inactive LEDs:
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#202020";
+        ctx.fillStyle = "#081E03";
+        b = 1;
+        for (h = 0; h < 8; ++h, b <<= 1) {
+            if ((led_state & b) == 0) {
+                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), inLEDOuterDiam * 0.5);
+            }
+        }
+
+        // draw active LEDs:
+        ctx.fillStyle = "#19FA05";
+        b = 1;
+        for (h = 0; h < 8; ++h, b <<= 1) {
+            if (led_state & b) {
+                dpi_FillAndStrokeCircle(hLeft + (h * hSpacing), vStart + vLEDOffset - (v * vSpacing), inLEDOuterDiam * 0.5);
+            }
+        }
+    }
+
+    ctx.restore();
+}
+
+function keydown(e) {
+    if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return false;
+
+    // ASDFGHJK for bottom row:
+    if (e.keyCode == 65) fsw_state |= 1;
+    else if (e.keyCode == 83) fsw_state |= 2;
+    else if (e.keyCode == 68) fsw_state |= 4;
+    else if (e.keyCode == 70) fsw_state |= 8;
+    else if (e.keyCode == 71) fsw_state |= 16;
+    else if (e.keyCode == 72) fsw_state |= 32;
+    else if (e.keyCode == 74) fsw_state |= 64;
+    else if (e.keyCode == 75) fsw_state |= 128;
+        // QWERTYUI for top row:
+    else if (e.keyCode == 81) fsw_state |= 256;
+    else if (e.keyCode == 87) fsw_state |= 512;
+    else if (e.keyCode == 69) fsw_state |= 1024;
+    else if (e.keyCode == 82) fsw_state |= 2048;
+    else if (e.keyCode == 84) fsw_state |= 4096;
+    else if (e.keyCode == 89) fsw_state |= 8192;
+    else if (e.keyCode == 85) fsw_state |= 16384;
+    else if (e.keyCode == 73) fsw_state |= 32768;
+    else return true;
+
+    ui_modified = true;
+    e.preventDefault();
+    return false;
+}
+
+function keyup(e) {
+    if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return false;
+
+    // ASDFGHJK for bottom row:
+    if (e.keyCode == 65) fsw_state &= 1 ^ 65535;
+    else if (e.keyCode == 83) fsw_state &= 2 ^ 65535;
+    else if (e.keyCode == 68) fsw_state &= 4 ^ 65535;
+    else if (e.keyCode == 70) fsw_state &= 8 ^ 65535;
+    else if (e.keyCode == 71) fsw_state &= 16 ^ 65535;
+    else if (e.keyCode == 72) fsw_state &= 32 ^ 65535;
+    else if (e.keyCode == 74) fsw_state &= 64 ^ 65535;
+    else if (e.keyCode == 75) fsw_state &= 128 ^ 65535;
+        // QWERTYUI for top row:
+    else if (e.keyCode == 81) fsw_state &= 256 ^ 65535;
+    else if (e.keyCode == 87) fsw_state &= 512 ^ 65535;
+    else if (e.keyCode == 69) fsw_state &= 1024 ^ 65535;
+    else if (e.keyCode == 82) fsw_state &= 2048 ^ 65535;
+    else if (e.keyCode == 84) fsw_state &= 4096 ^ 65535;
+    else if (e.keyCode == 89) fsw_state &= 8192 ^ 65535;
+    else if (e.keyCode == 85) fsw_state &= 16384 ^ 65535;
+    else if (e.keyCode == 73) fsw_state &= 32768 ^ 65535;
+    else return true;
+
+    ui_modified = true;
+    e.preventDefault();
+    return false;
+}
+
+// mouse button held down inside canvas:
+function mousedown(e) {
+    var old_fsw_state = fsw_state;
+
+    // FF does not have offsetX/Y pairs.
+    // e.offsetX, e.offsetY is relative mouse position from top-left of canvas:
+    var hasOffset = e.hasOwnProperty('offsetX'),
+        // TODO: should really recurse into e.target for a general solution
+        ex = hasOffset ? e.offsetX : (e.layerX - e.target.offsetLeft),
+        ey = hasOffset ? e.offsetY : (e.layerY - e.target.offsetTop);
+    var x = ex / dpi, y = ey / dpi;
+    var r_sqr = (inFswOuterDiam * 0.5) * (inFswOuterDiam * 0.5);
+    var dist;
+
+    // Find out which foot-switch we're nearest to:
+    var h = 0, v = 0, b = 0;
+    for (v = 0; v < 2; ++v) {
+        var b = 1 << (v * 8);
+        for (h = 0; h < 8; ++h, b <<= 1) {
+            dist = (x - (hLeft + (h * hSpacing))) * (x - (hLeft + (h * hSpacing))) + (y - (vStart - (v * vSpacing))) * (y - (vStart - (v * vSpacing)));
+            if (dist < r_sqr) {
+                fsw_state |= b;
+            }
+        }
+    }
+
+    if (old_fsw_state !== fsw_state) ui_modified = true;
+}
+
+// mouse button released inside canvas:
+function mouseup(e) {
+    fsw_state = 0;
+    ui_modified = true;
+}
+
+// ----------------------------- Utility functions:
+
+function hex1(v) {
+    var h = v.toString(16).toUpperCase();
+    return (h).substring(0, 1);
+}
+function hex2(v) {
+    var h = v.toString(16).toUpperCase();
+    return ("00" + h).substring(h.length);
+}
+
+// ----------------------------- MIDI controller "hardware" interface:
+
+// Pass back the LCD text buffer for the given row:
+// char *lcd_row_get(u8 row)
+function _lcd_row_get(row) {
+	// malloc a 20-byte buffer for the asked-for row of text (0-3):
+	lcd_rows_text_ptrs[row] = eminorv2._malloc(20);
+	return lcd_rows_text_ptrs[row];
+}
+
+// poll all 16 foot switches' state in a 16-bit word:
+function _fsw_poll() { return fsw_state; }
+
+// called to set the new state of the LEDs in a top and bottom row, each 8-bit words:
+function _led_set(leds) {
+	var bot = leds & 255;
+	var top = (leds >>> 8) & 255;
+
+	if (led_state_bot != bot) ui_modified = true;
+	if (led_state_top != top) ui_modified = true;
+
+	led_state_bot = bot;
+	led_state_top = top;
+}
+
+function _lcd_updated_row(row) {
+	//assert(row < 4);
+
+	var text_ptr = lcd_rows_text_ptrs[row];
+	var prevRowText = lcd_rows[row];
+	lcd_rows[row] = '';
+
+	var i;
+	for (i = 0; i < 20; ++i) {
+		// Read char from RAM:
+		var c = eminorv2.getValue(text_ptr + i, 'i8');
+		if (c == 0) break;
+
+		// Assume ASCII and append char to string:
+		lcd_rows[row] += String.fromCharCode(c & 127);
+	}
+	// Fill the rest with spaces:
+	for (; i < 20; ++i)
+		lcd_rows[row] += " ";
+
+	// Notify UI of update if necessary:
+	if (prevRowText !== lcd_rows[row])
+		ui_modified = true;
+}
+
+function _lcd_updated_all() {
+	_lcd_updated_row(0);
+	_lcd_updated_row(1);
+	_lcd_updated_row(2);
+	_lcd_updated_row(3);
+}
+
+// called to send MIDI command with one data byte:
+function _midi_send_cmd1(cmd, chan, data1) {
+	// TODO: add commentary about recognized commands
+	var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + "\n";
+	midiLog.appendChild(document.createTextNode(f));
+	midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
+}
+
+// called to send MIDI command with two data bytes:
+function _midi_send_cmd2(cmd, chan, data1, data2) {
+	// TODO: add commentary about recognized commands
+	var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + " " + hex2(data2) + "\n";
+	midiLog.appendChild(document.createTextNode(f));
+	midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
+}
+
+// ----------------------------- Startup:
+
+// Document initialization:
+function init() {
+    // Polyfill for `requestAnimationFrame`:
+    window.requestAnimFrame = (function () {
+        return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function (/* function */ callback, /* DOMElement */ element) {
+                    window.setTimeout(callback, 1000 / 60);
+                };
+    })();
+
+    // Set up a scrollable <pre> element to display the MIDI commands sent:
+    midiLog = document.getElementById('midiLog');
+    midiLogHeight = midiLog.clientHeight;
+    //midiLog.style.height = "" + midiLogHeight + "px";
+    if (midiLog.style['overflow-y'] !== undefined) {
+        midiLog.style['overflow-y'] = "scroll";
+    } else {
+        // FireFox hack:
+        midiLog.style.overflow = '-moz-scrollbars-vertical';
+    }
+
+    // Get canvas and its drawing context:
+    cvs = document.getElementById('cvs');
+    ctx = cvs.getContext('2d');
+
+    // Set up canvas:
+    cvs.setAttribute('width', inWidth * dpi);
+    cvs.setAttribute('height', inHeight * dpi);
+    cvs.addEventListener('mousedown', mousedown, true);
+    cvs.addEventListener('mouseup', mouseup, true);
+
+    // Keyboard handlers (only work if tabindex attribute is present on canvas element):
+    cvs.addEventListener("keydown", keydown, false);
+    cvs.addEventListener("keyup", keyup, false);
+
+    // Give the canvas focus:
+    cvs.focus();
+
+    var clearMidiOut = document.getElementById('clearMidiOut');
+    if (clearMidiOut)
+        clearMidiOut.addEventListener('click', function (e) {
+            e.preventDefault();
+            var c = midiLog.childNodes;
+            for (var i = c.length - 1; i >= 0; i--) {
+                midiLog.removeChild(c[i]);
+            }
+            cvs.focus();
+            return false;
+        });
+
+    // Initialize controller:
+    // NOTE(jsd): `eminorv2` is the name of the emscripten compiled module; exported functions have a leading '_'.
+    eminorv2._controller_init();
+    // Render initial UI:
+    requestAnimFrame(renderUI);
+
+    // Setup a refresh rate of 10ms:
+    setInterval(function () {
+        // Handle controller timers and logic:
+        eminorv2._controller_10msec_timer();
+        eminorv2._controller_handle();
+
+        // Update UI only on changes:
+        if (ui_modified) {
+            requestAnimFrame(renderUI);
+            ui_modified = false;
+        }
+    }, 10);
+}
+
+if (!document.addEventListener) {
+    document.attachEvent("onload", init);
+} else {
+    document.addEventListener("DOMContentLoaded", init, false);
+}
