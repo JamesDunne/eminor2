@@ -80,14 +80,14 @@
 u8 gmaj_cc_lookup[8];
 
 // Programming mode if non-zero:
-u8 programming_mode;
+u8 mode;
 
 // Setlist or program mode:
 u8 setlist_mode;
 
 // Current and previous button state:
 io16 fsw, fsw_last;
-// Current LED state per `programming_mode`:
+// Current LED state per `mode`:
 io16 leds[2];
 
 u16 curr_leds, last_leds;
@@ -275,7 +275,7 @@ static void store_program_state(void) {
 
 static void send_leds(void) {
     // Update LEDs:
-    curr_leds = (u16)leds[programming_mode].bot.byte | ((u16)leds[programming_mode].top.byte << 8);
+    curr_leds = (u16)leds[mode].bot.byte | ((u16)leds[mode].top.byte << 8);
     if (curr_leds != last_leds) {
         led_set(curr_leds);
         last_leds = curr_leds;
@@ -297,7 +297,7 @@ static void update_lcd(void) {
 #ifdef FEAT_LCD
     s8 i;
 
-    if (programming_mode) {
+    if (mode) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[0][i] = " -- Programming --  "[i];
         }
@@ -561,7 +561,7 @@ static void set_gmaj_program(void) {
     update_lcd();
 }
 
-static void switch_mode(u8 new_mode) {
+static void switch_setlist_mode(u8 new_mode) {
     u8 i;
 
     setlist_mode = new_mode;
@@ -577,15 +577,15 @@ static void switch_mode(u8 new_mode) {
     update_lcd();
 }
 
-static void switch_programming_mode(u8 new_mode) {
+static void switch_mode(u8 new_mode) {
     leds[1].top.byte = 0;
     leds[1].bot.byte = 0;
 
-    programming_mode = new_mode;
+    mode = new_mode;
     update_lcd();
 }
 
-static void switch_mode_1_alt(u8 new_mode) {
+static void switch_submode(u8 new_mode) {
     if (new_mode == 0) {
         leds[1].top.byte = 0;
         leds[1].bot.byte = 0;
@@ -622,7 +622,7 @@ void controller_init(void) {
     u8 i;
 
     setlist_mode = 1;
-    programming_mode = 0;
+    mode = 0;
     leds[0].top.byte = 0;
     leds[0].bot.byte = 0;
     leds[1].top.byte = 0;
@@ -684,7 +684,7 @@ void controller_init(void) {
     update_lcd();
 #endif
 
-    switch_mode(1);
+    switch_setlist_mode(1);
 
     // Initialize program:
     set_gmaj_program();
@@ -919,7 +919,7 @@ void handle_mode_0(void) {
     } else if (is_held_cancel() && is_timer_elapsed(prog)) {
         // programming mode:
         timer_held_prog = 0;
-        switch_programming_mode(1);
+        switch_mode(1);
     } else if (is_released_cancel()) {
         timer_held_prog = 0;
     }
@@ -996,36 +996,41 @@ void handle_mode_0(void) {
 void handle_mode_1(void) {
     // Select channel to reprogram first, then select channel to map it to.
     if (mode_1_alt == 0) {
+        // Exit programming when CANCEL button is pressed:
+        if (is_pressed_cancel()) {
+            switch_mode(0);
+        }
+
         // Select channel to reprogram:
         if (is_bot_button_pressed(M_1)) {
             mode_1_select = 0;
-            switch_mode_1_alt(1);
+            switch_submode(1);
         }
         if (is_bot_button_pressed(M_2)) {
             mode_1_select = 1;
-            switch_mode_1_alt(1);
+            switch_submode(1);
         }
         if (is_bot_button_pressed(M_3)) {
             mode_1_select = 2;
-            switch_mode_1_alt(1);
+            switch_submode(1);
         }
         if (is_bot_button_pressed(M_4)) {
             mode_1_select = 3;
-            switch_mode_1_alt(1);
+            switch_submode(1);
         }
         if (is_bot_button_pressed(M_5)) {
             mode_1_select = 4;
-            switch_mode_1_alt(1);
+            switch_submode(1);
         }
         if (is_bot_button_pressed(M_6)) {
             mode_1_select = 5;
-            switch_mode_1_alt(1);
+            switch_submode(1);
         }
 
         // Switch setlist/program modes:
         if (is_top_button_pressed(M_1)) {
             // Toggle setlist/program mode:
-            switch_mode((setlist_mode ^ 1));
+            switch_setlist_mode((setlist_mode ^ 1));
         }
         if (is_top_button_pressed(M_2)) {
         }
@@ -1036,11 +1041,8 @@ void handle_mode_1(void) {
         if (is_top_button_pressed(M_5)) {
         }
         if (is_top_button_pressed(M_6)) {
-        }
-
-        // Exit programming when CANCEL button is pressed:
-        if (is_pressed_cancel()) {
-            switch_programming_mode(0);
+			// Swap setlist entries:
+			
         }
 
         // NEXT/PREV change setlists:
@@ -1048,46 +1050,46 @@ void handle_mode_1(void) {
             // Next setlist:
             if (sli < 31) {
                 sli++;
-                switch_mode(setlist_mode);
+                switch_setlist_mode(setlist_mode);
             }
         }
         if (is_pressed_prev()) {
             // Prev setlist:
             if (sli > 0) {
                 sli--;
-                switch_mode(setlist_mode);
+                switch_setlist_mode(setlist_mode);
             }
         }
     } else {
         // Choose which amp channel to reprogram as:
         if (is_bot_button_pressed(M_1)) {
             remap_preset(mode_1_select, 0);
-            switch_mode_1_alt(0);
+            switch_submode(0);
         }
         if (is_bot_button_pressed(M_2)) {
             remap_preset(mode_1_select, 1);
-            switch_mode_1_alt(0);
+            switch_submode(0);
         }
         if (is_bot_button_pressed(M_3)) {
             remap_preset(mode_1_select, 2);
-            switch_mode_1_alt(0);
+            switch_submode(0);
         }
         if (is_bot_button_pressed(M_4)) {
             remap_preset(mode_1_select, 3);
-            switch_mode_1_alt(0);
+            switch_submode(0);
         }
         if (is_bot_button_pressed(M_5)) {
             remap_preset(mode_1_select, 4);
-            switch_mode_1_alt(0);
+            switch_submode(0);
         }
         if (is_bot_button_pressed(M_6)) {
             remap_preset(mode_1_select, 5);
-            switch_mode_1_alt(0);
+            switch_submode(0);
         }
 
         // Exit reprogram mode to cancel:
         if (is_pressed_cancel()) {
-            switch_mode_1_alt(0);
+            switch_submode(0);
         }
     }
 
@@ -1101,9 +1103,9 @@ void controller_handle(void) {
     fsw.bot.byte = tmp & 0xFF;
     fsw.top.byte = (tmp >> 8) & 0xFF;
 
-    if (programming_mode == 0) {
+    if (mode == 0) {
         handle_mode_0();
-    } else if (programming_mode == 1) {
+    } else if (mode == 1) {
         handle_mode_1();
     }
 
