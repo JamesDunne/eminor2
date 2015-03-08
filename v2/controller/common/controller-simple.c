@@ -79,8 +79,17 @@
 // Top row of controller buttons activate these CCs:
 u8 gmaj_cc_lookup[8];
 
-// Programming mode if non-zero:
+enum {
+	MODE_LIVE = 0,
+	MODE_PROGRAMMING,
+	MODE_SETLIST_REORDER,
+	MODE_count,
+};
+
+// Controller UX modes (high level):
 u8 mode;
+u8 submode;
+u8 mode_1_select;
 
 // Setlist or program mode:
 u8 setlist_mode;
@@ -88,7 +97,7 @@ u8 setlist_mode;
 // Current and previous button state:
 io16 fsw, fsw_last;
 // Current LED state per `mode`:
-io16 leds[2];
+io16 leds[MODE_count];
 
 u16 curr_leds, last_leds;
 
@@ -110,13 +119,12 @@ u8 pr_rjm[6], live_pr_rjm[6];
 
 // Current set list:
 struct set_list sl;
-// Current set list index:
+// Current index in list of setlists (which setlist):
 u8 sli, last_sli;
-// Current program within current set list:
+// Current song index within current setlist:
 u8 slp, last_slp;
 
-u8 mode_1_alt;
-u8 mode_1_select;
+u8 swap_slp;
 
 #ifdef FEAT_LCD
 u8 *lcd_rows[LCD_ROWS];
@@ -297,14 +305,13 @@ static void update_lcd(void) {
 #ifdef FEAT_LCD
     s8 i;
 
-    if (mode) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = " -- Programming --  "[i];
-        }
-    } else {
+    if (mode == MODE_LIVE) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[0][i] = "                    "[i];
         }
+
+		// "MUTE  CH1S   PENDING"
+
         if (is_muted) {
             // Muted:
             for (i = 0; i < 4; i++) {
@@ -327,9 +334,15 @@ static void update_lcd(void) {
                 lcd_rows[0][i + 13] = "PENDING"[i];
             }
         }
-    }
-
-    // "MUTE  CH1S   PENDING"
+    } else if (mode == MODE_PROGRAMMING) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[0][i] = " -- Programming --  "[i];
+        }
+    } else if (mode == MODE_SETLIST_REORDER) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[0][i] = " Swap setlist entry "[i];
+        }
+	}
 
     if (setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
@@ -595,7 +608,7 @@ static void switch_submode(u8 new_mode) {
         // Show the current mapping on the top:
         leds[1].top.byte = 1 << pr_rjm[mode_1_select];
     }
-    mode_1_alt = new_mode;
+    submode = new_mode;
 }
 
 static void remap_preset(u8 preset, u8 new_rjm_channel) {
@@ -622,7 +635,7 @@ void controller_init(void) {
     u8 i;
 
     setlist_mode = 1;
-    mode = 0;
+    mode = MODE_LIVE;
     leds[0].top.byte = 0;
     leds[0].bot.byte = 0;
     leds[1].top.byte = 0;
@@ -788,7 +801,7 @@ void song_prev(void) {
     set_gmaj_program();
 }
 
-void handle_mode_0(void) {
+void handle_mode_LIVE(void) {
     // handle top 6 FX block buttons:
     if (is_top_button_pressed(M_1)) {
         gmaj_toggle_cc(0);
@@ -993,12 +1006,12 @@ void handle_mode_0(void) {
 }
 
 // Mode 1 is activated by holding down PROG while in mode 0.
-void handle_mode_1(void) {
+void handle_mode_PROGRAMMING(void) {
     // Select channel to reprogram first, then select channel to map it to.
-    if (mode_1_alt == 0) {
+    if (submode == 0) {
         // Exit programming when CANCEL button is pressed:
         if (is_pressed_cancel()) {
-            switch_mode(0);
+            switch_mode(MODE_LIVE);
         }
 
         // Select channel to reprogram:
@@ -1041,8 +1054,12 @@ void handle_mode_1(void) {
         if (is_top_button_pressed(M_5)) {
         }
         if (is_top_button_pressed(M_6)) {
-			// Swap setlist entries:
-			
+			if (setlist_mode == 1) {
+				// Swap current setlist entry with selected one:
+				swap_slp = slp;
+				switch_mode(MODE_SETLIST_REORDER);
+				update_lcd();
+			}
         }
 
         // NEXT/PREV change setlists:
@@ -1096,6 +1113,56 @@ void handle_mode_1(void) {
     send_leds();
 }
 
+void handle_mode_SETLIST_REORDER(void) {
+	u8 tmp;
+
+    // CANCEL exits without swapping:
+    if (is_pressed_cancel()) {
+        switch_mode(MODE_PROGRAMMING);
+    }
+
+	// Select setlist entry to swap with:
+
+    // NEXT
+    if (is_pressed_next()) {
+        timer_held_nextprev = 1;
+        song_next();
+    } else if (is_released_next()) {
+        timer_held_nextprev = 0;
+    } else if (is_held_next()) {
+        if (timer_looped_nextprev) {
+            timer_looped_nextprev = 0;
+            song_next();
+        }
+    }
+
+    // PREV
+    if (is_pressed_prev()) {
+        timer_held_nextprev = 1;
+        song_prev();
+    } else if (is_released_prev()) {
+        timer_held_nextprev = 0;
+    } else if (is_held_prev()) {
+        if (timer_looped_nextprev) {
+            timer_looped_nextprev = 0;
+            song_prev();
+        }
+    }
+
+	// TAP/STORE to swap:
+	if (is_pressed_tapstore()) {
+		// Swap setlist entries:
+		tmp = sl.entries[slp].program;
+		sl.entries[slp].program = sl.entries[swap_slp].program;
+		sl.entries[swap_slp].program = tmp;
+		// Switch back to original setlist index:
+		slp = swap_slp;
+		// Go back to programming mode:
+		switch_mode(MODE_PROGRAMMING);
+		//update_lcd();
+	}
+}
+
 // main control loop
 void controller_handle(void) {
     // poll foot-switch depression status:
@@ -1103,11 +1170,13 @@ void controller_handle(void) {
     fsw.bot.byte = tmp & 0xFF;
     fsw.top.byte = (tmp >> 8) & 0xFF;
 
-    if (mode == 0) {
-        handle_mode_0();
-    } else if (mode == 1) {
-        handle_mode_1();
-    }
+    if (mode == MODE_LIVE) {
+        handle_mode_LIVE();
+    } else if (mode == MODE_PROGRAMMING) {
+        handle_mode_PROGRAMMING();
+    } else if (mode == MODE_SETLIST_REORDER) {
+        handle_mode_SETLIST_REORDER();
+	}
 
     // Record the previous switch state:
     fsw_last = fsw;
