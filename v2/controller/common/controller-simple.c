@@ -25,11 +25,7 @@
     James S. Dunne
     https://github.com/JamesDunne/
     2013-11-17
-    */
-
-// TODO: only change MIDI state when needed on channel-switch activation.
-// Since effects state is persisted per channel, it is redundant to always
-// update MIDI state on repeated activations.
+*/
 
 #include <assert.h>
 #include "../common/types.h"
@@ -996,6 +992,7 @@ void handle_mode_0(void) {
     send_leds();
 }
 
+// Mode 1 is activated by holding down PROG while in mode 0.
 void handle_mode_1(void) {
     // Select channel to reprogram first, then select channel to map it to.
     if (mode_1_alt == 0) {
@@ -1027,12 +1024,10 @@ void handle_mode_1(void) {
 
         // Switch setlist/program modes:
         if (is_top_button_pressed(M_1)) {
-            // Switch to setlist mode:
-            switch_mode(1);
+            // Toggle setlist/program mode:
+            switch_mode((setlist_mode ^ 1));
         }
         if (is_top_button_pressed(M_2)) {
-            // Switch to program mode:
-            switch_mode(0);
         }
         if (is_top_button_pressed(M_3)) {
         }
