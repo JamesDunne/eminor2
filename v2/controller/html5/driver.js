@@ -297,6 +297,48 @@ function mouseup(e) {
     ui_modified = true;
 }
 
+function touchstart(e) {
+    e.preventDefault();
+
+    var old_fsw_state = fsw_state;
+
+    var target = e.target;
+    var r_sqr = (inFswOuterDiam * 0.5) * (inFswOuterDiam * 0.5) * 3;
+    var dist;
+
+    var t = e.targetTouches;
+    for (i = 0; i < t.length; i++) {
+        var ex = (t[i].pageX - target.offsetLeft),
+            ey = (t[i].pageY - target.offsetTop);
+        var x = ex / dpi, y = ey / dpi;
+
+        // Find out which foot-switch we're nearest to:
+        var h = 0, v = 0, b = 0;
+        for (v = 0; v < 2; ++v) {
+            var b = 1 << (v * 8);
+            for (h = 0; h < 8; ++h, b <<= 1) {
+                dist = (x - (hLeft + (h * hSpacing))) * (x - (hLeft + (h * hSpacing))) + (y - (vStart - (v * vSpacing))) * (y - (vStart - (v * vSpacing)));
+                if (dist < r_sqr) {
+                    fsw_state |= b;
+                }
+            }
+        }
+    }
+
+    if (old_fsw_state !== fsw_state) ui_modified = true;
+
+    return false;
+}
+
+function touchend(e) {
+    e.preventDefault();
+
+    fsw_state = 0;
+    ui_modified = true;
+
+    return false;
+}
+
 // ----------------------------- Utility functions:
 
 function hex1(v) {
@@ -313,9 +355,9 @@ function hex2(v) {
 // Pass back the LCD text buffer for the given row:
 // char *lcd_row_get(u8 row)
 function _lcd_row_get(row) {
-	// malloc a 20-byte buffer for the asked-for row of text (0-3):
-	lcd_rows_text_ptrs[row] = eminorv2._malloc(20);
-	return lcd_rows_text_ptrs[row];
+    // malloc a 20-byte buffer for the asked-for row of text (0-3):
+    lcd_rows_text_ptrs[row] = eminorv2._malloc(20);
+    return lcd_rows_text_ptrs[row];
 }
 
 // poll all 16 foot switches' state in a 16-bit word:
@@ -323,62 +365,62 @@ function _fsw_poll() { return fsw_state; }
 
 // called to set the new state of the LEDs in a top and bottom row, each 8-bit words:
 function _led_set(leds) {
-	var bot = leds & 255;
-	var top = (leds >>> 8) & 255;
+    var bot = leds & 255;
+    var top = (leds >>> 8) & 255;
 
-	if (led_state_bot != bot) ui_modified = true;
-	if (led_state_top != top) ui_modified = true;
+    if (led_state_bot != bot) ui_modified = true;
+    if (led_state_top != top) ui_modified = true;
 
-	led_state_bot = bot;
-	led_state_top = top;
+    led_state_bot = bot;
+    led_state_top = top;
 }
 
 function _lcd_updated_row(row) {
-	//assert(row < 4);
+    //assert(row < 4);
 
-	var text_ptr = lcd_rows_text_ptrs[row];
-	var prevRowText = lcd_rows[row];
-	lcd_rows[row] = '';
+    var text_ptr = lcd_rows_text_ptrs[row];
+    var prevRowText = lcd_rows[row];
+    lcd_rows[row] = '';
 
-	var i;
-	for (i = 0; i < 20; ++i) {
-		// Read char from RAM:
-		var c = eminorv2.getValue(text_ptr + i, 'i8');
-		if (c == 0) break;
+    var i;
+    for (i = 0; i < 20; ++i) {
+        // Read char from RAM:
+        var c = eminorv2.getValue(text_ptr + i, 'i8');
+        if (c == 0) break;
 
-		// Assume ASCII and append char to string:
-		lcd_rows[row] += String.fromCharCode(c & 127);
-	}
-	// Fill the rest with spaces:
-	for (; i < 20; ++i)
-		lcd_rows[row] += " ";
+        // Assume ASCII and append char to string:
+        lcd_rows[row] += String.fromCharCode(c & 127);
+    }
+    // Fill the rest with spaces:
+    for (; i < 20; ++i)
+        lcd_rows[row] += " ";
 
-	// Notify UI of update if necessary:
-	if (prevRowText !== lcd_rows[row])
-		ui_modified = true;
+    // Notify UI of update if necessary:
+    if (prevRowText !== lcd_rows[row])
+        ui_modified = true;
 }
 
 function _lcd_updated_all() {
-	_lcd_updated_row(0);
-	_lcd_updated_row(1);
-	_lcd_updated_row(2);
-	_lcd_updated_row(3);
+    _lcd_updated_row(0);
+    _lcd_updated_row(1);
+    _lcd_updated_row(2);
+    _lcd_updated_row(3);
 }
 
 // called to send MIDI command with one data byte:
 function _midi_send_cmd1(cmd, chan, data1) {
-	// TODO: add commentary about recognized commands
-	var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + "\n";
-	midiLog.appendChild(document.createTextNode(f));
-	midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
+    // TODO: add commentary about recognized commands
+    var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + "\n";
+    midiLog.appendChild(document.createTextNode(f));
+    midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
 }
 
 // called to send MIDI command with two data bytes:
 function _midi_send_cmd2(cmd, chan, data1, data2) {
-	// TODO: add commentary about recognized commands
-	var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + " " + hex2(data2) + "\n";
-	midiLog.appendChild(document.createTextNode(f));
-	midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
+    // TODO: add commentary about recognized commands
+    var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + " " + hex2(data2) + "\n";
+    midiLog.appendChild(document.createTextNode(f));
+    midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
 }
 
 // ----------------------------- Startup:
@@ -415,8 +457,14 @@ function init() {
     // Set up canvas:
     cvs.setAttribute('width', inWidth * dpi);
     cvs.setAttribute('height', inHeight * dpi);
+
+    // Mouse handlers:
     cvs.addEventListener('mousedown', mousedown, true);
     cvs.addEventListener('mouseup', mouseup, true);
+
+    // Touch handlers (mobile):
+    cvs.addEventListener('touchstart', touchstart, true);
+    cvs.addEventListener('touchend', touchend, true);
 
     // Keyboard handlers (only work if tabindex attribute is present on canvas element):
     cvs.addEventListener("keydown", keydown, false);
