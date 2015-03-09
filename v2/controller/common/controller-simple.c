@@ -35,8 +35,8 @@
 #define tglbit(VAR,Place) VAR ^= (1 << Place)
 
 // Hard-coded MIDI channel #s:
-#define	gmaj_midi_channel   0
-#define	rjm_midi_channel    1
+#define gmaj_midi_channel   0
+#define rjm_midi_channel    1
 
 // G-major CC messages:
 #define gmaj_cc_taptempo    80
@@ -80,10 +80,10 @@
 u8 gmaj_cc_lookup[8];
 
 enum {
-	MODE_LIVE = 0,
-	MODE_PROGRAMMING,
-	MODE_SETLIST_REORDER,
-	MODE_count,
+    MODE_LIVE = 0,
+    MODE_PROGRAMMING,
+    MODE_SETLIST_REORDER,
+    MODE_count,
 };
 
 // Controller UX modes (high level):
@@ -292,12 +292,12 @@ static void send_leds(void) {
 
 static void set_rjm_leds(void) {
     // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds[0].bot.byte = (1 << rjm_channel) | (leds[0].bot.byte & (M_7 | M_8));
+    leds[MODE_LIVE].bot.byte = (1 << rjm_channel) | (leds[MODE_LIVE].bot.byte & (M_7 | M_8));
 }
 
 static void clear_rjm_leds(void) {
     // Preserve only LEDs 7 and 8 (clear LEDS 1-6):
-    leds[0].bot.byte &= (M_7 | M_8);
+    leds[MODE_LIVE].bot.byte &= (M_7 | M_8);
 }
 
 // Update LCD display:
@@ -311,7 +311,7 @@ static void update_lcd(void) {
             lcd_rows[3][i] = "CM FL PI CH DL RV   "[i];
         }
 
-		// "MUTE  CH1S   PENDING"
+        // "MUTE  CH1S   PENDING"
 
         if (is_muted) {
             // Muted:
@@ -345,12 +345,11 @@ static void update_lcd(void) {
             lcd_rows[0][i] = " Swap setlist entry "[i];
             lcd_rows[3][i] = "-- -- -- -- -- --   "[i];
         }
-	}
+    }
 
     if (setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[1][i] = "Program         #   "[i];
-            lcd_rows[3][i] = "MD -- -- -- RM SW   "[i];
         }
         ritoa(lcd_rows[1], next_gmaj_program + 1, 19);
     } else {
@@ -429,7 +428,7 @@ static void gmaj_toggle_cc(u8 idx) {
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
 
     // Update LEDs:
-    leds[0].top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
+    leds[MODE_LIVE].top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
     send_leds();
 }
 
@@ -441,7 +440,7 @@ static void update_effects_MIDI_state(void) {
     // Assume all effects are off by default because g-major program change has just occurred.
 
     // Reset top LEDs to new state, preserve LEDs 7 and 8:
-    leds[0].top.byte = (n.byte & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
+    leds[MODE_LIVE].top.byte = (n.byte & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
 
     if (n.bits._7) {
         // turn on noise gate:
@@ -479,7 +478,7 @@ static void update_effects_MIDI_state(void) {
     u8 fx = pr.fx[rjm_channel];
 
     // Reset top LEDs to new state, preserve LEDs 7 and 8:
-    leds[0].top.byte = (fx & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
+    leds[MODE_LIVE].top.byte = (fx & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
 
     // Assume g-major effects are in a random state so switch each on/off according to desired state:
     gmaj_cc_set(gmaj_cc_noisegate, (fx & fxm_noisegate) ? 0x7F : 0x00);
@@ -590,8 +589,8 @@ static void switch_setlist_mode(u8 new_mode) {
 }
 
 static void switch_mode(u8 new_mode) {
-    leds[1].top.byte = 0;
-    leds[1].bot.byte = 0;
+    leds[MODE_PROGRAMMING].top.byte = 0;
+    leds[MODE_PROGRAMMING].bot.byte = 0;
 
     mode = new_mode;
     update_lcd();
@@ -599,13 +598,13 @@ static void switch_mode(u8 new_mode) {
 
 static void switch_submode(u8 new_mode) {
     if (new_mode == 0) {
-        leds[1].top.byte = 0;
-        leds[1].bot.byte = 0;
+        leds[MODE_PROGRAMMING].top.byte = 0;
+        leds[MODE_PROGRAMMING].bot.byte = 0;
     } else if (new_mode == 1) {
         // Show the selected preset on the bottom:
-        leds[1].bot.byte = 1 << mode_1_select;
+        leds[MODE_PROGRAMMING].bot.byte = 1 << mode_1_select;
         // Show the current mapping on the top:
-        leds[1].top.byte = 1 << pr_rjm[mode_1_select];
+        leds[MODE_PROGRAMMING].top.byte = 1 << pr_rjm[mode_1_select];
     }
     submode = new_mode;
 }
@@ -635,10 +634,10 @@ void controller_init(void) {
 
     setlist_mode = 1;
     mode = MODE_LIVE;
-    leds[0].top.byte = 0;
-    leds[0].bot.byte = 0;
-    leds[1].top.byte = 0;
-    leds[1].bot.byte = 0;
+    for (i = 0; i < MODE_count; i++) {
+        leds[i].top.byte = 0;
+        leds[i].bot.byte = 0;
+    }
 
     last_sli = 0;
     last_slp = 0;
@@ -743,11 +742,11 @@ void controller_10msec_timer(void) {
     if (is_timer_elapsed(sw)) {
         // Flash top LEDs on/off:
         if ((timer_held_sw & 15) >= 7) {
-            if (fsw.bot.bits._1) leds[0].bot.bits._1 = 1;
-            if (fsw.bot.bits._2) leds[0].bot.bits._2 = 1;
+            if (fsw.bot.bits._1) leds[MODE_LIVE].bot.bits._1 = 1;
+            if (fsw.bot.bits._2) leds[MODE_LIVE].bot.bits._2 = 1;
         } else {
-            if (fsw.bot.bits._1) leds[0].bot.bits._1 = 0;
-            if (fsw.bot.bits._2) leds[0].bot.bits._2 = 0;
+            if (fsw.bot.bits._1) leds[MODE_LIVE].bot.bits._1 = 0;
+            if (fsw.bot.bits._2) leds[MODE_LIVE].bot.bits._2 = 0;
         }
         send_leds();
     }
@@ -755,9 +754,9 @@ void controller_10msec_timer(void) {
     if (is_timer_elapsed(fx)) {
         // Flash top LEDs on/off:
         if ((timer_held_fx & 15) >= 7) {
-            leds[0].top.byte = ((pr.fx[rjm_channel] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
+            leds[MODE_LIVE].top.byte = ((pr.fx[rjm_channel] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
         } else {
-            leds[0].top.byte = ((pr.fx[rjm_channel] | fsw.top.byte) & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
+            leds[MODE_LIVE].top.byte = ((pr.fx[rjm_channel] | fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
         }
         send_leds();
     }
@@ -765,14 +764,14 @@ void controller_10msec_timer(void) {
     if (timeout_flash) {
         if (!--timeout_flash) {
             // Reset LED state:
-            leds[0].top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds[0].top.byte & (M_7 | M_8));
+            leds[MODE_LIVE].top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
             send_leds();
         } else {
             // Flash top LEDs on/off:
             if ((timeout_flash & 15) >= 7) {
-                leds[0].top.byte = (M_1 | M_2 | M_3 | M_4 | M_5 | M_6) | (leds[0].top.byte & (M_7 | M_8));
+                leds[MODE_LIVE].top.byte = (M_1 | M_2 | M_3 | M_4 | M_5 | M_6) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
             } else {
-                leds[0].top.byte = (leds[0].top.byte & (M_7 | M_8));
+                leds[MODE_LIVE].top.byte = (leds[MODE_LIVE].top.byte & (M_7 | M_8));
             }
             send_leds();
         }
@@ -932,12 +931,13 @@ void handle_mode_LIVE(void) {
         // programming mode:
         timer_held_prog = 0;
         switch_mode(1);
+        switch_submode(0);
     } else if (is_released_cancel()) {
         timer_held_prog = 0;
     }
 
     // Turn on the TAP LED while the TAP button is held:
-    leds[0].bot.bits._7 = fsw.bot.bits._7;
+    leds[MODE_LIVE].bot.bits._7 = fsw.bot.bits._7;
 
     if (setlist_mode == 0) {
         // Program mode:
@@ -998,29 +998,33 @@ void handle_mode_LIVE(void) {
     }
 
     // NEXT/PREV LEDs:
-    leds[0].top.bits._8 = fsw.top.bits._8;
-    leds[0].top.bits._7 = fsw.top.bits._7;
+    leds[MODE_LIVE].top.bits._8 = fsw.top.bits._8;
+    leds[MODE_LIVE].top.bits._7 = fsw.top.bits._7;
 
     send_leds();
 }
 
 // Utility function to cut current setlist entry out:
 static void cut_setlist_entry(void) {
-	u8 i;
+    u8 i;
 
-	if (slp >= sl.count) return;
-	if (sl.count <= 0) return;
+    if (slp >= sl.count) return;
+    if (sl.count <= 0) return;
 
-	for (i = slp+1; i < sl.count; i++) {
-		sl.entries[i-1] = sl.entries[i];
-	}
-	sl.count--;
+    for (i = slp+1; i < sl.count; i++) {
+        sl.entries[i-1] = sl.entries[i];
+    }
+    sl.count--;
 }
 
 // Mode 1 is activated by holding down PROG while in mode 0.
 void handle_mode_PROGRAMMING(void) {
     // Select channel to reprogram first, then select channel to map it to.
     if (submode == 0) {
+        // LEDs == FSWs:
+        leds[MODE_PROGRAMMING].top.byte = fsw.top.byte;
+        leds[MODE_PROGRAMMING].bot.byte = fsw.bot.byte;
+
         // Exit programming when CANCEL button is pressed:
         if (is_pressed_cancel()) {
             switch_mode(MODE_LIVE);
@@ -1064,20 +1068,20 @@ void handle_mode_PROGRAMMING(void) {
         if (is_top_button_pressed(M_4)) {
         }
         if (is_top_button_pressed(M_5)) {
-			// Cut current setlist entry and shift all items back:
-			if (setlist_mode == 1) {
-				// TODO: confirm cut.
-				cut_setlist_entry();
-				set_gmaj_program();
-			}
+            // Cut current setlist entry and shift all items back:
+            if (setlist_mode == 1) {
+                // TODO: confirm cut.
+                cut_setlist_entry();
+                set_gmaj_program();
+            }
         }
         if (is_top_button_pressed(M_6)) {
-			if (setlist_mode == 1) {
-				// Swap current setlist entry with selected one:
-				swap_slp = slp;
-				switch_mode(MODE_SETLIST_REORDER);
-				update_lcd();
-			}
+            if (setlist_mode == 1) {
+                // Swap current setlist entry with selected one:
+                swap_slp = slp;
+                switch_mode(MODE_SETLIST_REORDER);
+                update_lcd();
+            }
         }
 
         // NEXT/PREV change setlists:
@@ -1095,6 +1099,8 @@ void handle_mode_PROGRAMMING(void) {
                 switch_setlist_mode(setlist_mode);
             }
         }
+
+        send_leds();
     } else {
         // Choose which amp channel to reprogram as:
         if (is_bot_button_pressed(M_1)) {
@@ -1126,20 +1132,20 @@ void handle_mode_PROGRAMMING(void) {
         if (is_pressed_cancel()) {
             switch_submode(0);
         }
-    }
 
-    send_leds();
+        send_leds();
+    }
 }
 
 void handle_mode_SETLIST_REORDER(void) {
-	u8 tmp;
+    u8 tmp;
 
     // CANCEL exits without swapping:
     if (is_pressed_cancel()) {
         switch_mode(MODE_PROGRAMMING);
     }
 
-	// Select setlist entry to swap with:
+    // Select setlist entry to swap with:
 
     // NEXT
     if (is_pressed_next()) {
@@ -1167,18 +1173,24 @@ void handle_mode_SETLIST_REORDER(void) {
         }
     }
 
-	// TAP/STORE to swap:
-	if (is_pressed_tapstore()) {
-		// Swap setlist entries:
-		tmp = sl.entries[slp].program;
-		sl.entries[slp].program = sl.entries[swap_slp].program;
-		sl.entries[swap_slp].program = tmp;
-		// Switch back to original setlist index:
-		slp = swap_slp;
-		// Go back to programming mode:
-		switch_mode(MODE_PROGRAMMING);
-		//update_lcd();
-	}
+    // TAP/STORE to swap:
+    if (is_pressed_tapstore()) {
+        // Swap setlist entries:
+        tmp = sl.entries[slp].program;
+        sl.entries[slp].program = sl.entries[swap_slp].program;
+        sl.entries[swap_slp].program = tmp;
+        // Switch back to original setlist index:
+        slp = swap_slp;
+        // Go back to programming mode:
+        switch_mode(MODE_PROGRAMMING);
+        //update_lcd();
+    }
+
+    // LEDs == FSWs:
+    leds[MODE_SETLIST_REORDER].top.byte = fsw.top.byte;
+    leds[MODE_SETLIST_REORDER].bot.byte = fsw.bot.byte;
+
+    send_leds();
 }
 
 // main control loop
@@ -1194,7 +1206,7 @@ void controller_handle(void) {
         handle_mode_PROGRAMMING();
     } else if (mode == MODE_SETLIST_REORDER) {
         handle_mode_SETLIST_REORDER();
-	}
+    }
 
     // Record the previous switch state:
     fsw_last = fsw;
