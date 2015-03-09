@@ -83,7 +83,7 @@ enum {
     MODE_LIVE = 0,
     MODE_PROGRAMMING,
     MODE_SETLIST_REORDER,
-    MODE_count,
+    MODE_count
 };
 
 // Controller UX modes (high level):
