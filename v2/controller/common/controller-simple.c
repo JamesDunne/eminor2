@@ -1005,6 +1005,19 @@ void handle_mode_LIVE(void) {
     send_leds();
 }
 
+// Utility function to cut current setlist entry out:
+static void cut_setlist_entry(void) {
+	u8 i;
+
+	if (slp >= sl.count) return;
+	if (sl.count <= 0) return;
+
+	for (i = slp+1; i < sl.count; i++) {
+		sl.entries[i-1] = sl.entries[i];
+	}
+	sl.count--;
+}
+
 // Mode 1 is activated by holding down PROG while in mode 0.
 void handle_mode_PROGRAMMING(void) {
     // Select channel to reprogram first, then select channel to map it to.
@@ -1052,6 +1065,12 @@ void handle_mode_PROGRAMMING(void) {
         if (is_top_button_pressed(M_4)) {
         }
         if (is_top_button_pressed(M_5)) {
+			// Cut current setlist entry and shift all items back:
+			if (setlist_mode == 1) {
+				// TODO: confirm cut.
+				cut_setlist_entry();
+				set_gmaj_program();
+			}
         }
         if (is_top_button_pressed(M_6)) {
 			if (setlist_mode == 1) {
