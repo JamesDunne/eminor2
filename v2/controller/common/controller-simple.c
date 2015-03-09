@@ -308,6 +308,7 @@ static void update_lcd(void) {
     if (mode == MODE_LIVE) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[0][i] = "                    "[i];
+            lcd_rows[3][i] = "CM FL PI CH DL RV   "[i];
         }
 
 		// "MUTE  CH1S   PENDING"
@@ -337,45 +338,43 @@ static void update_lcd(void) {
     } else if (mode == MODE_PROGRAMMING) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[0][i] = " -- Programming --  "[i];
+            lcd_rows[3][i] = "MD -- -- -- RM SW   "[i];
         }
     } else if (mode == MODE_SETLIST_REORDER) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[0][i] = " Swap setlist entry "[i];
+            lcd_rows[3][i] = "-- -- -- -- -- --   "[i];
         }
 	}
 
     if (setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = "Program mode        "[i];
+            lcd_rows[1][i] = "Program         #   "[i];
+            lcd_rows[3][i] = "MD -- -- -- RM SW   "[i];
         }
+        ritoa(lcd_rows[1], next_gmaj_program + 1, 19);
     } else {
         // Show setlist data:
         u8 yyyy = sl.d1 >> 1;
         u8 mm = ((sl.d1 & 1) << 4) | (sl.d0 >> 5);
         u8 dd = (sl.d0 & 31);
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = " 0) 2014-01-01   # 0"[i];
+            lcd_rows[1][i] = "2014-01-01       # 0"[i];
         }
-        litoa(lcd_rows[1], sli + 1, 1);
-
-        ritoa(lcd_rows[1], yyyy + 14, 7);
-        ritoa(lcd_rows[1], mm + 1, 10);
-        ritoa(lcd_rows[1], dd + 1, 13);
+        ritoa(lcd_rows[1], yyyy + 14, 3);
+        ritoa(lcd_rows[1], mm + 1, 6);
+        ritoa(lcd_rows[1], dd + 1, 9);
 
         ritoa(lcd_rows[1], slp + 1, 19);
     }
 
-    // Show g-major program number, right-aligned space padded:
-    i = ritoa(lcd_rows[2], next_gmaj_program + 1, LCD_COLS - 1);
-    for (; i > LCD_COLS - 4; --i) lcd_rows[2][i] = ' ';
-
     // Show program name:
     for (i = 0; i < LCD_COLS; i++) {
-        lcd_rows[3][i] = pr.name[i];
+        lcd_rows[2][i] = pr.name[i];
         if (pr.name[i] == 0) break;
     }
     for (; i < LCD_COLS; i++)
-        lcd_rows[3][i] = ' ';
+        lcd_rows[2][i] = ' ';
 
     lcd_updated_all();
 #endif
