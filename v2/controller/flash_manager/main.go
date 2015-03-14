@@ -201,7 +201,7 @@ func main() {
 					b |= FX_Delay
 				} else if effect == "reverb" {
 					b |= FX_Reverb
-				} else if effect == "noisegate" {
+				} else if effect == "gate" {
 					b |= FX_Noisegate
 				} else if effect == "eq" {
 					b |= FX_EQ
