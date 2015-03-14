@@ -767,7 +767,7 @@ programs:
     rjm_solo: false
     fx: [gate, compressor, delay]
   - rjm_channel: 3
-    rjm_solo: true
+    rjm_solo: false
     fx: [gate, compressor, delay]
   - rjm_channel: 3
     rjm_solo: false
