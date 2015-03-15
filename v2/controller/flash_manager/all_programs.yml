@@ -5,44 +5,44 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Even Flow
   gmaj_program: 2
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Zero
   starts: Jim
@@ -50,44 +50,44 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay, pitch]
 - name: Wonderwall
   gmaj_program: 4
   initial_scene: 4
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [gate, compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, compressor, eq, delay]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, compressor, eq]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, compressor, eq, delay]
 - name: Buddy Holly
   starts: Glaz+Bremer
@@ -95,22 +95,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Plush
   starts: Bremer 2 ct
@@ -118,66 +118,66 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor, chorus]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor, chorus, eq, delay]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, chorus, eq]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, chorus, eq, delay]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate, chorus, eq]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, chorus, eq, delay]
 - name: Come Out and Play
   gmaj_program: 7
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Drive
   gmaj_program: 8
   initial_scene: 4
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [gate, compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, compressor, eq, delay]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, compressor, eq]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, compressor, eq, delay]
 - name: When I Come Around
   starts: Jim
@@ -185,22 +185,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Everything Zen
   starts: Glaz
@@ -208,22 +208,22 @@ programs:
   initial_scene: 6
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: []
   - channel: 1
-    solo: true
+    level: 3
     fx: []
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, eq, delay]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, eq, delay]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, eq]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, eq, delay]
 - name: Enter Sandman
   starts: Glaz
@@ -231,22 +231,22 @@ programs:
   initial_scene: 1
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor, reverb]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor, reverb]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Crawling in the Dark
   starts: Jim
@@ -254,22 +254,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Song 2
   starts: Bremer
@@ -277,22 +277,22 @@ programs:
   initial_scene: 1
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [gate, compressor, eq]
   - channel: 1
-    solo: false
+    level: 0
     fx: [gate, compressor, eq]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
 - name: Sex Type Thing
   starts: Bremer 4 ct
@@ -300,22 +300,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Mr Jones
   starts: Jim
@@ -323,22 +323,22 @@ programs:
   initial_scene: 4
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [gate, compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, compressor, eq, delay]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, compressor, eq]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, compressor, eq, delay]
 - name: Counting Blue Cars
   starts: Bremer 4 ct
@@ -346,22 +346,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor, chorus, delay]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor, chorus, delay]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate, delay]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: In Bloom
   starts: Bremer 4 ct
@@ -369,22 +369,22 @@ programs:
   initial_scene: 1
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [gate, compressor, eq]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 1
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
 - name: Hash Pipe
   starts: Bremer+Adam
@@ -392,22 +392,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: My Hero
   starts: Bremer+Adam
@@ -415,22 +415,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Machinehead
   starts: Jim
@@ -438,22 +438,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, compressor, eq]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, compressor, eq]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, compressor, eq]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, compressor, eq, delay]
 - name: Holiday
   starts: Jim
@@ -461,22 +461,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Closing Time
   starts: Glaz
@@ -484,22 +484,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, delay]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Brainstew
   starts: Jim
@@ -507,22 +507,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate]
 - name: Bound for the Floor
   starts: Jim
@@ -530,44 +530,44 @@ programs:
   initial_scene: 3
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate, delay, chorus]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: I Alone
   gmaj_program: 25
   initial_scene: 1
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor, delay, chorus]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Cumbersome
   starts: Jim
@@ -575,22 +575,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Lump
   starts: Bremer+Glaz
@@ -598,22 +598,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
 - name: Hey Jealousy
   starts: Bremer 4 ct
@@ -621,22 +621,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Kryptonite
   starts: Glaz
@@ -644,22 +644,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Dammit
   starts: Jim
@@ -667,44 +667,44 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: Semi-charmed Life
   gmaj_program: 31
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate, delay]
 - name: My Own Worst Enemy
   starts: Jim
@@ -712,22 +712,22 @@ programs:
   initial_scene: 5
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor]
   - channel: 2
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 2
-    solo: true
+    level: 3
     fx: [gate]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate]
 - name: The Middle
   starts: Glaz
@@ -735,22 +735,22 @@ programs:
   initial_scene: 3
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: []
   - channel: 1
-    solo: true
+    level: 3
     fx: []
   - channel: 2
-    solo: false
+    level: 0
     fx: []
   - channel: 2
-    solo: true
+    level: 3
     fx: []
   - channel: 2
-    solo: false
+    level: 0
     fx: [compressor, filter, delay]
   - channel: 2
-    solo: false
+    level: 0
     fx: []
 - name: Bullet With Butterfly Wings
   starts: Glaz
@@ -758,20 +758,20 @@ programs:
   initial_scene: 1
   scenes:
   - channel: 1
-    solo: false
+    level: 0
     fx: [compressor, reverb]
   - channel: 1
-    solo: true
+    level: 3
     fx: [compressor, reverb]
   - channel: 3
-    solo: false
-    fx: [gate, compressor, delay]
+    level: -3
+    fx: [gate, delay]
   - channel: 3
-    solo: false
-    fx: [gate, compressor, delay]
+    level: -3
+    fx: [gate, delay]
   - channel: 3
-    solo: false
+    level: 0
     fx: [gate]
   - channel: 3
-    solo: true
+    level: 3
     fx: [gate]

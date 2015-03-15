@@ -25,9 +25,8 @@ const (
 )
 
 type SceneDescriptor struct {
-	Channel   int  `yaml:"channel"`
-	SoloBoost bool `yaml:"solo"`
-	AmpEQ     bool `yaml:"amp_eq,omitempty"`
+	Channel int `yaml:"channel"` // 1, 2, 3
+	Level   int `yaml:"level"`   // -6dB, -3dB, 0dB, +3dB
 
 	FX []string `yaml:"fx,flow"`
 }
@@ -36,7 +35,7 @@ type Program struct {
 	Name             string            `yaml:"name"`
 	Starts           string            `yaml:"starts,omitempty"`
 	GMajorProgram    int               `yaml:"gmaj_program"`
-	RJMInitial       int               `yaml:"initial_scene"`
+	InitialScene     int               `yaml:"initial_scene"`
 	SceneDescriptors []SceneDescriptor `yaml:"scenes"`
 }
 
@@ -84,7 +83,7 @@ func main() {
 	if false {
 		// Update YAML data:
 		for _, pr := range programs.Programs {
-			pr.RJMInitial += 1
+			pr.InitialScene += 1
 		}
 
 		// Rewrite YAML file:
@@ -161,34 +160,45 @@ func main() {
 		}
 
 		// Initial channel:
-		fmt.Fprintf(fo, "%d, ", p.RJMInitial-1)
+		fmt.Fprintf(fo, "%d, ", p.InitialScene-1)
 
 		// RJM channel descriptors:
 		//
-		// QSCC QSCC
+		// bits:
+		// 7654 3210
+		// BBCC BBCC
 		// |||| ||||
 		// |||| ||\+- Channel (0-2, 3 ignored)
-		// |||| |\--- SOLO    ON/OFF
-		// |||| \---- EQ      ON/OFF
+		// |||| ||
+		// |||| \+--- Boost   -6dB, -3dB, 0dB, +3dB (signed 2-bit)
 		// ||||
 		// ||\+------ Channel (0-2, 3 ignored)
-		// |\-------- SOLO    ON/OFF
-		// \--------- EQ      ON/OFF
+		// ||
+		// \+-------- Boost   -6dB, -3dB, 0dB, +3dB (signed 2-bit)
 		//
 
 		s := p.SceneDescriptors
 		for j := 0; j < 3; j++ {
 			b := uint8((s[j*2+0].Channel - 1) | ((s[j*2+1].Channel - 1) << 4))
-			if s[j*2+0].SoloBoost {
+
+			// 2's complement of (Level/3): where valid Level values are -6, -3, 0, +3
+			if s[j*2+0].Level == 3 {
 				b |= 0x04
-			}
-			if s[j*2+0].AmpEQ {
+			} else if s[j*2+0].Level == 0 {
+				// bits 0x04 and 0x08 are 0.
+			} else if s[j*2+0].Level == -3 {
+				b |= 0x08 | 0x04
+			} else if s[j*2+0].Level == -6 {
 				b |= 0x08
 			}
-			if s[j*2+1].SoloBoost {
+
+			if s[j*2+1].Level == 3 {
 				b |= 0x40
-			}
-			if s[j*2+1].AmpEQ {
+			} else if s[j*2+1].Level == 0 {
+				// bits 0x40 and 0x80 are 0.
+			} else if s[j*2+1].Level == -3 {
+				b |= 0x80 | 0x40
+			} else if s[j*2+1].Level == -6 {
 				b |= 0x80
 			}
 
