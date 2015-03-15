@@ -10,6 +10,8 @@
     g-major listens for program change messages and CC messages
     RJM listens on MIDI channel 2
     RJM listens for program change messages with program #s 1-6
+	Torpedo Live on MIDI channel 3
+	Torpedo Live listens for control change messages, mainly used to set Out Level
 
     Footswitch layout:
 
@@ -37,6 +39,7 @@
 // Hard-coded MIDI channel #s:
 #define gmaj_midi_channel   0
 #define rjm_midi_channel    1
+#define torp_midi_channel   2
 
 // G-major CC messages:
 #define gmaj_cc_taptempo    80
@@ -50,6 +53,9 @@
 #define gmaj_cc_reverb      89
 #define gmaj_cc_noisegate   90
 #define gmaj_cc_eq          91
+
+// Torpedo Live CC messages:
+#define torp_cc_out_level   25
 
 #define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
 #define is_held(rowname, mask) is_##rowname##_button_held(mask)
@@ -238,12 +244,12 @@ void load_program_state(void) {
 
         pr.gmaj_program = next_gmaj_program + 1;
 
-        pr.rjm_initial = 4;
-        pr.rjm_desc[0] = (rjm_channel_1)
+        pr.initial_scene = 4;
+        pr.scene_desc[0] = (rjm_channel_1)
                        | (rjm_channel_1 | rjm_solo_mask) << 4;
-        pr.rjm_desc[1] = (rjm_channel_2)
+        pr.scene_desc[1] = (rjm_channel_2)
                        | (rjm_channel_2 | rjm_solo_mask) << 4;
-        pr.rjm_desc[2] = (rjm_channel_3)
+        pr.scene_desc[2] = (rjm_channel_3)
                        | (rjm_channel_3 | rjm_solo_mask) << 4;
 
         pr.fx[0] = (fxm_compressor);
@@ -258,7 +264,7 @@ void load_program_state(void) {
         // Get the RJM channel descriptor:
         u8 descidx = i >> 1;
         u8 rshr = (i & 1) << 2;
-        u8 rdesc = (pr.rjm_desc[descidx] >> rshr) & 0x0F;
+        u8 rdesc = (pr.scene_desc[descidx] >> rshr) & 0x0F;
 
         // RJM channels start at 4 and alternate solo mode off/on and then increment channel #s:
         u8 mkv_chan = (rdesc & rjm_channel_mask);
@@ -269,13 +275,13 @@ void load_program_state(void) {
     }
 
     // Find the initial channel:
-    rjm_channel = pr.rjm_initial;
+    rjm_channel = pr.initial_scene;
 #endif
 }
 
 static void store_program_state(void) {
     // Store effects on/off state of current program:
-    pr.rjm_initial = rjm_channel;
+    pr.initial_scene = rjm_channel;
 
     // Store program state:
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
@@ -620,7 +626,7 @@ static void remap_preset(u8 preset, u8 new_rjm_channel) {
     // NOTE: we ignore EQ bit here; it's not really used anyway.
 
     // Update the RJM descriptor while preserving the other half:
-    pr.rjm_desc[descidx] = (pr.rjm_desc[descidx] & mask)
+    pr.scene_desc[descidx] = (pr.scene_desc[descidx] & mask)
         | (new_desc << lshr);
 
     pr_rjm[preset] = new_rjm_channel;

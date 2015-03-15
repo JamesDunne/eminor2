@@ -121,9 +121,9 @@ struct program {
     u8 name[20];
 
     // Initial RJM channel selection (0 to 6):
-    u8 rjm_initial;
+    u8 initial_scene;
     // RJM channel descriptors mapped to 6 channel selector buttons (see rjm_*); 4 bits each channels, 6 channels, hence 4x6 = 24 bits = 3 octets:
-    u8 rjm_desc[3];
+    u8 scene_desc[3];
 
     // G-major program number (1 to 128, 0 for unused):
     u8 gmaj_program;
@@ -164,11 +164,18 @@ COMPILE_ASSERT(sizeof(struct set_list) == 32);
 //
 // 8 bits describes two RJM channels:
 //
-//   QSCCqscc
-//   ||||
-//   ||CC = channel number [0..2]
-//   ||-S = solo enable
-//   |--Q = EQ enable
+// bits:
+// 7654 3210
+// BBCC BBCC
+// |||| ||||
+// |||| ||\+- Channel (0-2, 3 ignored)
+// |||| ||
+// |||| \+--- Boost   -6dB, -3dB, 0dB, +3dB (signed 2-bit)
+// ||||
+// ||\+------ Channel (0-2, 3 ignored)
+// ||
+// \+-------- Boost   -6dB, -3dB, 0dB, +3dB (signed 2-bit)
+//
 
 
 // Mark V channel 1
