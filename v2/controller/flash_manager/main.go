@@ -25,9 +25,9 @@ const (
 )
 
 type SceneDescriptor struct {
-	RJMChannel int  `yaml:"rjm_channel"`
-	RJMSolo    bool `yaml:"rjm_solo"`
-	RJMEQ      bool `yaml:"rjm_eq,omitempty"`
+	Channel   int  `yaml:"channel"`
+	SoloBoost bool `yaml:"solo"`
+	AmpEQ     bool `yaml:"amp_eq,omitempty"`
 
 	FX []string `yaml:"fx,flow"`
 }
@@ -36,7 +36,7 @@ type Program struct {
 	Name             string            `yaml:"name"`
 	Starts           string            `yaml:"starts,omitempty"`
 	GMajorProgram    int               `yaml:"gmaj_program"`
-	RJMInitial       int               `yaml:"rjm_initial"`
+	RJMInitial       int               `yaml:"initial_scene"`
 	SceneDescriptors []SceneDescriptor `yaml:"scenes"`
 }
 
@@ -164,19 +164,31 @@ func main() {
 		fmt.Fprintf(fo, "%d, ", p.RJMInitial-1)
 
 		// RJM channel descriptors:
+		//
+		// QSCC QSCC
+		// |||| ||||
+		// |||| ||\+- Channel (0-2, 3 ignored)
+		// |||| |\--- SOLO    ON/OFF
+		// |||| \---- EQ      ON/OFF
+		// ||||
+		// ||\+------ Channel (0-2, 3 ignored)
+		// |\-------- SOLO    ON/OFF
+		// \--------- EQ      ON/OFF
+		//
+
 		s := p.SceneDescriptors
 		for j := 0; j < 3; j++ {
-			b := uint8((s[j*2+0].RJMChannel - 1) | ((s[j*2+1].RJMChannel - 1) << 4))
-			if s[j*2+0].RJMSolo {
+			b := uint8((s[j*2+0].Channel - 1) | ((s[j*2+1].Channel - 1) << 4))
+			if s[j*2+0].SoloBoost {
 				b |= 0x04
 			}
-			if s[j*2+0].RJMEQ {
+			if s[j*2+0].AmpEQ {
 				b |= 0x08
 			}
-			if s[j*2+1].RJMSolo {
+			if s[j*2+1].SoloBoost {
 				b |= 0x40
 			}
-			if s[j*2+1].RJMEQ {
+			if s[j*2+1].AmpEQ {
 				b |= 0x80
 			}
 

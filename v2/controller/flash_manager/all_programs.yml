@@ -2,776 +2,776 @@ programs:
 - name: Monkeywrench
   starts: Bremer 4 ct
   gmaj_program: 1
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Even Flow
   gmaj_program: 2
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Zero
   starts: Jim
   gmaj_program: 3
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay, pitch]
 - name: Wonderwall
   gmaj_program: 4
-  rjm_initial: 4
+  initial_scene: 4
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [gate, compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, compressor, eq, delay]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, compressor, eq]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, compressor, eq, delay]
 - name: Buddy Holly
   starts: Glaz+Bremer
   gmaj_program: 5
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Plush
   starts: Bremer 2 ct
   gmaj_program: 6
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor, chorus]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor, chorus, eq, delay]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, chorus, eq]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, chorus, eq, delay]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate, chorus, eq]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, chorus, eq, delay]
 - name: Come Out and Play
   gmaj_program: 7
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Drive
   gmaj_program: 8
-  rjm_initial: 4
+  initial_scene: 4
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [gate, compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, compressor, eq, delay]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, compressor, eq]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, compressor, eq, delay]
 - name: When I Come Around
   starts: Jim
   gmaj_program: 9
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Everything Zen
   starts: Glaz
   gmaj_program: 10
-  rjm_initial: 6
+  initial_scene: 6
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: []
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: []
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, eq, delay]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, eq, delay]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, eq]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, eq, delay]
 - name: Enter Sandman
   starts: Glaz
   gmaj_program: 11
-  rjm_initial: 1
+  initial_scene: 1
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor, reverb]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor, reverb]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Crawling in the Dark
   starts: Jim
   gmaj_program: 12
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Song 2
   starts: Bremer
   gmaj_program: 13
-  rjm_initial: 1
+  initial_scene: 1
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [gate, compressor, eq]
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [gate, compressor, eq]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor, eq]
 - name: Sex Type Thing
   starts: Bremer 4 ct
   gmaj_program: 14
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Mr Jones
   starts: Jim
   gmaj_program: 15
-  rjm_initial: 4
+  initial_scene: 4
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [gate, compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, compressor, eq, delay]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, compressor, eq]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, compressor, eq, delay]
 - name: Counting Blue Cars
   starts: Bremer 4 ct
   gmaj_program: 16
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor, chorus, delay]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor, chorus, delay]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate, delay]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: In Bloom
   starts: Bremer 4 ct
   gmaj_program: 17
-  rjm_initial: 1
+  initial_scene: 1
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [gate, compressor, eq]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [gate, compressor, eq]
 - name: Hash Pipe
   starts: Bremer+Adam
   gmaj_program: 18
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: My Hero
   starts: Bremer+Adam
   gmaj_program: 19
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Machinehead
   starts: Jim
   gmaj_program: 20
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, compressor, eq]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, compressor, eq]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, compressor, eq]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, compressor, eq, delay]
 - name: Holiday
   starts: Jim
   gmaj_program: 21
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Closing Time
   starts: Glaz
   gmaj_program: 22
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, delay]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, delay]
 - name: Brainstew
   starts: Jim
   gmaj_program: 23
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate]
 - name: Bound for the Floor
   starts: Jim
   gmaj_program: 24
-  rjm_initial: 3
+  initial_scene: 3
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate, delay, chorus]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, delay]
 - name: I Alone
   gmaj_program: 25
-  rjm_initial: 1
+  initial_scene: 1
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor, delay, chorus]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, delay]
 - name: Cumbersome
   starts: Jim
   gmaj_program: 26
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, delay]
 - name: Lump
   starts: Bremer+Glaz
   gmaj_program: 27
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
 - name: Hey Jealousy
   starts: Bremer 4 ct
   gmaj_program: 28
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, delay]
 - name: Kryptonite
   starts: Glaz
   gmaj_program: 29
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate, delay]
 - name: Dammit
   starts: Jim
   gmaj_program: 30
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, delay]
 - name: Semi-charmed Life
   gmaj_program: 31
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate, delay]
 - name: My Own Worst Enemy
   starts: Jim
   gmaj_program: 32
-  rjm_initial: 5
+  initial_scene: 5
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [gate]
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate]
 - name: The Middle
   starts: Glaz
   gmaj_program: 33
-  rjm_initial: 3
+  initial_scene: 3
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: []
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: []
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: []
-  - rjm_channel: 2
-    rjm_solo: true
+  - channel: 2
+    solo: true
     fx: []
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: [compressor, filter, delay]
-  - rjm_channel: 2
-    rjm_solo: false
+  - channel: 2
+    solo: false
     fx: []
 - name: Bullet With Butterfly Wings
   starts: Glaz
   gmaj_program: 34
-  rjm_initial: 1
+  initial_scene: 1
   scenes:
-  - rjm_channel: 1
-    rjm_solo: false
+  - channel: 1
+    solo: false
     fx: [compressor, reverb]
-  - rjm_channel: 1
-    rjm_solo: true
+  - channel: 1
+    solo: true
     fx: [compressor, reverb]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate, compressor, delay]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate, compressor, delay]
-  - rjm_channel: 3
-    rjm_solo: false
+  - channel: 3
+    solo: false
     fx: [gate]
-  - rjm_channel: 3
-    rjm_solo: true
+  - channel: 3
+    solo: true
     fx: [gate]
