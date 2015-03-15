@@ -187,12 +187,14 @@ COMPILE_ASSERT(sizeof(struct set_list) == 32);
 
 #define rjm_channel_mask        0x03
 
-// Mark V solo mode
-#define rjm_solo_mask           0x04
-#define rjm_solo_shr_to_1bit    2
-// Mark V EQ enable
-#define rjm_eq_mask             0x08
-#define rjm_eq_shr_to_1bit      3
+// Scene level as 2-bit signed integer
+#define scene_level_mask (0x04 | 0x08)
+#define scene_level_shr  2
+
+#define scene_level_0    0x00
+#define scene_level_pos3 0x01
+#define scene_level_neg6 0x02
+#define scene_level_neg3 0x03
 
 // Number of bits to shift to get 2nd bitset from u8:
 #define rjm_shr_to_4bits        4
