@@ -120,18 +120,10 @@ struct program {
     // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
     u8 name[20];
 
-    // Initial RJM channel selection (0 to 6):
-    u8 initial_scene;
-    // RJM channel descriptors mapped to 6 channel selector buttons (see rjm_*); 4 bits each channels, 6 channels, hence 4x6 = 24 bits = 3 octets:
-    u8 scene_desc[3];
-
-    // G-major program number (1 to 128, 0 for unused):
-    u8 gmaj_program;
-    // G-major effects enabled by default per channel (see fxm_*):
+    // Scene descriptors:
+    u8 scene_desc[6];
+    // G-major effects enabled per scene (see fxm_*):
     u8 fx[6];
-
-    // Reserved:
-    u8 _unused;
 };
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
@@ -188,13 +180,15 @@ COMPILE_ASSERT(sizeof(struct set_list) == 32);
 #define rjm_channel_mask        0x03
 
 // Scene level as 2-bit signed integer
-#define scene_level_mask (0x04 | 0x08)
+#define scene_level_mask (31 << 2)
 #define scene_level_shr  2
 
-#define scene_level_0    0x00
-#define scene_level_pos3 0x01
-#define scene_level_neg6 0x02
-#define scene_level_neg3 0x03
+// 5-bit signed values
+#define scene_level_0    ((( 0 - 3) & 31) << 2)
+#define scene_level_pos5 (((+5 - 3) & 31) << 2)
+#define scene_level_neg3 (((-3 - 3) & 31) << 2)
+
+#define scene_initial    0x80
 
 // Number of bits to shift to get 2nd bitset from u8:
 #define rjm_shr_to_4bits        4

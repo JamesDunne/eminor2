@@ -178,10 +178,10 @@ func main() {
 			if lvl5bit > 12 {
 				lvl5bit = 12
 			}
-			// Shift up 3dB to be 0 level.
+			// Shift up 3 to accommodate uneven range.
 			lvl5bit += 3
 
-			b := uint8(((s[j].Channel - 1) & 3) | (int(uint(lvl5bit)&31) << 2))
+			b := uint8((s[j].Channel-1)&3) | uint8((int8(lvl5bit&31))<<2)
 			if p.InitialScene-1 == j {
 				b |= 0x80
 			}

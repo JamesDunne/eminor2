@@ -243,15 +243,12 @@ void load_program_state(void) {
         ritoa(pr.name, next_gmaj_program + 1, 3);
         pr.name[4] = 0;
 
-        pr.gmaj_program = next_gmaj_program + 1;
-
-        pr.initial_scene = 4;
-        pr.scene_desc[0] = (rjm_channel_1)
-                         | (rjm_channel_1 | scene_level_pos3) << 4;
-        pr.scene_desc[1] = (rjm_channel_2)
-                         | (rjm_channel_2 | scene_level_pos3) << 4;
-        pr.scene_desc[2] = (rjm_channel_3)
-                         | (rjm_channel_3 | scene_level_pos3) << 4;
+        pr.scene_desc[0] = rjm_channel_1;
+        pr.scene_desc[1] = rjm_channel_1 | scene_level_pos5;
+        pr.scene_desc[2] = rjm_channel_2;
+        pr.scene_desc[3] = rjm_channel_2 | scene_level_pos5;
+        pr.scene_desc[4] = rjm_channel_3 | scene_initial;
+        pr.scene_desc[5] = rjm_channel_3 | scene_level_pos5;
 
         pr.fx[0] = (fxm_compressor);
         pr.fx[1] = (fxm_compressor);
@@ -261,32 +258,46 @@ void load_program_state(void) {
         pr.fx[5] = (fxm_noisegate | fxm_delay);
     }
 
+    // Default to main unboosted rhythm channel:
+    rjm_channel = 4;
+
+    // Decode the scene descriptors:
     for (i = 0; i < 6; ++i) {
-        // Get the RJM channel descriptor:
-        u8 descidx = i >> 1;
-        u8 rshr = (i & 1) << 2;
-        u8 rdesc = (pr.scene_desc[descidx] >> rshr) & 0x0F;
+        // Get the descriptor:
+        u8 rdesc = pr.scene_desc[i];
 
         // RJM channels start at 4 and alternate solo mode off/on and then increment channel #s:
         u8 mkv_chan = (rdesc & rjm_channel_mask);
+        // NOTE(jsd): Mark V solo mode is unused now that we can use Out Level on Torpedo Live.
         u8 new_rjm_actual = (mkv_chan << 1);
 
+        // Decode the 5-bit signed integer with +3 offset.
         s8 out_level = (rdesc & scene_level_mask) >> scene_level_shr;
-		// 2-bit sign extension:
-		if (out_level > 1) out_level = (s8)(out_level | 0xFE);
+		if (out_level > 15)
+            out_level = (s8)((u8)out_level | 0xE0);
+
+        // Adjust by -3dB to find correct range. (-19..+12)
+        out_level += -3;
+
+        // Find the initial channel:
+        if ((rdesc & scene_initial) == scene_initial)
+            rjm_channel = i;
 
         pr_rjm[i] = new_rjm_actual;
-		pr_out_level[i] = out_level * 3;
+		pr_out_level[i] = out_level;
     }
-
-    // Find the initial channel:
-    rjm_channel = pr.initial_scene;
 #endif
 }
 
 static void store_program_state(void) {
     // Store effects on/off state of current program:
-    pr.initial_scene = rjm_channel;
+    u8 i;
+
+    // Set initial channel:
+    for (i = 0; i < 6; i++) {
+        pr.fx[i] &= 0x7F;
+    }
+    pr.fx[rjm_channel] |= 0x80;
 
     // Store program state:
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
@@ -525,7 +536,7 @@ static void rjm_activate(void) {
     midi_send_cmd1(0xC, rjm_midi_channel, pr_rjm[rjm_channel] + 4);
 
 	// Send the out level to Torpedo Live:
-	// CC #25; 0 = -95dB ; 95 = 0dB ; 107 = +12dB (user manual claims 112dB, but I think this is a typo)
+	// CC #25; 0 = -95dB ; 95 = 0dB ; 107 = +12dB (user manual claims 112dB, but this is a typo - confirmed)
 	midi_send_cmd2(0xB, torp_midi_channel, torp_cc_out_level, pr_out_level[rjm_channel] + 95);
 
     // Send MIDI effects enable commands and set effects LEDs:
