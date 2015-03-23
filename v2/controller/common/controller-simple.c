@@ -88,6 +88,7 @@ u8 gmaj_cc_lookup[8];
 enum {
     MODE_LIVE = 0,
     MODE_PROGRAMMING,
+    MODE_SCENE_DESIGN,
     MODE_SETLIST_REORDER,
     MODE_count
 };
@@ -95,7 +96,7 @@ enum {
 // Controller UX modes (high level):
 u8 mode;
 u8 submode;
-u8 mode_1_select;
+u8 design_scene;
 
 // Setlist or program mode:
 u8 setlist_mode;
@@ -116,13 +117,13 @@ u8 gmaj_program;
 // Next g-major program to update to:
 u8 next_gmaj_program;
 
-u8 rjm_channel, live_rjm_channel;
+u8 scene, live_scene;
 
 // Current program data:
 struct program pr;
 // Decoded RJM channels (0-based channel number, alternating SOLO modes):
 u8 pr_rjm[6], live_pr_rjm[6];
-s8 pr_out_level[6];
+s8 pr_out_level[6], live_pr_out_level[6];
 
 // Current set list:
 struct set_list sl;
@@ -259,17 +260,17 @@ void load_program_state(void) {
     }
 
     // Default to main unboosted rhythm channel:
-    rjm_channel = 4;
+    scene = 4;
 
     // Decode the scene descriptors:
     for (i = 0; i < 6; ++i) {
         // Get the descriptor:
         u8 rdesc = pr.scene_desc[i];
 
-        // RJM channels start at 4 and alternate solo mode off/on and then increment channel #s:
+        // RJM channels start at 1 and alternate solo mode off/on and then increment channel #s:
         u8 mkv_chan = (rdesc & rjm_channel_mask);
         // NOTE(jsd): Mark V solo mode is unused now that we can use Out Level on Torpedo Live.
-        u8 new_rjm_actual = (mkv_chan << 1);
+        u8 new_rjm_actual = mkv_chan;
 
         // Decode the 5-bit signed integer with +3 offset.
         s8 out_level = (rdesc & scene_level_mask) >> scene_level_shr;
@@ -281,7 +282,7 @@ void load_program_state(void) {
 
         // Find the initial channel:
         if ((rdesc & scene_initial) == scene_initial)
-            rjm_channel = i;
+            scene = i;
 
         pr_rjm[i] = new_rjm_actual;
 		pr_out_level[i] = out_level;
@@ -297,7 +298,7 @@ static void store_program_state(void) {
     for (i = 0; i < 6; i++) {
         pr.fx[i] &= 0x7F;
     }
-    pr.fx[rjm_channel] |= 0x80;
+    pr.fx[scene] |= 0x80;
 
     // Store program state:
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
@@ -314,7 +315,7 @@ static void send_leds(void) {
 
 static void set_rjm_leds(void) {
     // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds[MODE_LIVE].bot.byte = (1 << rjm_channel) | (leds[MODE_LIVE].bot.byte & (M_7 | M_8));
+    leds[MODE_LIVE].bot.byte = (1 << scene) | (leds[MODE_LIVE].bot.byte & (M_7 | M_8));
 }
 
 static void clear_rjm_leds(void) {
@@ -326,76 +327,116 @@ static void clear_rjm_leds(void) {
 static void update_lcd(void) {
 #ifdef FEAT_LCD
     s8 i;
+    u8 b = 1;
+    u8 fx = leds[MODE_LIVE].top.byte & ~(M_7 | M_8);
 
     if (mode == MODE_LIVE) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = "                    "[i];
-            lcd_rows[3][i] = "CM FL PI CH DL RV   "[i];
+            lcd_rows[3][i] = " cm fl pt ch dl rv  "[i];
         }
-
-        // "MUTE  CH1S   PENDING"
-
-        if (is_muted) {
-            // Muted:
-            for (i = 0; i < 4; i++) {
-                lcd_rows[0][i] = "MUTE"[i];
+        for (i = 0; i < 6; i++, b <<= 1) {
+            if ((fx & b) == b) {
+                // Upper-case enabled FX labels:
+                lcd_rows[3][i * 3 + 1] &= ~0x20;
+                lcd_rows[3][i * 3 + 2] &= ~0x20;
             }
         }
 
-        {
-            // RJM channel name of live setting:
-            u8 ch = live_pr_rjm[live_rjm_channel];
-            lcd_rows[0][6 + 0] = 'C';
-            lcd_rows[0][6 + 1] = 'H';
-            lcd_rows[0][6 + 2] = '1' + (ch >> 1);
-            lcd_rows[0][6 + 3] = (ch & 1) ? 'S' : ' ';
-        }
-
-        if (next_gmaj_program != gmaj_program) {
-            // Pending program change:
-            for (i = 0; i < 7; i++) {
-                lcd_rows[0][i + 13] = "PENDING"[i];
+        if (setlist_mode == 0) {
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[1][i] = "Program         #   "[i];
             }
+            ritoa(lcd_rows[1], next_gmaj_program + 1, 19);
+        } else {
+            // Show setlist data:
+            u8 yyyy = sl.d1 >> 1;
+            u8 mm = ((sl.d1 & 1) << 4) | (sl.d0 >> 5);
+            u8 dd = (sl.d0 & 31);
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[1][i] = "2014-01-01       # 0"[i];
+            }
+            ritoa(lcd_rows[1], yyyy + 14, 3);
+            ritoa(lcd_rows[1], mm + 1, 6);
+            ritoa(lcd_rows[1], dd + 1, 9);
+
+            ritoa(lcd_rows[1], slp + 1, 19);
         }
     } else if (mode == MODE_PROGRAMMING) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = " -- Programming --  "[i];
-            lcd_rows[3][i] = "MD -- -- -- RM SW   "[i];
+            lcd_rows[1][i] = " -- Programming --  "[i];
+            lcd_rows[3][i] = " MD SD -- -- RM SW  "[i];
+        }
+    } else if (mode == MODE_SCENE_DESIGN) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[1][i] = " -- Scene Design -- "[i];
+            lcd_rows[3][i] = " -- -- -- -- -- --  "[i];
         }
     } else if (mode == MODE_SETLIST_REORDER) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[0][i] = " Swap setlist entry "[i];
-            lcd_rows[3][i] = "-- -- -- -- -- --   "[i];
+            lcd_rows[1][i] = " Swap setlist entry "[i];
+            lcd_rows[3][i] = " -- -- -- -- -- --  "[i];
         }
     }
 
-    if (setlist_mode == 0) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = "Program         #   "[i];
-        }
-        ritoa(lcd_rows[1], next_gmaj_program + 1, 19);
-    } else {
-        // Show setlist data:
-        u8 yyyy = sl.d1 >> 1;
-        u8 mm = ((sl.d1 & 1) << 4) | (sl.d0 >> 5);
-        u8 dd = (sl.d0 & 31);
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = "2014-01-01       # 0"[i];
-        }
-        ritoa(lcd_rows[1], yyyy + 14, 3);
-        ritoa(lcd_rows[1], mm + 1, 6);
-        ritoa(lcd_rows[1], dd + 1, 9);
-
-        ritoa(lcd_rows[1], slp + 1, 19);
-    }
-
-    // Show program name:
+    // Show program name and clear row 0:
     for (i = 0; i < LCD_COLS; i++) {
+        lcd_rows[0][i] = ' ';
         lcd_rows[2][i] = pr.name[i];
         if (pr.name[i] == 0) break;
     }
-    for (; i < LCD_COLS; i++)
+    for (; i < LCD_COLS; i++) {
+        lcd_rows[0][i] = ' ';
         lcd_rows[2][i] = ' ';
+    }
+
+    // "MUTE  CH1  +00  ****"
+
+    if (is_muted) {
+        // Muted:
+        for (i = 0; i < 4; i++) {
+            lcd_rows[0][i] = "MUTE"[i];
+        }
+    }
+
+    {
+        u8 ch;
+        s8 out_level;
+        u8 pos_level;
+
+        if (mode == MODE_SCENE_DESIGN) {
+            ch = pr_rjm[design_scene];
+            out_level = pr_out_level[design_scene];
+            pos_level = +out_level;
+        } else {
+            ch = live_pr_rjm[live_scene];
+            out_level = live_pr_out_level[live_scene];
+            pos_level = +out_level;
+        }
+
+        // Mark V channel name of live setting:
+        lcd_rows[0][6 + 0] = 'C';
+        lcd_rows[0][6 + 1] = 'H';
+        lcd_rows[0][6 + 2] = '1' + ch;
+
+        // Torpedo Live Out Level:
+        if (out_level == 0)
+            lcd_rows[0][11] = ' ';
+        else if (out_level > 0)
+            lcd_rows[0][11] = '+';
+        else {
+            lcd_rows[0][11] = '-';
+            pos_level = -out_level;
+        }
+
+        litoa(lcd_rows[0], pos_level, 12);
+    }
+
+    if (next_gmaj_program != gmaj_program) {
+        // Pending program change:
+        for (i = 16; i < 20; i++) {
+            lcd_rows[0][i] = '*';
+        }
+    }
 
     lcd_updated_all();
 #endif
@@ -441,23 +482,25 @@ static void gmaj_toggle_cc(u8 idx) {
     idxMask = (1 << idx);
 
     // Toggle on/off the selected continuous controller:
-    pr.fx[rjm_channel] ^= idxMask;
+    pr.fx[scene] ^= idxMask;
 
     // Determine the MIDI value to use depending on the newly toggled state:
-    if (pr.fx[rjm_channel] & idxMask) togglevalue = 0x7F;
+    if (pr.fx[scene] & idxMask) togglevalue = 0x7F;
 
     // Send MIDI command:
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
 
     // Update LEDs:
-    leds[MODE_LIVE].top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
+    leds[MODE_LIVE].top.byte = (pr.fx[scene] & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
     send_leds();
+
+    update_lcd();
 }
 
 static void update_effects_MIDI_state(void) {
 #if FX_ASSUME_OFF
     b8 n;
-    n.byte = pr.fx[rjm_channel];
+    n.byte = pr.fx[scene];
 
     // Assume all effects are off by default because g-major program change has just occurred.
 
@@ -497,7 +540,7 @@ static void update_effects_MIDI_state(void) {
         gmaj_cc_set(gmaj_cc_lookup[7], 0x7F);
     }
 #else
-    u8 fx = pr.fx[rjm_channel];
+    u8 fx = pr.fx[scene];
 
     // Reset top LEDs to new state, preserve LEDs 7 and 8:
     leds[MODE_LIVE].top.byte = (fx & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
@@ -528,16 +571,18 @@ static void rjm_activate(void) {
         gmaj_program = next_gmaj_program;
     }
 
-    live_rjm_channel = rjm_channel;
-    for (i = 0; i < 6; i++)
+    live_scene = scene;
+    for (i = 0; i < 6; i++) {
         live_pr_rjm[i] = pr_rjm[i];
+        live_pr_out_level[i] = pr_out_level[i];
+    }
 
     // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
-    midi_send_cmd1(0xC, rjm_midi_channel, pr_rjm[rjm_channel] + 4);
+    midi_send_cmd1(0xC, rjm_midi_channel, (pr_rjm[scene] << 1));
 
 	// Send the out level to Torpedo Live:
 	// CC #25; 0 = -95dB ; 95 = 0dB ; 107 = +12dB (user manual claims 112dB, but this is a typo - confirmed)
-	midi_send_cmd2(0xB, torp_midi_channel, torp_cc_out_level, pr_out_level[rjm_channel] + 95);
+	midi_send_cmd2(0xB, torp_midi_channel, torp_cc_out_level, pr_out_level[scene] + 95);
 
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
@@ -557,7 +602,7 @@ static void set_rjm_channel(u8 p) {
     // Keep track of the last-activated setlist program:
     last_slp = slp;
 
-    rjm_channel = p;
+    scene = p;
 
     // Switch RJM channel and set up effects on/off:
     rjm_activate();
@@ -615,41 +660,47 @@ static void switch_setlist_mode(u8 new_mode) {
 }
 
 static void switch_mode(u8 new_mode) {
-    leds[MODE_PROGRAMMING].top.byte = 0;
-    leds[MODE_PROGRAMMING].bot.byte = 0;
-
     mode = new_mode;
     update_lcd();
 }
 
 static void switch_submode(u8 new_mode) {
     if (new_mode == 0) {
-        leds[MODE_PROGRAMMING].top.byte = 0;
-        leds[MODE_PROGRAMMING].bot.byte = 0;
+        leds[MODE_SCENE_DESIGN].top.byte = 0;
+        leds[MODE_SCENE_DESIGN].bot.byte = 0;
     } else if (new_mode == 1) {
         // Show the selected preset on the bottom:
-        leds[MODE_PROGRAMMING].bot.byte = 1 << mode_1_select;
-        // Show the current mapping on the top:
-        leds[MODE_PROGRAMMING].top.byte = 1 << pr_rjm[mode_1_select];
+        leds[MODE_SCENE_DESIGN].bot.byte = 1 << design_scene;
     }
     submode = new_mode;
+    update_lcd();
 }
 
-static void remap_preset(u8 preset, u8 new_rjm_channel) {
-    // Get the RJM channel descriptor:
-    u8 descidx = preset >> 1;
-    u8 lshr = (preset & 1) << 2;
-    u8 mask = 0xF0 >> lshr;
+static void remap_preset(u8 preset, u8 new_rjm_channel, s8 out_level) {
+    u8 desc = pr.scene_desc[preset];
 
-	// TODO(jsd): Figure out a way to select out level (-6dB, -3dB, 0dB, +3dB)
-    u8 new_desc = ((new_rjm_channel >> 1) & rjm_channel_mask)
-        | ((new_rjm_channel & 1) << scene_level_shr);
+    desc &= ~rjm_channel_mask;
+    desc |= new_rjm_channel & rjm_channel_mask;
 
-    // Update the RJM descriptor while preserving the other half:
-    pr.scene_desc[descidx] = (pr.scene_desc[descidx] & mask)
-        | (new_desc << lshr);
+    // Calculate 5-bit level:
+    if (out_level < -19) out_level = -19;
+    else if (out_level > 12) out_level = 12;
 
+    // Set the bits in the descriptor:
+    desc &= ~scene_level_mask;
+    desc |= (u8)((out_level + 3) & 31) << scene_level_shr;
+
+    // Update program data to be written back to flash:
+    pr.scene_desc[preset] = desc;
+
+    // Update calculated data:
     pr_rjm[preset] = new_rjm_channel;
+    pr_out_level[preset] = out_level;
+
+    live_pr_rjm[preset] = pr_rjm[preset];
+    live_pr_out_level[preset] = pr_out_level[preset];
+
+    update_lcd();
 }
 
 // ------------------------- Actual controller logic -------------------------
@@ -686,7 +737,7 @@ void controller_init(void) {
     is_muted = 0;
     toggle_tap = 0;
 
-    rjm_channel = 0;
+    scene = 0;
     gmaj_program = 255;
     next_gmaj_program = 0;
 
@@ -780,9 +831,9 @@ void controller_10msec_timer(void) {
     if (is_timer_elapsed(fx)) {
         // Flash top LEDs on/off:
         if ((timer_held_fx & 15) >= 7) {
-            leds[MODE_LIVE].top.byte = ((pr.fx[rjm_channel] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
+            leds[MODE_LIVE].top.byte = ((pr.fx[scene] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
         } else {
-            leds[MODE_LIVE].top.byte = ((pr.fx[rjm_channel] | fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
+            leds[MODE_LIVE].top.byte = ((pr.fx[scene] | fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
         }
         send_leds();
     }
@@ -790,7 +841,7 @@ void controller_10msec_timer(void) {
     if (timeout_flash) {
         if (!--timeout_flash) {
             // Reset LED state:
-            leds[MODE_LIVE].top.byte = (pr.fx[rjm_channel] & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
+            leds[MODE_LIVE].top.byte = (pr.fx[scene] & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
             send_leds();
         } else {
             // Flash top LEDs on/off:
@@ -936,7 +987,7 @@ void handle_mode_LIVE(void) {
             set_gmaj_program_only();
 
             // Revert to current live RJM channel:
-            rjm_channel = live_rjm_channel;
+            scene = live_scene;
 
             // Set only current program LED on bottom, preserve LEDs 7 and 8:
             set_rjm_leds();
@@ -956,7 +1007,7 @@ void handle_mode_LIVE(void) {
     } else if (is_held_cancel() && is_timer_elapsed(prog)) {
         // programming mode:
         timer_held_prog = 0;
-        switch_mode(1);
+        switch_mode(MODE_PROGRAMMING);
         switch_submode(0);
     } else if (is_released_cancel()) {
         timer_held_prog = 0;
@@ -1045,12 +1096,72 @@ static void cut_setlist_entry(void) {
 
 // Mode 1 is activated by holding down PROG while in mode 0.
 void handle_mode_PROGRAMMING(void) {
+    // LEDs == FSWs:
+    leds[MODE_PROGRAMMING].top.byte = fsw.top.byte;
+    leds[MODE_PROGRAMMING].bot.byte = fsw.bot.byte;
+
+    // Exit programming when CANCEL button is pressed:
+    if (is_pressed_cancel()) {
+        switch_mode(MODE_LIVE);
+    }
+
+    // Switch setlist/program modes:
+    if (is_top_button_pressed(M_1)) {
+        // Toggle setlist/program mode:
+        switch_setlist_mode((setlist_mode ^ 1));
+    }
+    if (is_top_button_pressed(M_2)) {
+        // Enter scene design mode:
+        switch_mode(MODE_SCENE_DESIGN);
+        switch_submode(0);
+    }
+    if (is_top_button_pressed(M_3)) {
+    }
+    if (is_top_button_pressed(M_4)) {
+    }
+    if (is_top_button_pressed(M_5)) {
+        // Cut current setlist entry and shift all items back:
+        if (setlist_mode == 1) {
+            // TODO: confirm cut.
+            cut_setlist_entry();
+            set_gmaj_program();
+        }
+    }
+    if (is_top_button_pressed(M_6)) {
+        if (setlist_mode == 1) {
+            // Swap current setlist entry with selected one:
+            swap_slp = slp;
+            switch_mode(MODE_SETLIST_REORDER);
+            update_lcd();
+        }
+    }
+
+    // NEXT/PREV change setlists:
+    if (is_pressed_next()) {
+        // Next setlist:
+        if (sli < 31) {
+            sli++;
+            switch_setlist_mode(setlist_mode);
+        }
+    }
+    if (is_pressed_prev()) {
+        // Prev setlist:
+        if (sli > 0) {
+            sli--;
+            switch_setlist_mode(setlist_mode);
+        }
+    }
+
+    send_leds();
+}
+
+void handle_mode_SCENE_DESIGN(void) {
+    // LEDs == FSWs:
+    leds[MODE_SCENE_DESIGN].top.byte = fsw.top.byte;
+    leds[MODE_SCENE_DESIGN].bot.byte = fsw.bot.byte;
+
     // Select channel to reprogram first, then select channel to map it to.
     if (submode == 0) {
-        // LEDs == FSWs:
-        leds[MODE_PROGRAMMING].top.byte = fsw.top.byte;
-        leds[MODE_PROGRAMMING].bot.byte = fsw.bot.byte;
-
         // Exit programming when CANCEL button is pressed:
         if (is_pressed_cancel()) {
             switch_mode(MODE_LIVE);
@@ -1058,100 +1169,58 @@ void handle_mode_PROGRAMMING(void) {
 
         // Select channel to reprogram:
         if (is_bot_button_pressed(M_1)) {
-            mode_1_select = 0;
+            design_scene = 0;
             switch_submode(1);
         }
         if (is_bot_button_pressed(M_2)) {
-            mode_1_select = 1;
+            design_scene = 1;
             switch_submode(1);
         }
         if (is_bot_button_pressed(M_3)) {
-            mode_1_select = 2;
+            design_scene = 2;
             switch_submode(1);
         }
         if (is_bot_button_pressed(M_4)) {
-            mode_1_select = 3;
+            design_scene = 3;
             switch_submode(1);
         }
         if (is_bot_button_pressed(M_5)) {
-            mode_1_select = 4;
+            design_scene = 4;
             switch_submode(1);
         }
         if (is_bot_button_pressed(M_6)) {
-            mode_1_select = 5;
+            design_scene = 5;
             switch_submode(1);
-        }
-
-        // Switch setlist/program modes:
-        if (is_top_button_pressed(M_1)) {
-            // Toggle setlist/program mode:
-            switch_setlist_mode((setlist_mode ^ 1));
-        }
-        if (is_top_button_pressed(M_2)) {
-        }
-        if (is_top_button_pressed(M_3)) {
-        }
-        if (is_top_button_pressed(M_4)) {
-        }
-        if (is_top_button_pressed(M_5)) {
-            // Cut current setlist entry and shift all items back:
-            if (setlist_mode == 1) {
-                // TODO: confirm cut.
-                cut_setlist_entry();
-                set_gmaj_program();
-            }
-        }
-        if (is_top_button_pressed(M_6)) {
-            if (setlist_mode == 1) {
-                // Swap current setlist entry with selected one:
-                swap_slp = slp;
-                switch_mode(MODE_SETLIST_REORDER);
-                update_lcd();
-            }
-        }
-
-        // NEXT/PREV change setlists:
-        if (is_pressed_next()) {
-            // Next setlist:
-            if (sli < 31) {
-                sli++;
-                switch_setlist_mode(setlist_mode);
-            }
-        }
-        if (is_pressed_prev()) {
-            // Prev setlist:
-            if (sli > 0) {
-                sli--;
-                switch_setlist_mode(setlist_mode);
-            }
         }
 
         send_leds();
     } else {
         // Choose which amp channel to reprogram as:
         if (is_bot_button_pressed(M_1)) {
-            remap_preset(mode_1_select, 0);
-            switch_submode(0);
+            remap_preset(design_scene, 0, 0);
         }
         if (is_bot_button_pressed(M_2)) {
-            remap_preset(mode_1_select, 1);
-            switch_submode(0);
+            remap_preset(design_scene, 0, +5);
         }
         if (is_bot_button_pressed(M_3)) {
-            remap_preset(mode_1_select, 2);
-            switch_submode(0);
+            remap_preset(design_scene, 1, 0);
         }
         if (is_bot_button_pressed(M_4)) {
-            remap_preset(mode_1_select, 3);
-            switch_submode(0);
+            remap_preset(design_scene, 1, +5);
         }
         if (is_bot_button_pressed(M_5)) {
-            remap_preset(mode_1_select, 4);
-            switch_submode(0);
+            remap_preset(design_scene, 2, 0);
         }
         if (is_bot_button_pressed(M_6)) {
-            remap_preset(mode_1_select, 5);
-            switch_submode(0);
+            remap_preset(design_scene, 2, +5);
+        }
+
+        // NEXT/PREV set Out Level:
+        if (is_pressed_next()) {
+            remap_preset(design_scene, pr_rjm[design_scene], pr_out_level[design_scene] + 1);
+        }
+        if (is_pressed_prev()) {
+            remap_preset(design_scene, pr_rjm[design_scene], pr_out_level[design_scene] - 1);
         }
 
         // Exit reprogram mode to cancel:
@@ -1230,6 +1299,8 @@ void controller_handle(void) {
         handle_mode_LIVE();
     } else if (mode == MODE_PROGRAMMING) {
         handle_mode_PROGRAMMING();
+    } else if (mode == MODE_SCENE_DESIGN) {
+        handle_mode_SCENE_DESIGN();
     } else if (mode == MODE_SETLIST_REORDER) {
         handle_mode_SETLIST_REORDER();
     }

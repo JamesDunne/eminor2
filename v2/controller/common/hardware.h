@@ -189,6 +189,3 @@ COMPILE_ASSERT(sizeof(struct set_list) == 32);
 #define scene_level_neg3 (((-3 - 3) & 31) << 2)
 
 #define scene_initial    0x80
-
-// Number of bits to shift to get 2nd bitset from u8:
-#define rjm_shr_to_4bits        4
