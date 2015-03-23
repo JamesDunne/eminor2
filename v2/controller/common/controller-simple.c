@@ -95,7 +95,6 @@ enum {
 
 // Controller UX modes (high level):
 u8 mode;
-u8 design_scene;
 
 // Setlist or program mode:
 u8 setlist_mode;
@@ -403,8 +402,8 @@ static void update_lcd(void) {
         u8 pos_level;
 
         if (mode == MODE_SCENE_DESIGN) {
-            ch = pr_rjm[design_scene];
-            out_level = pr_out_level[design_scene];
+            ch = pr_rjm[scene];
+            out_level = pr_out_level[scene];
             pos_level = +out_level;
         } else {
             ch = live_pr_rjm[live_scene];
@@ -556,7 +555,7 @@ static void update_effects_MIDI_state(void) {
 #endif
 }
 
-static void rjm_activate(void) {
+static void scene_activate(void) {
     u8 i;
 
     // Switch g-major program if needed:
@@ -604,7 +603,7 @@ static void set_rjm_channel(u8 p) {
     scene = p;
 
     // Switch RJM channel and set up effects on/off:
-    rjm_activate();
+    scene_activate();
 }
 
 // Set g-major program:
@@ -663,7 +662,7 @@ static void switch_mode(u8 new_mode) {
     update_lcd();
 }
 
-static void remap_preset(u8 preset, u8 new_rjm_channel, s8 out_level) {
+static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
     u8 desc = pr.scene_desc[preset];
 
     desc &= ~rjm_channel_mask;
@@ -687,7 +686,7 @@ static void remap_preset(u8 preset, u8 new_rjm_channel, s8 out_level) {
     live_pr_rjm[preset] = pr_rjm[preset];
     live_pr_out_level[preset] = pr_out_level[preset];
 
-    update_lcd();
+    scene_activate();
 }
 
 // ------------------------- Actual controller logic -------------------------
@@ -763,7 +762,7 @@ void controller_init(void) {
 
     // Initialize program:
     set_gmaj_program();
-    rjm_activate();
+    scene_activate();
 }
 
 // called every 10ms
@@ -1126,7 +1125,6 @@ void handle_mode_PROGRAMMING(void) {
     }
     if (is_top_button_pressed(M_2)) {
         // Enter scene design mode:
-        design_scene = scene;
         switch_mode(MODE_SCENE_DESIGN);
     }
     if (is_top_button_pressed(M_3)) {
@@ -1172,8 +1170,8 @@ void handle_mode_PROGRAMMING(void) {
 void handle_mode_SCENE_DESIGN(void) {
     // Set NEXT/PREV LEDs on FSW:
     // LEDs == FSWs:
-    leds[MODE_SCENE_DESIGN].top.byte = (1 << ((live_pr_rjm[design_scene] << 1) | (live_pr_out_level[design_scene] <= 0 ? 0 : 1))) | (fsw.top.byte & (M_7 | M_8));
-    leds[MODE_SCENE_DESIGN].bot.byte = (1 << design_scene) | (fsw.bot.byte & (M_7 | M_8));
+    leds[MODE_SCENE_DESIGN].top.byte = (1 << ((pr_rjm[scene] << 1) | (pr_out_level[scene] <= 0 ? 0 : 1))) | (fsw.top.byte & (M_7 | M_8));
+    leds[MODE_SCENE_DESIGN].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
 
     // Exit scene design when CANCEL button is pressed:
     if (is_pressed_cancel()) {
@@ -1182,56 +1180,56 @@ void handle_mode_SCENE_DESIGN(void) {
 
     // Select channel to reprogram:
     if (is_bot_button_pressed(M_1)) {
-        design_scene = 0;
-        update_lcd();
+        scene = 0;
+        scene_activate();
     }
     if (is_bot_button_pressed(M_2)) {
-        design_scene = 1;
-        update_lcd();
+        scene = 1;
+        scene_activate();
     }
     if (is_bot_button_pressed(M_3)) {
-        design_scene = 2;
-        update_lcd();
+        scene = 2;
+        scene_activate();
     }
     if (is_bot_button_pressed(M_4)) {
-        design_scene = 3;
-        update_lcd();
+        scene = 3;
+        scene_activate();
     }
     if (is_bot_button_pressed(M_5)) {
-        design_scene = 4;
-        update_lcd();
+        scene = 4;
+        scene_activate();
     }
     if (is_bot_button_pressed(M_6)) {
-        design_scene = 5;
-        update_lcd();
+        scene = 5;
+        scene_activate();
     }
 
     // Choose which amp channel to reprogram as:
     if (is_top_button_pressed(M_1)) {
-        remap_preset(design_scene, 0, 0);
+        scene_update(scene, 0, 0);
     }
     if (is_top_button_pressed(M_2)) {
-        remap_preset(design_scene, 0, +5);
+        scene_update(scene, 0, +5);
     }
     if (is_top_button_pressed(M_3)) {
-        remap_preset(design_scene, 1, 0);
+        scene_update(scene, 1, 0);
     }
     if (is_top_button_pressed(M_4)) {
-        remap_preset(design_scene, 1, +5);
+        scene_update(scene, 1, +5);
     }
     if (is_top_button_pressed(M_5)) {
-        remap_preset(design_scene, 2, 0);
+        scene_update(scene, 2, 0);
     }
     if (is_top_button_pressed(M_6)) {
-        remap_preset(design_scene, 2, +5);
+        scene_update(scene, 2, +5);
     }
 
     // NEXT/PREV inc/dec Out Level:
     if (is_pressed_next()) {
-        remap_preset(design_scene, pr_rjm[design_scene], pr_out_level[design_scene] + 1);
+        scene_update(scene, pr_rjm[scene], pr_out_level[scene] + 1);
     }
     if (is_pressed_prev()) {
-        remap_preset(design_scene, pr_rjm[design_scene], pr_out_level[design_scene] - 1);
+        scene_update(scene, pr_rjm[scene], pr_out_level[scene] - 1);
     }
 
     send_leds();
