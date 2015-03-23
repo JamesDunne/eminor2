@@ -26,7 +26,7 @@ const (
 
 type SceneDescriptor struct {
 	Channel int `yaml:"channel"` // 1, 2, 3
-	Level   int `yaml:"level"`   // -6dB, -3dB, 0dB, +3dB
+	Level   int `yaml:"level"`   // 5 bit signed (-16..+15), offset -3 = -19..+12
 
 	FX []string `yaml:"fx,flow"`
 }
@@ -129,7 +129,7 @@ func main() {
 	songs_by_name := make(map[string]int)
 	songs := 0
 	for i, p := range programs.Programs {
-		_, err = fmt.Printf("%3d) %s\n", i+1, p.Name)
+		_, err = fmt.Printf("%3d) #%3d %s\n", i+1, p.GMajorProgram, p.Name)
 		if err != nil {
 			log.Println(err)
 			return
@@ -138,15 +138,15 @@ func main() {
 		songs++
 
 		// Write the name first:
-		if len(p.Name) > 20 {
-			fmt.Printf("Name is longer than 20 character limit: '%s', %d chars\n", p.Name, len(p.Name))
+		if len(p.Name) > song_name_max_length {
+			fmt.Printf("Name is longer than %d character limit: '%s', %d chars\n", song_name_max_length, p.Name, len(p.Name))
 		}
 
 		// Record the name-to-index mapping:
 		songs_by_name[strings.ToLower(p.Name)] = i
 
 		// Copy name characters:
-		for j := 0; j < 20; j++ {
+		for j := 0; j < song_name_max_length; j++ {
 			if j >= len(p.Name) {
 				fmt.Fprint(fo, "0, ")
 				continue
@@ -159,46 +159,30 @@ func main() {
 			fmt.Fprintf(fo, "'%c', ", rune(c))
 		}
 
-		// Initial channel:
-		fmt.Fprintf(fo, "%d, ", p.InitialScene-1)
-
-		// RJM channel descriptors:
-		//
+		// Scene descriptors:
 		// bits:
 		// 7654 3210
-		// BBCC BBCC
+		// IBBB BBCC
 		// |||| ||||
-		// |||| ||\+- Channel (0-2, 3 ignored)
-		// |||| ||
-		// |||| \+--- Boost   -6dB, -3dB, 0dB, +3dB (signed 2-bit)
-		// ||||
-		// ||\+------ Channel (0-2, 3 ignored)
-		// ||
-		// \+-------- Boost   -6dB, -3dB, 0dB, +3dB (signed 2-bit)
-		//
+		// |||| ||\+--- Channel (2 bits, 0-2, 3 ignored)
+		// |+++-++--- Out Level (5 bits signed, -16..+15, offset -3 => -19..+12)
+		// \----------- Initial
 
 		s := p.SceneDescriptors
-		for j := 0; j < 3; j++ {
-			b := uint8((s[j*2+0].Channel - 1) | ((s[j*2+1].Channel - 1) << 4))
-
-			// 2's complement of (Level/3): where valid Level values are -6, -3, 0, +3
-			if s[j*2+0].Level == 3 {
-				b |= 0x04
-			} else if s[j*2+0].Level == 0 {
-				// bits 0x04 and 0x08 are 0.
-			} else if s[j*2+0].Level == -3 {
-				b |= 0x08 | 0x04
-			} else if s[j*2+0].Level == -6 {
-				b |= 0x08
+		for j := 0; j < 6; j++ {
+			// Cap the out level range to -19..+12
+			lvl5bit := s[j].Level
+			if lvl5bit < -19 {
+				lvl5bit = -19
 			}
+			if lvl5bit > 12 {
+				lvl5bit = 12
+			}
+			// Shift up 3dB to be 0 level.
+			lvl5bit += 3
 
-			if s[j*2+1].Level == 3 {
-				b |= 0x40
-			} else if s[j*2+1].Level == 0 {
-				// bits 0x40 and 0x80 are 0.
-			} else if s[j*2+1].Level == -3 {
-				b |= 0x80 | 0x40
-			} else if s[j*2+1].Level == -6 {
+			b := uint8(((s[j].Channel - 1) & 3) | ((lvl5bit & 31) << 2))
+			if p.InitialScene-1 == j {
 				b |= 0x80
 			}
 
@@ -206,7 +190,6 @@ func main() {
 		}
 
 		// G-Major effects:
-		fmt.Fprintf(fo, "%d, ", p.GMajorProgram)
 		for j := 0; j < 6; j++ {
 			// Translate effect name strings into bit flags:
 			b := uint8(0)
@@ -233,10 +216,7 @@ func main() {
 			fmt.Fprintf(fo, "0x%02X, ", b)
 		}
 
-		// Unused:
-		fmt.Fprint(fo, "0")
-
-		fmt.Fprint(fo, ",\n")
+		fmt.Fprint(fo, "\n")
 	}
 
 	for songs = songs; songs < 128; songs++ {
