@@ -181,7 +181,7 @@ func main() {
 			// Shift up 3dB to be 0 level.
 			lvl5bit += 3
 
-			b := uint8(((s[j].Channel - 1) & 3) | ((lvl5bit & 31) << 2))
+			b := uint8(((s[j].Channel - 1) & 3) | (int(uint(lvl5bit)&31) << 2))
 			if p.InitialScene-1 == j {
 				b |= 0x80
 			}
