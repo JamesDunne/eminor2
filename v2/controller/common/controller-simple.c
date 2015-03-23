@@ -95,7 +95,6 @@ enum {
 
 // Controller UX modes (high level):
 u8 mode;
-u8 submode;
 u8 design_scene;
 
 // Setlist or program mode:
@@ -369,7 +368,7 @@ static void update_lcd(void) {
     } else if (mode == MODE_SCENE_DESIGN) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[1][i] = " -- Scene Design -- "[i];
-            lcd_rows[3][i] = " -- -- -- -- -- --  "[i];
+            lcd_rows[3][i] = "    select scene    "[i];
         }
     } else if (mode == MODE_SETLIST_REORDER) {
         for (i = 0; i < LCD_COLS; i++) {
@@ -661,18 +660,6 @@ static void switch_setlist_mode(u8 new_mode) {
 
 static void switch_mode(u8 new_mode) {
     mode = new_mode;
-    update_lcd();
-}
-
-static void switch_submode(u8 new_mode) {
-    if (new_mode == 0) {
-        leds[MODE_SCENE_DESIGN].top.byte = 0;
-        leds[MODE_SCENE_DESIGN].bot.byte = 0;
-    } else if (new_mode == 1) {
-        // Show the selected preset on the bottom:
-        leds[MODE_SCENE_DESIGN].bot.byte = 1 << design_scene;
-    }
-    submode = new_mode;
     update_lcd();
 }
 
@@ -1008,7 +995,6 @@ void handle_mode_LIVE(void) {
         // programming mode:
         timer_held_prog = 0;
         switch_mode(MODE_PROGRAMMING);
-        switch_submode(0);
     } else if (is_released_cancel()) {
         timer_held_prog = 0;
     }
@@ -1098,11 +1084,39 @@ static void cut_setlist_entry(void) {
 void handle_mode_PROGRAMMING(void) {
     // LEDs == FSWs:
     leds[MODE_PROGRAMMING].top.byte = fsw.top.byte;
-    leds[MODE_PROGRAMMING].bot.byte = fsw.bot.byte;
+
+    // Set only current program LED on bottom, preserve LEDs 7 and 8:
+    leds[MODE_PROGRAMMING].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
 
     // Exit programming when CANCEL button is pressed:
     if (is_pressed_cancel()) {
         switch_mode(MODE_LIVE);
+    }
+
+    // handle bottom 6 amp selector buttons:
+    if (is_bot_button_pressed(M_1)) {
+        set_rjm_channel(0);
+        reset_tuner_mute();
+    }
+    if (is_bot_button_pressed(M_2)) {
+        set_rjm_channel(1);
+        reset_tuner_mute();
+    }
+    if (is_bot_button_pressed(M_3)) {
+        set_rjm_channel(2);
+        reset_tuner_mute();
+    }
+    if (is_bot_button_pressed(M_4)) {
+        set_rjm_channel(3);
+        reset_tuner_mute();
+    }
+    if (is_bot_button_pressed(M_5)) {
+        set_rjm_channel(4);
+        reset_tuner_mute();
+    }
+    if (is_bot_button_pressed(M_6)) {
+        set_rjm_channel(5);
+        reset_tuner_mute();
     }
 
     // Switch setlist/program modes:
@@ -1112,8 +1126,8 @@ void handle_mode_PROGRAMMING(void) {
     }
     if (is_top_button_pressed(M_2)) {
         // Enter scene design mode:
+        design_scene = scene;
         switch_mode(MODE_SCENE_DESIGN);
-        switch_submode(0);
     }
     if (is_top_button_pressed(M_3)) {
     }
@@ -1156,80 +1170,71 @@ void handle_mode_PROGRAMMING(void) {
 }
 
 void handle_mode_SCENE_DESIGN(void) {
+    // Set NEXT/PREV LEDs on FSW:
     // LEDs == FSWs:
-    leds[MODE_SCENE_DESIGN].top.byte = fsw.top.byte;
-    leds[MODE_SCENE_DESIGN].bot.byte = fsw.bot.byte;
+    leds[MODE_SCENE_DESIGN].top.byte = (1 << ((live_pr_rjm[design_scene] << 1) | (live_pr_out_level[design_scene] <= 0 ? 0 : 1))) | (fsw.top.byte & (M_7 | M_8));
+    leds[MODE_SCENE_DESIGN].bot.byte = (1 << design_scene) | (fsw.bot.byte & (M_7 | M_8));
 
-    // Select channel to reprogram first, then select channel to map it to.
-    if (submode == 0) {
-        // Exit programming when CANCEL button is pressed:
-        if (is_pressed_cancel()) {
-            switch_mode(MODE_LIVE);
-        }
-
-        // Select channel to reprogram:
-        if (is_bot_button_pressed(M_1)) {
-            design_scene = 0;
-            switch_submode(1);
-        }
-        if (is_bot_button_pressed(M_2)) {
-            design_scene = 1;
-            switch_submode(1);
-        }
-        if (is_bot_button_pressed(M_3)) {
-            design_scene = 2;
-            switch_submode(1);
-        }
-        if (is_bot_button_pressed(M_4)) {
-            design_scene = 3;
-            switch_submode(1);
-        }
-        if (is_bot_button_pressed(M_5)) {
-            design_scene = 4;
-            switch_submode(1);
-        }
-        if (is_bot_button_pressed(M_6)) {
-            design_scene = 5;
-            switch_submode(1);
-        }
-
-        send_leds();
-    } else {
-        // Choose which amp channel to reprogram as:
-        if (is_bot_button_pressed(M_1)) {
-            remap_preset(design_scene, 0, 0);
-        }
-        if (is_bot_button_pressed(M_2)) {
-            remap_preset(design_scene, 0, +5);
-        }
-        if (is_bot_button_pressed(M_3)) {
-            remap_preset(design_scene, 1, 0);
-        }
-        if (is_bot_button_pressed(M_4)) {
-            remap_preset(design_scene, 1, +5);
-        }
-        if (is_bot_button_pressed(M_5)) {
-            remap_preset(design_scene, 2, 0);
-        }
-        if (is_bot_button_pressed(M_6)) {
-            remap_preset(design_scene, 2, +5);
-        }
-
-        // NEXT/PREV set Out Level:
-        if (is_pressed_next()) {
-            remap_preset(design_scene, pr_rjm[design_scene], pr_out_level[design_scene] + 1);
-        }
-        if (is_pressed_prev()) {
-            remap_preset(design_scene, pr_rjm[design_scene], pr_out_level[design_scene] - 1);
-        }
-
-        // Exit reprogram mode to cancel:
-        if (is_pressed_cancel()) {
-            switch_submode(0);
-        }
-
-        send_leds();
+    // Exit scene design when CANCEL button is pressed:
+    if (is_pressed_cancel()) {
+        switch_mode(MODE_PROGRAMMING);
     }
+
+    // Select channel to reprogram:
+    if (is_bot_button_pressed(M_1)) {
+        design_scene = 0;
+        update_lcd();
+    }
+    if (is_bot_button_pressed(M_2)) {
+        design_scene = 1;
+        update_lcd();
+    }
+    if (is_bot_button_pressed(M_3)) {
+        design_scene = 2;
+        update_lcd();
+    }
+    if (is_bot_button_pressed(M_4)) {
+        design_scene = 3;
+        update_lcd();
+    }
+    if (is_bot_button_pressed(M_5)) {
+        design_scene = 4;
+        update_lcd();
+    }
+    if (is_bot_button_pressed(M_6)) {
+        design_scene = 5;
+        update_lcd();
+    }
+
+    // Choose which amp channel to reprogram as:
+    if (is_top_button_pressed(M_1)) {
+        remap_preset(design_scene, 0, 0);
+    }
+    if (is_top_button_pressed(M_2)) {
+        remap_preset(design_scene, 0, +5);
+    }
+    if (is_top_button_pressed(M_3)) {
+        remap_preset(design_scene, 1, 0);
+    }
+    if (is_top_button_pressed(M_4)) {
+        remap_preset(design_scene, 1, +5);
+    }
+    if (is_top_button_pressed(M_5)) {
+        remap_preset(design_scene, 2, 0);
+    }
+    if (is_top_button_pressed(M_6)) {
+        remap_preset(design_scene, 2, +5);
+    }
+
+    // NEXT/PREV inc/dec Out Level:
+    if (is_pressed_next()) {
+        remap_preset(design_scene, pr_rjm[design_scene], pr_out_level[design_scene] + 1);
+    }
+    if (is_pressed_prev()) {
+        remap_preset(design_scene, pr_rjm[design_scene], pr_out_level[design_scene] - 1);
+    }
+
+    send_leds();
 }
 
 void handle_mode_SETLIST_REORDER(void) {
