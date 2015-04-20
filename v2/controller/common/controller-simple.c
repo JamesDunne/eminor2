@@ -169,6 +169,12 @@ declare_timer_looper(nextprev);
 #define timer_timeout_nextprev  45
 #define timer_loop_nextprev     10
 
+static void set_rjm_leds(void);
+static void clear_rjm_leds(void);
+static s8 ritoa(u8 *s, u8 n, s8 i);
+static void send_leds(void);
+static void update_lcd(void);
+
 // Determine if a footswitch was pressed
 static u8 is_top_button_pressed(u8 mask) {
     return ((fsw.top.byte & mask) == mask) && ((fsw_last.top.byte & mask) == 0);
@@ -192,27 +198,6 @@ static u8 is_top_button_held(u8 mask) {
 
 static u8 is_bot_button_held(u8 mask) {
     return ((fsw.bot.byte & mask) != 0);
-}
-
-static s8 ritoa(u8 *s, u8 n, s8 i) {
-    do {
-        s[i--] = (n % 10) + '0';
-    } while ((n /= 10) > 0);
-    return i;
-}
-
-static s8 litoa(u8 *s, u8 n, s8 i) {
-    // Write the integer to temporary storage:
-    u8 tmp[3];
-    s8 c = 0;
-    do {
-        tmp[c++] = (n % 10) + '0';
-    } while ((n /= 10) > 0);
-    // Write the left-aligned integer to the destination:
-    for (c--; c >= 0; c--, i++) {
-        s[i] = tmp[c];
-    }
-    return i;
 }
 
 // Loads ROM describing the initial on/off state of effects
@@ -300,144 +285,6 @@ static void store_program_state(void) {
 
     // Store program state:
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
-}
-
-static void send_leds(void) {
-    // Update LEDs:
-    curr_leds = (u16)leds[mode].bot.byte | ((u16)leds[mode].top.byte << 8);
-    if (curr_leds != last_leds) {
-        led_set(curr_leds);
-        last_leds = curr_leds;
-    }
-}
-
-static void set_rjm_leds(void) {
-    // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds[MODE_LIVE].bot.byte = (1 << scene) | (leds[MODE_LIVE].bot.byte & (M_7 | M_8));
-}
-
-static void clear_rjm_leds(void) {
-    // Preserve only LEDs 7 and 8 (clear LEDS 1-6):
-    leds[MODE_LIVE].bot.byte &= (M_7 | M_8);
-}
-
-// Update LCD display:
-static void update_lcd(void) {
-#ifdef FEAT_LCD
-    s8 i;
-    u8 b = 1;
-    u8 fx = leds[MODE_LIVE].top.byte & ~(M_7 | M_8);
-
-    if (mode == MODE_LIVE) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[3][i] = " cm fl pt ch dl rv  "[i];
-        }
-        for (i = 0; i < 6; i++, b <<= 1) {
-            if ((fx & b) == b) {
-                // Upper-case enabled FX labels:
-                lcd_rows[3][i * 3 + 1] &= ~0x20;
-                lcd_rows[3][i * 3 + 2] &= ~0x20;
-            }
-        }
-
-        if (setlist_mode == 0) {
-            for (i = 0; i < LCD_COLS; i++) {
-                lcd_rows[1][i] = "Program         #   "[i];
-            }
-            ritoa(lcd_rows[1], next_gmaj_program + 1, 19);
-        } else {
-            // Show setlist data:
-            u8 yyyy = sl.d1 >> 1;
-            u8 mm = ((sl.d1 & 1) << 4) | (sl.d0 >> 5);
-            u8 dd = (sl.d0 & 31);
-            for (i = 0; i < LCD_COLS; i++) {
-                lcd_rows[1][i] = "2014-01-01       # 0"[i];
-            }
-            ritoa(lcd_rows[1], yyyy + 14, 3);
-            ritoa(lcd_rows[1], mm + 1, 6);
-            ritoa(lcd_rows[1], dd + 1, 9);
-
-            ritoa(lcd_rows[1], slp + 1, 19);
-        }
-    } else if (mode == MODE_PROGRAMMING) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = " -- Programming --  "[i];
-            lcd_rows[3][i] = " MD SD -- -- RM SW  "[i];
-        }
-    } else if (mode == MODE_SCENE_DESIGN) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = " -- Scene Design -- "[i];
-            lcd_rows[3][i] = "    select scene    "[i];
-        }
-    } else if (mode == MODE_SETLIST_REORDER) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = " Swap setlist entry "[i];
-            lcd_rows[3][i] = " -- -- -- -- -- --  "[i];
-        }
-    }
-
-    // Show program name and clear row 0:
-    for (i = 0; i < LCD_COLS; i++) {
-        lcd_rows[0][i] = ' ';
-        lcd_rows[2][i] = pr.name[i];
-        if (pr.name[i] == 0) break;
-    }
-    for (; i < LCD_COLS; i++) {
-        lcd_rows[0][i] = ' ';
-        lcd_rows[2][i] = ' ';
-    }
-
-    // "MUTE  CH1  +00  ****"
-
-    if (is_muted) {
-        // Muted:
-        for (i = 0; i < 4; i++) {
-            lcd_rows[0][i] = "MUTE"[i];
-        }
-    }
-
-    {
-        u8 ch;
-        s8 out_level;
-        u8 pos_level;
-
-        if (mode == MODE_SCENE_DESIGN) {
-            ch = pr_rjm[scene];
-            out_level = pr_out_level[scene];
-            pos_level = +out_level;
-        } else {
-            ch = live_pr_rjm[live_scene];
-            out_level = live_pr_out_level[live_scene];
-            pos_level = +out_level;
-        }
-
-        // Mark V channel name of live setting:
-        lcd_rows[0][6 + 0] = 'C';
-        lcd_rows[0][6 + 1] = 'H';
-        lcd_rows[0][6 + 2] = '1' + ch;
-
-        // Torpedo Live Out Level:
-        if (out_level == 0)
-            lcd_rows[0][11] = ' ';
-        else if (out_level > 0)
-            lcd_rows[0][11] = '+';
-        else {
-            lcd_rows[0][11] = '-';
-            pos_level = -out_level;
-        }
-
-        litoa(lcd_rows[0], pos_level, 12);
-    }
-
-    if (next_gmaj_program != gmaj_program) {
-        // Pending program change:
-        for (i = 16; i < 20; i++) {
-            lcd_rows[0][i] = '*';
-        }
-    }
-
-    lcd_updated_all();
-#endif
 }
 
 // Set g-major CC value
@@ -860,6 +707,165 @@ void song_next(void) {
 void song_prev(void) {
     if (slp != 0) slp--;
     set_gmaj_program();
+}
+
+static s8 ritoa(u8 *s, u8 n, s8 i) {
+    do {
+        s[i--] = (n % 10) + '0';
+    } while ((n /= 10) > 0);
+    return i;
+}
+
+static s8 litoa(u8 *s, u8 n, s8 i) {
+    // Write the integer to temporary storage:
+    u8 tmp[3];
+    s8 c = 0;
+    do {
+        tmp[c++] = (n % 10) + '0';
+    } while ((n /= 10) > 0);
+    // Write the left-aligned integer to the destination:
+    for (c--; c >= 0; c--, i++) {
+        s[i] = tmp[c];
+    }
+    return i;
+}
+
+static void send_leds(void) {
+    // Update LEDs:
+    curr_leds = (u16)leds[mode].bot.byte | ((u16)leds[mode].top.byte << 8);
+    if (curr_leds != last_leds) {
+        led_set(curr_leds);
+        last_leds = curr_leds;
+    }
+}
+
+static void set_rjm_leds(void) {
+    // Set only current program LED on bottom, preserve LEDs 7 and 8:
+    leds[MODE_LIVE].bot.byte = (1 << scene) | (leds[MODE_LIVE].bot.byte & (M_7 | M_8));
+}
+
+static void clear_rjm_leds(void) {
+    // Preserve only LEDs 7 and 8 (clear LEDS 1-6):
+    leds[MODE_LIVE].bot.byte &= (M_7 | M_8);
+}
+
+// Update LCD display:
+static void update_lcd(void) {
+#ifdef FEAT_LCD
+    s8 i;
+    u8 b = 1;
+    u8 fx = leds[MODE_LIVE].top.byte & ~(M_7 | M_8);
+
+    if (mode == MODE_LIVE) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[3][i] = " cm fl pt ch dl rv  "[i];
+        }
+        for (i = 0; i < 6; i++, b <<= 1) {
+            if ((fx & b) == b) {
+                // Upper-case enabled FX labels:
+                lcd_rows[3][i * 3 + 1] &= ~0x20;
+                lcd_rows[3][i * 3 + 2] &= ~0x20;
+            }
+        }
+
+        if (setlist_mode == 0) {
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[1][i] = "Program         #   "[i];
+            }
+            ritoa(lcd_rows[1], next_gmaj_program + 1, 19);
+        } else {
+            // Show setlist data:
+            u8 yyyy = sl.d1 >> 1;
+            u8 mm = ((sl.d1 & 1) << 4) | (sl.d0 >> 5);
+            u8 dd = (sl.d0 & 31);
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[1][i] = "2014-01-01       # 0"[i];
+            }
+            ritoa(lcd_rows[1], yyyy + 14, 3);
+            ritoa(lcd_rows[1], mm + 1, 6);
+            ritoa(lcd_rows[1], dd + 1, 9);
+
+            ritoa(lcd_rows[1], slp + 1, 19);
+        }
+    } else if (mode == MODE_PROGRAMMING) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[1][i] = " -- Programming --  "[i];
+            lcd_rows[3][i] = " MD SD -- -- RM SW  "[i];
+        }
+    } else if (mode == MODE_SCENE_DESIGN) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[1][i] = " -- Scene Design -- "[i];
+            lcd_rows[3][i] = "    select scene    "[i];
+        }
+    } else if (mode == MODE_SETLIST_REORDER) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[1][i] = " Swap setlist entry "[i];
+            lcd_rows[3][i] = " -- -- -- -- -- --  "[i];
+        }
+    }
+
+    // Show program name and clear row 0:
+    for (i = 0; i < LCD_COLS; i++) {
+        lcd_rows[0][i] = ' ';
+        lcd_rows[2][i] = pr.name[i];
+        if (pr.name[i] == 0) break;
+    }
+    for (; i < LCD_COLS; i++) {
+        lcd_rows[0][i] = ' ';
+        lcd_rows[2][i] = ' ';
+    }
+
+    // "MUTE  CH1  +00  ****"
+
+    if (is_muted) {
+        // Muted:
+        for (i = 0; i < 4; i++) {
+            lcd_rows[0][i] = "MUTE"[i];
+        }
+    }
+
+    {
+        u8 ch;
+        s8 out_level;
+        u8 pos_level;
+
+        if (mode == MODE_SCENE_DESIGN) {
+            ch = pr_rjm[scene];
+            out_level = pr_out_level[scene];
+            pos_level = +out_level;
+        } else {
+            ch = live_pr_rjm[live_scene];
+            out_level = live_pr_out_level[live_scene];
+            pos_level = +out_level;
+        }
+
+        // Mark V channel name of live setting:
+        lcd_rows[0][6 + 0] = 'C';
+        lcd_rows[0][6 + 1] = 'H';
+        lcd_rows[0][6 + 2] = '1' + ch;
+
+        // Torpedo Live Out Level:
+        if (out_level == 0)
+            lcd_rows[0][11] = ' ';
+        else if (out_level > 0)
+            lcd_rows[0][11] = '+';
+        else {
+            lcd_rows[0][11] = '-';
+            pos_level = -out_level;
+        }
+
+        litoa(lcd_rows[0], pos_level, 12);
+    }
+
+    if (next_gmaj_program != gmaj_program) {
+        // Pending program change:
+        for (i = 16; i < 20; i++) {
+            lcd_rows[0][i] = '*';
+        }
+    }
+
+    lcd_updated_all();
+#endif
 }
 
 void handle_mode_LIVE(void) {
