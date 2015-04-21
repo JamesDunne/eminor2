@@ -62,13 +62,17 @@
 #define is_released(rowname, mask) is_##rowname##_button_released(mask)
 
 // Define our buttons by name:
-#define is_pressed_mute()       is_pressed(bot, M_1)
-#define is_held_mute()          is_held(bot, M_1)
-#define is_released_mute()      is_released(bot, M_1)
+#define is_pressed_mute()       is_pressed(bot, M_7)
+#define is_held_mute()          is_held(bot, M_7)
+#define is_released_mute()      is_released(bot, M_7)
 
-#define is_pressed_tapstore()   is_pressed(bot, M_7)
-#define is_held_tapstore()      is_held(bot, M_7)
-#define is_released_tapstore()  is_released(bot, M_7)
+#define is_pressed_tap()        is_pressed(bot, M_7)
+#define is_held_tap()           is_held(bot, M_7)
+#define is_released_tap()       is_released(bot, M_7)
+
+#define is_pressed_store()      is_pressed(bot, M_7)
+#define is_held_store()         is_held(bot, M_7)
+#define is_released_store()     is_released(bot, M_7)
 
 #define is_pressed_cancel()     is_pressed(bot, M_8)
 #define is_held_cancel()        is_held(bot, M_8)
@@ -94,7 +98,7 @@ enum {
 };
 
 // Controller UX modes (high level):
-u8 mode;
+u8 mode, mode_last;
 
 // Setlist or program mode:
 u8 setlist_mode;
@@ -163,6 +167,9 @@ declare_timer(prog);
 #define timer_timeout_prog      75
 
 declare_timer(flash);
+
+declare_timer(design);
+#define timer_timeout_design    75
 
 // next/prev loops and sets timer_looped_nextprev = 1 on each loop around.
 declare_timer_looper(nextprev);
@@ -295,16 +302,12 @@ static void gmaj_cc_set(u8 cc, u8 val) {
 static void enable_mute(void) {
     is_muted = 1;
     gmaj_cc_set(gmaj_cc_mute, 0x7F);
-    clear_rjm_leds();
-    send_leds();
     update_lcd();
 }
 
 static void disable_mute(void) {
     is_muted = 0;
     gmaj_cc_set(gmaj_cc_mute, 0x00);
-    set_rjm_leds();
-    send_leds();
     update_lcd();
 }
 
@@ -334,10 +337,6 @@ static void gmaj_toggle_cc(u8 idx) {
 
     // Send MIDI command:
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
-
-    // Update LEDs:
-    leds[MODE_LIVE].top.byte = (pr.fx[scene] & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
-    send_leds();
 
     update_lcd();
 }
@@ -432,11 +431,6 @@ static void scene_activate(void) {
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
 
-    // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    set_rjm_leds();
-
-    send_leds();
-
     update_lcd();
 }
 
@@ -481,9 +475,6 @@ static void set_gmaj_program(void) {
         set_rjm_leds();
     }
 
-    // Update LEDs:
-    send_leds();
-
     // Update LCD:
     update_lcd();
 }
@@ -505,6 +496,7 @@ static void switch_setlist_mode(u8 new_mode) {
 }
 
 static void switch_mode(u8 new_mode) {
+    mode_last = mode;
     mode = new_mode;
     update_lcd();
 }
@@ -544,6 +536,7 @@ void controller_init(void) {
 
     setlist_mode = 1;
     mode = MODE_LIVE;
+    mode_last = MODE_LIVE;
     for (i = 0; i < MODE_count; i++) {
         leds[i].top.byte = 0;
         leds[i].bot.byte = 0;
@@ -638,53 +631,10 @@ void controller_10msec_timer(void) {
     inc_timer_loop(nextprev)
 
     inc_timer(flash)
-
-    // Flash pending channel LED:
-    if (next_gmaj_program != gmaj_program) {
-        if ((timer_held_flash & 15) >= 7) {
-            set_rjm_leds();
-        } else {
-            clear_rjm_leds();
-        }
-    }
-
-    // Flash held LEDs:
-    if (is_timer_elapsed(sw)) {
-        // Flash top LEDs on/off:
-        if ((timer_held_sw & 15) >= 7) {
-            if (fsw.bot.bits._1) leds[MODE_LIVE].bot.bits._1 = 1;
-            if (fsw.bot.bits._2) leds[MODE_LIVE].bot.bits._2 = 1;
-        } else {
-            if (fsw.bot.bits._1) leds[MODE_LIVE].bot.bits._1 = 0;
-            if (fsw.bot.bits._2) leds[MODE_LIVE].bot.bits._2 = 0;
-        }
-        send_leds();
-    }
-
-    if (is_timer_elapsed(fx)) {
-        // Flash top LEDs on/off:
-        if ((timer_held_fx & 15) >= 7) {
-            leds[MODE_LIVE].top.byte = ((pr.fx[scene] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
-        } else {
-            leds[MODE_LIVE].top.byte = ((pr.fx[scene] | fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
-        }
-        send_leds();
-    }
+    inc_timer(design)
 
     if (timeout_flash) {
-        if (!--timeout_flash) {
-            // Reset LED state:
-            leds[MODE_LIVE].top.byte = (pr.fx[scene] & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
-            send_leds();
-        } else {
-            // Flash top LEDs on/off:
-            if ((timeout_flash & 15) >= 7) {
-                leds[MODE_LIVE].top.byte = (M_1 | M_2 | M_3 | M_4 | M_5 | M_6) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
-            } else {
-                leds[MODE_LIVE].top.byte = (leds[MODE_LIVE].top.byte & (M_7 | M_8));
-            }
-            send_leds();
-        }
+        --timeout_flash;
     }
 }
 
@@ -754,7 +704,7 @@ static void update_lcd(void) {
 #ifdef FEAT_LCD
     s8 i;
     u8 b = 1;
-    u8 fx = leds[MODE_LIVE].top.byte & ~(M_7 | M_8);
+    u8 fx = pr.fx[scene] & ~(M_7 | M_8);
 
     if (mode == MODE_LIVE) {
         for (i = 0; i < LCD_COLS; i++) {
@@ -767,41 +717,38 @@ static void update_lcd(void) {
                 lcd_rows[3][i * 3 + 2] &= ~0x20;
             }
         }
-
-        if (setlist_mode == 0) {
-            for (i = 0; i < LCD_COLS; i++) {
-                lcd_rows[1][i] = "Program         #   "[i];
-            }
-            ritoa(lcd_rows[1], next_gmaj_program + 1, 19);
-        } else {
-            // Show setlist data:
-            u8 yyyy = sl.d1 >> 1;
-            u8 mm = ((sl.d1 & 1) << 4) | (sl.d0 >> 5);
-            u8 dd = (sl.d0 & 31);
-            for (i = 0; i < LCD_COLS; i++) {
-                lcd_rows[1][i] = "2014-01-01       # 0"[i];
-            }
-            ritoa(lcd_rows[1], yyyy + 14, 3);
-            ritoa(lcd_rows[1], mm + 1, 6);
-            ritoa(lcd_rows[1], dd + 1, 9);
-
-            ritoa(lcd_rows[1], slp + 1, 19);
-        }
     } else if (mode == MODE_PROGRAMMING) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = " -- Programming --  "[i];
             lcd_rows[3][i] = " MD SD -- -- RM SW  "[i];
         }
     } else if (mode == MODE_SCENE_DESIGN) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = " -- Scene Design -- "[i];
-            lcd_rows[3][i] = "    select scene    "[i];
+            lcd_rows[3][i] = "    scene design    "[i];
         }
     } else if (mode == MODE_SETLIST_REORDER) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = " Swap setlist entry "[i];
             lcd_rows[3][i] = " -- -- -- -- -- --  "[i];
         }
+    }
+
+    if (setlist_mode == 0) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[1][i] = "Program         #   "[i];
+        }
+        ritoa(lcd_rows[1], next_gmaj_program + 1, 19);
+    } else {
+        // Show setlist data:
+        u8 yyyy = sl.d1 >> 1;
+        u8 mm = ((sl.d1 & 1) << 4) | (sl.d0 >> 5);
+        u8 dd = (sl.d0 & 31);
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[1][i] = "2014-01-01       # 0"[i];
+        }
+        ritoa(lcd_rows[1], yyyy + 14, 3);
+        ritoa(lcd_rows[1], mm + 1, 6);
+        ritoa(lcd_rows[1], dd + 1, 9);
+
+        ritoa(lcd_rows[1], slp + 1, 19);
     }
 
     // Show program name and clear row 0:
@@ -868,6 +815,66 @@ static void update_lcd(void) {
 #endif
 }
 
+static void calc_leds(void) {
+    if (mode == MODE_LIVE) {
+        // NEXT/PREV LEDs:
+        leds[MODE_LIVE].top.bits._8 = fsw.top.bits._8;
+        leds[MODE_LIVE].top.bits._7 = fsw.top.bits._7;
+
+        // Turn on the TAP LED while the TAP button is held:
+        leds[MODE_LIVE].bot.bits._7 = fsw.bot.bits._7;
+
+        // Flash pending channel LED:
+        if (next_gmaj_program != gmaj_program) {
+            if ((timer_held_flash & 15) >= 8) {
+                set_rjm_leds();
+            } else {
+                clear_rjm_leds();
+            }
+        } else {
+            // Set only current program LED on bottom, preserve LEDs 7 and 8:
+            set_rjm_leds();
+        }
+
+        // Set top LEDs to new FX state, preserve LEDs 7 and 8:
+        leds[MODE_LIVE].top.byte = (pr.fx[scene] & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
+
+        if (is_timer_elapsed(fx)) {
+            // Flash top LEDs on/off:
+            if ((timer_held_fx & 15) >= 8) {
+                leds[MODE_LIVE].top.byte = ((pr.fx[scene] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
+            } else {
+                leds[MODE_LIVE].top.byte = ((pr.fx[scene] | fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
+            }
+        }
+    } else if (mode == MODE_PROGRAMMING) {
+        // LEDs == FSWs:
+        leds[MODE_PROGRAMMING].top.byte = fsw.top.byte;
+
+        // Set only current program LED on bottom, preserve LEDs 7 and 8:
+        leds[MODE_PROGRAMMING].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
+    } else if (mode == MODE_SCENE_DESIGN) {
+        // LEDs == FSWs:
+        leds[MODE_SCENE_DESIGN].top.byte = (1 << ((pr_rjm[scene] << 1) | (pr_out_level[scene] <= 0 ? 0 : 1))) | (fsw.top.byte & (M_7 | M_8));
+        leds[MODE_SCENE_DESIGN].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
+    } else if (mode == MODE_SETLIST_REORDER) {
+        // LEDs == FSWs:
+        leds[MODE_SETLIST_REORDER].top.byte = fsw.top.byte;
+        leds[MODE_SETLIST_REORDER].bot.byte = fsw.bot.byte;
+    }
+
+    if (timeout_flash) {
+        // Flash top LEDs on/off to indicate store complete:
+        if ((timeout_flash & 15) >= 8) {
+            leds[mode].bot.bits._7 = 1;
+        } else {
+            leds[mode].bot.bits._7 = 0;
+        }
+    }
+
+    send_leds();
+}
+
 void handle_mode_LIVE(void) {
     // handle top 6 FX block buttons:
     if (is_top_button_pressed(M_1)) {
@@ -914,10 +921,61 @@ void handle_mode_LIVE(void) {
     }
 
     // handle bottom 6 amp selector buttons:
+
+    // hold down button to enter scene design mode to adjust output volume and channels.
+
     if (is_bot_button_pressed(M_1)) {
         set_rjm_channel(0);
         reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_1) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
     }
+
+    if (is_bot_button_pressed(M_2)) {
+        set_rjm_channel(1);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_2) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+
+    if (is_bot_button_pressed(M_3)) {
+        set_rjm_channel(2);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_3) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+    if (is_bot_button_pressed(M_4)) {
+        set_rjm_channel(3);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_4) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+    if (is_bot_button_pressed(M_5)) {
+        set_rjm_channel(4);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_5) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+    if (is_bot_button_pressed(M_6)) {
+        set_rjm_channel(5);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_6) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+
+    // handle remaining 4 functions:
 
     if (is_pressed_mute()) {
         timer_held_mute = 1;
@@ -929,45 +987,10 @@ void handle_mode_LIVE(void) {
         timer_held_mute = 0;
     }
 
-    if (is_bot_button_pressed(M_2)) {
-        set_rjm_channel(1);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_3)) {
-        set_rjm_channel(2);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_4)) {
-        set_rjm_channel(3);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_5)) {
-        set_rjm_channel(4);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_6)) {
-        set_rjm_channel(5);
-        reset_tuner_mute();
-    }
-
-    // handle remaining 4 functions:
-
-    // TAP/STORE released after timeout?
-    if (is_pressed_tapstore()) {
+    if (is_pressed_tap()) {
         // tap tempo function:
         toggle_tap = ~toggle_tap & 0x7F;
         gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
-        // start timer for STORE:
-        timer_held_tapstore = 1;
-    } else if (is_held_tapstore() && is_timer_elapsed(tapstore)) {
-        // STORE:
-        store_program_state();
-        // flash LEDs for 800ms:
-        timeout_flash = 80;
-        // disable STORE timer:
-        timer_held_tapstore = 0;
-    } else if (is_released_tapstore()) {
-        timer_held_tapstore = 0;
     }
 
     // CANCEL held to engage PROG:
@@ -980,12 +1003,6 @@ void handle_mode_LIVE(void) {
 
             // Revert to current live RJM channel:
             scene = live_scene;
-
-            // Set only current program LED on bottom, preserve LEDs 7 and 8:
-            set_rjm_leds();
-
-            // Update LEDs:
-            send_leds();
 
             // Update LCD:
             update_lcd();
@@ -1003,9 +1020,6 @@ void handle_mode_LIVE(void) {
     } else if (is_released_cancel()) {
         timer_held_prog = 0;
     }
-
-    // Turn on the TAP LED while the TAP button is held:
-    leds[MODE_LIVE].bot.bits._7 = fsw.bot.bits._7;
 
     if (setlist_mode == 0) {
         // Program mode:
@@ -1064,12 +1078,6 @@ void handle_mode_LIVE(void) {
             }
         }
     }
-
-    // NEXT/PREV LEDs:
-    leds[MODE_LIVE].top.bits._8 = fsw.top.bits._8;
-    leds[MODE_LIVE].top.bits._7 = fsw.top.bits._7;
-
-    send_leds();
 }
 
 // Utility function to cut current setlist entry out:
@@ -1087,12 +1095,6 @@ static void cut_setlist_entry(void) {
 
 // Mode 1 is activated by holding down PROG while in mode 0.
 void handle_mode_PROGRAMMING(void) {
-    // LEDs == FSWs:
-    leds[MODE_PROGRAMMING].top.byte = fsw.top.byte;
-
-    // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds[MODE_PROGRAMMING].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
-
     // Exit programming when CANCEL button is pressed:
     if (is_pressed_cancel()) {
         switch_mode(MODE_LIVE);
@@ -1154,34 +1156,75 @@ void handle_mode_PROGRAMMING(void) {
         }
     }
 
-    // NEXT/PREV change setlists:
-    if (is_pressed_next()) {
-        // Next setlist:
-        if (sli < 31) {
-            sli++;
-            switch_setlist_mode(setlist_mode);
-        }
-    }
-    if (is_pressed_prev()) {
-        // Prev setlist:
-        if (sli > 0) {
-            sli--;
-            switch_setlist_mode(setlist_mode);
-        }
+    // STORE released after timeout?
+    if (is_pressed_store()) {
+        // start timer for STORE:
+        timer_held_tapstore = 1;
+    } else if (is_held_store() && is_timer_elapsed(tapstore)) {
+        // STORE:
+        store_program_state();
+        // flash LEDs for 800ms:
+        timeout_flash = 80;
+        // disable STORE timer:
+        timer_held_tapstore = 0;
+    } else if (is_released_store()) {
+        timer_held_tapstore = 0;
     }
 
-    send_leds();
+    // NEXT/PREV change setlists:
+    if (setlist_mode == 0) {
+        // Program mode:
+
+        // NEXT
+        if (is_pressed_next()) {
+            timer_held_nextprev = 1;
+            prog_next();
+        } else if (is_released_next()) {
+            timer_held_nextprev = 0;
+        } else if (is_held_next()) {
+            if (timer_looped_nextprev) {
+                timer_looped_nextprev = 0;
+                prog_next();
+            }
+        }
+
+        // PREV
+        if (is_pressed_prev()) {
+            timer_held_nextprev = 1;
+            prog_prev();
+        } else if (is_released_prev()) {
+            timer_held_nextprev = 0;
+        } else if (is_held_prev()) {
+            if (timer_looped_nextprev) {
+                timer_looped_nextprev = 0;
+                prog_prev();
+            }
+        }
+    } else {
+        // Setlist mode:
+
+        if (is_pressed_next()) {
+            // Next setlist:
+            if (sli < 31) {
+                sli++;
+                switch_setlist_mode(setlist_mode);
+            }
+        }
+
+        if (is_pressed_prev()) {
+            // Prev setlist:
+            if (sli > 0) {
+                sli--;
+                switch_setlist_mode(setlist_mode);
+            }
+        }
+    }
 }
 
 void handle_mode_SCENE_DESIGN(void) {
-    // Set NEXT/PREV LEDs on FSW:
-    // LEDs == FSWs:
-    leds[MODE_SCENE_DESIGN].top.byte = (1 << ((pr_rjm[scene] << 1) | (pr_out_level[scene] <= 0 ? 0 : 1))) | (fsw.top.byte & (M_7 | M_8));
-    leds[MODE_SCENE_DESIGN].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
-
     // Exit scene design when CANCEL button is pressed:
     if (is_pressed_cancel()) {
-        switch_mode(MODE_PROGRAMMING);
+        switch_mode(mode_last);
     }
 
     // Select channel to reprogram:
@@ -1230,6 +1273,21 @@ void handle_mode_SCENE_DESIGN(void) {
         scene_update(scene, 2, +5);
     }
 
+    // STORE released after timeout?
+    if (is_pressed_store()) {
+        // start timer for STORE:
+        timer_held_tapstore = 1;
+    } else if (is_held_store() && is_timer_elapsed(tapstore)) {
+        // STORE:
+        store_program_state();
+        // flash LEDs for 800ms:
+        timeout_flash = 80;
+        // disable STORE timer:
+        timer_held_tapstore = 0;
+    } else if (is_released_store()) {
+        timer_held_tapstore = 0;
+    }
+
     // NEXT/PREV inc/dec Out Level:
     if (is_pressed_next()) {
         scene_update(scene, pr_rjm[scene], pr_out_level[scene] + 1);
@@ -1237,8 +1295,6 @@ void handle_mode_SCENE_DESIGN(void) {
     if (is_pressed_prev()) {
         scene_update(scene, pr_rjm[scene], pr_out_level[scene] - 1);
     }
-
-    send_leds();
 }
 
 void handle_mode_SETLIST_REORDER(void) {
@@ -1277,8 +1333,8 @@ void handle_mode_SETLIST_REORDER(void) {
         }
     }
 
-    // TAP/STORE to swap:
-    if (is_pressed_tapstore()) {
+    // STORE to swap:
+    if (is_pressed_store()) {
         // Swap setlist entries:
         tmp = sl.entries[slp].program;
         sl.entries[slp].program = sl.entries[swap_slp].program;
@@ -1287,14 +1343,7 @@ void handle_mode_SETLIST_REORDER(void) {
         slp = swap_slp;
         // Go back to programming mode:
         switch_mode(MODE_PROGRAMMING);
-        //update_lcd();
     }
-
-    // LEDs == FSWs:
-    leds[MODE_SETLIST_REORDER].top.byte = fsw.top.byte;
-    leds[MODE_SETLIST_REORDER].bot.byte = fsw.bot.byte;
-
-    send_leds();
 }
 
 // main control loop
@@ -1313,6 +1362,9 @@ void controller_handle(void) {
     } else if (mode == MODE_SETLIST_REORDER) {
         handle_mode_SETLIST_REORDER();
     }
+
+    // Calculate LEDs state and send it:
+    calc_leds();
 
     // Record the previous switch state:
     fsw_last = fsw;
