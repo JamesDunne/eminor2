@@ -234,11 +234,11 @@ void load_program_state(void) {
         ritoa(pr.name, next_gmaj_program + 1, 3);
         pr.name[4] = 0;
 
-        pr.scene_desc[0] = rjm_channel_1;
+        pr.scene_desc[0] = rjm_channel_1 | scene_level_0;
         pr.scene_desc[1] = rjm_channel_1 | scene_level_pos5;
-        pr.scene_desc[2] = rjm_channel_2;
+        pr.scene_desc[2] = rjm_channel_2 | scene_level_0;
         pr.scene_desc[3] = rjm_channel_2 | scene_level_pos5;
-        pr.scene_desc[4] = rjm_channel_3 | scene_initial;
+        pr.scene_desc[4] = rjm_channel_3 | scene_level_0 | scene_initial;
         pr.scene_desc[5] = rjm_channel_3 | scene_level_pos5;
 
         pr.fx[0] = (fxm_compressor);
