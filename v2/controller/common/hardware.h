@@ -138,7 +138,7 @@ struct set_entry {
 struct set_list {
     u8 count;                       // number of songs in set list
     u8 d0, d1;                      // date of show (see DATES below)
-    struct set_entry entries[29];
+    struct set_entry entries[61];
 };
 
 // DATES since 2014 are stored in 16 bits in the following form: (LSB on right)
@@ -150,7 +150,7 @@ struct set_list {
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
 // Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
-COMPILE_ASSERT(sizeof(struct set_list) == 32);
+COMPILE_ASSERT(sizeof(struct set_list) == 64);
 
 // An RJM channel descriptor:
 //
