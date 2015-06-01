@@ -33,6 +33,7 @@ type SceneDescriptor struct {
 
 type Program struct {
 	Name             string            `yaml:"name"`
+	AltNames         []string          `yaml:"altnames"`
 	Starts           string            `yaml:"starts,omitempty"`
 	GMajorProgram    int               `yaml:"gmaj_program"`
 	InitialScene     int               `yaml:"initial_scene"`
@@ -144,6 +145,9 @@ func main() {
 
 		// Record the name-to-index mapping:
 		songs_by_name[strings.ToLower(p.Name)] = i
+		for _, altname := range p.AltNames {
+			songs_by_name[strings.ToLower(altname)] = i
+		}
 
 		// Copy name characters:
 		for j := 0; j < song_name_max_length; j++ {
@@ -225,7 +229,7 @@ func main() {
 		fmt.Fprint(fo, ",\n")
 	}
 
-	const max_set_length = 29
+	const max_set_length = 61
 
 	// Write setlist data in reverse order of sets:
 	for i := len(setlists.Sets) - 1; i >= 0; i-- {

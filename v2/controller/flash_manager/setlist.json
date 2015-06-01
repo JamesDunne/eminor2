@@ -1,5 +1,5 @@
 {
-  "date": "2015-03-14",
+  "date": "2015-06-27",
   "songs": [
     {
       "i": 1,
@@ -13,11 +13,11 @@
     },
     {
       "i": 3,
-      "title": "My Own Worst Enemy",
+      "title": "Zero",
       "starts": "Jim"
     },
     {
-      "breakText": "BAND INTRO"
+      "breakText": "BREAK"
     },
     {
       "i": 4,
@@ -35,7 +35,48 @@
       "starts": "Glaz+Bremer"
     },
     {
+      "breakText": "BREAK"
+    },
+    {
       "i": 7,
+      "title": "Beautiful Disaster",
+      "starts": "Jim"
+    },
+    {
+      "i": 8,
+      "title": "When I Come Around",
+      "starts": "Jim"
+    },
+    {
+      "i": 9,
+      "title": "Semi-charmed Life",
+      "starts": ""
+    },
+    {
+      "breakText": "BREAK"
+    },
+    {
+      "i": 10,
+      "title": "Plush",
+      "starts": "Bremer 2 ct"
+    },
+    {
+      "i": 11,
+      "title": "Bound for the Floor",
+      "starts": "Jim"
+    },
+    {
+      "i": 12,
+      "title": "If You Could Only See",
+      "starts": "Glaz"
+    },
+    {
+      "i": 13,
+      "title": "My Own Worst Enemy",
+      "starts": "Jim"
+    },
+    {
+      "i": 14,
       "title": "Bullet With Butterfly Wings",
       "starts": "Glaz"
     },
@@ -43,74 +84,71 @@
       "breakText": "BREAK"
     },
     {
-      "i": 8,
-      "title": "Cumbersome",
-      "starts": "Jim"
-    },
-    {
-      "i": 9,
-      "title": "Hash Pipe",
+      "i": 15,
+      "title": "My Hero",
       "starts": "Bremer+Adam"
     },
     {
-      "i": 10,
-      "title": "Zero",
-      "starts": "Jim"
+      "i": 16,
+      "title": "Sex Type Thing",
+      "starts": "Bremer 4 ct"
     },
     {
-      "breakText": "TUNING"
+      "i": 17,
+      "title": "Kryptonite",
+      "starts": "Glaz"
     },
     {
-      "i": 11,
-      "title": "Plush",
-      "starts": "Bremer 2 ct"
-    },
-    {
-      "i": 12,
+      "i": 18,
       "title": "Brainstew",
       "starts": "Jim"
     },
     {
-      "i": 13,
-      "title": "Everything Zen",
-      "starts": "Glaz"
+      "breakText": "BREAK"
     },
     {
-      "breakText": "TUNING"
-    },
-    {
-      "i": 14,
+      "i": 19,
       "title": "The Middle",
       "starts": "Glaz"
     },
     {
-      "i": 15,
+      "i": 20,
       "title": "Monkeywrench",
       "starts": "Bremer 4 ct"
     },
     {
-      "i": 16,
+      "i": 21,
       "title": "Lump",
       "starts": "Bremer+Glaz"
     },
     {
-      "breakText": "TUNING"
+      "breakText": "BREAK"
     },
     {
-      "i": 17,
-      "title": "Counting Blue Cars",
-      "starts": "Bremer 4 ct"
+      "i": 22,
+      "title": "Cumbersome",
+      "starts": "Jim"
     },
     {
-      "i": 18,
+      "i": 23,
+      "title": "Hash Pipe",
+      "starts": "Bremer+Adam"
+    },
+    {
+      "i": 24,
+      "title": "Everything Zen",
+      "starts": "Glaz"
+    },
+    {
+      "breakText": "BREAK"
+    },
+    {
+      "i": 25,
       "title": "Holiday",
       "starts": "Jim"
     },
     {
-      "breakText": "GOODBYE"
-    },
-    {
-      "i": 19,
+      "i": 26,
       "title": "Enter Sandman",
       "starts": "Glaz"
     }
