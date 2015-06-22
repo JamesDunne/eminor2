@@ -123,13 +123,62 @@ sets:
 
     - Enter Sandman
 
-  - date: "2015-06-27"
+  - date: "2015-06-26"
+    print: true
     songs:
     - Dammit
     - Song 2
     - Zero
 
+    - 'BREAK: WELCOME'
+
+    - Brainstew
+    - Kryptonite
+    - Cumbersome
+
     - 'BREAK: BREAK'
+
+    - Machinehead
+    - Hash Pipe
+    - My Hero
+    - My Own Worst Enemy
+
+    - 'BREAK: DOWN TUNE'
+
+    - The Middle
+    - Monkey Wrench
+    - Lump
+
+    - 'BREAK: UP TUNE'
+
+    - Plush
+    - Buddy Holly
+    - Holiday
+
+    - 'BREAK: BREAK'
+
+    - Bullet With Butterfly Wings
+    - If You Could Only See
+    - Beautiful Disaster
+
+    - 'BREAK: BREAK'
+
+    - Hey Jealousy
+    - When I Come Around
+    - Semi-Charmed Life
+
+    - 'BREAK: BREAK'
+
+    - Enter Sandman
+
+  - date: "2015-06-27"
+    print: true
+    songs:
+    - Dammit
+    - Song 2
+    - Zero
+
+    - 'BREAK: WELCOME'
 
     - Machinehead
     - Hey Jealousy
@@ -156,13 +205,13 @@ sets:
     - Kryptonite
     - Brainstew
 
-    - 'BREAK: BREAK'
+    - 'BREAK: DOWN TUNE'
 
     - The Middle
     - Monkey Wrench
     - Lump
 
-    - 'BREAK: BREAK'
+    - 'BREAK: UP TUNE'
 
     - Cumbersome
     - Hash Pipe
