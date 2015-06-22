@@ -643,7 +643,7 @@ programs:
 - name: Kryptonite
   starts: Glaz
   gmaj_program: 29
-  initial_scene: 5
+  initial_scene: 1
   scenes:
   - channel: 1
     level: 0
