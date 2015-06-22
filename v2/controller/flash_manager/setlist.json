@@ -1,156 +1,299 @@
-{
-  "date": "2015-06-27",
-  "songs": [
-    {
-      "i": 1,
-      "title": "Dammit",
-      "starts": "Jim"
-    },
-    {
-      "i": 2,
-      "title": "Song 2",
-      "starts": "Bremer"
-    },
-    {
-      "i": 3,
-      "title": "Zero",
-      "starts": "Jim"
-    },
-    {
-      "breakText": "BREAK"
-    },
-    {
-      "i": 4,
-      "title": "Machinehead",
-      "starts": "Jim"
-    },
-    {
-      "i": 5,
-      "title": "Hey Jealousy",
-      "starts": "Bremer 4 ct"
-    },
-    {
-      "i": 6,
-      "title": "Buddy Holly",
-      "starts": "Glaz+Bremer"
-    },
-    {
-      "breakText": "BREAK"
-    },
-    {
-      "i": 7,
-      "title": "Beautiful Disaster",
-      "starts": "Jim"
-    },
-    {
-      "i": 8,
-      "title": "When I Come Around",
-      "starts": "Jim"
-    },
-    {
-      "i": 9,
-      "title": "Semi-charmed Life",
-      "starts": ""
-    },
-    {
-      "breakText": "BREAK"
-    },
-    {
-      "i": 10,
-      "title": "Plush",
-      "starts": "Bremer 2 ct"
-    },
-    {
-      "i": 11,
-      "title": "Bound for the Floor",
-      "starts": "Jim"
-    },
-    {
-      "i": 12,
-      "title": "If You Could Only See",
-      "starts": "Glaz"
-    },
-    {
-      "i": 13,
-      "title": "My Own Worst Enemy",
-      "starts": "Jim"
-    },
-    {
-      "i": 14,
-      "title": "Bullet With Butterfly Wings",
-      "starts": "Glaz"
-    },
-    {
-      "breakText": "BREAK"
-    },
-    {
-      "i": 15,
-      "title": "My Hero",
-      "starts": "Bremer+Adam"
-    },
-    {
-      "i": 16,
-      "title": "Sex Type Thing",
-      "starts": "Bremer 4 ct"
-    },
-    {
-      "i": 17,
-      "title": "Kryptonite",
-      "starts": "Glaz"
-    },
-    {
-      "i": 18,
-      "title": "Brainstew",
-      "starts": "Jim"
-    },
-    {
-      "breakText": "BREAK"
-    },
-    {
-      "i": 19,
-      "title": "The Middle",
-      "starts": "Glaz"
-    },
-    {
-      "i": 20,
-      "title": "Monkeywrench",
-      "starts": "Bremer 4 ct"
-    },
-    {
-      "i": 21,
-      "title": "Lump",
-      "starts": "Bremer+Glaz"
-    },
-    {
-      "breakText": "BREAK"
-    },
-    {
-      "i": 22,
-      "title": "Cumbersome",
-      "starts": "Jim"
-    },
-    {
-      "i": 23,
-      "title": "Hash Pipe",
-      "starts": "Bremer+Adam"
-    },
-    {
-      "i": 24,
-      "title": "Everything Zen",
-      "starts": "Glaz"
-    },
-    {
-      "breakText": "BREAK"
-    },
-    {
-      "i": 25,
-      "title": "Holiday",
-      "starts": "Jim"
-    },
-    {
-      "i": 26,
-      "title": "Enter Sandman",
-      "starts": "Glaz"
-    }
-  ]
-}
+[
+  {
+    "date": "2015-06-26",
+    "songs": [
+      {
+        "i": 1,
+        "title": "Dammit",
+        "starts": "Jim"
+      },
+      {
+        "i": 2,
+        "title": "Song 2",
+        "starts": "Bremer"
+      },
+      {
+        "i": 3,
+        "title": "Zero",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "WELCOME"
+      },
+      {
+        "i": 4,
+        "title": "Brainstew",
+        "starts": "Jim"
+      },
+      {
+        "i": 5,
+        "title": "Kryptonite",
+        "starts": "Glaz"
+      },
+      {
+        "i": 6,
+        "title": "Cumbersome",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 7,
+        "title": "Machinehead",
+        "starts": "Jim"
+      },
+      {
+        "i": 8,
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "i": 9,
+        "title": "My Hero",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "i": 10,
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "DOWN TUNE"
+      },
+      {
+        "i": 11,
+        "title": "The Middle",
+        "starts": "Glaz"
+      },
+      {
+        "i": 12,
+        "title": "Monkeywrench",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 13,
+        "title": "Lump",
+        "starts": "Bremer+Glaz"
+      },
+      {
+        "breakText": "UP TUNE"
+      },
+      {
+        "i": 14,
+        "title": "Plush",
+        "starts": "Bremer 2 ct"
+      },
+      {
+        "i": 15,
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
+      },
+      {
+        "i": 16,
+        "title": "Holiday",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 17,
+        "title": "Bullet With Butterfly Wings",
+        "starts": "Glaz"
+      },
+      {
+        "i": 18,
+        "title": "If You Could Only See",
+        "starts": "Glaz"
+      },
+      {
+        "i": 19,
+        "title": "Beautiful Disaster",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 20,
+        "title": "Hey Jealousy",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 21,
+        "title": "When I Come Around",
+        "starts": "Jim"
+      },
+      {
+        "i": 22,
+        "title": "Semi-charmed Life",
+        "starts": ""
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 23,
+        "title": "Enter Sandman",
+        "starts": "Glaz"
+      }
+    ]
+  },
+  {
+    "date": "2015-06-27",
+    "songs": [
+      {
+        "i": 1,
+        "title": "Dammit",
+        "starts": "Jim"
+      },
+      {
+        "i": 2,
+        "title": "Song 2",
+        "starts": "Bremer"
+      },
+      {
+        "i": 3,
+        "title": "Zero",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "WELCOME"
+      },
+      {
+        "i": 4,
+        "title": "Machinehead",
+        "starts": "Jim"
+      },
+      {
+        "i": 5,
+        "title": "Hey Jealousy",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 6,
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 7,
+        "title": "Beautiful Disaster",
+        "starts": "Jim"
+      },
+      {
+        "i": 8,
+        "title": "When I Come Around",
+        "starts": "Jim"
+      },
+      {
+        "i": 9,
+        "title": "Semi-charmed Life",
+        "starts": ""
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 10,
+        "title": "Plush",
+        "starts": "Bremer 2 ct"
+      },
+      {
+        "i": 11,
+        "title": "Bound for the Floor",
+        "starts": "Jim"
+      },
+      {
+        "i": 12,
+        "title": "If You Could Only See",
+        "starts": "Glaz"
+      },
+      {
+        "i": 13,
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
+      },
+      {
+        "i": 14,
+        "title": "Bullet With Butterfly Wings",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 15,
+        "title": "My Hero",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "i": 16,
+        "title": "Sex Type Thing",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 17,
+        "title": "Kryptonite",
+        "starts": "Glaz"
+      },
+      {
+        "i": 18,
+        "title": "Brainstew",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "DOWN TUNE"
+      },
+      {
+        "i": 19,
+        "title": "The Middle",
+        "starts": "Glaz"
+      },
+      {
+        "i": 20,
+        "title": "Monkeywrench",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 21,
+        "title": "Lump",
+        "starts": "Bremer+Glaz"
+      },
+      {
+        "breakText": "UP TUNE"
+      },
+      {
+        "i": 22,
+        "title": "Cumbersome",
+        "starts": "Jim"
+      },
+      {
+        "i": 23,
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "i": 24,
+        "title": "Everything Zen",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 25,
+        "title": "Holiday",
+        "starts": "Jim"
+      },
+      {
+        "i": 26,
+        "title": "Enter Sandman",
+        "starts": "Glaz"
+      }
+    ]
+  }
+]
