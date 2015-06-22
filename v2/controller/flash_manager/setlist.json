@@ -185,35 +185,30 @@
         "starts": "Jim"
       },
       {
-        "i": 9,
-        "title": "Semi-charmed Life",
-        "starts": "Bremer"
-      },
-      {
         "breakText": "BREAK"
       },
       {
-        "i": 10,
+        "i": 9,
         "title": "Plush",
         "starts": "Bremer 2 ct"
       },
       {
-        "i": 11,
+        "i": 10,
         "title": "Bound for the Floor",
         "starts": "Jim"
       },
       {
-        "i": 12,
+        "i": 11,
         "title": "If You Could Only See",
         "starts": "Glaz"
       },
       {
-        "i": 13,
+        "i": 12,
         "title": "My Own Worst Enemy",
         "starts": "Jim"
       },
       {
-        "i": 14,
+        "i": 13,
         "title": "Bullet With Butterfly Wings",
         "starts": "Glaz"
       },
@@ -221,22 +216,22 @@
         "breakText": "BREAK"
       },
       {
-        "i": 15,
+        "i": 14,
         "title": "My Hero",
         "starts": "Bremer+Adam"
       },
       {
-        "i": 16,
+        "i": 15,
         "title": "Sex Type Thing",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 17,
+        "i": 16,
         "title": "Kryptonite",
         "starts": "Glaz"
       },
       {
-        "i": 18,
+        "i": 17,
         "title": "Brainstew",
         "starts": "Jim"
       },
@@ -244,17 +239,17 @@
         "breakText": "DOWN TUNE"
       },
       {
-        "i": 19,
+        "i": 18,
         "title": "The Middle",
         "starts": "Glaz"
       },
       {
-        "i": 20,
+        "i": 19,
         "title": "Monkeywrench",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 21,
+        "i": 20,
         "title": "Lump",
         "starts": "Bremer+Glaz"
       },
@@ -262,17 +257,17 @@
         "breakText": "UP TUNE"
       },
       {
-        "i": 22,
+        "i": 21,
         "title": "Cumbersome",
         "starts": "Jim"
       },
       {
-        "i": 23,
+        "i": 22,
         "title": "Hash Pipe",
         "starts": "Bremer+Adam"
       },
       {
-        "i": 24,
+        "i": 23,
         "title": "Everything Zen",
         "starts": "Glaz"
       },
@@ -280,12 +275,12 @@
         "breakText": "BREAK"
       },
       {
-        "i": 25,
+        "i": 24,
         "title": "Holiday",
         "starts": "Jim"
       },
       {
-        "i": 26,
+        "i": 25,
         "title": "Enter Sandman",
         "starts": "Glaz"
       }
