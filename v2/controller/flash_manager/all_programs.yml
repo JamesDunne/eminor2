@@ -687,6 +687,7 @@ programs:
     level: 4
     fx: [gate, delay]
 - name: Semi-charmed Life
+  starts: Bremer
   gmaj_program: 31
   initial_scene: 5
   scenes:

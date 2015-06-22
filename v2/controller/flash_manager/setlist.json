@@ -126,15 +126,10 @@
         "starts": "Jim"
       },
       {
-        "i": 22,
-        "title": "Semi-charmed Life",
-        "starts": ""
-      },
-      {
         "breakText": "BREAK"
       },
       {
-        "i": 23,
+        "i": 22,
         "title": "Enter Sandman",
         "starts": "Glaz"
       }
@@ -192,7 +187,7 @@
       {
         "i": 9,
         "title": "Semi-charmed Life",
-        "starts": ""
+        "starts": "Bremer"
       },
       {
         "breakText": "BREAK"
