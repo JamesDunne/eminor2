@@ -124,6 +124,7 @@ sets:
     - Enter Sandman
 
   - date: "2015-06-26"
+    venue: Danny's Pizza
     print: true
     songs:
     - Dammit
@@ -168,6 +169,7 @@ sets:
     - Enter Sandman
 
   - date: "2015-06-27"
+    venue: Q Bar
     print: true
     songs:
     - Dammit

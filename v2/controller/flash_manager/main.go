@@ -47,6 +47,7 @@ type Programs struct {
 type Setlist struct {
 	// YAML sourced:
 	Date        string   `yaml:"date"`
+	Venue       string   `yaml:"venue"`
 	Songs       []string `yaml:"songs"`
 	ShouldPrint bool     `yaml:"print"`
 
@@ -327,6 +328,7 @@ func main() {
 		// Set up a temporary struct to marshal JSON data to:
 		type setlistJson struct {
 			Date  string        `json:"date"`
+			Venue string        `json:"venue"`
 			Songs []interface{} `json:"songs"`
 		}
 
@@ -340,6 +342,7 @@ func main() {
 
 			setlistData := setlistJson{
 				Date:  set.Date,
+				Venue: set.Venue,
 				Songs: make([]interface{}, 0, len(set.Songs)),
 			}
 

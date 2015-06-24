@@ -1,6 +1,7 @@
 [
   {
     "date": "2015-06-26",
+    "venue": "Danny's Pizza",
     "songs": [
       {
         "i": 1,
@@ -134,6 +135,7 @@
   },
   {
     "date": "2015-06-27",
+    "venue": "Q Bar",
     "songs": [
       {
         "i": 1,
