@@ -132,43 +132,39 @@ sets:
 
     - 'BREAK: WELCOME'
 
-    - Brainstew
-    - Kryptonite
     - Cumbersome
+    - Machinehead
+    - Brain Stew
 
     - 'BREAK: BREAK'
 
-    - Machinehead
-    - Hash Pipe
-    - My Hero
-    - My Own Worst Enemy
+    - Hey Jealousy
+    - Buddy Holly
+    - Beautiful Disaster
 
-    - 'BREAK: DOWN TUNE'
+    - 'BREAK: BREAK'
+
+    - Holiday
+    - My Own Worst Enemy
+    - If You Could Only See
+
+    - 'BREAK: DOWNTUNE'
 
     - The Middle
     - Monkey Wrench
     - Lump
 
-    - 'BREAK: UP TUNE'
+    - 'BREAK: UPTUNE'
 
     - Plush
-    - Buddy Holly
-    - Holiday
+    - Hash Pipe
+    - Kryptonite
+    - My Hero
 
     - 'BREAK: BREAK'
 
-    - Bullet With Butterfly Wings
-    - If You Could Only See
-    - Beautiful Disaster
-
-    - 'BREAK: BREAK'
-
-    - Hey Jealousy
     - When I Come Around
-    #- Semi-Charmed Life
-
-    - 'BREAK: BREAK'
-
+    - Bullet With Butterfly Wings
     - Enter Sandman
 
   - date: "2015-06-27"
@@ -188,36 +184,35 @@ sets:
 
     - Beautiful Disaster
     - When I Come Around
-    #- Semi-Charmed Life
-
-    - 'BREAK: BREAK'
-
-    - Plush
-    - Bound for the Floor
-    - If You Could Only See
-    - My Own Worst Enemy
     - Bullet With Butterfly Wings
 
     - 'BREAK: BREAK'
 
-    - My Hero
-    - Sex Type Thing
-    - Kryptonite
-    - Brainstew
+    - Plush
+    - My Own Worst Enemy
+    - If You Could Only See
+    - Brain Stew
 
-    - 'BREAK: DOWN TUNE'
+    - 'BREAK: DOWNTUNE'
 
     - The Middle
     - Monkey Wrench
     - Lump
 
-    - 'BREAK: UP TUNE'
+    - 'BREAK: UPTUNE'
+
+    - Kryptonite
+    - Hash Pipe
+    - My Hero
+
+    - 'BREAK: BREAK'
 
     - Cumbersome
-    - Hash Pipe
+    - Sex Type Thing
     - Everything Zen
 
     - 'BREAK: BREAK'
 
     - Holiday
+    - Closing Time
     - Enter Sandman

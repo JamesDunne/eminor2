@@ -22,17 +22,17 @@
       },
       {
         "i": 4,
-        "title": "Brainstew",
+        "title": "Cumbersome",
         "starts": "Jim"
       },
       {
         "i": 5,
-        "title": "Kryptonite",
-        "starts": "Glaz"
+        "title": "Machinehead",
+        "starts": "Jim"
       },
       {
         "i": 6,
-        "title": "Cumbersome",
+        "title": "Brainstew",
         "starts": "Jim"
       },
       {
@@ -40,75 +40,16 @@
       },
       {
         "i": 7,
-        "title": "Machinehead",
-        "starts": "Jim"
-      },
-      {
-        "i": 8,
-        "title": "Hash Pipe",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "i": 9,
-        "title": "My Hero",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "i": 10,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "DOWN TUNE"
-      },
-      {
-        "i": 11,
-        "title": "The Middle",
-        "starts": "Glaz"
-      },
-      {
-        "i": 12,
-        "title": "Monkeywrench",
+        "title": "Hey Jealousy",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 13,
-        "title": "Lump",
-        "starts": "Bremer+Glaz"
-      },
-      {
-        "breakText": "UP TUNE"
-      },
-      {
-        "i": 14,
-        "title": "Plush",
-        "starts": "Bremer 2 ct"
-      },
-      {
-        "i": 15,
+        "i": 8,
         "title": "Buddy Holly",
         "starts": "Glaz+Bremer"
       },
       {
-        "i": 16,
-        "title": "Holiday",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 17,
-        "title": "Bullet With Butterfly Wings",
-        "starts": "Glaz"
-      },
-      {
-        "i": 18,
-        "title": "If You Could Only See",
-        "starts": "Glaz"
-      },
-      {
-        "i": 19,
+        "i": 9,
         "title": "Beautiful Disaster",
         "starts": "Jim"
       },
@@ -116,17 +57,73 @@
         "breakText": "BREAK"
       },
       {
-        "i": 20,
-        "title": "Hey Jealousy",
+        "i": 10,
+        "title": "Holiday",
+        "starts": "Jim"
+      },
+      {
+        "i": 11,
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
+      },
+      {
+        "i": 12,
+        "title": "If You Could Only See",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "DOWNTUNE"
+      },
+      {
+        "i": 13,
+        "title": "The Middle",
+        "starts": "Glaz"
+      },
+      {
+        "i": 14,
+        "title": "Monkeywrench",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 21,
+        "i": 15,
+        "title": "Lump",
+        "starts": "Bremer+Glaz"
+      },
+      {
+        "breakText": "UPTUNE"
+      },
+      {
+        "i": 16,
+        "title": "Plush",
+        "starts": "Bremer 2 ct"
+      },
+      {
+        "i": 17,
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "i": 18,
+        "title": "Kryptonite",
+        "starts": "Glaz"
+      },
+      {
+        "i": 19,
+        "title": "My Hero",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 20,
         "title": "When I Come Around",
         "starts": "Jim"
       },
       {
-        "breakText": "BREAK"
+        "i": 21,
+        "title": "Bullet With Butterfly Wings",
+        "starts": "Glaz"
       },
       {
         "i": 22,
@@ -185,30 +182,7 @@
         "starts": "Jim"
       },
       {
-        "breakText": "BREAK"
-      },
-      {
         "i": 9,
-        "title": "Plush",
-        "starts": "Bremer 2 ct"
-      },
-      {
-        "i": 10,
-        "title": "Bound for the Floor",
-        "starts": "Jim"
-      },
-      {
-        "i": 11,
-        "title": "If You Could Only See",
-        "starts": "Glaz"
-      },
-      {
-        "i": 12,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
-      },
-      {
-        "i": 13,
         "title": "Bullet With Butterfly Wings",
         "starts": "Glaz"
       },
@@ -216,58 +190,76 @@
         "breakText": "BREAK"
       },
       {
-        "i": 14,
-        "title": "My Hero",
-        "starts": "Bremer+Adam"
+        "i": 10,
+        "title": "Plush",
+        "starts": "Bremer 2 ct"
       },
       {
-        "i": 15,
-        "title": "Sex Type Thing",
-        "starts": "Bremer 4 ct"
+        "i": 11,
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
       },
       {
-        "i": 16,
-        "title": "Kryptonite",
+        "i": 12,
+        "title": "If You Could Only See",
         "starts": "Glaz"
       },
       {
-        "i": 17,
+        "i": 13,
         "title": "Brainstew",
         "starts": "Jim"
       },
       {
-        "breakText": "DOWN TUNE"
+        "breakText": "DOWNTUNE"
       },
       {
-        "i": 18,
+        "i": 14,
         "title": "The Middle",
         "starts": "Glaz"
       },
       {
-        "i": 19,
+        "i": 15,
         "title": "Monkeywrench",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 20,
+        "i": 16,
         "title": "Lump",
         "starts": "Bremer+Glaz"
       },
       {
-        "breakText": "UP TUNE"
+        "breakText": "UPTUNE"
       },
       {
-        "i": 21,
-        "title": "Cumbersome",
-        "starts": "Jim"
+        "i": 17,
+        "title": "Kryptonite",
+        "starts": "Glaz"
       },
       {
-        "i": 22,
+        "i": 18,
         "title": "Hash Pipe",
         "starts": "Bremer+Adam"
       },
       {
-        "i": 23,
+        "i": 19,
+        "title": "My Hero",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 20,
+        "title": "Cumbersome",
+        "starts": "Jim"
+      },
+      {
+        "i": 21,
+        "title": "Sex Type Thing",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 22,
         "title": "Everything Zen",
         "starts": "Glaz"
       },
@@ -275,9 +267,14 @@
         "breakText": "BREAK"
       },
       {
-        "i": 24,
+        "i": 23,
         "title": "Holiday",
         "starts": "Jim"
+      },
+      {
+        "i": 24,
+        "title": "Closing Time",
+        "starts": "Glaz"
       },
       {
         "i": 25,
