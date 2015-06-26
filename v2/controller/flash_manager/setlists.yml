@@ -169,13 +169,14 @@ sets:
 
     - 'BREAK: BREAK'
 
+    - Everything Zen
     - When I Come Around
     - Bullet With Butterfly Wings
+
     - Enter Sandman
 
   - date: "2015-06-27"
     venue: Q Bar
-    print: true
     songs:
     - Dammit
     - Song 2
