@@ -10,6 +10,14 @@
 #include "../common/hardware.h"
 #include "font-5x8.h"
 
+// MinGW fixes:
+#ifndef GET_KEYSTATE_WPARAM
+#  define GET_KEYSTATE_WPARAM(wParam) (LOWORD(wParam))
+#endif
+#if _WIN32 
+#define swprintf _snwprintf 
+#endif 
+
 typedef unsigned long u32;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -93,12 +101,14 @@ void show_midi_output_devices() {
 }
 
 // main entry point
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine, int nCmdShow) {
     WNDCLASSEXW WndClass;
     MSG Msg;
     unsigned long result;
 
     zhInstance = hInstance;
+
+    PWSTR pCmdLine = GetCommandLineW();
 
     WndClass.cbSize = sizeof(WNDCLASSEXW);
     WndClass.style = 0; // disable CS_DBLCLKS
