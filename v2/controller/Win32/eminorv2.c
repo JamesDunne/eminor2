@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <windowsx.h>
+#include <wchar.h>
 #include <winuser.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -14,8 +15,8 @@
 #ifndef GET_KEYSTATE_WPARAM
 #  define GET_KEYSTATE_WPARAM(wParam) (LOWORD(wParam))
 #endif
-#if _WIN32 
-#define swprintf _snwprintf 
+#if _WIN32
+#  define swprintf _snwprintf
 #endif 
 
 typedef unsigned long u32;
