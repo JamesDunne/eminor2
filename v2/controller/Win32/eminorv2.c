@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <windowsx.h>
+//#include <windowsx.h>
 #include <wchar.h>
 #include <winuser.h>
 #include <stdio.h>
@@ -18,6 +18,11 @@
 #if _WIN32
 #  define swprintf _snwprintf
 #endif 
+
+#define FEAT_MIDI
+#ifdef __TINYC__
+#  undef FEAT_MIDI
+#endif
 
 typedef unsigned long u32;
 
@@ -78,9 +83,12 @@ static HWND hwndMain;
 
 // MIDI I/O:
 
+#ifdef FEAT_MIDI
 HMIDIOUT outHandle;
+#endif
 
 void show_midi_output_devices() {
+#ifdef FEAT_MIDI
     MIDIOUTCAPS     moc;
     unsigned long iNumDevs, i;
 
@@ -99,6 +107,7 @@ void show_midi_output_devices() {
             printf("  #%d: %ls\r\n", i, moc.szPname);
         }
     }
+#endif
 }
 
 // main entry point
@@ -152,6 +161,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
 
 #define TARGET_RESOLUTION 1         // 1-millisecond target resolution
 
+#ifdef FEAT_MIDI
     TIMECAPS tc;
     UINT     wTimerRes;
 
@@ -162,6 +172,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
 
     wTimerRes = min(max(tc.wPeriodMin, TARGET_RESOLUTION), tc.wPeriodMax);
     timeBeginPeriod(wTimerRes);
+#endif
 
     // TODO: really should FreeConsole() and fclose(stdout) later but it'll be open til process end anyway.
     AllocConsole();
@@ -170,6 +181,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
     // display the possible MIDI output devices:
     show_midi_output_devices();
 
+#ifdef FEAT_MIDI
     // Open the MIDI Mapper
     UINT midiDeviceID = (UINT)1;
     if (wcslen(pCmdLine) > 0) {
@@ -182,6 +194,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
         printf("There was an error opening MIDI device!  Disabling MIDI output...\r\n\r\n");
     else
         printf("Opened MIDI device successfully.\r\n\r\n");
+#endif
 
     // initialize UI bits:
     fsw_state.bot.byte = 0;
@@ -297,7 +310,7 @@ BOOL dpi_Label(HDC hdc, double cX, double cY, COLORREF color, HFONT font, UINT a
     SetTextColor(hdc, color);
     SetTextAlign(hdc, align); // TA_CENTER | VTA_TOP
     SelectObject(hdc, font);
-    SelectObject(hdc, GetStockPen(WHITE_PEN));
+    SelectObject(hdc, GetStockObject(WHITE_PEN));
 
     // Draw cross-hair:
     dpi_MoveTo(hdc, cX, cY - 0.05);
@@ -430,7 +443,7 @@ void paintFacePlate(HWND hwnd) {
     // Draw screw mounting holes:
     const double screwRadius = 1.25 * mmToIn;
     SelectObject(hDC, penThin);
-    SelectObject(hDC, GetStockBrush(NULL_BRUSH));
+    SelectObject(hDC, GetStockObject(NULL_BRUSH));
     dpi_CenterEllipse(hDC, lcdCenterX - (93 * mmToIn * 0.5), lcdCenterY - (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
     dpi_CenterEllipse(hDC, lcdCenterX + (93 * mmToIn * 0.5), lcdCenterY - (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
     dpi_CenterEllipse(hDC, lcdCenterX - (93 * mmToIn * 0.5), lcdCenterY + (55.0 * mmToIn * 0.5), screwRadius, screwRadius);
@@ -540,7 +553,7 @@ void paintFacePlate(HWND hwnd) {
         if (!show_dimensions) {
             SelectObject(hDC, brsWhite);
         } else {
-            SelectObject(hDC, GetStockBrush(NULL_BRUSH));
+            SelectObject(hDC, GetStockObject(NULL_BRUSH));
         }
 
         // draw 2 rows of 8 evenly spaced foot-switches
@@ -588,7 +601,7 @@ void paintFacePlate(HWND hwnd) {
         if (!show_dimensions) {
             SelectObject(hDC, brsDarkGreen);
         } else {
-            SelectObject(hDC, GetStockBrush(NULL_BRUSH));
+            SelectObject(hDC, GetStockObject(NULL_BRUSH));
         }
         b = 1;
         for (h = 0; h < 8; ++h, b <<= 1) {
@@ -651,6 +664,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             DestroyWindow(hwnd);
             break;
         case WM_DESTROY:
+#ifdef FEAT_MIDI
             // Close the MIDI device:
             if (outHandle != 0) {
                 if (midiOutClose(outHandle)) {
@@ -659,6 +673,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
                     printf("Closed MIDI mapper.\r\n");
                 }
             }
+#endif
             PostQuitMessage(0);
             break;
         case WM_PAINT:
@@ -667,8 +682,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
         case WM_LBUTTONDOWN: {
             int h, b;
 
-            double x = (double)GET_X_LPARAM(lParam) / dpi,
-                y = (double)GET_Y_LPARAM(lParam) / dpi;
+            double x = (double)LOWORD(lParam) / dpi,
+                y = (double)HIWORD(lParam) / dpi;
             const double r_sqr = (inFswOuterDiam * 0.5) * (inFswOuterDiam * 0.5);
 
             // Find out which foot-switch the mouse cursor is inside:
@@ -854,18 +869,22 @@ void led_set(u16 leds) {
     00 <= data2   <= FF   - second (optional) data byte of MIDI command
     */
 void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
+#ifdef FEAT_MIDI
     if (outHandle != 0) {
         // send the MIDI command to the opened MIDI Mapper device:
         midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8));
     }
+#endif
     printf("MIDI: %1X%1X %02X\r\n", cmd, channel, data1);
 }
 
 void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
+#ifdef FEAT_MIDI
     if (outHandle != 0) {
         // send the MIDI command to the opened MIDI Mapper device:
         midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8) | ((u32)data2 << 16));
     }
+#endif
     printf("MIDI: %1X%1X %02X %02X\r\n", cmd, channel, data1, data2);
 }
 
