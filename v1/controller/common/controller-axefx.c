@@ -44,6 +44,7 @@
 #define axe_cc_scene        34
 
 u8 sw_curr, sw_last;
+u8 slider_curr, slider_last;
 
 u8 axe_program;
 u8 axe_scene;
@@ -99,7 +100,7 @@ static void axe_midi_cc_set(u8 cc, u8 val) {
 
 // Change Axe-FX program:
 static void axe_set_program(u8 program) {
-    axe_program = program + 10;
+    axe_program = program;
 
     midi_send_cmd1(0xC, axe_midi_channel, axe_program);
     update_7seg();
@@ -108,29 +109,55 @@ static void axe_set_program(u8 program) {
 static void axe_reset_scene(void) {
     axe_midi_cc_set(axe_cc_scene, axe_scene);
 
-    if (axe_scene == 0) {
-        fsw_led_enable(0);
-        fsw_led_disable(1);
-        fsw_led_disable(2);
-        fsw_led_disable(3);
-    }
-    if (axe_scene == 1) {
-        fsw_led_enable(1);
-        fsw_led_disable(0);
-        fsw_led_disable(2);
-        fsw_led_disable(3);
-    }
-    if (axe_scene == 2) {
-        fsw_led_enable(2);
-        fsw_led_disable(0);
-        fsw_led_disable(1);
-        fsw_led_disable(3);
-    }
-    if (axe_scene == 3) {
-        fsw_led_enable(3);
-        fsw_led_disable(0);
-        fsw_led_disable(1);
-        fsw_led_disable(2);
+    switch (axe_scene) {
+        case 0:
+            fsw_led_enable(0);
+            fsw_led_disable(1);
+            fsw_led_disable(2);
+            fsw_led_disable(3);
+            break;
+        case 1:
+            fsw_led_disable(0);
+            fsw_led_enable(1);
+            fsw_led_disable(2);
+            fsw_led_disable(3);
+            break;
+        case 2:
+            fsw_led_disable(0);
+            fsw_led_disable(1);
+            fsw_led_enable(2);
+            fsw_led_disable(3);
+            break;
+        case 3:
+            fsw_led_disable(0);
+            fsw_led_disable(1);
+            fsw_led_disable(2);
+            fsw_led_enable(3);
+            break;
+        case 4:
+            fsw_led_disable(0);
+            fsw_led_enable(1);
+            fsw_led_enable(2);
+            fsw_led_enable(3);
+            break;
+        case 5:
+            fsw_led_enable(0);
+            fsw_led_disable(1);
+            fsw_led_enable(2);
+            fsw_led_enable(3);
+            break;
+        case 6:
+            fsw_led_enable(0);
+            fsw_led_enable(1);
+            fsw_led_disable(2);
+            fsw_led_enable(3);
+            break;
+        case 7:
+            fsw_led_enable(0);
+            fsw_led_enable(1);
+            fsw_led_enable(2);
+            fsw_led_disable(3);
+            break;
     }
     update_7seg();
 }
@@ -145,8 +172,10 @@ static void axe_set_scene(u8 scene) {
 // set the controller to an initial state
 void controller_init(void) {
     sw_last = 0xFF;
+    slider_last = 0xFF;
+    slider_curr = 0;
 
-    axe_set_program(0);
+    //axe_set_program(0);
     axe_set_scene(0);
 }
 
@@ -158,8 +187,9 @@ void controller_10msec_timer(void) {
 void controller_handle(void) {
     // poll foot-switch depression status:
     sw_curr = fsw_poll();
+    slider_curr = slider_poll();
 
-    // one of BOTTOM preset 1-4 pressed:
+    // one of BOTTOM 1-4 pressed:
     if (button_pressed(FSM_PRESET_1)) {
         axe_set_scene(0);
     }
@@ -173,22 +203,28 @@ void controller_handle(void) {
         axe_set_scene(3);
     }
 
-    // one of TOP control 1-4 pressed:
-    if (button_pressed(FSM_CONTROL_1)) {
-        axe_set_program(0);
-        axe_reset_scene();
-    }
-    if (button_pressed(FSM_CONTROL_2)) {
-        axe_set_program(1);
-        axe_reset_scene();
-    }
-    if (button_pressed(FSM_CONTROL_3)) {
-        axe_set_program(2);
-        axe_reset_scene();
-    }
-    if (button_pressed(FSM_CONTROL_4)) {
-        axe_set_program(3);
-        axe_reset_scene();
+    if (slider_curr == 1) {
+        // one of TOP 1-4 pressed:
+        if (button_pressed(FSM_CONTROL_1)) {
+            axe_set_scene(4);
+            //axe_set_program(0);
+            //axe_reset_scene();
+        }
+        if (button_pressed(FSM_CONTROL_2)) {
+            axe_set_scene(5);
+            //axe_set_program(1);
+            //axe_reset_scene();
+        }
+        if (button_pressed(FSM_CONTROL_3)) {
+            axe_set_scene(6);
+            //axe_set_program(2);
+            //axe_reset_scene();
+        }
+        if (button_pressed(FSM_CONTROL_4)) {
+            axe_set_scene(7);
+            //axe_set_program(3);
+            //axe_reset_scene();
+        }
     }
 
     sw_last = sw_curr;
