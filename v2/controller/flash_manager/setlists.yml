@@ -130,7 +130,6 @@ sets:
 
   - date: "2015-06-26"
     venue: Danny's Pizza
-    print: true
     songs:
     - Dammit
     - Song 2
@@ -224,3 +223,41 @@ sets:
     - Holiday
     - Closing Time
     - Enter Sandman
+
+  - date: "2015-07-31"
+    venue: The Alibi
+    print: true
+    songs:
+      - Everything Zen
+      - Song 2
+      - Zero
+
+      - 'BREAK: BREAK'
+
+      - Machinehead
+      - Dammit
+      - Beautiful Disaster
+
+      - 'BREAK: BREAK'
+
+      - Hey Jealousy
+      - When I Come Around
+      - Buddy Holly
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: UPTUNE'
+
+      - Cumbersome
+      - Brain Stew
+      - Kryptonite
+
+      - 'BREAK: BREAK'
+
+      - My Own Worst Enemy
+      - Hash Pipe
+      - Enter Sandman

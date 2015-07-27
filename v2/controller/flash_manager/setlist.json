@@ -1,12 +1,12 @@
 [
   {
-    "date": "2015-06-26",
-    "venue": "Danny's Pizza",
+    "date": "2015-07-31",
+    "venue": "The Alibi",
     "songs": [
       {
         "i": 1,
-        "title": "Dammit",
-        "starts": "Jim"
+        "title": "Everything Zen",
+        "starts": "Glaz"
       },
       {
         "i": 2,
@@ -19,21 +19,21 @@
         "starts": "Jim"
       },
       {
-        "breakText": "WELCOME"
+        "breakText": "BREAK"
       },
       {
         "i": 4,
-        "title": "Cumbersome",
-        "starts": "Jim"
-      },
-      {
-        "i": 5,
         "title": "Machinehead",
         "starts": "Jim"
       },
       {
+        "i": 5,
+        "title": "Dammit",
+        "starts": "Jim"
+      },
+      {
         "i": 6,
-        "title": "Brainstew",
+        "title": "Beautiful Disaster",
         "starts": "Jim"
       },
       {
@@ -46,47 +46,29 @@
       },
       {
         "i": 8,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
+        "title": "When I Come Around",
+        "starts": "Jim"
       },
       {
         "i": 9,
-        "title": "Beautiful Disaster",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 10,
-        "title": "Holiday",
-        "starts": "Jim"
-      },
-      {
-        "i": 11,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
-      },
-      {
-        "i": 12,
-        "title": "If You Could Only See",
-        "starts": "Glaz"
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
       },
       {
         "breakText": "DOWNTUNE"
       },
       {
-        "i": 13,
+        "i": 10,
         "title": "The Middle",
         "starts": "Glaz"
       },
       {
-        "i": 14,
+        "i": 11,
         "title": "Monkeywrench",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 15,
+        "i": 12,
         "title": "Lump",
         "starts": "Bremer+Glaz"
       },
@@ -94,9 +76,27 @@
         "breakText": "UPTUNE"
       },
       {
+        "i": 13,
+        "title": "Cumbersome",
+        "starts": "Jim"
+      },
+      {
+        "i": 14,
+        "title": "Brainstew",
+        "starts": "Jim"
+      },
+      {
+        "i": 15,
+        "title": "Kryptonite",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
         "i": 16,
-        "title": "Plush",
-        "starts": "Bremer 2 ct"
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
       },
       {
         "i": 17,
@@ -105,34 +105,6 @@
       },
       {
         "i": 18,
-        "title": "Kryptonite",
-        "starts": "Glaz"
-      },
-      {
-        "i": 19,
-        "title": "My Hero",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 20,
-        "title": "Everything Zen",
-        "starts": "Glaz"
-      },
-      {
-        "i": 21,
-        "title": "When I Come Around",
-        "starts": "Jim"
-      },
-      {
-        "i": 22,
-        "title": "Bullet With Butterfly Wings",
-        "starts": "Glaz"
-      },
-      {
-        "i": 23,
         "title": "Enter Sandman",
         "starts": "Glaz"
       }
