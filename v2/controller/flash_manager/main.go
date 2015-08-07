@@ -143,21 +143,26 @@ func generatePICH() {
 		// IBBB BBCC
 		// |||| ||||
 		// |||| ||\+--- Channel (2 bits, 0-2, 3 ignored)
-		// |+++-++--- Out Level (5 bits signed, -16..+15, offset -3 => -19..+12)
+		// |+++-++--- Out Level (5 bits signed, -16..+15, offset -9 => -25..+6)
 		// \----------- Initial
+		const (
+			lvl_offset = 9
+			lvl_min = -16 - lvl_offset
+			lvl_max = 15 - lvl_offset
+		)
 
 		s := p.SceneDescriptors
 		for j := 0; j < 6; j++ {
 			// Cap the out level range to -19..+12
 			lvl5bit := s[j].Level
-			if lvl5bit < -19 {
-				lvl5bit = -19
+			if lvl5bit < lvl_min {
+				lvl5bit = lvl_min
 			}
-			if lvl5bit > 12 {
-				lvl5bit = 12
+			if lvl5bit > lvl_max {
+				lvl5bit = lvl_max
 			}
-			// Shift up 3 to accommodate uneven range.
-			lvl5bit += 3
+			// Offset up to accommodate uneven range.
+			lvl5bit += lvl_offset
 
 			b := uint8((s[j].Channel-1)&3) | uint8((int8(lvl5bit&31))<<2)
 			if p.InitialScene-1 == j {

@@ -42,17 +42,18 @@
 #define torp_midi_channel   2
 
 // G-major CC messages:
-#define gmaj_cc_taptempo    80
-#define gmaj_cc_mute        81
+#define gmaj_cc_taptempo        80
+#define gmaj_cc_mute            81
 
-#define gmaj_cc_compressor  84
-#define gmaj_cc_filter      85
-#define gmaj_cc_pitch       86
-#define gmaj_cc_chorus      87
-#define gmaj_cc_delay       88
-#define gmaj_cc_reverb      89
-#define gmaj_cc_noisegate   90
-#define gmaj_cc_eq          91
+#define gmaj_cc_compressor      84
+#define gmaj_cc_filter          85
+#define gmaj_cc_pitch           86
+#define gmaj_cc_chorus          87
+#define gmaj_cc_delay           88
+#define gmaj_cc_reverb          89
+#define gmaj_cc_noisegate       90
+#define gmaj_cc_eq              91
+#define gmaj_cc_global_in_level 92
 
 // Torpedo Live CC messages:
 #define torp_cc_out_level   25
@@ -262,13 +263,13 @@ void load_program_state(void) {
         // NOTE(jsd): Mark V solo mode is unused now that we can use Out Level on Torpedo Live.
         u8 new_rjm_actual = mkv_chan;
 
-        // Decode the 5-bit signed integer with +3 offset.
+        // Decode the 5-bit signed integer with offset.
         s8 out_level = (rdesc & scene_level_mask) >> scene_level_shr;
 		if (out_level > 15)
             out_level = (s8)((u8)out_level | 0xE0);
 
-        // Adjust by -3dB to find correct range. (-19..+12)
-        out_level += -3;
+        // Adjust by scene_level_offset to find correct range.
+        out_level += -scene_level_offset;
 
         // Find the initial channel:
         if ((rdesc & scene_initial) == scene_initial)
@@ -403,6 +404,7 @@ static void update_effects_MIDI_state(void) {
 
 static void scene_activate(void) {
     u8 i;
+    u8 max_level;
 
     // Switch g-major program if needed:
     if (next_gmaj_program != gmaj_program) {
@@ -426,7 +428,14 @@ static void scene_activate(void) {
 
 	// Send the out level to Torpedo Live:
 	// CC #25; 0 = -95dB ; 95 = 0dB ; 107 = +12dB (user manual claims 112dB, but this is a typo - confirmed)
-	midi_send_cmd2(0xB, torp_midi_channel, torp_cc_out_level, pr_out_level[scene] + 95);
+	//midi_send_cmd2(0xB, torp_midi_channel, torp_cc_out_level, pr_out_level[scene] + 95);
+
+    // Max boost is +6dB
+    // Send the out level to the G-Major as Global-In Level:
+    max_level = pr_out_level[scene] + 121;
+    if (max_level > 127) max_level = 127;
+    if (max_level < 0) max_level = 0;
+    midi_send_cmd2(0xB, gmaj_midi_channel, gmaj_cc_global_in_level, max_level);
 
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
@@ -508,12 +517,12 @@ static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
     desc |= new_rjm_channel & rjm_channel_mask;
 
     // Calculate 5-bit level:
-    if (out_level < -19) out_level = -19;
-    else if (out_level > 12) out_level = 12;
+    if (out_level < -25) out_level = -25;
+    else if (out_level > 6) out_level = 6;
 
     // Set the bits in the descriptor:
     desc &= ~scene_level_mask;
-    desc |= (u8)((out_level + 3) & 31) << scene_level_shr;
+    desc |= (u8)((out_level + scene_level_offset) & 31) << scene_level_shr;
 
     // Update program data to be written back to flash:
     pr.scene_desc[preset] = desc;

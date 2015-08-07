@@ -184,8 +184,9 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define scene_level_shr  2
 
 // 5-bit signed values
-#define scene_level_0    ((( 0 + 3) & 31) << 2)
-#define scene_level_pos4 (((+4 + 3) & 31) << 2)
-#define scene_level_neg3 (((-3 + 3) & 31) << 2)
+#define scene_level_offset  9
+#define scene_level_0    ((( 0 + scene_level_offset) & 31) << 2)
+#define scene_level_pos4 (((+5 + scene_level_offset) & 31) << 2)
+#define scene_level_neg3 (((-3 + scene_level_offset) & 31) << 2)
 
 #define scene_initial    0x80
