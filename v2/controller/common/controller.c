@@ -2,16 +2,19 @@
     Programmable e-minor MIDI foot controller v2.
 
     Currently designed to work with:
-    RJM Mini Amp Gizmo controlling a 3-channel Mark V amplifier
-    t.c. electronic g-major effects unit.
+    Primary guitar amp:
+        3-channel Mark V amplifier controller via
+            RJM Mini Amp Gizmo (MIDI)
+        t.c. electronic g-major effects unit (MIDI)
+    Secondary guitar amp:
+        Axe-FX II (MIDI)
+            scene changes 1-4 to control amp changes across two amp blocks with X/Y switching
 
     Assumptions:
     g-major listens on MIDI channel 1
     g-major listens for program change messages and CC messages
     RJM listens on MIDI channel 2
     RJM listens for program change messages with program #s 1-6
-	Torpedo Live on MIDI channel 3
-	Torpedo Live listens for control change messages, mainly used to set Out Level
 
     Footswitch layout:
 
@@ -26,7 +29,7 @@
     Written by
     James S. Dunne
     https://github.com/JamesDunne/
-    2013-11-17
+    2015-08-15
 */
 
 #include <assert.h>
@@ -54,9 +57,6 @@
 #define gmaj_cc_noisegate       90
 #define gmaj_cc_eq              91
 #define gmaj_cc_global_in_level 92
-
-// Torpedo Live CC messages:
-#define torp_cc_out_level   25
 
 #define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
 #define is_held(rowname, mask) is_##rowname##_button_held(mask)
@@ -260,7 +260,7 @@ void load_program_state(void) {
 
         // RJM channels start at 1 and alternate solo mode off/on and then increment channel #s:
         u8 mkv_chan = (rdesc & rjm_channel_mask);
-        // NOTE(jsd): Mark V solo mode is unused now that we can use Out Level on Torpedo Live.
+        // NOTE(jsd): Mark V solo mode is unused now that we can set Global In Level on g-major.
         u8 new_rjm_actual = mkv_chan;
 
         // Decode the 5-bit signed integer with offset.
@@ -425,10 +425,6 @@ static void scene_activate(void) {
 
     // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
     midi_send_cmd1(0xC, rjm_midi_channel, (pr_rjm[scene] << 1));
-
-	// Send the out level to Torpedo Live:
-	// CC #25; 0 = -95dB ; 95 = 0dB ; 107 = +12dB (user manual claims 112dB, but this is a typo - confirmed)
-	//midi_send_cmd2(0xB, torp_midi_channel, torp_cc_out_level, pr_out_level[scene] + 95);
 
     // Max boost is +6dB
     // Send the out level to the G-Major as Global-In Level:
@@ -800,7 +796,7 @@ static void update_lcd(void) {
         lcd_rows[0][6 + 1] = 'H';
         lcd_rows[0][6 + 2] = '1' + ch;
 
-        // Torpedo Live Out Level:
+        // g-major Global In Level:
         if (out_level == 0)
             lcd_rows[0][11] = ' ';
         else if (out_level > 0)
