@@ -101,7 +101,7 @@ func generatePICH() {
 		fmt.Println("Closed.")
 	}()
 
-	// Translate to binary data for FLASH memory:
+	// Translate YAML to binary data for FLASH memory (see common/controller.c):
 	songs := 0
 	for i, p := range programs.Programs {
 		_, err = fmt.Printf("%3d) #%3d %s\n", i+1, p.GMajorProgram, p.Name)
@@ -132,7 +132,6 @@ func generatePICH() {
 			c := p.Name[j]
 			if c < 32 {
 				fmt.Fprint(fo, "0, ")
-
 			}
 			fmt.Fprintf(fo, "'%c', ", rune(c))
 		}
