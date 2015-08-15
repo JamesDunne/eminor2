@@ -223,6 +223,19 @@ ToolArgsString=-nw 2060 -nw 2056 -nw 2055
 TraceCmdString=
 DebugOptions=
 [File017]
+Location=C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\Object\controller.o
+Folder=Intermediary
+DeviceName=PIC18F4550
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\mplabc18\v3.46\bin\mcc18.exe
+PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\PIC;..\common;C:\mplabc18\v3.46\h||$(LIBDIR)|C:\mplabc18\v3.46\lib||$(LKRDIR)||
+SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eeprom.c|writeprogmem.c|systick.c|bootcode.c|BootUserStartup.c|UserAppCode.c|comm_lcd.c|comm_midi.c|C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller.c||<obj>||<lib>||<lkr>|18f4550.lkr||
+SuiteArgsString=
+ToolArgsString=-nw 2060 -nw 2056 -nw 2055
+TraceCmdString=
+DebugOptions=
+[File018]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\config.lst
 Folder=Output
 DeviceName=PIC18F4550
@@ -235,7 +248,7 @@ SuiteArgsString=
 ToolArgsString=
 TraceCmdString=
 DebugOptions=
-[File018]
+[File019]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\midicontroller.cof
 Folder=Output
 DeviceName=PIC18F4550
@@ -243,12 +256,12 @@ LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
 LanguageToolLocation=C:\mplabc18\v3.46\bin\mplink.exe
 PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\PIC;..\common;C:\mplabc18\v3.46\h||$(LIBDIR)|C:\mplabc18\v3.46\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eeprom.c|writeprogmem.c|systick.c|bootcode.c|BootUserStartup.c|UserAppCode.c|comm_lcd.c|comm_midi.c|C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4550.lkr||
+SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eeprom.c|writeprogmem.c|systick.c|bootcode.c|BootUserStartup.c|UserAppCode.c|comm_lcd.c|comm_midi.c|C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller.c||<obj>||<lib>||<lkr>|18f4550.lkr||
 SuiteArgsString=
 ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
 TraceCmdString=
 DebugOptions=
-[File019]
+[File020]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\midicontroller.hex
 Folder=Output
 DeviceName=PIC18F4550
@@ -256,12 +269,12 @@ LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
 LanguageToolLocation=C:\mplabc18\v3.46\bin\mplink.exe
 PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\PIC;..\common;C:\mplabc18\v3.46\h||$(LIBDIR)|C:\mplabc18\v3.46\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eeprom.c|writeprogmem.c|systick.c|bootcode.c|BootUserStartup.c|UserAppCode.c|comm_lcd.c|comm_midi.c|C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4550.lkr||
+SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eeprom.c|writeprogmem.c|systick.c|bootcode.c|BootUserStartup.c|UserAppCode.c|comm_lcd.c|comm_midi.c|C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller.c||<obj>||<lib>||<lkr>|18f4550.lkr||
 SuiteArgsString=
 ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
 TraceCmdString=
 DebugOptions=
-[File020]
+[File021]
 Location=C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\midicontroller.map
 Folder=Output
 DeviceName=PIC18F4550
@@ -269,7 +282,7 @@ LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
 LanguageToolLocation=C:\mplabc18\v3.46\bin\mplink.exe
 PPAD=$(BINDIR)||$(TMPDIR)|Object||$(AINDIR)||$(INCDIR)|..\PIC;..\common;C:\mplabc18\v3.46\h||$(LIBDIR)|C:\mplabc18\v3.46\lib||$(LKRDIR)||
-SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eeprom.c|writeprogmem.c|systick.c|bootcode.c|BootUserStartup.c|UserAppCode.c|comm_lcd.c|comm_midi.c|C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-simple.c||<obj>||<lib>||<lkr>|18f4550.lkr||
+SOLK=<src>|main.c|startup.c|ram_def.c|config.asm|intslct.c|init.c|hwcalls.c|eeprom.c|writeprogmem.c|systick.c|bootcode.c|BootUserStartup.c|UserAppCode.c|comm_lcd.c|comm_midi.c|C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller.c||<obj>||<lib>||<lkr>|18f4550.lkr||
 SuiteArgsString=
 ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(TARGETBASE).cof"
 TraceCmdString=

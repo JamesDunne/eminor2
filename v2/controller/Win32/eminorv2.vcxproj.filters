@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\controller-simple.c">
+    <ClCompile Include="eminorv2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="eminorv2.c">
+    <ClCompile Include="..\common\controller.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
