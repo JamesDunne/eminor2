@@ -50,6 +50,7 @@ type Setlist struct {
 	Venue       string   `yaml:"venue"`
 	Songs       []string `yaml:"songs"`
 	ShouldPrint bool     `yaml:"print"`
+	IsActive    bool     `yaml:"active"`
 
 	// Computed:
 	SongNames []string
@@ -146,8 +147,8 @@ func generatePICH() {
 		// \----------- Initial
 		const (
 			lvl_offset = 9
-			lvl_min = -16 - lvl_offset
-			lvl_max = 15 - lvl_offset
+			lvl_min    = -16 - lvl_offset
+			lvl_max    = 15 - lvl_offset
 		)
 
 		s := p.SceneDescriptors
@@ -212,6 +213,10 @@ func generatePICH() {
 	// Write setlist data in reverse order of sets:
 	for i := len(setlists.Sets) - 1; i >= 0; i-- {
 		set := setlists.Sets[i]
+		if !set.IsActive {
+			continue
+		}
+
 		fmt.Printf("Set #%d\n", i+1)
 		if len(set.Songs) > max_set_length {
 			panic(fmt.Errorf("Set list cannot have more than %d songs; %d songs currently.", max_set_length, len(set.Songs)))

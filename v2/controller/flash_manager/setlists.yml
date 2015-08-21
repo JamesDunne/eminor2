@@ -226,7 +226,6 @@ sets:
 
   - date: "2015-07-31"
     venue: The Alibi
-    print: true
     songs:
       - Everything Zen
       - Song 2
@@ -260,4 +259,37 @@ sets:
 
       - My Own Worst Enemy
       - Hash Pipe
+      - Enter Sandman
+
+  - date: "2015-08-29"
+    venue: Penny Road Pub
+    active: true
+    print: true
+    songs:
+      - Everything Zen
+      - Song 2
+      - Zero
+
+      - 'BREAK: BREAK'
+
+      - Machinehead
+      - Buddy Holly
+      - Beautiful Disaster
+
+      - 'BREAK: BREAK'
+
+      - Dammit
+      - Brain Stew
+      - My Own Worst Enemy
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: UPTUNE'
+
+      - Hash Pipe
+      - When I Come Around
       - Enter Sandman

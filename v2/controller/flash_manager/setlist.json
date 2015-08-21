@@ -1,7 +1,7 @@
 [
   {
-    "date": "2015-07-31",
-    "venue": "The Alibi",
+    "date": "2015-08-29",
+    "venue": "Penny Road Pub",
     "songs": [
       {
         "i": 1,
@@ -28,8 +28,8 @@
       },
       {
         "i": 5,
-        "title": "Dammit",
-        "starts": "Jim"
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
       },
       {
         "i": 6,
@@ -41,18 +41,18 @@
       },
       {
         "i": 7,
-        "title": "Hey Jealousy",
-        "starts": "Bremer 4 ct"
+        "title": "Dammit",
+        "starts": "Jim"
       },
       {
         "i": 8,
-        "title": "When I Come Around",
+        "title": "Brainstew",
         "starts": "Jim"
       },
       {
         "i": 9,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
       },
       {
         "breakText": "DOWNTUNE"
@@ -77,34 +77,16 @@
       },
       {
         "i": 13,
-        "title": "Cumbersome",
-        "starts": "Jim"
-      },
-      {
-        "i": 14,
-        "title": "Brainstew",
-        "starts": "Jim"
-      },
-      {
-        "i": 15,
-        "title": "Kryptonite",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 16,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
-      },
-      {
-        "i": 17,
         "title": "Hash Pipe",
         "starts": "Bremer+Adam"
       },
       {
-        "i": 18,
+        "i": 14,
+        "title": "When I Come Around",
+        "starts": "Jim"
+      },
+      {
+        "i": 15,
         "title": "Enter Sandman",
         "starts": "Glaz"
       }
