@@ -35,6 +35,7 @@
 #include <assert.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
+#include "../common/memory.h"
 
 // Useful macros:
 #define tglbit(VAR,Place) VAR ^= (1 << Place)

@@ -9,6 +9,7 @@
 #include <assert.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
+#include "../common/memory.h"
 #include "font-5x8.h"
 
 // MinGW fixes:

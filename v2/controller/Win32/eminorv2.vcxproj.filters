@@ -32,5 +32,8 @@
     <ClInclude Include="font-5x8.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\memory.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

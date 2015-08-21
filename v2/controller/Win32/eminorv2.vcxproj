@@ -167,6 +167,7 @@
   <ItemGroup>
     <ClCompile Include="..\common\controller.c" />
     <ClCompile Include="eminorv2.c" />
+    <ClInclude Include="..\common\memory.h" />
     <ClInclude Include="font-5x8.h">
       <FileType>CppCode</FileType>
     </ClInclude>
