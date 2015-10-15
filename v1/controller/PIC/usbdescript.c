@@ -340,7 +340,7 @@ rom struct{byte report[HID_RPT_UPS_SIZE];}hid_rpt_UPS={
 	0x09, 0xD6,						//	   USAGE (***Firmware Partnumber 32bit)
 	0xb1, 0x02,						//	   FEATURE (Data,Var,Abs)
 
-//Production test password = 866E1942
+//Production test password
     0x85, 0x9A,                    //       REPORT_ID (154)
     0x09, 0xC4,                    //       USAGE (***Production test Password - 32bit)
     0xb1, 0x02,                    //       FEATURE (Data,Var,Abs)
