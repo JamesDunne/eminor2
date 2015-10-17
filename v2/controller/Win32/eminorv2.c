@@ -36,7 +36,7 @@ static HINSTANCE zhInstance = NULL;
 // display scale factor (pixels per inch)
 // NOTE(jsd): 55.4 dpi is to-scale on my 40" Samsung HDTV 1080p
 const double defaultDpi = 55.4;
-static double dpi = 82; // 93.5;
+static double dpi = 66; // 82; 93.5;
 
 // Total width, height in inches:
 const double inWidth = 20.078;

@@ -26,7 +26,7 @@ const (
 
 type SceneDescriptor struct {
 	Channel int `yaml:"channel"` // 1, 2, 3
-	Level   int `yaml:"level"`   // 5 bit signed (-16..+15), offset -3 = -19..+12
+	Level   int `yaml:"level"`   // 5 bits signed, -16..+15, offset -9 => -25..+6
 
 	FX []string `yaml:"fx,flow"`
 }
@@ -153,7 +153,7 @@ func generatePICH() {
 
 		s := p.SceneDescriptors
 		for j := 0; j < 6; j++ {
-			// Cap the out level range to -19..+12
+			// Cap the out level range to -25..+6
 			lvl5bit := s[j].Level
 			if lvl5bit < lvl_min {
 				lvl5bit = lvl_min
