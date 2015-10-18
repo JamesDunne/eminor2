@@ -607,35 +607,31 @@ void controller_init(void) {
 
 #ifdef HWFEAT_LABEL_UPDATES
     labels = label_row_get(0);
-    if (labels) {
-        labels[0] = "A-1";
-        labels[1] = "A-2";
-        labels[2] = "A-3";
-        labels[3] = "A-4";
-        labels[4] = "A-5";
-        labels[5] = "A-6";
-        labels[6] = "TAP/STORE";
-        labels[7] = "ENTER";
-    }
+    labels[0] = "A-1";
+    labels[1] = "A-2";
+    labels[2] = "A-3";
+    labels[3] = "A-4";
+    labels[4] = "A-5";
+    labels[5] = "A-6";
+    labels[6] = "TAP/STORE";
+    labels[7] = "ENTER";
     label_row_update(0);
 
     labels = label_row_get(1);
-    if (labels) {
-        labels[0] = "B-1";
-        labels[1] = "B-2";
-        labels[2] = "B-3";
-        labels[3] = "B-4";
-        labels[4] = "B-5";
-        labels[5] = "B-6";
-        // labels[0] = "COMP";
-        // labels[1] = "FILTER";
-        // labels[2] = "PITCH";
-        // labels[3] = "CHORUS";
-        // labels[4] = "DELAY";
-        // labels[5] = "REVERB";
-        labels[6] = "PREV";
-        labels[7] = "NEXT";
-    }
+    labels[0] = "B-1";
+    labels[1] = "B-2";
+    labels[2] = "B-3";
+    labels[3] = "B-4";
+    labels[4] = "B-5";
+    labels[5] = "B-6";
+    // labels[0] = "COMP";
+    // labels[1] = "FILTER";
+    // labels[2] = "PITCH";
+    // labels[3] = "CHORUS";
+    // labels[4] = "DELAY";
+    // labels[5] = "REVERB";
+    labels[6] = "PREV";
+    labels[7] = "NEXT";
     label_row_update(1);
 #endif
 
