@@ -738,6 +738,9 @@ static void clear_rjm_leds(void) {
 
 // Update LCD display:
 static void update_lcd(void) {
+#ifdef HWFEAT_LABEL_UPDATES
+    u8 **labels;
+#endif
 #ifdef FEAT_LCD
     s8 i;
     u8 b = 1;
@@ -754,6 +757,18 @@ static void update_lcd(void) {
                 lcd_rows[3][i * 3 + 2] &= ~0x20;
             }
         }
+#if HWFEAT_LABEL_UPDATES
+        labels = label_row_get(1);
+        labels[0] = "B-1";
+        labels[1] = "B-2";
+        labels[2] = "B-3";
+        labels[3] = "B-4";
+        labels[4] = "B-5";
+        labels[5] = "B-6";
+        labels[6] = "PREV";
+        labels[7] = "NEXT";
+        label_row_update(1);
+#endif
     } else if (mode == MODE_PROGRAMMING) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[3][i] = " MD SD -- -- RM SW  "[i];
@@ -762,6 +777,18 @@ static void update_lcd(void) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[3][i] = "    scene design    "[i];
         }
+#if HWFEAT_LABEL_UPDATES
+        labels = label_row_get(1);
+        labels[0] = "COMP";
+        labels[1] = "FILTER";
+        labels[2] = "PITCH";
+        labels[3] = "CHORUS";
+        labels[4] = "DELAY";
+        labels[5] = "REVERB";
+        labels[6] = "PREV";
+        labels[7] = "NEXT";
+        label_row_update(1);
+#endif
     } else if (mode == MODE_SETLIST_REORDER) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[3][i] = " -- -- -- -- -- --  "[i];
