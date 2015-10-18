@@ -107,6 +107,15 @@ extern void flash_store(u16 addr, u16 count, u8 *data);
 
 // --------------- Controller logic interface functions:
 
-/* export */ void controller_init(void);
-/* export */ void controller_10msec_timer(void);
-/* export */ void controller_handle(void);
+/* export */ extern void controller_init(void);
+/* export */ extern void controller_10msec_timer(void);
+/* export */ extern void controller_handle(void);
+
+#ifdef HWFEAT_LABEL_UPDATES
+
+// --------------- Change button labels (for Win32 / HTML5 interfaces only):
+
+/* export */ extern u8 **label_row_get(u8 row);
+/* export */ extern void label_row_update(u8 row);
+
+#endif

@@ -57,15 +57,24 @@ const double inFswOuterDiam = (12.2 /*mm*/ * mmToIn);
 const double inFswInnerDiam = (10 /*mm*/ * mmToIn);
 
 // button labels:
-const static LPCWSTR labels[2][8] = {
-    { L"CH1", L"CH1S", L"CH2", L"CH2S", L"CH3", L"CH3S", L"TAP/STORE", L"CANCEL" },
-    { L"COMP", L"FILTER", L"PITCH", L"CHORUS", L"DELAY", L"REVERB", L"PREV", L"NEXT" }
-};
-
 const static LPCWSTR keylabels[2][8] = {
     { L"A", L"S", L"D", L"F", L"G", L"H", L"J", L"K" },
     { L"Q", L"W", L"E", L"R", L"T", L"Y", L"U", L"I" }
 };
+
+#ifdef HWFEAT_LABEL_UPDATES
+
+WCHAR *labels[2][8];
+u8 *labels_ascii[2][8];
+
+#else
+
+const static LPCWSTR labels[2][8] = {
+    { L"A-1", L"A-2", L"A-3", L"A-4", L"A-5", L"A-6", L"TAP/STORE", L"ENTER" },
+    { L"COMP", L"FILTER", L"PITCH", L"CHORUS", L"DELAY", L"REVERB", L"PREV", L"NEXT" }
+};
+
+#endif
 
 #ifdef FEAT_LCD
 // currently displayed LCD text in row X col format:
@@ -195,6 +204,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
         printf("There was an error opening MIDI device!  Disabling MIDI output...\r\n\r\n");
     else
         printf("Opened MIDI device successfully.\r\n\r\n");
+#endif
+
+#ifdef HWFEAT_LABEL_UPDATES
+
+    for (int i = 0; i < 8; i++) {
+        labels[0][i] = (WCHAR *)malloc(sizeof(WCHAR) * 21);
+        labels[1][i] = (WCHAR *)malloc(sizeof(WCHAR) * 21);
+        labels_ascii[0][i] = (u8 *)malloc(sizeof(u8) * 20);
+        labels_ascii[1][i] = (u8 *)malloc(sizeof(u8) * 20);
+    }
+
 #endif
 
     // initialize UI bits:
@@ -796,6 +816,35 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
     }
     return 0;
 }
+
+#ifdef HWFEAT_LABEL_UPDATES
+
+u8 **label_row_get(u8 row) {
+    return labels_ascii[row];
+}
+
+void label_row_update(u8 row) {
+    assert(row < 2);
+
+    // Convert ASCII to UTF-16:
+    int c, i;
+    for (i = 0; i < 8; ++i) {
+        u8 *label = labels_ascii[row][i];
+        for (c = 0; c < 20; ++c) {
+            if (labels_ascii[row][i][c] == 0) {
+                labels[row][i][c] = (WCHAR)0;
+                break;
+            }
+            labels[row][i][c] = (WCHAR)labels_ascii[row][i][c];
+        }
+        labels[row][i][c] = (WCHAR)0;
+    }
+
+    // Request a UI repaint:
+    InvalidateRect(hwndMain, NULL, TRUE);
+}
+
+#endif
 
 #ifdef FEAT_LCD
 

@@ -539,6 +539,7 @@ static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
 // set the controller to an initial state
 void controller_init(void) {
     u8 i;
+    u8 **labels;
 
     setlist_mode = 1;
     mode = MODE_LIVE;
@@ -602,6 +603,40 @@ void controller_init(void) {
     }
 
     update_lcd();
+#endif
+
+#ifdef HWFEAT_LABEL_UPDATES
+    labels = label_row_get(0);
+    if (labels) {
+        labels[0] = "A-1";
+        labels[1] = "A-2";
+        labels[2] = "A-3";
+        labels[3] = "A-4";
+        labels[4] = "A-5";
+        labels[5] = "A-6";
+        labels[6] = "TAP/STORE";
+        labels[7] = "ENTER";
+    }
+    label_row_update(0);
+
+    labels = label_row_get(1);
+    if (labels) {
+        labels[0] = "B-1";
+        labels[1] = "B-2";
+        labels[2] = "B-3";
+        labels[3] = "B-4";
+        labels[4] = "B-5";
+        labels[5] = "B-6";
+        // labels[0] = "COMP";
+        // labels[1] = "FILTER";
+        // labels[2] = "PITCH";
+        // labels[3] = "CHORUS";
+        // labels[4] = "DELAY";
+        // labels[5] = "REVERB";
+        labels[6] = "PREV";
+        labels[7] = "NEXT";
+    }
+    label_row_update(1);
 #endif
 
     switch_setlist_mode(1);
