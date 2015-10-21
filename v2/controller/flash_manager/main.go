@@ -151,8 +151,17 @@ func generatePICH() {
 			lvl_max    = 15 - lvl_offset
 		)
 
-		s := p.SceneDescriptors
-		for j := 0; j < 6; j++ {
+		s := make([]SceneDescriptor, 8)
+		s[0] = p.SceneDescriptors[0]
+		s[1] = p.SceneDescriptors[0]
+		s[2] = p.SceneDescriptors[1]
+		s[3] = p.SceneDescriptors[2]
+		s[4] = p.SceneDescriptors[3]
+		s[5] = p.SceneDescriptors[4]
+		s[6] = p.SceneDescriptors[4]
+		s[7] = p.SceneDescriptors[5]
+
+		for j := 0; j < 8; j++ {
 			// Cap the out level range to -25..+6
 			lvl5bit := s[j].Level
 			if lvl5bit < lvl_min {
@@ -169,14 +178,17 @@ func generatePICH() {
 				b |= 0x80
 			}
 
+			// part1:
 			fmt.Fprintf(fo, "0x%02X, ", b)
+			// part2:
+			fmt.Fprintf(fo, "0x%02X, ", 0)
 		}
 
 		// G-Major effects:
-		for j := 0; j < 6; j++ {
+		for j := 0; j < 8; j++ {
 			// Translate effect name strings into bit flags:
 			b := uint8(0)
-			for _, effect := range p.SceneDescriptors[j].FX {
+			for _, effect := range s[j].FX {
 				if effect == "compressor" {
 					b |= FX_Compressor
 				} else if effect == "filter" {
@@ -199,13 +211,18 @@ func generatePICH() {
 			fmt.Fprintf(fo, "0x%02X, ", b)
 		}
 
+		// _unused:
+		for j := 0; j < 20; j++ {
+			fmt.Fprintf(fo, "0x%02X, ", 0)
+		}
 		fmt.Fprint(fo, "\n")
 	}
 
 	for songs = songs; songs < 128; songs++ {
-		fmt.Fprint(fo, "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0")
-
-		fmt.Fprint(fo, ",\n")
+		for j := 0; j < 64; j++ {
+			fmt.Fprintf(fo, "0, ")
+		}
+		fmt.Fprint(fo, "\n")
 	}
 
 	const max_set_length = 61
