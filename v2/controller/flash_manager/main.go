@@ -175,20 +175,27 @@ func generatePICH() {
 
 		initialScene := p.InitialScene
 		switch p.InitialScene {
-		case 0:
-			initialScene = 0
 		case 1:
-			initialScene = 2
+			initialScene = 1
+			break
 		case 2:
 			initialScene = 3
+			break
 		case 3:
 			initialScene = 4
+			break
 		case 4:
 			initialScene = 5
+			break
 		case 5:
-			initialScene = 7
+			initialScene = 6
+			break
+		case 6:
+			initialScene = 8
+			break
 		default:
-			initialScene = 5
+			initialScene = 6
+			break
 		}
 
 		for j := 0; j < 8; j++ {
