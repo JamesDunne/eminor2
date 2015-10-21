@@ -386,14 +386,6 @@ programs:
     level: 0
     axe_scene: 1
     fx: [compressor]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 6
-    axe_scene: 1
-    fx: [compressor]
   - channel: 3
     level: 0
     axe_scene: 3
@@ -401,11 +393,19 @@ programs:
   - channel: 3
     level: 6
     axe_scene: 3
-    fx: [gate]
+    fx: [gate, delay]
   - channel: 3
     level: 0
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 1
+    level: 0
     axe_scene: 3
-    fx: [gate]
+    fx: [compressor]
   - channel: 3
     level: 0
     axe_scene: 3
@@ -1095,8 +1095,8 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
-    axe_scene: 3
+    level: 0
+    axe_scene: 4
     fx: [gate, delay]
 - name: Dammit
   altnames: []
@@ -1243,9 +1243,9 @@ programs:
     axe_scene: 2
     fx: [filter, delay]
   - channel: 2
-    level: -2
+    level: 0
     axe_scene: 2
-    fx: [filter, delay]
+    fx: []
   - channel: 2
     level: 0
     axe_scene: 2
