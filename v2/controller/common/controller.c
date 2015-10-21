@@ -862,17 +862,21 @@ static void update_lcd(void) {
     s8 i;
     u8 b = 1;
     u8 fx = pr.fx[scene] & ~(M_7 | M_8);
+    u8 show_row3_fx = 0;
+
+    // Show program name and clear row 0:
+    for (i = 0; i < LCD_COLS; i++) {
+        lcd_rows[0][i] = ' ';
+        lcd_rows[2][i] = pr.name[i];
+        if (pr.name[i] == 0) break;
+    }
+    for (; i < LCD_COLS; i++) {
+        lcd_rows[0][i] = ' ';
+        lcd_rows[2][i] = ' ';
+    }
 
     if (mode == MODE_LIVE) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[3][i] = "  c-f-p-o-d-v-g-q-  "[i];
-        }
-        // Upper-case enabled FX labels:
-        for (i = 0; i < 8; i++, b <<= 1) {
-            if ((fx & b) == b) {
-                lcd_rows[3][i * 2 + 2] &= ~0x20;
-            }
-        }
+        show_row3_fx = 1;
 #if HWFEAT_LABEL_UPDATES
         labels = label_row_get(0);
         labels[0] = "A-1";
@@ -897,10 +901,12 @@ static void update_lcd(void) {
         label_row_update(1);
 #endif
     } else if (mode == MODE_SCENE_DESIGN) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[3][i] = "  scene A-1 design  "[i];
-        }
-        lcd_rows[3][10] = '1' + scene;
+        // Show selected scene on LCD since we don't have an LED for it:
+        lcd_rows[0][16] = 'A';
+        lcd_rows[0][17] = '-';
+        lcd_rows[0][18] = '1' + scene;
+
+        show_row3_fx = 1;
 #if HWFEAT_LABEL_UPDATES
         labels = label_row_get(0);
         labels[0] = "CH1";
@@ -950,20 +956,19 @@ static void update_lcd(void) {
         ritoa(lcd_rows[1], slp + 1, 19);
     }
 
-    // Show program name and clear row 0:
-    for (i = 0; i < LCD_COLS; i++) {
-        lcd_rows[0][i] = ' ';
-        lcd_rows[2][i] = pr.name[i];
-        if (pr.name[i] == 0) break;
-    }
-    for (; i < LCD_COLS; i++) {
-        lcd_rows[0][i] = ' ';
-        lcd_rows[2][i] = ' ';
+    if (show_row3_fx) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[3][i] = "  c-f-p-o-d-v-g-q-  "[i];
+        }
+        // Upper-case enabled FX labels:
+        for (i = 0; i < 8; i++, b <<= 1) {
+            if ((fx & b) == b) {
+                lcd_rows[3][i * 2 + 2] &= ~0x20;
+            }
+        }
     }
 
-    // "MUTE  CH1  +00  ****"
     // "A-CH1 B-3  +00  ****"
-
     {
         u8 gmaj_ch, axe_ch;
         s8 out_level;
@@ -1003,12 +1008,12 @@ static void update_lcd(void) {
         }
 
         litoa(lcd_rows[0], pos_level, 12);
-    }
 
-    if (next_gmaj_program != gmaj_program) {
-        // Pending program change:
-        for (i = 16; i < 20; i++) {
-            lcd_rows[0][i] = '*';
+        if (next_gmaj_program != gmaj_program) {
+            // Pending program change:
+            for (i = 16; i < 20; i++) {
+                lcd_rows[0][i] = '*';
+            }
         }
     }
 
