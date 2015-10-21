@@ -24,6 +24,7 @@
 */
 
 #include <assert.h>
+#include <stdio.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
 
@@ -233,6 +234,7 @@ u8 last_rjm_channel;
 u8 last_gmaj_in_level;
 u8 last_fx;
 u8 last_bot_button_mask;
+u8 last_axe_muted;
 
 // Current program data:
 struct program pr;
@@ -243,7 +245,6 @@ u8 pr_axe_scene[scene_descriptor_count];
 u8 pr_axe_muted[scene_descriptor_count];
 
 u8 axe_scene, last_axe_scene;   // 0 - 3
-u8 is_axe_muted; // 0 or 1
 
 // Current set list:
 struct set_list sl;
@@ -442,22 +443,29 @@ static void gmaj_toggle_mute(void) {
     update_lcd();
 }
 
-static void axe_enable_mute(void) {
-    is_axe_muted = 1;
-    axe_cc_set(axe_cc_tuner, 0x7F);
+static void scene_update_current();
+
+static void send_axe_mute(void) {
+    axe_cc_set(axe_cc_tuner, pr_axe_muted[scene] ? (u8)0x7F : (u8)0x00);
+    scene_update_current();
     update_lcd();
+}
+
+static void scene_activate(void);
+
+static void axe_enable_mute(void) {
+    pr_axe_muted[scene] = 1;
+    scene_activate();
 }
 
 static void axe_disable_mute(void) {
-    is_axe_muted = 0;
-    axe_cc_set(axe_cc_tuner, 0x00);
-    update_lcd();
+    pr_axe_muted[scene] = 0;
+    scene_activate();
 }
 
 static void axe_toggle_mute(void) {
-    is_axe_muted ^= (u8)1;
-    axe_cc_set(axe_cc_tuner, is_axe_muted ? (u8)0x7F : (u8)0x00);
-    update_lcd();
+    pr_axe_muted[scene] ^= (u8)1;
+    scene_activate();
 }
 
 // Reset g-major mute to off if on
@@ -547,6 +555,12 @@ static void scene_activate(void) {
         last_axe_scene = axe_scene;
     }
 
+    // Send Axe-FX mute change:
+    if (pr_axe_muted[scene] != last_axe_muted) {
+        send_axe_mute();
+        last_axe_muted = pr_axe_muted[scene];
+    }
+
     live_scene = scene;
     for (i = 0; i < scene_descriptor_count; i++) {
         live_pr_rjm[i] = pr_rjm[i];
@@ -557,6 +571,37 @@ static void scene_activate(void) {
     update_effects_MIDI_state();
 
     update_lcd();
+}
+
+static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
+    u8 desc = pr.scene[preset].part1;
+
+    desc &= ~rjm_channel_mask;
+    desc |= new_rjm_channel & rjm_channel_mask;
+
+    // Calculate 5-bit level:
+    if (out_level < -25) out_level = -25;
+    else if (out_level > 6) out_level = 6;
+
+    // Set the bits in the descriptor:
+    desc &= ~scene_level_mask;
+    desc |= (u8)((out_level + scene_level_offset) & 31) << scene_level_shr;
+
+    // Update program data to be written back to flash:
+    pr.scene[preset].part1 = desc;
+    // TOOD: volume ramp feature!
+    pr.scene[preset].part2 = (pr_axe_scene[preset] & (u8)axe_scene_mask) | (pr_axe_muted[preset] << 7);
+
+    // Update calculated data:
+    pr_rjm[preset] = new_rjm_channel;
+    pr_out_level[preset] = out_level;
+
+    live_pr_rjm[preset] = pr_rjm[preset];
+    live_pr_out_level[preset] = pr_out_level[preset];
+}
+
+static void scene_update_current() {
+    scene_update(scene, pr_rjm[scene], pr_out_level[scene]);
 }
 
 // Set RJM program to p (0-5)
@@ -621,35 +666,6 @@ static void switch_mode(u8 new_mode) {
     update_lcd();
 }
 
-static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
-    u8 desc = pr.scene[preset].part1;
-
-    desc &= ~rjm_channel_mask;
-    desc |= new_rjm_channel & rjm_channel_mask;
-
-    // Calculate 5-bit level:
-    if (out_level < -25) out_level = -25;
-    else if (out_level > 6) out_level = 6;
-
-    // Set the bits in the descriptor:
-    desc &= ~scene_level_mask;
-    desc |= (u8)((out_level + scene_level_offset) & 31) << scene_level_shr;
-
-    // Update program data to be written back to flash:
-    pr.scene[preset].part1 = desc;
-    // TOOD: volume ramp feature!
-    pr.scene[preset].part2 = (pr_axe_scene[preset] & (u8)axe_scene_mask) | (pr_axe_muted[preset] << 7);
-
-    // Update calculated data:
-    pr_rjm[preset] = new_rjm_channel;
-    pr_out_level[preset] = out_level;
-
-    live_pr_rjm[preset] = pr_rjm[preset];
-    live_pr_out_level[preset] = pr_out_level[preset];
-
-    scene_activate();
-}
-
 // ------------------------- Actual controller logic -------------------------
 
 // set the controller to an initial state
@@ -684,7 +700,6 @@ void controller_init(void) {
     timeout_flash = 0;
 
     is_gmaj_muted = 0;
-    is_axe_muted = 0;
     toggle_tap = 0;
 
     scene = 0;
@@ -988,7 +1003,7 @@ static void update_lcd(void) {
 
 static void calc_leds(void) {
     if (mode == MODE_LIVE) {
-        leds[MODE_LIVE].top.byte = (1 << axe_scene) | (is_axe_muted << 4) | (is_gmaj_muted << 5) | (fsw.top.byte & (M_7 | M_8));
+        leds[MODE_LIVE].top.byte = (1 << axe_scene) | (pr_axe_muted[scene] << 4) | (is_gmaj_muted << 5) | (fsw.top.byte & (M_7 | M_8));
 
         // Flash pending scene LED:
         if (next_gmaj_program != gmaj_program) {
@@ -1239,21 +1254,27 @@ void handle_mode_SCENE_DESIGN(void) {
     // Update amp channel:
     if (is_bot_button_pressed(M_1)) {
         scene_update(scene, 0, pr_out_level[scene]);
+        scene_activate();
     }
     if (is_bot_button_pressed(M_2)) {
         scene_update(scene, 1, pr_out_level[scene]);
+        scene_activate();
     }
     if (is_bot_button_pressed(M_3)) {
         scene_update(scene, 2, pr_out_level[scene]);
+        scene_activate();
     }
     if (is_bot_button_pressed(M_4)) {
         scene_update(scene, pr_rjm[scene], pr_out_level[scene] - (s8)1);
+        scene_activate();
     }
     if (is_bot_button_pressed(M_5)) {
         scene_update(scene, pr_rjm[scene], pr_out_level[scene] + (s8)1);
+        scene_activate();
     }
     if (is_bot_button_pressed(M_6)) {
         scene_update(scene, pr_rjm[scene], 6);
+        scene_activate();
     }
 
     // SAVE pressed:
