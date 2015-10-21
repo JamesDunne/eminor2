@@ -932,33 +932,35 @@ static void update_lcd(void) {
     }
 
     // "MUTE  CH1  +00  ****"
-
-    if (is_gmaj_muted) {
-        // Muted:
-        for (i = 0; i < 4; i++) {
-            lcd_rows[0][i] = "MUTE"[i];
-        }
-    }
+    // "A-CH1 B-3  +00  ****"
 
     {
-        u8 ch;
+        u8 gmaj_ch, axe_ch;
         s8 out_level;
         u8 pos_level;
 
         if (mode == MODE_SCENE_DESIGN) {
-            ch = pr_rjm[scene];
+            gmaj_ch = pr_rjm[scene];
+            axe_ch = pr_axe_scene[scene];
             out_level = pr_out_level[scene];
             pos_level = +out_level;
         } else {
-            ch = live_pr_rjm[live_scene];
+            gmaj_ch = live_pr_rjm[live_scene];
+            axe_ch = pr_axe_scene[live_scene];
             out_level = live_pr_out_level[live_scene];
             pos_level = +out_level;
         }
 
         // Mark V channel name of live setting:
-        lcd_rows[0][6 + 0] = 'C';
-        lcd_rows[0][6 + 1] = 'H';
-        lcd_rows[0][6 + 2] = '1' + ch;
+        lcd_rows[0][0 + 0] = 'A';
+        lcd_rows[0][0 + 1] = '-';
+        lcd_rows[0][0 + 2] = 'C';
+        lcd_rows[0][0 + 3] = 'H';
+        lcd_rows[0][0 + 4] = '1' + gmaj_ch;
+
+        lcd_rows[0][6 + 0] = 'B';
+        lcd_rows[0][6 + 1] = '-';
+        lcd_rows[0][6 + 2] = '1' + axe_ch;
 
         // g-major Global In Level:
         if (out_level == 0)
