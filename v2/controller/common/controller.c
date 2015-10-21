@@ -232,6 +232,7 @@ u8 scene, live_scene;
 u8 last_rjm_channel;
 u8 last_gmaj_in_level;
 u8 last_fx;
+u8 last_bot_button_mask;
 
 // Current program data:
 struct program pr;
@@ -475,7 +476,7 @@ static void gmaj_cc_toggle(u8 idx) {
     // Make sure we don't go out of range:
     assert(idx < scene_descriptor_count);
 
-    idxMask = (1 << idx);
+    idxMask = ((u8)1 << idx);
 
     // Toggle on/off the selected continuous controller:
     pr.fx[scene] ^= idxMask;
@@ -546,16 +547,16 @@ static void scene_activate(void) {
         last_axe_scene = axe_scene;
     }
 
-    // Send MIDI effects enable commands and set effects LEDs:
-    update_effects_MIDI_state();
-
-    update_lcd();
-
     live_scene = scene;
     for (i = 0; i < scene_descriptor_count; i++) {
         live_pr_rjm[i] = pr_rjm[i];
         live_pr_out_level[i] = pr_out_level[i];
     }
+
+    // Send MIDI effects enable commands and set effects LEDs:
+    update_effects_MIDI_state();
+
+    update_lcd();
 }
 
 // Set RJM program to p (0-5)
@@ -1041,9 +1042,13 @@ static inline void scene_change_button_logic(u8 btn_mask, u8 new_scene) {
         set_rjm_channel(new_scene);
         reset_tuner_mute();
 
-        // tap tempo function:
-        toggle_tap = ~toggle_tap & (u8)0x7F;
-        gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
+        if (last_bot_button_mask == btn_mask) {
+            // tap tempo function:
+            toggle_tap = ~toggle_tap & (u8) 0x7F;
+            gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
+        }
+
+        last_bot_button_mask = btn_mask;
 
         timer_held_design = 1;
     } else if (is_bot_button_held(btn_mask) && is_timer_elapsed(design)) {
