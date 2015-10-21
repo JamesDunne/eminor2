@@ -478,7 +478,7 @@ func main() {
 
 	generatePICH()
 
-	write_yaml("all_programs.gen.yml", programs)
+	//write_yaml("all_programs.gen.yml", programs)
 
 	generateJSON()
 }

@@ -395,9 +395,9 @@ programs:
     axe_scene: 3
     fx: [gate, delay]
   - channel: 3
-    level: 0
+    level: 3
     axe_scene: 1
-    fx: [compressor]
+    fx: [gate, delay]
   - channel: 1
     level: 0
     axe_scene: 1
