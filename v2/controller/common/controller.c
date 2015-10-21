@@ -51,7 +51,7 @@ SCENE DESIGNER:
 |                                                           |
 |                                                           |
 |    *      *      *      *      *      *      *      *     |
-|   CH1    CH2    CH3   VOL--  VOL++  VOL=+6  SAVE   EXIT   |
+|   CH1    CH2    CH3   VOL--  VOL++  VOL=6   SAVE   EXIT   |
 |                                                           |
 |-----------------------------------------------------------|
 */
@@ -1037,154 +1037,6 @@ static void calc_leds(void) {
     send_leds();
 }
 
-static inline void scene_change_button_logic(u8 btn_mask, u8 new_scene) {
-    // hold down button to enter scene design mode to adjust FX, output volume, and channels.
-    // press button again to send TAP TEMPO
-    if (is_bot_button_pressed(btn_mask)) {
-        set_rjm_channel(new_scene);
-        reset_tuner_mute();
-
-        if (last_bot_button_mask == btn_mask) {
-            // tap tempo function:
-            toggle_tap = ~toggle_tap & (u8) 0x7F;
-            gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
-        }
-
-        last_bot_button_mask = btn_mask;
-
-        timer_held_design = 1;
-    } else if (is_bot_button_held(btn_mask) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-}
-
-void handle_mode_LIVE(void) {
-    // handle bottom 8 scene change buttons:
-    scene_change_button_logic(M_1, 0);
-    scene_change_button_logic(M_2, 1);
-    scene_change_button_logic(M_3, 2);
-    scene_change_button_logic(M_4, 3);
-    scene_change_button_logic(M_5, 4);
-    scene_change_button_logic(M_6, 5);
-    scene_change_button_logic(M_7, 6);
-    scene_change_button_logic(M_8, 7);
-
-    // Axe-FX scene changes:
-    if (is_top_button_pressed(M_1)) {
-        pr_axe_scene[scene] = 0;
-        scene_activate();
-    }
-    if (is_top_button_pressed(M_2)) {
-        pr_axe_scene[scene] = 1;
-        scene_activate();
-    }
-    if (is_top_button_pressed(M_3)) {
-        pr_axe_scene[scene] = 2;
-        scene_activate();
-    }
-    if (is_top_button_pressed(M_4)) {
-        pr_axe_scene[scene] = 3;
-        scene_activate();
-    }
-
-    // handle remaining 4 functions:
-    if (is_top_button_pressed(M_5)) {
-        axe_toggle_mute();
-    }
-    if (is_top_button_pressed(M_6)) {
-        gmaj_toggle_mute();
-    }
-
-    /*
-    // CANCEL held to engage PROG:
-    if (is_pressed_cancel()) {
-        // Cancel pending program change:
-        if (next_gmaj_program != gmaj_program) {
-            next_gmaj_program = gmaj_program;
-            slp = last_slp;
-            set_gmaj_program_only();
-
-            // Revert to current live RJM channel:
-            scene = live_scene;
-
-            // Update LCD:
-            update_lcd();
-        } else {
-            // If no pending program change, just unmute:
-            reset_tuner_mute();
-        }
-
-        // Start a timer to check if changing to programming mode:
-        timer_held_prog = 1;
-    } else if (is_held_cancel() && is_timer_elapsed(prog)) {
-        // programming mode:
-        timer_held_prog = 0;
-        switch_mode(MODE_PROGRAMMING);
-    } else if (is_released_cancel()) {
-        timer_held_prog = 0;
-    }
-    */
-
-    if (setlist_mode == 0) {
-        // Program mode:
-
-        // NEXT
-        if (is_pressed_next()) {
-            timer_held_nextprev = 1;
-            prog_next();
-        } else if (is_released_next()) {
-            timer_held_nextprev = 0;
-        } else if (is_held_next()) {
-            if (timer_looped_nextprev) {
-                timer_looped_nextprev = 0;
-                prog_next();
-            }
-        }
-
-        // PREV
-        if (is_pressed_prev()) {
-            timer_held_nextprev = 1;
-            prog_prev();
-        } else if (is_released_prev()) {
-            timer_held_nextprev = 0;
-        } else if (is_held_prev()) {
-            if (timer_looped_nextprev) {
-                timer_looped_nextprev = 0;
-                prog_prev();
-            }
-        }
-    } else {
-        // Setlist mode:
-
-        // NEXT
-        if (is_pressed_next()) {
-            timer_held_nextprev = 1;
-            song_next();
-        } else if (is_released_next()) {
-            timer_held_nextprev = 0;
-        } else if (is_held_next()) {
-            if (timer_looped_nextprev) {
-                timer_looped_nextprev = 0;
-                song_next();
-            }
-        }
-
-        // PREV
-        if (is_pressed_prev()) {
-            timer_held_nextprev = 1;
-            song_prev();
-        } else if (is_released_prev()) {
-            timer_held_nextprev = 0;
-        } else if (is_held_prev()) {
-            if (timer_looped_nextprev) {
-                timer_looped_nextprev = 0;
-                song_prev();
-            }
-        }
-    }
-}
-
 // Utility function to cut current setlist entry out:
 static void cut_setlist_entry(void) {
     u8 i;
@@ -1404,19 +1256,137 @@ void handle_mode_SCENE_DESIGN(void) {
         scene_update(scene, pr_rjm[scene], 6);
     }
 
-    // STORE released after timeout?
-    if (is_pressed_store()) {
-        // start timer for STORE:
-        timer_held_tapstore = 1;
-    } else if (is_held_store() && is_timer_elapsed(tapstore)) {
+    // SAVE pressed:
+    if (is_bot_button_pressed(M_7)) {
         // STORE:
         store_program_state();
         // flash LEDs for 800ms:
         timeout_flash = 80;
-        // disable STORE timer:
-        timer_held_tapstore = 0;
-    } else if (is_released_store()) {
-        timer_held_tapstore = 0;
+        // Back to previous mode:
+        switch_mode(mode_last);
+    }
+    // EXIT pressed:
+    if (is_bot_button_pressed(M_8)) {
+        // Back to previous mode:
+        switch_mode(mode_last);
+    }
+}
+
+static inline void scene_change_button_logic(u8 btn_mask, u8 new_scene) {
+    // hold down button to enter scene design mode to adjust FX, output volume, and channels.
+    // press button again to send TAP TEMPO
+    if (is_bot_button_pressed(btn_mask)) {
+        set_rjm_channel(new_scene);
+        reset_tuner_mute();
+
+        if (last_bot_button_mask == btn_mask) {
+            // tap tempo function:
+            toggle_tap = ~toggle_tap & (u8) 0x7F;
+            gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
+        }
+
+        last_bot_button_mask = btn_mask;
+
+        timer_held_design = 1;
+    } else if (is_bot_button_held(btn_mask) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+}
+
+void handle_mode_LIVE(void) {
+    // handle bottom 8 scene change buttons:
+    scene_change_button_logic(M_1, 0);
+    scene_change_button_logic(M_2, 1);
+    scene_change_button_logic(M_3, 2);
+    scene_change_button_logic(M_4, 3);
+    scene_change_button_logic(M_5, 4);
+    scene_change_button_logic(M_6, 5);
+    scene_change_button_logic(M_7, 6);
+    scene_change_button_logic(M_8, 7);
+
+    // Axe-FX scene changes:
+    if (is_top_button_pressed(M_1)) {
+        pr_axe_scene[scene] = 0;
+        scene_activate();
+    }
+    if (is_top_button_pressed(M_2)) {
+        pr_axe_scene[scene] = 1;
+        scene_activate();
+    }
+    if (is_top_button_pressed(M_3)) {
+        pr_axe_scene[scene] = 2;
+        scene_activate();
+    }
+    if (is_top_button_pressed(M_4)) {
+        pr_axe_scene[scene] = 3;
+        scene_activate();
+    }
+
+    // handle remaining 4 functions:
+    if (is_top_button_pressed(M_5)) {
+        axe_toggle_mute();
+    }
+    if (is_top_button_pressed(M_6)) {
+        gmaj_toggle_mute();
+    }
+
+    if (setlist_mode == 0) {
+        // Program mode:
+
+        // NEXT
+        if (is_pressed_next()) {
+            timer_held_nextprev = 1;
+            prog_next();
+        } else if (is_released_next()) {
+            timer_held_nextprev = 0;
+        } else if (is_held_next()) {
+            if (timer_looped_nextprev) {
+                timer_looped_nextprev = 0;
+                prog_next();
+            }
+        }
+
+        // PREV
+        if (is_pressed_prev()) {
+            timer_held_nextprev = 1;
+            prog_prev();
+        } else if (is_released_prev()) {
+            timer_held_nextprev = 0;
+        } else if (is_held_prev()) {
+            if (timer_looped_nextprev) {
+                timer_looped_nextprev = 0;
+                prog_prev();
+            }
+        }
+    } else {
+        // Setlist mode:
+
+        // NEXT
+        if (is_pressed_next()) {
+            timer_held_nextprev = 1;
+            song_next();
+        } else if (is_released_next()) {
+            timer_held_nextprev = 0;
+        } else if (is_held_next()) {
+            if (timer_looped_nextprev) {
+                timer_looped_nextprev = 0;
+                song_next();
+            }
+        }
+
+        // PREV
+        if (is_pressed_prev()) {
+            timer_held_nextprev = 1;
+            song_prev();
+        } else if (is_released_prev()) {
+            timer_held_nextprev = 0;
+        } else if (is_held_prev()) {
+            if (timer_looped_nextprev) {
+                timer_looped_nextprev = 0;
+                song_prev();
+            }
+        }
     }
 }
 
@@ -1429,10 +1399,10 @@ void controller_handle(void) {
 
     if (mode == MODE_LIVE) {
         handle_mode_LIVE();
-    } else if (mode == MODE_PROGRAMMING) {
-        handle_mode_PROGRAMMING();
     } else if (mode == MODE_SCENE_DESIGN) {
         handle_mode_SCENE_DESIGN();
+    } else if (mode == MODE_PROGRAMMING) {
+        handle_mode_PROGRAMMING();
     }
 
     // Calculate LEDs state and send it:
