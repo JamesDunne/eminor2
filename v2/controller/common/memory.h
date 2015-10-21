@@ -1,5 +1,34 @@
 
-// JSD's custom persistent data structures per program:
+// JSD's custom persistent data structures per program.
+
+/*
+LIVE:
+-----------------------------------------------------------
+    *      *      *      *      *      *      *      *
+   B-1    B-2    B-3    B-4   B-MUTE A-MUTE  PREV   NEXT
+
+
+    *      *      *      *      *      *      *      *
+   A-1    A-2    A-3    A-4    A-5    A-6    A-7    A-8
+
+-----------------------------------------------------------
+
+      MODE = enter MODE change
+      B-1 to B-4 = press to send B scene change #1-4
+      A-1 to A-8 = press to switch to scene; repeat to send TAP TEMPO
+      Hold down A-1 to A-8 to enter SCENE DESIGNER
+
+SCENE DESIGNER:
+-----------------------------------------------------------
+    *      *      *      *      *      *      *      *
+   CMP    FLT    PIT    CHO    DLY    RVB    GATE   EQ
+
+
+    *      *      *      *      *      *      *      *
+   CH1    CH2    CH3   VOL--  VOL++  VOL=+6  SAVE   EXIT
+
+-----------------------------------------------------------
+*/
 
 // Program data structure loaded from / written to flash memory:
 struct program {
@@ -7,10 +36,35 @@ struct program {
     u8 name[20];
 
     // Scene descriptors:
-    u8 scene_desc[6];
+    struct scene_descriptor {
+        // Ivvv vvCC
+        // |||| ||||
+        // |||| ||\--- (unsigned 0-3 = RJM channel)
+        // |\--------- (  signed -16..+15, offset -9 = -25..+6)
+        // \---------- Is Initial Scene
+        u8 part1;
+
+        // M000 00CC
+        // |      ||
+        // |      \--- (unsigned 0-3 = Axe-FX scene)
+        // |
+        // \---------- Is Muted
+        // TODO: volume ramp from previous!
+        u8 part2;
+    } scene[8];
+
     // G-major effects enabled per scene (see fxm_*):
-    u8 fx[6];
+    u8 fx[8];
+
+	// 20 scene changes per program; changes[0] is loaded on program load:
+	// low 4 bits = amp A change (0-7 = switch scene, 8-15 = undefined)
+	// hi  4 bits = amp B change (0-7 = switch scene, 8-15 = undefined)
+    u8 changes[20];
 };
+
+// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
+// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
+COMPILE_ASSERT(sizeof(struct program) == 64);
 
 // Mark V channel 1
 #define rjm_channel_1   0x00
@@ -21,7 +75,6 @@ struct program {
 
 #define rjm_channel_mask        0x03
 
-// Scene level as 2-bit signed integer
 #define scene_level_mask (31 << 2)
 #define scene_level_shr  2
 
@@ -32,10 +85,6 @@ struct program {
 #define scene_level_neg3 (((-3 + scene_level_offset) & 31) << 2)
 
 #define scene_initial    0x80
-
-// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
-// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
-COMPILE_ASSERT(sizeof(struct program) == 32);
 
 // Set list entry
 struct set_entry {

@@ -236,12 +236,12 @@ void load_program_state(void) {
         ritoa(pr.name, next_gmaj_program + 1, 3);
         pr.name[4] = 0;
 
-        pr.scene_desc[0] = rjm_channel_1 | scene_level_0;
-        pr.scene_desc[1] = rjm_channel_1 | scene_level_pos4;
-        pr.scene_desc[2] = rjm_channel_2 | scene_level_0;
-        pr.scene_desc[3] = rjm_channel_2 | scene_level_pos4;
-        pr.scene_desc[4] = rjm_channel_3 | scene_level_0 | scene_initial;
-        pr.scene_desc[5] = rjm_channel_3 | scene_level_pos4;
+        pr.scene[0] = rjm_channel_1 | scene_level_0;
+        pr.scene[1] = rjm_channel_1 | scene_level_pos4;
+        pr.scene[2] = rjm_channel_2 | scene_level_0;
+        pr.scene[3] = rjm_channel_2 | scene_level_pos4;
+        pr.scene[4] = rjm_channel_3 | scene_level_0 | scene_initial;
+        pr.scene[5] = rjm_channel_3 | scene_level_pos4;
 
         pr.fx[0] = (fxm_compressor);
         pr.fx[1] = (fxm_compressor);
@@ -257,7 +257,7 @@ void load_program_state(void) {
     // Decode the scene descriptors:
     for (i = 0; i < 6; ++i) {
         // Get the descriptor:
-        u8 rdesc = pr.scene_desc[i];
+        u8 rdesc = pr.scene[i];
 
         // RJM channels start at 1 and alternate solo mode off/on and then increment channel #s:
         u8 mkv_chan = (rdesc & rjm_channel_mask);
@@ -508,7 +508,7 @@ static void switch_mode(u8 new_mode) {
 }
 
 static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
-    u8 desc = pr.scene_desc[preset];
+    u8 desc = pr.scene[preset];
 
     desc &= ~rjm_channel_mask;
     desc |= new_rjm_channel & rjm_channel_mask;
@@ -522,7 +522,7 @@ static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
     desc |= (u8)((out_level + scene_level_offset) & 31) << scene_level_shr;
 
     // Update program data to be written back to flash:
-    pr.scene_desc[preset] = desc;
+    pr.scene[preset] = desc;
 
     // Update calculated data:
     pr_rjm[preset] = new_rjm_channel;
@@ -775,7 +775,7 @@ static void update_lcd(void) {
         }
     } else if (mode == MODE_SCENE_DESIGN) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[3][i] = "    scene design    "[i];
+            lcd_rows[3][i] = "  scene A-1 design  "[i];
         }
 #if HWFEAT_LABEL_UPDATES
         labels = label_row_get(1);
