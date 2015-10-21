@@ -149,7 +149,7 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 // Hard-coded MIDI channel #s:
 #define gmaj_midi_channel   0
 #define rjm_midi_channel    1
-#define axe_midi_channel    2
+#define axe_midi_channel    3
 
 // G-major CC messages:
 #define gmaj_cc_taptempo        80
