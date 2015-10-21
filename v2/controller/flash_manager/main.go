@@ -28,6 +28,8 @@ type SceneDescriptor struct {
 	Channel int `yaml:"channel"` // 1, 2, 3
 	Level   int `yaml:"level"`   // 5 bits signed, -16..+15, offset -9 => -25..+6
 
+	AxeScene int `yaml:"axe_scene"`
+
 	FX []string `yaml:"fx,flow"`
 }
 
@@ -84,6 +86,16 @@ func parse_yaml(path string, dest interface{}) error {
 	}
 
 	return nil
+}
+
+func write_yaml(path string, src interface{}) error {
+	bytes, err := yaml.Marshal(src)
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(path, bytes, 0664)
+	return err
 }
 
 // Generate flash_rom_init.h for #include in controller C code projects
@@ -200,9 +212,13 @@ func generatePICH() {
 			fmt.Fprintf(fo, "0x%02X, ", b)
 
 			// part2 (Axe-FX use same amp channel as RJM):
-			b = uint8((s[j].Channel - 1) & 3)
+			s[j].AxeScene = s[j].Channel
+			b = uint8((s[j].AxeScene - 1) & 3)
 			fmt.Fprintf(fo, "0x%02X, ", b)
 		}
+
+		p.SceneDescriptors = s
+		p.InitialScene = initialScene
 
 		// G-Major effects:
 		for j := 0; j < 8; j++ {
@@ -447,6 +463,8 @@ func main() {
 	songs_by_name = make(map[string]int)
 
 	generatePICH()
+
+	write_yaml("all_programs.gen.yml", programs)
 
 	generateJSON()
 }
