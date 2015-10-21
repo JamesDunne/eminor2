@@ -163,42 +163,46 @@ func generatePICH() {
 			lvl_max    = 15 - lvl_offset
 		)
 
-		s := make([]SceneDescriptor, 8)
-		s[0] = p.SceneDescriptors[0]
-		s[1] = p.SceneDescriptors[0]
-		s[2] = p.SceneDescriptors[1]
-		s[3] = p.SceneDescriptors[2]
-		s[4] = p.SceneDescriptors[3]
-		s[5] = p.SceneDescriptors[4]
-		s[6] = p.SceneDescriptors[4]
-		s[7] = p.SceneDescriptors[5]
-
+		s := p.SceneDescriptors
 		initialScene := p.InitialScene
-		switch p.InitialScene {
-		case 1:
-			initialScene = 1
-			break
-		case 2:
-			initialScene = 3
-			break
-		case 3:
-			initialScene = 4
-			break
-		case 4:
-			initialScene = 5
-			break
-		case 5:
-			initialScene = 6
-			break
-		case 6:
-			initialScene = 8
-			break
-		default:
-			initialScene = 6
-			break
+
+		if len(p.SceneDescriptors) == 6 {
+			s = make([]SceneDescriptor, 8)
+			s[0] = p.SceneDescriptors[0]
+			s[1] = p.SceneDescriptors[0]
+			s[2] = p.SceneDescriptors[1]
+			s[3] = p.SceneDescriptors[2]
+			s[4] = p.SceneDescriptors[3]
+			s[5] = p.SceneDescriptors[4]
+			s[6] = p.SceneDescriptors[4]
+			s[7] = p.SceneDescriptors[5]
+
+			switch p.InitialScene {
+			case 1:
+				initialScene = 1
+				break
+			case 2:
+				initialScene = 3
+				break
+			case 3:
+				initialScene = 4
+				break
+			case 4:
+				initialScene = 5
+				break
+			case 5:
+				initialScene = 6
+				break
+			case 6:
+				initialScene = 8
+				break
+			default:
+				initialScene = 6
+				break
+			}
 		}
 
-		for j := 0; j < 8; j++ {
+		for j := 0; j < len(s); j++ {
 			// Cap the out level range to -25..+6
 			lvl5bit := s[j].Level
 			if lvl5bit < lvl_min {
@@ -218,8 +222,11 @@ func generatePICH() {
 			// part1:
 			fmt.Fprintf(fo, "0x%02X, ", b)
 
-			// part2 (Axe-FX use same amp channel as RJM):
-			s[j].AxeScene = s[j].Channel
+			// part2:
+			if (s[j].AxeScene == 0) {
+				// Axe-FX use same amp channel as RJM:
+				s[j].AxeScene = s[j].Channel
+			}
 			b = uint8((s[j].AxeScene - 1) & 3)
 			fmt.Fprintf(fo, "0x%02X, ", b)
 		}
@@ -228,7 +235,7 @@ func generatePICH() {
 		p.InitialScene = initialScene
 
 		// G-Major effects:
-		for j := 0; j < 8; j++ {
+		for j := 0; j < len(s); j++ {
 			// Translate effect name strings into bit flags:
 			b := uint8(0)
 			for _, effect := range s[j].FX {
