@@ -1254,7 +1254,12 @@ void handle_mode_SCENE_DESIGN(void) {
         scene_activate();
     }
     if (is_bot_button_pressed(M_6)) {
-        scene_update(scene, pr_rjm[scene], 6);
+        // Toggle between +6 and 0:
+        if (pr_out_level[scene] != 6) {
+            scene_update(scene, pr_rjm[scene], 6);
+        } else {
+            scene_update(scene, pr_rjm[scene], 0);
+        }
         scene_activate();
     }
 
