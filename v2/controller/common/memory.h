@@ -3,15 +3,15 @@
 
 /*
 LIVE:
------------------------------------------------------------
-    *      *      *      *      *      *      *      *
-   B-1    B-2    B-3    B-4   B-MUTE A-MUTE  PREV   NEXT
-
-
-    *      *      *      *      *      *      *      *
-   A-1    A-2    A-3    A-4    A-5    A-6    A-7    A-8
-
------------------------------------------------------------
+|-----------------------------------------------------------|
+|    *      *      *      *      *      *      *      *     |
+|   B-1    B-2    B-3    B-4   B-MUTE A-MUTE  PREV   NEXT   |
+|                                                           |
+|                                                           |
+|    *      *      *      *      *      *      *      *     |
+|   A-1    A-2    A-3    A-4    A-5    A-6    A-7    A-8    |
+|                                                           |
+|-----------------------------------------------------------|
 
       MODE = enter MODE change
       B-1 to B-4 = press to send B scene change #1-4
@@ -19,15 +19,15 @@ LIVE:
       Hold down A-1 to A-8 to enter SCENE DESIGNER
 
 SCENE DESIGNER:
------------------------------------------------------------
-    *      *      *      *      *      *      *      *
-   CMP    FLT    PIT    CHO    DLY    RVB    GATE   EQ
-
-
-    *      *      *      *      *      *      *      *
-   CH1    CH2    CH3   VOL--  VOL++  VOL=+6  SAVE   EXIT
-
------------------------------------------------------------
+|-----------------------------------------------------------|
+|    *      *      *      *      *      *      *      *     |
+|   CMP    FLT    PIT    CHO    DLY    RVB    GATE   EQ     |
+|                                                           |
+|                                                           |
+|    *      *      *      *      *      *      *      *     |
+|   CH1    CH2    CH3   VOL--  VOL++  VOL=+6  SAVE   EXIT   |
+|                                                           |
+|-----------------------------------------------------------|
 */
 
 // Program data structure loaded from / written to flash memory:
@@ -56,10 +56,7 @@ struct program {
     // G-major effects enabled per scene (see fxm_*):
     u8 fx[8];
 
-	// 20 scene changes per program; changes[0] is loaded on program load:
-	// low 4 bits = amp A change (0-7 = switch scene, 8-15 = undefined)
-	// hi  4 bits = amp B change (0-7 = switch scene, 8-15 = undefined)
-    u8 changes[20];
+    u8 _unused[20];
 };
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
