@@ -865,12 +865,11 @@ static void update_lcd(void) {
 
     if (mode == MODE_LIVE) {
         for (i = 0; i < LCD_COLS; i++) {
-            //lcd_rows[3][i] = " cm fl pt ch dl rv  "[i];
             lcd_rows[3][i] = "  c-f-p-o-d-v-g-q-  "[i];
         }
+        // Upper-case enabled FX labels:
         for (i = 0; i < 8; i++, b <<= 1) {
             if ((fx & b) == b) {
-                // Upper-case enabled FX labels:
                 lcd_rows[3][i * 2 + 2] &= ~0x20;
             }
         }
