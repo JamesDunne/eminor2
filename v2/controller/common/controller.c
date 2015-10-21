@@ -14,28 +14,126 @@
     g-major listens on MIDI channel 1
     g-major listens for program change messages and CC messages
     RJM listens on MIDI channel 2
-    RJM listens for program change messages with program #s 1-6
-
-    Footswitch layout:
-
-    *      *      *      *      *      *      *       *
-    CMP    FLT    PIT    CHO    DLY    RVB    PREV    NEXT
-
-
-    *      *      *      *      *      *      *       *
-    1      1S     2      2S     3      3S    TAP    CANCEL
-    MUTE                                     STORE    PROG
+    RJM listens for program change messages with program #s 1-3
+    Axe-FX II listens on MIDI channel 3
 
     Written by
     James S. Dunne
     https://github.com/JamesDunne/
-    2015-08-15
+    2015-10-21
 */
 
 #include <assert.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
-#include "../common/memory.h"
+#include "types.h"
+
+/*
+LIVE:
+|-----------------------------------------------------------|
+|    *      *      *      *      *      *      *      *     |
+|   B-1    B-2    B-3    B-4   B-MUTE A-MUTE  PREV   NEXT   |
+|                                                           |
+|                                                           |
+|    *      *      *      *      *      *      *      *     |
+|   A-1    A-2    A-3    A-4    A-5    A-6    A-7    A-8    |
+|                                                           |
+|-----------------------------------------------------------|
+
+      MODE = enter MODE change
+      B-1 to B-4 = press to send B scene change #1-4
+      A-1 to A-8 = press to switch to scene; repeat to send TAP TEMPO
+      Hold down A-1 to A-8 to enter SCENE DESIGNER
+
+SCENE DESIGNER:
+|-----------------------------------------------------------|
+|    *      *      *      *      *      *      *      *     |
+|   CMP    FLT    PIT    CHO    DLY    RVB    GATE   EQ     |
+|                                                           |
+|                                                           |
+|    *      *      *      *      *      *      *      *     |
+|   CH1    CH2    CH3   VOL--  VOL++  VOL=+6  SAVE   EXIT   |
+|                                                           |
+|-----------------------------------------------------------|
+*/
+
+#define scene_descriptor_count 8
+
+// Program data structure loaded from / written to flash memory:
+struct program {
+    // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
+    u8 name[20];
+
+    // Scene descriptors:
+    struct scene_descriptor {
+        // Ivvv vvCC
+        // |||| ||||
+        // |||| ||\--- (unsigned 0-3 = RJM channel)
+        // |\--------- (  signed -16..+15, offset -9 = -25..+6)
+        // \---------- Is Initial Scene
+        u8 part1;
+
+        // M000 00CC
+        // |      ||
+        // |      \--- (unsigned 0-3 = Axe-FX scene)
+        // |
+        // \---------- Is Muted
+        // TODO: volume ramp from previous!
+        u8 part2;
+    } scene[8];
+
+    // G-major effects enabled per scene (see fxm_*):
+    u8 fx[8];
+
+    u8 _unused[20];
+};
+
+// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
+// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
+COMPILE_ASSERT(sizeof(struct program) == 64);
+
+// Mark V channel 1
+#define rjm_channel_1   0x00
+// Mark V channel 2
+#define rjm_channel_2   0x01
+// Mark V channel 3
+#define rjm_channel_3   0x02
+
+#define rjm_channel_mask        0x03
+
+#define scene_level_mask (31 << 2)
+#define scene_level_shr  2
+
+// 5-bit signed values
+#define scene_level_offset  9
+#define scene_level_0    ((( 0 + scene_level_offset) & 31) << 2)
+#define scene_level_pos4 (((+5 + scene_level_offset) & 31) << 2)
+#define scene_level_neg3 (((-3 + scene_level_offset) & 31) << 2)
+
+#define scene_initial    0x80
+
+// Set list entry
+struct set_entry {
+    u8 program;
+};
+
+// Set lists
+struct set_list {
+    u8 count;                       // number of songs in set list
+    u8 d0, d1;                      // date of show (see DATES below)
+    struct set_entry entries[61];
+};
+
+// DATES since 2014 are stored in 16 bits in the following form: (LSB on right)
+//  yyyyyyym mmmddddd
+//  |||||||| ||||||||
+//  |||||||| |||\++++ day of month [0..30]
+//  |||||||\-+++----- month [0..11]
+//  \++++++---------- year since 2014 [0..127]
+
+// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
+// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
+COMPILE_ASSERT(sizeof(struct set_list) == 64);
 
 // Useful macros:
 #define tglbit(VAR,Place) VAR ^= (1 << Place)
@@ -95,7 +193,6 @@ enum {
     MODE_LIVE = 0,
     MODE_PROGRAMMING,
     MODE_SCENE_DESIGN,
-    MODE_SETLIST_REORDER,
     MODE_count
 };
 
@@ -114,7 +211,7 @@ u16 curr_leds, last_leds;
 
 // Toggle value for tap tempo:
 u8 toggle_tap;
-u8 is_muted;
+u8 is_gmaj_muted; // 0 or 1
 
 // Current g-major program # (0-127):
 u8 gmaj_program;
@@ -126,8 +223,11 @@ u8 scene, live_scene;
 // Current program data:
 struct program pr;
 // Decoded RJM channels (0-based channel number, alternating SOLO modes):
-u8 pr_rjm[6], live_pr_rjm[6];
-s8 pr_out_level[6], live_pr_out_level[6];
+u8 pr_rjm[scene_descriptor_count], live_pr_rjm[scene_descriptor_count];
+s8 pr_out_level[scene_descriptor_count], live_pr_out_level[scene_descriptor_count];
+
+u8 axe_scene, last_axe_scene;   // 0 - 3
+u8 is_axe_muted; // 0 or 1
 
 // Current set list:
 struct set_list sl;
@@ -178,8 +278,6 @@ declare_timer_looper(nextprev);
 #define timer_timeout_nextprev  45
 #define timer_loop_nextprev     10
 
-static void set_rjm_leds(void);
-static void clear_rjm_leds(void);
 static s8 ritoa(u8 *s, u8 n, s8 i);
 static void send_leds(void);
 static void update_lcd(void);
@@ -255,7 +353,7 @@ void load_program_state(void) {
     scene = 4;
 
     // Decode the scene descriptors:
-    for (i = 0; i < 6; ++i) {
+    for (i = 0; i < scene_descriptor_count; ++i) {
         // Get the descriptor:
         u8 rdesc = pr.scene[i];
 
@@ -287,7 +385,7 @@ static void store_program_state(void) {
     u8 i;
 
     // Set initial channel:
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < scene_descriptor_count; i++) {
         pr.fx[i] &= 0x7F;
     }
     pr.fx[scene] |= 0x80;
@@ -302,13 +400,13 @@ static void gmaj_cc_set(u8 cc, u8 val) {
 }
 
 static void enable_mute(void) {
-    is_muted = 1;
+    is_gmaj_muted = 1;
     gmaj_cc_set(gmaj_cc_mute, 0x7F);
     update_lcd();
 }
 
 static void disable_mute(void) {
-    is_muted = 0;
+    is_gmaj_muted = 0;
     gmaj_cc_set(gmaj_cc_mute, 0x00);
     update_lcd();
 }
@@ -316,7 +414,7 @@ static void disable_mute(void) {
 // Reset g-major mute to off if on
 static void reset_tuner_mute(void) {
     // Turn off mute if enabled:
-    if (is_muted) {
+    if (is_gmaj_muted) {
         disable_mute();
     }
 }
@@ -327,7 +425,7 @@ static void gmaj_toggle_cc(u8 idx) {
     u8 idxMask;
 
     // Make sure we don't go out of range:
-    assert(idx < 6);
+    assert(idx < scene_descriptor_count);
 
     idxMask = (1 << idx);
 
@@ -344,52 +442,7 @@ static void gmaj_toggle_cc(u8 idx) {
 }
 
 static void update_effects_MIDI_state(void) {
-#if FX_ASSUME_OFF
-    b8 n;
-    n.byte = pr.fx[scene];
-
-    // Assume all effects are off by default because g-major program change has just occurred.
-
-    // Reset top LEDs to new state, preserve LEDs 7 and 8:
-    leds[MODE_LIVE].top.byte = (n.byte & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
-
-    if (n.bits._7) {
-        // turn on noise gate:
-        gmaj_cc_set(gmaj_cc_lookup[6], 0x7F);
-    }
-    if (n.bits._5) {
-        // turn on delay:
-        gmaj_cc_set(gmaj_cc_lookup[4], 0x7F);
-    }
-    if (n.bits._6) {
-        // turn on reverb:
-        gmaj_cc_set(gmaj_cc_lookup[5], 0x7F);
-    }
-    if (n.bits._3) {
-        // turn on pitch:
-        gmaj_cc_set(gmaj_cc_lookup[2], 0x7F);
-    }
-    if (n.bits._2) {
-        // turn on filter:
-        gmaj_cc_set(gmaj_cc_lookup[1], 0x7F);
-    }
-    if (n.bits._4) {
-        // turn on chorus:
-        gmaj_cc_set(gmaj_cc_lookup[3], 0x7F);
-    }
-    if (n.bits._1) {
-        // turn on compressor:
-        gmaj_cc_set(gmaj_cc_lookup[0], 0x7F);
-    }
-    if (n.bits._8) {
-        // turn on eq:
-        gmaj_cc_set(gmaj_cc_lookup[7], 0x7F);
-    }
-#else
     u8 fx = pr.fx[scene];
-
-    // Reset top LEDs to new state, preserve LEDs 7 and 8:
-    leds[MODE_LIVE].top.byte = (fx & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
 
     // Assume g-major effects are in a random state so switch each on/off according to desired state:
     gmaj_cc_set(gmaj_cc_noisegate, (fx & fxm_noisegate) ? 0x7F : 0x00);
@@ -400,7 +453,6 @@ static void update_effects_MIDI_state(void) {
     gmaj_cc_set(gmaj_cc_compressor, (fx & fxm_compressor) ? 0x7F : 0x00);
     gmaj_cc_set(gmaj_cc_reverb, (fx & fxm_reverb) ? 0x7F : 0x00);
     gmaj_cc_set(gmaj_cc_eq, (fx & fxm_eq) ? 0x7F : 0x00);
-#endif
 }
 
 static void scene_activate(void) {
@@ -419,7 +471,7 @@ static void scene_activate(void) {
     }
 
     live_scene = scene;
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < scene_descriptor_count; i++) {
         live_pr_rjm[i] = pr_rjm[i];
         live_pr_out_level[i] = pr_out_level[i];
     }
@@ -442,7 +494,7 @@ static void scene_activate(void) {
 
 // Set RJM program to p (0-5)
 static void set_rjm_channel(u8 p) {
-    assert(p < 6);
+    assert(p < scene_descriptor_count);
 
     // Keep track of the last-activated setlist program:
     last_slp = slp;
@@ -475,11 +527,6 @@ static void set_gmaj_program_only(void) {
 
 static void set_gmaj_program(void) {
     set_gmaj_program_only();
-
-    // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    if (timer_held_flash == 0) {
-        set_rjm_leds();
-    }
 
     // Update LCD:
     update_lcd();
@@ -567,10 +614,12 @@ void controller_init(void) {
 
     timeout_flash = 0;
 
-    is_muted = 0;
+    is_gmaj_muted = 0;
+    is_axe_muted = 0;
     toggle_tap = 0;
 
     scene = 0;
+    axe_scene = 2;
     gmaj_program = 255;
     next_gmaj_program = 0;
 
@@ -726,16 +775,6 @@ static void send_leds(void) {
     }
 }
 
-static void set_rjm_leds(void) {
-    // Set only current program LED on bottom, preserve LEDs 7 and 8:
-    leds[MODE_LIVE].bot.byte = (1 << scene) | (leds[MODE_LIVE].bot.byte & (M_7 | M_8));
-}
-
-static void clear_rjm_leds(void) {
-    // Preserve only LEDs 7 and 8 (clear LEDS 1-6):
-    leds[MODE_LIVE].bot.byte &= (M_7 | M_8);
-}
-
 // Update LCD display:
 static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
@@ -828,7 +867,7 @@ static void update_lcd(void) {
 
     // "MUTE  CH1  +00  ****"
 
-    if (is_muted) {
+    if (is_gmaj_muted) {
         // Muted:
         for (i = 0; i < 4; i++) {
             lcd_rows[0][i] = "MUTE"[i];
@@ -881,35 +920,20 @@ static void update_lcd(void) {
 
 static void calc_leds(void) {
     if (mode == MODE_LIVE) {
-        // NEXT/PREV LEDs:
-        leds[MODE_LIVE].top.bits._8 = fsw.top.bits._8;
-        leds[MODE_LIVE].top.bits._7 = fsw.top.bits._7;
+        leds[MODE_LIVE].top.byte = (1 << axe_scene) | (is_axe_muted << 4) | (is_gmaj_muted << 5) | (fsw.top.byte & (M_7 | M_8));
 
-        // Turn on the TAP LED while the TAP button is held:
-        leds[MODE_LIVE].bot.bits._7 = fsw.bot.bits._7;
-
-        // Flash pending channel LED:
+        // Flash pending scene LED:
         if (next_gmaj_program != gmaj_program) {
             if ((timer_held_flash & 15) >= 8) {
-                set_rjm_leds();
+                // Set only current program LED on bottom:
+                leds[MODE_LIVE].bot.byte = (1 << scene);
             } else {
-                clear_rjm_leds();
+                // Preserve only LEDs 7 and 8 (clear LEDS 1-6):
+                leds[MODE_LIVE].bot.byte = 0;
             }
         } else {
             // Set only current program LED on bottom, preserve LEDs 7 and 8:
-            set_rjm_leds();
-        }
-
-        // Set top LEDs to new FX state, preserve LEDs 7 and 8:
-        leds[MODE_LIVE].top.byte = (pr.fx[scene] & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
-
-        if (is_timer_elapsed(fx)) {
-            // Flash top LEDs on/off:
-            if ((timer_held_fx & 15) >= 8) {
-                leds[MODE_LIVE].top.byte = ((pr.fx[scene] & ~fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
-            } else {
-                leds[MODE_LIVE].top.byte = ((pr.fx[scene] | fsw.top.byte) & ~(M_7 | M_8)) | (leds[MODE_LIVE].top.byte & (M_7 | M_8));
-            }
+            leds[MODE_LIVE].bot.byte = (1 << scene);
         }
     } else if (mode == MODE_PROGRAMMING) {
         // LEDs == FSWs:
@@ -918,13 +942,19 @@ static void calc_leds(void) {
         // Set only current program LED on bottom, preserve LEDs 7 and 8:
         leds[MODE_PROGRAMMING].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
     } else if (mode == MODE_SCENE_DESIGN) {
-        // LEDs == FSWs:
-        leds[MODE_SCENE_DESIGN].top.byte = (1 << ((pr_rjm[scene] << 1) | (pr_out_level[scene] <= 0 ? 0 : 1))) | (fsw.top.byte & (M_7 | M_8));
-        leds[MODE_SCENE_DESIGN].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
-    } else if (mode == MODE_SETLIST_REORDER) {
-        // LEDs == FSWs:
-        leds[MODE_SETLIST_REORDER].top.byte = fsw.top.byte;
-        leds[MODE_SETLIST_REORDER].bot.byte = fsw.bot.byte;
+        // Reset top LEDs to new state:
+        leds[MODE_SCENE_DESIGN].top.byte = pr.fx[scene];
+        // Show amp channel on left 3 LEDs, and show depressed status on remaining LEDs:
+        leds[MODE_SCENE_DESIGN].bot.byte = (1 << pr_rjm[scene]) | (fsw.bot.byte & (M_4 | M_5 | M_6 | M_7 | M_8));
+
+        if (is_timer_elapsed(fx)) {
+            // Flash top LEDs on/off:
+            if ((timer_held_fx & 15) >= 8) {
+                leds[MODE_SCENE_DESIGN].top.byte = (pr.fx[scene] & ~fsw.top.byte);
+            } else {
+                leds[MODE_SCENE_DESIGN].top.byte = (pr.fx[scene] | fsw.top.byte);
+            }
+        }
     }
 
     if (timeout_flash) {
@@ -940,6 +970,75 @@ static void calc_leds(void) {
 }
 
 void handle_mode_LIVE(void) {
+    // handle bottom 8 scene change buttons:
+
+    // hold down button to enter scene design mode to adjust FX, output volume, and channels.
+
+    if (is_bot_button_pressed(M_1)) {
+        set_rjm_channel(0);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_1) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+    if (is_bot_button_pressed(M_2)) {
+        set_rjm_channel(1);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_2) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+    if (is_bot_button_pressed(M_3)) {
+        set_rjm_channel(2);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_3) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+    if (is_bot_button_pressed(M_4)) {
+        set_rjm_channel(3);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_4) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+    if (is_bot_button_pressed(M_5)) {
+        set_rjm_channel(4);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_5) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+    if (is_bot_button_pressed(M_6)) {
+        set_rjm_channel(5);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_6) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+    if (is_bot_button_pressed(M_7)) {
+        set_rjm_channel(6);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_7) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+    if (is_bot_button_pressed(M_8)) {
+        set_rjm_channel(7);
+        reset_tuner_mute();
+        timer_held_design = 1;
+    } else if (is_bot_button_held(M_8) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+
     // handle top 6 FX block buttons:
     if (is_top_button_pressed(M_1)) {
         gmaj_toggle_cc(0);
@@ -982,61 +1081,6 @@ void handle_mode_LIVE(void) {
     } else if (is_top_button_released(M_6) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
         gmaj_toggle_cc(5);
-    }
-
-    // handle bottom 6 amp selector buttons:
-
-    // hold down button to enter scene design mode to adjust output volume and channels.
-
-    if (is_bot_button_pressed(M_1)) {
-        set_rjm_channel(0);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_1) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-
-    if (is_bot_button_pressed(M_2)) {
-        set_rjm_channel(1);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_2) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-
-    if (is_bot_button_pressed(M_3)) {
-        set_rjm_channel(2);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_3) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-    if (is_bot_button_pressed(M_4)) {
-        set_rjm_channel(3);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_4) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-    if (is_bot_button_pressed(M_5)) {
-        set_rjm_channel(4);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_5) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-    if (is_bot_button_pressed(M_6)) {
-        set_rjm_channel(5);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_6) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
     }
 
     // handle remaining 4 functions:
