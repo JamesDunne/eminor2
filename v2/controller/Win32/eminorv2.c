@@ -593,12 +593,10 @@ void paintFacePlate(HWND hwnd) {
             }
 
             // Set label color:
-            if (v == 0 && h < 6)
+            if (v == 0)
                 SetTextColor(hDC, RGB(64, 64, 192));
-            else if (v == 1 && h < 6)
+            else if (v == 1)
                 SetTextColor(hDC, RGB(64, 192, 64));
-            else
-                SetTextColor(hDC, RGB(224, 224, 224));
 
             SetTextAlign(hDC, TA_CENTER | VTA_TOP);
             dpi_TextOut(hDC, hLeft + (h * hSpacing), vStart + 0.25 - (v * vSpacing), labels[v][h], (int)wcslen(labels[v][h]));

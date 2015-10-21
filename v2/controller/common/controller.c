@@ -730,8 +730,8 @@ void controller_init(void) {
     labels[3] = "A-4";
     labels[4] = "A-5";
     labels[5] = "A-6";
-    labels[6] = "TAP/STORE";
-    labels[7] = "ENTER";
+    labels[6] = "A-7";
+    labels[7] = "A-8";
     label_row_update(0);
 
     labels = label_row_get(1);
@@ -739,14 +739,8 @@ void controller_init(void) {
     labels[1] = "B-2";
     labels[2] = "B-3";
     labels[3] = "B-4";
-    labels[4] = "B-5";
-    labels[5] = "B-6";
-    // labels[0] = "COMP";
-    // labels[1] = "FILTER";
-    // labels[2] = "PITCH";
-    // labels[3] = "CHORUS";
-    // labels[4] = "DELAY";
-    // labels[5] = "REVERB";
+    labels[4] = "B-MUTE";
+    labels[5] = "A-MUTE";
     labels[6] = "PREV";
     labels[7] = "NEXT";
     label_row_update(1);
@@ -870,10 +864,8 @@ static void update_lcd(void) {
         labels[1] = "B-2";
         labels[2] = "B-3";
         labels[3] = "B-4";
-        labels[4] = "B-5";
-        labels[5] = "B-6";
-        labels[6] = "PREV";
-        labels[7] = "NEXT";
+        labels[4] = "B-MUTE";
+        labels[5] = "A-MUTE";
         label_row_update(1);
 #endif
     } else if (mode == MODE_PROGRAMMING) {
@@ -885,6 +877,17 @@ static void update_lcd(void) {
             lcd_rows[3][i] = "  scene A-1 design  "[i];
         }
 #if HWFEAT_LABEL_UPDATES
+        labels = label_row_get(0);
+        labels[0] = "CH1";
+        labels[1] = "CH2";
+        labels[2] = "CH3";
+        labels[3] = "VOL--";
+        labels[4] = "VOL++";
+        labels[5] = "VOL=6";
+        labels[6] = "SAVE";
+        labels[7] = "EXIT";
+        label_row_update(0);
+
         labels = label_row_get(1);
         labels[0] = "COMP";
         labels[1] = "FILTER";
@@ -892,8 +895,6 @@ static void update_lcd(void) {
         labels[3] = "CHORUS";
         labels[4] = "DELAY";
         labels[5] = "REVERB";
-        labels[6] = "PREV";
-        labels[7] = "NEXT";
         label_row_update(1);
 #endif
     }
