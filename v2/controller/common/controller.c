@@ -164,6 +164,9 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define gmaj_cc_eq              91
 #define gmaj_cc_global_in_level 92
 
+// Axe-FX CC messages:
+#define axe_cc_tuner            15
+
 #define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
 #define is_held(rowname, mask) is_##rowname##_button_held(mask)
 #define is_released(rowname, mask) is_##rowname##_button_released(mask)
@@ -226,6 +229,9 @@ u8 gmaj_program;
 u8 next_gmaj_program;
 
 u8 scene, live_scene;
+u8 last_rjm_channel;
+u8 last_gmaj_in_level;
+u8 last_fx;
 
 // Current program data:
 struct program pr;
@@ -318,15 +324,6 @@ static u8 is_bot_button_held(u8 mask) {
 
 // Loads ROM describing the initial on/off state of effects
 void load_program_state(void) {
-#if NOFLASH
-    // defaults: all SOLO channels get delay enabled
-    pr.fx[0] = 0;
-    pr.fx[1] = fxm_delay;
-    pr.fx[2] = 0;
-    pr.fx[3] = fxm_delay;
-    pr.fx[4] = 0;
-    pr.fx[5] = fxm_delay;
-#else
     u8 i;
 
     // Load effects on/off state data from persistent storage:
@@ -401,7 +398,6 @@ void load_program_state(void) {
         pr_axe_muted[i] = ((pr.scene[i].part2 & axe_scene_muted) == axe_scene_muted) ? 1 : 0;
 		pr_out_level[i] = out_level;
     }
-#endif
 }
 
 static void store_program_state(void) {
@@ -423,15 +419,43 @@ static void gmaj_cc_set(u8 cc, u8 val) {
     midi_send_cmd2(0xB, gmaj_midi_channel, cc, val);
 }
 
-static void enable_mute(void) {
+static void axe_cc_set(u8 cc, u8 val) {
+    midi_send_cmd2(0xB, axe_midi_channel, cc, val);
+}
+
+static void gmaj_enable_mute(void) {
     is_gmaj_muted = 1;
     gmaj_cc_set(gmaj_cc_mute, 0x7F);
     update_lcd();
 }
 
-static void disable_mute(void) {
+static void gmaj_disable_mute(void) {
     is_gmaj_muted = 0;
     gmaj_cc_set(gmaj_cc_mute, 0x00);
+    update_lcd();
+}
+
+static void gmaj_toggle_mute(void) {
+    is_gmaj_muted ^= (u8)1;
+    gmaj_cc_set(gmaj_cc_mute, is_gmaj_muted ? (u8)0x7F : (u8)0x00);
+    update_lcd();
+}
+
+static void axe_enable_mute(void) {
+    is_axe_muted = 1;
+    axe_cc_set(axe_cc_tuner, 0x7F);
+    update_lcd();
+}
+
+static void axe_disable_mute(void) {
+    is_axe_muted = 0;
+    axe_cc_set(axe_cc_tuner, 0x00);
+    update_lcd();
+}
+
+static void axe_toggle_mute(void) {
+    is_axe_muted ^= (u8)1;
+    axe_cc_set(axe_cc_tuner, is_axe_muted ? (u8)0x7F : (u8)0x00);
     update_lcd();
 }
 
@@ -439,12 +463,12 @@ static void disable_mute(void) {
 static void reset_tuner_mute(void) {
     // Turn off mute if enabled:
     if (is_gmaj_muted) {
-        disable_mute();
+        gmaj_disable_mute();
     }
 }
 
 // Toggle a g-major CC effect
-static void gmaj_toggle_cc(u8 idx) {
+static void gmaj_cc_toggle(u8 idx) {
     u8 togglevalue = 0x00;
     u8 idxMask;
 
@@ -468,6 +492,8 @@ static void gmaj_toggle_cc(u8 idx) {
 static void update_effects_MIDI_state(void) {
     u8 fx = pr.fx[scene];
 
+    if (fx == last_fx) return;
+
     // Assume g-major effects are in a random state so switch each on/off according to desired state:
     gmaj_cc_set(gmaj_cc_noisegate, (fx & fxm_noisegate) ? 0x7F : 0x00);
     gmaj_cc_set(gmaj_cc_delay, (fx & fxm_delay) ? 0x7F : 0x00);
@@ -477,11 +503,13 @@ static void update_effects_MIDI_state(void) {
     gmaj_cc_set(gmaj_cc_compressor, (fx & fxm_compressor) ? 0x7F : 0x00);
     gmaj_cc_set(gmaj_cc_reverb, (fx & fxm_reverb) ? 0x7F : 0x00);
     gmaj_cc_set(gmaj_cc_eq, (fx & fxm_eq) ? 0x7F : 0x00);
+
+    last_fx = fx;
 }
 
 static void scene_activate(void) {
     u8 i;
-    u8 max_level;
+    u8 gmaj_in_level;
 
     // Switch g-major program if needed:
     if (next_gmaj_program != gmaj_program) {
@@ -494,29 +522,40 @@ static void scene_activate(void) {
         gmaj_program = next_gmaj_program;
     }
 
-    live_scene = scene;
-    for (i = 0; i < scene_descriptor_count; i++) {
-        live_pr_rjm[i] = pr_rjm[i];
-        live_pr_out_level[i] = pr_out_level[i];
+    if (pr_rjm[scene] != last_rjm_channel) {
+        // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
+        midi_send_cmd1(0xC, rjm_midi_channel, (pr_rjm[scene] << 1));
+        last_rjm_channel = pr_rjm[scene];
     }
 
-    // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
-    midi_send_cmd1(0xC, rjm_midi_channel, (pr_rjm[scene] << 1));
-
     // Max boost is +6dB
+    gmaj_in_level = (u8)(pr_out_level[scene] + (u8)121);
+    if (gmaj_in_level > 127) gmaj_in_level = 127;
+    if (gmaj_in_level < 0) gmaj_in_level = 0;
+
     // Send the out level to the G-Major as Global-In Level:
-    max_level = pr_out_level[scene] + 121;
-    if (max_level > 127) max_level = 127;
-    if (max_level < 0) max_level = 0;
-    midi_send_cmd2(0xB, gmaj_midi_channel, gmaj_cc_global_in_level, max_level);
+    if (gmaj_in_level != last_gmaj_in_level) {
+        midi_send_cmd2(0xB, gmaj_midi_channel, gmaj_cc_global_in_level, gmaj_in_level);
+        last_gmaj_in_level = gmaj_in_level;
+    }
 
     // Send Axe-FX scene change:
-    midi_send_cmd1(0xC, axe_midi_channel, pr_axe_scene[scene]);
+    axe_scene = pr_axe_scene[scene];
+    if (axe_scene != last_axe_scene) {
+        midi_send_cmd1(0xC, axe_midi_channel, axe_scene);
+        last_axe_scene = axe_scene;
+    }
 
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
 
     update_lcd();
+
+    live_scene = scene;
+    for (i = 0; i < scene_descriptor_count; i++) {
+        live_pr_rjm[i] = pr_rjm[i];
+        live_pr_out_level[i] = pr_out_level[i];
+    }
 }
 
 // Set RJM program to p (0-5)
@@ -598,7 +637,7 @@ static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
     // Update program data to be written back to flash:
     pr.scene[preset].part1 = desc;
     // TOOD: volume ramp feature!
-    pr.scene[preset].part2 = axe_scene | (is_axe_muted << 7);
+    pr.scene[preset].part2 = (pr_axe_scene[preset] & (u8)axe_scene_mask) | (pr_axe_muted[preset] << 7);
 
     // Update calculated data:
     pr_rjm[preset] = new_rjm_channel;
@@ -994,98 +1033,62 @@ static void calc_leds(void) {
     send_leds();
 }
 
+static inline void scene_change_button_logic(u8 btn_mask, u8 new_scene) {
+    // hold down button to enter scene design mode to adjust FX, output volume, and channels.
+    // press button again to send TAP TEMPO
+    if (is_bot_button_pressed(btn_mask)) {
+        set_rjm_channel(new_scene);
+        reset_tuner_mute();
+
+        // tap tempo function:
+        toggle_tap = ~toggle_tap & (u8)0x7F;
+        gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
+
+        timer_held_design = 1;
+    } else if (is_bot_button_held(btn_mask) && is_timer_elapsed(design)) {
+        switch_mode(MODE_SCENE_DESIGN);
+        timer_held_design = 0;
+    }
+}
+
 void handle_mode_LIVE(void) {
     // handle bottom 8 scene change buttons:
+    scene_change_button_logic(M_1, 0);
+    scene_change_button_logic(M_2, 1);
+    scene_change_button_logic(M_3, 2);
+    scene_change_button_logic(M_4, 3);
+    scene_change_button_logic(M_5, 4);
+    scene_change_button_logic(M_6, 5);
+    scene_change_button_logic(M_7, 6);
+    scene_change_button_logic(M_8, 7);
 
-    // hold down button to enter scene design mode to adjust FX, output volume, and channels.
-
-    if (is_bot_button_pressed(M_1)) {
-        set_rjm_channel(0);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_1) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-    if (is_bot_button_pressed(M_2)) {
-        set_rjm_channel(1);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_2) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-    if (is_bot_button_pressed(M_3)) {
-        set_rjm_channel(2);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_3) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-    if (is_bot_button_pressed(M_4)) {
-        set_rjm_channel(3);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_4) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-    if (is_bot_button_pressed(M_5)) {
-        set_rjm_channel(4);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_5) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-    if (is_bot_button_pressed(M_6)) {
-        set_rjm_channel(5);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_6) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-    if (is_bot_button_pressed(M_7)) {
-        set_rjm_channel(6);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_7) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-    if (is_bot_button_pressed(M_8)) {
-        set_rjm_channel(7);
-        reset_tuner_mute();
-        timer_held_design = 1;
-    } else if (is_bot_button_held(M_8) && is_timer_elapsed(design)) {
-        switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
-    }
-
-    // handle remaining 4 functions:
+    // Axe-FX scene changes:
     if (is_top_button_pressed(M_1)) {
-        axe_scene = 0;
+        pr_axe_scene[scene] = 0;
+        scene_activate();
+    }
+    if (is_top_button_pressed(M_2)) {
+        pr_axe_scene[scene] = 1;
+        scene_activate();
+    }
+    if (is_top_button_pressed(M_3)) {
+        pr_axe_scene[scene] = 2;
+        scene_activate();
+    }
+    if (is_top_button_pressed(M_4)) {
+        pr_axe_scene[scene] = 3;
         scene_activate();
     }
 
-    if (is_pressed_mute()) {
-        timer_held_mute = 1;
-    } else if (is_held_mute() && is_timer_elapsed(mute)) {
-        // Send mute:
-        enable_mute();
-        timer_held_mute = 0;
-    } else if (is_released_mute()) {
-        timer_held_mute = 0;
+    // handle remaining 4 functions:
+    if (is_top_button_pressed(M_5)) {
+        axe_toggle_mute();
+    }
+    if (is_top_button_pressed(M_6)) {
+        gmaj_toggle_mute();
     }
 
-    if (is_pressed_tap()) {
-        // tap tempo function:
-        toggle_tap = ~toggle_tap & 0x7F;
-        gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
-    }
-
+    /*
     // CANCEL held to engage PROG:
     if (is_pressed_cancel()) {
         // Cancel pending program change:
@@ -1113,6 +1116,7 @@ void handle_mode_LIVE(void) {
     } else if (is_released_cancel()) {
         timer_held_prog = 0;
     }
+    */
 
     if (setlist_mode == 0) {
         // Program mode:
@@ -1316,60 +1320,60 @@ void handle_mode_SCENE_DESIGN(void) {
 
     // handle top 8 FX block buttons:
     if (is_top_button_pressed(M_1)) {
-        gmaj_toggle_cc(0);
+        gmaj_cc_toggle(0);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_1) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(0);
+        gmaj_cc_toggle(0);
     }
     if (is_top_button_pressed(M_2)) {
-        gmaj_toggle_cc(1);
+        gmaj_cc_toggle(1);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_2) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(1);
+        gmaj_cc_toggle(1);
     }
     if (is_top_button_pressed(M_3)) {
-        gmaj_toggle_cc(2);
+        gmaj_cc_toggle(2);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_3) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(2);
+        gmaj_cc_toggle(2);
     }
     if (is_top_button_pressed(M_4)) {
-        gmaj_toggle_cc(3);
+        gmaj_cc_toggle(3);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_4) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(3);
+        gmaj_cc_toggle(3);
     }
     if (is_top_button_pressed(M_5)) {
-        gmaj_toggle_cc(4);
+        gmaj_cc_toggle(4);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_5) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(4);
+        gmaj_cc_toggle(4);
     }
     if (is_top_button_pressed(M_6)) {
-        gmaj_toggle_cc(5);
+        gmaj_cc_toggle(5);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_6) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(5);
+        gmaj_cc_toggle(5);
     }
     if (is_top_button_pressed(M_7)) {
-        gmaj_toggle_cc(6);
+        gmaj_cc_toggle(6);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_7) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(6);
+        gmaj_cc_toggle(6);
     }
     if (is_top_button_pressed(M_8)) {
-        gmaj_toggle_cc(7);
+        gmaj_cc_toggle(7);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_8) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(7);
+        gmaj_cc_toggle(7);
     }
 
     // Update amp channel:
@@ -1383,10 +1387,10 @@ void handle_mode_SCENE_DESIGN(void) {
         scene_update(scene, 2, pr_out_level[scene]);
     }
     if (is_bot_button_pressed(M_4)) {
-        scene_update(scene, pr_rjm[scene], pr_out_level[scene] - 1);
+        scene_update(scene, pr_rjm[scene], pr_out_level[scene] - (s8)1);
     }
     if (is_bot_button_pressed(M_5)) {
-        scene_update(scene, pr_rjm[scene], pr_out_level[scene] + 1);
+        scene_update(scene, pr_rjm[scene], pr_out_level[scene] + (s8)1);
     }
     if (is_bot_button_pressed(M_6)) {
         scene_update(scene, pr_rjm[scene], 6);
@@ -1406,22 +1410,14 @@ void handle_mode_SCENE_DESIGN(void) {
     } else if (is_released_store()) {
         timer_held_tapstore = 0;
     }
-
-    // NEXT/PREV inc/dec Out Level:
-    if (is_pressed_next()) {
-        scene_update(scene, pr_rjm[scene], pr_out_level[scene] + 1);
-    }
-    if (is_pressed_prev()) {
-        scene_update(scene, pr_rjm[scene], pr_out_level[scene] - 1);
-    }
 }
 
 // main control loop
 void controller_handle(void) {
     // poll foot-switch depression status:
     u16 tmp = fsw_poll();
-    fsw.bot.byte = tmp & 0xFF;
-    fsw.top.byte = (tmp >> 8) & 0xFF;
+    fsw.bot.byte = (u8)(tmp & 0xFF);
+    fsw.top.byte = (u8)((tmp >> 8) & 0xFF);
 
     if (mode == MODE_LIVE) {
         handle_mode_LIVE();
