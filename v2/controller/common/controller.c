@@ -997,21 +997,21 @@ static void update_lcd(void) {
 
         // g-major Global In Level:
         if (out_level == 0)
-            lcd_rows[0][5] = ' ';
+            lcd_rows[0][6] = ' ';
         else if (out_level > 0)
-            lcd_rows[0][5] = '+';
+            lcd_rows[0][6] = '+';
         else {
-            lcd_rows[0][5] = '-';
+            lcd_rows[0][6] = '-';
             pos_level = -out_level;
         }
 
-        litoa(lcd_rows[0], pos_level, 6);
+        litoa(lcd_rows[0], pos_level, 7);
 
-        lcd_rows[0][9 + 0] = 'A';
-        lcd_rows[0][9 + 1] = 'X';
-        lcd_rows[0][9 + 2] = '-';
-        lcd_rows[0][9 + 3] = 'S';
-        lcd_rows[0][9 + 4] = '1' + axe_ch;
+        lcd_rows[0][10 + 0] = 'A';
+        lcd_rows[0][10 + 1] = 'X';
+        lcd_rows[0][10 + 2] = '-';
+        lcd_rows[0][10 + 3] = 'S';
+        lcd_rows[0][10 + 4] = '1' + axe_ch;
 
         if (next_gmaj_program != gmaj_program) {
             // Pending program change:
