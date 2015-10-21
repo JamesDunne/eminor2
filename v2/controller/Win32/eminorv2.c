@@ -9,7 +9,7 @@
 #include <assert.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
-#include "../common/memory.h"
+//#include "../common/memory.h"
 #include "font-5x8.h"
 
 // MinGW fixes:
@@ -940,7 +940,7 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 // --------------- Flash memory interface:
 
-#define FLASH_LENGTH (sizeof(struct program) * 128 + sizeof(struct set_list) * 32)
+#define FLASH_LENGTH (64 * 128 + 64 * 32)
 const size_t flash_length = FLASH_LENGTH;
 u8 flash_memory[FLASH_LENGTH] = {
 #include "../PIC/flash_rom_init.h"
