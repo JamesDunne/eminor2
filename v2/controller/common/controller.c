@@ -410,9 +410,9 @@ static void store_program_state(void) {
 
     // Set initial channel:
     for (i = 0; i < scene_descriptor_count; i++) {
-        pr.fx[i] &= 0x7F;
+        pr.scene[i].part1 &= 0x7F;
     }
-    pr.fx[scene] |= 0x80;
+    pr.scene[scene].part1 |= 0x80;
 
     // Store program state:
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
@@ -565,7 +565,7 @@ static void switch_setlist_mode(u8 new_mode) {
     setlist_mode = new_mode;
     if (setlist_mode == 1) {
         // Set mode:
-        flash_load((u16)(128 * 0x20) + (u16)sli * sizeof(struct set_list), sizeof(struct set_list), (u8 *)&sl);
+        flash_load((u16)(128 * sizeof(struct program)) + (u16)sli * sizeof(struct set_list), sizeof(struct set_list), (u8 *)&sl);
         slp = 0;
         set_gmaj_program();
 
@@ -1065,6 +1065,10 @@ void handle_mode_LIVE(void) {
     }
 
     // handle remaining 4 functions:
+    if (is_top_button_pressed(M_1)) {
+        axe_scene = 0;
+        scene_activate();
+    }
 
     if (is_pressed_mute()) {
         timer_held_mute = 1;
