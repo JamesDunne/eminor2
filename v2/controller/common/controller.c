@@ -892,6 +892,7 @@ static void update_lcd(void) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[3][i] = "  scene A-1 design  "[i];
         }
+        lcd_rows[3][10] = '1' + scene;
 #if HWFEAT_LABEL_UPDATES
         labels = label_row_get(0);
         labels[0] = "CH1";
@@ -1188,11 +1189,6 @@ void handle_mode_PROGRAMMING(void) {
 }
 
 void handle_mode_SCENE_DESIGN(void) {
-    // Exit scene design when CANCEL button is pressed:
-    if (is_pressed_cancel()) {
-        switch_mode(mode_last);
-    }
-
     // handle top 8 FX block buttons:
     if (is_top_button_pressed(M_1)) {
         gmaj_cc_toggle(0);
