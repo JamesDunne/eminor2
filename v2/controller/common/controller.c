@@ -875,6 +875,17 @@ static void update_lcd(void) {
             }
         }
 #if HWFEAT_LABEL_UPDATES
+        labels = label_row_get(0);
+        labels[0] = "A-1";
+        labels[1] = "A-2";
+        labels[2] = "A-3";
+        labels[3] = "A-4";
+        labels[4] = "A-5";
+        labels[5] = "A-6";
+        labels[6] = "A-7";
+        labels[7] = "A-8";
+        label_row_update(0);
+
         labels = label_row_get(1);
         labels[0] = "B-1";
         labels[1] = "B-2";
@@ -882,12 +893,10 @@ static void update_lcd(void) {
         labels[3] = "B-4";
         labels[4] = "B-MUTE";
         labels[5] = "A-MUTE";
+        labels[6] = "PREV";
+        labels[7] = "NEXT";
         label_row_update(1);
 #endif
-    } else if (mode == MODE_PROGRAMMING) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[3][i] = " MD SD -- -- RM SW  "[i];
-        }
     } else if (mode == MODE_SCENE_DESIGN) {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[3][i] = "  scene A-1 design  "[i];
@@ -912,8 +921,14 @@ static void update_lcd(void) {
         labels[3] = "CHORUS";
         labels[4] = "DELAY";
         labels[5] = "REVERB";
+        labels[6] = "GATE";
+        labels[7] = "EQ";
         label_row_update(1);
 #endif
+    } else if (mode == MODE_PROGRAMMING) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[3][i] = " MD SD -- -- RM SW  "[i];
+        }
     }
 
     if (setlist_mode == 0) {
