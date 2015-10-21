@@ -32,18 +32,18 @@
 LIVE:
 |-----------------------------------------------------------|
 |    *      *      *      *      *      *      *      *     |
-|   B-1    B-2    B-3    B-4   B-MUTE A-MUTE  PREV   NEXT   |
+|   AX1    AX2    AX3    AX4  AX-MUTE MK-MUTE PREV   NEXT   |
 |                                                           |
 |                                                           |
 |    *      *      *      *      *      *      *      *     |
-|   A-1    A-2    A-3    A-4    A-5    A-6    A-7    A-8    |
+|   SC1    SC2    SC3    SC4    SC5    SC6    SC7    SC8    |
 |                                                           |
 |-----------------------------------------------------------|
 
       MODE = enter MODE change
-      B-1 to B-4 = press to send B scene change #1-4
-      A-1 to A-8 = press to switch to scene; repeat to send TAP TEMPO
-      Hold down A-1 to A-8 to enter SCENE DESIGNER
+      AX1 to AX4 = press to send Axe-FX scene change #1-4
+      SC1 to SC8 = press to switch to scene; repeat to send TAP TEMPO
+      Hold down SC1 to SC8 to enter SCENE DESIGNER
 
 SCENE DESIGNER:
 |-----------------------------------------------------------|
@@ -482,7 +482,7 @@ static void gmaj_cc_toggle(u8 idx) {
     u8 idxMask;
 
     // Make sure we don't go out of range:
-    assert(idx < scene_descriptor_count);
+    assert(idx < 8);
 
     idxMask = ((u8)1 << idx);
 
@@ -740,23 +740,23 @@ void controller_init(void) {
 
 #ifdef HWFEAT_LABEL_UPDATES
     labels = label_row_get(0);
-    labels[0] = "A-1";
-    labels[1] = "A-2";
-    labels[2] = "A-3";
-    labels[3] = "A-4";
-    labels[4] = "A-5";
-    labels[5] = "A-6";
-    labels[6] = "A-7";
-    labels[7] = "A-8";
+    labels[0] = "SC1";
+    labels[1] = "SC2";
+    labels[2] = "SC3";
+    labels[3] = "SC4";
+    labels[4] = "SC5";
+    labels[5] = "SC6";
+    labels[6] = "SC7";
+    labels[7] = "SC8";
     label_row_update(0);
 
     labels = label_row_get(1);
-    labels[0] = "B-1";
-    labels[1] = "B-2";
-    labels[2] = "B-3";
-    labels[3] = "B-4";
-    labels[4] = "B-MUTE";
-    labels[5] = "A-MUTE";
+    labels[0] = "AX1";
+    labels[1] = "AX2";
+    labels[2] = "AX3";
+    labels[3] = "AX4";
+    labels[4] = "AX-MUTE";
+    labels[5] = "MK-MUTE";
     labels[6] = "PREV";
     labels[7] = "NEXT";
     label_row_update(1);
@@ -861,7 +861,7 @@ static void update_lcd(void) {
 #ifdef FEAT_LCD
     s8 i;
     u8 b = 1;
-    u8 fx = pr.fx[scene] & ~(M_7 | M_8);
+    u8 fx = pr.fx[scene];
     u8 show_row3_fx = 0;
 
     // Show program name and clear row 0:
@@ -879,32 +879,32 @@ static void update_lcd(void) {
         show_row3_fx = 1;
 #if HWFEAT_LABEL_UPDATES
         labels = label_row_get(0);
-        labels[0] = "A-1";
-        labels[1] = "A-2";
-        labels[2] = "A-3";
-        labels[3] = "A-4";
-        labels[4] = "A-5";
-        labels[5] = "A-6";
-        labels[6] = "A-7";
-        labels[7] = "A-8";
+        labels[0] = "SC1";
+        labels[1] = "SC2";
+        labels[2] = "SC3";
+        labels[3] = "SC4";
+        labels[4] = "SC5";
+        labels[5] = "SC6";
+        labels[6] = "SC7";
+        labels[7] = "SC8";
         label_row_update(0);
 
         labels = label_row_get(1);
-        labels[0] = "B-1";
-        labels[1] = "B-2";
-        labels[2] = "B-3";
-        labels[3] = "B-4";
-        labels[4] = "B-MUTE";
-        labels[5] = "A-MUTE";
+        labels[0] = "AX1";
+        labels[1] = "AX2";
+        labels[2] = "AX3";
+        labels[3] = "AX4";
+        labels[4] = "AX-MUTE";
+        labels[5] = "MK-MUTE";
         labels[6] = "PREV";
         labels[7] = "NEXT";
         label_row_update(1);
 #endif
     } else if (mode == MODE_SCENE_DESIGN) {
         // Show selected scene on LCD since we don't have an LED for it:
-        lcd_rows[0][16] = 'A';
-        lcd_rows[0][17] = '-';
-        lcd_rows[0][18] = '1' + scene;
+        lcd_rows[0][17] = 'S';
+        lcd_rows[0][18] = 'C';
+        lcd_rows[0][19] = '1' + scene;
 
         show_row3_fx = 1;
 #if HWFEAT_LABEL_UPDATES
@@ -957,6 +957,7 @@ static void update_lcd(void) {
     }
 
     if (show_row3_fx) {
+        b = 1;
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[3][i] = "  c-f-p-o-d-v-g-q-  "[i];
         }
@@ -969,6 +970,7 @@ static void update_lcd(void) {
     }
 
     // "A-CH1 B-3  +00  ****"
+    // "MK-C1+00 AX-S3   SC1"
     {
         u8 gmaj_ch, axe_ch;
         s8 out_level;
@@ -987,27 +989,29 @@ static void update_lcd(void) {
         }
 
         // Mark V channel name of live setting:
-        lcd_rows[0][0 + 0] = 'A';
-        lcd_rows[0][0 + 1] = '-';
-        lcd_rows[0][0 + 2] = 'C';
-        lcd_rows[0][0 + 3] = 'H';
+        lcd_rows[0][0 + 0] = 'M';
+        lcd_rows[0][0 + 1] = 'K';
+        lcd_rows[0][0 + 2] = '-';
+        lcd_rows[0][0 + 3] = 'C';
         lcd_rows[0][0 + 4] = '1' + gmaj_ch;
-
-        lcd_rows[0][6 + 0] = 'B';
-        lcd_rows[0][6 + 1] = '-';
-        lcd_rows[0][6 + 2] = '1' + axe_ch;
 
         // g-major Global In Level:
         if (out_level == 0)
-            lcd_rows[0][11] = ' ';
+            lcd_rows[0][5] = ' ';
         else if (out_level > 0)
-            lcd_rows[0][11] = '+';
+            lcd_rows[0][5] = '+';
         else {
-            lcd_rows[0][11] = '-';
+            lcd_rows[0][5] = '-';
             pos_level = -out_level;
         }
 
-        litoa(lcd_rows[0], pos_level, 12);
+        litoa(lcd_rows[0], pos_level, 6);
+
+        lcd_rows[0][9 + 0] = 'A';
+        lcd_rows[0][9 + 1] = 'X';
+        lcd_rows[0][9 + 2] = '-';
+        lcd_rows[0][9 + 3] = 'S';
+        lcd_rows[0][9 + 4] = '1' + axe_ch;
 
         if (next_gmaj_program != gmaj_program) {
             // Pending program change:
@@ -1207,64 +1211,26 @@ void handle_mode_PROGRAMMING(void) {
     }
 }
 
+static inline void fx_button_logic(u8 btn_mask, u8 fx_idx) {
+    if (is_top_button_pressed(btn_mask)) {
+        gmaj_cc_toggle(fx_idx);
+        timer_held_fx = 1;
+    } else if (is_top_button_released(btn_mask) && is_timer_elapsed(fx)) {
+        timer_held_fx = 0;
+        gmaj_cc_toggle(fx_idx);
+    }
+}
+
 void handle_mode_SCENE_DESIGN(void) {
     // handle top 8 FX block buttons:
-    if (is_top_button_pressed(M_1)) {
-        gmaj_cc_toggle(0);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_1) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(0);
-    }
-    if (is_top_button_pressed(M_2)) {
-        gmaj_cc_toggle(1);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_2) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(1);
-    }
-    if (is_top_button_pressed(M_3)) {
-        gmaj_cc_toggle(2);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_3) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(2);
-    }
-    if (is_top_button_pressed(M_4)) {
-        gmaj_cc_toggle(3);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_4) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(3);
-    }
-    if (is_top_button_pressed(M_5)) {
-        gmaj_cc_toggle(4);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_5) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(4);
-    }
-    if (is_top_button_pressed(M_6)) {
-        gmaj_cc_toggle(5);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_6) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(5);
-    }
-    if (is_top_button_pressed(M_7)) {
-        gmaj_cc_toggle(6);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_7) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(6);
-    }
-    if (is_top_button_pressed(M_8)) {
-        gmaj_cc_toggle(7);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_8) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(7);
-    }
+    fx_button_logic(M_1, 0);
+    fx_button_logic(M_2, 1);
+    fx_button_logic(M_3, 2);
+    fx_button_logic(M_4, 3);
+    fx_button_logic(M_5, 4);
+    fx_button_logic(M_6, 5);
+    fx_button_logic(M_7, 6);
+    fx_button_logic(M_8, 7);
 
     // Update amp channel:
     if (is_bot_button_pressed(M_1)) {
