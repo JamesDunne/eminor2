@@ -161,6 +161,17 @@ func generatePICH() {
 		s[6] = p.SceneDescriptors[4]
 		s[7] = p.SceneDescriptors[5]
 
+		initialScene := p.InitialScene
+		switch p.InitialScene {
+		case 0: initialScene = 0
+		case 1: initialScene = 2
+		case 2: initialScene = 3
+		case 3: initialScene = 4
+		case 4: initialScene = 5
+		case 5: initialScene = 7
+		default: initialScene = 5
+		}
+
 		for j := 0; j < 8; j++ {
 			// Cap the out level range to -25..+6
 			lvl5bit := s[j].Level
@@ -174,14 +185,16 @@ func generatePICH() {
 			lvl5bit += lvl_offset
 
 			b := uint8((s[j].Channel-1)&3) | uint8((int8(lvl5bit&31))<<2)
-			if p.InitialScene-1 == j {
+			if initialScene-1 == j {
 				b |= 0x80
 			}
 
 			// part1:
 			fmt.Fprintf(fo, "0x%02X, ", b)
-			// part2:
-			fmt.Fprintf(fo, "0x%02X, ", 0)
+
+			// part2 (Axe-FX use same amp channel as RJM):
+			b = uint8((s[j].Channel - 1) & 3)
+			fmt.Fprintf(fo, "0x%02X, ", b)
 		}
 
 		// G-Major effects:
