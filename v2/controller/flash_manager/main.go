@@ -11,7 +11,9 @@ import (
 	"time"
 )
 
-import "gopkg.in/yaml.v2"
+import (
+	"gopkg.in/yaml.v2"
+)
 
 const (
 	FX_Compressor uint8 = 1 << iota
@@ -98,15 +100,85 @@ func write_yaml(path string, src interface{}) error {
 	return err
 }
 
-// Generate flash_rom_init.h for #include in controller C code projects
-func generatePICH() {
-	fo, err := os.OpenFile("../PIC/flash_rom_init.h", os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+type BankedWriter struct {
+	fo           *os.File
+	bankNumber	 int
+	bytesWritten int
+}
+
+func NewBankedWriter() *BankedWriter {
+	w := &BankedWriter{
+		bankNumber:0,
+		bytesWritten:0,
+	}
+
+	var err error
+	w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_bank%d.h", w.bankNumber), os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Println(err)
+		panic(err)
+	}
+	return w
+}
+
+func (w *BankedWriter) Close() error {
+	return w.fo.Close()
+}
+
+func (w *BankedWriter) writeSeparator() {
+	// Don't write separators at top of bank files:
+	if w.bytesWritten & 0x0FFF == 0 {
 		return
 	}
+
+	fmt.Fprint(w.fo, ",")
+	if w.bytesWritten & 63 == 0 {
+		fmt.Fprint(w.fo, "\n")
+	}
+}
+
+func (w *BankedWriter) cycle() {
+	// Are we about to cross a 4K boundary?
+	if (w.bytesWritten & 0x0FFF) == 0x0FFF {
+		err := w.fo.Close()
+		if err != nil {
+			panic(err)
+		}
+
+		w.bankNumber++
+
+		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_bank%d.h", w.bankNumber), os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	w.bytesWritten++
+}
+
+func (w *BankedWriter) WriteHex(b uint8) {
+	w.writeSeparator()
+	fmt.Fprintf(w.fo, " 0x%02X", b)
+	w.cycle()
+}
+
+func (w *BankedWriter) WriteDecimal(b uint8) {
+	w.writeSeparator()
+	fmt.Fprintf(w.fo, "  %3d", b)
+	w.cycle()
+}
+
+func (w *BankedWriter) WriteChar(b uint8) {
+	w.writeSeparator()
+	fmt.Fprintf(w.fo, "  '%c'", rune(b))
+	w.cycle()
+}
+
+// Generate flash_rom_init.h for #include in controller C code projects
+func generatePICH() {
+	var err error
+	bw := NewBankedWriter()
 	defer func() {
-		err = fo.Close()
+		err := bw.Close()
 		if err != nil {
 			log.Println(err)
 			return
@@ -139,14 +211,14 @@ func generatePICH() {
 		// Copy name characters:
 		for j := 0; j < song_name_max_length; j++ {
 			if j >= len(p.Name) {
-				fmt.Fprint(fo, "0, ")
+				bw.WriteDecimal(0)
 				continue
 			}
 			c := p.Name[j]
 			if c < 32 {
-				fmt.Fprint(fo, "0, ")
+				bw.WriteDecimal(0)
 			}
-			fmt.Fprintf(fo, "'%c', ", rune(c))
+			bw.WriteChar(c)
 		}
 
 		// Scene descriptors:
@@ -220,15 +292,15 @@ func generatePICH() {
 			}
 
 			// part1:
-			fmt.Fprintf(fo, "0x%02X, ", b)
+			bw.WriteHex(b)
 
 			// part2:
-			if (s[j].AxeScene == 0) {
+			if s[j].AxeScene == 0 {
 				// Axe-FX use same amp channel as RJM:
 				s[j].AxeScene = s[j].Channel
 			}
 			b = uint8((s[j].AxeScene - 1) & 3)
-			fmt.Fprintf(fo, "0x%02X, ", b)
+			bw.WriteHex(b)
 		}
 
 		p.SceneDescriptors = s
@@ -258,21 +330,19 @@ func generatePICH() {
 				}
 			}
 
-			fmt.Fprintf(fo, "0x%02X, ", b)
+			bw.WriteHex(b)
 		}
 
 		// _unused:
 		for j := 0; j < 20; j++ {
-			fmt.Fprintf(fo, "0x%02X, ", 0)
+			bw.WriteHex(0)
 		}
-		fmt.Fprint(fo, "\n")
 	}
 
 	for songs = songs; songs < 128; songs++ {
 		for j := 0; j < 64; j++ {
-			fmt.Fprintf(fo, "0, ")
+			bw.WriteDecimal(0)
 		}
-		fmt.Fprint(fo, "\n")
 	}
 
 	const max_set_length = 61
@@ -298,7 +368,7 @@ func generatePICH() {
 		}
 
 		fmt.Printf("  Songs: %d\n", len(set.SongNames))
-		fmt.Fprintf(fo, "%d, ", byte(len(set.SongNames)))
+		bw.WriteDecimal(byte(len(set.SongNames)))
 
 		// dates since 2014 stored in 16 bits:
 		//  yyyyyyym mmmddddd
@@ -323,13 +393,14 @@ func generatePICH() {
 		d1 := byte(((mm >> 3) & 1) | ((yyyy & 127) << 1))
 
 		// Write the two 8-bit values for the date:
-		fmt.Fprintf(fo, "0x%02X, 0x%02X, ", d0, d1)
+		bw.WriteHex(d0)
+		bw.WriteHex(d1)
 		fmt.Printf("  Date:  %04d-%02d-%02d\n", yyyy+2014, mm+1, dd+1)
 
 		// Write out the song indices for the setlist:
 		for j := 0; j < max_set_length; j++ {
 			if j >= len(set.SongNames) {
-				fmt.Fprintf(fo, "0xFF")
+				bw.WriteHex(0xFF)
 			} else {
 				// Look up song by name, case-insensitive:
 				song_name := strings.ToLower(set.SongNames[j])
@@ -339,17 +410,9 @@ func generatePICH() {
 				}
 
 				// Write out song index:
-				fmt.Fprintf(fo, "%2d", byte(song_index))
+				bw.WriteDecimal(byte(song_index))
 				fmt.Printf("  %2d) %3d %s\n", j+1, song_index+1, programs.Programs[song_index].Name)
 			}
-			if j < max_set_length-1 {
-				fmt.Fprint(fo, ", ")
-			}
-		}
-		if i > 0 {
-			fmt.Fprint(fo, ",\n")
-		} else {
-			fmt.Fprint(fo, "\n")
 		}
 	}
 }
