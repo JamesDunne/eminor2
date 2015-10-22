@@ -1279,7 +1279,7 @@ void handle_mode_SCENE_DESIGN(void) {
     }
 }
 
-static void scene_change_button_logic(u8 btn_mask, u8 new_scene) {
+static void rjm_scene_change_button_logic(u8 btn_mask, u8 new_scene) {
     // hold down button to enter scene design mode to adjust FX, output volume, and channels.
     // press button again to send TAP TEMPO
     if (is_bot_button_pressed(btn_mask)) {
@@ -1301,34 +1301,29 @@ static void scene_change_button_logic(u8 btn_mask, u8 new_scene) {
     }
 }
 
+static void axe_scene_change_button_logic(u8 btn_mask, u8 new_scene) {
+    if (is_top_button_pressed(btn_mask)) {
+        pr_axe_scene[scene] = new_scene;
+        scene_activate();
+    }
+}
+
 void handle_mode_LIVE(void) {
     // handle bottom 8 scene change buttons:
-    scene_change_button_logic(M_1, 0);
-    scene_change_button_logic(M_2, 1);
-    scene_change_button_logic(M_3, 2);
-    scene_change_button_logic(M_4, 3);
-    scene_change_button_logic(M_5, 4);
-    scene_change_button_logic(M_6, 5);
-    scene_change_button_logic(M_7, 6);
-    scene_change_button_logic(M_8, 7);
+    rjm_scene_change_button_logic(M_1, 0);
+    rjm_scene_change_button_logic(M_2, 1);
+    rjm_scene_change_button_logic(M_3, 2);
+    rjm_scene_change_button_logic(M_4, 3);
+    rjm_scene_change_button_logic(M_5, 4);
+    rjm_scene_change_button_logic(M_6, 5);
+    rjm_scene_change_button_logic(M_7, 6);
+    rjm_scene_change_button_logic(M_8, 7);
 
     // Axe-FX scene changes:
-    if (is_top_button_pressed(M_1)) {
-        pr_axe_scene[scene] = 0;
-        scene_activate();
-    }
-    if (is_top_button_pressed(M_2)) {
-        pr_axe_scene[scene] = 1;
-        scene_activate();
-    }
-    if (is_top_button_pressed(M_3)) {
-        pr_axe_scene[scene] = 2;
-        scene_activate();
-    }
-    if (is_top_button_pressed(M_4)) {
-        pr_axe_scene[scene] = 3;
-        scene_activate();
-    }
+    axe_scene_change_button_logic(M_1, 0);
+    axe_scene_change_button_logic(M_2, 1);
+    axe_scene_change_button_logic(M_3, 2);
+    axe_scene_change_button_logic(M_4, 3);
 
     // handle remaining 4 functions:
     if (is_top_button_pressed(M_5)) {
