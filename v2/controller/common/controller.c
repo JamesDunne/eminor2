@@ -448,7 +448,7 @@ static void gmaj_toggle_mute(void) {
     update_lcd();
 }
 
-static void scene_update_current();
+static void scene_update_current(void);
 
 static void send_axe_mute(void) {
     axe_cc_set(axe_cc_tuner, pr_axe_muted[scene] ? (u8)0x7F : (u8)0x00);
