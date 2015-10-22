@@ -121,10 +121,26 @@ func NewBankedWriter() *BankedWriter {
 }
 
 func (w *BankedWriter) Close() error {
+	if w.fo == nil {
+		return nil
+	}
+
+	// MPLAB C18 compiler requires a newline at the end of the header file, otherwise you get a syntax error.
+	fmt.Fprint(w.fo, "\n")
+
 	return w.fo.Close()
 }
 
 func (w *BankedWriter) writeSeparator() {
+	// Open new file when needed:
+	if w.fo == nil {
+		var err error
+		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_bank%d.h", w.bankNumber), os.O_TRUNC | os.O_CREATE | os.O_WRONLY, 0644)
+		if err != nil {
+			panic(err)
+		}
+	}
+
 	// Don't write separators at top of bank files:
 	if w.bytesWritten & 0x0FFF == 0 {
 		return
@@ -139,17 +155,14 @@ func (w *BankedWriter) writeSeparator() {
 func (w *BankedWriter) cycle() {
 	// Are we about to cross a 4K boundary?
 	if (w.bytesWritten & 0x0FFF) == 0x0FFF {
-		err := w.fo.Close()
-		if err != nil {
-			panic(err)
-		}
+		// Close last open file:
+		w.Close()
 
+		// Next bank:
 		w.bankNumber++
 
-		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_bank%d.h", w.bankNumber), os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			panic(err)
-		}
+		// Indicate to open a new file on next write:
+		w.fo = nil
 	}
 
 	w.bytesWritten++
