@@ -166,6 +166,7 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define gmaj_cc_global_in_level 92
 
 // Axe-FX CC messages:
+#define axe_cc_taptempo         14
 #define axe_cc_tuner            15
 
 #define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
@@ -1290,6 +1291,7 @@ static void rjm_scene_change_button_logic(u8 btn_mask, u8 new_scene) {
             // tap tempo function:
             toggle_tap = ~toggle_tap & (u8) 0x7F;
             gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
+            axe_cc_set(axe_cc_taptempo, toggle_tap);
         }
 
         last_bot_button_mask = btn_mask;
