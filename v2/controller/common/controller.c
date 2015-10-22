@@ -33,7 +33,7 @@ LIVE:
 |-----------------------------------------------------------|
 |    *      *      *      *      *      *      *      *     |
 |   AX1    AX2    AX3    AX4  AX-MUTE MK-MUTE PREV   NEXT   |
-|                                                           |
+|   MODE                               SAVE                 |
 |                                                           |
 |    *      *      *      *      *      *      *      *     |
 |   SC1    SC2    SC3    SC4    SC5    SC6    SC7    SC8    |
