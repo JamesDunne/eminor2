@@ -938,25 +938,36 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 // --------------- Flash memory interface:
 
-#define FLASH_LENGTH (64 * 128 + 64 * 32)
-const size_t flash_length = FLASH_LENGTH;
-u8 flash_memory[FLASH_LENGTH] = {
-#include "../PIC/flash_rom_init.h"
+u8 flash_bank[3][4096] = {
+    {
+#include "../PIC/flash_bank0.h"
+    },
+    {
+#include "../PIC/flash_bank1.h"
+    },
+    {
+#include "../PIC/flash_bank2.h"
+    }
 };
-#undef FLASH_LENGTH
 
 // Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
 void flash_load(u16 addr, u16 count, u8 *data) {
+    u8 bank = (u8)(addr >> 12);
+    addr &= 0x0FFF;
+
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
     assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
 
-    memcpy((void *)data, (void *)&flash_memory[addr], count);
+    memcpy((void *)data, (void *)&flash_bank[bank][addr], count);
 }
 
 // Stores `count` bytes from `data` into flash memory at address `addr` (0-based where 0 is first available byte of available flash memory):
 void flash_store(u16 addr, u16 count, u8 *data) {
+    u8 bank = (u8)(addr >> 12);
+    addr &= 0x0FFF;
+
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
     assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
 
-    memcpy((void *)&flash_memory[addr], (void *)data, count);
+    memcpy((void *)&flash_bank[bank][addr], (void *)data, count);
 }
