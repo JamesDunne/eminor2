@@ -263,13 +263,18 @@ u8 *lcd_rows[LCD_ROWS];
 // Countdown timer for flashing LEDs:
 u8 timeout_flash;
 
-#define declare_timer(name) u8 timer_held_##name
-#define declare_timer_looper(name) u8 timer_held_##name, timer_looped_##name
+#define declare_timer(name)         u8 timer_held_##name, timer_satisfied_##name
+#define declare_timer_looper(name)  u8 timer_held_##name, timer_satisfied_##name, timer_looped_##name
 
-#define is_timer_elapsed(name) (timer_held_##name >= (timer_timeout_##name + 1))
+#define start_timer(name)           timer_satisfied_##name = 0; timer_held_##name = 1
+#define reset_timer(name)           timer_satisfied_##name = 0; timer_held_##name = 0
+#define set_timer_satisfied(name)   timer_satisfied_##name = 1
 
-#define init_timer(name) timer_held_##name = 0
-#define init_timer_looper(name) timer_held_##name = 0, timer_looped_##name = 0
+#define is_timer_satisfied(name)    (timer_satisfied_##name == 1)
+#define is_timer_elapsed(name)      (!is_timer_satisfied(name) && ((timer_held_##name & 127) >= (timer_timeout_##name + 1)))
+
+#define init_timer(name)            timer_held_##name = 0
+#define init_timer_looper(name)     timer_held_##name = 0, timer_looped_##name = 0
 
 declare_timer(tapstore);
 #define timer_timeout_tapstore  75
@@ -523,7 +528,7 @@ static void scene_activate(void) {
 
     // Switch g-major program if needed:
     if (next_gmaj_program != gmaj_program) {
-        timer_held_flash = 0;
+        reset_timer(flash);
 
         // Send the MIDI PROGRAM CHANGE message to t.c. electronic g-major effects unit:
         midi_send_cmd1(0xC, gmaj_midi_channel, next_gmaj_program);
@@ -628,10 +633,10 @@ static void set_gmaj_program_only(void) {
     if (next_gmaj_program != gmaj_program) {
         // Only start flashing timer; otherwise leave current timer loop alone:
         if (timer_held_flash == 0) {
-            timer_held_flash = 1;
+            start_timer(flash);
         }
     } else {
-        timer_held_flash = 0;
+        reset_timer(flash);
     }
 
     // Load new effect states but don't switch MIDI yet:
@@ -772,20 +777,20 @@ void controller_init(void) {
 
 // called every 10ms
 void controller_10msec_timer(void) {
-    // Increment timers:
+// Increment timers:
 #define inc_timer(name) \
-    if (timer_held_##name > 0) { \
-    timer_held_##name++; \
-    if (timer_held_##name >= 240) \
-    timer_held_##name = 128; \
+    if ((timer_held_##name > 0) && !is_timer_satisfied(name)) { \
+        timer_held_##name++; \
+        if (timer_held_##name >= 255) \
+            timer_held_##name = 128; \
     }
 #define inc_timer_loop(name) \
-    if (timer_held_##name > 0) { \
-    timer_held_##name++; \
-    if (timer_held_##name >= (timer_timeout_##name + timer_loop_##name)) { \
-    timer_held_##name = timer_timeout_##name; \
-    timer_looped_##name = 1; \
-    } \
+    if ((timer_held_##name > 0) && !is_timer_satisfied(name)) { \
+        timer_held_##name++; \
+        if (timer_held_##name >= (timer_timeout_##name + timer_loop_##name)) { \
+            timer_held_##name = timer_timeout_##name; \
+            timer_looped_##name = 1; \
+        } \
     }
 
     inc_timer(fx)
@@ -1077,6 +1082,17 @@ static void calc_leds(void) {
     send_leds();
 }
 
+#define button_timer_logic(top_or_bot, btn_mask, timername, notimer, yestimer) \
+    if (is_##top_or_bot##_button_pressed(btn_mask)) { \
+        start_timer(timername); \
+    } else if (is_##top_or_bot##_button_held(btn_mask) && is_timer_elapsed(timername)) { \
+        set_timer_satisfied(timername); \
+        yestimer; \
+    } else if (is_##top_or_bot##_button_released(btn_mask) && !is_timer_elapsed(timername) && !is_timer_satisfied(timername)) { \
+        reset_timer(timername); \
+        notimer; \
+    }
+
 // Utility function to cut current setlist entry out:
 static void cut_setlist_entry(void) {
     u8 i;
@@ -1150,16 +1166,16 @@ void handle_mode_PROGRAMMING(void) {
     // STORE released after timeout?
     if (is_pressed_store()) {
         // start timer for STORE:
-        timer_held_tapstore = 1;
+        start_timer(tapstore);
     } else if (is_held_store() && is_timer_elapsed(tapstore)) {
         // STORE:
         store_program_state();
         // flash LEDs for 800ms:
         timeout_flash = 80;
         // disable STORE timer:
-        timer_held_tapstore = 0;
+        reset_timer(tapstore);
     } else if (is_released_store()) {
-        timer_held_tapstore = 0;
+        reset_timer(tapstore);
     }
 
     // NEXT/PREV change setlists:
@@ -1168,10 +1184,10 @@ void handle_mode_PROGRAMMING(void) {
 
         // NEXT
         if (is_pressed_next()) {
-            timer_held_nextprev = 1;
+            start_timer(nextprev);
             prog_next();
         } else if (is_released_next()) {
-            timer_held_nextprev = 0;
+            reset_timer(nextprev);
         } else if (is_held_next()) {
             if (timer_looped_nextprev) {
                 timer_looped_nextprev = 0;
@@ -1181,10 +1197,10 @@ void handle_mode_PROGRAMMING(void) {
 
         // PREV
         if (is_pressed_prev()) {
-            timer_held_nextprev = 1;
+            start_timer(nextprev);
             prog_prev();
         } else if (is_released_prev()) {
-            timer_held_nextprev = 0;
+            reset_timer(nextprev);
         } else if (is_held_prev()) {
             if (timer_looped_nextprev) {
                 timer_looped_nextprev = 0;
@@ -1215,9 +1231,9 @@ void handle_mode_PROGRAMMING(void) {
 static void fx_button_logic(u8 btn_mask, u8 fx_idx) {
     if (is_top_button_pressed(btn_mask)) {
         gmaj_cc_toggle(fx_idx);
-        timer_held_fx = 1;
+        start_timer(fx);
     } else if (is_top_button_released(btn_mask) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
+        reset_timer(fx);
         gmaj_cc_toggle(fx_idx);
     }
 }
@@ -1296,10 +1312,10 @@ static void rjm_scene_change_button_logic(u8 btn_mask, u8 new_scene) {
 
         last_bot_button_mask = btn_mask;
 
-        timer_held_design = 1;
+        start_timer(design);
     } else if (is_bot_button_held(btn_mask) && is_timer_elapsed(design)) {
         switch_mode(MODE_SCENE_DESIGN);
-        timer_held_design = 0;
+        reset_timer(design);
     }
 }
 
@@ -1322,7 +1338,14 @@ void handle_mode_LIVE(void) {
     rjm_scene_change_button_logic(M_8, 7);
 
     // Axe-FX scene changes:
-    axe_scene_change_button_logic(M_1, 0);
+    button_timer_logic(top, M_1, fx, {
+        // Switch Axe-FX scene:
+        pr_axe_scene[scene] = 0;
+        scene_activate();
+    }, {
+        // Toggle setlist mode:
+        switch_setlist_mode((setlist_mode ^ 1));
+    })
     axe_scene_change_button_logic(M_2, 1);
     axe_scene_change_button_logic(M_3, 2);
     axe_scene_change_button_logic(M_4, 3);
@@ -1331,19 +1354,26 @@ void handle_mode_LIVE(void) {
     if (is_top_button_pressed(M_5)) {
         axe_toggle_mute();
     }
-    if (is_top_button_pressed(M_6)) {
+    button_timer_logic(top, M_6, fx, {
         gmaj_toggle_mute();
-    }
+    }, {
+        // STORE:
+        store_program_state();
+        // flash LEDs for 800ms:
+        timeout_flash = 80;
+        // Back to previous mode:
+        switch_mode(mode_last);
+    })
 
     if (setlist_mode == 0) {
         // Program mode:
 
         // NEXT
         if (is_pressed_next()) {
-            timer_held_nextprev = 1;
+            start_timer(nextprev);
             prog_next();
         } else if (is_released_next()) {
-            timer_held_nextprev = 0;
+            reset_timer(nextprev);
         } else if (is_held_next()) {
             if (timer_looped_nextprev) {
                 timer_looped_nextprev = 0;
@@ -1353,10 +1383,10 @@ void handle_mode_LIVE(void) {
 
         // PREV
         if (is_pressed_prev()) {
-            timer_held_nextprev = 1;
+            start_timer(nextprev);
             prog_prev();
         } else if (is_released_prev()) {
-            timer_held_nextprev = 0;
+            reset_timer(nextprev);
         } else if (is_held_prev()) {
             if (timer_looped_nextprev) {
                 timer_looped_nextprev = 0;
@@ -1368,10 +1398,10 @@ void handle_mode_LIVE(void) {
 
         // NEXT
         if (is_pressed_next()) {
-            timer_held_nextprev = 1;
+            start_timer(nextprev);
             song_next();
         } else if (is_released_next()) {
-            timer_held_nextprev = 0;
+            reset_timer(nextprev);
         } else if (is_held_next()) {
             if (timer_looped_nextprev) {
                 timer_looped_nextprev = 0;
@@ -1381,10 +1411,10 @@ void handle_mode_LIVE(void) {
 
         // PREV
         if (is_pressed_prev()) {
-            timer_held_nextprev = 1;
+            start_timer(nextprev);
             song_prev();
         } else if (is_released_prev()) {
-            timer_held_nextprev = 0;
+            reset_timer(nextprev);
         } else if (is_held_prev()) {
             if (timer_looped_nextprev) {
                 timer_looped_nextprev = 0;
