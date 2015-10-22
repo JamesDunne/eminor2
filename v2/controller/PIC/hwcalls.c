@@ -219,6 +219,7 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 void flash_load(u16 addr, u16 count, u8 *data) {
     u8 i;
+    u8 bank;
     u16 saddr;
 
     // Check sanity of read to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
@@ -226,24 +227,31 @@ void flash_load(u16 addr, u16 count, u8 *data) {
     // Make sure read is in flash memory range:
     assert(addr + count < WRITABLE_SEG_LEN);
 
+    bank = (u8)(addr >> 12);
+    addr &= 0x0FFF;
+
     // Copy data from ROM to destination:
     for (i = 0, saddr = addr; i < count; i++, saddr++)
-        data[i] = ROM_SAVEDATA[saddr];
+        data[i] = ROM_SAVEDATA[bank][saddr];
 }
 
 void flash_store(u16 addr, u16 count, u8 *data) {
     u8 i;
-    u16 saddr, daddr;
+    u8 bank;
+    u16 bankedaddr, saddr, daddr;
 
     // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
     assert(((addr) & ~63) == (((addr + count - 1)) & ~63));
     // Make sure write is in flash memory range:
     assert(addr + count < WRITABLE_SEG_LEN);
 
+    bank = (u8)(addr >> 12);
+    bankedaddr = addr & 0x0FFF;
+
     // Copy 64 byte aligned chunk of ROM into RAM so it can be put back in after ERASE completes.
-    saddr = addr & ~63;
+    saddr = bankedaddr & ~63;
     for (i = 0; i < 64; i++, saddr++) {
-        ProgmemBuffer[i] = ROM_SAVEDATA[saddr];
+        ProgmemBuffer[i] = ROM_SAVEDATA[bank][saddr];
     }
 
     // Copy new data into RAM buffer, assuming we don't cross a 64-byte chunk boundary:

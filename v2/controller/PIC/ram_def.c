@@ -47,8 +47,16 @@ unsigned char LCDUpdateStage;
 
 // User-writable flash memory:
 #pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
-rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN] = {
-#include "flash_rom_init.h"
+rom unsigned char ROM_SAVEDATA[3][4096] = {
+    {
+#include "flash_bank0.h"
+    },
+    {
+#include "flash_bank1.h"
+    },
+    {
+#include "flash_bank2.h"
+    }
 };
 
 unsigned char LCDRamMap[4][20];

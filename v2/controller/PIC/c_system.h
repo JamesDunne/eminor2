@@ -50,7 +50,7 @@ void    lcd_update_screen(void);
 void    swuart_tx_start(void);
 void    swuart_tx_interrupt(void);
 
-extern rom unsigned char ROM_SAVEDATA[WRITABLE_SEG_LEN];
+extern rom unsigned char ROM_SAVEDATA[3][4096];
 //-----------------------------------------------------------------------------
 
 // NOTE(jsd): These macros are just plain broken on the MPLAB SIM; unknown on PIC18.
