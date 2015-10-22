@@ -1211,7 +1211,7 @@ void handle_mode_PROGRAMMING(void) {
     }
 }
 
-static inline void fx_button_logic(u8 btn_mask, u8 fx_idx) {
+static void fx_button_logic(u8 btn_mask, u8 fx_idx) {
     if (is_top_button_pressed(btn_mask)) {
         gmaj_cc_toggle(fx_idx);
         timer_held_fx = 1;
@@ -1279,7 +1279,7 @@ void handle_mode_SCENE_DESIGN(void) {
     }
 }
 
-static inline void scene_change_button_logic(u8 btn_mask, u8 new_scene) {
+static void scene_change_button_logic(u8 btn_mask, u8 new_scene) {
     // hold down button to enter scene design mode to adjust FX, output volume, and channels.
     // press button again to send TAP TEMPO
     if (is_bot_button_pressed(btn_mask)) {
