@@ -26,3 +26,5 @@ v2/controller/Win32/flash.bin
 
 .DS_Store
 Thumbs.db
+
+.idea/
