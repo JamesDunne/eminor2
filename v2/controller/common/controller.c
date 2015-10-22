@@ -203,7 +203,6 @@ u8 gmaj_cc_lookup[8];
 
 enum {
     MODE_LIVE = 0,
-    MODE_PROGRAMMING,
     MODE_SCENE_DESIGN,
     MODE_count
 };
@@ -936,10 +935,6 @@ static void update_lcd(void) {
         labels[7] = "EQ";
         label_row_update(1);
 #endif
-    } else if (mode == MODE_PROGRAMMING) {
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[3][i] = " MD SD -- -- RM SW  "[i];
-        }
     }
 
     if (setlist_mode == 0) {
@@ -1048,12 +1043,6 @@ static void calc_leds(void) {
             // Set only current program LED on bottom, preserve LEDs 7 and 8:
             leds[MODE_LIVE].bot.byte = (1 << scene);
         }
-    } else if (mode == MODE_PROGRAMMING) {
-        // LEDs == FSWs:
-        leds[MODE_PROGRAMMING].top.byte = fsw.top.byte;
-
-        // Set only current program LED on bottom, preserve LEDs 7 and 8:
-        leds[MODE_PROGRAMMING].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
     } else if (mode == MODE_SCENE_DESIGN) {
         // Reset top LEDs to new state:
         leds[MODE_SCENE_DESIGN].top.byte = pr.fx[scene];
@@ -1092,141 +1081,6 @@ static void calc_leds(void) {
         reset_timer(timername); \
         notimer; \
     }
-
-// Utility function to cut current setlist entry out:
-static void cut_setlist_entry(void) {
-    u8 i;
-
-    if (slp >= sl.count) return;
-    if (sl.count <= 0) return;
-
-    for (i = slp+1; i < sl.count; i++) {
-        sl.entries[i-1] = sl.entries[i];
-    }
-    sl.count--;
-}
-
-// Mode 1 is activated by holding down PROG while in mode 0.
-void handle_mode_PROGRAMMING(void) {
-    // Exit programming when CANCEL button is pressed:
-    if (is_pressed_cancel()) {
-        switch_mode(MODE_LIVE);
-    }
-
-    // handle bottom 6 amp selector buttons:
-    if (is_bot_button_pressed(M_1)) {
-        set_rjm_channel(0);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_2)) {
-        set_rjm_channel(1);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_3)) {
-        set_rjm_channel(2);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_4)) {
-        set_rjm_channel(3);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_5)) {
-        set_rjm_channel(4);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_6)) {
-        set_rjm_channel(5);
-        reset_tuner_mute();
-    }
-
-    // Switch setlist/program modes:
-    if (is_top_button_pressed(M_1)) {
-        // Toggle setlist/program mode:
-        switch_setlist_mode((setlist_mode ^ 1));
-    }
-    if (is_top_button_pressed(M_2)) {
-        // Enter scene design mode:
-        switch_mode(MODE_SCENE_DESIGN);
-    }
-    if (is_top_button_pressed(M_3)) {
-    }
-    if (is_top_button_pressed(M_4)) {
-    }
-    if (is_top_button_pressed(M_5)) {
-        // Cut current setlist entry and shift all items back:
-        if (setlist_mode == 1) {
-            // TODO: confirm cut.
-            cut_setlist_entry();
-            set_gmaj_program();
-        }
-    }
-    if (is_top_button_pressed(M_6)) {
-    }
-
-    // STORE released after timeout?
-    if (is_pressed_store()) {
-        // start timer for STORE:
-        start_timer(tapstore);
-    } else if (is_held_store() && is_timer_elapsed(tapstore)) {
-        // STORE:
-        store_program_state();
-        // flash LEDs for 800ms:
-        timeout_flash = 80;
-        // disable STORE timer:
-        reset_timer(tapstore);
-    } else if (is_released_store()) {
-        reset_timer(tapstore);
-    }
-
-    // NEXT/PREV change setlists:
-    if (setlist_mode == 0) {
-        // Program mode:
-
-        // NEXT
-        if (is_pressed_next()) {
-            start_timer(nextprev);
-            prog_next();
-        } else if (is_released_next()) {
-            reset_timer(nextprev);
-        } else if (is_held_next()) {
-            if (timer_looped_nextprev) {
-                timer_looped_nextprev = 0;
-                prog_next();
-            }
-        }
-
-        // PREV
-        if (is_pressed_prev()) {
-            start_timer(nextprev);
-            prog_prev();
-        } else if (is_released_prev()) {
-            reset_timer(nextprev);
-        } else if (is_held_prev()) {
-            if (timer_looped_nextprev) {
-                timer_looped_nextprev = 0;
-                prog_prev();
-            }
-        }
-    } else {
-        // Setlist mode:
-
-        if (is_pressed_next()) {
-            // Next setlist:
-            if (sli < 31) {
-                sli++;
-                switch_setlist_mode(setlist_mode);
-            }
-        }
-
-        if (is_pressed_prev()) {
-            // Prev setlist:
-            if (sli > 0) {
-                sli--;
-                switch_setlist_mode(setlist_mode);
-            }
-        }
-    }
-}
 
 static void fx_button_logic(u8 btn_mask, u8 fx_idx) {
     if (is_top_button_pressed(btn_mask)) {
@@ -1435,8 +1289,6 @@ void controller_handle(void) {
         handle_mode_LIVE();
     } else if (mode == MODE_SCENE_DESIGN) {
         handle_mode_SCENE_DESIGN();
-    } else if (mode == MODE_PROGRAMMING) {
-        handle_mode_PROGRAMMING();
     }
 
     // Calculate LEDs state and send it:
