@@ -450,12 +450,6 @@ static void gmaj_toggle_mute(void) {
 
 static void scene_update_current(void);
 
-static void send_axe_mute(void) {
-    axe_cc_set(axe_cc_tuner, pr_axe_muted[scene] ? (u8)0x7F : (u8)0x00);
-    scene_update_current();
-    update_lcd();
-}
-
 static void scene_activate(void);
 
 static void axe_enable_mute(void) {
@@ -521,6 +515,37 @@ static void update_effects_MIDI_state(void) {
     last_fx = fx;
 }
 
+static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
+    u8 desc = pr.scene[preset].part1;
+
+    desc &= ~rjm_channel_mask;
+    desc |= new_rjm_channel & rjm_channel_mask;
+
+    // Calculate 5-bit level:
+    if (out_level < -25) out_level = -25;
+    else if (out_level > 6) out_level = 6;
+
+    // Set the bits in the descriptor:
+    desc &= ~scene_level_mask;
+    desc |= (u8)((out_level + scene_level_offset) & 31) << scene_level_shr;
+
+    // Update program data to be written back to flash:
+    pr.scene[preset].part1 = desc;
+    // TOOD: volume ramp feature!
+    pr.scene[preset].part2 = (pr_axe_scene[preset] & (u8)axe_scene_mask) | (pr_axe_muted[preset] << 7);
+
+    // Update calculated data:
+    pr_rjm[preset] = new_rjm_channel;
+    pr_out_level[preset] = out_level;
+
+    live_pr_rjm[preset] = pr_rjm[preset];
+    live_pr_out_level[preset] = pr_out_level[preset];
+}
+
+static void scene_update_current() {
+    scene_update(scene, pr_rjm[scene], pr_out_level[scene]);
+}
+
 static void scene_activate(void) {
     u8 i;
     u8 gmaj_in_level;
@@ -562,7 +587,7 @@ static void scene_activate(void) {
 
     // Send Axe-FX mute change:
     if (pr_axe_muted[scene] != last_axe_muted) {
-        send_axe_mute();
+        axe_cc_set(axe_cc_tuner, pr_axe_muted[scene] ? (u8)0x7F : (u8)0x00);
         last_axe_muted = pr_axe_muted[scene];
     }
 
@@ -572,41 +597,12 @@ static void scene_activate(void) {
         live_pr_out_level[i] = pr_out_level[i];
     }
 
+    scene_update_current();
+
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
 
     update_lcd();
-}
-
-static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
-    u8 desc = pr.scene[preset].part1;
-
-    desc &= ~rjm_channel_mask;
-    desc |= new_rjm_channel & rjm_channel_mask;
-
-    // Calculate 5-bit level:
-    if (out_level < -25) out_level = -25;
-    else if (out_level > 6) out_level = 6;
-
-    // Set the bits in the descriptor:
-    desc &= ~scene_level_mask;
-    desc |= (u8)((out_level + scene_level_offset) & 31) << scene_level_shr;
-
-    // Update program data to be written back to flash:
-    pr.scene[preset].part1 = desc;
-    // TOOD: volume ramp feature!
-    pr.scene[preset].part2 = (pr_axe_scene[preset] & (u8)axe_scene_mask) | (pr_axe_muted[preset] << 7);
-
-    // Update calculated data:
-    pr_rjm[preset] = new_rjm_channel;
-    pr_out_level[preset] = out_level;
-
-    live_pr_rjm[preset] = pr_rjm[preset];
-    live_pr_out_level[preset] = pr_out_level[preset];
-}
-
-static void scene_update_current() {
-    scene_update(scene, pr_rjm[scene], pr_out_level[scene]);
 }
 
 // Set RJM program to p (0-5)
@@ -1207,6 +1203,7 @@ void handle_mode_LIVE(void) {
     // handle remaining 4 functions:
     if (is_top_button_pressed(M_5)) {
         axe_toggle_mute();
+        scene_update_current();
     }
     button_timer_logic(top, M_6, fx, {
         gmaj_toggle_mute();
