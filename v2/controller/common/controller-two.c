@@ -174,22 +174,6 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define is_released(rowname, mask) is_##rowname##_button_released(mask)
 
 // Define our buttons by name:
-#define is_pressed_mute()       is_pressed(bot, M_7)
-#define is_held_mute()          is_held(bot, M_7)
-#define is_released_mute()      is_released(bot, M_7)
-
-#define is_pressed_tap()        is_pressed(bot, M_7)
-#define is_held_tap()           is_held(bot, M_7)
-#define is_released_tap()       is_released(bot, M_7)
-
-#define is_pressed_store()      is_pressed(bot, M_7)
-#define is_held_store()         is_held(bot, M_7)
-#define is_released_store()     is_released(bot, M_7)
-
-#define is_pressed_cancel()     is_pressed(bot, M_8)
-#define is_held_cancel()        is_held(bot, M_8)
-#define is_released_cancel()    is_released(bot, M_8)
-
 #define is_pressed_prev()       is_pressed(top, M_7)
 #define is_held_prev()          is_held(top, M_7)
 #define is_released_prev()      is_released(top, M_7)
