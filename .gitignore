@@ -28,3 +28,6 @@ v2/controller/Win32/flash.bin
 Thumbs.db
 
 .idea/
+
+uart-out.txt
+
