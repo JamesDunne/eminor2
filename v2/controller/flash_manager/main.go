@@ -16,6 +16,11 @@ import (
 )
 
 const (
+	version = "v1"
+	//version = "v2"
+)
+
+const (
 	FX_Compressor uint8 = 1 << iota
 	FX_Filter
 	FX_Pitch
@@ -102,21 +107,19 @@ func write_yaml(path string, src interface{}) error {
 
 type BankedWriter struct {
 	fo           *os.File
-	bankNumber	 int
+	version      string
+	bankNumber   int
 	bytesWritten int
 }
 
-func NewBankedWriter() *BankedWriter {
+func NewBankedWriter(version string) *BankedWriter {
 	w := &BankedWriter{
-		bankNumber:0,
-		bytesWritten:0,
+		fo:           nil,
+		version:      version,
+		bankNumber:   0,
+		bytesWritten: 0,
 	}
 
-	var err error
-	w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_bank%d.h", w.bankNumber), os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		panic(err)
-	}
 	return w
 }
 
@@ -135,20 +138,26 @@ func (w *BankedWriter) writeSeparator() {
 	// Open new file when needed:
 	if w.fo == nil {
 		var err error
-		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_bank%d.h", w.bankNumber), os.O_TRUNC | os.O_CREATE | os.O_WRONLY, 0644)
+		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_%s_bank%d.h", w.version, w.bankNumber), os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			panic(err)
 		}
 	}
 
 	// Don't write separators at top of bank files:
-	if w.bytesWritten & 0x0FFF == 0 {
+	if w.bytesWritten&0x0FFF == 0 {
 		return
 	}
 
 	fmt.Fprint(w.fo, ",")
-	if w.bytesWritten & 63 == 0 {
-		fmt.Fprint(w.fo, "\n")
+	if version == "v2" {
+		if w.bytesWritten&63 == 0 {
+			fmt.Fprint(w.fo, "\n")
+		}
+	} else if version == "v1" {
+		if w.bytesWritten&31 == 0 {
+			fmt.Fprint(w.fo, "\n")
+		}
 	}
 }
 
@@ -187,9 +196,9 @@ func (w *BankedWriter) WriteChar(b uint8) {
 }
 
 // Generate flash_rom_init.h for #include in controller C code projects
-func generatePICH() {
+func generatePICH(version string) {
 	var err error
-	bw := NewBankedWriter()
+	bw := NewBankedWriter(version)
 	defer func() {
 		err := bw.Close()
 		if err != nil {
@@ -251,39 +260,41 @@ func generatePICH() {
 		s := p.SceneDescriptors
 		initialScene := p.InitialScene
 
-		if len(p.SceneDescriptors) == 6 {
-			s = make([]SceneDescriptor, 8)
-			s[0] = p.SceneDescriptors[0]
-			s[1] = p.SceneDescriptors[0]
-			s[2] = p.SceneDescriptors[1]
-			s[3] = p.SceneDescriptors[2]
-			s[4] = p.SceneDescriptors[3]
-			s[5] = p.SceneDescriptors[4]
-			s[6] = p.SceneDescriptors[4]
-			s[7] = p.SceneDescriptors[5]
+		if version == "v2" {
+			if len(p.SceneDescriptors) == 6 {
+				s = make([]SceneDescriptor, 8)
+				s[0] = p.SceneDescriptors[0]
+				s[1] = p.SceneDescriptors[0]
+				s[2] = p.SceneDescriptors[1]
+				s[3] = p.SceneDescriptors[2]
+				s[4] = p.SceneDescriptors[3]
+				s[5] = p.SceneDescriptors[4]
+				s[6] = p.SceneDescriptors[4]
+				s[7] = p.SceneDescriptors[5]
 
-			switch p.InitialScene {
-			case 1:
-				initialScene = 1
-				break
-			case 2:
-				initialScene = 3
-				break
-			case 3:
-				initialScene = 4
-				break
-			case 4:
-				initialScene = 5
-				break
-			case 5:
-				initialScene = 6
-				break
-			case 6:
-				initialScene = 8
-				break
-			default:
-				initialScene = 6
-				break
+				switch p.InitialScene {
+				case 1:
+					initialScene = 1
+					break
+				case 2:
+					initialScene = 3
+					break
+				case 3:
+					initialScene = 4
+					break
+				case 4:
+					initialScene = 5
+					break
+				case 5:
+					initialScene = 6
+					break
+				case 6:
+					initialScene = 8
+					break
+				default:
+					initialScene = 6
+					break
+				}
 			}
 		}
 
@@ -307,13 +318,15 @@ func generatePICH() {
 			// part1:
 			bw.WriteHex(b)
 
-			// part2:
-			if s[j].AxeScene == 0 {
-				// Axe-FX use same amp channel as RJM:
-				s[j].AxeScene = s[j].Channel
+			if version == "v2" {
+				// part2:
+				if s[j].AxeScene == 0 {
+					// Axe-FX use same amp channel as RJM:
+					s[j].AxeScene = s[j].Channel
+				}
+				b = uint8((s[j].AxeScene - 1) & 3)
+				bw.WriteHex(b)
 			}
-			b = uint8((s[j].AxeScene - 1) & 3)
-			bw.WriteHex(b)
 		}
 
 		p.SceneDescriptors = s
@@ -346,15 +359,25 @@ func generatePICH() {
 			bw.WriteHex(b)
 		}
 
-		// _unused:
-		for j := 0; j < 20; j++ {
-			bw.WriteHex(0)
+		if version == "v2" {
+			// _unused:
+			for j := 0; j < 20; j++ {
+				bw.WriteHex(0)
+			}
 		}
 	}
 
-	for songs = songs; songs < 128; songs++ {
-		for j := 0; j < 64; j++ {
-			bw.WriteDecimal(0)
+	if version == "v1" {
+		for songs = songs; songs < 128; songs++ {
+			for j := 0; j < 32; j++ {
+				bw.WriteDecimal(0)
+			}
+		}
+	} else if version == "v2" {
+		for songs = songs; songs < 128; songs++ {
+			for j := 0; j < 64; j++ {
+				bw.WriteDecimal(0)
+			}
 		}
 	}
 
@@ -514,7 +537,7 @@ func generateJSON() {
 }
 
 func main() {
-	err := parse_yaml("all_programs.yml", &programs)
+	err := parse_yaml(fmt.Sprintf("all_programs-%s.yml", version), &programs)
 	if err != nil {
 		log.Println(err)
 		return
@@ -552,7 +575,7 @@ func main() {
 
 	songs_by_name = make(map[string]int)
 
-	generatePICH()
+	generatePICH(version)
 
 	//write_yaml("all_programs.gen.yml", programs)
 

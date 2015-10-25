@@ -1,0 +1,826 @@
+programs:
+- name: Monkeywrench
+  altnames: [Monkey wrench]
+  starts: Bremer 4 ct
+  gmaj_program: 1
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Even Flow
+  gmaj_program: 2
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Zero
+  starts: Jim
+  gmaj_program: 3
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay, pitch]
+- name: Wonderwall
+  gmaj_program: 4
+  initial_scene: 4
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [gate, compressor]
+  - channel: 1
+    level: 6
+    fx: [gate, compressor]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq, delay]
+  - channel: 2
+    level: 6
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 6
+    fx: [gate, compressor, eq, delay]
+- name: Buddy Holly
+  starts: Glaz+Bremer
+  gmaj_program: 5
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Plush
+  starts: Bremer 2 ct
+  gmaj_program: 6
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor, chorus]
+  - channel: 1
+    level: 6
+    fx: [compressor, chorus, eq, delay]
+  - channel: 2
+    level: 0
+    fx: [gate, chorus, eq]
+  - channel: 2
+    level: 6
+    fx: [gate, chorus, eq, delay]
+  - channel: 3
+    level: 0
+    fx: [gate, chorus, eq]
+  - channel: 3
+    level: 6
+    fx: [gate, chorus, eq, delay]
+- name: Come Out and Play
+  gmaj_program: 7
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Drive
+  gmaj_program: 8
+  initial_scene: 4
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [gate, compressor]
+  - channel: 1
+    level: 6
+    fx: [gate, compressor]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq, delay]
+  - channel: 2
+    level: 6
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 6
+    fx: [gate, compressor, eq, delay]
+- name: When I Come Around
+  starts: Jim
+  gmaj_program: 9
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Everything Zen
+  starts: Glaz
+  gmaj_program: 10
+  initial_scene: 6
+  scenes:
+  - channel: 1
+    level: 0
+    fx: []
+  - channel: 1
+    level: 6
+    fx: []
+  - channel: 2
+    level: 0
+    fx: [gate, eq, delay]
+  - channel: 2
+    level: 0
+    fx: [gate, eq, delay]
+  - channel: 2
+    level: 0
+    fx: [gate, eq]
+  - channel: 2
+    level: 6
+    fx: [gate, eq, delay]
+- name: Enter Sandman
+  starts: Glaz
+  gmaj_program: 11
+  initial_scene: 1
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Crawling in the Dark
+  starts: Jim
+  gmaj_program: 12
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Song 2
+  starts: Bremer
+  gmaj_program: 13
+  initial_scene: 1
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 1
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 6
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 6
+    fx: [gate, compressor, eq]
+- name: Sex Type Thing
+  starts: Bremer 4 ct
+  gmaj_program: 14
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Mr Jones
+  starts: Jim
+  gmaj_program: 15
+  initial_scene: 4
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [gate, compressor]
+  - channel: 1
+    level: 6
+    fx: [gate, compressor]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq, delay]
+  - channel: 2
+    level: 6
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 6
+    fx: [gate, compressor, eq, delay]
+- name: Counting Blue Cars
+  starts: Bremer 4 ct
+  gmaj_program: 16
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor, chorus, delay]
+  - channel: 1
+    level: 6
+    fx: [compressor, chorus, delay]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate, delay]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: In Bloom
+  starts: Bremer 4 ct
+  gmaj_program: 17
+  initial_scene: 1
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 1
+    level: 6
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 6
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 6
+    fx: [gate, compressor, eq]
+- name: Hash Pipe
+  starts: Bremer+Adam
+  gmaj_program: 18
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: My Hero
+  starts: Bremer+Adam
+  gmaj_program: 19
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Machinehead
+  starts: Jim
+  gmaj_program: 20
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 6
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq, delay]
+- name: Holiday
+  starts: Jim
+  gmaj_program: 21
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Closing Time
+  starts: Glaz
+  gmaj_program: 22
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate, delay]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate, delay]
+- name: Brainstew
+  altnames: [Brain stew]
+  starts: Jim
+  gmaj_program: 23
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate]
+- name: Bound for the Floor
+  starts: Jim
+  gmaj_program: 24
+  initial_scene: 3
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 0
+    fx: [gate, delay, chorus]
+  - channel: 2
+    level: 6
+    fx: [gate, delay]
+- name: I Alone
+  gmaj_program: 25
+  initial_scene: 1
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor, delay, chorus]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate, delay]
+- name: Cumbersome
+  starts: Jim
+  gmaj_program: 26
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate, delay]
+- name: Lump
+  starts: Bremer+Glaz
+  gmaj_program: 27
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+- name: Hey Jealousy
+  starts: Bremer 4 ct
+  gmaj_program: 28
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate, delay]
+- name: Kryptonite
+  starts: Glaz
+  gmaj_program: 29
+  initial_scene: 1
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate, delay]
+- name: Dammit
+  starts: Jim
+  gmaj_program: 30
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate, delay]
+- name: Semi-charmed Life
+  starts: Bremer
+  gmaj_program: 31
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate, delay]
+- name: My Own Worst Enemy
+  starts: Jim
+  gmaj_program: 32
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate]
+- name: The Middle
+  starts: Glaz
+  gmaj_program: 33
+  initial_scene: 3
+  scenes:
+  - channel: 1
+    level: 0
+    fx: []
+  - channel: 1
+    level: 6
+    fx: []
+  - channel: 2
+    level: 0
+    fx: []
+  - channel: 2
+    level: 6
+    fx: []
+  - channel: 2
+    level: -2
+    fx: [filter, delay]
+  - channel: 2
+    level: 0
+    fx: []
+- name: Bullet With Butterfly Wings
+  starts: Glaz
+  gmaj_program: 34
+  initial_scene: 1
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 3
+    level: -2
+    fx: [gate, delay]
+  - channel: 3
+    level: -2
+    fx: [gate, delay]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 6
+    fx: [gate]
+- name: If You Could Only See
+  starts: Glaz
+  gmaj_program: 35
+  initial_scene: 6
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: -2
+    fx: [gate, delay]
+  - channel: 2
+    level: -2
+    fx: [gate, delay]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate, delay]
+- name: Beautiful Disaster
+  starts: Jim
+  gmaj_program: 36
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: -2
+    fx: [gate, delay]
+  - channel: 2
+    level: -2
+    fx: [gate, delay]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
