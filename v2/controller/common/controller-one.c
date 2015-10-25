@@ -32,6 +32,8 @@
     2015-08-15
 */
 
+#ifdef HW_V1
+
 #include <assert.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
@@ -1460,3 +1462,5 @@ void controller_handle(void) {
     // Record the previous switch state:
     fsw_last = fsw;
 }
+
+#endif

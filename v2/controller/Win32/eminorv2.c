@@ -938,17 +938,28 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 // --------------- Flash memory interface:
 
+#ifdef HW_V2
 u8 flash_bank[3][4096] = {
     {
-#include "../PIC/flash_bank0.h"
+#include "../PIC/flash_v2_bank0.h"
     },
     {
-#include "../PIC/flash_bank1.h"
+#include "../PIC/flash_v2_bank1.h"
     },
     {
-#include "../PIC/flash_bank2.h"
+#include "../PIC/flash_v2_bank2.h"
     }
 };
+#elif HW_V1
+u8 flash_bank[2][4096] = {
+    {
+#include "../PIC/flash_v1_bank0.h"
+    },
+    {
+#include "../PIC/flash_v1_bank1.h"
+    }
+};
+#endif
 
 // Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
 void flash_load(u16 addr, u16 count, u8 *data) {
