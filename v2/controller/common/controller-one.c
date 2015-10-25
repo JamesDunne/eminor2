@@ -1462,5 +1462,9 @@ void controller_handle(void) {
     // Record the previous switch state:
     fsw_last = fsw;
 }
+#else
+
+static void nothing(void) {
+}
 
 #endif

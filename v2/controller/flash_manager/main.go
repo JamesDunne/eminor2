@@ -16,8 +16,8 @@ import (
 )
 
 const (
-	version = "v1"
-	//version = "v2"
+	//version = "v1"
+	version = "v2"
 )
 
 const (

@@ -1281,4 +1281,9 @@ void controller_handle(void) {
     fsw_last = fsw;
 }
 
+#else
+
+static void nothing(void) {
+}
+
 #endif
