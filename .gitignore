@@ -22,7 +22,7 @@ midicontroller.cof
 
 v2/controller/go-ui/go-ui
 v2/controller/flash_manager/flash_manager
-v2/controller/Win32/flash.bin
+v2/controller/flash_manager/all_programs-v2-gen.yml
 
 .DS_Store
 Thumbs.db
