@@ -959,6 +959,8 @@ u8 flash_bank[2][4096] = {
 #include "../PIC/flash_v1_bank1.h"
     }
 };
+#else
+#error Must define either preprocessor symbol HW_V1 or HW_V2 to compile!
 #endif
 
 // Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
