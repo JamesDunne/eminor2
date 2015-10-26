@@ -32,7 +32,7 @@
     2015-08-15
 */
 
-#ifdef HW_V1
+#if HW_VERSION == 1
 
 #include <assert.h>
 #include "../common/types.h"
@@ -1462,9 +1462,13 @@ void controller_handle(void) {
     // Record the previous switch state:
     fsw_last = fsw;
 }
+
+#elif HW_VERSION == 2
+
+static void nothing(void) {}
+
 #else
 
-static void nothing(void) {
-}
+#error HW_ VERSION must be either "1" or "2"
 
 #endif

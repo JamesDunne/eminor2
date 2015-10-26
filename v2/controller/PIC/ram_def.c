@@ -47,7 +47,7 @@ unsigned char LCDUpdateStage;
 
 // User-writable flash memory:
 #pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
-#ifdef HW_V1
+#if HW_VERSION == 1
 rom unsigned char ROM_SAVEDATA[3][4096] = {
     {
 #include "flash_v1_bank0.h"
@@ -59,7 +59,7 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
         0
     }
 };
-#elif HW_V2
+#elif HW_VERSION == 2
 rom unsigned char ROM_SAVEDATA[3][4096] = {
     {
 #include "flash_v2_bank0.h"
@@ -71,6 +71,8 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
 #include "flash_v2_bank2.h"
     }
 };
+#else
+#error HW_ VERSION must be either "1" or "2"
 #endif
 
 unsigned char LCDRamMap[4][20];

@@ -23,7 +23,7 @@
     2015-10-21
 */
 
-#ifdef HW_V2
+#if HW_VERSION == 2
 
 #include <assert.h>
 #include <stdio.h>
@@ -1281,9 +1281,12 @@ void controller_handle(void) {
     fsw_last = fsw;
 }
 
+#elif HW_VERSION == 1
+
+static void nothing(void) {}
+
 #else
 
-static void nothing(void) {
-}
+#error HW_ VERSION must be either "1" or "2"
 
 #endif
