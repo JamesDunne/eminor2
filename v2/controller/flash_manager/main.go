@@ -15,7 +15,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var version string = "v2"
+var version string
 
 const (
 	FX_Compressor uint8 = 1 << iota
@@ -104,15 +104,13 @@ func write_yaml(path string, src interface{}) error {
 
 type BankedWriter struct {
 	fo           *os.File
-	version      string
 	bankNumber   int
 	bytesWritten int
 }
 
-func NewBankedWriter(version string) *BankedWriter {
+func NewBankedWriter() *BankedWriter {
 	w := &BankedWriter{
 		fo:           nil,
-		version:      version,
 		bankNumber:   0,
 		bytesWritten: 0,
 	}
@@ -135,7 +133,7 @@ func (w *BankedWriter) writeSeparator() {
 	// Open new file when needed:
 	if w.fo == nil {
 		var err error
-		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_%s_bank%d.h", w.version, w.bankNumber), os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_%s_bank%d.h", version, w.bankNumber), os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			panic(err)
 		}
@@ -195,7 +193,7 @@ func (w *BankedWriter) WriteChar(b uint8) {
 // Generate flash_rom_init.h for #include in controller C code projects
 func generatePICH() {
 	var err error
-	bw := NewBankedWriter(version)
+	bw := NewBankedWriter()
 	defer func() {
 		err := bw.Close()
 		if err != nil {
@@ -534,32 +532,20 @@ func generateJSON() {
 }
 
 func main() {
+	version = os.Getenv("HW_VERSION")
+	if version != "1" && version != "2" {
+		fmt.Println("HW_VERSION environment variable must be either '1' or '2'.")
+		return
+	}
+	fmt.Printf("HW_VERSION = '%s'\n", version)
+	version = "v" + version
+
 	err := parse_yaml(fmt.Sprintf("all_programs-%s.yml", version), &programs)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	//fmt.Printf("%+v\n\n", programs)
-
-	if version == "v1" {
-		// Update YAML data:
-		for _, pr := range programs.Programs {
-			pr.InitialScene += 1
-		}
-
-		// Rewrite YAML file:
-		out_text, err := yaml.Marshal(&programs)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		err = ioutil.WriteFile("all_programs-v2.gen.yml", out_text, 0644)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		return
-	}
 
 	// Add setlist data:
 	err = parse_yaml("setlists.yml", &setlists)
@@ -573,7 +559,24 @@ func main() {
 
 	generatePICH()
 
-	//write_yaml("all_programs.gen.yml", programs)
+	if version == "v1" {
+		// Update YAML data:
+		for _, pr := range programs.Programs {
+			pr.InitialScene += 1
+		}
+
+		// Rewrite YAML file:
+		out_text, err := yaml.Marshal(&programs)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		err = ioutil.WriteFile("all_programs-v2-gen.yml", out_text, 0644)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
 
 	generateJSON()
 }
