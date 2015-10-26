@@ -938,7 +938,16 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
 
 // --------------- Flash memory interface:
 
-#ifdef HW_V2
+#if HW_VERSION == 1
+u8 flash_bank[2][4096] = {
+    {
+#include "../PIC/flash_v1_bank0.h"
+    },
+    {
+#include "../PIC/flash_v1_bank1.h"
+    }
+};
+#elif HW_VERSION == 2
 u8 flash_bank[3][4096] = {
     {
 #include "../PIC/flash_v2_bank0.h"
@@ -950,17 +959,8 @@ u8 flash_bank[3][4096] = {
 #include "../PIC/flash_v2_bank2.h"
     }
 };
-#elif HW_V1
-u8 flash_bank[2][4096] = {
-    {
-#include "../PIC/flash_v1_bank0.h"
-    },
-    {
-#include "../PIC/flash_v1_bank1.h"
-    }
-};
 #else
-#error Must define either preprocessor symbol HW_V1 or HW_V2 to compile!
+#error HW_ VERSION must be either "1" or "2"!
 #endif
 
 // Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
