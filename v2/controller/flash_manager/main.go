@@ -15,10 +15,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-const (
-	//version = "v1"
-	version = "v2"
-)
+var version string = "v2"
 
 const (
 	FX_Compressor uint8 = 1 << iota
@@ -196,7 +193,7 @@ func (w *BankedWriter) WriteChar(b uint8) {
 }
 
 // Generate flash_rom_init.h for #include in controller C code projects
-func generatePICH(version string) {
+func generatePICH() {
 	var err error
 	bw := NewBankedWriter(version)
 	defer func() {
@@ -544,8 +541,7 @@ func main() {
 	}
 	//fmt.Printf("%+v\n\n", programs)
 
-	// NOTE(jsd): Enable this to rewrite YAML data.
-	if false {
+	if version == "v1" {
 		// Update YAML data:
 		for _, pr := range programs.Programs {
 			pr.InitialScene += 1
@@ -557,7 +553,7 @@ func main() {
 			log.Println(err)
 			return
 		}
-		err = ioutil.WriteFile("all_programs.gen.yml", out_text, 0644)
+		err = ioutil.WriteFile("all_programs-v2.gen.yml", out_text, 0644)
 		if err != nil {
 			log.Println(err)
 			return
@@ -575,7 +571,7 @@ func main() {
 
 	songs_by_name = make(map[string]int)
 
-	generatePICH(version)
+	generatePICH()
 
 	//write_yaml("all_programs.gen.yml", programs)
 
