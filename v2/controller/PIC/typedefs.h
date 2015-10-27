@@ -141,8 +141,8 @@ typedef union _POINTER
     word* wRam;                         // Ram word poitner: 2 bytes poitner pointing
                                         // to 2 bytes of data
 
-    rom byte* bRom;                     // Size depends on compiler setting
-    rom word* wRom;
+    const byte* bRom;                     // Size depends on compiler setting
+    const word* wRom;
     //rom near byte* nbRom;               // Near = 2 bytes pointer
     //rom near word* nwRom;
     //rom far byte* fbRom;                // Far = 3 bytes pointer

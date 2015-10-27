@@ -12,21 +12,21 @@
 
 #include "c_system.h"
 
-#pragma code InterruptVectorHigh = 0x1008
-void InterruptVectorHigh (void)
-{
-  _asm
-    goto InterruptHandlerHigh //jump to interrupt routine
-  _endasm
-}
+//#pragma code InterruptVectorHigh = 0x1008
+//void InterruptVectorHigh (void)
+//{
+//  _asm
+//    goto InterruptHandlerHigh //jump to interrupt routine
+//  _endasm
+//}
 
 //----------------------------------------------------------------------------
 // High priority interrupt routine
 
-#pragma code
+//#pragma code
 
-#pragma interrupt InterruptHandlerHigh
-void InterruptHandlerHigh (void) {
+//#pragma interrupt InterruptHandlerHigh
+void interrupt InterruptHandlerHigh (void) {
     if (PIR1bits.TMR1IF) {
         // Call to SWUART for timer1:
         swuart_tx_interrupt();
@@ -47,6 +47,6 @@ void InterruptHandlerHigh (void) {
     }
 }
 
-#pragma code
+//#pragma code
 
 //----------------------------------------------------------------------------

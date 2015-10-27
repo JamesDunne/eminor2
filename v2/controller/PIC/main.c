@@ -24,7 +24,7 @@
 #include "types.h"
 #include "hardware.h"
 
-#pragma code main_code
+//#pragma code main_code
 
 void main() {
     CLRWDT();

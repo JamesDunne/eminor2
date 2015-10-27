@@ -30,7 +30,7 @@ void EEWrite(unsigned char addr,unsigned char data) {
     EECON2=0xAA;                // Required
     EECON1bits.WR=1;            // Enable writes
     do {
-        ClrWdt();
+        CLRWDT();
     } while(EECON1bits.WR);     // block until write complete
  
     INTCONbits.GIE = 1;         // Enable global interrupts

@@ -31,9 +31,10 @@
 
 #define jumpto(LOCATION) _asm goto  LOCATION    _endasm
 
-#define nop(x)      _asm NOP    _endasm
+//#define nop(x)      _asm NOP    _endasm
+#define nop() NOP()
 
-#define CLRWDT(x)   _asm CLRWDT _endasm
+//#define CLRWDT(x)   _asm CLRWDT _endasm
 
 //---------------------------------------------------------------------------
 //Define flags here

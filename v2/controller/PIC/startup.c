@@ -14,16 +14,18 @@ void _startup (void);
 extern near char __FPFLAGS;
 #define RND 6
 
-#pragma code _entry_scn=REMAPPED_APPLICATION_RESET_VECTOR
-void _entry (void)
+//#pragma code _entry_scn=REMAPPED_APPLICATION_RESET_VECTOR
+void _entry (void) @ REMAPPED_APPLICATION_RESET_VECTOR
 {
-    _asm goto _startup _endasm
+#asm
+    goto _startup
+#endasm
 }
 
-#pragma code _startup_scn
+//#pragma code _startup_scn
 void _startup (void)
 {
-  _asm
+#asm
     // Initialize the stack pointer
     lfsr 1, _stack
     lfsr 2, _stack
@@ -41,7 +43,8 @@ RAMCLEAR:
     btfss   FSR0H, 3, 0
     goto    RAMCLEAR
 
-_endasm loop:
+#endasm
+loop:
 
   // Call the user's main routine
   main ();

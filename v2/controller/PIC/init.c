@@ -10,7 +10,16 @@
 #include "c_system.h"
 
 void init(void) {
-    CLEAR_RAM();
+#asm
+    clrf    FSR0H
+    clrf    FSR0L
+
+RAMCLEAR1:
+    CLRWDT
+    clrf    POSTINC0
+    btfss   FSR0H, 3
+    bra RAMCLEAR1
+#endasm
 
     LATA = INIT_LATA;
     LATB = INIT_LATB;

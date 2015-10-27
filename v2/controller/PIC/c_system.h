@@ -6,8 +6,9 @@
 //;#            File Name: c_system.h                                         #
 //;#                                                                          #
 //;############################################################################
+#include <xc.h>
 #include "_tools.h"
-#include "p18f4550.h"
+//#include "p18f4550.h"
 #include "c_cnstdef.h"
 #include "c_ramdef.h"
 #include "c_portdef.h"
@@ -24,14 +25,13 @@
 
 //-----------------------------------------------------------------------------
 //generic function prototypes:
-void    CLEAR_RAM(void);        //asm function.
 void    SendDataToShiftReg16(unsigned char data1, unsigned char data2);
 void    SetDipAddress(unsigned char Address);
 void    EraseProgMem(void);
 void    WriteProgMem(unsigned char index);
 
 //routine prototypes:
-void    InterruptHandlerHigh();
+void    interrupt InterruptHandlerHigh();
 void    SystemTimeRoutine(void);
 void    init(void);
 
@@ -50,7 +50,7 @@ void    lcd_update_screen(void);
 void    swuart_tx_start(void);
 void    swuart_tx_interrupt(void);
 
-extern rom unsigned char ROM_SAVEDATA[3][4096];
+extern const unsigned char ROM_SAVEDATA[3][4096];
 //-----------------------------------------------------------------------------
 
 // NOTE(jsd): These macros are just plain broken on the MPLAB SIM; unknown on PIC18.

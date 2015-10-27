@@ -24,14 +24,14 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=PIC
+PROJECTNAME=midicontroller.X
 
 # Active Configuration
-DEFAULTCONF=pickit3
+DEFAULTCONF=default
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=pickit3 simulator 
+ALLCONFS=default 
 
 
 # build
@@ -45,15 +45,13 @@ ALLCONFS=pickit3 simulator
 
 # clobber
 .clobber-impl: .clobber-pre .depcheck-impl
-	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=pickit3 clean
-	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=simulator clean
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default clean
 
 
 
 # all
 .all-impl: .all-pre .depcheck-impl
-	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=pickit3 build
-	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=simulator build
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default build
 
 
 

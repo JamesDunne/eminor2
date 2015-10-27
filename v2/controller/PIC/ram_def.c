@@ -3,15 +3,15 @@
 
 //----------------------------Access bank variables----------------------------------------
 
-#pragma udata access accessram
-near BitField CommFlags1;
-near BitField ArbFlags1;
-near BitField ArbFlags2;
-near BitField MiscFlags1;
+//#pragma udata access accessram
+near BitField CommFlags1 @0;
+near BitField ArbFlags1  @1;
+near BitField ArbFlags2  @2;
+near BitField MiscFlags1 @3;
 
 //----------------------------Main variables----------------------------------------
-#pragma udata gpr1
-TwoBytes ProgMemAddr;
+//#pragma udata gpr1
+TwoBytes ProgMemAddr @ 0x100;
 unsigned char ProgmemBuffer[64];
 
 TwoBytes NVRCommAddr;
@@ -46,9 +46,9 @@ TwoBytes tTimer1Value;
 unsigned char LCDUpdateStage;
 
 // User-writable flash memory:
-#pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
+//#pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
 #if HW_VERSION == 1
-rom unsigned char ROM_SAVEDATA[3][4096] = {
+const unsigned char ROM_SAVEDATA[3][4096] @ WRITABLE_SEG_ADDR = {
     {
 #include "flash_v1_bank0.h"
     },
@@ -60,7 +60,7 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
     }
 };
 #elif HW_VERSION == 2
-rom unsigned char ROM_SAVEDATA[3][4096] = {
+const unsigned char ROM_SAVEDATA[3][4096] @ WRITABLE_SEG_ADDR = {
     {
 #include "flash_v2_bank0.h"
     },

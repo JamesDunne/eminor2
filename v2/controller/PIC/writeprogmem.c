@@ -39,7 +39,7 @@ void WriteProgMem(unsigned char index) //TESTED: Passed
     //LEN = # of byte to write
 
     for (counter = index; counter < index+32; counter++) {
-        *(rom far char *)(ProgMemAddr.s_form+counter) = ProgmemBuffer[counter];
+        *(far char *)(ProgMemAddr.s_form+counter) = ProgmemBuffer[counter];
         if ((counter & 0b00011111) == 0b00011111) {
             StartWrite();
         }
@@ -55,7 +55,7 @@ void EraseProgMem(void) //TESTED: Passed
     //LEN = # of 64-byte block to erase
     EECON1 = 0b10010100;     //Setup writes: EEPGD=1,FREE=1,WREN=1
 
-    *(rom far char *)ProgMemAddr.s_form;  //Load TBLPTR
+    *(far char *)ProgMemAddr.s_form;  //Load TBLPTR
     StartWrite();
 
     TBLPTRU = 0;            // forces upper byte back to 0x00

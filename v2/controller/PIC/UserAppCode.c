@@ -21,8 +21,8 @@
 
 
 //Initialize with a valid application signature already loaded to allow the code to run at startup rather than jumping to bootload mode.
-#pragma romdata app_signature=APP_SIGNATURE_ADDRESS
-rom const unsigned short app_sig = {APP_SIGNATURE_VALUE};
+//#pragma romdata app_signature=APP_SIGNATURE_ADDRESS
+const const unsigned short app_sig @ APP_SIGNATURE_ADDRESS = {APP_SIGNATURE_VALUE};
 
-#pragma romdata app_version=APP_VERSION_ADDRESS
-rom const unsigned short app_ver = {APP_VERSION};
+//#pragma romdata app_version=APP_VERSION_ADDRESS
+const unsigned short app_ver @ APP_VERSION_ADDRESS = {APP_VERSION};
