@@ -405,7 +405,7 @@ func generatePICH() {
 		//  yyyyyyym mmmddddd
 		//  |||||||| ||||||||
 		//  |||||||| |||\++++ day of month [0..30]
-		//  |||||||\-+++----- month [0..11]
+		//  |||||||\-+++----- month [0..11, 12-15 unused]
 		//  \++++++---------- year since 2014 [0..127]
 
 		// Parse date string using `time` package:

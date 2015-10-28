@@ -927,7 +927,7 @@ static void update_lcd(void) {
     } else {
         // Show setlist data:
         u8 yyyy = sl.d1 >> 1;
-        u8 mm = ((sl.d1 & 1) << 4) | (sl.d0 >> 5);
+        u8 mm = ((sl.d1 & 1) << 3) | (sl.d0 >> 5);
         u8 dd = (sl.d0 & 31);
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[1][i] = "2014-01-01       # 0"[i];
