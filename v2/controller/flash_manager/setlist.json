@@ -1,8 +1,11 @@
 [
   {
-    "date": "2015-08-29",
-    "venue": "Penny Road Pub",
+    "date": "2015-10-31",
+    "venue": "Halloween House Party",
     "songs": [
+      {
+        "breakText": "SET 1"
+      },
       {
         "i": 1,
         "title": "Everything Zen",
@@ -15,11 +18,8 @@
       },
       {
         "i": 3,
-        "title": "Zero",
+        "title": "Holiday",
         "starts": "Jim"
-      },
-      {
-        "breakText": "BREAK"
       },
       {
         "i": 4,
@@ -28,21 +28,21 @@
       },
       {
         "i": 5,
+        "title": "Hey Jealousy",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 6,
         "title": "Buddy Holly",
         "starts": "Glaz+Bremer"
       },
       {
-        "i": 6,
-        "title": "Beautiful Disaster",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
         "i": 7,
-        "title": "Dammit",
+        "title": "Zero",
         "starts": "Jim"
+      },
+      {
+        "breakText": "TUNING"
       },
       {
         "i": 8,
@@ -51,42 +51,103 @@
       },
       {
         "i": 9,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "DOWNTUNE"
-      },
-      {
-        "i": 10,
-        "title": "The Middle",
+        "title": "Kryptonite",
         "starts": "Glaz"
       },
       {
+        "i": 10,
+        "title": "My Hero",
+        "starts": "Bremer+Adam"
+      },
+      {
         "i": 11,
-        "title": "Monkeywrench",
+        "title": "Sex Type Thing",
         "starts": "Bremer 4 ct"
       },
       {
         "i": 12,
-        "title": "Lump",
-        "starts": "Bremer+Glaz"
-      },
-      {
-        "breakText": "UPTUNE"
+        "title": "Beautiful Disaster",
+        "starts": "Jim"
       },
       {
         "i": 13,
+        "title": "Bullet With Butterfly Wings",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "SET 2"
+      },
+      {
+        "i": 14,
+        "title": "Crawling in the Dark",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "TUNING"
+      },
+      {
+        "i": 15,
+        "title": "Bound for the Floor",
+        "starts": "Jim"
+      },
+      {
+        "i": 16,
+        "title": "For Whom The Bell Tolls",
+        "starts": "Bremer"
+      },
+      {
+        "i": 17,
         "title": "Hash Pipe",
         "starts": "Bremer+Adam"
       },
       {
-        "i": 14,
+        "i": 18,
+        "title": "Cumbersome",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "TUNING"
+      },
+      {
+        "i": 19,
+        "title": "The Middle",
+        "starts": "Glaz"
+      },
+      {
+        "i": 20,
+        "title": "Monkeywrench",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 21,
+        "title": "Lump",
+        "starts": "Bremer+Glaz"
+      },
+      {
+        "breakText": "TUNING"
+      },
+      {
+        "i": 22,
+        "title": "Plush",
+        "starts": "Bremer 2 ct"
+      },
+      {
+        "i": 23,
+        "title": "Dammit",
+        "starts": "Jim"
+      },
+      {
+        "i": 24,
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
+      },
+      {
+        "i": 25,
         "title": "When I Come Around",
         "starts": "Jim"
       },
       {
-        "i": 15,
+        "i": 26,
         "title": "Enter Sandman",
         "starts": "Glaz"
       }

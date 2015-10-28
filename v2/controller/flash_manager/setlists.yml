@@ -263,8 +263,6 @@ sets:
 
   - date: "2015-08-29"
     venue: Penny Road Pub
-    active: true
-    print: true
     songs:
       - Everything Zen
       - Song 2
@@ -291,5 +289,54 @@ sets:
       - 'BREAK: UPTUNE'
 
       - Hash Pipe
+      - When I Come Around
+      - Enter Sandman
+
+  - date: "2015-10-31"
+    venue: Halloween House Party
+    active: true
+    print: true
+    songs:
+      - 'BREAK: SET 1'
+
+      - Everything Zen
+      - Song 2
+      - Holiday
+      - Machinehead
+      - Hey Jealousy
+      - Buddy Holly
+      - Zero
+
+      - 'BREAK: TUNING'
+
+      - Brain Stew
+      - Kryptonite
+      - My Hero
+      - Sex Type Thing
+      - Beautiful Disaster
+      - Bullet With Butterfly Wings
+
+      - 'BREAK: SET 2'
+
+      - Crawling in the Dark
+
+      - 'BREAK: TUNING'
+
+      - Bound for the Floor
+      - For Whom the Bell Tolls
+      - Hash Pipe
+      - Cumbersome
+
+      - 'BREAK: TUNING'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: TUNING'
+
+      - Plush
+      - Damnit
+      - My Own Worst Enemy
       - When I Come Around
       - Enter Sandman

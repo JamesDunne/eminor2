@@ -664,6 +664,7 @@ programs:
     level: 6
     fx: [gate, delay]
 - name: Dammit
+  altnames: [Damnit]
   starts: Jim
   gmaj_program: 30
   initial_scene: 5
@@ -822,5 +823,28 @@ programs:
     level: 0
     fx: [gate]
   - channel: 2
+    level: 6
+    fx: [gate]
+- name: For Whom The Bell Tolls
+  starts: Bremer
+  gmaj_program: 32
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 6
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 6
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
     level: 6
     fx: [gate]
