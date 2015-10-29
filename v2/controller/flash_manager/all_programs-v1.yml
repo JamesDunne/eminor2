@@ -252,26 +252,26 @@ programs:
 - name: Crawling in the Dark
   starts: Jim
   gmaj_program: 12
-  initial_scene: 5
+  initial_scene: 3
   scenes:
   - channel: 1
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 0
     fx: [compressor]
   - channel: 2
+    level: -1
+    fx: [gate, filter, delay]
+  - channel: 2
+    level: -1
+    fx: [gate, filter, delay]
+  - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
-    fx: [gate]
-  - channel: 3
     level: 0
     fx: [gate]
-  - channel: 3
-    level: 6
-    fx: [gate, delay]
 - name: Song 2
   starts: Bremer
   gmaj_program: 13
@@ -768,10 +768,10 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 3
-    level: -5
+    level: -3
     fx: [gate, delay]
   - channel: 3
-    level: -5
+    level: -3
     fx: [gate, delay]
   - channel: 3
     level: 0
