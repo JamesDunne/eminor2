@@ -356,7 +356,7 @@ function hex2(v) {
 // char *lcd_row_get(u8 row)
 function _lcd_row_get(row) {
     // malloc a 20-byte buffer for the asked-for row of text (0-3):
-    lcd_rows_text_ptrs[row] = eminorv2._malloc(20);
+    lcd_rows_text_ptrs[row] = Module._malloc(20);
     return lcd_rows_text_ptrs[row];
 }
 
@@ -385,7 +385,7 @@ function _lcd_updated_row(row) {
     var i;
     for (i = 0; i < 20; ++i) {
         // Read char from RAM:
-        var c = eminorv2.getValue(text_ptr + i, 'i8');
+        var c = Module.getValue(text_ptr + i, 'i8');
         if (c == 0) break;
 
         // Assume ASCII and append char to string:
@@ -486,16 +486,16 @@ function init() {
         });
 
     // Initialize controller:
-    // NOTE(jsd): `eminorv2` is the name of the emscripten compiled module; exported functions have a leading '_'.
-    eminorv2._controller_init();
+    // NOTE(jsd): `Module` is the name of the emscripten compiled module; exported functions have a leading '_'.
+    Module._controller_init();
     // Render initial UI:
     requestAnimFrame(renderUI);
 
     // Setup a refresh rate of 10ms:
     setInterval(function () {
         // Handle controller timers and logic:
-        eminorv2._controller_10msec_timer();
-        eminorv2._controller_handle();
+        Module._controller_10msec_timer();
+        Module._controller_handle();
 
         // Update UI only on changes:
         if (ui_modified) {

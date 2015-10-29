@@ -3,10 +3,12 @@
 #include "../common/types.h"
 #include "../common/hardware.h"
 
-#define FLASH_LENGTH (sizeof(struct program) * 128 + sizeof(struct set_list) * 32)
+#define FLASH_LENGTH (64 * 128 + 64 * 32)
 const int flash_length = FLASH_LENGTH;
 const unsigned char flash_memory[FLASH_LENGTH] = {
-#include "../PIC/flash_rom_init.h"
+#include "../PIC/flash_v1_bank0.h"
+,
+#include "../PIC/flash_v1_bank1.h"
 };
 #undef FLASH_LENGTH
 
