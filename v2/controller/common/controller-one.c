@@ -350,9 +350,9 @@ static void store_program_state(void) {
 
     // Set initial channel:
     for (i = 0; i < 6; i++) {
-        pr.fx[i] &= 0x7F;
+        pr.scene_desc[i] &= 0x7F;
     }
-    pr.fx[scene] |= 0x80;
+    pr.scene_desc[scene] |= 0x80;
 
     // Store program state:
     flash_store((u16)gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
