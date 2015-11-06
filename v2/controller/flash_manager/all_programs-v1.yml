@@ -261,10 +261,10 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 2
-    level: -1
+    level: 2
     fx: [gate, filter, delay]
   - channel: 2
-    level: -1
+    level: 2
     fx: [gate, filter, delay]
   - channel: 2
     level: 0
@@ -768,16 +768,16 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 3
-    level: -3
+    level: -2
     fx: [gate, delay]
   - channel: 3
-    level: -3
+    level: -2
     fx: [gate, delay]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 2
+    level: 0
     fx: [gate]
 - name: If You Could Only See
   starts: Glaz

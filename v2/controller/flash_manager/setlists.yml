@@ -294,8 +294,6 @@ sets:
 
   - date: "2015-10-31"
     venue: Halloween House Party
-    active: true
-    print: true
     songs:
       - 'BREAK: SET 1'
 
@@ -339,4 +337,53 @@ sets:
       - Damnit
       - My Own Worst Enemy
       - When I Come Around
+      - Enter Sandman
+
+  - date: "2015-11-07"
+    venue: JD Muggs
+    active: true
+    print: true
+    songs:
+      - Dammit
+      - Song 2
+      - Holiday
+
+      - 'BREAK: INTRO'
+
+      - Machinehead
+      - Hey Jealousy
+      - Beautiful Disaster
+
+      - 'BREAK: BREAK'
+
+      - When I Come Around
+      - Hash Pipe
+      - Kryptonite
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Monkeywrench
+
+      - 'BREAK: UPTUNE'
+
+      - Cumbersome
+      - Brain Stew
+      - Zero
+
+      - 'BREAK: TUNING'
+
+      - Plush
+      - My Own Worst Enemy
+      - Everything Zen
+
+      - 'BREAK: BREAK'
+
+      - Sex Type Thing
+      - Buddy Holly
+      - Crawling in the Dark
+
+      - 'BREAK: GOODBYE'
+
+      - Bullet With Butterfly Wings
       - Enter Sandman

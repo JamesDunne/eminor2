@@ -1,15 +1,12 @@
 [
   {
-    "date": "2015-10-31",
-    "venue": "Halloween House Party",
+    "date": "2015-11-07",
+    "venue": "JD Muggs",
     "songs": [
       {
-        "breakText": "SET 1"
-      },
-      {
         "i": 1,
-        "title": "Everything Zen",
-        "starts": "Glaz"
+        "title": "Dammit",
+        "starts": "Jim"
       },
       {
         "i": 2,
@@ -20,6 +17,9 @@
         "i": 3,
         "title": "Holiday",
         "starts": "Jim"
+      },
+      {
+        "breakText": "INTRO"
       },
       {
         "i": 4,
@@ -33,21 +33,21 @@
       },
       {
         "i": 6,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
+        "title": "Beautiful Disaster",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "BREAK"
       },
       {
         "i": 7,
-        "title": "Zero",
+        "title": "When I Come Around",
         "starts": "Jim"
-      },
-      {
-        "breakText": "TUNING"
       },
       {
         "i": 8,
-        "title": "Brainstew",
-        "starts": "Jim"
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
       },
       {
         "i": 9,
@@ -55,31 +55,34 @@
         "starts": "Glaz"
       },
       {
+        "breakText": "DOWNTUNE"
+      },
+      {
         "i": 10,
-        "title": "My Hero",
-        "starts": "Bremer+Adam"
+        "title": "The Middle",
+        "starts": "Glaz"
       },
       {
         "i": 11,
-        "title": "Sex Type Thing",
+        "title": "Monkeywrench",
         "starts": "Bremer 4 ct"
       },
       {
+        "breakText": "UPTUNE"
+      },
+      {
         "i": 12,
-        "title": "Beautiful Disaster",
+        "title": "Cumbersome",
         "starts": "Jim"
       },
       {
         "i": 13,
-        "title": "Bullet With Butterfly Wings",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "SET 2"
+        "title": "Brainstew",
+        "starts": "Jim"
       },
       {
         "i": 14,
-        "title": "Crawling in the Dark",
+        "title": "Zero",
         "starts": "Jim"
       },
       {
@@ -87,67 +90,47 @@
       },
       {
         "i": 15,
-        "title": "Bound for the Floor",
-        "starts": "Jim"
-      },
-      {
-        "i": 16,
-        "title": "For Whom The Bell Tolls",
-        "starts": "Bremer"
-      },
-      {
-        "i": 17,
-        "title": "Hash Pipe",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "i": 18,
-        "title": "Cumbersome",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "TUNING"
-      },
-      {
-        "i": 19,
-        "title": "The Middle",
-        "starts": "Glaz"
-      },
-      {
-        "i": 20,
-        "title": "Monkeywrench",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 21,
-        "title": "Lump",
-        "starts": "Bremer+Glaz"
-      },
-      {
-        "breakText": "TUNING"
-      },
-      {
-        "i": 22,
         "title": "Plush",
         "starts": "Bremer 2 ct"
       },
       {
-        "i": 23,
-        "title": "Dammit",
-        "starts": "Jim"
-      },
-      {
-        "i": 24,
+        "i": 16,
         "title": "My Own Worst Enemy",
         "starts": "Jim"
       },
       {
-        "i": 25,
-        "title": "When I Come Around",
+        "i": 17,
+        "title": "Everything Zen",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 18,
+        "title": "Sex Type Thing",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 19,
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
+      },
+      {
+        "i": 20,
+        "title": "Crawling in the Dark",
         "starts": "Jim"
       },
       {
-        "i": 26,
+        "breakText": "GOODBYE"
+      },
+      {
+        "i": 21,
+        "title": "Bullet With Butterfly Wings",
+        "starts": "Glaz"
+      },
+      {
+        "i": 22,
         "title": "Enter Sandman",
         "starts": "Glaz"
       }
