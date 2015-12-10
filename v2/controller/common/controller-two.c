@@ -35,7 +35,7 @@ LIVE:
 |-----------------------------------------------------------|
 |    *      *      *      *      *      *      *      *     |
 |   AX1    AX2    AX3    AX4  AX-MUTE MK-MUTE PREV   NEXT   |
-|   MODE                               SAVE                 |
+|                               MODE   SAVE                 |
 |                                                           |
 |    *      *      *      *      *      *      *      *     |
 |   SC1    SC2    SC3    SC4    SC5    SC6    SC7    SC8    |
@@ -1174,23 +1174,19 @@ void handle_mode_LIVE(void) {
     rjm_scene_change_button_logic(M_8, 7);
 
     // Axe-FX scene changes:
-    button_timer_logic(top, M_1, fx, {
-        // Switch Axe-FX scene:
-        pr_axe_scene[scene] = 0;
-        scene_activate();
-    }, {
-        // Toggle setlist mode:
-        switch_setlist_mode((setlist_mode ^ 1));
-    })
+    axe_scene_change_button_logic(M_1, 0);
     axe_scene_change_button_logic(M_2, 1);
     axe_scene_change_button_logic(M_3, 2);
     axe_scene_change_button_logic(M_4, 3);
 
     // handle remaining 4 functions:
-    if (is_top_button_pressed(M_5)) {
+    button_timer_logic(top, M_5, fx, {
         axe_toggle_mute();
         scene_update_current();
-    }
+    }, {
+        // Toggle setlist mode:
+        switch_setlist_mode((setlist_mode ^ 1));
+    })
     button_timer_logic(top, M_6, fx, {
         gmaj_toggle_mute();
     }, {
@@ -1198,8 +1194,6 @@ void handle_mode_LIVE(void) {
         store_program_state();
         // flash LEDs for 800ms:
         timeout_flash = 80;
-        // Back to previous mode:
-        switch_mode(mode_last);
     })
 
     if (setlist_mode == 0) {
