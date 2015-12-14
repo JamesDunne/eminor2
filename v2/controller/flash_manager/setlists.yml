@@ -341,8 +341,6 @@ sets:
 
   - date: "2015-11-07"
     venue: JD Muggs
-    active: true
-    print: true
     songs:
       - Dammit
       - Song 2
@@ -387,3 +385,52 @@ sets:
 
       - Bullet With Butterfly Wings
       - Enter Sandman
+
+  - date: "2015-12-26"
+    venue: The Loop
+    active: true
+    print: true
+    songs:
+      - Everything Zen
+      - Song 2
+      - Dammit
+
+      - 'BREAK: INTRO'
+
+      - Brainstew
+      - Hey Jealousy
+      - Beautiful Disaster
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Monkeywrench
+      - Lump
+
+      - 'BREAK: UPTUNE'
+
+      - Cumbersome
+      - Fuel
+      - When I Come Around
+
+      - 'BREAK: BREAK'
+
+      - Buddy Holly
+      - My Hero
+      - Crawling in the Dark
+
+      - 'BREAK: BREAK'
+
+      - Plush
+      - My Own Worst Enemy
+      - Zero
+
+      - 'BREAK: TUNING'
+
+      - Machinehead
+      - Hash Pipe
+      - Enter Sandman
+
+      - 'BREAK: ENCORE?'
+
+      - Bells

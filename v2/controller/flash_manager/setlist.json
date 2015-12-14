@@ -1,12 +1,12 @@
 [
   {
-    "date": "2015-11-07",
-    "venue": "JD Muggs",
+    "date": "2015-12-26",
+    "venue": "The Loop",
     "songs": [
       {
         "i": 1,
-        "title": "Dammit",
-        "starts": "Jim"
+        "title": "Everything Zen",
+        "starts": "Glaz"
       },
       {
         "i": 2,
@@ -15,7 +15,7 @@
       },
       {
         "i": 3,
-        "title": "Holiday",
+        "title": "Dammit",
         "starts": "Jim"
       },
       {
@@ -23,7 +23,7 @@
       },
       {
         "i": 4,
-        "title": "Machinehead",
+        "title": "Brainstew",
         "starts": "Jim"
       },
       {
@@ -37,51 +37,74 @@
         "starts": "Jim"
       },
       {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 7,
-        "title": "When I Come Around",
-        "starts": "Jim"
-      },
-      {
-        "i": 8,
-        "title": "Hash Pipe",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "i": 9,
-        "title": "Kryptonite",
-        "starts": "Glaz"
-      },
-      {
         "breakText": "DOWNTUNE"
       },
       {
-        "i": 10,
+        "i": 7,
         "title": "The Middle",
         "starts": "Glaz"
       },
       {
-        "i": 11,
+        "i": 8,
         "title": "Monkeywrench",
         "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 9,
+        "title": "Lump",
+        "starts": "Bremer+Glaz"
       },
       {
         "breakText": "UPTUNE"
       },
       {
-        "i": 12,
+        "i": 10,
         "title": "Cumbersome",
         "starts": "Jim"
       },
       {
-        "i": 13,
-        "title": "Brainstew",
+        "i": 11,
+        "title": "Fuel",
+        "starts": "Bremer"
+      },
+      {
+        "i": 12,
+        "title": "When I Come Around",
         "starts": "Jim"
       },
       {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 13,
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
+      },
+      {
         "i": 14,
+        "title": "My Hero",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "i": 15,
+        "title": "Crawling in the Dark",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 16,
+        "title": "Plush",
+        "starts": "Bremer 2 ct"
+      },
+      {
+        "i": 17,
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
+      },
+      {
+        "i": 18,
         "title": "Zero",
         "starts": "Jim"
       },
@@ -89,50 +112,27 @@
         "breakText": "TUNING"
       },
       {
-        "i": 15,
-        "title": "Plush",
-        "starts": "Bremer 2 ct"
-      },
-      {
-        "i": 16,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
-      },
-      {
-        "i": 17,
-        "title": "Everything Zen",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 18,
-        "title": "Sex Type Thing",
-        "starts": "Bremer 4 ct"
-      },
-      {
         "i": 19,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
+        "title": "Machinehead",
+        "starts": "Jim"
       },
       {
         "i": 20,
-        "title": "Crawling in the Dark",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "GOODBYE"
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
       },
       {
         "i": 21,
-        "title": "Bullet With Butterfly Wings",
+        "title": "Enter Sandman",
         "starts": "Glaz"
       },
       {
+        "breakText": "ENCORE?"
+      },
+      {
         "i": 22,
-        "title": "Enter Sandman",
-        "starts": "Glaz"
+        "title": "Bells",
+        "starts": "Bremer"
       }
     ]
   }

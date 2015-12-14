@@ -15,7 +15,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -23,7 +23,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
@@ -35,7 +35,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
 - name: Zero
@@ -53,7 +53,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 3
@@ -61,7 +61,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
   - channel: 3
@@ -73,7 +73,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay, pitch]
 - name: Buddy Holly
@@ -91,7 +91,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -99,7 +99,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
@@ -111,7 +111,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
 - name: Plush
@@ -129,7 +129,7 @@ programs:
     axe_scene: 1
     fx: [compressor, chorus]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor, chorus, eq, delay]
   - channel: 2
@@ -137,7 +137,7 @@ programs:
     axe_scene: 2
     fx: [gate, chorus, eq]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, chorus, eq, delay]
   - channel: 3
@@ -149,7 +149,7 @@ programs:
     axe_scene: 3
     fx: [gate, chorus, eq]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, chorus, eq, delay]
 - name: Drive
@@ -166,7 +166,7 @@ programs:
     axe_scene: 1
     fx: [gate, compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [gate, compressor]
   - channel: 2
@@ -174,7 +174,7 @@ programs:
     axe_scene: 2
     fx: [gate, compressor, eq, delay]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, compressor, eq]
   - channel: 2
@@ -186,7 +186,7 @@ programs:
     axe_scene: 2
     fx: [gate, compressor, eq]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, compressor, eq, delay]
 - name: When I Come Around
@@ -204,7 +204,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -212,7 +212,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
@@ -224,7 +224,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
 - name: Everything Zen
@@ -242,7 +242,7 @@ programs:
     axe_scene: 1
     fx: []
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: []
   - channel: 2
@@ -262,7 +262,7 @@ programs:
     axe_scene: 2
     fx: [gate, eq]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, eq, delay]
 - name: Enter Sandman
@@ -280,11 +280,11 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
   - channel: 3
-    level: 3
+    level: 1
     axe_scene: 1
     fx: [gate, delay]
   - channel: 1
@@ -300,7 +300,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
 - name: Crawling in the Dark
@@ -318,7 +318,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -326,7 +326,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
@@ -338,7 +338,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
 - name: Song 2
@@ -364,7 +364,7 @@ programs:
     axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
@@ -376,7 +376,7 @@ programs:
     axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, compressor, eq]
 - name: Sex Type Thing
@@ -394,7 +394,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -402,7 +402,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
@@ -414,7 +414,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
 - name: Counting Blue Cars
@@ -432,7 +432,7 @@ programs:
     axe_scene: 1
     fx: [compressor, chorus, delay]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor, chorus, delay]
   - channel: 3
@@ -440,7 +440,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate]
   - channel: 3
@@ -452,7 +452,7 @@ programs:
     axe_scene: 3
     fx: [gate, delay]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
 - name: In Bloom
@@ -470,7 +470,7 @@ programs:
     axe_scene: 1
     fx: [gate, compressor, eq]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [gate, compressor, eq]
   - channel: 3
@@ -478,7 +478,7 @@ programs:
     axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
@@ -490,7 +490,7 @@ programs:
     axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, compressor, eq]
 - name: Hash Pipe
@@ -508,7 +508,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -516,7 +516,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
@@ -528,7 +528,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
 - name: My Hero
@@ -546,7 +546,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -554,7 +554,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
@@ -566,7 +566,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
 - name: Machinehead
@@ -584,7 +584,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -592,7 +592,7 @@ programs:
     axe_scene: 2
     fx: [gate, compressor, eq]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, compressor, eq]
   - channel: 2
@@ -622,7 +622,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -630,7 +630,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
@@ -642,7 +642,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate, delay]
 - name: Brainstew
@@ -661,7 +661,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -681,7 +681,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate]
 - name: Bound for the Floor
@@ -699,7 +699,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -719,7 +719,7 @@ programs:
     axe_scene: 2
     fx: [gate, delay, chorus]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Cumbersome
@@ -737,7 +737,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -745,7 +745,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 2
@@ -757,7 +757,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Lump
@@ -775,7 +775,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -783,7 +783,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 2
@@ -795,7 +795,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
 - name: Hey Jealousy
@@ -813,7 +813,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -821,7 +821,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 2
@@ -833,7 +833,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Kryptonite
@@ -851,7 +851,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -859,7 +859,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
@@ -889,7 +889,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -897,7 +897,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 2
@@ -909,7 +909,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Semi-charmed Life
@@ -927,7 +927,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -935,7 +935,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 2
@@ -947,7 +947,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: My Own Worst Enemy
@@ -965,7 +965,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -973,7 +973,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
@@ -985,7 +985,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate]
 - name: The Middle
@@ -1003,7 +1003,7 @@ programs:
     axe_scene: 1
     fx: []
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: []
   - channel: 2
@@ -1011,7 +1011,7 @@ programs:
     axe_scene: 2
     fx: []
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: []
   - channel: 2
@@ -1041,7 +1041,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 3
@@ -1061,7 +1061,7 @@ programs:
     axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     axe_scene: 3
     fx: [gate]
 - name: If You Could Only See
@@ -1079,7 +1079,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -1099,7 +1099,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Beautiful Disaster
@@ -1117,7 +1117,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -1137,7 +1137,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate]
 - name: Bells
@@ -1176,7 +1176,7 @@ programs:
     axe_scene: 2
     fx: [gate, delay]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Fuel
@@ -1213,6 +1213,6 @@ programs:
     axe_scene: 2
     fx: [gate, delay]
   - channel: 2
-    level: 6
+    level: 4
     axe_scene: 2
     fx: [gate, delay]

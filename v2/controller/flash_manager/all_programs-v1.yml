@@ -9,19 +9,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Even Flow
   gmaj_program: 2
@@ -31,19 +31,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Zero
   starts: Jim
@@ -54,19 +54,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay, pitch]
 - name: Wonderwall
   gmaj_program: 4
@@ -76,19 +76,19 @@ programs:
     level: 0
     fx: [gate, compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [gate, compressor]
   - channel: 2
     level: 0
     fx: [gate, compressor, eq, delay]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, compressor, eq]
   - channel: 2
     level: 0
     fx: [gate, compressor, eq]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, compressor, eq, delay]
 - name: Buddy Holly
   starts: Glaz+Bremer
@@ -99,19 +99,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Plush
   starts: Bremer 2 ct
@@ -122,19 +122,19 @@ programs:
     level: 0
     fx: [compressor, chorus]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor, chorus, eq, delay]
   - channel: 2
     level: 0
     fx: [gate, chorus, eq]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, chorus, eq, delay]
   - channel: 3
     level: 0
     fx: [gate, chorus, eq]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, chorus, eq, delay]
 - name: Come Out and Play
   gmaj_program: 7
@@ -144,19 +144,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Drive
   gmaj_program: 8
@@ -166,19 +166,19 @@ programs:
     level: 0
     fx: [gate, compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [gate, compressor]
   - channel: 2
     level: 0
     fx: [gate, compressor, eq, delay]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, compressor, eq]
   - channel: 2
     level: 0
     fx: [gate, compressor, eq]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, compressor, eq, delay]
 - name: When I Come Around
   starts: Jim
@@ -189,19 +189,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Everything Zen
   starts: Glaz
@@ -212,7 +212,7 @@ programs:
     level: 0
     fx: []
   - channel: 1
-    level: 6
+    level: 4
     fx: []
   - channel: 2
     level: 0
@@ -224,7 +224,7 @@ programs:
     level: 0
     fx: [gate, eq]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, eq, delay]
 - name: Enter Sandman
   starts: Glaz
@@ -235,19 +235,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Crawling in the Dark
   starts: Jim
@@ -287,13 +287,13 @@ programs:
     level: 0
     fx: [gate, compressor, eq]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, compressor, eq]
   - channel: 3
     level: 0
     fx: [gate, compressor, eq]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, compressor, eq]
 - name: Sex Type Thing
   starts: Bremer 4 ct
@@ -304,19 +304,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Mr Jones
   starts: Jim
@@ -327,19 +327,19 @@ programs:
     level: 0
     fx: [gate, compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [gate, compressor]
   - channel: 2
     level: 0
     fx: [gate, compressor, eq, delay]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, compressor, eq]
   - channel: 2
     level: 0
     fx: [gate, compressor, eq]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, compressor, eq, delay]
 - name: Counting Blue Cars
   starts: Bremer 4 ct
@@ -350,19 +350,19 @@ programs:
     level: 0
     fx: [compressor, chorus, delay]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor, chorus, delay]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate, delay]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: In Bloom
   starts: Bremer 4 ct
@@ -373,19 +373,19 @@ programs:
     level: 0
     fx: [gate, compressor, eq]
   - channel: 1
-    level: 6
+    level: 4
     fx: [gate, compressor, eq]
   - channel: 3
     level: 0
     fx: [gate, compressor, eq]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, compressor, eq]
   - channel: 3
     level: 0
     fx: [gate, compressor, eq]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, compressor, eq]
 - name: Hash Pipe
   starts: Bremer+Adam
@@ -396,19 +396,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: My Hero
   starts: Bremer+Adam
@@ -419,19 +419,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Machinehead
   starts: Jim
@@ -442,13 +442,13 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate, compressor, eq]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, compressor, eq]
   - channel: 2
     level: 0
@@ -465,19 +465,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Closing Time
   starts: Glaz
@@ -488,19 +488,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, delay]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Brainstew
   altnames: [Brain stew]
@@ -512,7 +512,7 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
@@ -524,7 +524,7 @@ programs:
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate]
 - name: Bound for the Floor
   starts: Jim
@@ -535,7 +535,7 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
@@ -547,7 +547,7 @@ programs:
     level: 0
     fx: [gate, delay, chorus]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: I Alone
   gmaj_program: 25
@@ -557,19 +557,19 @@ programs:
     level: 0
     fx: [compressor, delay, chorus]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Cumbersome
   starts: Jim
@@ -580,19 +580,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Lump
   starts: Bremer+Glaz
@@ -603,19 +603,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
 - name: Hey Jealousy
   starts: Bremer 4 ct
@@ -626,19 +626,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Kryptonite
   starts: Glaz
@@ -649,19 +649,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Dammit
   altnames: [Damnit]
@@ -673,19 +673,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Semi-charmed Life
   starts: Bremer
@@ -696,19 +696,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: My Own Worst Enemy
   starts: Jim
@@ -719,19 +719,19 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
     fx: [gate]
 - name: The Middle
   starts: Glaz
@@ -742,13 +742,13 @@ programs:
     level: 0
     fx: []
   - channel: 1
-    level: 6
+    level: 4
     fx: []
   - channel: 2
     level: 0
     fx: []
   - channel: 2
-    level: 6
+    level: 4
     fx: []
   - channel: 2
     level: -2
@@ -788,7 +788,7 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: -2
@@ -800,7 +800,7 @@ programs:
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate, delay]
 - name: Beautiful Disaster
   starts: Jim
@@ -811,7 +811,7 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: -2
@@ -823,9 +823,10 @@ programs:
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
-- name: For Whom The Bell Tolls
+- name: Bells
+  altnames: [For Whom The Bell Tolls]
   starts: Bremer
   gmaj_program: 32
   initial_scene: 5
@@ -834,17 +835,40 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 6
+    level: 4
     fx: [compressor]
   - channel: 2
     level: 0
     fx: [gate]
   - channel: 2
-    level: 6
+    level: 4
     fx: [gate]
   - channel: 3
     level: 0
     fx: [gate]
   - channel: 3
-    level: 6
+    level: 4
+    fx: [gate]
+- name: Fuel
+  starts: Bremer
+  gmaj_program: 32
+  initial_scene: 5
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 4
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 4
+    fx: [gate]
+  - channel: 3
+    level: 0
+    fx: [gate]
+  - channel: 3
+    level: 4
     fx: [gate]
