@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/hex"
 	"encoding/json"
 	"flag"
 	"io"
@@ -200,7 +201,7 @@ func generatePICH() {
 	defer func() {
 		err := bw.Close()
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			return
 		}
 		fmt.Println("Closed.")
@@ -211,7 +212,7 @@ func generatePICH() {
 	for i, p := range programs.Programs {
 		_, err = fmt.Printf("%3d) #%3d %s\n", i+1, p.GMajorProgram, p.Name)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			return
 		}
 
@@ -455,13 +456,13 @@ func generatePICH() {
 func generateJSON() {
 	fjson, err := os.OpenFile("setlist.json", os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 	defer func() {
 		err = fjson.Close()
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			return
 		}
 	}()
@@ -523,13 +524,13 @@ func generateJSON() {
 	// Marshal array of Printable setlists to JSON file:
 	bytes, err := json.MarshalIndent(setlistsJson, "", "  ")
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 
 	_, err = fjson.Write(bytes)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 }
@@ -542,9 +543,15 @@ func parseHex(s string) int64 {
 	return value
 }
 
-func loadHex(r io.Reader, offset int, length int) (finalBytes []byte, err error) {
+func loadHex(r io.Reader, offset int64, length int64) (finalBytes []byte, err error) {
 	s := bufio.NewScanner(r)
 	lineno := 0
+
+	extendedAddress := int64(0)
+
+	finalBytes = make([]byte, length)
+
+readLoop:
 	for s.Scan() {
 		lineno++
 		line := s.Text()
@@ -579,14 +586,61 @@ func loadHex(r io.Reader, offset int, length int) (finalBytes []byte, err error)
 		_ = recType
 		_ = payload
 
-		fmt.Printf("%d, %04x: %s\n", recType, address, payload)
+		const (
+			HEX_FILE_EXTENDED_LINEAR_ADDRESS = 0x04
+			HEX_FILE_EOF                     = 0x01
+			HEX_FILE_DATA                    = 0x00
+
+			//This is the number of bytes per line of the
+			HEX_FILE_BYTES_PER_LINE = 16
+		)
+
+		switch recType {
+		case HEX_FILE_EXTENDED_LINEAR_ADDRESS:
+			extendedAddress = parseHex(payload)
+			break
+		case HEX_FILE_EOF:
+			break readLoop
+		case HEX_FILE_DATA:
+			actualAddress := (extendedAddress << 16) + address
+			// Skip the data if it's outside our target window:
+			if actualAddress < offset {
+				continue
+			}
+			if actualAddress >= offset+length {
+				continue
+			}
+
+			//fmt.Printf("%d, %04x: %s\n", recType, address, payload)
+
+			var decoded int
+			sliceIndex := (actualAddress - offset)
+			if sliceIndex+recLen >= length {
+				//fmt.Printf("sliceIndex=%04x; recLen=%02x; actualAddress=%04x, offset=%04x; length=%04x\n",
+				//	sliceIndex,
+				//	recLen,
+				//	actualAddress,
+				//	offset,
+				//	length,
+				//)
+				decoded, err = hex.Decode(finalBytes[sliceIndex:len(finalBytes)], []byte(payload))
+			} else {
+				decoded, err = hex.Decode(finalBytes[sliceIndex:sliceIndex+recLen], []byte(payload))
+			}
+
+			if err != nil {
+				return nil, fmt.Errorf("Error decoding HEX bytes on line %d: '%s'\n%s", lineno, payload, err)
+			}
+			if int64(decoded) != recLen {
+				return nil, fmt.Errorf("Decoded only %d HEX bytes, expected %d on line %d", decoded, recLen, lineno)
+			}
+			break
+		}
 	}
 	// If any scanner errors, abort:
 	if err = s.Err(); err != nil {
 		return nil, err
 	}
-
-	//finalBytes = make([]byte)
 
 	return
 }
@@ -601,30 +655,33 @@ func main() {
 	version = "v" + version
 
 	hexFileName := flag.String("hex", "", "")
-	hexOffset := flag.Int("offs", 0x004900, "ROM_SAVEDATA offset in HEX file")
-	const hexLength = 0x3000
+	hexOffset := flag.Int64("offs", 0x004900, "ROM_SAVEDATA offset in HEX file")
+	const hexLength = 0x2000
 	flag.Parse()
 
 	if *hexFileName != "" {
 		// Read HEX file and export YAML:
 		fi, err := os.Open(*hexFileName)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			return
 		}
 		hexBytes, err := loadHex(fi, *hexOffset, hexLength)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			return
 		}
 		_ = hexBytes
-		fmt.Println(hexBytes)
+		//fmt.Println(hexBytes)
+
+		// Parse the bytes and emit a YAML:
+
 		return
 	}
 
 	err := parse_yaml(fmt.Sprintf("all_programs-%s.yml", version), &programs)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 	//fmt.Printf("%+v\n\n", programs)
@@ -632,7 +689,7 @@ func main() {
 	// Add setlist data:
 	err = parse_yaml("setlists.yml", &setlists)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 	//fmt.Printf("%+v\n\n", setlists)
@@ -650,12 +707,12 @@ func main() {
 		// Rewrite YAML file:
 		out_text, err := yaml.Marshal(&programs)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			return
 		}
 		err = ioutil.WriteFile("all_programs-v2-gen.yml", out_text, 0644)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			return
 		}
 	}
