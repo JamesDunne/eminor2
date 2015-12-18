@@ -797,17 +797,17 @@ static void update_lcd(void) {
 #ifdef FEAT_LCD
     s8 i;
     u8 b = 1;
-    u8 fx = pr.fx[scene] & ~(M_7 | M_8);
+    u8 fx = pr.fx[scene];
 
     if (mode == MODE_LIVE) {
+        b = 1;
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[3][i] = " cm fl pt ch dl rv  "[i];
+            lcd_rows[3][i] = "  c-f-p-o-d-v-g-q-  "[i];
         }
-        for (i = 0; i < 6; i++, b <<= 1) {
+        // Upper-case enabled FX labels:
+        for (i = 0; i < 8; i++, b <<= 1) {
             if ((fx & b) == b) {
-                // Upper-case enabled FX labels:
-                lcd_rows[3][i * 3 + 1] &= ~0x20;
-                lcd_rows[3][i * 3 + 2] &= ~0x20;
+                lcd_rows[3][i * 2 + 2] &= ~0x20;
             }
         }
     } else if (mode == MODE_PROGRAMMING) {
