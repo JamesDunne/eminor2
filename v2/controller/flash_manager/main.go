@@ -32,6 +32,17 @@ const (
 	FX_EQ
 )
 
+var FXNames = []string{
+	"compressor",
+	"filter",
+	"pitch",
+	"chorus",
+	"delay",
+	"reverb",
+	"gate",
+	"eq",
+}
+
 type SceneDescriptor struct {
 	Channel int `yaml:"channel"` // 1, 2, 3
 	Level   int `yaml:"level"`   // 5 bits signed, -16..+15, offset -9 => -25..+6
@@ -645,6 +656,63 @@ readLoop:
 	return
 }
 
+func extractPrograms(hexBytes []byte) (err error) {
+	if version == "v1" {
+		// V1 programs parser:
+		programs.Programs = make([]*Program, 0, 128)
+		for i := 0; i < 128; i++ {
+			o := i * 32
+			if hexBytes[o] == 0 {
+				// No holes.
+				break
+			}
+
+			program := &Program{
+				Name:             strings.TrimRight(string(hexBytes[o:o+20]), " \x00\n\r\t"),
+				SceneDescriptors: make([]SceneDescriptor, 6, 6),
+			}
+			for j := 0; j < 6; j++ {
+				// Scene descriptors:
+				// bits:
+				// 7654 3210
+				// IBBB BBCC
+				// |||| ||||
+				// |||| ||\+--- Channel (2 bits, 0-2, 3 ignored)
+				// |+++-++--- Out Level (5 bits signed, -16..+15, offset -9 => -25..+6)
+				// \----------- Initial
+				program.SceneDescriptors[j].Channel = int(hexBytes[o+20+j] & 3)
+				program.SceneDescriptors[j].Level = int((hexBytes[o+20+j]>>2)&0x1F) - 9
+				program.SceneDescriptors[j].FX = make([]string, 0, 8)
+				for b := uint(0); b < 8; b++ {
+					if (hexBytes[o+20+6+j])&(1<<b) == (1 << b) {
+						program.SceneDescriptors[j].FX = append(program.SceneDescriptors[j].FX, FXNames[b])
+					}
+				}
+				if hexBytes[o+20+j]&0x80 == 0x80 {
+					program.InitialScene = j + 1
+				}
+			}
+
+			programs.Programs = append(programs.Programs, program)
+		}
+
+		yamlBytes, err := yaml.Marshal(programs)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+		fmt.Printf("%s\n", string(yamlBytes))
+		return nil
+	} else if version == "v2" {
+		// V2 programs parser:
+		for i := 0; i < 128; i++ {
+			// TODO
+			continue
+		}
+		return nil
+	}
+	return fmt.Errorf("Unknown HW_VERSION.")
+}
+
 func main() {
 	version = os.Getenv("HW_VERSION")
 	if version != "1" && version != "2" {
@@ -675,7 +743,11 @@ func main() {
 		//fmt.Println(hexBytes)
 
 		// Parse the bytes and emit a YAML:
-
+		err = extractPrograms(hexBytes)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return
+		}
 		return
 	}
 
