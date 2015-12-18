@@ -48,6 +48,7 @@ type SongMeta struct {
 	PrimaryName string
 
 	Names       []string `yaml:"names"`
+	ShortName   string `yaml:"short_name"`
 	Starts      string   `yaml:"starts"`
 }
 
@@ -62,8 +63,6 @@ type SceneDescriptor struct {
 
 type Program struct {
 	Name             string            `yaml:"name"`
-	//AltNames         []string          `yaml:"altnames,omitempty"`
-	//Starts           string            `yaml:"starts,omitempty"`
 	GMajorProgram    int               `yaml:"gmaj_program,omitempty"`
 	InitialScene     int               `yaml:"initial_scene"`
 	SceneDescriptors []SceneDescriptor `yaml:"scenes"`
@@ -111,6 +110,12 @@ func partial_match_song_name(name string) (*SongMeta, error) {
 	nameLower := strings.ToLower(name)
 
 	for _, meta := range song_meta {
+		// Skip alternate names if the short-name matches:
+		if strings.ToLower(meta.ShortName) == nameLower {
+			candidates = append(candidates, candidate{name: meta.ShortName, meta: meta})
+			continue
+		}
+
 		for _, metaname := range meta.Names {
 			if strings.HasPrefix(strings.ToLower(metaname), nameLower) {
 				candidates = append(candidates, candidate{name: metaname, meta: meta})
@@ -244,7 +249,7 @@ func (w *BankedWriter) WriteChar(b uint8) {
 
 // Generate flash_rom_init.h for #include in controller C code projects
 func generatePICH() {
-	var err error
+	//var err error
 	bw := NewBankedWriter()
 	defer func() {
 		err := bw.Close()
@@ -258,18 +263,7 @@ func generatePICH() {
 	// Translate YAML to binary data for FLASH memory (see common/controller.c):
 	songs := 0
 	for i, p := range programs.Programs {
-		_, err = fmt.Printf("%3d) #%3d %s\n", i + 1, p.GMajorProgram, p.Name)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			return
-		}
-
 		songs++
-
-		// Write the name first:
-		if len(p.Name) > song_name_max_length {
-			fmt.Printf("Name is longer than %d character limit: '%s', %d chars\n", song_name_max_length, p.Name, len(p.Name))
-		}
 
 		// Record the name-to-index mapping:
 		meta, err := partial_match_song_name(p.Name)
@@ -279,13 +273,21 @@ func generatePICH() {
 		}
 		songs_by_name[meta.PrimaryName] = i
 
+		short_name := meta.ShortName
+
+		_, err = fmt.Printf("%3d) #%3d %s\n", i + 1, p.GMajorProgram, short_name)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return
+		}
+
 		// Copy name characters:
 		for j := 0; j < song_name_max_length; j++ {
-			if j >= len(p.Name) {
+			if j >= len(short_name) {
 				bw.WriteDecimal(0)
 				continue
 			}
-			c := p.Name[j]
+			c := short_name[j]
 			if c < 32 {
 				bw.WriteDecimal(0)
 			}
@@ -500,7 +502,7 @@ func generatePICH() {
 
 				// Write out song index:
 				bw.WriteDecimal(byte(song_index))
-				fmt.Printf("  %2d) %3d %s\n", j + 1, song_index + 1, programs.Programs[song_index].Name)
+				fmt.Printf("  %2d) %3d %s\n", j + 1, song_index + 1, meta.PrimaryName)
 			}
 		}
 	}
@@ -557,18 +559,15 @@ func generateJSON() {
 
 			// We know we'll find the song; we would've panic()d above already.
 			meta, _ := partial_match_song_name(song_name)
-			song_index, _ := songs_by_name[meta.PrimaryName]
 			j++
 
-			// Write out song index:
-			prog := programs.Programs[song_index]
 			setlistData.Songs = append(setlistData.Songs, &struct {
 				Index  int    `json:"i"`
 				Title  string `json:"title"`
 				Starts string `json:"starts"`
 			}{
 				Index:  j,
-				Title:  prog.Name,
+				Title:  meta.PrimaryName,
 				Starts: meta.Starts,
 			})
 		}
@@ -706,6 +705,12 @@ func extractProgramsV1(hexBytes []byte) (err error) {
 			GMajorProgram: i + 1,
 		}
 
+		meta, err := partial_match_song_name(program.Name)
+		if err != nil {
+			return err
+		}
+		program.Name = meta.ShortName
+
 		for j := 0; j < 6; j++ {
 			// Scene descriptors:
 			// bits:
@@ -753,6 +758,10 @@ func main() {
 	song_meta = song_names.Songs
 	for _, meta := range song_meta {
 		meta.PrimaryName = meta.Names[0]
+
+		if len(meta.ShortName) > song_name_max_length {
+			fmt.Printf("short_name is longer than %d character limit: '%s', %d chars\n", song_name_max_length, meta.ShortName, len(meta.ShortName))
+		}
 	}
 
 	// Check for HEX parsing commandline option:

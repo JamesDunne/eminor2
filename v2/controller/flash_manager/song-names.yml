@@ -1,77 +1,152 @@
 songs:
 - names: [Monkeywrench, Monkey Wrench]
+  short_name: Monkeywrench
   starts: Bremer 4 ct
+
 - names: [Even Flow]
+  short_name: Even Flow
   starts: Bremer 4 ct
+
 - names: [Zero]
+  short_name: Zero
   starts: Jim
+
 - names: [Wonderwall]
+  short_name: Wonderwall
   starts: Glaz
+
 - names: [Buddy Holly]
+  short_name: Buddy Holly
   starts: Glaz+Bremer
+
 - names: [Plush]
+  short_name: Plush
   starts: Bremer 2 ct
+
 - names: [Come Out and Play]
+  short_name: Come Out
   starts: Bremer
+
 - names: [Drive]
+  short_name: Drive
   starts: Jim
+
 - names: [When I Come Around]
+  short_name: Come Around
   starts: Jim
+
 - names: [Everything Zen, Zen]
+  short_name: Zen
   starts: Glaz
+
 - names: [Enter Sandman, Sandman]
+  short_name: Sandman
   starts: Glaz
+
 - names: [Crawling in the Dark, Crawling]
+  short_name: Crawling
   starts: Jim
+
 - names: [Song 2]
+  short_name: Song 2
   starts: Bremer
+
 - names: [Sex Type Thing]
+  short_name: Sex Type Thing
   starts: Bremer 4 ct
+
 - names: [Mr Jones, Mr. Jones]
+  short_name: Mr Jones
   starts: Jim
+
 - names: [Counting Blue Cars, Blue Cars]
+  short_name: Blue Cars
   starts: Bremer 4 ct
+
 - names: [In Bloom]
+  short_name: In Bloom
   starts: Bremer 4 ct
+
 - names: [Hash Pipe, Hashpipe]
+  short_name: Hash Pipe
   starts: Bremer+Adam
+
 - names: [My Hero]
+  short_name: My Hero
   starts: Bremer+Adam
+
 - names: [Machinehead, Machine Head]
+  short_name: Machinehead
   starts: Jim
+
 - names: [Holiday]
+  short_name: Holiday
   starts: Jim
+
 - names: [Closing Time]
+  short_name: Closing Time
   starts: Glaz
+
 - names: [Brainstew, Brain Stew]
+  short_name: Brainstew
   starts: Jim
+
 - names: [Bound for the Floor]
+  short_name: Bound
   starts: Jim
+
 - names: [I Alone]
+  short_name: I Alone
   starts: Jim
+
 - names: [Cumbersome]
+  short_name: Cumbersome
   starts: Jim
+
 - names: [Lump]
+  short_name: Lump
   starts: Bremer+Glaz
+
 - names: [Hey Jealousy]
+  short_name: Hey Jealousy
   starts: Bremer 4 ct
+
 - names: [Kryptonite]
+  short_name: Kryptonite
   starts: Glaz
+
 - names: [Dammit, Damnit]
+  short_name: Dammit
   starts: Jim
+
 - names: [Semi-charmed Life, Semi-charmed Kind of Life, Semicharmed Kind of Life]
+  short_name: Semi-charmed
   starts: Bremer
+
 - names: [My Own Worst Enemy]
+  short_name: My Own Worst Enemy
   starts: Jim
+
 - names: [The Middle, Middle]
+  short_name: The Middle
   starts: Glaz
+
 - names: [Bullet With Butterfly Wings, Bullet]
+  short_name: Bullet
   starts: Glaz
+
 - names: [If You Could Only See]
+  short_name: If You Could Only
   starts: Glaz
+
 - names: [Beautiful Disaster]
+  short_name: Beautiful Disaster
   starts: Jim
-- names: [Bells, For Whom The Bell Tolls]
+
+- names: [For Whom The Bell Tolls, Bells]
+  short_name: Bells
   starts: Bremer
+
 - names: [Fuel]
+  short_name: Fuel
   starts: Glaz
