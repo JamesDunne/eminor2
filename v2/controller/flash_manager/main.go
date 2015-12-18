@@ -47,16 +47,16 @@ type SceneDescriptor struct {
 	Channel int `yaml:"channel"` // 1, 2, 3
 	Level   int `yaml:"level"`   // 5 bits signed, -16..+15, offset -9 => -25..+6
 
-	AxeScene int `yaml:"axe_scene"`
+	AxeScene int `yaml:"axe_scene,omitempty"`
 
 	FX []string `yaml:"fx,flow"`
 }
 
 type Program struct {
 	Name             string            `yaml:"name"`
-	AltNames         []string          `yaml:"altnames"`
+	AltNames         []string          `yaml:"altnames,omitempty"`
 	Starts           string            `yaml:"starts,omitempty"`
-	GMajorProgram    int               `yaml:"gmaj_program"`
+	GMajorProgram    int               `yaml:"gmaj_program,omitempty"`
 	InitialScene     int               `yaml:"initial_scene"`
 	SceneDescriptors []SceneDescriptor `yaml:"scenes"`
 }
@@ -696,6 +696,7 @@ func extractPrograms(hexBytes []byte) (err error) {
 			programs.Programs = append(programs.Programs, program)
 		}
 
+		// Marshal to YAML and output:
 		yamlBytes, err := yaml.Marshal(programs)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -719,7 +720,7 @@ func main() {
 		fmt.Println("HW_VERSION environment variable must be either '1' or '2'.")
 		return
 	}
-	fmt.Printf("HW_VERSION = '%s'\n", version)
+	fmt.Fprintf(os.Stderr, "HW_VERSION = '%s'\n", version)
 	version = "v" + version
 
 	hexFileName := flag.String("hex", "", "")
@@ -739,8 +740,6 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			return
 		}
-		_ = hexBytes
-		//fmt.Println(hexBytes)
 
 		// Parse the bytes and emit a YAML:
 		err = extractPrograms(hexBytes)
