@@ -794,12 +794,38 @@ static void clear_rjm_leds(void) {
 
 // Update LCD display:
 static void update_lcd(void) {
+#ifdef HWFEAT_LABEL_UPDATES
+    u8 **labels;
+#endif
 #ifdef FEAT_LCD
     s8 i;
     u8 b = 1;
     u8 fx = pr.fx[scene];
 
     if (mode == MODE_LIVE) {
+#if HWFEAT_LABEL_UPDATES
+        labels = label_row_get(0);
+        labels[0] = "SC1";
+        labels[1] = "SC2";
+        labels[2] = "SC3";
+        labels[3] = "SC4";
+        labels[4] = "SC5";
+        labels[5] = "SC6";
+        labels[6] = "TAP";
+        labels[7] = "ENTER";
+        label_row_update(0);
+
+        labels = label_row_get(1);
+        labels[0] = "COMP";
+        labels[1] = "FILT";
+        labels[2] = "PITCH";
+        labels[3] = "CHORUS";
+        labels[4] = "DELAY";
+        labels[5] = "REVERB";
+        labels[6] = "PREV";
+        labels[7] = "NEXT";
+        label_row_update(1);
+#endif
         b = 1;
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[3][i] = "  c-f-p-o-d-v-g-q-  "[i];
@@ -811,14 +837,83 @@ static void update_lcd(void) {
             }
         }
     } else if (mode == MODE_PROGRAMMING) {
+#if HWFEAT_LABEL_UPDATES
+        labels = label_row_get(0);
+        labels[0] = "SC1";
+        labels[1] = "SC2";
+        labels[2] = "SC3";
+        labels[3] = "SC4";
+        labels[4] = "SC5";
+        labels[5] = "SC6";
+        labels[6] = "SAVE";
+        labels[7] = "EXIT";
+        label_row_update(0);
+
+        labels = label_row_get(1);
+        labels[0] = "MODE";
+        labels[1] = "SCENE DESIGN";
+        labels[2] = "";
+        labels[3] = "";
+        labels[4] = "REMOVE";
+        labels[5] = "SWITCH";
+        labels[6] = "PREV";
+        labels[7] = "NEXT";
+        label_row_update(1);
+#endif
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[3][i] = " MD SD -- -- RM SW  "[i];
         }
     } else if (mode == MODE_SCENE_DESIGN) {
+#if HWFEAT_LABEL_UPDATES
+        labels = label_row_get(0);
+        labels[0] = "SC1";
+        labels[1] = "SC2";
+        labels[2] = "SC3";
+        labels[3] = "SC4";
+        labels[4] = "SC5";
+        labels[5] = "SC6";
+        labels[6] = "SAVE";
+        labels[7] = "EXIT";
+        label_row_update(0);
+
+        labels = label_row_get(1);
+        labels[0] = "CH1";
+        labels[1] = "CH+6";
+        labels[2] = "CH2";
+        labels[3] = "CH2+6";
+        labels[4] = "CH3";
+        labels[5] = "CH3+6";
+        labels[6] = "VOL--";
+        labels[7] = "VOL++";
+        label_row_update(1);
+#endif
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[3][i] = "    scene design    "[i];
         }
     } else if (mode == MODE_SETLIST_REORDER) {
+#if HWFEAT_LABEL_UPDATES
+        labels = label_row_get(0);
+        labels[0] = "SC1";
+        labels[1] = "SC2";
+        labels[2] = "SC3";
+        labels[3] = "SC4";
+        labels[4] = "SC5";
+        labels[5] = "SC6";
+        labels[6] = "TAP";
+        labels[7] = "ENTER";
+        label_row_update(0);
+
+        labels = label_row_get(1);
+        labels[0] = "MODE";
+        labels[1] = "SET DESIGN";
+        labels[2] = "";
+        labels[3] = "";
+        labels[4] = "REMOVE";
+        labels[5] = "SWITCH";
+        labels[6] = "PREV";
+        labels[7] = "NEXT";
+        label_row_update(1);
+#endif
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[3][i] = " -- -- -- -- -- --  "[i];
         }
