@@ -680,7 +680,7 @@ func extractPrograms(hexBytes []byte) (err error) {
 				// |||| ||\+--- Channel (2 bits, 0-2, 3 ignored)
 				// |+++-++--- Out Level (5 bits signed, -16..+15, offset -9 => -25..+6)
 				// \----------- Initial
-				program.SceneDescriptors[j].Channel = int(hexBytes[o+20+j] & 3)
+				program.SceneDescriptors[j].Channel = int(hexBytes[o+20+j]&3) + 1
 				program.SceneDescriptors[j].Level = int((hexBytes[o+20+j]>>2)&0x1F) - 9
 				program.SceneDescriptors[j].FX = make([]string, 0, 8)
 				for b := uint(0); b < 8; b++ {
