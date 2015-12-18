@@ -17,6 +17,7 @@ import (
 
 import (
 	"gopkg.in/yaml.v2"
+	"path"
 )
 
 var version string
@@ -593,17 +594,10 @@ readLoop:
 			return nil, fmt.Errorf("Checksum fail in line %d", lineno)
 		}
 
-		_ = address
-		_ = recType
-		_ = payload
-
 		const (
 			HEX_FILE_EXTENDED_LINEAR_ADDRESS = 0x04
 			HEX_FILE_EOF                     = 0x01
 			HEX_FILE_DATA                    = 0x00
-
-			//This is the number of bytes per line of the
-			HEX_FILE_BYTES_PER_LINE = 16
 		)
 
 		switch recType {
@@ -619,31 +613,27 @@ readLoop:
 				continue
 			}
 			if actualAddress >= offset+length {
+				// Ideally should early exit here but the HEX could suddenly relocate back into our target address space;
+				// very unlikely that it would though.
 				continue
 			}
 
-			//fmt.Printf("%d, %04x: %s\n", recType, address, payload)
+			fmt.Printf("%08x: %s\n", actualAddress, payload)
 
 			var decoded int
 			sliceIndex := (actualAddress - offset)
 			if sliceIndex+recLen >= length {
-				//fmt.Printf("sliceIndex=%04x; recLen=%02x; actualAddress=%04x, offset=%04x; length=%04x\n",
-				//	sliceIndex,
-				//	recLen,
-				//	actualAddress,
-				//	offset,
-				//	length,
-				//)
+				// Only decode up to length of buffer:
 				decoded, err = hex.Decode(finalBytes[sliceIndex:len(finalBytes)], []byte(payload))
 			} else {
 				decoded, err = hex.Decode(finalBytes[sliceIndex:sliceIndex+recLen], []byte(payload))
+				if err == nil && int64(decoded) != recLen {
+					return nil, fmt.Errorf("Decoded only %d HEX bytes, expected %d on line %d", decoded, recLen, lineno)
+				}
 			}
 
 			if err != nil {
 				return nil, fmt.Errorf("Error decoding HEX bytes on line %d: '%s'\n%s", lineno, payload, err)
-			}
-			if int64(decoded) != recLen {
-				return nil, fmt.Errorf("Decoded only %d HEX bytes, expected %d on line %d", decoded, recLen, lineno)
 			}
 			break
 		}
@@ -669,7 +659,11 @@ func extractProgramsV1(hexBytes []byte) (err error) {
 		program := &Program{
 			Name:             strings.TrimRight(string(hexBytes[o:o+20]), " \x00\n\r\t"),
 			SceneDescriptors: make([]SceneDescriptor, 6, 6),
+			// G-Major program number is not stored in the flash memory; it is assumed that the song definition order lines
+			// up 1:1 with G-Major program numbers.
+			GMajorProgram:    i+1,
 		}
+
 		for j := 0; j < 6; j++ {
 			// Scene descriptors:
 			// bits:
@@ -728,7 +722,15 @@ func main() {
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}
-		fmt.Printf("%s\n", string(yamlBytes))
+		_, yamlFileName := path.Split(*hexFileName)
+		dot := strings.LastIndex(yamlFileName, ".")
+		if dot >= 0 {
+			yamlFileName = yamlFileName[:dot] + ".yml"
+		} else {
+			yamlFileName += ".yml"
+		}
+		fmt.Printf("Writing YAML to '%s'\n", yamlFileName)
+		ioutil.WriteFile(yamlFileName, yamlBytes, 0644)
 		return
 	}
 
