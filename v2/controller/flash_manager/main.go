@@ -7,7 +7,7 @@ import (
 	"flag"
 	"io"
 	"strconv"
-	//"bytes"
+//"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -44,19 +44,26 @@ var FXNames = []string{
 	"eq",
 }
 
+type SongMeta struct {
+	PrimaryName string
+
+	Names       []string `yaml:"names"`
+	Starts      string   `yaml:"starts"`
+}
+
 type SceneDescriptor struct {
-	Channel int `yaml:"channel"` // 1, 2, 3
-	Level   int `yaml:"level"`   // 5 bits signed, -16..+15, offset -9 => -25..+6
+	Channel  int `yaml:"channel"` // 1, 2, 3
+	Level    int `yaml:"level"`   // 5 bits signed, -16..+15, offset -9 => -25..+6
 
 	AxeScene int `yaml:"axe_scene,omitempty"`
 
-	FX []string `yaml:"fx,flow"`
+	FX       []string `yaml:"fx,flow"`
 }
 
 type Program struct {
 	Name             string            `yaml:"name"`
-	AltNames         []string          `yaml:"altnames,omitempty"`
-	Starts           string            `yaml:"starts,omitempty"`
+	//AltNames         []string          `yaml:"altnames,omitempty"`
+	//Starts           string            `yaml:"starts,omitempty"`
 	GMajorProgram    int               `yaml:"gmaj_program,omitempty"`
 	InitialScene     int               `yaml:"initial_scene"`
 	SceneDescriptors []SceneDescriptor `yaml:"scenes"`
@@ -75,7 +82,7 @@ type Setlist struct {
 	IsActive    bool     `yaml:"active"`
 
 	// Computed:
-	SongNames []string
+	SongNames   []string
 }
 
 type Setlists struct {
@@ -87,10 +94,39 @@ const song_name_max_length = 20
 
 // Globals, yuck, but this is just a dumb CLI tool so who cares.
 var (
-	programs      Programs
-	setlists      Setlists
+	programs Programs
+	setlists Setlists
+
 	songs_by_name map[string]int
+	song_meta     []*SongMeta
 )
+
+func partial_match_song_name(name string) (*SongMeta, error) {
+	type candidate struct {
+		name string
+		meta *SongMeta
+	}
+
+	candidates := make([]candidate, 0, len(song_meta))
+	nameLower := strings.ToLower(name)
+
+	for _, meta := range song_meta {
+		for _, metaname := range meta.Names {
+			if strings.HasPrefix(strings.ToLower(metaname), nameLower) {
+				candidates = append(candidates, candidate{name: metaname, meta: meta})
+			}
+		}
+	}
+
+	if len(candidates) == 1 {
+		return candidates[0].meta, nil
+	}
+
+	if len(candidates) == 0 {
+		return nil, fmt.Errorf("No match for song name")
+	}
+	return nil, fmt.Errorf("Multiple matches for partial song name")
+}
 
 func parse_yaml(path string, dest interface{}) error {
 	// Load YAML file:
@@ -149,24 +185,24 @@ func (w *BankedWriter) writeSeparator() {
 	// Open new file when needed:
 	if w.fo == nil {
 		var err error
-		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_%s_bank%d.h", version, w.bankNumber), os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_%s_bank%d.h", version, w.bankNumber), os.O_TRUNC | os.O_CREATE | os.O_WRONLY, 0644)
 		if err != nil {
 			panic(err)
 		}
 	}
 
 	// Don't write separators at top of bank files:
-	if w.bytesWritten&0x0FFF == 0 {
+	if w.bytesWritten & 0x0FFF == 0 {
 		return
 	}
 
 	fmt.Fprint(w.fo, ",")
 	if version == "v2" {
-		if w.bytesWritten&63 == 0 {
+		if w.bytesWritten & 63 == 0 {
 			fmt.Fprint(w.fo, "\n")
 		}
 	} else if version == "v1" {
-		if w.bytesWritten&31 == 0 {
+		if w.bytesWritten & 31 == 0 {
 			fmt.Fprint(w.fo, "\n")
 		}
 	}
@@ -222,7 +258,7 @@ func generatePICH() {
 	// Translate YAML to binary data for FLASH memory (see common/controller.c):
 	songs := 0
 	for i, p := range programs.Programs {
-		_, err = fmt.Printf("%3d) #%3d %s\n", i+1, p.GMajorProgram, p.Name)
+		_, err = fmt.Printf("%3d) #%3d %s\n", i + 1, p.GMajorProgram, p.Name)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			return
@@ -236,10 +272,12 @@ func generatePICH() {
 		}
 
 		// Record the name-to-index mapping:
-		songs_by_name[strings.ToLower(p.Name)] = i
-		for _, altname := range p.AltNames {
-			songs_by_name[strings.ToLower(altname)] = i
+		meta, err := partial_match_song_name(p.Name)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return
 		}
+		songs_by_name[meta.PrimaryName] = i
 
 		// Copy name characters:
 		for j := 0; j < song_name_max_length; j++ {
@@ -264,8 +302,8 @@ func generatePICH() {
 		// \----------- Initial
 		const (
 			lvl_offset = 9
-			lvl_min    = -16 - lvl_offset
-			lvl_max    = 15 - lvl_offset
+			lvl_min = -16 - lvl_offset
+			lvl_max = 15 - lvl_offset
 		)
 
 		s := p.SceneDescriptors
@@ -321,8 +359,8 @@ func generatePICH() {
 			// Offset up to accommodate uneven range.
 			lvl5bit += lvl_offset
 
-			b := uint8((s[j].Channel-1)&3) | uint8((int8(lvl5bit&31))<<2)
-			if initialScene-1 == j {
+			b := uint8((s[j].Channel - 1) & 3) | uint8((int8(lvl5bit & 31)) << 2)
+			if initialScene - 1 == j {
 				b |= 0x80
 			}
 
@@ -401,7 +439,7 @@ func generatePICH() {
 			continue
 		}
 
-		fmt.Printf("Set #%d\n", i+1)
+		fmt.Printf("Set #%d\n", i + 1)
 		if len(set.Songs) > max_set_length {
 			panic(fmt.Errorf("Set list cannot have more than %d songs; %d songs currently.", max_set_length, len(set.Songs)))
 		}
@@ -442,7 +480,7 @@ func generatePICH() {
 		// Write the two 8-bit values for the date:
 		bw.WriteHex(d0)
 		bw.WriteHex(d1)
-		fmt.Printf("  Date:  %04d-%02d-%02d\n", yyyy+2014, mm+1, dd+1)
+		fmt.Printf("  Date:  %04d-%02d-%02d\n", yyyy + 2014, mm + 1, dd + 1)
 
 		// Write out the song indices for the setlist:
 		for j := 0; j < max_set_length; j++ {
@@ -450,15 +488,19 @@ func generatePICH() {
 				bw.WriteHex(0xFF)
 			} else {
 				// Look up song by name, case-insensitive:
-				song_name := strings.ToLower(set.SongNames[j])
-				song_index, exists := songs_by_name[song_name]
+				meta, err := partial_match_song_name(set.SongNames[j])
+				if err != nil {
+					panic(err)
+				}
+
+				song_index, exists := songs_by_name[meta.PrimaryName]
 				if !exists {
 					panic(fmt.Errorf("Song name not found in all_programs.yml: '%s'", set.SongNames[j]))
 				}
 
 				// Write out song index:
 				bw.WriteDecimal(byte(song_index))
-				fmt.Printf("  %2d) %3d %s\n", j+1, song_index+1, programs.Programs[song_index].Name)
+				fmt.Printf("  %2d) %3d %s\n", j + 1, song_index + 1, programs.Programs[song_index].Name)
 			}
 		}
 	}
@@ -466,7 +508,7 @@ func generatePICH() {
 
 // Generate JSON for Google Docs setlist generator script:
 func generateJSON() {
-	fjson, err := os.OpenFile("setlist.json", os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+	fjson, err := os.OpenFile("setlist.json", os.O_TRUNC | os.O_CREATE | os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
@@ -502,7 +544,6 @@ func generateJSON() {
 
 		j := 0
 		for _, song_name := range set.Songs {
-			// Look up song by name, case-insensitive:
 			name_lower := strings.ToLower(song_name)
 			if strings.HasPrefix(name_lower, "break: ") {
 				// Write out break text:
@@ -515,7 +556,8 @@ func generateJSON() {
 			}
 
 			// We know we'll find the song; we would've panic()d above already.
-			song_index, _ := songs_by_name[name_lower]
+			meta, _ := partial_match_song_name(song_name)
+			song_index, _ := songs_by_name[meta.PrimaryName]
 			j++
 
 			// Write out song index:
@@ -527,7 +569,7 @@ func generateJSON() {
 			}{
 				Index:  j,
 				Title:  prog.Name,
-				Starts: prog.Starts,
+				Starts: meta.Starts,
 			})
 		}
 		setlistsJson = append(setlistsJson, setlistData)
@@ -563,7 +605,7 @@ func loadHex(r io.Reader, offset int64, length int64) (finalBytes []byte, err er
 
 	finalBytes = make([]byte, length)
 
-readLoop:
+	readLoop:
 	for s.Scan() {
 		lineno++
 		line := s.Text()
@@ -578,16 +620,16 @@ readLoop:
 		line = line[1:]
 
 		// Parse out the standard fields:
-		recLen := parseHex(line[0 : 0+2])
-		address := parseHex(line[2 : 2+4])
-		recType := parseHex(line[6 : 6+2])
-		payload := line[8 : 8+recLen*2]
-		chksum := parseHex(line[8+recLen*2 : 8+recLen*2+2])
+		recLen := parseHex(line[0 : 0 + 2])
+		address := parseHex(line[2 : 2 + 4])
+		recType := parseHex(line[6 : 6 + 2])
+		payload := line[8 : 8 + recLen * 2]
+		chksum := parseHex(line[8 + recLen * 2 : 8 + recLen * 2 + 2])
 
 		// Verify checksum:
 		chksum_calc := int64(0)
-		for j := int64(0); j < recLen+4; j++ {
-			chksum_calc += parseHex(line[j*2 : j*2+2])
+		for j := int64(0); j < recLen + 4; j++ {
+			chksum_calc += parseHex(line[j * 2 : j * 2 + 2])
 		}
 		chksum_calc = (^chksum_calc) + 1
 		if (chksum_calc & 0xFF) != chksum {
@@ -596,8 +638,8 @@ readLoop:
 
 		const (
 			HEX_FILE_EXTENDED_LINEAR_ADDRESS = 0x04
-			HEX_FILE_EOF                     = 0x01
-			HEX_FILE_DATA                    = 0x00
+			HEX_FILE_EOF = 0x01
+			HEX_FILE_DATA = 0x00
 		)
 
 		switch recType {
@@ -612,7 +654,7 @@ readLoop:
 			if actualAddress < offset {
 				continue
 			}
-			if actualAddress >= offset+length {
+			if actualAddress >= offset + length {
 				// Ideally should early exit here but the HEX could suddenly relocate back into our target address space;
 				// very unlikely that it would though.
 				continue
@@ -622,11 +664,11 @@ readLoop:
 
 			var decoded int
 			sliceIndex := (actualAddress - offset)
-			if sliceIndex+recLen >= length {
+			if sliceIndex + recLen >= length {
 				// Only decode up to length of buffer:
 				decoded, err = hex.Decode(finalBytes[sliceIndex:len(finalBytes)], []byte(payload))
 			} else {
-				decoded, err = hex.Decode(finalBytes[sliceIndex:sliceIndex+recLen], []byte(payload))
+				decoded, err = hex.Decode(finalBytes[sliceIndex:sliceIndex + recLen], []byte(payload))
 				if err == nil && int64(decoded) != recLen {
 					return nil, fmt.Errorf("Decoded only %d HEX bytes, expected %d on line %d", decoded, recLen, lineno)
 				}
@@ -657,11 +699,11 @@ func extractProgramsV1(hexBytes []byte) (err error) {
 		}
 
 		program := &Program{
-			Name:             strings.TrimRight(string(hexBytes[o:o+20]), " \x00\n\r\t"),
+			Name:             strings.TrimRight(string(hexBytes[o:o + 20]), " \x00\n\r\t"),
 			SceneDescriptors: make([]SceneDescriptor, 6, 6),
 			// G-Major program number is not stored in the flash memory; it is assumed that the song definition order lines
 			// up 1:1 with G-Major program numbers.
-			GMajorProgram:    i+1,
+			GMajorProgram: i + 1,
 		}
 
 		for j := 0; j < 6; j++ {
@@ -673,15 +715,15 @@ func extractProgramsV1(hexBytes []byte) (err error) {
 			// |||| ||\+--- Channel (2 bits, 0-2, 3 ignored)
 			// |+++-++--- Out Level (5 bits signed, -16..+15, offset -9 => -25..+6)
 			// \----------- Initial
-			program.SceneDescriptors[j].Channel = int(hexBytes[o+20+j]&3) + 1
-			program.SceneDescriptors[j].Level = int((hexBytes[o+20+j]>>2)&0x1F) - 9
+			program.SceneDescriptors[j].Channel = int(hexBytes[o + 20 + j] & 3) + 1
+			program.SceneDescriptors[j].Level = int((hexBytes[o + 20 + j] >> 2) & 0x1F) - 9
 			program.SceneDescriptors[j].FX = make([]string, 0, 8)
 			for b := uint(0); b < 8; b++ {
-				if (hexBytes[o+20+6+j])&(1<<b) == (1 << b) {
+				if (hexBytes[o + 20 + 6 + j]) & (1 << b) == (1 << b) {
 					program.SceneDescriptors[j].FX = append(program.SceneDescriptors[j].FX, FXNames[b])
 				}
 			}
-			if hexBytes[o+20+j]&0x80 == 0x80 {
+			if hexBytes[o + 20 + j] & 0x80 == 0x80 {
 				program.InitialScene = j + 1
 			}
 		}
@@ -697,6 +739,23 @@ func main() {
 	const hexLength = 0x1000
 	flag.Parse()
 
+	// Load song names mapping YAML file:
+	song_names := &struct {
+		Songs []*SongMeta
+	}{}
+	err := parse_yaml("song-names.yml", song_names)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+
+	// Convert parsed song names YAML into a lookup map:
+	song_meta = song_names.Songs
+	for _, meta := range song_meta {
+		meta.PrimaryName = meta.Names[0]
+	}
+
+	// Check for HEX parsing commandline option:
 	if *hexFileName != "" {
 		// Read HEX file and export YAML:
 		fi, err := os.Open(*hexFileName)
@@ -742,7 +801,7 @@ func main() {
 	fmt.Fprintf(os.Stderr, "HW_VERSION = '%s'\n", version)
 	version = "v" + version
 
-	err := parse_yaml(fmt.Sprintf("all_programs-%s.yml", version), &programs)
+	err = parse_yaml(fmt.Sprintf("all_programs-%s.yml", version), &programs)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
