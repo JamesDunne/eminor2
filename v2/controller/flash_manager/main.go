@@ -871,11 +871,12 @@ func main() {
 			}
 			p.InitialScene = initialScene
 
-			// part2:
 			for j := 0; j < 8; j++ {
 				if s[j].AxeScene == 0 {
 					// Axe-FX use same amp channel as RJM:
 					s[j].AxeScene = s[j].Channel
+					// MG doesn't like channel 3, and we don't map solo channel:
+					if s[j].AxeScene > 2 { s[j].AxeScene = 2 }
 				}
 			}
 		}
