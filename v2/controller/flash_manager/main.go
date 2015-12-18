@@ -312,6 +312,7 @@ func generatePICH() {
 		initialScene := p.InitialScene
 
 		if version == "v2" {
+			// Up-convert v1 to v2:
 			if len(p.SceneDescriptors) == 6 {
 				s = make([]SceneDescriptor, 8)
 				s[0] = p.SceneDescriptors[0]
@@ -831,8 +832,52 @@ func main() {
 
 	if version == "v1" {
 		// Update YAML data:
-		for _, pr := range programs.Programs {
-			pr.InitialScene += 1
+		for _, p := range programs.Programs {
+			if len(p.SceneDescriptors) != 6 { continue }
+			s := make([]SceneDescriptor, 8)
+			s[0] = p.SceneDescriptors[0]
+			s[1] = p.SceneDescriptors[0]
+			s[2] = p.SceneDescriptors[1]
+			s[3] = p.SceneDescriptors[2]
+			s[4] = p.SceneDescriptors[3]
+			s[5] = p.SceneDescriptors[4]
+			s[6] = p.SceneDescriptors[4]
+			s[7] = p.SceneDescriptors[5]
+			p.SceneDescriptors = s
+
+			initialScene := 6
+			switch p.InitialScene {
+			case 1:
+				initialScene = 1
+				break
+			case 2:
+				initialScene = 3
+				break
+			case 3:
+				initialScene = 4
+				break
+			case 4:
+				initialScene = 5
+				break
+			case 5:
+				initialScene = 6
+				break
+			case 6:
+				initialScene = 8
+				break
+			default:
+				initialScene = 6
+				break
+			}
+			p.InitialScene = initialScene
+
+			// part2:
+			for j := 0; j < 8; j++ {
+				if s[j].AxeScene == 0 {
+					// Axe-FX use same amp channel as RJM:
+					s[j].AxeScene = s[j].Channel
+				}
+			}
 		}
 
 		// Rewrite YAML file:
