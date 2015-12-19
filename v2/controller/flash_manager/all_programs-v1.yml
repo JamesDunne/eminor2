@@ -491,7 +491,7 @@ programs:
     level: 0
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 0
     fx: [compressor]
   - channel: 3
     level: 0
@@ -503,7 +503,7 @@ programs:
     level: 0
     fx: [gate]
   - channel: 3
-    level: 3
+    level: 0
     fx: [gate]
 - name: Bound for the Floor
   gmaj_program: 24
@@ -525,7 +525,7 @@ programs:
     level: 0
     fx: [gate, delay, chorus]
   - channel: 2
-    level: 3
+    level: 0
     fx: [gate, delay]
 - name: I Alone
   gmaj_program: 25
@@ -607,7 +607,7 @@ programs:
     level: 0
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 0
     fx: [gate]
   - channel: 2
     level: 0
@@ -673,7 +673,7 @@ programs:
     level: 0
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 0
     fx: [gate]
   - channel: 2
     level: 0
@@ -695,13 +695,13 @@ programs:
     level: 0
     fx: [gate]
   - channel: 2
-    level: 3
-    fx: [gate]
-  - channel: 3
     level: 0
     fx: [gate]
-  - channel: 3
-    level: 3
+  - channel: 2
+    level: 0
+    fx: [gate]
+  - channel: 2
+    level: 0
     fx: [gate]
 - name: The Middle
   gmaj_program: 33
@@ -720,7 +720,7 @@ programs:
     level: 3
     fx: []
   - channel: 2
-    level: -2
+    level: -1
     fx: [filter, delay]
   - channel: 2
     level: 0
@@ -789,7 +789,7 @@ programs:
     level: 0
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 0
     fx: [gate]
 - name: Bells
   gmaj_program: 32
