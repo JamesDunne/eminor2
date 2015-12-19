@@ -207,13 +207,18 @@ u8 *lcd_rows[LCD_ROWS];
 // Countdown timer for flashing LEDs:
 u8 timeout_flash;
 
-#define declare_timer(name) u8 timer_held_##name
-#define declare_timer_looper(name) u8 timer_held_##name, timer_looped_##name
+#define declare_timer(name)         u8 timer_held_##name, timer_satisfied_##name
+#define declare_timer_looper(name)  u8 timer_held_##name, timer_satisfied_##name, timer_looped_##name
 
-#define is_timer_elapsed(name) (timer_held_##name >= (timer_timeout_##name + 1))
+#define start_timer(name)           timer_satisfied_##name = 0; timer_held_##name = 1
+#define reset_timer(name)           timer_satisfied_##name = 0; timer_held_##name = 0
+#define set_timer_satisfied(name)   timer_satisfied_##name = 1
 
-#define init_timer(name) timer_held_##name = 0
-#define init_timer_looper(name) timer_held_##name = 0, timer_looped_##name = 0
+#define is_timer_satisfied(name)    (timer_satisfied_##name == 1)
+#define is_timer_elapsed(name)      (!is_timer_satisfied(name) && ((timer_held_##name & 127) >= (timer_timeout_##name + 1)))
+
+#define init_timer(name)            timer_held_##name = 0
+#define init_timer_looper(name)     timer_held_##name = 0, timer_looped_##name = 0
 
 declare_timer(tapstore);
 #define timer_timeout_tapstore  75
@@ -384,14 +389,14 @@ static void reset_tuner_mute(void) {
 }
 
 // Toggle a g-major CC effect
-static void gmaj_toggle_cc(u8 idx) {
+static void gmaj_cc_toggle(u8 idx) {
     u8 togglevalue = 0x00;
     u8 idxMask;
 
     // Make sure we don't go out of range:
-    assert(idx < 6);
+    assert(idx < 8);
 
-    idxMask = (1 << idx);
+    idxMask = ((u8)1 << idx);
 
     // Toggle on/off the selected continuous controller:
     pr.fx[scene] ^= idxMask;
@@ -663,33 +668,9 @@ void controller_init(void) {
         lcd_rows[2][i] = "Program:            "[i];
         lcd_rows[3][i] = "                    "[i];
     }
+#endif
 
     update_lcd();
-#endif
-
-#ifdef HWFEAT_LABEL_UPDATES
-    labels = label_row_get(0);
-    labels[0] = "SC1";
-    labels[1] = "SC2";
-    labels[2] = "SC3";
-    labels[3] = "SC4";
-    labels[4] = "SC5";
-    labels[5] = "SC6";
-    labels[6] = "TAP";
-    labels[7] = "CANCEL";
-    label_row_update(0);
-
-    labels = label_row_get(1);
-    labels[0] = "COMP";
-    labels[1] = "FILTER";
-    labels[2] = "PITCH";
-    labels[3] = "CHORUS";
-    labels[4] = "DELAY";
-    labels[5] = "REVERB";
-    labels[6] = "PREV";
-    labels[7] = "NEXT";
-    label_row_update(1);
-#endif
 
     switch_setlist_mode(1);
 
@@ -702,18 +683,18 @@ void controller_init(void) {
 void controller_10msec_timer(void) {
     // Increment timers:
 #define inc_timer(name) \
-    if (timer_held_##name > 0) { \
-    timer_held_##name++; \
-    if (timer_held_##name >= 240) \
-    timer_held_##name = 128; \
+    if ((timer_held_##name > 0) && !is_timer_satisfied(name)) { \
+        timer_held_##name++; \
+        if (timer_held_##name >= 255) \
+            timer_held_##name = 128; \
     }
 #define inc_timer_loop(name) \
-    if (timer_held_##name > 0) { \
-    timer_held_##name++; \
-    if (timer_held_##name >= (timer_timeout_##name + timer_loop_##name)) { \
-    timer_held_##name = timer_timeout_##name; \
-    timer_looped_##name = 1; \
-    } \
+    if ((timer_held_##name > 0) && !is_timer_satisfied(name)) { \
+        timer_held_##name++; \
+        if (timer_held_##name >= (timer_timeout_##name + timer_loop_##name)) { \
+            timer_held_##name = timer_timeout_##name; \
+            timer_looped_##name = 1; \
+        } \
     }
 
     inc_timer(fx)
@@ -801,8 +782,10 @@ static void update_lcd(void) {
     s8 i;
     u8 b = 1;
     u8 fx = pr.fx[scene];
+    u8 show_row3_fx = 0;
 
     if (mode == MODE_LIVE) {
+        show_row3_fx = 1;
 #if HWFEAT_LABEL_UPDATES
         labels = label_row_get(0);
         labels[0] = "SC1";
@@ -826,16 +809,6 @@ static void update_lcd(void) {
         labels[7] = "NEXT";
         label_row_update(1);
 #endif
-        b = 1;
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[3][i] = "  c-f-p-o-d-v-g-q-  "[i];
-        }
-        // Upper-case enabled FX labels:
-        for (i = 0; i < 8; i++, b <<= 1) {
-            if ((fx & b) == b) {
-                lcd_rows[3][i * 2 + 2] &= ~0x20;
-            }
-        }
     } else if (mode == MODE_PROGRAMMING) {
 #if HWFEAT_LABEL_UPDATES
         labels = label_row_get(0);
@@ -851,7 +824,7 @@ static void update_lcd(void) {
 
         labels = label_row_get(1);
         labels[0] = "MODE";
-        labels[1] = "SCENE DESIGN";
+        labels[1] = "";
         labels[2] = "";
         labels[3] = "";
         labels[4] = "REMOVE";
@@ -861,35 +834,38 @@ static void update_lcd(void) {
         label_row_update(1);
 #endif
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[3][i] = " MD SD -- -- RM SW  "[i];
+            lcd_rows[3][i] = " MD -- -- -- RM SW  "[i];
         }
     } else if (mode == MODE_SCENE_DESIGN) {
+        // Show selected scene on LCD since we don't have an LED for it:
+        lcd_rows[0][17] = 'S';
+        lcd_rows[0][18] = 'C';
+        lcd_rows[0][19] = '1' + scene;
+
+        show_row3_fx = 1;
 #if HWFEAT_LABEL_UPDATES
         labels = label_row_get(0);
-        labels[0] = "SC1";
-        labels[1] = "SC2";
-        labels[2] = "SC3";
-        labels[3] = "SC4";
-        labels[4] = "SC5";
-        labels[5] = "SC6";
+        labels[0] = "CH1";
+        labels[1] = "CH2";
+        labels[2] = "CH3";
+        labels[3] = "VOL--";
+        labels[4] = "VOL++";
+        labels[5] = "VOL=3";
         labels[6] = "SAVE";
         labels[7] = "EXIT";
         label_row_update(0);
 
         labels = label_row_get(1);
-        labels[0] = "CH1";
-        labels[1] = "CH+6";
-        labels[2] = "CH2";
-        labels[3] = "CH2+6";
-        labels[4] = "CH3";
-        labels[5] = "CH3+6";
-        labels[6] = "VOL--";
-        labels[7] = "VOL++";
+        labels[0] = "COMP";
+        labels[1] = "FILTER";
+        labels[2] = "PITCH";
+        labels[3] = "CHORUS";
+        labels[4] = "DELAY";
+        labels[5] = "REVERB";
+        labels[6] = "GATE";
+        labels[7] = "EQ";
         label_row_update(1);
 #endif
-        for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[3][i] = "    scene design    "[i];
-        }
     } else if (mode == MODE_SETLIST_REORDER) {
 #if HWFEAT_LABEL_UPDATES
         labels = label_row_get(0);
@@ -948,6 +924,19 @@ static void update_lcd(void) {
     for (; i < LCD_COLS; i++) {
         lcd_rows[0][i] = ' ';
         lcd_rows[2][i] = ' ';
+    }
+
+    if (show_row3_fx) {
+        b = 1;
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[3][i] = "  c-f-p-o-d-v-g-q-  "[i];
+        }
+        // Upper-case enabled FX labels:
+        for (i = 0; i < 8; i++, b <<= 1) {
+            if ((fx & b) == b) {
+                lcd_rows[3][i * 2 + 2] &= ~0x20;
+            }
+        }
     }
 
     // "MUTE  CH1  +00  ****"
@@ -1042,9 +1031,19 @@ static void calc_leds(void) {
         // Set only current program LED on bottom, preserve LEDs 7 and 8:
         leds[MODE_PROGRAMMING].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
     } else if (mode == MODE_SCENE_DESIGN) {
-        // LEDs == FSWs:
-        leds[MODE_SCENE_DESIGN].top.byte = (1 << ((pr_rjm[scene] << 1) | (pr_out_level[scene] <= 0 ? 0 : 1))) | (fsw.top.byte & (M_7 | M_8));
-        leds[MODE_SCENE_DESIGN].bot.byte = (1 << scene) | (fsw.bot.byte & (M_7 | M_8));
+        // Reset top LEDs to new state:
+        leds[MODE_SCENE_DESIGN].top.byte = pr.fx[scene];
+        // Show amp channel on left 3 LEDs, and show depressed status on remaining LEDs:
+        leds[MODE_SCENE_DESIGN].bot.byte = (1 << pr_rjm[scene]) | (fsw.bot.byte & (M_4 | M_5 | M_6 | M_7 | M_8));
+
+        if (is_timer_elapsed(fx)) {
+            // Flash top LEDs on/off:
+            if ((timer_held_fx & 15) >= 8) {
+                leds[MODE_SCENE_DESIGN].top.byte = (pr.fx[scene] & ~fsw.top.byte);
+            } else {
+                leds[MODE_SCENE_DESIGN].top.byte = (pr.fx[scene] | fsw.top.byte);
+            }
+        }
     } else if (mode == MODE_SETLIST_REORDER) {
         // LEDs == FSWs:
         leds[MODE_SETLIST_REORDER].top.byte = fsw.top.byte;
@@ -1066,46 +1065,46 @@ static void calc_leds(void) {
 void handle_mode_LIVE(void) {
     // handle top 6 FX block buttons:
     if (is_top_button_pressed(M_1)) {
-        gmaj_toggle_cc(0);
+        gmaj_cc_toggle(0);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_1) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(0);
+        gmaj_cc_toggle(0);
     }
     if (is_top_button_pressed(M_2)) {
-        gmaj_toggle_cc(1);
+        gmaj_cc_toggle(1);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_2) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(1);
+        gmaj_cc_toggle(1);
     }
     if (is_top_button_pressed(M_3)) {
-        gmaj_toggle_cc(2);
+        gmaj_cc_toggle(2);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_3) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(2);
+        gmaj_cc_toggle(2);
     }
     if (is_top_button_pressed(M_4)) {
-        gmaj_toggle_cc(3);
+        gmaj_cc_toggle(3);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_4) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(3);
+        gmaj_cc_toggle(3);
     }
     if (is_top_button_pressed(M_5)) {
-        gmaj_toggle_cc(4);
+        gmaj_cc_toggle(4);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_5) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(4);
+        gmaj_cc_toggle(4);
     }
     if (is_top_button_pressed(M_6)) {
-        gmaj_toggle_cc(5);
+        gmaj_cc_toggle(5);
         timer_held_fx = 1;
     } else if (is_top_button_released(M_6) && is_timer_elapsed(fx)) {
         timer_held_fx = 0;
-        gmaj_toggle_cc(5);
+        gmaj_cc_toggle(5);
     }
 
     // handle bottom 6 amp selector buttons:
@@ -1320,8 +1319,6 @@ void handle_mode_PROGRAMMING(void) {
         switch_setlist_mode((setlist_mode ^ 1));
     }
     if (is_top_button_pressed(M_2)) {
-        // Enter scene design mode:
-        switch_mode(MODE_SCENE_DESIGN);
     }
     if (is_top_button_pressed(M_3)) {
     }
@@ -1409,79 +1406,71 @@ void handle_mode_PROGRAMMING(void) {
     }
 }
 
-void handle_mode_SCENE_DESIGN(void) {
-    // Exit scene design when CANCEL button is pressed:
-    if (is_pressed_cancel()) {
-        switch_mode(mode_last);
+static void fx_button_logic(u8 btn_mask, u8 fx_idx) {
+    if (is_top_button_pressed(btn_mask)) {
+        gmaj_cc_toggle(fx_idx);
+        start_timer(fx);
+    } else if (is_top_button_released(btn_mask) && is_timer_elapsed(fx)) {
+        reset_timer(fx);
+        gmaj_cc_toggle(fx_idx);
     }
+}
 
-    // Select channel to reprogram:
+void handle_mode_SCENE_DESIGN(void) {
+    // handle top 8 FX block buttons:
+    fx_button_logic(M_1, 0);
+    fx_button_logic(M_2, 1);
+    fx_button_logic(M_3, 2);
+    fx_button_logic(M_4, 3);
+    fx_button_logic(M_5, 4);
+    fx_button_logic(M_6, 5);
+    fx_button_logic(M_7, 6);
+    fx_button_logic(M_8, 7);
+
+    // Update amp channel:
     if (is_bot_button_pressed(M_1)) {
-        scene = 0;
+        scene_update(scene, 0, pr_out_level[scene]);
         scene_activate();
     }
     if (is_bot_button_pressed(M_2)) {
-        scene = 1;
+        scene_update(scene, 1, pr_out_level[scene]);
         scene_activate();
     }
     if (is_bot_button_pressed(M_3)) {
-        scene = 2;
+        scene_update(scene, 2, pr_out_level[scene]);
         scene_activate();
     }
     if (is_bot_button_pressed(M_4)) {
-        scene = 3;
+        scene_update(scene, pr_rjm[scene], pr_out_level[scene] - (s8)1);
         scene_activate();
     }
     if (is_bot_button_pressed(M_5)) {
-        scene = 4;
+        scene_update(scene, pr_rjm[scene], pr_out_level[scene] + (s8)1);
         scene_activate();
     }
     if (is_bot_button_pressed(M_6)) {
-        scene = 5;
+        // Toggle between +3 and 0:
+        if (pr_out_level[scene] != 3) {
+            scene_update(scene, pr_rjm[scene], 3);
+        } else {
+            scene_update(scene, pr_rjm[scene], 0);
+        }
         scene_activate();
     }
 
-    // Choose which amp channel to reprogram as:
-    if (is_top_button_pressed(M_1)) {
-        scene_update(scene, 0, 0);
-    }
-    if (is_top_button_pressed(M_2)) {
-        scene_update(scene, 0, +5);
-    }
-    if (is_top_button_pressed(M_3)) {
-        scene_update(scene, 1, 0);
-    }
-    if (is_top_button_pressed(M_4)) {
-        scene_update(scene, 1, +5);
-    }
-    if (is_top_button_pressed(M_5)) {
-        scene_update(scene, 2, 0);
-    }
-    if (is_top_button_pressed(M_6)) {
-        scene_update(scene, 2, +5);
-    }
-
-    // STORE released after timeout?
-    if (is_pressed_store()) {
-        // start timer for STORE:
-        timer_held_tapstore = 1;
-    } else if (is_held_store() && is_timer_elapsed(tapstore)) {
+    // SAVE pressed:
+    if (is_bot_button_pressed(M_7)) {
         // STORE:
         store_program_state();
         // flash LEDs for 800ms:
         timeout_flash = 80;
-        // disable STORE timer:
-        timer_held_tapstore = 0;
-    } else if (is_released_store()) {
-        timer_held_tapstore = 0;
+        // Back to previous mode:
+        switch_mode(mode_last);
     }
-
-    // NEXT/PREV inc/dec Out Level:
-    if (is_pressed_next()) {
-        scene_update(scene, pr_rjm[scene], pr_out_level[scene] + 1);
-    }
-    if (is_pressed_prev()) {
-        scene_update(scene, pr_rjm[scene], pr_out_level[scene] - 1);
+    // EXIT pressed:
+    if (is_bot_button_pressed(M_8)) {
+        // Back to previous mode:
+        switch_mode(mode_last);
     }
 }
 
