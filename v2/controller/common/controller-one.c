@@ -470,6 +470,26 @@ static void update_effects_MIDI_state(void) {
 #endif
 }
 
+static void scene_activate_level(void) {
+	u8 max_level;
+
+	// Max boost is +6dB
+	// Send the out level to the G-Major as Global-In Level:
+	max_level = pr_out_level[scene] + 121;
+	if (max_level > 127) max_level = 127;
+	if (max_level < 0) max_level = 0;
+	midi_send_cmd2(0xB, gmaj_midi_channel, gmaj_cc_global_in_level, max_level);
+
+	update_lcd();
+}
+
+static void scene_activate_channel(void) {
+	// Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
+	midi_send_cmd1(0xC, rjm_midi_channel, (pr_rjm[scene] << 1));
+
+	update_lcd();
+}
+
 static void scene_activate(void) {
     u8 i;
     u8 max_level;
@@ -494,12 +514,7 @@ static void scene_activate(void) {
     // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
     midi_send_cmd1(0xC, rjm_midi_channel, (pr_rjm[scene] << 1));
 
-    // Max boost is +6dB
-    // Send the out level to the G-Major as Global-In Level:
-    max_level = pr_out_level[scene] + 121;
-    if (max_level > 127) max_level = 127;
-    if (max_level < 0) max_level = 0;
-    midi_send_cmd2(0xB, gmaj_midi_channel, gmaj_cc_global_in_level, max_level);
+	scene_activate_level();
 
     // Send MIDI effects enable commands and set effects LEDs:
     update_effects_MIDI_state();
@@ -574,31 +589,41 @@ static void switch_mode(u8 new_mode) {
     update_lcd();
 }
 
-static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
-    u8 desc = pr.scene_desc[preset];
+static void scene_update_channel(u8 new_rjm_channel) {
+    u8 desc = pr.scene_desc[scene];
 
     desc &= ~rjm_channel_mask;
     desc |= new_rjm_channel & rjm_channel_mask;
 
-    // Calculate 5-bit level:
-    if (out_level < -25) out_level = -25;
-    else if (out_level > 6) out_level = 6;
-
-    // Set the bits in the descriptor:
-    desc &= ~scene_level_mask;
-    desc |= (u8)((out_level + scene_level_offset) & 31) << scene_level_shr;
-
     // Update program data to be written back to flash:
-    pr.scene_desc[preset] = desc;
+    pr.scene_desc[scene] = desc;
 
     // Update calculated data:
-    pr_rjm[preset] = new_rjm_channel;
-    pr_out_level[preset] = out_level;
+    pr_rjm[scene] = new_rjm_channel;
+    live_pr_rjm[scene] = pr_rjm[scene];
 
-    live_pr_rjm[preset] = pr_rjm[preset];
-    live_pr_out_level[preset] = pr_out_level[preset];
+    scene_activate_channel();
+}
 
-    scene_activate();
+static void scene_update_level(s8 out_level) {
+	u8 desc = pr.scene_desc[scene];
+
+	// Calculate 5-bit level:
+	if (out_level < -25) out_level = -25;
+	else if (out_level > 6) out_level = 6;
+
+	// Set the bits in the descriptor:
+	desc &= ~scene_level_mask;
+	desc |= (u8)((out_level + scene_level_offset) & 31) << scene_level_shr;
+
+	// Update program data to be written back to flash:
+	pr.scene_desc[scene] = desc;
+
+	// Update calculated data:
+	pr_out_level[scene] = out_level;
+	live_pr_out_level[scene] = out_level;
+
+	scene_activate_level();
 }
 
 // ------------------------- Actual controller logic -------------------------
@@ -1429,33 +1454,27 @@ void handle_mode_SCENE_DESIGN(void) {
 
     // Update amp channel:
     if (is_bot_button_pressed(M_1)) {
-        scene_update(scene, 0, pr_out_level[scene]);
-        scene_activate();
+        scene_update_channel(0);
     }
     if (is_bot_button_pressed(M_2)) {
-        scene_update(scene, 1, pr_out_level[scene]);
-        scene_activate();
+        scene_update_channel(1);
     }
     if (is_bot_button_pressed(M_3)) {
-        scene_update(scene, 2, pr_out_level[scene]);
-        scene_activate();
+        scene_update_channel(2);
     }
     if (is_bot_button_pressed(M_4)) {
-        scene_update(scene, pr_rjm[scene], pr_out_level[scene] - (s8)1);
-        scene_activate();
+		scene_update_level(pr_out_level[scene] - (s8)1);
     }
     if (is_bot_button_pressed(M_5)) {
-        scene_update(scene, pr_rjm[scene], pr_out_level[scene] + (s8)1);
-        scene_activate();
+		scene_update_level(pr_out_level[scene] + (s8)1);
     }
     if (is_bot_button_pressed(M_6)) {
         // Toggle between +3 and 0:
         if (pr_out_level[scene] != 3) {
-            scene_update(scene, pr_rjm[scene], 3);
+			scene_update_level(3);
         } else {
-            scene_update(scene, pr_rjm[scene], 0);
+			scene_update_level(0);
         }
-        scene_activate();
     }
 
     // SAVE pressed:
