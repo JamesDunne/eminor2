@@ -4,12 +4,14 @@
 
 Debug/
 Release/
+x64/
 *.sdf
 *.opensdf
 *.ilk
 *.exe
 *.pdb
 *.suo
+*.iml
 
 dist/
 build/
