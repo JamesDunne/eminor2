@@ -268,7 +268,7 @@ function mousedown(e) {
 
     // FF does not have offsetX/Y pairs.
     // e.offsetX, e.offsetY is relative mouse position from top-left of canvas:
-    var hasOffset = e.hasOwnProperty('offsetX'),
+    var hasOffset = e.offsetX != undefined,
         // TODO: should really recurse into e.target for a general solution
         ex = hasOffset ? e.offsetX : (e.layerX - e.target.offsetLeft),
         ey = hasOffset ? e.offsetY : (e.layerY - e.target.offsetTop);
