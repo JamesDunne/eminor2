@@ -186,7 +186,7 @@ u8 next_gmaj_program;
 u8 scene, live_scene;
 
 // Current program data:
-struct program pr;
+struct program pr, live_pr;
 // Decoded RJM channels (0-based channel number, alternating SOLO modes):
 u8 pr_rjm[6], live_pr_rjm[6];
 s8 pr_out_level[6], live_pr_out_level[6];
@@ -289,8 +289,12 @@ void load_program_state(void) {
 #else
     u8 i;
 
-    // Load effects on/off state data from persistent storage:
-    flash_load((u16)next_gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+	if (next_gmaj_program == gmaj_program) {
+		pr = live_pr;
+	} else {
+		// Load effects on/off state data from persistent storage:
+		flash_load((u16)next_gmaj_program * sizeof(struct program), sizeof(struct program), (u8 *)&pr);
+	}
 
     if (pr.name[0] == 0) {
         // Empty program name? That signifies a zeroed-out program. Let's set up some reasonable defaults:
@@ -407,6 +411,7 @@ static void gmaj_cc_toggle(u8 idx) {
     // Send MIDI command:
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
 
+	live_pr = pr;
     update_lcd();
 }
 
@@ -479,15 +484,11 @@ static void scene_activate_level(void) {
 	if (max_level > 127) max_level = 127;
 	if (max_level < 0) max_level = 0;
 	midi_send_cmd2(0xB, gmaj_midi_channel, gmaj_cc_global_in_level, max_level);
-
-	update_lcd();
 }
 
 static void scene_activate_channel(void) {
 	// Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
 	midi_send_cmd1(0xC, rjm_midi_channel, (pr_rjm[scene] << 1));
-
-	update_lcd();
 }
 
 static void scene_activate(void) {
@@ -505,7 +506,8 @@ static void scene_activate(void) {
         gmaj_program = next_gmaj_program;
     }
 
-    live_scene = scene;
+	live_pr = pr;
+	live_scene = scene;
     for (i = 0; i < 6; i++) {
         live_pr_rjm[i] = pr_rjm[i];
         live_pr_out_level[i] = pr_out_level[i];
@@ -602,7 +604,10 @@ static void scene_update_channel(u8 new_rjm_channel) {
     pr_rjm[scene] = new_rjm_channel;
     live_pr_rjm[scene] = pr_rjm[scene];
 
+	live_pr = pr;
     scene_activate_channel();
+
+	update_lcd();
 }
 
 static void scene_update_level(s8 out_level) {
@@ -623,7 +628,10 @@ static void scene_update_level(s8 out_level) {
 	pr_out_level[scene] = out_level;
 	live_pr_out_level[scene] = out_level;
 
+	live_pr = pr;
 	scene_activate_level();
+
+	update_lcd();
 }
 
 // ------------------------- Actual controller logic -------------------------
@@ -1087,54 +1095,28 @@ static void calc_leds(void) {
     send_leds();
 }
 
+static void fx_button_logic(u8 btn_mask, u8 fx_idx) {
+	if (is_top_button_pressed(btn_mask)) {
+		gmaj_cc_toggle(fx_idx);
+		start_timer(fx);
+	}
+	else if (is_top_button_released(btn_mask) && is_timer_elapsed(fx)) {
+		reset_timer(fx);
+		gmaj_cc_toggle(fx_idx);
+	}
+}
+
 void handle_mode_LIVE(void) {
     // handle top 6 FX block buttons:
-    if (is_top_button_pressed(M_1)) {
-        gmaj_cc_toggle(0);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_1) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(0);
-    }
-    if (is_top_button_pressed(M_2)) {
-        gmaj_cc_toggle(1);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_2) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(1);
-    }
-    if (is_top_button_pressed(M_3)) {
-        gmaj_cc_toggle(2);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_3) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(2);
-    }
-    if (is_top_button_pressed(M_4)) {
-        gmaj_cc_toggle(3);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_4) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(3);
-    }
-    if (is_top_button_pressed(M_5)) {
-        gmaj_cc_toggle(4);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_5) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(4);
-    }
-    if (is_top_button_pressed(M_6)) {
-        gmaj_cc_toggle(5);
-        timer_held_fx = 1;
-    } else if (is_top_button_released(M_6) && is_timer_elapsed(fx)) {
-        timer_held_fx = 0;
-        gmaj_cc_toggle(5);
-    }
+	fx_button_logic(M_1, 0);
+	fx_button_logic(M_2, 1);
+	fx_button_logic(M_3, 2);
+	fx_button_logic(M_4, 3);
+	fx_button_logic(M_5, 4);
+	fx_button_logic(M_6, 5);
 
-    // handle bottom 6 amp selector buttons:
-
-    // hold down button to enter scene design mode to adjust output volume and channels.
+	// handle bottom 6 amp selector buttons:
+	// hold down button to enter scene design mode to adjust output volume and channels.
 
     if (is_bot_button_pressed(M_1)) {
         set_rjm_channel(0);
@@ -1292,155 +1274,6 @@ void handle_mode_LIVE(void) {
     }
 }
 
-// Utility function to cut current setlist entry out:
-static void cut_setlist_entry(void) {
-    u8 i;
-
-    if (slp >= sl.count) return;
-    if (sl.count <= 0) return;
-
-    for (i = slp+1; i < sl.count; i++) {
-        sl.entries[i-1] = sl.entries[i];
-    }
-    sl.count--;
-}
-
-// Mode 1 is activated by holding down PROG while in mode 0.
-void handle_mode_PROGRAMMING(void) {
-    // Exit programming when CANCEL button is pressed:
-    if (is_pressed_cancel()) {
-        switch_mode(MODE_LIVE);
-    }
-
-    // handle bottom 6 amp selector buttons:
-    if (is_bot_button_pressed(M_1)) {
-        set_rjm_channel(0);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_2)) {
-        set_rjm_channel(1);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_3)) {
-        set_rjm_channel(2);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_4)) {
-        set_rjm_channel(3);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_5)) {
-        set_rjm_channel(4);
-        reset_tuner_mute();
-    }
-    if (is_bot_button_pressed(M_6)) {
-        set_rjm_channel(5);
-        reset_tuner_mute();
-    }
-
-    // Switch setlist/program modes:
-    if (is_top_button_pressed(M_1)) {
-        // Toggle setlist/program mode:
-        switch_setlist_mode((setlist_mode ^ 1));
-    }
-    if (is_top_button_pressed(M_2)) {
-    }
-    if (is_top_button_pressed(M_3)) {
-    }
-    if (is_top_button_pressed(M_4)) {
-    }
-    if (is_top_button_pressed(M_5)) {
-        // Cut current setlist entry and shift all items back:
-        if (setlist_mode == 1) {
-            // TODO: confirm cut.
-            cut_setlist_entry();
-            set_gmaj_program();
-        }
-    }
-    if (is_top_button_pressed(M_6)) {
-        if (setlist_mode == 1) {
-            // Swap current setlist entry with selected one:
-            swap_slp = slp;
-            switch_mode(MODE_SETLIST_REORDER);
-            update_lcd();
-        }
-    }
-
-    // STORE released after timeout?
-    if (is_pressed_store()) {
-        // start timer for STORE:
-        timer_held_tapstore = 1;
-    } else if (is_held_store() && is_timer_elapsed(tapstore)) {
-        // STORE:
-        store_program_state();
-        // flash LEDs for 800ms:
-        timeout_flash = 80;
-        // disable STORE timer:
-        timer_held_tapstore = 0;
-    } else if (is_released_store()) {
-        timer_held_tapstore = 0;
-    }
-
-    // NEXT/PREV change setlists:
-    if (setlist_mode == 0) {
-        // Program mode:
-
-        // NEXT
-        if (is_pressed_next()) {
-            timer_held_nextprev = 1;
-            prog_next();
-        } else if (is_released_next()) {
-            timer_held_nextprev = 0;
-        } else if (is_held_next()) {
-            if (timer_looped_nextprev) {
-                timer_looped_nextprev = 0;
-                prog_next();
-            }
-        }
-
-        // PREV
-        if (is_pressed_prev()) {
-            timer_held_nextprev = 1;
-            prog_prev();
-        } else if (is_released_prev()) {
-            timer_held_nextprev = 0;
-        } else if (is_held_prev()) {
-            if (timer_looped_nextprev) {
-                timer_looped_nextprev = 0;
-                prog_prev();
-            }
-        }
-    } else {
-        // Setlist mode:
-
-        if (is_pressed_next()) {
-            // Next setlist:
-            if (sli < 31) {
-                sli++;
-                switch_setlist_mode(setlist_mode);
-            }
-        }
-
-        if (is_pressed_prev()) {
-            // Prev setlist:
-            if (sli > 0) {
-                sli--;
-                switch_setlist_mode(setlist_mode);
-            }
-        }
-    }
-}
-
-static void fx_button_logic(u8 btn_mask, u8 fx_idx) {
-    if (is_top_button_pressed(btn_mask)) {
-        gmaj_cc_toggle(fx_idx);
-        start_timer(fx);
-    } else if (is_top_button_released(btn_mask) && is_timer_elapsed(fx)) {
-        reset_timer(fx);
-        gmaj_cc_toggle(fx_idx);
-    }
-}
-
 void handle_mode_SCENE_DESIGN(void) {
     // handle top 8 FX block buttons:
     fx_button_logic(M_1, 0);
@@ -1491,6 +1324,152 @@ void handle_mode_SCENE_DESIGN(void) {
         // Back to previous mode:
         switch_mode(mode_last);
     }
+}
+
+// Utility function to cut current setlist entry out:
+static void cut_setlist_entry(void) {
+	u8 i;
+
+	if (slp >= sl.count) return;
+	if (sl.count <= 0) return;
+
+	for (i = slp + 1; i < sl.count; i++) {
+		sl.entries[i - 1] = sl.entries[i];
+	}
+	sl.count--;
+}
+
+// Mode 1 is activated by holding down PROG while in mode 0.
+void handle_mode_PROGRAMMING(void) {
+	// Exit programming when CANCEL button is pressed:
+	if (is_pressed_cancel()) {
+		switch_mode(MODE_LIVE);
+	}
+
+	// handle bottom 6 amp selector buttons:
+	if (is_bot_button_pressed(M_1)) {
+		set_rjm_channel(0);
+		reset_tuner_mute();
+	}
+	if (is_bot_button_pressed(M_2)) {
+		set_rjm_channel(1);
+		reset_tuner_mute();
+	}
+	if (is_bot_button_pressed(M_3)) {
+		set_rjm_channel(2);
+		reset_tuner_mute();
+	}
+	if (is_bot_button_pressed(M_4)) {
+		set_rjm_channel(3);
+		reset_tuner_mute();
+	}
+	if (is_bot_button_pressed(M_5)) {
+		set_rjm_channel(4);
+		reset_tuner_mute();
+	}
+	if (is_bot_button_pressed(M_6)) {
+		set_rjm_channel(5);
+		reset_tuner_mute();
+	}
+
+	// Switch setlist/program modes:
+	if (is_top_button_pressed(M_1)) {
+		// Toggle setlist/program mode:
+		switch_setlist_mode((setlist_mode ^ 1));
+	}
+	if (is_top_button_pressed(M_2)) {
+	}
+	if (is_top_button_pressed(M_3)) {
+	}
+	if (is_top_button_pressed(M_4)) {
+	}
+	if (is_top_button_pressed(M_5)) {
+		// Cut current setlist entry and shift all items back:
+		if (setlist_mode == 1) {
+			// TODO: confirm cut.
+			cut_setlist_entry();
+			set_gmaj_program();
+		}
+	}
+	if (is_top_button_pressed(M_6)) {
+		if (setlist_mode == 1) {
+			// Swap current setlist entry with selected one:
+			swap_slp = slp;
+			switch_mode(MODE_SETLIST_REORDER);
+			update_lcd();
+		}
+	}
+
+	// STORE released after timeout?
+	if (is_pressed_store()) {
+		// start timer for STORE:
+		timer_held_tapstore = 1;
+	}
+	else if (is_held_store() && is_timer_elapsed(tapstore)) {
+		// STORE:
+		store_program_state();
+		// flash LEDs for 800ms:
+		timeout_flash = 80;
+		// disable STORE timer:
+		timer_held_tapstore = 0;
+	}
+	else if (is_released_store()) {
+		timer_held_tapstore = 0;
+	}
+
+	// NEXT/PREV change setlists:
+	if (setlist_mode == 0) {
+		// Program mode:
+
+		// NEXT
+		if (is_pressed_next()) {
+			timer_held_nextprev = 1;
+			prog_next();
+		}
+		else if (is_released_next()) {
+			timer_held_nextprev = 0;
+		}
+		else if (is_held_next()) {
+			if (timer_looped_nextprev) {
+				timer_looped_nextprev = 0;
+				prog_next();
+			}
+		}
+
+		// PREV
+		if (is_pressed_prev()) {
+			timer_held_nextprev = 1;
+			prog_prev();
+		}
+		else if (is_released_prev()) {
+			timer_held_nextprev = 0;
+		}
+		else if (is_held_prev()) {
+			if (timer_looped_nextprev) {
+				timer_looped_nextprev = 0;
+				prog_prev();
+			}
+		}
+	}
+	else {
+		// Setlist mode:
+
+		if (is_pressed_next()) {
+			// Next setlist:
+			if (sli < 31) {
+				sli++;
+				switch_setlist_mode(setlist_mode);
+			}
+		}
+
+		if (is_pressed_prev()) {
+			// Prev setlist:
+			if (sli > 0) {
+				sli--;
+				switch_setlist_mode(setlist_mode);
+			}
+		}
+	}
 }
 
 void handle_mode_SETLIST_REORDER(void) {
