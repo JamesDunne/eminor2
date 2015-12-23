@@ -350,6 +350,10 @@ void load_program_state(void) {
         pr_rjm[i] = new_rjm_actual;
 		pr_out_level[i] = out_level;
     }
+
+	if (next_gmaj_program == gmaj_program) {
+		scene = live_scene;
+	}
 #endif
 }
 
