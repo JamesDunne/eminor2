@@ -67,7 +67,7 @@ struct program {
 // 5-bit signed values
 #define scene_level_offset  9
 #define scene_level_0    ((( 0 + scene_level_offset) & 31) << 2)
-#define scene_level_pos4 (((+5 + scene_level_offset) & 31) << 2)
+#define scene_level_pos3 (((+3 + scene_level_offset) & 31) << 2)
 #define scene_level_neg3 (((-3 + scene_level_offset) & 31) << 2)
 
 #define scene_initial    0x80
@@ -304,11 +304,11 @@ void load_program_state(void) {
         pr.name[4] = 0;
 
         pr.scene_desc[0] = rjm_channel_1 | scene_level_0;
-        pr.scene_desc[1] = rjm_channel_1 | scene_level_pos4;
+        pr.scene_desc[1] = rjm_channel_1 | scene_level_pos3;
         pr.scene_desc[2] = rjm_channel_2 | scene_level_0;
-        pr.scene_desc[3] = rjm_channel_2 | scene_level_pos4;
+        pr.scene_desc[3] = rjm_channel_2 | scene_level_0;
         pr.scene_desc[4] = rjm_channel_3 | scene_level_0 | scene_initial;
-        pr.scene_desc[5] = rjm_channel_3 | scene_level_pos4;
+        pr.scene_desc[5] = rjm_channel_3 | scene_level_pos3;
 
         pr.fx[0] = (fxm_compressor);
         pr.fx[1] = (fxm_compressor);
