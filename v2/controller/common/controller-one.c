@@ -1024,6 +1024,11 @@ static void update_lcd(void) {
             lcd_rows[0][i] = '*';
         }
     }
+    if (mode == MODE_SCENE_DESIGN) {
+        for (i = 16; i < 20; i++) {
+            lcd_rows[0][i] = 'D';
+        }
+    }
 
     lcd_updated_all();
 #endif
