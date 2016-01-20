@@ -388,6 +388,60 @@ sets:
 
   - date: "2015-12-26"
     venue: The Loop
+    songs:
+      - Everything Zen
+      - Song 2
+      - Dammit
+      
+      - 'BREAK: INTRO BREAK'
+      
+      - Brain Stew
+      - Hey Jealousy
+      - Beautiful Disaster
+      - Zero
+      
+      - 'BREAK: DOWNTUNING'
+      
+      - The Middle
+      - Monkey Wrench
+      - Lump
+      
+      - 'BREAK: UPTUNING'
+      
+      - Cumbersome
+      - Fuel
+      - When I Come Around
+      
+      - 'BREAK: BREAK'
+      
+      - Buddy Holly
+      - My Hero
+      - Crawling in the Dark
+      
+      - 'BREAK: BREAK'
+      
+      - Plush
+      - My Own Worst Enemy
+      - Bullet With Butterfly Wings
+      
+      - 'BREAK: BREAK'
+      
+      - Bound for the Floor
+      - Sex Type Thing
+      - Machinehead
+      
+      - 'BREAK: BREAK'
+      
+      - Hash Pipe
+      - Holiday
+      - Enter Sandman
+      
+      - 'BREAK: ENCORE?'
+      
+      - For Whom the Bell Tolls
+
+  - date: "2016-01-22"
+    venue: MT Barrels
     active: true
     print: true
     songs:
@@ -425,6 +479,7 @@ sets:
       - Plush
       - My Own Worst Enemy
       - Bullet With Butterfly Wings
+      - What I Got
       
       - 'BREAK: BREAK'
       

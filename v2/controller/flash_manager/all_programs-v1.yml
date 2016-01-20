@@ -159,10 +159,10 @@ programs:
   scenes:
   - channel: 1
     level: 0
-    fx: [gate, compressor]
+    fx: [compressor]
   - channel: 1
     level: 3
-    fx: [gate, compressor]
+    fx: [compressor, delay, chorus]
   - channel: 2
     level: 0
     fx: [gate, compressor, eq, delay]
@@ -792,7 +792,7 @@ programs:
     level: 0
     fx: [gate]
 - name: Bells
-  gmaj_program: 32
+  gmaj_program: 37
   initial_scene: 5
   scenes:
   - channel: 1
@@ -814,7 +814,7 @@ programs:
     level: 3
     fx: [gate, delay]
 - name: Fuel
-  gmaj_program: 32
+  gmaj_program: 38
   initial_scene: 5
   scenes:
   - channel: 1
@@ -835,3 +835,25 @@ programs:
   - channel: 2
     level: 3
     fx: [gate]
+- name: What I Got
+  gmaj_program: 39
+  initial_scene: 1
+  scenes:
+  - channel: 1
+    level: 0
+    fx: [compressor]
+  - channel: 1
+    level: 3
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq, delay]
+  - channel: 2
+    level: 3
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 0
+    fx: [gate, compressor, eq]
+  - channel: 2
+    level: 3
+    fx: [gate, compressor, eq, delay]
