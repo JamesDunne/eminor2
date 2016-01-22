@@ -200,6 +200,8 @@ u8 slp, last_slp;
 
 u8 swap_slp;
 
+u8 last_level;
+
 #ifdef FEAT_LCD
 u8 *lcd_rows[LCD_ROWS];
 #endif
@@ -396,29 +398,6 @@ static void reset_tuner_mute(void) {
     }
 }
 
-// Toggle a g-major CC effect
-static void gmaj_cc_toggle(u8 idx) {
-    u8 togglevalue = 0x00;
-    u8 idxMask;
-
-    // Make sure we don't go out of range:
-    assert(idx < 8);
-
-    idxMask = ((u8)1 << idx);
-
-    // Toggle on/off the selected continuous controller:
-    pr.fx[scene] ^= idxMask;
-
-    // Determine the MIDI value to use depending on the newly toggled state:
-    if (pr.fx[scene] & idxMask) togglevalue = 0x7F;
-
-    // Send MIDI command:
-    gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
-
-	live_pr = pr;
-    update_lcd();
-}
-
 static void update_effects_MIDI_state(void) {
 #if FX_ASSUME_OFF
     b8 n;
@@ -479,20 +458,58 @@ static void update_effects_MIDI_state(void) {
 #endif
 }
 
+static s8 fx_adjusted_out_level(u8 fx, s8 level) {
+	// Compensate by +2dB for volume loss of delay effect:
+	if ((fx & fxm_delay) == fxm_delay) {
+		return level + 2;
+	}
+	return level;
+}
+
 static void scene_activate_level(void) {
 	u8 max_level;
 
 	// Max boost is +6dB
 	// Send the out level to the G-Major as Global-In Level:
-	max_level = pr_out_level[scene] + 121;
+	max_level = fx_adjusted_out_level(pr.fx[scene], pr_out_level[scene]) + 121;
 	if (max_level > 127) max_level = 127;
 	if (max_level < 0) max_level = 0;
-	midi_send_cmd2(0xB, gmaj_midi_channel, gmaj_cc_global_in_level, max_level);
+
+	if (last_level != max_level) {
+		midi_send_cmd2(0xB, gmaj_midi_channel, gmaj_cc_global_in_level, max_level);
+		last_level = max_level;
+	}
 }
 
 static void scene_activate_channel(void) {
 	// Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
 	midi_send_cmd1(0xC, rjm_midi_channel, (pr_rjm[scene] << 1));
+}
+
+// Toggle a g-major CC effect
+static void gmaj_cc_toggle(u8 idx) {
+	u8 togglevalue = 0x00;
+	u8 idxMask;
+
+	// Make sure we don't go out of range:
+	assert(idx < 8);
+
+	idxMask = ((u8)1 << idx);
+
+	// Toggle on/off the selected continuous controller:
+	pr.fx[scene] ^= idxMask;
+
+	// Determine the MIDI value to use depending on the newly toggled state:
+	if (pr.fx[scene] & idxMask) togglevalue = 0x7F;
+
+	// Send MIDI command:
+	gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
+
+	// Adjust level if necessary:
+	scene_activate_level();
+
+	live_pr = pr;
+	update_lcd();
 }
 
 static void scene_activate(void) {
@@ -660,6 +677,8 @@ void controller_init(void) {
 
     curr_leds = 0x0000U;
     last_leds = 0xFFFFU;
+
+	last_level = 0;
 
     init_timer(tapstore);
     init_timer(fx);
@@ -992,11 +1011,11 @@ static void update_lcd(void) {
 
         if (mode == MODE_SCENE_DESIGN) {
             ch = pr_rjm[scene];
-            out_level = pr_out_level[scene];
+            out_level = fx_adjusted_out_level(pr.fx[scene], pr_out_level[scene]);
             pos_level = +out_level;
         } else {
             ch = live_pr_rjm[live_scene];
-            out_level = live_pr_out_level[live_scene];
+            out_level = fx_adjusted_out_level(pr.fx[live_scene], live_pr_out_level[live_scene]);
             pos_level = +out_level;
         }
 
