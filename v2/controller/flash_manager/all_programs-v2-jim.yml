@@ -1,5 +1,8 @@
 programs:
 - name: Monkeywrench
+  altnames:
+  - Monkey wrench
+  starts: Bremer 4 ct
   gmaj_program: 1
   initial_scene: 6
   scenes:
@@ -12,7 +15,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -20,58 +23,24 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 3
-    axe_scene: 2
-    fx: [gate, delay]
-- name: Even Flow
-  gmaj_program: 2
-  initial_scene: 6
-  scenes:
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 3
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, delay]
 - name: Zero
+  altnames: []
+  starts: Jim
   gmaj_program: 3
   initial_scene: 6
   scenes:
@@ -84,66 +53,32 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, delay]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, delay, pitch]
-- name: Wonderwall
-  gmaj_program: 4
-  initial_scene: 5
-  scenes:
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [gate, compressor]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [gate, compressor]
-  - channel: 1
-    level: 3
-    axe_scene: 1
-    fx: [gate, compressor]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq, delay]
-  - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate, compressor, eq, delay]
 - name: Buddy Holly
+  altnames: []
+  starts: Glaz+Bremer
   gmaj_program: 5
   initial_scene: 6
   scenes:
@@ -156,7 +91,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -164,22 +99,24 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, delay]
 - name: Plush
+  altnames: []
+  starts: Bremer 2 ct
   gmaj_program: 6
   initial_scene: 6
   scenes:
@@ -192,7 +129,7 @@ programs:
     axe_scene: 1
     fx: [compressor, chorus]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor, chorus, eq, delay]
   - channel: 2
@@ -200,79 +137,44 @@ programs:
     axe_scene: 2
     fx: [gate, chorus, eq]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, chorus, eq, delay]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, chorus, eq]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, chorus, eq]
   - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, chorus, eq, delay]
-- name: Come Out and Play
-  gmaj_program: 7
-  initial_scene: 6
-  scenes:
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 3
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 3
-    axe_scene: 2
-    fx: [gate, delay]
 - name: Drive
+  altnames: []
   gmaj_program: 8
   initial_scene: 5
   scenes:
   - channel: 1
     level: 0
     axe_scene: 1
-    fx: [compressor]
+    fx: [gate, compressor]
   - channel: 1
     level: 0
     axe_scene: 1
-    fx: [compressor]
+    fx: [gate, compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
-    fx: [compressor, delay, chorus]
+    fx: [gate, compressor]
   - channel: 2
     level: 0
     axe_scene: 2
     fx: [gate, compressor, eq, delay]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, compressor, eq]
   - channel: 2
@@ -284,10 +186,12 @@ programs:
     axe_scene: 2
     fx: [gate, compressor, eq]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, compressor, eq, delay]
 - name: When I Come Around
+  altnames: []
+  starts: Jim
   gmaj_program: 9
   initial_scene: 6
   scenes:
@@ -300,7 +204,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -308,22 +212,24 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, delay]
 - name: Everything Zen
+  altnames: []
+  starts: Glaz
   gmaj_program: 10
   initial_scene: 8
   scenes:
@@ -336,7 +242,7 @@ programs:
     axe_scene: 1
     fx: []
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: []
   - channel: 2
@@ -356,10 +262,12 @@ programs:
     axe_scene: 2
     fx: [gate, eq]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, eq, delay]
 - name: Enter Sandman
+  altnames: []
+  starts: Glaz
   gmaj_program: 11
   initial_scene: 1
   scenes:
@@ -367,37 +275,39 @@ programs:
     level: 0
     axe_scene: 1
     fx: [compressor]
+  - channel: 3
+    level: 0
+    axe_scene: 3
+    fx: [gate]
+  - channel: 3
+    level: 4
+    axe_scene: 3
+    fx: [gate, delay]
+  - channel: 3
+    level: 1
+    axe_scene: 1
+    fx: [gate, delay]
   - channel: 1
     level: 0
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
-    axe_scene: 1
+    level: 0
+    axe_scene: 3
     fx: [compressor]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 3
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, delay]
 - name: Crawling in the Dark
+  altnames: []
+  starts: Jim
   gmaj_program: 12
-  initial_scene: 4
+  initial_scene: 6
   scenes:
   - channel: 1
     level: 0
@@ -408,30 +318,32 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 0
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
-    level: 2
-    axe_scene: 2
-    fx: [gate, filter, delay]
-  - channel: 2
-    level: 2
-    axe_scene: 2
-    fx: [gate, filter, delay]
-  - channel: 2
     level: 0
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
+  - channel: 3
+    level: 0
+    axe_scene: 3
+    fx: [gate]
+  - channel: 3
+    level: 4
+    axe_scene: 3
+    fx: [gate, delay]
 - name: Song 2
+  altnames: []
+  starts: Bremer
   gmaj_program: 13
   initial_scene: 1
   scenes:
@@ -449,25 +361,27 @@ programs:
     fx: [gate, compressor, eq]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 4
+    axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, compressor, eq]
 - name: Sex Type Thing
+  altnames: []
+  starts: Bremer 4 ct
   gmaj_program: 14
   initial_scene: 6
   scenes:
@@ -480,66 +394,32 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
-  - channel: 3
+  - channel: 2
     level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, delay]
-- name: Mr Jones
-  gmaj_program: 15
-  initial_scene: 5
-  scenes:
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [gate, compressor]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [gate, compressor]
-  - channel: 1
-    level: 3
-    axe_scene: 1
-    fx: [gate, compressor]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq, delay]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate, compressor, eq, delay]
 - name: Counting Blue Cars
+  altnames: []
+  starts: Bremer 4 ct
   gmaj_program: 16
   initial_scene: 6
   scenes:
@@ -552,30 +432,32 @@ programs:
     axe_scene: 1
     fx: [compressor, chorus, delay]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor, chorus, delay]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
+    fx: [gate]
+  - channel: 3
+    level: 4
+    axe_scene: 3
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, delay]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, delay]
   - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, delay]
 - name: In Bloom
+  altnames: []
+  starts: Bremer 4 ct
   gmaj_program: 17
   initial_scene: 1
   scenes:
@@ -588,30 +470,32 @@ programs:
     axe_scene: 1
     fx: [gate, compressor, eq]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [gate, compressor, eq]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 4
+    axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, compressor, eq]
   - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, compressor, eq]
 - name: Hash Pipe
+  altnames: []
+  starts: Bremer+Adam
   gmaj_program: 18
   initial_scene: 6
   scenes:
@@ -624,7 +508,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -632,22 +516,24 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
-  - channel: 2
-    level: 3
-    axe_scene: 2
+  - channel: 3
+    level: 4
+    axe_scene: 3
     fx: [gate, delay]
 - name: My Hero
+  altnames: []
+  starts: Bremer+Adam
   gmaj_program: 19
   initial_scene: 6
   scenes:
@@ -660,7 +546,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -668,22 +554,24 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 3
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate, delay]
 - name: Machinehead
+  altnames: []
+  starts: Jim
   gmaj_program: 20
   initial_scene: 6
   scenes:
@@ -696,7 +584,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -704,7 +592,7 @@ programs:
     axe_scene: 2
     fx: [gate, compressor, eq]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate, compressor, eq]
   - channel: 2
@@ -720,6 +608,8 @@ programs:
     axe_scene: 2
     fx: [gate, compressor, eq, delay]
 - name: Holiday
+  altnames: []
+  starts: Jim
   gmaj_program: 21
   initial_scene: 6
   scenes:
@@ -732,43 +622,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 3
-    axe_scene: 2
-    fx: [gate, delay]
-- name: Closing Time
-  gmaj_program: 22
-  initial_scene: 6
-  scenes:
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -776,22 +630,25 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 2
-    axe_scene: 2
-    fx: [gate, delay]
-  - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
-  - channel: 2
-    level: 3
-    axe_scene: 2
+  - channel: 3
+    level: 0
+    axe_scene: 3
+    fx: [gate]
+  - channel: 3
+    level: 4
+    axe_scene: 3
     fx: [gate, delay]
 - name: Brainstew
+  altnames:
+  - Brain stew
+  starts: Jim
   gmaj_program: 23
   initial_scene: 6
   scenes:
@@ -804,30 +661,32 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 0
+    level: 4
     axe_scene: 1
     fx: [compressor]
-  - channel: 3
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
     level: 0
     axe_scene: 2
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate]
 - name: Bound for the Floor
+  altnames: []
+  starts: Jim
   gmaj_program: 24
   initial_scene: 4
   scenes:
@@ -840,7 +699,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -860,46 +719,12 @@ programs:
     axe_scene: 2
     fx: [gate, delay, chorus]
   - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate, delay]
-- name: I Alone
-  gmaj_program: 25
-  initial_scene: 1
-  scenes:
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor, delay, chorus]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor, delay, chorus]
-  - channel: 1
-    level: 3
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Cumbersome
+  altnames: []
+  starts: Jim
   gmaj_program: 26
   initial_scene: 6
   scenes:
@@ -912,7 +737,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -920,7 +745,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 2
@@ -932,10 +757,12 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Lump
+  altnames: []
+  starts: Bremer+Glaz
   gmaj_program: 27
   initial_scene: 6
   scenes:
@@ -948,7 +775,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -956,7 +783,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 2
@@ -968,10 +795,12 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate]
 - name: Hey Jealousy
+  altnames: []
+  starts: Bremer 4 ct
   gmaj_program: 28
   initial_scene: 6
   scenes:
@@ -984,7 +813,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -992,7 +821,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 2
@@ -1004,10 +833,12 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Kryptonite
+  altnames: []
+  starts: Glaz
   gmaj_program: 29
   initial_scene: 1
   scenes:
@@ -1020,7 +851,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -1028,22 +859,24 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
-  - channel: 2
-    level: 3
-    axe_scene: 2
+  - channel: 3
+    level: 0
+    axe_scene: 4
     fx: [gate, delay]
 - name: Dammit
+  altnames: []
+  starts: Jim
   gmaj_program: 30
   initial_scene: 6
   scenes:
@@ -1056,7 +889,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -1064,7 +897,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 2
@@ -1076,10 +909,12 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Semi-charmed Life
+  altnames: []
+  starts: Bremer
   gmaj_program: 31
   initial_scene: 6
   scenes:
@@ -1092,7 +927,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -1100,7 +935,7 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
   - channel: 2
@@ -1112,10 +947,12 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: My Own Worst Enemy
+  altnames: []
+  starts: Jim
   gmaj_program: 32
   initial_scene: 6
   scenes:
@@ -1128,7 +965,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -1136,22 +973,24 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
-  - channel: 2
-    level: 0
-    axe_scene: 2
+  - channel: 3
+    level: 4
+    axe_scene: 3
     fx: [gate]
 - name: The Middle
+  altnames: []
+  starts: Glaz
   gmaj_program: 33
   initial_scene: 4
   scenes:
@@ -1164,7 +1003,7 @@ programs:
     axe_scene: 1
     fx: []
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: []
   - channel: 2
@@ -1172,22 +1011,24 @@ programs:
     axe_scene: 2
     fx: []
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: []
   - channel: 2
-    level: -1
-    axe_scene: 2
-    fx: [filter, delay]
-  - channel: 2
-    level: -1
+    level: -2
     axe_scene: 2
     fx: [filter, delay]
   - channel: 2
     level: 0
     axe_scene: 2
     fx: []
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: []
 - name: Bullet With Butterfly Wings
+  altnames: []
+  starts: Glaz
   gmaj_program: 34
   initial_scene: 1
   scenes:
@@ -1200,30 +1041,32 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 0
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 3
     level: -2
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, delay]
   - channel: 3
     level: -2
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, delay]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
   - channel: 3
-    level: 0
-    axe_scene: 2
+    level: 4
+    axe_scene: 3
     fx: [gate]
 - name: If You Could Only See
+  altnames: []
+  starts: Glaz
   gmaj_program: 35
   initial_scene: 8
   scenes:
@@ -1236,7 +1079,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -1256,10 +1099,12 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Beautiful Disaster
+  altnames: []
+  starts: Jim
   gmaj_program: 36
   initial_scene: 6
   scenes:
@@ -1272,7 +1117,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
@@ -1292,11 +1137,14 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
+    level: 4
     axe_scene: 2
     fx: [gate]
 - name: Bells
-  gmaj_program: 37
+  altnames:
+  - For Whom The Bell Tolls
+  starts: Bremer
+  gmaj_program: 1
   initial_scene: 6
   scenes:
   - channel: 1
@@ -1307,10 +1155,6 @@ programs:
     level: 0
     axe_scene: 1
     fx: [compressor]
-  - channel: 1
-    level: 3
-    axe_scene: 1
-    fx: [compressor]
   - channel: 2
     level: 0
     axe_scene: 2
@@ -1328,11 +1172,16 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate, delay]
+  - channel: 2
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Fuel
-  gmaj_program: 38
+  starts: Glaz
+  gmaj_program: 1
   initial_scene: 6
   scenes:
   - channel: 1
@@ -1343,10 +1192,6 @@ programs:
     level: 0
     axe_scene: 1
     fx: [compressor]
-  - channel: 1
-    level: 3
-    axe_scene: 1
-    fx: [compressor]
   - channel: 2
     level: 0
     axe_scene: 2
@@ -1364,42 +1209,10 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate]
-- name: What I Got
-  gmaj_program: 39
-  initial_scene: 1
-  scenes:
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 3
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 2
     level: 0
     axe_scene: 2
-    fx: [gate, compressor, eq, delay]
+    fx: [gate, delay]
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate, compressor, eq, delay]
+    fx: [gate, delay]
