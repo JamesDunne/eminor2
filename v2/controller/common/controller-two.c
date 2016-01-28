@@ -151,7 +151,7 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 // Hard-coded MIDI channel #s:
 #define gmaj_midi_channel   0
 #define rjm_midi_channel    1
-#define axe_midi_channel    3
+#define axe_midi_channel    2
 
 // G-major CC messages:
 #define gmaj_cc_taptempo        80
@@ -170,6 +170,8 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 // Axe-FX CC messages:
 #define axe_cc_taptempo         14
 #define axe_cc_tuner            15
+
+#define axe_cc_scene            34
 
 #define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
 #define is_held(rowname, mask) is_##rowname##_button_held(mask)
@@ -567,7 +569,7 @@ static void scene_activate(void) {
     // Send Axe-FX scene change:
     axe_scene = pr_axe_scene[scene];
     if (axe_scene != last_axe_scene) {
-        midi_send_cmd1(0xC, axe_midi_channel, axe_scene);
+		axe_cc_set(axe_cc_scene, axe_scene);
         last_axe_scene = axe_scene;
     }
 
