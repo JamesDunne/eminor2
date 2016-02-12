@@ -367,32 +367,32 @@ programs:
     level: 0
     axe_scene: 1
     fx: [compressor]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 3
+    level: 4
+    axe_scene: 2
+    fx: [gate, delay]
+  - channel: 3
+    level: 1
+    axe_scene: 1
+    fx: [gate, delay]
   - channel: 1
     level: 0
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
-    axe_scene: 1
+    level: 0
+    axe_scene: 2
     fx: [compressor]
   - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
   - channel: 3
-    level: 3
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
 - name: Crawling in the Dark
@@ -747,14 +747,16 @@ programs:
     level: 0
     axe_scene: 2
     fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
+  - notes: JD solo
+    channel: 3
     level: 3
     axe_scene: 2
     fx: [gate, delay]
+  - notes: MG solo
+    channel: 3
+    level: 0
+    axe_scene: 4
+    fx: [gate]
 - name: Closing Time
   gmaj_program: 22
   initial_scene: 6
@@ -1348,13 +1350,13 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 2
-    level: 0
+    level: 1
     axe_scene: 2
-    fx: [gate]
+    fx: [gate, delay]
   - channel: 2
-    level: 0
+    level: 1
     axe_scene: 2
-    fx: [gate]
+    fx: [gate, delay]
   - channel: 2
     level: 0
     axe_scene: 2
@@ -1380,7 +1382,7 @@ programs:
     axe_scene: 1
     fx: [compressor]
   - channel: 1
-    level: 3
+    level: 4
     axe_scene: 1
     fx: [compressor]
   - channel: 2
