@@ -442,8 +442,6 @@ sets:
 
   - date: "2016-01-22"
     venue: MT Barrels
-    active: true
-    print: true
     songs:
       - Everything Zen
       - Song 2
@@ -495,4 +493,53 @@ sets:
       
       - 'BREAK: ENCORE?'
       
+      - For Whom the Bell Tolls
+
+  - date: "2016-02-20"
+    venue: JD Muggs
+    active: true
+    print: true
+    songs:
+      - Holiday
+      - My Own Worst Enemy
+      - Zero
+      
+      - 'BREAK: INTRO'
+      
+      - Bound for the Floor
+      - Hey Jealousy
+      - Beautiful Disaster
+      
+      - 'BREAK: DOWNTUNE'
+      
+      - The Middle
+      - Monkey Wrench
+      
+      - 'BREAK: UPTUNE'
+      
+      - Song 2
+      - Brain Stew
+      - Dammit
+      
+      - 'BREAK: BREAK'
+      
+      - Machinehead
+      - Cumbersome
+      - Fuel
+      
+      - 'BREAK: BREAK'
+      
+      - Plush
+      - Hash Pipe
+      - Crawling in the Dark
+      
+      - 'BREAK: BREAK'
+      
+      - Buddy Holly
+      - What I Got
+      - Sex Type Thing
+      
+      - 'BREAK: GOODBYE'
+      
+      - Enter Sandman
       - For Whom the Bell Tolls
