@@ -437,15 +437,15 @@ programs:
   scenes:
   - channel: 1
     level: 0
-    axe_scene: 1
+    axe_scene: 2
     fx: [gate, compressor, eq]
-  - channel: 1
+  - channel: 3
     level: 0
-    axe_scene: 1
+    axe_scene: 2
     fx: [gate, compressor, eq]
-  - channel: 1
+  - channel: 3
     level: 0
-    axe_scene: 1
+    axe_scene: 2
     fx: [gate, compressor, eq]
   - channel: 3
     level: 0
@@ -627,23 +627,23 @@ programs:
     level: 3
     axe_scene: 1
     fx: [compressor]
-  - channel: 2
+  - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 3
     axe_scene: 2
     fx: [gate, delay]
