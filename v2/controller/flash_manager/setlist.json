@@ -37,15 +37,20 @@
         "starts": "Jim"
       },
       {
+        "i": 7,
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
+      },
+      {
         "breakText": "DOWNTUNE"
       },
       {
-        "i": 7,
+        "i": 8,
         "title": "The Middle",
         "starts": "Glaz"
       },
       {
-        "i": 8,
+        "i": 9,
         "title": "Monkeywrench",
         "starts": "Bremer 4 ct"
       },
@@ -53,17 +58,17 @@
         "breakText": "UPTUNE"
       },
       {
-        "i": 9,
+        "i": 10,
         "title": "Song 2",
         "starts": "Bremer"
       },
       {
-        "i": 10,
+        "i": 11,
         "title": "Brainstew",
         "starts": "Jim"
       },
       {
-        "i": 11,
+        "i": 12,
         "title": "Dammit",
         "starts": "Jim"
       },
@@ -71,17 +76,17 @@
         "breakText": "BREAK"
       },
       {
-        "i": 12,
+        "i": 13,
         "title": "Machinehead",
         "starts": "Jim"
       },
       {
-        "i": 13,
+        "i": 14,
         "title": "Cumbersome",
         "starts": "Jim"
       },
       {
-        "i": 14,
+        "i": 15,
         "title": "Fuel",
         "starts": "Glaz"
       },
@@ -89,27 +94,22 @@
         "breakText": "BREAK"
       },
       {
-        "i": 15,
+        "i": 16,
         "title": "Plush",
         "starts": "Bremer 2 ct"
       },
       {
-        "i": 16,
-        "title": "Hash Pipe",
-        "starts": "Bremer+Adam"
+        "i": 17,
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
       },
       {
-        "i": 17,
+        "i": 18,
         "title": "Crawling in the Dark",
         "starts": "Jim"
       },
       {
         "breakText": "BREAK"
-      },
-      {
-        "i": 18,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
       },
       {
         "i": 19,
