@@ -173,6 +173,9 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 
 #define axe_cc_scene            34
 
+// Add +1 (dB?) to gmajor in level to adjust for delay effect volume loss:
+#define delay_level_adjust      1
+
 #define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
 #define is_held(rowname, mask) is_##rowname##_button_held(mask)
 #define is_released(rowname, mask) is_##rowname##_button_released(mask)
@@ -292,13 +295,12 @@ static s8 ritoa(u8 *s, u8 n, s8 i);
 static void send_leds(void);
 static void update_lcd(void);
 
-// Determine if a footswitch was pressed
 static u8 is_top_button_pressed(u8 mask) {
-    return ((fsw.top.byte & mask) == mask) && ((fsw_last.top.byte & mask) == 0);
+    return (fsw_last.bot.byte == 0) && (fsw.bot.byte == 0) && (fsw_last.top.byte == 0) && (fsw.top.byte == mask);
 }
 
 static u8 is_bot_button_pressed(u8 mask) {
-    return ((fsw.bot.byte & mask) == mask) && ((fsw_last.bot.byte & mask) == 0);
+    return (fsw_last.top.byte == 0) && (fsw.top.byte == 0) && (fsw_last.bot.byte == 0) && (fsw.bot.byte == mask);
 }
 
 static u8 is_top_button_released(u8 mask) {
@@ -310,11 +312,11 @@ static u8 is_bot_button_released(u8 mask) {
 }
 
 static u8 is_top_button_held(u8 mask) {
-    return ((fsw.top.byte & mask) != 0);
+    return (fsw.bot.byte == 0) && (fsw.top.byte == mask);
 }
 
 static u8 is_bot_button_held(u8 mask) {
-    return ((fsw.bot.byte & mask) != 0);
+    return (fsw.top.byte == 0) && (fsw.bot.byte == mask);
 }
 
 // Loads ROM describing the initial on/off state of effects
@@ -378,7 +380,7 @@ void load_program_state(void) {
 
         // Decode the 5-bit signed integer with offset.
         s8 out_level = (rdesc & scene_level_mask) >> scene_level_shr;
-		if (out_level > 15)
+        if (out_level > 15)
             out_level = (s8)((u8)out_level | 0xE0);
 
         // Adjust by scene_level_offset to find correct range.
@@ -391,7 +393,7 @@ void load_program_state(void) {
         pr_rjm[i] = new_rjm_actual;
         pr_axe_scene[i] = pr.scene[i].part2 & axe_scene_mask;
         pr_axe_muted[i] = ((pr.scene[i].part2 & axe_scene_muted) == axe_scene_muted) ? 1 : 0;
-		pr_out_level[i] = out_level;
+        pr_out_level[i] = out_level;
     }
 }
 
@@ -463,6 +465,8 @@ static void reset_tuner_mute(void) {
     }
 }
 
+static void scene_activate_level(void);
+
 // Toggle a g-major CC effect
 static void gmaj_cc_toggle(u8 idx) {
     u8 togglevalue = 0x00;
@@ -481,6 +485,8 @@ static void gmaj_cc_toggle(u8 idx) {
 
     // Send MIDI command:
     gmaj_cc_set(gmaj_cc_lookup[idx], togglevalue);
+
+    scene_activate_level();
 
     update_lcd();
 }
@@ -528,15 +534,42 @@ static void scene_update(u8 preset, u8 new_rjm_channel, s8 out_level) {
 
     live_pr_rjm[preset] = pr_rjm[preset];
     live_pr_out_level[preset] = pr_out_level[preset];
+
+    scene_activate_level();
+    update_lcd();
 }
 
 static void scene_update_current() {
     scene_update(scene, pr_rjm[scene], pr_out_level[scene]);
 }
 
+static s8 fx_adjusted_out_level(u8 fx, s8 level) {
+    // Add volume to compensate for volume loss of delay effect:
+    if ((fx & fxm_delay) == fxm_delay) {
+        return level + delay_level_adjust;
+    }
+    // Max of +6 (dB?):
+    if (level > 6) level = 6;
+    return level;
+}
+
+static void scene_activate_level(void) {
+    u8 gmaj_in_level;
+
+    // Max boost is +6dB
+    // Send the out level to the G-Major as Global-In Level:
+    gmaj_in_level = fx_adjusted_out_level(pr.fx[scene], pr_out_level[scene]) + (u8)121;
+    if (gmaj_in_level > 127) gmaj_in_level = 127;
+    if (gmaj_in_level < 0) gmaj_in_level = 0;
+
+    if (gmaj_in_level != last_gmaj_in_level) {
+        midi_send_cmd2(0xB, gmaj_midi_channel, gmaj_cc_global_in_level, gmaj_in_level);
+        last_gmaj_in_level = gmaj_in_level;
+    }
+}
+
 static void scene_activate(void) {
     u8 i;
-    u8 gmaj_in_level;
 
     // Switch g-major program if needed:
     if (next_gmaj_program != gmaj_program) {
@@ -555,21 +588,12 @@ static void scene_activate(void) {
         last_rjm_channel = pr_rjm[scene];
     }
 
-    // Max boost is +6dB
-    gmaj_in_level = (u8)(pr_out_level[scene] + (u8)121);
-    if (gmaj_in_level > 127) gmaj_in_level = 127;
-    if (gmaj_in_level < 0) gmaj_in_level = 0;
-
-    // Send the out level to the G-Major as Global-In Level:
-    if (gmaj_in_level != last_gmaj_in_level) {
-        midi_send_cmd2(0xB, gmaj_midi_channel, gmaj_cc_global_in_level, gmaj_in_level);
-        last_gmaj_in_level = gmaj_in_level;
-    }
+    scene_activate_level();
 
     // Send Axe-FX scene change:
     axe_scene = pr_axe_scene[scene];
     if (axe_scene != last_axe_scene) {
-		axe_cc_set(axe_cc_scene, axe_scene);
+        axe_cc_set(axe_cc_scene, axe_scene);
         last_axe_scene = axe_scene;
     }
 
@@ -964,12 +988,12 @@ static void update_lcd(void) {
         if (mode == MODE_SCENE_DESIGN) {
             gmaj_ch = pr_rjm[scene];
             axe_ch = pr_axe_scene[scene];
-            out_level = pr_out_level[scene];
+            out_level = fx_adjusted_out_level(pr.fx[scene], pr_out_level[scene]);
             pos_level = +out_level;
         } else {
             gmaj_ch = live_pr_rjm[live_scene];
             axe_ch = pr_axe_scene[live_scene];
-            out_level = live_pr_out_level[live_scene];
+            out_level = fx_adjusted_out_level(pr.fx[live_scene], live_pr_out_level[live_scene]);
             pos_level = +out_level;
         }
 
@@ -1143,7 +1167,7 @@ static void rjm_scene_change_button_logic(u8 btn_mask, u8 new_scene) {
 
         if (last_bot_button_mask == btn_mask) {
             // tap tempo function:
-            toggle_tap = ~toggle_tap & (u8) 0x7F;
+            toggle_tap = ~toggle_tap & (u8)0x7F;
             gmaj_cc_set(gmaj_cc_taptempo, toggle_tap);
             axe_cc_set(axe_cc_taptempo, toggle_tap);
         }
@@ -1153,6 +1177,8 @@ static void rjm_scene_change_button_logic(u8 btn_mask, u8 new_scene) {
         start_timer(design);
     } else if (is_bot_button_held(btn_mask) && is_timer_elapsed(design)) {
         switch_mode(MODE_SCENE_DESIGN);
+        reset_timer(design);
+    } else if (is_bot_button_released(btn_mask)) {
         reset_timer(design);
     }
 }
