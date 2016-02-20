@@ -15,7 +15,7 @@
     g-major listens for program change messages and CC messages
     RJM listens on MIDI channel 2
     RJM listens for program change messages with program #s 1-3
-    Axe-FX II listens on MIDI channel 3
+    Axe-FX II listens on MIDI channel 4
 
     Written by
     James S. Dunne
