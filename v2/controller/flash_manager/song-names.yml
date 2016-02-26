@@ -154,3 +154,23 @@ songs:
 - names: [What I Got]
   short_name: What I Got
   starts: Bremer
+
+- names: [Say It Aint So, Say It Ain't So]
+  short_name: Say It Aint So
+  starts: Jim
+
+- names: [Shine]
+  short_name: Shine
+  starts: Jim
+
+- names: [Basketcase, Basket Case]
+  short_name: Basketcase
+  starts: Glaz
+
+- names: [Breed]
+  short_name: Breed
+  starts: Jim
+
+- names: [Lithium]
+  short_name: Lithium
+  starts: Jim

@@ -541,70 +541,80 @@ programs:
     fx: [gate, compressor, eq, delay]
 - name: Counting Blue Cars
   gmaj_program: 16
-  initial_scene: 6
+  initial_scene: 1
+  scene_order: [1,2,3,4,5,6,7,8,5,6,7]
   scenes:
+    # Intro
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [delay]
+    # Verse 1 (pads)
   - channel: 1
     level: 0
     axe_scene: 1
     fx: [compressor, chorus, delay]
-  - channel: 1
+    # Pre-chorus and chorus (he walked with a purpose)
+  - channel: 3
     level: 0
     axe_scene: 1
-    fx: [compressor, chorus, delay]
-  - channel: 1
+    fx: [delay]
+    # Chorus
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [delay]
+    # Verse 2 (singing whales and pads)
+  - channel: 3
+    level: 0
+    axe_scene: 1
+    fx: [delay]
+    # Chorus
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [delay]
+    # JD Solo
+  - channel: 3
     level: 3
+    axe_scene: 2
+    fx: [delay]
+    # Clean bridge (whole note chords ring out)
+  - channel: 1
+    level: 0
     axe_scene: 1
-    fx: [compressor, chorus, delay]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate, delay]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate, delay]
-  - channel: 3
-    level: 3
-    axe_scene: 2
-    fx: [gate, delay]
+    fx: [delay]
+    # Go back to scene 5 for whales then scene 6 for chorus and finally scene 7 outro solo
 - name: In Bloom
   gmaj_program: 17
   initial_scene: 1
   scenes:
   - channel: 1
     level: 0
-    axe_scene: 1
-    fx: [gate, compressor, eq]
+    axe_scene: 2
+    fx: [compressor, eq]
   - channel: 1
     level: 0
-    axe_scene: 1
-    fx: [gate, compressor, eq]
+    axe_scene: 2
+    fx: [compressor, eq]
   - channel: 1
+    level: 0
+    axe_scene: 2
+    fx: [compressor, eq]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+  - channel: 3
     level: 3
-    axe_scene: 1
-    fx: [gate, compressor, eq]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 3
-    level: 0
     axe_scene: 2
     fx: [gate, compressor, eq]
   - channel: 3
@@ -759,40 +769,44 @@ programs:
     fx: [gate]
 - name: Closing Time
   gmaj_program: 22
-  initial_scene: 6
+  initial_scene: 1
+  scene_order: [1,2,1]
   scenes:
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 3
-    axe_scene: 1
-    fx: [compressor]
+    # Soft intro, full open chorus, soft verses
   - channel: 2
     level: 0
     axe_scene: 2
-    fx: [gate]
+    fx: []
+    # Bridge (MG clean, JD "piano lead")
+  - channel: 2
+    level: 0
+    axe_scene: 1
+    fx: []
+    # JD boost slightly
   - channel: 2
     level: 2
     axe_scene: 2
-    fx: [gate, delay]
+    fx: []
   - channel: 2
     level: 0
     axe_scene: 2
-    fx: [gate]
+    fx: []
   - channel: 2
     level: 0
     axe_scene: 2
-    fx: [gate]
+    fx: []
   - channel: 2
-    level: 3
+    level: 0
     axe_scene: 2
-    fx: [gate, delay]
+    fx: []
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: []
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: []
 - name: Brainstew
   gmaj_program: 23
   initial_scene: 6
@@ -1012,39 +1026,33 @@ programs:
 - name: Kryptonite
   gmaj_program: 29
   initial_scene: 1
+  scene_order: [1,2,3,1,2,4,5,1,2,4]
   scenes:
+    # Intro, verse 1, verse 2, pre-chorus (MG, JD clean) 
   - channel: 1
     level: 0
     axe_scene: 1
     fx: [compressor]
+    # Chorus (MG heavy, JD heavy)
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+    # Post-Chorus (MG heavy ring out, JD clean)
   - channel: 1
     level: 0
-    axe_scene: 1
+    axe_scene: 2
     fx: [compressor]
+    # MG solo, JD heavy
+  - channel: 2
+    level: 0
+    axe_scene: 4
+    fx: [gate]
+    # MG solo, JD clean
   - channel: 1
-    level: 3
-    axe_scene: 1
+    level: 0
+    axe_scene: 4
     fx: [compressor]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 2
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-  - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate, delay]
 - name: Dammit
   gmaj_program: 30
   initial_scene: 6
@@ -1405,3 +1413,187 @@ programs:
     level: 3
     axe_scene: 2
     fx: [gate, compressor, eq, delay]
+- name: Say It Aint So
+  gmaj_program: 40
+  initial_scene: 6
+  scenes:
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 3
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 3
+    axe_scene: 4
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 1
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+- name: Shine
+  gmaj_program: 41
+  initial_scene: 6
+  scenes:
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 1
+    level: 3
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 4
+    fx: [gate, delay]
+  - channel: 2
+    level: 3
+    axe_scene: 2
+    fx: [gate, delay]
+- name: Basketcase
+  gmaj_program: 42
+  initial_scene: 6
+  scenes:
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 1
+    level: 3
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 4
+    fx: [gate, delay]
+  - channel: 2
+    level: 3
+    axe_scene: 2
+    fx: [gate, delay]
+- name: Breed
+  gmaj_program: 43
+  initial_scene: 6
+  scenes:
+  - channel: 1
+    level: 0
+    axe_scene: 2
+    fx: [compressor, eq]
+  - channel: 1
+    level: 0
+    axe_scene: 2
+    fx: [compressor, eq]
+  - channel: 1
+    level: 0
+    axe_scene: 2
+    fx: [compressor, eq]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 3
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 3
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+- name: Lithium
+  gmaj_program: 44
+  initial_scene: 1
+  scenes:
+    # MG clean, JD clean
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor, eq]
+    # MG heavy, JD heavy
+  - channel: 3
+    level: 0
+    axe_scene: 3
+    fx: [gate, eq]
+    # MG clean, JD clean
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor, eq]
+    # MG heavy, JD heavy
+  - channel: 3
+    level: 0
+    axe_scene: 3
+    fx: [gate, eq]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 3
+    axe_scene: 2
+    fx: [gate, compressor, eq]
+  - channel: 3
+    level: 3
+    axe_scene: 2
+    fx: [gate, compressor, eq]
