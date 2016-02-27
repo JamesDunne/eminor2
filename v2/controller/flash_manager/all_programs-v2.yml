@@ -1490,13 +1490,13 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 0
-    axe_scene: 4
-    fx: [gate, delay]
-  - channel: 2
     level: 3
     axe_scene: 2
     fx: [gate, delay]
+  - channel: 2
+    level: 0
+    axe_scene: 4
+    fx: [gate]
 - name: Basketcase
   gmaj_program: 42
   initial_scene: 6
@@ -1528,7 +1528,7 @@ programs:
   - channel: 2
     level: 0
     axe_scene: 4
-    fx: [gate, delay]
+    fx: [gate]
   - channel: 2
     level: 3
     axe_scene: 2
