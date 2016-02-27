@@ -587,7 +587,7 @@ programs:
     # Go back to scene 5 for whales then scene 6 for chorus and finally scene 7 outro solo
 - name: In Bloom
   gmaj_program: 17
-  initial_scene: 1
+  initial_scene: 6
   scenes:
   - channel: 1
     level: 0
@@ -1427,7 +1427,7 @@ programs:
     fx: [gate, compressor, eq, delay]
 - name: Say It Aint So
   gmaj_program: 40
-  initial_scene: 6
+  initial_scene: 1
   scenes:
   - channel: 1
     level: 0
