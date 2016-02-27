@@ -313,45 +313,51 @@ func generatePICH() {
 		initialScene := p.InitialScene
 
 		if version == "v2" {
-			// Up-convert v1 to v2:
-			if len(p.SceneDescriptors) == 6 {
-				s = make([]SceneDescriptor, 8)
-				s[0] = p.SceneDescriptors[0]
-				s[1] = p.SceneDescriptors[0]
-				s[2] = p.SceneDescriptors[1]
-				s[3] = p.SceneDescriptors[2]
-				s[4] = p.SceneDescriptors[3]
-				s[5] = p.SceneDescriptors[4]
-				s[6] = p.SceneDescriptors[4]
-				s[7] = p.SceneDescriptors[5]
-
-				switch p.InitialScene {
-				case 1:
-					initialScene = 1
-					break
-				case 2:
-					initialScene = 3
-					break
-				case 3:
-					initialScene = 4
-					break
-				case 4:
-					initialScene = 5
-					break
-				case 5:
-					initialScene = 6
-					break
-				case 6:
-					initialScene = 8
-					break
-				default:
-					initialScene = 6
-					break
-				}
+			if len(s) != 8 {
+				fmt.Fprintln(os.Stderr, "Song does not have 8 scenes defined!")
+				return
 			}
+
+			// Up-convert v1 to v2:
+			//if len(s) == 6 {
+			//	s = make([]SceneDescriptor, 8)
+			//	s[0] = p.SceneDescriptors[0]
+			//	s[1] = p.SceneDescriptors[0]
+			//	s[2] = p.SceneDescriptors[1]
+			//	s[3] = p.SceneDescriptors[2]
+			//	s[4] = p.SceneDescriptors[3]
+			//	s[5] = p.SceneDescriptors[4]
+			//	s[6] = p.SceneDescriptors[4]
+			//	s[7] = p.SceneDescriptors[5]
+
+			//	switch p.InitialScene {
+			//	case 1:
+			//		initialScene = 1
+			//		break
+			//	case 2:
+			//		initialScene = 3
+			//		break
+			//	case 3:
+			//		initialScene = 4
+			//		break
+			//	case 4:
+			//		initialScene = 5
+			//		break
+			//	case 5:
+			//		initialScene = 6
+			//		break
+			//	case 6:
+			//		initialScene = 8
+			//		break
+			//	default:
+			//		initialScene = 6
+			//		break
+			//	}
+			//}
 		}
 
-		for j := 0; j < len(s); j++ {
+		var j int
+		for j = 0; j < len(s); j++ {
 			// Cap the out level range to -25..+6
 			lvl5bit := s[j].Level
 			if lvl5bit < lvl_min {
@@ -381,6 +387,11 @@ func generatePICH() {
 				bw.WriteHex(b)
 			}
 		}
+		// Pad the remainder:
+		//for ; j < 8; j++ {
+		//	bw.WriteHex(0)
+		//	bw.WriteHex(0)
+		//}
 
 		p.SceneDescriptors = s
 		p.InitialScene = initialScene
@@ -806,8 +817,9 @@ func main() {
 
 	version = os.Getenv("HW_VERSION")
 	if version != "1" && version != "2" {
-		fmt.Println("HW_VERSION environment variable must be either '1' or '2'.")
-		return
+		version = "2"
+		//fmt.Println("HW_VERSION environment variable must be either '1' or '2'.")
+		//return
 	}
 	fmt.Fprintf(os.Stderr, "HW_VERSION = '%s'\n", version)
 	version = "v" + version
