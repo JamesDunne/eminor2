@@ -1053,6 +1053,18 @@ programs:
     level: 0
     axe_scene: 4
     fx: [compressor]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+  - channel: 2
+    level: 0
+    axe_scene: 2
+    fx: [gate]
 - name: Dammit
   gmaj_program: 30
   initial_scene: 6
