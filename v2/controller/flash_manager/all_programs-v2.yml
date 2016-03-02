@@ -1429,34 +1429,42 @@ programs:
   gmaj_program: 40
   initial_scene: 1
   scenes:
+    # MG clean, JD clean
   - channel: 1
     level: 0
     axe_scene: 1
     fx: [compressor]
+    # MG dirty, JD dirty
   - channel: 2
     level: 0
     axe_scene: 2
     fx: [gate]
+    # MG dirty, JD lead
   - channel: 2
     level: 3
     axe_scene: 2
     fx: [gate]
+    # MG lead, JD lead
   - channel: 2
     level: 3
     axe_scene: 4
     fx: [gate]
+    # MG dirty, JD dirty
   - channel: 2
     level: 0
     axe_scene: 2
     fx: [gate]
+    # MG dirty, JD clean
   - channel: 1
     level: 0
     axe_scene: 2
     fx: [gate]
+    # MG dirty, JD dirty
   - channel: 2
     level: 0
     axe_scene: 2
     fx: [gate]
+    # MG dirty, JD dirty
   - channel: 2
     level: 0
     axe_scene: 2

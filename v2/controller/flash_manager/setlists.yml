@@ -497,8 +497,6 @@ sets:
 
   - date: "2016-02-20"
     venue: JD Muggs
-    active: true
-    print: true
     songs:
       - Holiday
       - My Own Worst Enemy
@@ -543,3 +541,67 @@ sets:
       
       - Enter Sandman
       - For Whom the Bell Tolls
+
+  - date: "2016-03-12"
+    venue: Dublin Mule
+    active: true
+    print: true
+    songs:
+      - Everything Zen
+      - Song 2
+      - Dammit
+
+      - 'BREAK: INTRO BREAK'
+
+      - Brain Stew
+      - Hey Jealousy
+      - Beautiful Disaster
+      - Zero
+      
+      - 'BREAK: DOWNTUNING'
+      
+      - The Middle
+      - Monkey Wrench
+      - Lump
+      
+      - 'BREAK: UPTUNING'
+      
+      - Cumbersome
+      - Fuel
+      - When I Come Around
+      
+      - 'BREAK: BREAK'
+      
+      - Buddy Holly
+      - My Hero
+      - Crawling in the Dark
+      
+      - 'BREAK: BREAK'
+      
+      - Plush
+      - My Own Worst Enemy
+      - Bullet With Butterfly Wings
+      - What I Got
+      
+      - 'BREAK: BREAK'
+      
+      - Bound for the Floor
+      - Sex Type Thing
+      - Machinehead
+      
+      - 'BREAK: BREAK'
+      
+      - Hash Pipe
+      - Holiday
+      - Enter Sandman
+      
+      - 'BREAK: ENCORE?'
+      
+      - For Whom the Bell Tolls
+
+      # New songs; temporary.
+      - Say It Aint So
+      - In Bloom
+      - Shine
+      - Breed
+      - Lithium
