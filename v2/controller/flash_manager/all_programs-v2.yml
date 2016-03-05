@@ -552,12 +552,12 @@ programs:
     # Verse 1 (pads)
   - channel: 1
     level: 0
-    axe_scene: 1
+    axe_scene: 2
     fx: [compressor, chorus, delay]
     # Pre-chorus and chorus (he walked with a purpose)
   - channel: 3
     level: 0
-    axe_scene: 1
+    axe_scene: 2
     fx: [delay]
     # Chorus
   - channel: 3
@@ -567,7 +567,7 @@ programs:
     # Verse 2 (singing whales and pads)
   - channel: 3
     level: 0
-    axe_scene: 1
+    axe_scene: 2
     fx: [delay]
     # Chorus
   - channel: 3
@@ -582,7 +582,7 @@ programs:
     # Clean bridge (whole note chords ring out)
   - channel: 1
     level: 0
-    axe_scene: 1
+    axe_scene: 2
     fx: [delay]
     # Go back to scene 5 for whales then scene 6 for chorus and finally scene 7 outro solo
 - name: In Bloom
@@ -777,10 +777,10 @@ programs:
     level: 0
     axe_scene: 2
     fx: []
-    # Bridge (MG clean, JD "piano lead")
+    # Bridge (MG dirty, JD "piano lead")
   - channel: 2
     level: 0
-    axe_scene: 1
+    axe_scene: 2
     fx: []
     # JD boost slightly
   - channel: 2
@@ -1444,11 +1444,11 @@ programs:
     level: 3
     axe_scene: 2
     fx: [gate]
-    # MG lead, JD lead
-  - channel: 2
-    level: 3
-    axe_scene: 4
-    fx: [gate]
+    # MG dirty, JD clean
+  - channel: 1
+    level: 0
+    axe_scene: 2
+    fx: [compressor]
     # MG dirty, JD dirty
   - channel: 2
     level: 0
@@ -1458,7 +1458,7 @@ programs:
   - channel: 1
     level: 0
     axe_scene: 2
-    fx: [gate]
+    fx: [compressor]
     # MG dirty, JD dirty
   - channel: 2
     level: 0
