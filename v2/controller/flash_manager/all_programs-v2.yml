@@ -544,32 +544,17 @@ programs:
   initial_scene: 1
   scene_order: [1,2,3,4,5,6,7,8,5,6,7]
   scenes:
-    # Intro
+    # Dirty
   - channel: 3
     level: 0
     axe_scene: 2
     fx: [delay]
-    # Verse 1 (pads)
+    # Clean
   - channel: 1
     level: 0
     axe_scene: 2
     fx: [compressor, chorus, delay]
-    # Pre-chorus and chorus (he walked with a purpose)
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [delay]
-    # Chorus
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [delay]
-    # Verse 2 (singing whales and pads)
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [delay]
-    # Chorus
+    # Chorus (he walked with a purpose)
   - channel: 3
     level: 0
     axe_scene: 2
@@ -579,12 +564,22 @@ programs:
     level: 3
     axe_scene: 2
     fx: [delay]
-    # Clean bridge (whole note chords ring out)
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [delay]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [delay]
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [delay]
   - channel: 1
     level: 0
     axe_scene: 2
     fx: [delay]
-    # Go back to scene 5 for whales then scene 6 for chorus and finally scene 7 outro solo
 - name: In Bloom
   gmaj_program: 17
   initial_scene: 6
