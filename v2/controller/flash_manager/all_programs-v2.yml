@@ -1213,38 +1213,46 @@ programs:
   gmaj_program: 34
   initial_scene: 1
   scenes:
+    # MG clean, JD clean
   - channel: 1
     level: 0
     axe_scene: 1
     fx: [compressor]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
+    # MG dirty, JD dirty
   - channel: 3
-    level: -2
+    level: 0
     axe_scene: 2
+    fx: [gate]
+    # MG clean, JD clean
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor]
+    # MG clean, JD bg dirty delay
+  - channel: 3
+    level: -3
+    axe_scene: 1
     fx: [gate, delay]
-  - channel: 3
-    level: -2
-    axe_scene: 2
-    fx: [gate, delay]
+    # MG dirty, JD dirty
   - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
+    # MG clean, JD clean
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor]
+    # MG dirty, JD dirty
   - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
+    # MG dirty, JD dirty lead
   - channel: 3
-    level: 0
+    level: 3
     axe_scene: 2
-    fx: [gate]
+    fx: [gate, chorus]
 - name: If You Could Only See
   gmaj_program: 35
   initial_scene: 8

@@ -547,61 +547,58 @@ sets:
     active: true
     print: true
     songs:
-      - Everything Zen
-      - Song 2
       - Dammit
+      - Holiday
+      - Machinehead
 
       - 'BREAK: INTRO BREAK'
-
-      - Brain Stew
+      - Bound for the Floor
       - Hey Jealousy
-      - Beautiful Disaster
       - Zero
-      
+      - Plush
+
       - 'BREAK: DOWNTUNING'
-      
+      - Lump
       - The Middle
       - Monkey Wrench
-      - Lump
-      
       - 'BREAK: UPTUNING'
+
+      - 'BREAK: PART 2'
+      - Beautiful Disaster
+
+      - 'BREAK: BREAK'
+      - Say It Aint So
+      - My Own Worst Enemy
+      - Song 2
+
+      - 'BREAK: BREAK'
+      - Brain Stew
+      - Everything Zen
+      - My Hero
+      - Buddy Holly
       
+      - 'BREAK: BREAK'
       - Cumbersome
       - Fuel
-      - When I Come Around
-      
-      - 'BREAK: BREAK'
-      
-      - Buddy Holly
-      - My Hero
-      - Crawling in the Dark
-      
-      - 'BREAK: BREAK'
-      
-      - Plush
-      - My Own Worst Enemy
       - Bullet With Butterfly Wings
-      - What I Got
-      
+
+      - 'BREAK: PART 3'
+      - Crawling in the Dark
+      - Kryptonite
+
       - 'BREAK: BREAK'
-      
-      - Bound for the Floor
-      - Sex Type Thing
-      - Machinehead
-      
-      - 'BREAK: BREAK'
-      
+      - In Bloom
       - Hash Pipe
-      - Holiday
+
+      - 'BREAK: BREAK'
+      - Counting Blue Cars
+      - When I Come Around
+      - What I Got
+      - Sex Type Thing
+      
+      - 'BREAK: GOODBYE'
+      - Closing Time
       - Enter Sandman
       
       - 'BREAK: ENCORE?'
-      
       - For Whom the Bell Tolls
-
-      # New songs; temporary.
-      - Say It Aint So
-      - In Bloom
-      - Shine
-      - Breed
-      - Lithium
