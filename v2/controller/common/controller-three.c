@@ -245,6 +245,8 @@ u8 pr_axe_muted[scene_descriptor_count];
 
 u8 axe_scene, last_axe_scene;   // 0 - 3
 
+u8 curr_seq;
+
 // Current set list:
 struct set_list sl;
 // Current index in list of setlists (which setlist):
@@ -287,7 +289,7 @@ declare_timer(mute);
 #define timer_timeout_mute      75
 
 declare_timer(prog);
-#define timer_timeout_prog      75
+#define timer_timeout_prog      150
 
 declare_timer(flash);
 
@@ -350,7 +352,7 @@ void load_program_state(void) {
         pr.scene[2].part1 = rjm_channel_1 | scene_level_pos6;
         pr.scene[3].part1 = rjm_channel_2 | scene_level_0;
         pr.scene[4].part1 = rjm_channel_2 | scene_level_pos6;
-        pr.scene[5].part1 = rjm_channel_3 | scene_level_0 | scene_initial;
+        pr.scene[5].part1 = rjm_channel_3 | scene_level_0;
         pr.scene[6].part1 = rjm_channel_3 | scene_level_0;
         pr.scene[7].part1 = rjm_channel_3 | scene_level_pos6;
 
@@ -394,15 +396,19 @@ void load_program_state(void) {
         // Adjust by scene_level_offset to find correct range.
         out_level += -scene_level_offset;
 
-        // Find the initial channel:
-        if ((rdesc & scene_initial) == scene_initial)
-            scene = i;
-
         pr_rjm[i] = new_rjm_actual;
         pr_axe_scene[i] = pr.scene[i].part2 & axe_scene_mask;
         pr_axe_muted[i] = ((pr.scene[i].part2 & axe_scene_muted) == axe_scene_muted) ? 1 : 0;
         pr_out_level[i] = out_level;
     }
+
+	if (pr.sequence.count > 0) {
+		scene = pr.sequence.scenes[0];
+		curr_seq = 1;
+		if (pr.sequence.count > 1) {
+			start_timer(prog);
+		}
+	}
 }
 
 static void store_program_state(void) {
@@ -795,9 +801,10 @@ void controller_10msec_timer(void) {
 // Increment timers:
 #define inc_timer(name) \
     if ((timer_held_##name > 0) && !is_timer_satisfied(name)) { \
-        timer_held_##name++; \
-        if (timer_held_##name >= 255) \
-            timer_held_##name = 128; \
+		if (timer_held_##name == 255) \
+			timer_held_##name = 128; \
+		else \
+			timer_held_##name++; \
     }
 #define inc_timer_loop(name) \
     if ((timer_held_##name > 0) && !is_timer_satisfied(name)) { \
@@ -1047,14 +1054,19 @@ static void calc_leds(void) {
         leds[MODE_LIVE].top.byte = (1 << axe_scene) | (pr_axe_muted[scene] << 4) | (is_gmaj_muted << 5) | (fsw.top.byte & (M_7 | M_8));
 
         // Flash pending scene LED:
-        if (next_gmaj_program != gmaj_program) {
-            if ((timer_held_flash & 15) >= 8) {
-                // Set only current program LED on bottom:
-                leds[MODE_LIVE].bot.byte = (1 << scene);
-            } else {
-                // Preserve only LEDs 7 and 8 (clear LEDS 1-6):
-                leds[MODE_LIVE].bot.byte = 0;
-            }
+		if (next_gmaj_program != gmaj_program) {
+			if ((timer_held_flash & 15) >= 8) {
+				// Set only current program LED on bottom:
+				leds[MODE_LIVE].bot.byte = (1 << scene);
+			}
+			else {
+				// Preserve only LEDs 7 and 8 (clear LEDS 1-6):
+				leds[MODE_LIVE].bot.byte = 0;
+			}
+		} else if ((timer_held_prog & 64) >= 32) {
+			// Flash next scene to switch to in order to follow sequence:
+			leds[MODE_LIVE].bot.byte = (1 << scene);
+			leds[MODE_LIVE].bot.byte |= (1 << pr.sequence.scenes[curr_seq]);
         } else {
             // Set only current program LED on bottom, preserve LEDs 7 and 8:
             leds[MODE_LIVE].bot.byte = (1 << scene);
@@ -1172,6 +1184,18 @@ static void rjm_scene_change_button_logic(u8 btn_mask, u8 new_scene) {
     if (is_bot_button_pressed(btn_mask)) {
         set_rjm_channel(new_scene);
         reset_tuner_mute();
+
+		// Advance sequence counter:
+		if (curr_seq < pr.sequence.count) {
+			if (pr.sequence.scenes[curr_seq] == new_scene) {
+				curr_seq++;
+				if (curr_seq < pr.sequence.count) {
+					start_timer(prog);
+				} else {
+					reset_timer(prog);
+				}
+			}
+		}
 
         if (last_bot_button_mask == btn_mask) {
             // tap tempo function:

@@ -962,13 +962,13 @@ u8 flash_bank[3][4096] = {
 #elif HW_VERSION == 3
 u8 flash_bank[3][4096] = {
 	{
-#include "../PIC/flash_v2_bank0.h"
+#include "../PIC/flash_v3_bank0.h"
 	},
 	{
-#include "../PIC/flash_v2_bank1.h"
+#include "../PIC/flash_v3_bank1.h"
 	},
 	{
-#include "../PIC/flash_v2_bank2.h"
+#include "../PIC/flash_v3_bank2.h"
 	}
 };
 #else
