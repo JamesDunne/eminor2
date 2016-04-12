@@ -246,7 +246,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>HW_VERSION=2;HWFEAT_LABEL_UPDATES;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HW_VERSION=3;HWFEAT_LABEL_UPDATES;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>
       </ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -326,6 +326,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\controller-one.c" />
+    <ClCompile Include="..\common\controller-three.c" />
     <ClCompile Include="..\common\controller-two.c" />
     <ClCompile Include="eminorv2.c" />
     <ClInclude Include="..\common\memory.h" />
