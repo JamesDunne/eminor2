@@ -1577,6 +1577,10 @@ void controller_handle(void) {
 
 static void nothing(void) {}
 
+#elif HW_VERSION == 3
+
+static void nothing(void) {}
+
 #else
 
 #error HW_ VERSION must be either "1" or "2"

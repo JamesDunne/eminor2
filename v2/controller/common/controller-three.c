@@ -34,19 +34,18 @@
 LIVE:
 |-----------------------------------------------------------|
 |    *      *      *      *      *      *      *      *     |
-|   AX1    AX2    AX4   VOL--  VOL++  AX-MUTE PREV   NEXT   |
-|                                      MODE                 |
+|   AX1    AX2    AX3    AX4  AX-MUTE MK-MUTE PREV   NEXT   |
+|                               MODE   SAVE                 |
 |                                                           |
 |    *      *      *      *      *      *      *      *     |
-|   MK1    MK2    MK3   VOL--  VOL++ MK-MUTE  SC--   SC++   |
-|                                      SAVE                 |
+|   SC1    SC2    SC3    SC4    SC5    SC6    SC7    SC8    |
+|                                                           |
 |-----------------------------------------------------------|
 
       MODE = enter MODE change
       AX1 to AX4 = press to send Axe-FX scene change #1-4
-      MK1 to MK3 = press to change Mark V channel; repeat to send TAP TEMPO
-	  SC-- = switch to last scene
-	  SC++ = switch to next scene
+      SC1 to SC8 = press to switch to scene; repeat to send TAP TEMPO
+      Hold down SC1 to SC8 to enter SCENE DESIGNER
 
 SCENE DESIGNER:
 |-----------------------------------------------------------|
@@ -61,6 +60,13 @@ SCENE DESIGNER:
 */
 
 #define scene_descriptor_count 8
+
+struct sequence {
+	// Number of entries in the sequence
+	u8 count;
+
+	u8 scenes[19];
+};
 
 // Program data structure loaded from / written to flash memory:
 struct program {
@@ -88,7 +94,8 @@ struct program {
     // G-major effects enabled per scene (see fxm_*):
     u8 fx[8];
 
-    u8 _unused[20];
+	// Sequence of pre-programmed scene changes:
+	struct sequence sequence;
 };
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!

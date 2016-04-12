@@ -959,6 +959,18 @@ u8 flash_bank[3][4096] = {
 #include "../PIC/flash_v2_bank2.h"
     }
 };
+#elif HW_VERSION == 3
+u8 flash_bank[3][4096] = {
+	{
+#include "../PIC/flash_v2_bank0.h"
+	},
+	{
+#include "../PIC/flash_v2_bank1.h"
+	},
+	{
+#include "../PIC/flash_v2_bank2.h"
+	}
+};
 #else
 #error HW_ VERSION must be either "1" or "2"!
 #endif
