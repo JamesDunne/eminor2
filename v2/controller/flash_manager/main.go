@@ -67,6 +67,7 @@ type Program struct {
 	GMajorProgram    int               `yaml:"gmaj_program,omitempty"`
 	InitialScene     int               `yaml:"initial_scene"`
 	SceneDescriptors []SceneDescriptor `yaml:"scenes"`
+	Sequence         []int             `yaml:"sequence"`
 }
 
 type Programs struct {
@@ -370,8 +371,10 @@ func generatePICH() {
 			lvl5bit += lvl_offset
 
 			b := uint8((s[j].Channel-1)&3) | uint8((int8(lvl5bit&31))<<2)
-			if initialScene-1 == j {
-				b |= 0x80
+			if version == "v1" || version == "v2" {
+				if initialScene-1 == j {
+					b |= 0x80
+				}
 			}
 
 			// part1:
@@ -427,6 +430,21 @@ func generatePICH() {
 			// _unused:
 			for j := 0; j < 20; j++ {
 				bw.WriteHex(0)
+			}
+		} else if version == "v3" {
+			// If we have no sequence, then we just have a sequence of one
+			// defined by the initial scene number.
+			if len(p.Sequence) == 0 {
+				p.Sequence = []int{initialScene}
+			}
+
+			// Write sequence:
+			bw.WriteDecimal(uint8(len(p.Sequence)))
+			for j := 0; j < len(p.Sequence); j++ {
+				bw.WriteDecimal(uint8(p.Sequence[j]))
+			}
+			for j := len(p.Sequence); j < 19; j++ {
+				bw.WriteDecimal(0)
 			}
 		}
 	}
@@ -816,8 +834,8 @@ func main() {
 	}
 
 	version = os.Getenv("HW_VERSION")
-	if version != "1" && version != "2" {
-		version = "2"
+	if version != "1" && version != "2" && version != "3" {
+		version = "3"
 		//fmt.Println("HW_VERSION environment variable must be either '1' or '2'.")
 		//return
 	}
