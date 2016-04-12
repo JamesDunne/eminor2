@@ -1,203 +1,22 @@
 [
   {
-    "date": "2016-03-12",
-    "venue": "Dublin Mule",
+    "date": "2016-04-16",
+    "venue": "Private Pary",
     "songs": [
       {
         "i": 1,
-        "title": "Dammit",
-        "starts": "Jim"
-      },
-      {
-        "i": 2,
-        "title": "Holiday",
-        "starts": "Jim"
-      },
-      {
-        "i": 3,
-        "title": "Machinehead",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "INTRO BREAK"
-      },
-      {
-        "i": 4,
-        "title": "Bound for the Floor",
-        "starts": "Jim"
-      },
-      {
-        "i": 5,
-        "title": "Hey Jealousy",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 6,
-        "title": "Zero",
-        "starts": "Jim"
-      },
-      {
-        "i": 7,
-        "title": "Plush",
-        "starts": "Bremer 2 ct"
-      },
-      {
-        "breakText": "DOWNTUNING"
-      },
-      {
-        "i": 8,
-        "title": "Lump",
-        "starts": "Bremer+Glaz"
-      },
-      {
-        "i": 9,
-        "title": "The Middle",
-        "starts": "Glaz"
-      },
-      {
-        "i": 10,
-        "title": "Monkeywrench",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "breakText": "UPTUNING"
-      },
-      {
-        "breakText": "PART 2"
-      },
-      {
-        "i": 11,
-        "title": "Beautiful Disaster",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 12,
-        "title": "Say It Aint So",
-        "starts": "Jim"
-      },
-      {
-        "i": 13,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
-      },
-      {
-        "i": 14,
-        "title": "Song 2",
-        "starts": "Bremer"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 15,
-        "title": "Brainstew",
-        "starts": "Jim"
-      },
-      {
-        "i": 16,
-        "title": "Everything Zen",
-        "starts": "Glaz"
-      },
-      {
-        "i": 17,
-        "title": "My Hero",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "i": 18,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 19,
-        "title": "Cumbersome",
-        "starts": "Jim"
-      },
-      {
-        "i": 20,
-        "title": "Fuel",
-        "starts": "Glaz"
-      },
-      {
-        "i": 21,
-        "title": "Bullet With Butterfly Wings",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "PART 3"
-      },
-      {
-        "i": 22,
-        "title": "Crawling in the Dark",
-        "starts": "Jim"
-      },
-      {
-        "i": 23,
-        "title": "Kryptonite",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 24,
-        "title": "In Bloom",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 25,
-        "title": "Hash Pipe",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 26,
         "title": "Counting Blue Cars",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 27,
-        "title": "When I Come Around",
-        "starts": "Jim"
+        "i": 2,
+        "title": "Kryptonite",
+        "starts": "Glaz"
       },
       {
-        "i": 28,
-        "title": "What I Got",
-        "starts": "Bremer"
-      },
-      {
-        "i": 29,
-        "title": "Sex Type Thing",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "breakText": "GOODBYE"
-      },
-      {
-        "i": 30,
+        "i": 3,
         "title": "Closing Time",
         "starts": "Glaz"
-      },
-      {
-        "i": 31,
-        "title": "Enter Sandman",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "ENCORE?"
-      },
-      {
-        "i": 32,
-        "title": "For Whom The Bell Tolls",
-        "starts": "Bremer"
       }
     ]
   }

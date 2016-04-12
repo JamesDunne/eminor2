@@ -544,8 +544,6 @@ sets:
 
   - date: "2016-03-12"
     venue: Dublin Mule
-    active: true
-    print: true
     songs:
       - Dammit
       - Holiday
@@ -602,3 +600,12 @@ sets:
       
       - 'BREAK: ENCORE?'
       - For Whom the Bell Tolls
+
+  - date: "2016-04-16"
+    venue: Private Party
+    active: true
+    print: true
+    songs:
+      - Counting Blue Cars
+      - Kryptonite
+      - Closing Time

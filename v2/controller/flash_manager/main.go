@@ -204,7 +204,7 @@ func (w *BankedWriter) writeSeparator() {
 	}
 
 	fmt.Fprint(w.fo, ",")
-	if version == "v2" {
+	if version == "v2" || version == "v3" {
 		if w.bytesWritten&63 == 0 {
 			fmt.Fprint(w.fo, "\n")
 		}
@@ -380,7 +380,7 @@ func generatePICH() {
 			// part1:
 			bw.WriteHex(b)
 
-			if version == "v2" {
+			if version == "v2" || version == "v3" {
 				// part2:
 				if s[j].AxeScene == 0 {
 					// Axe-FX use same amp channel as RJM:
@@ -441,7 +441,7 @@ func generatePICH() {
 			// Write sequence:
 			bw.WriteDecimal(uint8(len(p.Sequence)))
 			for j := 0; j < len(p.Sequence); j++ {
-				bw.WriteDecimal(uint8(p.Sequence[j]))
+				bw.WriteDecimal(uint8(p.Sequence[j])-1)
 			}
 			for j := len(p.Sequence); j < 19; j++ {
 				bw.WriteDecimal(0)
@@ -455,7 +455,7 @@ func generatePICH() {
 				bw.WriteDecimal(0)
 			}
 		}
-	} else if version == "v2" {
+	} else if version == "v2" || version == "v3" {
 		for songs = songs; songs < 128; songs++ {
 			for j := 0; j < 64; j++ {
 				bw.WriteDecimal(0)
