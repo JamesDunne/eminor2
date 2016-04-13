@@ -1431,6 +1431,7 @@ programs:
 - name: Say It Aint So
   gmaj_program: 40
   initial_scene: 1
+  sequence: [1,2,1,2,3,2,4]
   scenes:
     # MG clean, JD clean
   - channel: 1

@@ -1063,7 +1063,7 @@ static void calc_leds(void) {
 				// Preserve only LEDs 7 and 8 (clear LEDS 1-6):
 				leds[MODE_LIVE].bot.byte = 0;
 			}
-		} else if ((timer_held_prog & 64) >= 32) {
+		} else if ((timer_held_prog & 63) >= 56) {
 			// Flash next scene to switch to in order to follow sequence:
 			leds[MODE_LIVE].bot.byte = (1 << scene);
 			leds[MODE_LIVE].bot.byte |= (1 << pr.sequence.scenes[curr_seq]);
