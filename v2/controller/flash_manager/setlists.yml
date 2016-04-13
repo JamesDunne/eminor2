@@ -606,6 +606,43 @@ sets:
     active: true
     print: true
     songs:
+      - Song 2
+      - Dammit
+      - Zero
+      - Brain Stew
+      - Say It Ain't So
+      - Crawling in the Dark
+      - Holiday
+
+      - 'BREAK: DOWNTUNE'
+
+      - Monkey Wrench
+      - The Middle
+
+      - 'BREAK: UPTUNE'
+
+      - Plush
+      - For Whom the Bell Tolls
+      - Hash Pipe
+
+      - 'BREAK: DOWNTUNE'
+
+      - Shine
+
+      - 'BREAK: UPTUNE'
+
+      - Undone
+      - Beautiful Disaster
+      - Machinehead
+      - Cumbersome
+      - My Own Worst Enemy
+      - Buddy Holly
+      - My Hero
+      - Fuel
+      - What I Got
       - Counting Blue Cars
-      - Kryptonite
-      - Closing Time
+      - Everything Zen
+      - When I Come Around
+      - Sex Type Thing
+      - Bullet With Butterfly Wings
+      - Enter Sandman
