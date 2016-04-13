@@ -397,7 +397,7 @@ programs:
     fx: [gate, delay]
 - name: Crawling in the Dark
   gmaj_program: 12
-  initial_scene: 4
+  sequence: [4,6,4,6,4,6,4,6]
   scenes:
   - channel: 1
     level: 0
@@ -1206,7 +1206,7 @@ programs:
     fx: []
 - name: Bullet With Butterfly Wings
   gmaj_program: 34
-  initial_scene: 1
+  sequence: [1,2,1,3,2,1,2,4]
   scenes:
     # MG clean, JD clean
   - channel: 1
@@ -1218,36 +1218,36 @@ programs:
     level: 0
     axe_scene: 2
     fx: [gate]
-    # MG clean, JD clean
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-    # MG clean, JD bg dirty delay
+    # MG clean, JD dirty bg delay
   - channel: 3
     level: -3
     axe_scene: 1
     fx: [gate, delay]
-    # MG dirty, JD dirty
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
-    # MG clean, JD clean
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
-    # MG dirty, JD dirty
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [gate]
     # MG dirty, JD dirty lead
   - channel: 3
     level: 3
     axe_scene: 2
     fx: [gate, chorus]
+    # MG clean, JD clean
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor]
+    # MG dirty, JD dirty
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate]
+    # MG clean, JD clean
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor]
+    # MG dirty, JD dirty
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [gate]
 - name: If You Could Only See
   gmaj_program: 35
   initial_scene: 8
@@ -1358,7 +1358,7 @@ programs:
     fx: [gate, delay]
 - name: Fuel
   gmaj_program: 38
-  initial_scene: 6
+  sequence: [6,7,8,4,6]
   scenes:
   - channel: 1
     level: 0
@@ -1372,6 +1372,7 @@ programs:
     level: 3
     axe_scene: 1
     fx: [compressor]
+    # JD post-lead delay with chorus (gimme fuel)
   - channel: 2
     level: 1
     axe_scene: 2
@@ -1384,10 +1385,12 @@ programs:
     level: 0
     axe_scene: 2
     fx: [gate]
+    # JD minor boost before lead
   - channel: 2
-    level: 0
+    level: 1
     axe_scene: 2
     fx: [gate]
+    # JD lead
   - channel: 2
     level: 3
     axe_scene: 2
