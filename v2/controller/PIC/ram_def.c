@@ -71,8 +71,20 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
 #include "flash_v2_bank2.h"
     }
 };
+#elif HW_VERSION == 3
+rom unsigned char ROM_SAVEDATA[3][4096] = {
+    {
+#include "flash_v3_bank0.h"
+    },
+    {
+#include "flash_v3_bank1.h"
+    },
+    {
+#include "flash_v3_bank2.h"
+    }
+};
 #else
-#error HW_ VERSION must be either "1" or "2"
+#error HW_ VERSION must be "1", "2", or "3"
 #endif
 
 unsigned char LCDRamMap[4][20];
