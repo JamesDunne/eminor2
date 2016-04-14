@@ -1636,7 +1636,7 @@ programs:
     # MG heavy, JD heavy
   - channel: 3
     level: 0
-    axe_scene: 3
+    axe_scene: 2
     fx: [gate]
     # MG heavy, JD lead
   - channel: 3
@@ -1645,7 +1645,7 @@ programs:
     fx: [gate, delay]
   - channel: 3
     level: 0
-    axe_scene: 3
+    axe_scene: 2
     fx: [gate]
   - channel: 3
     level: 0
