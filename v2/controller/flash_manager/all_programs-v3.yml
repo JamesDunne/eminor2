@@ -542,18 +542,18 @@ programs:
 - name: Counting Blue Cars
   gmaj_program: 16
   initial_scene: 1
-  sequence: [1,2,1,3,2,1,3]
+  sequence: [2,1,2,1,2,3,1,2,3]
   scenes:
-    # Dirty
-  - channel: 3
-    level: 0
-    axe_scene: 2
-    fx: [delay]
     # Clean
   - channel: 1
     level: 0
     axe_scene: 2
     fx: [compressor, chorus, delay]
+    # Dirty
+  - channel: 3
+    level: 0
+    axe_scene: 2
+    fx: [delay]
     # JD Solo
   - channel: 3
     level: 3
@@ -1322,7 +1322,7 @@ programs:
     fx: [gate]
 - name: Bells
   gmaj_program: 37
-  initial_scene: 6
+  sequence: [6, 8]
   scenes:
   - channel: 1
     level: 0
@@ -1397,12 +1397,8 @@ programs:
     fx: [gate]
 - name: What I Got
   gmaj_program: 39
-  initial_scene: 1
+  sequence: [1, 2, 1, 2, 1]
   scenes:
-  - channel: 1
-    level: 0
-    axe_scene: 1
-    fx: [compressor]
   - channel: 1
     level: 0
     axe_scene: 1
@@ -1411,26 +1407,30 @@ programs:
     level: 4
     axe_scene: 1
     fx: [compressor]
-  - channel: 2
+  - channel: 1
+    level: 4
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 1
     level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq, delay]
-  - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 1
     level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 1
     level: 0
-    axe_scene: 2
-    fx: [gate, compressor, eq]
-  - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate, compressor, eq, delay]
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor]
+  - channel: 1
+    level: 0
+    axe_scene: 1
+    fx: [compressor]
 - name: Say It Aint So
   gmaj_program: 40
   initial_scene: 1
@@ -1478,7 +1478,7 @@ programs:
     fx: [gate]
 - name: Shine
   gmaj_program: 41
-  initial_scene: 6
+  sequence: [6, 8, 6]
   scenes:
   - channel: 1
     level: 0
@@ -1505,13 +1505,13 @@ programs:
     axe_scene: 2
     fx: [gate]
   - channel: 2
-    level: 3
-    axe_scene: 2
-    fx: [gate, delay]
-  - channel: 2
     level: 0
     axe_scene: 4
     fx: [gate]
+  - channel: 2
+    level: 3
+    axe_scene: 2
+    fx: [gate, delay]
 - name: Basketcase
   gmaj_program: 42
   initial_scene: 6
