@@ -407,7 +407,12 @@ void load_program_state(void) {
 		curr_seq = 1;
 		if (pr.sequence.count > 1) {
 			start_timer(prog);
+		} else {
+			reset_timer(prog);
 		}
+	} else {
+		curr_seq = 0;
+		reset_timer(prog);
 	}
 }
 
