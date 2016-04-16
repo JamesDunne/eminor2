@@ -73,7 +73,7 @@ programs:
     fx: [gate, delay]
 - name: Zero
   gmaj_program: 3
-  sequence: [6,8,6,8,6,5]
+  sequence: [6,8,6,8,6,5,6]
   scenes:
   - channel: 1
     level: 0
