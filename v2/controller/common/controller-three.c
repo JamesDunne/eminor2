@@ -157,9 +157,10 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define tglbit(VAR,Place) VAR ^= (1 << Place)
 
 // Hard-coded MIDI channel #s:
-#define gmaj_midi_channel   0
-#define rjm_midi_channel    1
-#define axe_midi_channel    2
+#define gmaj_midi_channel	 0
+#define rjm_midi_channel	 1
+#define axe_midi_channel	 2
+#define triaxis_midi_channel 3
 
 // G-major CC messages:
 #define gmaj_cc_taptempo        80
@@ -612,8 +613,11 @@ static void scene_activate(void) {
     // Send Axe-FX scene change:
     axe_scene = pr_axe_scene[scene];
     if (axe_scene != last_axe_scene) {
+		// Send Axe-FX scene change:
         axe_cc_set(axe_cc_scene, axe_scene);
-        last_axe_scene = axe_scene;
+		// Also send program change to TriAxis preamp:
+		midi_send_cmd1(0xC, triaxis_midi_channel, axe_scene);
+		last_axe_scene = axe_scene;
     }
 
     // Send Axe-FX mute change:
