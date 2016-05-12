@@ -602,29 +602,29 @@ static void scene_activate(void) {
         gmaj_program = next_gmaj_program;
     }
 
-    if (pr_rjm[scene] != last_rjm_channel) {
+    //if (pr_rjm[scene] != last_rjm_channel) {
         // Send the MIDI PROGRAM CHANGE message to RJM Mini Amp Gizmo:
         midi_send_cmd1(0xC, rjm_midi_channel, (pr_rjm[scene] << 1));
         last_rjm_channel = pr_rjm[scene];
-    }
+    //}
 
     scene_activate_level();
 
     // Send Axe-FX scene change:
     axe_scene = pr_axe_scene[scene];
-    if (axe_scene != last_axe_scene) {
+    //if (axe_scene != last_axe_scene) {
 		// Send Axe-FX scene change:
         axe_cc_set(axe_cc_scene, axe_scene);
 		// Also send program change to TriAxis preamp:
 		midi_send_cmd1(0xC, triaxis_midi_channel, axe_scene);
 		last_axe_scene = axe_scene;
-    }
+    //}
 
     // Send Axe-FX mute change:
-    if (pr_axe_muted[scene] != last_axe_muted) {
+    //if (pr_axe_muted[scene] != last_axe_muted) {
         axe_cc_set(axe_cc_tuner, pr_axe_muted[scene] ? (u8)0x7F : (u8)0x00);
         last_axe_muted = pr_axe_muted[scene];
-    }
+    //}
 
     live_scene = scene;
     for (i = 0; i < scene_descriptor_count; i++) {
