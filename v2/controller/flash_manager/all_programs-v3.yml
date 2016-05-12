@@ -826,14 +826,16 @@ programs:
     level: 0
     axe_scene: 2
     fx: [gate]
+    # Brainstew with hard gate
   - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
+    # Jaded with no gate
   - channel: 3
     level: 0
     axe_scene: 2
-    fx: [gate]
+    fx: []
   - channel: 3
     level: 0
     axe_scene: 2
@@ -1300,25 +1302,25 @@ programs:
     level: 3
     axe_scene: 1
     fx: [compressor]
-  - channel: 2
+  - channel: 3
     level: -2
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, delay]
-  - channel: 2
+  - channel: 3
     level: -2
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate, delay]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
-    axe_scene: 2
+    axe_scene: 3
     fx: [gate]
 - name: Bells
   gmaj_program: 37
@@ -1336,23 +1338,23 @@ programs:
     level: 3
     axe_scene: 1
     fx: [compressor]
-  - channel: 2
+  - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 0
     axe_scene: 2
     fx: [gate]
-  - channel: 2
+  - channel: 3
     level: 3
     axe_scene: 2
     fx: [gate, delay]
