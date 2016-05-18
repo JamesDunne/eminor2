@@ -1449,7 +1449,7 @@ programs:
     axe_scene: 2
     fx: [gate]
     # MG dirty, JD lead
-  - channel: 2
+  - channel: 3
     level: 3
     axe_scene: 2
     fx: [gate]
@@ -1642,7 +1642,7 @@ programs:
     fx: [gate]
     # MG heavy, JD lead
   - channel: 2
-    level: 3
+    level: 4
     axe_scene: 2
     fx: [gate, delay]
   - channel: 2

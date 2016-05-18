@@ -603,8 +603,6 @@ sets:
 
   - date: "2016-04-16"
     venue: Private Party
-    active: true
-    print: true
     songs:
       - Song 2
       - Dammit
@@ -646,3 +644,54 @@ sets:
       - Sex Type Thing
       - Bullet With Butterfly Wings
       - Enter Sandman
+
+  - date: "2016-05-28"
+    venue: Dublin Mule
+    active: true
+    print: true
+    songs:
+      - Crawling
+      - Holiday
+      - Machinehead
+      - 'BREAK: INTRO'
+      - Zero
+      - Brainstew
+      - Kryptonite
+      - 'BREAK: BREAK'
+      - Undone
+      - Hey Jealousy
+      - 'BREAK: DOWNTUNE'
+      - The Middle
+      - Monkeywrench
+      - Lump
+      - 'BREAK: UPTUNE'
+      - Plush
+      - Bound for the Floor
+      - What I Got
+      - 'BREAK: BREAK'
+      - Hash Pipe
+      - Bullet with Butterfly Wings
+      - 'BREAK: SET 2'
+      - Song 2
+      - Dammit
+      - In Bloom
+      - Beautiful Disaster
+      - 'BREAK: BREAK'
+      - Say It Aint So
+      - Everything Zen
+      - 'BREAK: DOWNTUNE'
+      - Shine
+      - 'BREAK: UPTUNE'
+      - My Own Worst Enemy
+      - Counting Blue Cars
+      - Buddy Holly
+      - 'BREAK: BREAK'
+      - Cumbersome
+      - Fuel
+      - My Hero
+      - 'BREAK: BREAK'
+      - Sex Type Thing
+      - When I Come Around
+      - 'BREAK: GOODBYE'
+      - Enter Sandman
+      - Bells
