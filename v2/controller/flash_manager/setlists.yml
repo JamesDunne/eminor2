@@ -646,7 +646,7 @@ sets:
       - Enter Sandman
 
   - date: "2016-05-28"
-    venue: Dublin Mule
+    venue: Olde Towne Inn
     active: true
     print: true
     songs:
