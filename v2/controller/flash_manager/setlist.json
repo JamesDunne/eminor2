@@ -95,7 +95,7 @@
       },
       {
         "i": 16,
-        "title": "Bullet With Butterfly Wings",
+        "title": "Enter Sandman",
         "starts": "Glaz"
       },
       {
@@ -103,13 +103,13 @@
       },
       {
         "i": 17,
-        "title": "Song 2",
-        "starts": "Bremer"
+        "title": "Beautiful Disaster",
+        "starts": "Jim"
       },
       {
         "i": 18,
-        "title": "Dammit",
-        "starts": "Jim"
+        "title": "Song 2",
+        "starts": "Bremer"
       },
       {
         "i": 19,
@@ -117,22 +117,22 @@
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 20,
-        "title": "Beautiful Disaster",
-        "starts": "Jim"
-      },
-      {
         "breakText": "BREAK"
       },
       {
-        "i": 21,
+        "i": 20,
         "title": "Say It Aint So",
         "starts": "Jim"
       },
       {
-        "i": 22,
+        "i": 21,
         "title": "Everything Zen",
         "starts": "Glaz"
+      },
+      {
+        "i": 22,
+        "title": "Dammit",
+        "starts": "Jim"
       },
       {
         "breakText": "DOWNTUNE"
@@ -196,7 +196,7 @@
       },
       {
         "i": 32,
-        "title": "Enter Sandman",
+        "title": "Bullet With Butterfly Wings",
         "starts": "Glaz"
       },
       {
