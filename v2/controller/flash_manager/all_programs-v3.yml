@@ -582,7 +582,7 @@ programs:
     fx: [delay]
 - name: In Bloom
   gmaj_program: 17
-  initial_scene: 6
+  sequence: [6,8,6]
   scenes:
   - channel: 1
     level: 0
@@ -802,7 +802,7 @@ programs:
     level: 0
     axe_scene: 1
     fx: []
-- name: Brainstew
+- name: Brain Stew
   gmaj_program: 23
   initial_scene: 6
   scenes:
@@ -842,7 +842,7 @@ programs:
     fx: [gate]
 - name: Bound for the Floor
   gmaj_program: 24
-  initial_scene: 4
+  sequence: [4,6,4]
   scenes:
   - channel: 1
     level: 0
