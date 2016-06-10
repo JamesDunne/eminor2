@@ -647,8 +647,6 @@ sets:
 
   - date: "2016-05-28"
     venue: Olde Towne Inn
-    active: true
-    print: true
     songs:
       - Crawling
       - Holiday
@@ -695,3 +693,55 @@ sets:
       - 'BREAK: GOODBYE'
       - Bullet with Butterfly Wings
       - Bells
+
+  - date: "2016-06-10"
+    venue: Penny Road Pub
+    active: true
+    print: true
+    songs:
+      - Crawling in the Dark
+      - Dammit
+      - Song 2
+
+      - 'BREAK: INTRO'
+
+      - Brain Stew
+      - Hey Jealousy
+      - Bound for the Floor
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: UPTUNE'
+
+      - Say It Ain't So
+      - Machinehead
+      - Holiday
+
+      - 'BREAK: BREAK'
+
+      - Undone
+      - Fuel
+      - When I Come Around
+
+      - 'BREAK: BREAK'
+
+      - Sex Type Thing
+      - Counting Blue Cars
+      - Zero
+
+      - 'BREAK: BREAK'
+
+      - My Own Worst Enemy
+      - Hash Pipe
+
+      - 'BREAK: GOODBYE'
+
+      - Enter Sandman
+
+      - 'BREAK: ENCORE'
+
+      - For Whom the Bell Tolls

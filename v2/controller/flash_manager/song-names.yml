@@ -1,6 +1,6 @@
 songs:
-- names: [Monkeywrench, Monkey Wrench]
-  short_name: Monkeywrench
+- names: [Monkey Wrench, Monkeywrench]
+  short_name: Monkey Wrench
   starts: Bremer 4 ct
 
 - names: [Even Flow]
@@ -87,8 +87,8 @@ songs:
   short_name: Closing Time
   starts: Glaz
 
-- names: [Brainstew, Brain Stew]
-  short_name: Brainstew
+- names: [Brain Stew, Brainstew]
+  short_name: Brain Stew
   starts: Jim
 
 - names: [Bound for the Floor]
@@ -115,7 +115,7 @@ songs:
   short_name: Kryptonite
   starts: Glaz
 
-- names: [Dammit, Damnit]
+- names: [Dammit, Damnit, Damn It]
   short_name: Dammit
   starts: Jim
 
