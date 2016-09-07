@@ -1376,11 +1376,11 @@ programs:
     fx: [compressor]
     # JD post-lead delay with chorus (gimme fuel)
   - channel: 2
-    level: 1
+    level: 2
     axe_scene: 2
     fx: [gate, delay]
   - channel: 2
-    level: 1
+    level: 3
     axe_scene: 2
     fx: [gate, delay]
   - channel: 2
@@ -1394,7 +1394,7 @@ programs:
     fx: [gate]
     # JD lead
   - channel: 2
-    level: 5
+    level: 4
     axe_scene: 2
     fx: [gate]
 - name: What I Got
