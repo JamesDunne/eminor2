@@ -307,11 +307,13 @@ static void send_leds(void);
 static void update_lcd(void);
 
 static u8 is_top_button_pressed(u8 mask) {
+	// Top switch press cannot be an accident:
     return (fsw_last.bot.byte == 0) && (fsw.bot.byte == 0) && (fsw_last.top.byte == 0) && (fsw.top.byte == mask);
 }
 
 static u8 is_bot_button_pressed(u8 mask) {
-    return (fsw_last.top.byte == 0) && (fsw.top.byte == 0) && (fsw_last.bot.byte == 0) && (fsw.bot.byte == mask);
+	// Always switch programs regardless of whether a top switch was accidentally depressed:
+    return (fsw_last.bot.byte == 0) && (fsw.bot.byte == mask);
 }
 
 static u8 is_top_button_released(u8 mask) {
