@@ -696,8 +696,6 @@ sets:
 
   - date: "2016-06-10"
     venue: Penny Road Pub
-    active: true
-    print: true
     songs:
       - Crawling in the Dark
       - Dammit
@@ -745,3 +743,22 @@ sets:
       - 'BREAK: ENCORE'
 
       - For Whom the Bell Tolls
+
+  - date: "2016-09-23"
+    venue: Q Bar
+    active: true
+    print: true
+    songs:
+      - Zero
+      - My Own Worst Enemy
+      - Dammit
+      - Brain Stew
+      - Song 2
+      - Say It Ain't So
+      - Machinehead
+      - Basket Case
+      - Buddy Holly
+      - Fuel
+      - 'BREAK: ENCORE'
+      - Hash Pipe
+      - Enter Sandman

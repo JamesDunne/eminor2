@@ -1,25 +1,22 @@
 [
   {
-    "date": "2016-06-10",
-    "venue": "Penny Road Pub",
+    "date": "2016-09-23",
+    "venue": "Q Bar",
     "songs": [
       {
         "i": 1,
-        "title": "Crawling in the Dark",
+        "title": "Zero",
         "starts": "Jim"
       },
       {
         "i": 2,
-        "title": "Dammit",
+        "title": "My Own Worst Enemy",
         "starts": "Jim"
       },
       {
         "i": 3,
-        "title": "Song 2",
-        "starts": "Bremer"
-      },
-      {
-        "breakText": "INTRO"
+        "title": "Dammit",
+        "starts": "Jim"
       },
       {
         "i": 4,
@@ -28,114 +25,46 @@
       },
       {
         "i": 5,
-        "title": "Hey Jealousy",
-        "starts": "Bremer 4 ct"
+        "title": "Song 2",
+        "starts": "Bremer"
       },
       {
         "i": 6,
-        "title": "Bound for the Floor",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "DOWNTUNE"
-      },
-      {
-        "i": 7,
-        "title": "The Middle",
-        "starts": "Glaz"
-      },
-      {
-        "i": 8,
-        "title": "Monkey Wrench",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 9,
-        "title": "Lump",
-        "starts": "Bremer+Glaz"
-      },
-      {
-        "breakText": "UPTUNE"
-      },
-      {
-        "i": 10,
         "title": "Say It Aint So",
         "starts": "Jim"
       },
       {
-        "i": 11,
+        "i": 7,
         "title": "Machinehead",
         "starts": "Jim"
       },
       {
-        "i": 12,
-        "title": "Holiday",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 13,
-        "title": "Undone",
-        "starts": "Bremer"
-      },
-      {
-        "i": 14,
-        "title": "Fuel",
+        "i": 8,
+        "title": "Basketcase",
         "starts": "Glaz"
       },
       {
-        "i": 15,
-        "title": "When I Come Around",
-        "starts": "Jim"
+        "i": 9,
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
       },
       {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 16,
-        "title": "Sex Type Thing",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 17,
-        "title": "Counting Blue Cars",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 18,
-        "title": "Zero",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 19,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
-      },
-      {
-        "i": 20,
-        "title": "Hash Pipe",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "breakText": "GOODBYE"
-      },
-      {
-        "i": 21,
-        "title": "Enter Sandman",
+        "i": 10,
+        "title": "Fuel",
         "starts": "Glaz"
       },
       {
         "breakText": "ENCORE"
       },
       {
-        "i": 22,
-        "title": "For Whom The Bell Tolls",
-        "starts": "Bremer"
+        "i": 11,
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "i": 12,
+        "title": "Enter Sandman",
+        "starts": "Glaz"
       }
     ]
   }
