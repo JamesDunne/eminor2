@@ -50,6 +50,11 @@
       },
       {
         "i": 10,
+        "title": "Enter Sandman",
+        "starts": "Glaz"
+      },
+      {
+        "i": 11,
         "title": "Fuel",
         "starts": "Glaz"
       },
@@ -57,14 +62,9 @@
         "breakText": "ENCORE"
       },
       {
-        "i": 11,
-        "title": "Hash Pipe",
-        "starts": "Bremer+Adam"
-      },
-      {
         "i": 12,
-        "title": "Enter Sandman",
-        "starts": "Glaz"
+        "title": "When I Come Around",
+        "starts": "Jim"
       }
     ]
   }
