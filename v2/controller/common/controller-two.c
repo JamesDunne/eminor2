@@ -1303,16 +1303,8 @@ void controller_handle(void) {
     fsw_last = fsw;
 }
 
-#elif HW_VERSION == 1
-
-static void nothing(void) {}
-
-#elif HW_VERSION == 3
-
-static void nothing(void) {}
-
 #else
 
-#error HW_ VERSION must be either "1" or "2"
+static void nothing(void) {}
 
 #endif

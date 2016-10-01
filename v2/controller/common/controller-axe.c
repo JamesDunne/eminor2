@@ -2,28 +2,15 @@
     Programmable e-minor MIDI foot controller v2.
 
     Currently designed to work with:
-    Primary guitar amp:
-        3-channel Mark V amplifier controller via
-            RJM Mini Amp Gizmo (MIDI)
-        t.c. electronic g-major effects unit (MIDI)
-    Secondary guitar amp:
-        Axe-FX II (MIDI)
-            scene changes 1-4 to control amp changes across two amp blocks with X/Y switching
-
-    Assumptions:
-    g-major listens on MIDI channel 1
-    g-major listens for program change messages and CC messages
-    RJM listens on MIDI channel 2
-    RJM listens for program change messages with program #s 1-3
-    Axe-FX II listens on MIDI channel 4
+        Axe-FX II (MIDI channel 3)
 
     Written by
     James S. Dunne
     https://github.com/JamesDunne/
-    2016-03-20
+    2016-10-01
 */
 
-#if HW_VERSION == 3
+#if HW_VERSION == 4
 
 #include <assert.h>
 #include <stdio.h>
@@ -32,22 +19,39 @@
 
 /*
 LIVE:
-|-----------------------------------------------------------|
-|    *      *      *      *      *      *      *      *     |
-|   AX1    AX2    AX3    AX4  AX-MUTE MK-MUTE PREV   NEXT   |
-|                               MODE   SAVE                 |
-|                                                           |
-|    *      *      *      *      *      *      *      *     |
-|   SC1    SC2    SC3    SC4    SC5    SC6    SC7    SC8    |
-|                                                           |
-|-----------------------------------------------------------|
+|------------------------------------------------------------|
+|     *      *      *      *      *      *      *      *     |
+|   DRV1    XY1   VOL--  VOL++   FX1    MODE  PR_PRV PR_NXT  |
+|                                                            |
+|                                                            |
+|     *      *      *      *      *      *      *      *     |
+|   DRV2    XY2   VOL--  VOL++   FX2    TAP   SC_PRV SC_NXT  |
+|                                      STORE                 |
+|------------------------------------------------------------|
 
-      MODE = enter MODE change
-      AX1 to AX4 = press to send Axe-FX scene change #1-4
-      SC1 to SC8 = press to switch to scene; repeat to send TAP TEMPO
-      Hold down SC1 to SC8 to enter SCENE DESIGNER
+	Top row of buttons controls amp 1 settings
+	Bottom row of buttons controls amp 2 settings
 
-SCENE DESIGNER:
+	Press DRV    to change from clean to dirty (LED off is clean, on is dirty); gapless audio using scene controllers to modify amp parameters
+	Press XY     to switch AMP1/2 between X and Y settings (e.g. X = Mark V ch 2, Y = Mark V ch 3); causes audio gap
+	Press VOL--  to decrease amp volume by 1dB
+	Press VOL++  to increase amp volume by 1dB
+	Press FX     to alter effects for amp 1/2
+
+	Press TAP    to send tap tempo
+	Hold  STORE  to store current scene settings
+
+	Press SC_PRV to move to previous scene
+	Press SC_NXT to move to next scene
+
+	Press PR_PRV to move to previous setlist song / program #
+	Press PR_NXT to move to next setlist song / program #
+
+	Use scene controllers to transition from clean to dirty on both AMP1 and AMP2, controlled separately
+
+    Press MODE   to switch between set-list order and program # order
+
+FX EDITOR:
 |-----------------------------------------------------------|
 |    *      *      *      *      *      *      *      *     |
 |   CMP    FLT    PIT    CHO    DLY    RVB    GATE   EQ     |
@@ -57,6 +61,12 @@ SCENE DESIGNER:
 |   CH1    CH2    CH3   VOL--  VOL++  VOL=6   SAVE   EXIT   |
 |                                                           |
 |-----------------------------------------------------------|
+
+    PITCH1 -- AMP1 -- GATE1 -- COMP1 -- CHORUS1  -- PHASER1 -- DELAY1 -\               
+                                     \- FLANGER1 -/                     \- VOL1 --- CAB
+                                     /- FLANGER2 -\                     /- VOL2 -/     
+    PITCH2 -- AMP2 -- GATE2 -- COMP2 -- CHORUS2  -- PHASER2 -- DELAY2 -/               
+
 */
 
 #define scene_descriptor_count 8
