@@ -52,20 +52,20 @@ LIVE:
     Press MODE   to switch between set-list order and program # order
 
 FX EDITOR:
-|-----------------------------------------------------------|
-|    *      *      *      *      *      *      *      *     |
-|   CMP    FLT    PIT    CHO    DLY    RVB    GATE   EQ     |
-|                                                           |
-|                                                           |
-|    *      *      *      *      *      *      *      *     |
-|   CH1    CH2    CH3   VOL--  VOL++  VOL=6   SAVE   EXIT   |
-|                                                           |
-|-----------------------------------------------------------|
+|------------------------------------------------------------|
+|     *      *      *      *      *      *      *      *     |
+|   GATE1  PITCH1 COMP1 CHORUS1 PHSER1 DELAY1                |
+|                                                            |
+|                                                            |
+|     *      *      *      *      *      *      *      *     |
+|   GATE2  PITCH2 COMP2 CHORUS2 PHSER2 DELAY2 EXIT   ENTER   |
+|                                                            |
+|------------------------------------------------------------|
 
-    PITCH1 -- AMP1 -- GATE1 -- COMP1 -- CHORUS1  -- PHASER1 -- DELAY1 -\               
-                                     \- FLANGER1 -/                     \- VOL1 --- CAB
-                                     /- FLANGER2 -\                     /- VOL2 -/     
-    PITCH2 -- AMP2 -- GATE2 -- COMP2 -- CHORUS2  -- PHASER2 -- DELAY2 -/               
+    GATE1 -- PITCH1 -- AMP1 -- COMP1 -- CHORUS1 -- PHASER1 -- DELAY1 -\               
+                                                                       \- VOL1 --- CAB
+                                                                       /- VOL2 -/     
+    GATE2 -- PITCH2 -- AMP2 -- COMP2 -- CHORUS2 -- PHASER2 -- DELAY2 -/               
 
 */
 
