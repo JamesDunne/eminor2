@@ -1,7 +1,7 @@
 [
   {
-    "date": "2016-09-23",
-    "venue": "Q Bar",
+    "date": "2016-10-28",
+    "venue": "BOTB",
     "songs": [
       {
         "i": 1,
@@ -59,12 +59,59 @@
         "starts": "Glaz"
       },
       {
-        "breakText": "ENCORE"
-      },
-      {
         "i": 12,
         "title": "When I Come Around",
         "starts": "Jim"
+      },
+      {
+        "i": 13,
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "i": 14,
+        "title": "Everything Zen",
+        "starts": "Glaz"
+      },
+      {
+        "i": 15,
+        "title": "Beautiful Disaster",
+        "starts": "Jim"
+      },
+      {
+        "i": 16,
+        "title": "Cumbersome",
+        "starts": "Jim"
+      },
+      {
+        "i": 17,
+        "title": "Plush",
+        "starts": "Bremer 2 ct"
+      },
+      {
+        "i": 18,
+        "title": "Lump",
+        "starts": "Bremer+Glaz"
+      },
+      {
+        "i": 19,
+        "title": "The Middle",
+        "starts": "Glaz"
+      },
+      {
+        "i": 20,
+        "title": "Monkey Wrench",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 21,
+        "title": "Undone",
+        "starts": "Bremer"
+      },
+      {
+        "i": 22,
+        "title": "For Whom The Bell Tolls",
+        "starts": "Bremer"
       }
     ]
   }

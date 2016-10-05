@@ -746,8 +746,6 @@ sets:
 
   - date: "2016-09-23"
     venue: Q Bar
-    active: true
-    print: true
     songs:
       - Zero
       - My Own Worst Enemy
@@ -762,3 +760,31 @@ sets:
       - Fuel
       - 'BREAK: ENCORE'
       - When I Come Around
+
+  - date: "2016-10-28"
+    venue: BOTB
+    active: true
+    print: true
+    songs:
+      - Zero
+      - My Own Worst Enemy
+      - Dammit
+      - Brain Stew
+      - Song 2
+      - Say It Ain't So
+      - Machinehead
+      - Basket Case
+      - Buddy Holly
+      - Enter Sandman
+      - Fuel
+      - When I Come Around
+      - Hash Pipe
+      - Everything Zen
+      - Beautiful Disaster
+      - Cumbersome
+      - Plush
+      - Lump
+      - The Middle
+      - Monkeywrench
+      - Undone
+      - Bells
