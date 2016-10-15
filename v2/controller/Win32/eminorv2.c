@@ -959,7 +959,7 @@ u8 flash_bank[3][4096] = {
 #include "../PIC/flash_v2_bank2.h"
     }
 };
-#elif HW_VERSION == 3
+#elif HW_VERSION == 3 || HW_VERSION == 4
 u8 flash_bank[3][4096] = {
 	{
 #include "../PIC/flash_v3_bank0.h"
