@@ -766,25 +766,38 @@ sets:
     active: true
     print: true
     songs:
-      - Zero
+      - Fuel
       - My Own Worst Enemy
       - Dammit
+
+      - "BREAK: INTRO"
+
       - Brain Stew
-      - Song 2
-      - Say It Ain't So
       - Machinehead
-      - Basket Case
-      - Buddy Holly
-      - Enter Sandman
-      - Fuel
-      - When I Come Around
-      - Hash Pipe
-      - Everything Zen
+      - Zero
+
+      - "BREAK: BREAK"
+
       - Beautiful Disaster
-      - Cumbersome
+      - Say It Ain't So
+      - Basket Case
+
+      - "BREAK: BREAK"
+
+      - Buddy Holly
+      - Everything Zen
+
+      - "BREAK: TUNE"
+
+      - Monkey Wrench
+
+      - "BREAK: TUNE"
+
       - Plush
-      - Lump
-      - The Middle
-      - Monkeywrench
-      - Undone
-      - Bells
+      - Song 2
+      - Hash Pipe
+
+      - "BREAK: GOODBYE"
+
+      - Enter Sandman
+      - For Whom the Bell Tolls
