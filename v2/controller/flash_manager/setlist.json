@@ -1,7 +1,7 @@
 [
   {
     "date": "2016-10-28",
-    "venue": "BOTB",
+    "venue": "Bar 145",
     "songs": [
       {
         "i": 1,
@@ -68,28 +68,20 @@
         "starts": "Glaz"
       },
       {
-        "breakText": "TUNE"
+        "breakText": "BREAK"
       },
       {
         "i": 12,
-        "title": "Monkey Wrench",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "breakText": "TUNE"
-      },
-      {
-        "i": 13,
         "title": "Plush",
         "starts": "Bremer 2 ct"
       },
       {
-        "i": 14,
+        "i": 13,
         "title": "Song 2",
         "starts": "Bremer"
       },
       {
-        "i": 15,
+        "i": 14,
         "title": "Hash Pipe",
         "starts": "Bremer+Adam"
       },
@@ -97,14 +89,9 @@
         "breakText": "GOODBYE"
       },
       {
-        "i": 16,
+        "i": 15,
         "title": "Enter Sandman",
         "starts": "Glaz"
-      },
-      {
-        "i": 17,
-        "title": "For Whom The Bell Tolls",
-        "starts": "Bremer"
       }
     ]
   }

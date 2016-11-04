@@ -762,7 +762,7 @@ sets:
       - When I Come Around
 
   - date: "2016-10-28"
-    venue: BOTB
+    venue: Bar 145
     active: true
     print: true
     songs:
@@ -787,11 +787,7 @@ sets:
       - Buddy Holly
       - Everything Zen
 
-      - "BREAK: TUNE"
-
-      - Monkey Wrench
-
-      - "BREAK: TUNE"
+      - "BREAK: BREAK"
 
       - Plush
       - Song 2
@@ -800,4 +796,3 @@ sets:
       - "BREAK: GOODBYE"
 
       - Enter Sandman
-      - For Whom the Bell Tolls
