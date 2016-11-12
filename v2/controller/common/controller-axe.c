@@ -170,7 +170,7 @@ enum {
 
 struct amp {
     u8 dirty;   // clean or dirty tone
-    u8 xy;      // X or Y settings
+    u8 boost;   // 0dB or +6dB boost
 };
 
 struct state {
@@ -186,6 +186,8 @@ struct state {
 
     // Per-amp settings:
     struct amp amp[2];
+    // Common X/Y mode for amps:
+    u8 xy;
 };
 
 // Current and last state:
@@ -356,25 +358,39 @@ void controller_10msec_timer(void) {
 
 }
 
-static u8 calc_scene(struct amp amp[]) {
-    return amp[0].dirty | (amp[1].dirty << 1);
-}
-
 static void calc_leds(void) {
     curr.mode_leds[curr.mode].bot.bits._1 = curr.amp[0].dirty;
     curr.mode_leds[curr.mode].bot.bits._2 = curr.amp[1].dirty;
+    curr.mode_leds[curr.mode].bot.bits._3 = curr.xy;
+
+    curr.mode_leds[curr.mode].top.bits._1 = curr.amp[0].boost;
+    curr.mode_leds[curr.mode].top.bits._2 = curr.amp[1].boost;
 
     send_leds();
+}
+
+static u8 calc_scene(struct amp amp[], u8 xy) {
+    return (amp[0].dirty | (amp[1].dirty << 1)) | ((xy & 1) << 2);
+}
+
+static u8 calc_boost_level(u8 boost) {
+    return (127 - 64) + ((boost & 1) << 6);
 }
 
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     // Axe-FX scene # is just a bitwise OR of (amp[0].dirty) and (amp[1].dirty << 1):
-    u8 curr_scene = calc_scene(curr.amp);
-    u8 last_scene = calc_scene(last.amp);
+    u8 curr_scene = calc_scene(curr.amp, curr.xy);
+    u8 last_scene = calc_scene(last.amp, last.xy);
 
     if (curr_scene != last_scene) {
         midi_set_axe_cc(axe_cc_scene, curr_scene);
+    }
+    if (curr.amp[0].boost != last.amp[0].boost) {
+        midi_set_axe_cc(16, calc_boost_level(curr.amp[0].boost & 1));
+    }
+    if (curr.amp[1].boost != last.amp[1].boost) {
+        midi_set_axe_cc(17, calc_boost_level(curr.amp[1].boost & 1));
     }
 }
 
@@ -391,6 +407,17 @@ void controller_handle(void) {
     }
     if (is_bot_button_pressed(M_2)) {
         curr.amp[1].dirty ^= 1;
+    }
+    if (is_bot_button_pressed(M_3)) {
+        curr.xy ^= 1;
+    }
+
+    // Handle boost switches:
+    if (is_top_button_pressed(M_1)) {
+        curr.amp[0].boost ^= 1;
+    }
+    if (is_top_button_pressed(M_2)) {
+        curr.amp[1].boost ^= 1;
     }
 
     calc_midi();
