@@ -111,34 +111,6 @@ struct program {
 // Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
 COMPILE_ASSERT(sizeof(struct program) == 64);
 
-// Mark V channel 1
-#define rjm_channel_1       0x00
-// Mark V channel 2
-#define rjm_channel_2       0x01
-// Mark V channel 3
-#define rjm_channel_3       0x02
-
-#define rjm_channel_mask    0x03
-
-#define scene_level_mask (31 << 2)
-#define scene_level_shr  2
-
-// 5-bit signed values
-#define scene_level_offset  9
-#define scene_level_0       ((( 0 + scene_level_offset) & 31) << 2)
-#define scene_level_pos6    (((+6 + scene_level_offset) & 31) << 2)
-
-#define scene_initial       0x80
-
-#define axe_scene_1         0x00
-#define axe_scene_2         0x01
-#define axe_scene_3         0x02
-#define axe_scene_4         0x02
-
-#define axe_scene_mask      0x03
-
-#define axe_scene_muted     0x80
-
 // Set list entry
 struct set_entry {
     u8 program;
@@ -171,28 +143,11 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define axe_midi_channel	 2
 #define triaxis_midi_channel 3
 
-// G-major CC messages:
-#define gmaj_cc_taptempo        80
-#define gmaj_cc_mute            81
-
-#define gmaj_cc_compressor      84
-#define gmaj_cc_filter          85
-#define gmaj_cc_pitch           86
-#define gmaj_cc_chorus          87
-#define gmaj_cc_delay           88
-#define gmaj_cc_reverb          89
-#define gmaj_cc_noisegate       90
-#define gmaj_cc_eq              91
-#define gmaj_cc_global_in_level 92
-
 // Axe-FX CC messages:
 #define axe_cc_taptempo         14
 #define axe_cc_tuner            15
 
 #define axe_cc_scene            34
-
-// Add +1 (dB?) to gmajor in level to adjust for delay effect volume loss:
-#define delay_level_adjust      1
 
 #define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
 #define is_held(rowname, mask) is_##rowname##_button_held(mask)
@@ -207,97 +162,71 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define is_held_next()          is_held(top, M_8)
 #define is_released_next()      is_released(top, M_8)
 
-// Top row of controller buttons activate these CCs:
-u8 gmaj_cc_lookup[8];
-
 enum {
     MODE_LIVE = 0,
     MODE_SCENE_DESIGN,
     MODE_count
 };
 
-// Controller UX modes (high level):
-u8 mode, mode_last;
+struct amp {
+    u8 dirty;   // clean or dirty tone
+    u8 xy;      // X or Y settings
+};
 
-// Setlist or program mode:
-u8 setlist_mode;
+struct state {
+    // Footswitch state:
+    io16 fsw;
+    // Actual LED state:
+    u16 leds;
 
-// Current and previous button state:
-io16 fsw, fsw_last;
-// Current LED state per `mode`:
-io16 leds[MODE_count];
+    // Current mode:
+    u8 mode;
+    // LED state per mode:
+    io16 mode_leds[MODE_count];
 
-u16 curr_leds, last_leds;
+    // Per-amp settings:
+    struct amp amp[2];
+};
 
-// Toggle value for tap tempo:
-u8 toggle_tap;
-u8 is_gmaj_muted; // 0 or 1
-
-// Current g-major program # (0-127):
-u8 gmaj_program;
-// Next g-major program to update to:
-u8 next_gmaj_program;
-
-u8 scene, live_scene;
-u8 last_rjm_channel;
-u8 last_gmaj_in_level;
-u8 last_fx;
-u8 last_bot_button_mask;
-u8 last_axe_muted;
-
-// Current program data:
-struct program pr;
-// Decoded RJM channels (0-based channel number, alternating SOLO modes):
-u8 pr_rjm[scene_descriptor_count], live_pr_rjm[scene_descriptor_count];
-s8 pr_out_level[scene_descriptor_count], live_pr_out_level[scene_descriptor_count];
-u8 pr_axe_scene[scene_descriptor_count];
-u8 pr_axe_muted[scene_descriptor_count];
-
-u8 axe_scene, last_axe_scene;   // 0 - 3
-
-u8 curr_seq;
-
-// Current set list:
-struct set_list sl;
-// Current index in list of setlists (which setlist):
-u8 sli, last_sli;
-// Current song index within current setlist:
-u8 slp, last_slp;
-
-u8 swap_slp;
+// Current and last state:
+struct state curr, last;
 
 #ifdef FEAT_LCD
+// Pointers to LCD character rows:
 u8 *lcd_rows[LCD_ROWS];
 #endif
 
-static s8 ritoa(u8 *s, u8 n, s8 i);
-static void send_leds(void);
 static void update_lcd(void);
+
+// Set Axe-FX CC value
+static void midi_set_axe_cc(u8 cc, u8 val) {
+    midi_send_cmd2(0xB, axe_midi_channel, cc, val);
+}
 
 static u8 is_top_button_pressed(u8 mask) {
 	// Top switch press cannot be an accident:
-    return (fsw_last.bot.byte == 0) && (fsw.bot.byte == 0) && (fsw_last.top.byte == 0) && (fsw.top.byte == mask);
+    return (last.fsw.bot.byte == 0) && (curr.fsw.bot.byte == 0) && (last.fsw.top.byte == 0) && (curr.fsw.top.byte == mask);
 }
 
 static u8 is_bot_button_pressed(u8 mask) {
 	// Always switch programs regardless of whether a top switch was accidentally depressed:
-    return (fsw_last.bot.byte == 0) && (fsw.bot.byte == mask);
+    return (last.fsw.bot.byte == 0) && (curr.fsw.bot.byte == mask);
 }
 
 static u8 is_top_button_released(u8 mask) {
-    return ((fsw_last.top.byte & mask) == mask) && ((fsw.top.byte & mask) == 0);
+    return ((last.fsw.top.byte & mask) == mask) && ((curr.fsw.top.byte & mask) == 0);
 }
 
 static u8 is_bot_button_released(u8 mask) {
-    return ((fsw_last.bot.byte & mask) == mask) && ((fsw.bot.byte & mask) == 0);
+    return ((last.fsw.bot.byte & mask) == mask) && ((curr.fsw.bot.byte & mask) == 0);
 }
 
 static u8 is_top_button_held(u8 mask) {
-    return (fsw.bot.byte == 0) && (fsw.top.byte == mask);
+    return (curr.fsw.bot.byte == 0) && (curr.fsw.top.byte == mask);
 }
 
 static u8 is_bot_button_held(u8 mask) {
-    return (fsw.top.byte == 0) && (fsw.bot.byte == mask);
+    return (curr.fsw.top.byte == 0) && (curr.fsw.bot.byte == mask);
 }
 
 static s8 ritoa(u8 *s, u8 n, s8 i) {
@@ -323,10 +252,10 @@ static s8 litoa(u8 *s, u8 n, s8 i) {
 
 static void send_leds(void) {
 	// Update LEDs:
-	curr_leds = (u16)leds[mode].bot.byte | ((u16)leds[mode].top.byte << 8);
-	if (curr_leds != last_leds) {
-		led_set(curr_leds);
-		last_leds = curr_leds;
+    curr.leds = (u16)curr.mode_leds[curr.mode].bot.byte | ((u16)curr.mode_leds[curr.mode].top.byte << 8);
+	if (curr.leds != last.leds) {
+		led_set(curr.leds);
+		last.leds = curr.leds;
 	}
 }
 
@@ -336,91 +265,34 @@ static void update_lcd(void) {
 	u8 **labels;
 #endif
 #ifdef FEAT_LCD
-	s8 i;
-	u8 b = 1;
-	u8 fx = pr.fx[scene];
-	u8 show_row3_fx = 0;
-
-	// Show program name and clear row 0:
-	for (i = 0; i < LCD_COLS; i++) {
-		lcd_rows[0][i] = ' ';
-		lcd_rows[2][i] = pr.name[i];
-		if (pr.name[i] == 0) break;
-	}
-	for (; i < LCD_COLS; i++) {
-		lcd_rows[0][i] = ' ';
-		lcd_rows[2][i] = ' ';
-	}
-
-	if (mode == MODE_LIVE) {
-		show_row3_fx = 1;
-#if HWFEAT_LABEL_UPDATES
-		labels = label_row_get(0);
-		labels[0] = "SC1";
-		labels[1] = "SC2";
-		labels[2] = "SC3";
-		labels[3] = "SC4";
-		labels[4] = "SC5";
-		labels[5] = "SC6";
-		labels[6] = "SC7";
-		labels[7] = "SC8";
-		label_row_update(0);
-
-		labels = label_row_get(1);
-		labels[0] = "AX1";
-		labels[1] = "AX2";
-		labels[2] = "AX3";
-		labels[3] = "AX4";
-		labels[4] = "AX-MUTE";
-		labels[5] = "MK-MUTE";
-		labels[6] = "PREV";
-		labels[7] = "NEXT";
-		label_row_update(1);
+    s8 i;
 #endif
-	}
-	else if (mode == MODE_SCENE_DESIGN) {
-		// Show selected scene on LCD since we don't have an LED for it:
-		lcd_rows[0][17] = 'S';
-		lcd_rows[0][18] = 'C';
-		lcd_rows[0][19] = '1' + scene;
+#ifdef HWFEAT_LABEL_UPDATES
+    labels = label_row_get(0);
+    labels[0] = "BOT1";
+    labels[1] = "BOT2";
+    labels[2] = "BOT3";
+    labels[3] = "BOT4";
+    labels[4] = "BOT5";
+    labels[5] = "BOT6";
+    labels[6] = "BOT7";
+    labels[7] = "BOT8";
+    label_row_update(0);
 
-		show_row3_fx = 1;
-#if HWFEAT_LABEL_UPDATES
-		labels = label_row_get(0);
-		labels[0] = "CH1";
-		labels[1] = "CH2";
-		labels[2] = "CH3";
-		labels[3] = "VOL--";
-		labels[4] = "VOL++";
-		labels[5] = "VOL=6";
-		labels[6] = "SAVE";
-		labels[7] = "EXIT";
-		label_row_update(0);
-
-		labels = label_row_get(1);
-		labels[0] = "COMP";
-		labels[1] = "FILTER";
-		labels[2] = "PITCH";
-		labels[3] = "CHORUS";
-		labels[4] = "DELAY";
-		labels[5] = "REVERB";
-		labels[6] = "GATE";
-		labels[7] = "EQ";
-		label_row_update(1);
+    labels = label_row_get(1);
+    labels[0] = "TOP1";
+    labels[1] = "TOP2";
+    labels[2] = "TOP3";
+    labels[3] = "TOP4";
+    labels[4] = "TOP5";
+    labels[5] = "TOP6";
+    labels[6] = "TOP7";
+    labels[7] = "TOP8";
+    label_row_update(1);
 #endif
-	}
-
+#ifdef FEAT_LCD
 	lcd_updated_all();
 #endif
-}
-
-static void calc_leds(void) {
-	send_leds();
-}
-
-// Set g-major CC value
-static void axe_cc_set(u8 cc, u8 val) {
-    midi_send_cmd2(0xB, axe_midi_channel, cc, val);
 }
 
 // ------------------------- Actual controller logic -------------------------
@@ -430,16 +302,15 @@ void controller_init(void) {
     u8 i;
     u8 **labels;
 
-    setlist_mode = 1;
-    mode = MODE_LIVE;
-    mode_last = MODE_LIVE;
+    last.mode = MODE_LIVE;
+    curr.mode = MODE_LIVE;
     for (i = 0; i < MODE_count; i++) {
-        leds[i].top.byte = 0;
-        leds[i].bot.byte = 0;
+        curr.mode_leds[i].top.byte = 0;
+        curr.mode_leds[i].bot.byte = 0;
     }
 
-    curr_leds = 0x0000U;
-    last_leds = 0xFFFFU;
+    last.leds = 0xFFFFU;
+    curr.leds = 0x0000U;
 
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_ROWS; ++i)
@@ -485,17 +356,48 @@ void controller_10msec_timer(void) {
 
 }
 
+static u8 calc_scene(struct amp amp[]) {
+    return amp[0].dirty | (amp[1].dirty << 1);
+}
+
+static void calc_leds(void) {
+    curr.mode_leds[curr.mode].bot.bits._1 = curr.amp[0].dirty;
+    curr.mode_leds[curr.mode].bot.bits._2 = curr.amp[1].dirty;
+
+    send_leds();
+}
+
+// calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
+static void calc_midi(void) {
+    // Axe-FX scene # is just a bitwise OR of (amp[0].dirty) and (amp[1].dirty << 1):
+    u8 curr_scene = calc_scene(curr.amp);
+    u8 last_scene = calc_scene(last.amp);
+
+    if (curr_scene != last_scene) {
+        midi_set_axe_cc(axe_cc_scene, curr_scene);
+    }
+}
+
 // main control loop
 void controller_handle(void) {
     // poll foot-switch depression status:
     u16 tmp = fsw_poll();
-    fsw.bot.byte = (u8)(tmp & 0xFF);
-    fsw.top.byte = (u8)((tmp >> 8) & 0xFF);
+    curr.fsw.bot.byte = (u8)(tmp & 0xFF);
+    curr.fsw.top.byte = (u8)((tmp >> 8) & 0xFF);
 
-	send_leds();
+    // Handle clean/dirty switches:
+    if (is_bot_button_pressed(M_1)) {
+        curr.amp[0].dirty ^= 1;
+    }
+    if (is_bot_button_pressed(M_2)) {
+        curr.amp[1].dirty ^= 1;
+    }
 
-    // Record the previous switch state:
-    fsw_last = fsw;
+    calc_midi();
+    calc_leds();
+
+    // Record the previous state:
+    last = curr;
 }
 
 #else

@@ -18,15 +18,6 @@
     <ClCompile Include="eminorv2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\controller-two.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\controller-one.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\controller-three.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\common\controller-axe.c">
       <Filter>Source Files</Filter>
     </ClCompile>

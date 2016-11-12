@@ -326,9 +326,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\controller-axe.c" />
-    <ClCompile Include="..\common\controller-one.c" />
-    <ClCompile Include="..\common\controller-three.c" />
-    <ClCompile Include="..\common\controller-two.c" />
     <ClCompile Include="eminorv2.c" />
     <ClInclude Include="..\common\memory.h" />
     <ClInclude Include="..\PIC\flash_v1_bank0.h" />
