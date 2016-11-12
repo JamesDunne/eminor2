@@ -21,11 +21,11 @@
 LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
-|   DRV1    XY1   VOL--  VOL++   FX1    MODE  PR_PRV PR_NXT  |
+|   BOOST1 BOOST2                       MODE  PR_PRV PR_NXT  |
 |                                                            |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   DRV2    XY2   VOL--  VOL++   FX2    TAP   SC_PRV SC_NXT  |
+|   GAIN1  GAIN2          FX            TAP   SC_PRV SC_NXT  |
 |                                      STORE                 |
 |------------------------------------------------------------|
 
@@ -66,7 +66,6 @@ FX EDITOR:
                                                                        \- VOL1 --- CAB
                                                                        /- VOL2 -/     
     GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/               
-
 */
 
 #define scene_descriptor_count 8
