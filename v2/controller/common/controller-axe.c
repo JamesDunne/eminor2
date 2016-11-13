@@ -270,26 +270,28 @@ static void update_lcd(void) {
     s8 i;
 #endif
 #ifdef HWFEAT_LABEL_UPDATES
+    // Bottom row:
     labels = label_row_get(0);
-    labels[0] = "BOT1";
-    labels[1] = "BOT2";
-    labels[2] = "BOT3";
-    labels[3] = "BOT4";
-    labels[4] = "BOT5";
-    labels[5] = "BOT6";
-    labels[6] = "BOT7";
-    labels[7] = "BOT8";
+    labels[0] = "DRV1";
+    labels[1] = "DRV2";
+    labels[2] = "X/Y";
+    labels[3] = "FX";
+    labels[4] = "TAP";
+    labels[5] = "SAVE";
+    labels[6] = "PREV SCENE";
+    labels[7] = "NEXT SCENE";
     label_row_update(0);
 
+    // Top row:
     labels = label_row_get(1);
-    labels[0] = "TOP1";
-    labels[1] = "TOP2";
-    labels[2] = "TOP3";
-    labels[3] = "TOP4";
-    labels[4] = "TOP5";
-    labels[5] = "TOP6";
-    labels[6] = "TOP7";
-    labels[7] = "TOP8";
+    labels[0] = "BOOST1";
+    labels[1] = "BOOST2";
+    labels[2] = "";
+    labels[3] = "";
+    labels[4] = "";
+    labels[5] = "";
+    labels[6] = "PREV SONG";
+    labels[7] = "NEXT SONG";
     label_row_update(1);
 #endif
 #ifdef FEAT_LCD
@@ -326,30 +328,6 @@ void controller_init(void) {
     }
 
     update_lcd();
-#endif
-
-#ifdef HWFEAT_LABEL_UPDATES
-    labels = label_row_get(0);
-    labels[0] = "DRV1";
-    labels[1] = "DRV2";
-    labels[2] = "X/Y";
-    labels[3] = "";
-    labels[4] = "";
-    labels[5] = "";
-    labels[6] = "";
-    labels[7] = "";
-    label_row_update(0);
-
-    labels = label_row_get(1);
-    labels[0] = "BOOST1";
-    labels[1] = "BOOST2";
-    labels[2] = "";
-    labels[3] = "";
-    labels[4] = "";
-    labels[5] = "";
-    labels[6] = "";
-    labels[7] = "";
-    label_row_update(1);
 #endif
 }
 
