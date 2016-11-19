@@ -62,11 +62,11 @@ GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/
 #include "../common/hardware.h"
 
 struct amp {
-    u8 dirty : 1;   // clean or dirty tone
-    u8 delay : 1;   // delay on or off
-    u8 pitch : 1;   // pitch on or off
+    u8 dirty  : 1;  // clean or dirty tone
+    u8 delay  : 1;  // delay on or off
+    u8 pitch  : 1;  // pitch on or off
     u8 chorus : 1;  // chorus on or off
-    u8 xy : 1;      // X or Y amp (applies to both amps due to scene design)
+    u8 xy     : 1;  // X or Y amp (applies to both amps due to scene design)
     s8 volume : 3;  // volume = signed [-4, 3]
 };
 
@@ -127,11 +127,32 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define axe_midi_channel	 2
 #define triaxis_midi_channel 3
 
-// Axe-FX CC messages:
-#define axe_cc_taptempo         14
-#define axe_cc_tuner            15
+// Axe-FX II CC messages:
+#define axe_cc_taptempo     14
+#define axe_cc_tuner        15
 
-#define axe_cc_scene            34
+#define axe_cc_external1    16
+#define axe_cc_external2    17
+
+#define axe_cc_scene        34
+
+#define axe_cc_byp_amp1     37
+#define axe_cc_byp_amp2     38
+#define axe_cc_byp_chorus1  41
+#define axe_cc_byp_chorus2  42
+#define axe_cc_byp_delay1   47
+#define axe_cc_byp_delay2   48
+#define axe_cc_byp_pitch1   77
+#define axe_cc_byp_pitch2   78
+
+#define axe_cc_xy_amp1     100
+#define axe_cc_xy_amp2     101
+#define axe_cc_xy_chorus1  104
+#define axe_cc_xy_chorus2  105
+#define axe_cc_xy_delay1   106
+#define axe_cc_xy_delay2   107
+#define axe_cc_xy_pitch1   114
+#define axe_cc_xy_pitch2   115
 
 #define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
 #define is_held(rowname, mask) is_##rowname##_button_held(mask)
@@ -296,6 +317,11 @@ static u8 calc_boost_level(s8 volume) {
     return (127 - 64) + ((volume & 1) << 6);
 }
 
+static u8 calc_cc_toggle(u8 enable) {
+    // TODO: replace me with branchless bit twiddling.
+    return enable == 0 ? 0 : 0x7F;
+}
+
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     u8 diff = 0;
@@ -307,14 +333,51 @@ static void calc_midi(void) {
     // Change scene if applicable:
     if (curr_scene != last_scene) {
         midi_set_axe_cc(axe_cc_scene, curr_scene);
+        // Treat all last FX as off after a scene change:
+        last.amp[0].delay  = 0;
+        last.amp[0].pitch  = 0;
+        last.amp[0].chorus = 0;
+        last.amp[0].volume = 0;
+        last.amp[1].delay = 0;
+        last.amp[1].pitch = 0;
+        last.amp[1].chorus = 0;
+        last.amp[1].volume = 0;
         diff = 1;
     }
+    // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
-        midi_set_axe_cc(16, calc_boost_level(curr.amp[0].volume));
+        midi_set_axe_cc(axe_cc_external1, calc_boost_level(curr.amp[0].volume));
         diff = 1;
     }
     if (curr.amp[1].volume != last.amp[1].volume) {
-        midi_set_axe_cc(17, calc_boost_level(curr.amp[1].volume));
+        midi_set_axe_cc(axe_cc_external2, calc_boost_level(curr.amp[1].volume));
+        diff = 1;
+    }
+    // Enable FX:
+    if (curr.amp[0].delay != last.amp[0].delay) {
+        midi_set_axe_cc(axe_cc_byp_delay1, calc_cc_toggle(curr.amp[0].delay));
+        diff = 1;
+    }
+    if (curr.amp[1].delay != last.amp[1].delay) {
+        midi_set_axe_cc(axe_cc_byp_delay2, calc_cc_toggle(curr.amp[1].delay));
+        diff = 1;
+    }
+
+    if (curr.amp[0].pitch != last.amp[0].pitch) {
+        midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(curr.amp[0].pitch));
+        diff = 1;
+    }
+    if (curr.amp[1].pitch != last.amp[1].pitch) {
+        midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(curr.amp[1].pitch));
+        diff = 1;
+    }
+
+    if (curr.amp[0].chorus != last.amp[0].chorus) {
+        midi_set_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(curr.amp[0].chorus));
+        diff = 1;
+    }
+    if (curr.amp[1].chorus != last.amp[1].chorus) {
+        midi_set_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(curr.amp[1].chorus));
         diff = 1;
     }
 
