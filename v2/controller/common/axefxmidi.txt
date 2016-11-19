@@ -1,0 +1,119 @@
+CC#	Description
+10	Input Volume
+11	Out1 Volume
+12	Out2 Volume
+13	Bypass
+14	Tap Tempo
+15	Tuner
+16	External 1
+17	External 2
+18	External 3
+19	External 4
+20	External 5
+21	External 6
+22	External 7
+23	External 8
+24	External 9 
+25	External 10
+26	External 11 
+27	External 12
+
+28	Looper Record
+29	Looper Play
+30	Looper Once
+31	Looper Dub 
+32	Looper Rev 
+33	Looper Bypass
+120	Looper Half
+121	Looper Undo
+
+122	Metronome
+34	Scene Select
+123	Scene Inc
+124	Scene Dec
+35	Volume Inc
+36	Volume Dec
+
+37	Amp1 Bypass
+38	Amp2 Bypass
+39	Cabinet1 Bypass
+40	Cabinet2 Bypass
+41	Chorus1 Bypass
+42	Chorus2 Bypass
+43	Compressor1 Bypass
+44	Compressor2 Bypass
+45	Crossover1 Bypass
+46	Crossover2 Bypass
+47	Delay1 Bypass
+48	Delay2 Bypass
+49	Drive1 Bypass
+50	Drive2 Bypass
+51	Enhancer1 Bypass
+52	Filter1 Bypass
+53	Filter2 Bypass
+54	Filter3 Bypass
+55	Filter4 Bypass
+56	Flanger1 Bypass
+57	Flanger2 Bypass
+58	Formant Bypass
+59	FX Loop Bypass
+60	Gate1 Bypass
+61	Gate2 Bypass
+62	Graphic EQ1 Bypass
+63	Graphic EQ2 Bypass
+64	Graphic EQ3 Bypass
+65	Graphic EQ4 Bypass
+66	Megatap Bypass
+67	Multicomp1 Bypass
+68	Multicomp2 Bypass
+69	Multidly1 Bypass
+70	Multidly2 Bypass
+71	ParamEq1 Bypass
+72	ParamEq2 Bypass
+73	ParamEq3 Bypass
+74	ParamEq4 Bypass
+75	Phaser1 Bypass
+76	Phaser2 Bypass
+77	Pitch1 Bypass
+78	Pitch2 Bypass
+79	QChorus1 Bypass
+80	QChorus2 Bypass
+81	Resonator1 Bypass
+82	Resonator2 Bypass
+83	Reverb1 Bypass
+84	Reverb2 Bypass
+85	RingMod Bypass
+86	Rotary1 Bypass
+87	Rotary2 Bypass
+88	Synth1 Bypass
+89	Synth2 Bypass
+90	Tremolo1 Bypass
+91	Tremolo2 Bypass
+92	Vocoder Bypass
+93	Volume1 Bypass
+94	Volume2 Bypass
+95	Volume3 Bypass
+96	Volume4 Bypass
+97	Wah1 Byp Bypass
+98	Wah2 Byp Bypass
+
+100	Amp1 X/Y
+101	Amp2 X/Y
+102	Cab1 X/Y
+103	Cab2 X/Y
+104	Chorus1 X/Y
+105	Chorus2 X/Y
+106	Delay1 X/Y
+107	Delay2 X/Y
+108	Drive1 X/Y
+109	Drive2 X/Y
+110	Flanger1 X/Y
+111	Flanger2 X/Y
+112	Phaser1 X/Y
+113	Phaser2 X/Y
+114	Pitch1 X/Y
+115	Pitch2 X/Y
+116	Reverb1 X/Y
+117	Reverb2 X/Y
+118	Wah1 X/Y
+119	Wah2 X/Y
