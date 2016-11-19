@@ -105,6 +105,9 @@ extern void flash_load(u16 addr, u16 count, u8 *data);
 // Stores `count` bytes from `data` into flash memory at address `addr`:
 extern void flash_store(u16 addr, u16 count, u8 *data);
 
+// Get a pointer to flash memory at address:
+extern u8 *flash_addr(u16 addr);
+
 // --------------- Controller logic interface functions:
 
 /* export */ extern void controller_init(void);

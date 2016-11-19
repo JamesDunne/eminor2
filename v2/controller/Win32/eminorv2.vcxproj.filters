@@ -35,19 +35,13 @@
     <ClInclude Include="..\common\memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\PIC\flash_v1_bank0.h">
+    <ClInclude Include="..\PIC\flash_v3_bank0.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\PIC\flash_v1_bank1.h">
+    <ClInclude Include="..\PIC\flash_v3_bank1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\PIC\flash_v2_bank0.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\PIC\flash_v2_bank1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\PIC\flash_v2_bank2.h">
+    <ClInclude Include="..\PIC\flash_v3_bank2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

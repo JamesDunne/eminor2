@@ -996,3 +996,11 @@ void flash_store(u16 addr, u16 count, u8 *data) {
 
     memcpy((void *)&flash_bank[bank][addr], (void *)data, count);
 }
+
+// Get a pointer to flash memory at address:
+u8 *flash_addr(u16 addr) {
+    u8 bank = (u8)(addr >> 12);
+    addr &= 0x0FFF;
+
+    return (u8 *)flash_bank[bank] + addr;
+}

@@ -328,11 +328,9 @@
     <ClCompile Include="..\common\controller-axe.c" />
     <ClCompile Include="eminorv2.c" />
     <ClInclude Include="..\common\memory.h" />
-    <ClInclude Include="..\PIC\flash_v1_bank0.h" />
-    <ClInclude Include="..\PIC\flash_v1_bank1.h" />
-    <ClInclude Include="..\PIC\flash_v2_bank0.h" />
-    <ClInclude Include="..\PIC\flash_v2_bank1.h" />
-    <ClInclude Include="..\PIC\flash_v2_bank2.h" />
+    <ClInclude Include="..\PIC\flash_v3_bank0.h" />
+    <ClInclude Include="..\PIC\flash_v3_bank1.h" />
+    <ClInclude Include="..\PIC\flash_v3_bank2.h" />
     <ClInclude Include="font-5x8.h">
       <FileType>CppCode</FileType>
     </ClInclude>

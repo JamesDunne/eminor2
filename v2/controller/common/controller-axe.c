@@ -8,16 +8,7 @@
     James S. Dunne
     https://github.com/JamesDunne/
     2016-10-01
-*/
 
-#if HW_VERSION == 4
-
-#include <assert.h>
-#include <stdio.h>
-#include "../common/types.h"
-#include "../common/hardware.h"
-
-/*
 LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
@@ -29,39 +20,46 @@ LIVE:
 |  RESET1 RESET2                       STORE  SC_ONE         |
 |------------------------------------------------------------|
 
-	Top row of buttons controls selected amp settings
+Top row of buttons controls selected amp settings
 
-    Press AMP1   to select AMP1 for modification on top row
-    Press AMP2   to select AMP2 for modification on top row
-    Hold  RESET1 to reset AMP1 to basic dirty tone and select AMP1
-    Hold  RESET2 to reset AMP2 to basic dirty tone and select AMP2
-    Press X/Y    to switch AMP1&2 between X and Y settings; causes audio gap
+Press AMP1   to select AMP1 for modification on top row
+Press AMP2   to select AMP2 for modification on top row
+Hold  RESET1 to reset AMP1 to basic dirty tone and select AMP1
+Hold  RESET2 to reset AMP2 to basic dirty tone and select AMP2
+Press X/Y    to switch AMP1&2 between X and Y settings; causes audio gap
 
-    Press DIRTY  to change from clean to dirty (LED off is clean, on is dirty); gapless audio using scene controllers to modify amp gain
-    Press DELAY  to toggle delay effect
-    Press PITCH  to toggle pitch effect
-    Press CHORUS to toggle chorus effect
-	Press VOL--  to decrease amp volume
-	Press VOL++  to increase amp volume
+Press DIRTY  to change from clean to dirty (LED off is clean, on is dirty); gapless audio using scene controllers to modify amp gain
+Press DELAY  to toggle delay effect
+Press PITCH  to toggle pitch effect
+Press CHORUS to toggle chorus effect
+Press VOL--  to decrease amp volume
+Press VOL++  to increase amp volume
 
-	Press TAP    to send tap tempo
-	Hold  STORE  to store current scene settings
+Press TAP    to send tap tempo
+Hold  STORE  to store current scene settings
 
-	Press SC_PRV to move to previous scene
-	Press SC_NXT to move to next scene
+Press SC_PRV to move to previous scene
+Press SC_NXT to move to next scene
 
-	Press PR_PRV to move to previous setlist song / program #
-	Press PR_NXT to move to next setlist song / program #
+Press PR_PRV to move to previous setlist song / program #
+Press PR_NXT to move to next setlist song / program #
 
-	Use scene controllers to transition from clean to dirty on both AMP1 and AMP2, controlled separately
+Use scene controllers to transition from clean to dirty on both AMP1 and AMP2, controlled separately
 
-    Press MODE   to switch between set-list order and program # order
+Press MODE   to switch between set-list order and program # order
 
-    GATE1 -- PITCH1 -- CHORUS1 -- AMP1 -- COMP1 -- PHASER1 -- DELAY1 -\               
-                                                                       \- VOL1 --- CAB
-                                                                       /- VOL2 -/     
-    GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/               
+GATE1 -- PITCH1 -- CHORUS1 -- AMP1 -- COMP1 -- PHASER1 -- DELAY1 -\
+\- VOL1 --- CAB
+/- VOL2 -/
+GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/
 */
+
+#if HW_VERSION == 4
+
+#include <assert.h>
+#include <stdio.h>
+#include "../common/types.h"
+#include "../common/hardware.h"
 
 struct amp {
     u8 dirty : 1;   // clean or dirty tone
@@ -170,16 +168,23 @@ struct state {
     // LED state per mode:
     io16 mode_leds[MODE_count];
 
+    // Selected amp (0 or 1):
+    u8 selected_amp;
     // Per-amp settings:
     struct amp amp[2];
-    // Common X/Y mode for amps:
-    u8 xy;
 };
 
 // Current and last state:
 struct state curr, last;
 
 static void update_lcd(void);
+
+#define name_table_offs (u16)(128 * sizeof(struct program))
+
+// Get the name text for the given name_index from flash memory:
+static u8 *name_get(u8 name_index) {
+    return flash_addr(name_table_offs + (name_index * 20));
+}
 
 // Set Axe-FX CC value
 static void midi_set_axe_cc(u8 cc, u8 val) {
@@ -242,45 +247,9 @@ static void send_leds(void) {
 	}
 }
 
-// Update LCD display:
-static void update_lcd(void) {
-#ifdef HWFEAT_LABEL_UPDATES
-	u8 **labels;
-#endif
-#ifdef FEAT_LCD
-    s8 i;
-#endif
-#ifdef HWFEAT_LABEL_UPDATES
-    // Bottom row:
-    labels = label_row_get(0);
-    labels[0] = "DRV1";
-    labels[1] = "DRV2";
-    labels[2] = "X/Y";
-    labels[3] = "FX";
-    labels[4] = "TAP";
-    labels[5] = "SAVE";
-    labels[6] = "PREV SCENE";
-    labels[7] = "NEXT SCENE";
-    label_row_update(0);
-
-    // Top row:
-    labels = label_row_get(1);
-    labels[0] = "BOOST1";
-    labels[1] = "BOOST2";
-    labels[2] = "";
-    labels[3] = "";
-    labels[4] = "";
-    labels[5] = "";
-    labels[6] = "PREV SONG";
-    labels[7] = "NEXT SONG";
-    label_row_update(1);
-#endif
-#ifdef FEAT_LCD
-	lcd_updated_all();
-#endif
-}
-
 // ------------------------- Actual controller logic -------------------------
+
+static void update_lcd(void);
 
 // set the controller to an initial state
 void controller_init(void) {
@@ -317,40 +286,115 @@ void controller_10msec_timer(void) {
 
 }
 
-static void calc_leds(void) {
-    curr.mode_leds[curr.mode].bot.bits._1 = curr.amp[0].dirty;
-    curr.mode_leds[curr.mode].bot.bits._2 = curr.amp[1].dirty;
-    curr.mode_leds[curr.mode].bot.bits._3 = curr.xy;
-
-    curr.mode_leds[curr.mode].top.bits._1 = curr.amp[0].boost;
-    curr.mode_leds[curr.mode].top.bits._2 = curr.amp[1].boost;
-
-    send_leds();
+static u8 calc_scene(struct amp amp[]) {
+    // Not a typo: X/Y is only controlled from amp[0].
+    return (amp[0].dirty | (amp[1].dirty << 1)) | ((amp[0].xy & 1) << 2);
 }
 
-static u8 calc_scene(struct amp amp[], u8 xy) {
-    return (amp[0].dirty | (amp[1].dirty << 1)) | ((xy & 1) << 2);
-}
-
-static u8 calc_boost_level(u8 boost) {
-    return (127 - 64) + ((boost & 1) << 6);
+static u8 calc_boost_level(s8 volume) {
+    // TODO: fix me.
+    return (127 - 64) + ((volume & 1) << 6);
 }
 
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
-    // Axe-FX scene # is just a bitwise OR of (amp[0].dirty) and (amp[1].dirty << 1):
-    u8 curr_scene = calc_scene(curr.amp, curr.xy);
-    u8 last_scene = calc_scene(last.amp, last.xy);
+    u8 diff = 0;
 
+    // Calculate scene numbers:
+    u8 curr_scene = calc_scene(curr.amp);
+    u8 last_scene = calc_scene(last.amp);
+
+    // Change scene if applicable:
     if (curr_scene != last_scene) {
         midi_set_axe_cc(axe_cc_scene, curr_scene);
+        diff = 1;
     }
-    if (curr.amp[0].boost != last.amp[0].boost) {
-        midi_set_axe_cc(16, calc_boost_level(curr.amp[0].boost & 1));
+    if (curr.amp[0].volume != last.amp[0].volume) {
+        midi_set_axe_cc(16, calc_boost_level(curr.amp[0].volume));
+        diff = 1;
     }
-    if (curr.amp[1].boost != last.amp[1].boost) {
-        midi_set_axe_cc(17, calc_boost_level(curr.amp[1].boost & 1));
+    if (curr.amp[1].volume != last.amp[1].volume) {
+        midi_set_axe_cc(17, calc_boost_level(curr.amp[1].volume));
+        diff = 1;
     }
+
+    // Update LCD if the state changed:
+    if (diff) {
+        update_lcd();
+    }
+}
+
+// Update LCD display:
+static void update_lcd(void) {
+#ifdef HWFEAT_LABEL_UPDATES
+    u8 **labels;
+#endif
+#ifdef FEAT_LCD
+    s8 i;
+#endif
+#ifdef HWFEAT_LABEL_UPDATES
+    // Bottom row:
+    labels = label_row_get(0);
+    labels[0] = "AMP1";
+    labels[1] = "AMP2";
+    labels[2] = "X/Y";
+    labels[3] = "";
+    labels[4] = "";
+    labels[5] = "TAP/STORE";
+    labels[6] = "PREV SCENE";
+    labels[7] = "NEXT SCENE";
+    label_row_update(0);
+
+    // Top row:
+    labels = label_row_get(1);
+    labels[0] = "DIRTY";
+    labels[1] = "DELAY";
+    labels[2] = "PITCH";
+    labels[3] = "CHORUS";
+    labels[4] = "VOL--";
+    labels[5] = "VOL++";
+    labels[6] = "PREV SONG";
+    labels[7] = "NEXT SONG";
+    label_row_update(1);
+#endif
+#ifdef FEAT_LCD
+    lcd_updated_all();
+#endif
+}
+
+/*
+LIVE:
+|------------------------------------------------------------|
+|     *      *      *      *      *      *      *      *     |
+|   DIRTY  DELAY  PITCH  CHORUS VOL--  VOL++  PR_PRV PR_NXT  |
+|                                             PR_ONE         |
+|                                                            |
+|     *      *      *      *      *      *      *      *     |
+|   AMP1   AMP2    X/Y                  TAP   SC_PRV SC_NXT  |
+|  RESET1 RESET2                       STORE  SC_ONE         |
+|------------------------------------------------------------|
+*/
+
+static void calc_leds(void) {
+    curr.mode_leds[curr.mode].top.bits._1 = curr.amp[curr.selected_amp].dirty;
+    curr.mode_leds[curr.mode].top.bits._2 = curr.amp[curr.selected_amp].delay;
+    curr.mode_leds[curr.mode].top.bits._3 = curr.amp[curr.selected_amp].pitch;
+    curr.mode_leds[curr.mode].top.bits._4 = curr.amp[curr.selected_amp].chorus;
+    curr.mode_leds[curr.mode].top.bits._5 = curr.fsw.top.bits._5;
+    curr.mode_leds[curr.mode].top.bits._6 = curr.fsw.top.bits._6;
+    curr.mode_leds[curr.mode].top.bits._7 = curr.fsw.top.bits._7;
+    curr.mode_leds[curr.mode].top.bits._8 = curr.fsw.top.bits._8;
+
+    curr.mode_leds[curr.mode].bot.bits._1 = !(curr.selected_amp & 1);
+    curr.mode_leds[curr.mode].bot.bits._2 = (curr.selected_amp & 1);
+    curr.mode_leds[curr.mode].bot.bits._3 = curr.amp[0].xy;
+    curr.mode_leds[curr.mode].bot.bits._4 = curr.fsw.bot.bits._4;
+    curr.mode_leds[curr.mode].bot.bits._5 = curr.fsw.bot.bits._5;
+    curr.mode_leds[curr.mode].bot.bits._6 = curr.fsw.bot.bits._6;
+    curr.mode_leds[curr.mode].bot.bits._7 = curr.fsw.bot.bits._7;
+    curr.mode_leds[curr.mode].bot.bits._8 = curr.fsw.bot.bits._8;
+
+    send_leds();
 }
 
 // main control loop
@@ -360,23 +404,29 @@ void controller_handle(void) {
     curr.fsw.bot.byte = (u8)(tmp & 0xFF);
     curr.fsw.top.byte = (u8)((tmp >> 8) & 0xFF);
 
-    // Handle clean/dirty switches:
+    // Handle bottom control switches:
     if (is_bot_button_pressed(M_1)) {
-        curr.amp[0].dirty ^= 1;
+        curr.selected_amp = 0;
     }
     if (is_bot_button_pressed(M_2)) {
-        curr.amp[1].dirty ^= 1;
+        curr.selected_amp = 1;
     }
     if (is_bot_button_pressed(M_3)) {
-        curr.xy ^= 1;
+        curr.amp[0].xy ^= 1;
     }
 
-    // Handle boost switches:
+    // Handle top amp effects:
     if (is_top_button_pressed(M_1)) {
-        curr.amp[0].boost ^= 1;
+        curr.amp[curr.selected_amp].dirty ^= 1;
     }
     if (is_top_button_pressed(M_2)) {
-        curr.amp[1].boost ^= 1;
+        curr.amp[curr.selected_amp].delay ^= 1;
+    }
+    if (is_top_button_pressed(M_3)) {
+        curr.amp[curr.selected_amp].pitch ^= 1;
+    }
+    if (is_top_button_pressed(M_4)) {
+        curr.amp[curr.selected_amp].chorus ^= 1;
     }
 
     calc_midi();
