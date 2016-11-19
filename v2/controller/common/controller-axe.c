@@ -21,22 +21,28 @@
 LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
-|   BOOST1 BOOST2                       MODE  PR_PRV PR_NXT  |
-|                                                            |
+|   DIRTY  DELAY  PITCH  CHORUS VOL--  VOL++  PR_PRV PR_NXT  |
+|                                             PR_ONE         |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   GAIN1  GAIN2          FX            TAP   SC_PRV SC_NXT  |
-|                                      STORE                 |
+|   AMP1   AMP2    X/Y                  TAP   SC_PRV SC_NXT  |
+|  RESET1 RESET2                       STORE  SC_ONE         |
 |------------------------------------------------------------|
 
-	Top row of buttons controls amp 1 settings
-	Bottom row of buttons controls amp 2 settings
+	Top row of buttons controls selected amp settings
 
-	Press DRV    to change from clean to dirty (LED off is clean, on is dirty); gapless audio using scene controllers to modify amp gain
-	Press XY     to switch AMP1/2 between X and Y settings (e.g. X = Mark V ch 2, Y = Mark V ch 3); causes audio gap
-	Press VOL--  to decrease amp volume by 1dB
-	Press VOL++  to increase amp volume by 1dB
-	Press FX     to alter effects for amp 1/2
+    Press AMP1   to select AMP1 for modification on top row
+    Press AMP2   to select AMP2 for modification on top row
+    Hold  RESET1 to reset AMP1 to basic dirty tone and select AMP1
+    Hold  RESET2 to reset AMP2 to basic dirty tone and select AMP2
+    Press X/Y    to switch AMP1&2 between X and Y settings; causes audio gap
+
+    Press DIRTY  to change from clean to dirty (LED off is clean, on is dirty); gapless audio using scene controllers to modify amp gain
+    Press DELAY  to toggle delay effect
+    Press PITCH  to toggle pitch effect
+    Press CHORUS to toggle chorus effect
+	Press VOL--  to decrease amp volume
+	Press VOL++  to increase amp volume
 
 	Press TAP    to send tap tempo
 	Hold  STORE  to store current scene settings
@@ -51,60 +57,40 @@ LIVE:
 
     Press MODE   to switch between set-list order and program # order
 
-FX EDITOR:
-|-------------------------------------------------------------------|
-|     *       *       *       *       *       *       *       *     |
-|   GATE1   PITCH1 CHORUS1  COMP1   PHSER1  DELAY1                  |
-|                                                                   |
-|                                                                   |
-|     *       *       *       *       *       *       *       *     |
-|   GATE2   PITCH2 CHORUS2  COMP2   PHSER2  DELAY2  EXIT    ENTER   |
-|                                                                   |
-|-------------------------------------------------------------------|
-
     GATE1 -- PITCH1 -- CHORUS1 -- AMP1 -- COMP1 -- PHASER1 -- DELAY1 -\               
                                                                        \- VOL1 --- CAB
                                                                        /- VOL2 -/     
     GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/               
 */
 
-#define scene_descriptor_count 8
-
-struct sequence {
-	// Number of entries in the sequence
-	u8 count;
-
-	u8 scenes[19];
+struct amp {
+    u8 dirty : 1;   // clean or dirty tone
+    u8 delay : 1;   // delay on or off
+    u8 pitch : 1;   // pitch on or off
+    u8 chorus : 1;  // chorus on or off
+    u8 xy : 1;      // X or Y amp (applies to both amps due to scene design)
+    s8 volume : 3;  // volume = signed [-4, 3]
 };
+
+// amp state is 1 byte:
+COMPILE_ASSERT(sizeof(struct amp) == 1);
 
 // Program data structure loaded from / written to flash memory:
 struct program {
     // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
     u8 name[20];
 
-    // Scene descriptors:
+    // Number of scenes defined:
+    u8 scene_count;
+    u8 _unused;
+
+    // Scene descriptors (2 bytes each):
     struct scene_descriptor {
-        // Ivvv vvCC
-        // |||| ||||
-        // |||| ||\--- (unsigned 0-3 = RJM channel)
-        // |\--------- (  signed -16..+15, offset -9 = -25..+6)
-        // \---------- Is Initial Scene
-        u8 part1;
-
-        // M000 00CC
-        // |      ||
-        // |      \--- (unsigned 0-3 = Axe-FX scene)
-        // |
-        // \---------- Is Muted
-        // TODO: volume ramp from previous!
-        u8 part2;
-    } scene[8];
-
-    // G-major effects enabled per scene (see fxm_*):
-    u8 fx[8];
-
-	// Sequence of pre-programmed scene changes:
-	struct sequence sequence;
+        // Amp definitions:
+        struct amp amp[2];
+        // Index into name table:
+        u8 name_index;
+    } scene[14];
 };
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
@@ -162,15 +148,15 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define is_held_next()          is_held(top, M_8)
 #define is_released_next()      is_released(top, M_8)
 
+#ifdef FEAT_LCD
+// Pointers to LCD character rows:
+u8 *lcd_rows[LCD_ROWS];
+#endif
+
 enum {
     MODE_LIVE = 0,
     MODE_SCENE_DESIGN,
     MODE_count
-};
-
-struct amp {
-    u8 dirty;   // clean or dirty tone
-    u8 boost;   // 0dB or +6dB boost
 };
 
 struct state {
@@ -192,11 +178,6 @@ struct state {
 
 // Current and last state:
 struct state curr, last;
-
-#ifdef FEAT_LCD
-// Pointers to LCD character rows:
-u8 *lcd_rows[LCD_ROWS];
-#endif
 
 static void update_lcd(void);
 
