@@ -1,0 +1,764 @@
+sets:
+  - date: "2014-08-22"
+    venue: Penny Road Pub
+    songs:
+    - Everything Zen
+    - Song 2
+    - Zero
+    - Brainstew
+    - Buddy Holly
+    - Bound for the Floor
+    - Counting Blue Cars
+    - Holiday
+    - Machinehead
+    - Monkeywrench
+    - Crawling in the Dark
+    - Plush
+    - Hash Pipe
+    - Closing Time
+    - Enter Sandman
+  - date: "2014-11-22"
+    venue: Chicago Loop
+    songs:
+    - Everything Zen
+    - Song 2
+    - Zero
+    - My Hero
+    - Brainstew
+    - I Alone
+    - Buddy Holly
+    - Cumbersome
+    - Machinehead
+    - Plush
+    - Holiday
+    - Monkeywrench
+    - Lump
+    - Bound for the Floor
+    - Counting Blue Cars
+    - Hash Pipe
+    - In Bloom
+    - When I Come Around
+    - Sex Type Thing
+    - Hey Jealousy
+    - Closing Time
+    - Enter Sandman
+  - date: "2015-01-16"
+    venue: MT Barrels
+    songs:
+    - Everything Zen
+    - Song 2
+    - Zero
+    - Brainstew
+    - Buddy Holly
+    - My Own Worst Enemy
+    - Plush
+    - Hey Jealousy
+    - Monkeywrench
+    - Lump
+    - Machinehead
+    - Hash Pipe
+    - Enter Sandman
+    - Holiday
+    - Dammit
+  - date: "2015-02-28"
+    venue: Chicago Loop
+    songs:
+    - Dammit
+    - My Own Worst Enemy
+    - Holiday
+    - Cumbersome
+    - Machinehead
+    - Buddy Holly
+    - Everything Zen
+    - The Middle
+    - In Bloom
+    - When I Come Around
+    - Hash Pipe
+    - Plush
+    - Bound for the Floor
+    - Hey Jealousy
+    - Bullet With Butterfly Wings
+    - Brainstew
+    - Monkeywrench
+    - Lump
+    - Counting Blue Cars
+    - Zero
+    - Song 2
+    - My Hero
+    - Sex Type Thing
+    - Enter Sandman
+  - date: "2015-03-14"
+    venue: The Alibi
+    songs:
+    - Dammit
+    - Song 2
+    - My Own Worst Enemy
+
+    - 'BREAK: BAND INTRO'
+
+    - Machinehead
+    - Hey Jealousy
+    - Buddy Holly
+    - Bullet With Butterfly Wings
+
+    - 'BREAK: BREAK'
+
+    - Cumbersome
+    - Hash Pipe
+    - Zero
+
+    - 'BREAK: TUNING'
+
+    - Plush
+    - Brainstew
+    - Everything Zen
+
+    - 'BREAK: TUNING'
+
+    - The Middle
+    - Monkeywrench
+    - Lump
+
+    - 'BREAK: TUNING'
+
+    - Counting Blue Cars
+    - Holiday
+
+    - 'BREAK: GOODBYE'
+
+    - Enter Sandman
+
+  - date: "2015-06-26"
+    venue: Danny's Pizza
+    songs:
+    - Dammit
+    - Song 2
+    - Zero
+
+    - 'BREAK: WELCOME'
+
+    - Cumbersome
+    - Machinehead
+    - Brain Stew
+
+    - 'BREAK: BREAK'
+
+    - Hey Jealousy
+    - Buddy Holly
+    - Beautiful Disaster
+
+    - 'BREAK: BREAK'
+
+    - Holiday
+    - My Own Worst Enemy
+    - If You Could Only See
+
+    - 'BREAK: DOWNTUNE'
+
+    - The Middle
+    - Monkey Wrench
+    - Lump
+
+    - 'BREAK: UPTUNE'
+
+    - Plush
+    - Hash Pipe
+    - Kryptonite
+    - My Hero
+
+    - 'BREAK: BREAK'
+
+    - Everything Zen
+    - When I Come Around
+    - Bullet With Butterfly Wings
+
+    - Enter Sandman
+
+  - date: "2015-06-27"
+    venue: Q Bar
+    songs:
+    - Dammit
+    - Song 2
+    - Zero
+
+    - 'BREAK: WELCOME'
+
+    - Machinehead
+    - Hey Jealousy
+    - Buddy Holly
+
+    - 'BREAK: BREAK'
+
+    - Beautiful Disaster
+    - When I Come Around
+    - Bullet With Butterfly Wings
+
+    - 'BREAK: BREAK'
+
+    - Plush
+    - My Own Worst Enemy
+    - If You Could Only See
+    - Brain Stew
+
+    - 'BREAK: DOWNTUNE'
+
+    - The Middle
+    - Monkey Wrench
+    - Lump
+
+    - 'BREAK: UPTUNE'
+
+    - Kryptonite
+    - Hash Pipe
+    - My Hero
+
+    - 'BREAK: BREAK'
+
+    - Cumbersome
+    - Sex Type Thing
+    - Everything Zen
+
+    - 'BREAK: BREAK'
+
+    - Holiday
+    - Closing Time
+    - Enter Sandman
+
+  - date: "2015-07-31"
+    venue: The Alibi
+    songs:
+      - Everything Zen
+      - Song 2
+      - Zero
+
+      - 'BREAK: BREAK'
+
+      - Machinehead
+      - Dammit
+      - Beautiful Disaster
+
+      - 'BREAK: BREAK'
+
+      - Hey Jealousy
+      - When I Come Around
+      - Buddy Holly
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: UPTUNE'
+
+      - Cumbersome
+      - Brain Stew
+      - Kryptonite
+
+      - 'BREAK: BREAK'
+
+      - My Own Worst Enemy
+      - Hash Pipe
+      - Enter Sandman
+
+  - date: "2015-08-29"
+    venue: Penny Road Pub
+    songs:
+      - Everything Zen
+      - Song 2
+      - Zero
+
+      - 'BREAK: BREAK'
+
+      - Machinehead
+      - Buddy Holly
+      - Beautiful Disaster
+
+      - 'BREAK: BREAK'
+
+      - Dammit
+      - Brain Stew
+      - My Own Worst Enemy
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: UPTUNE'
+
+      - Hash Pipe
+      - When I Come Around
+      - Enter Sandman
+
+  - date: "2015-10-31"
+    venue: Halloween House Party
+    songs:
+      - 'BREAK: SET 1'
+
+      - Everything Zen
+      - Song 2
+      - Holiday
+      - Machinehead
+      - Hey Jealousy
+      - Buddy Holly
+      - Zero
+
+      - 'BREAK: TUNING'
+
+      - Brain Stew
+      - Kryptonite
+      - My Hero
+      - Sex Type Thing
+      - Beautiful Disaster
+      - Bullet With Butterfly Wings
+
+      - 'BREAK: SET 2'
+
+      - Crawling in the Dark
+
+      - 'BREAK: TUNING'
+
+      - Bound for the Floor
+      - For Whom the Bell Tolls
+      - Hash Pipe
+      - Cumbersome
+
+      - 'BREAK: TUNING'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: TUNING'
+
+      - Plush
+      - Damnit
+      - My Own Worst Enemy
+      - When I Come Around
+      - Enter Sandman
+
+  - date: "2015-11-07"
+    venue: JD Muggs
+    songs:
+      - Dammit
+      - Song 2
+      - Holiday
+
+      - 'BREAK: INTRO'
+
+      - Machinehead
+      - Hey Jealousy
+      - Beautiful Disaster
+
+      - 'BREAK: BREAK'
+
+      - When I Come Around
+      - Hash Pipe
+      - Kryptonite
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Monkeywrench
+
+      - 'BREAK: UPTUNE'
+
+      - Cumbersome
+      - Brain Stew
+      - Zero
+
+      - 'BREAK: TUNING'
+
+      - Plush
+      - My Own Worst Enemy
+      - Everything Zen
+
+      - 'BREAK: BREAK'
+
+      - Sex Type Thing
+      - Buddy Holly
+      - Crawling in the Dark
+
+      - 'BREAK: GOODBYE'
+
+      - Bullet With Butterfly Wings
+      - Enter Sandman
+
+  - date: "2015-12-26"
+    venue: The Loop
+    songs:
+      - Everything Zen
+      - Song 2
+      - Dammit
+      
+      - 'BREAK: INTRO BREAK'
+      
+      - Brain Stew
+      - Hey Jealousy
+      - Beautiful Disaster
+      - Zero
+      
+      - 'BREAK: DOWNTUNING'
+      
+      - The Middle
+      - Monkey Wrench
+      - Lump
+      
+      - 'BREAK: UPTUNING'
+      
+      - Cumbersome
+      - Fuel
+      - When I Come Around
+      
+      - 'BREAK: BREAK'
+      
+      - Buddy Holly
+      - My Hero
+      - Crawling in the Dark
+      
+      - 'BREAK: BREAK'
+      
+      - Plush
+      - My Own Worst Enemy
+      - Bullet With Butterfly Wings
+      
+      - 'BREAK: BREAK'
+      
+      - Bound for the Floor
+      - Sex Type Thing
+      - Machinehead
+      
+      - 'BREAK: BREAK'
+      
+      - Hash Pipe
+      - Holiday
+      - Enter Sandman
+      
+      - 'BREAK: ENCORE?'
+      
+      - For Whom the Bell Tolls
+
+  - date: "2016-01-22"
+    venue: MT Barrels
+    songs:
+      - Everything Zen
+      - Song 2
+      - Dammit
+      
+      - 'BREAK: INTRO BREAK'
+      
+      - Brain Stew
+      - Hey Jealousy
+      - Beautiful Disaster
+      - Zero
+      
+      - 'BREAK: DOWNTUNING'
+      
+      - The Middle
+      - Monkey Wrench
+      - Lump
+      
+      - 'BREAK: UPTUNING'
+      
+      - Cumbersome
+      - Fuel
+      - When I Come Around
+      
+      - 'BREAK: BREAK'
+      
+      - Buddy Holly
+      - My Hero
+      - Crawling in the Dark
+      
+      - 'BREAK: BREAK'
+      
+      - Plush
+      - My Own Worst Enemy
+      - Bullet With Butterfly Wings
+      - What I Got
+      
+      - 'BREAK: BREAK'
+      
+      - Bound for the Floor
+      - Sex Type Thing
+      - Machinehead
+      
+      - 'BREAK: BREAK'
+      
+      - Hash Pipe
+      - Holiday
+      - Enter Sandman
+      
+      - 'BREAK: ENCORE?'
+      
+      - For Whom the Bell Tolls
+
+  - date: "2016-02-20"
+    venue: JD Muggs
+    songs:
+      - Holiday
+      - My Own Worst Enemy
+      - Zero
+      
+      - 'BREAK: INTRO'
+      
+      - Bound for the Floor
+      - Hey Jealousy
+      - Beautiful Disaster
+      - Hash Pipe
+      
+      - 'BREAK: DOWNTUNE'
+      
+      - The Middle
+      - Monkey Wrench
+      
+      - 'BREAK: UPTUNE'
+      
+      - Song 2
+      - Brain Stew
+      - Dammit
+      
+      - 'BREAK: BREAK'
+      
+      - Machinehead
+      - Cumbersome
+      - Fuel
+      
+      - 'BREAK: BREAK'
+      
+      - Plush
+      - Buddy Holly
+      - Crawling in the Dark
+      
+      - 'BREAK: BREAK'
+
+      - What I Got
+      - Sex Type Thing
+      
+      - 'BREAK: GOODBYE'
+      
+      - Enter Sandman
+      - For Whom the Bell Tolls
+
+  - date: "2016-03-12"
+    venue: Dublin Mule
+    songs:
+      - Dammit
+      - Holiday
+      - Machinehead
+
+      - 'BREAK: INTRO BREAK'
+      - Bound for the Floor
+      - Hey Jealousy
+      - Zero
+      - Plush
+
+      - 'BREAK: DOWNTUNING'
+      - Lump
+      - The Middle
+      - Monkey Wrench
+      - 'BREAK: UPTUNING'
+
+      - 'BREAK: PART 2'
+      - Beautiful Disaster
+
+      - 'BREAK: BREAK'
+      - Say It Aint So
+      - My Own Worst Enemy
+      - Song 2
+
+      - 'BREAK: BREAK'
+      - Brain Stew
+      - Everything Zen
+      - My Hero
+      - Buddy Holly
+      
+      - 'BREAK: BREAK'
+      - Cumbersome
+      - Fuel
+      - Bullet With Butterfly Wings
+
+      - 'BREAK: PART 3'
+      - Crawling in the Dark
+      - Kryptonite
+
+      - 'BREAK: BREAK'
+      - In Bloom
+      - Hash Pipe
+
+      - 'BREAK: BREAK'
+      - Counting Blue Cars
+      - When I Come Around
+      - What I Got
+      - Sex Type Thing
+      
+      - 'BREAK: GOODBYE'
+      - Closing Time
+      - Enter Sandman
+      
+      - 'BREAK: ENCORE?'
+      - For Whom the Bell Tolls
+
+  - date: "2016-04-16"
+    venue: Private Party
+    songs:
+      - Song 2
+      - Dammit
+      - Zero
+      - Brain Stew
+      - Say It Ain't So
+      - Crawling in the Dark
+      - Holiday
+
+      - 'BREAK: DOWNTUNE'
+
+      - Monkey Wrench
+      - The Middle
+
+      - 'BREAK: UPTUNE'
+
+      - Plush
+      - For Whom the Bell Tolls
+      - Hash Pipe
+
+      - 'BREAK: DOWNTUNE'
+
+      - Shine
+
+      - 'BREAK: UPTUNE'
+
+      - Undone
+      - Beautiful Disaster
+      - Machinehead
+      - Cumbersome
+      - My Own Worst Enemy
+      - Buddy Holly
+      - My Hero
+      - Fuel
+      - What I Got
+      - Counting Blue Cars
+      - Everything Zen
+      - When I Come Around
+      - Sex Type Thing
+      - Bullet With Butterfly Wings
+      - Enter Sandman
+
+  - date: "2016-05-28"
+    venue: Olde Towne Inn
+    songs:
+      - Crawling
+      - Holiday
+      - Machinehead
+      - 'BREAK: INTRO'
+      - Zero
+      - Brainstew
+      - Kryptonite
+      - 'BREAK: BREAK'
+      - Undone
+      - Hey Jealousy
+      - 'BREAK: DOWNTUNE'
+      - The Middle
+      - Monkeywrench
+      - Lump
+      - 'BREAK: UPTUNE'
+      - Plush
+      - Bound for the Floor
+      - What I Got
+      - 'BREAK: BREAK'
+      - Hash Pipe
+      - Enter Sandman
+      - 'BREAK: SET 2'
+      - Beautiful Disaster
+      - Song 2
+      - In Bloom
+      - 'BREAK: BREAK'
+      - Say It Aint So
+      - Everything Zen
+      - Dammit
+      - 'BREAK: DOWNTUNE'
+      - Shine
+      - 'BREAK: UPTUNE'
+      - My Own Worst Enemy
+      - Counting Blue Cars
+      - Buddy Holly
+      - 'BREAK: BREAK'
+      - Cumbersome
+      - Fuel
+      - My Hero
+      - 'BREAK: BREAK'
+      - Sex Type Thing
+      - When I Come Around
+      - 'BREAK: GOODBYE'
+      - Bullet with Butterfly Wings
+      - Bells
+
+  - date: "2016-06-10"
+    venue: Penny Road Pub
+    songs:
+      - Crawling in the Dark
+      - Dammit
+      - Song 2
+
+      - 'BREAK: INTRO'
+
+      - Brain Stew
+      - Hey Jealousy
+      - Bound for the Floor
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: UPTUNE'
+
+      - Say It Ain't So
+      - Machinehead
+      - Holiday
+
+      - 'BREAK: BREAK'
+
+      - Undone
+      - Fuel
+      - When I Come Around
+
+      - 'BREAK: BREAK'
+
+      - Sex Type Thing
+      - Counting Blue Cars
+      - Zero
+
+      - 'BREAK: BREAK'
+
+      - My Own Worst Enemy
+      - Hash Pipe
+
+      - 'BREAK: GOODBYE'
+
+      - Enter Sandman
+
+      - 'BREAK: ENCORE'
+
+      - For Whom the Bell Tolls
+
+  - date: "2016-09-23"
+    venue: Q Bar
+    active: true
+    print: true
+    songs:
+      - Zero
+      - My Own Worst Enemy
+      - Dammit
+      - Brain Stew
+      - Song 2
+      - Say It Ain't So
+      - Machinehead
+      - Basket Case
+      - Buddy Holly
+      - Enter Sandman
+      - Fuel
+      - 'BREAK: ENCORE'
+      - When I Come Around
