@@ -607,25 +607,30 @@ func main() {
 				s4.Name = ""
 				if s3.Channel == 1 {
 					s4.JD.Channel = "clean"
-					s4.Name += "JD clean"
 				} else {
 					s4.JD.Channel = "dirty"
-					s4.Name += "JD dirty"
 				}
 				if s3.Channel == 2 {
 					s4.JD.XY = "Y"
 				} else {
 					s4.JD.XY = "X"
 				}
-				s4.JD.Level = s3.Level / 2
+				if s3.Level > 0 && s3.Channel != 1 {
+					s4.Name += "JD lead"
+				} else {
+					if s3.Channel == 1 {
+						s4.Name += "JD clean"
+					} else {
+						s4.Name += "JD dirty"
+					}
+				}
+
+				s4.JD.Level = s3.Level * 3 / 5
 
 				// Filter out bad FX that no longer apply:
 				s4.JD.FX = make([]string, 0, len(s3.FX))
 				for _, fx := range s3.FX {
-					if fx != "delay" && fx != "chorus" && fx != "pitch" {
-						if fx != "gate" {
-							fmt.Printf("Excluding FX '%s'\n", fx)
-						}
+					if fx == "gate" || fx == "eq" || fx == "compressor" {
 						continue
 					}
 					s4.JD.FX = append(s4.JD.FX, fx)
@@ -633,21 +638,21 @@ func main() {
 
 				if s3.AxeScene == 1 {
 					s4.MG.Channel = "clean"
-					s4.Name += ";MG clean"
 				} else {
 					s4.MG.Channel = "dirty"
-					s4.Name += ";MG dirty"
 				}
-				if s3.AxeScene == 2 {
-					s4.MG.XY = "Y"
-				} else {
-					s4.MG.XY = "X"
-				}
+				s4.MG.XY = "X"
 				if s3.AxeScene == 4 {
 					s4.MG.Level = 3
 					s4.MG.FX = []string{"delay"}
+					s4.Name += ";MG lead"
 				} else {
 					s4.MG.Level = 0
+					if s3.AxeScene == 1 {
+						s4.Name += ";MG dirty"
+					} else {
+						s4.Name += ";MG clean"
+					}
 				}
 			}
 		}
@@ -658,7 +663,7 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			return
 		}
-		err = ioutil.WriteFile("all_programs-v4-gen.yml", out_text, 0644)
+		err = ioutil.WriteFile("all_programs-v4.yml", out_text, 0644)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			return
