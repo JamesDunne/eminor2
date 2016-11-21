@@ -56,8 +56,6 @@ GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/
 
 #if HW_VERSION == 4
 
-#include <assert.h>
-#include <stdio.h>
 #include "../common/types.h"
 #include "../common/hardware.h"
 
@@ -73,7 +71,44 @@ struct amp {
 // amp state is 1 byte:
 COMPILE_ASSERT(sizeof(struct amp) == 1);
 
-// Program data structure loaded from / written to flash memory:
+struct sequence_v3 {
+    // Number of entries in the sequence
+    u8 count;
+
+    u8 scenes[19];
+};
+
+// Program v3 (current) data structure loaded from / written to flash memory:
+struct program_v3 {
+    // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
+    u8 name[20];
+
+    // Scene descriptors:
+    struct scene_descriptor_v3 {
+        // Ivvv vvCC
+        // |||| ||||
+        // |||| ||\--- (unsigned 0-3 = RJM channel)
+        // |\--------- (  signed -16..+15, offset -9 = -25..+6)
+        // \---------- Is Initial Scene
+        u8 part1;
+
+        // M000 00CC
+        // |      ||
+        // |      \--- (unsigned 0-3 = Axe-FX scene)
+        // |
+        // \---------- Is Muted
+        // TODO: volume ramp from previous!
+        u8 part2;
+    } scene[8];
+
+    // G-major effects enabled per scene (see fxm_*):
+    u8 fx[8];
+
+    // Sequence of pre-programmed scene changes:
+    struct sequence_v3 sequence;
+};
+
+// Program v4 (next gen) data structure loaded from / written to flash memory:
 struct program {
     // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
     u8 name[20];
@@ -108,7 +143,7 @@ struct set_list {
 };
 
 // DATES since 2014 are stored in 16 bits in the following form: (LSB on right)
-//  yyyyyyym mmmddddd
+//  yyyyyyym mmmddddd;
 //  |||||||| ||||||||
 //  |||||||| |||\++++ day of month [0..30]
 //  |||||||\-+++----- month [0..11]
@@ -174,7 +209,6 @@ u8 *lcd_rows[LCD_ROWS];
 
 enum {
     MODE_LIVE = 0,
-    MODE_SCENE_DESIGN,
     MODE_count
 };
 
@@ -189,18 +223,25 @@ struct state {
     // LED state per mode:
     io16 mode_leds[MODE_count];
 
+    // Setlist index:
+    u8 sl_idx;
+    // Current program:
+    u8 pr_idx;
+    // Current scene:
+    u8 sc_idx;
+    // Loaded program:
+    struct program pr;
+
     // Selected amp (0 or 1):
     u8 selected_amp;
-    // Per-amp settings:
+    // Amp definitions:
     struct amp amp[2];
 };
 
 // Current and last state:
 struct state curr, last;
 
-static void update_lcd(void);
-
-#define name_table_offs (u16)(128 * sizeof(struct program))
+#define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
 
 // Get the name text for the given name_index from flash memory:
 static u8 *name_get(u8 name_index) {
@@ -287,6 +328,16 @@ void controller_init(void) {
     last.leds = 0xFFFFU;
     curr.leds = 0x0000U;
 
+    // Load first program:
+    curr.sl_idx = 0;
+    curr.sc_idx = 0;
+    curr.pr_idx = 0;
+    flash_load((u16)(curr.pr_idx * sizeof(struct program)), sizeof(struct program), (u8 *)&curr.pr);
+
+    // Copy current scene settings into state:
+    curr.amp[0] = curr.pr.scene[curr.sc_idx].amp[0];
+    curr.amp[1] = curr.pr.scene[curr.sc_idx].amp[1];
+
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_ROWS; ++i)
         lcd_rows[i] = lcd_row_get(i);
@@ -312,6 +363,7 @@ static u8 calc_scene(struct amp amp[]) {
     return (amp[0].dirty | (amp[1].dirty << 1)) | ((amp[0].xy & 1) << 2);
 }
 
+// volume is a signed 3-bit value
 static u8 calc_boost_level(s8 volume) {
     // TODO: fix me.
     return (127 - 64) + ((volume & 1) << 6);
@@ -338,8 +390,8 @@ static void calc_midi(void) {
         last.amp[0].pitch  = 0;
         last.amp[0].chorus = 0;
         last.amp[0].volume = 0;
-        last.amp[1].delay = 0;
-        last.amp[1].pitch = 0;
+        last.amp[1].delay  = 0;
+        last.amp[1].pitch  = 0;
         last.amp[1].chorus = 0;
         last.amp[1].volume = 0;
         diff = 1;
