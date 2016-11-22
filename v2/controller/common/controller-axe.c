@@ -142,19 +142,29 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define axe_cc_taptempo     14
 #define axe_cc_tuner        15
 
+// Output mixer gain:
 #define axe_cc_external1    16
 #define axe_cc_external2    17
+// Amp gain:
+#define axe_cc_external3    18
+#define axe_cc_external4    19
 
 #define axe_cc_scene        34
 
-#define axe_cc_byp_amp1     37
-#define axe_cc_byp_amp2     38
-#define axe_cc_byp_chorus1  41
-#define axe_cc_byp_chorus2  42
-#define axe_cc_byp_delay1   47
-#define axe_cc_byp_delay2   48
-#define axe_cc_byp_pitch1   77
-#define axe_cc_byp_pitch2   78
+#define axe_cc_byp_amp1         37
+#define axe_cc_byp_amp2         38
+#define axe_cc_byp_chorus1      41
+#define axe_cc_byp_chorus2      42
+#define axe_cc_byp_compressor1  43
+#define axe_cc_byp_compressor2  44
+#define axe_cc_byp_delay1       47
+#define axe_cc_byp_delay2       48
+#define axe_cc_byp_gate1        60
+#define axe_cc_byp_gate2        61
+#define axe_cc_byp_phaser1      75
+#define axe_cc_byp_phaser2      76
+#define axe_cc_byp_pitch1       77
+#define axe_cc_byp_pitch2       78
 
 #define axe_cc_xy_amp1     100
 #define axe_cc_xy_amp2     101
@@ -202,6 +212,8 @@ struct state {
     // Tap tempo CC value (toggles between 0x00 and 0x7F):
     u8 tap;
 
+    // 0 for program mode, 1 for setlist mode:
+    u8 setlist_mode;
     // Current program:
     u8 pr_idx;
     // Current scene:
@@ -327,6 +339,7 @@ static u8 calc_cc_toggle(u8 enable) {
 static void calc_midi(void) {
     u8 diff = 0;
 
+#if 0
     // Calculate scene numbers:
     u8 curr_scene = calc_scene(curr.amp);
     u8 last_scene = calc_scene(last.amp);
@@ -342,13 +355,30 @@ static void calc_midi(void) {
         last.amp[1].volume = 0;
         diff = 1;
     }
+#else
+    // Send gain controller changes:
+    if (read_bit(dirty, curr.amp[0].fx) != read_bit(dirty, last.amp[0].fx)) {
+        u8 dirty = read_bit(dirty, curr.amp[0].fx);
+        midi_set_axe_cc(axe_cc_external3, calc_cc_toggle(dirty));
+        midi_set_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(dirty));
+        midi_set_axe_cc(axe_cc_byp_compressor1, calc_cc_toggle(!dirty));
+    }
+    if (read_bit(dirty, curr.amp[1].fx) != read_bit(dirty, last.amp[1].fx)) {
+        u8 dirty = read_bit(dirty, curr.amp[1].fx);
+        midi_set_axe_cc(axe_cc_external4, calc_cc_toggle(dirty));
+        midi_set_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(dirty));
+        midi_set_axe_cc(axe_cc_byp_compressor2, calc_cc_toggle(!dirty));
+    }
 
-    if (last.amp[0].fx != curr.amp[0].fx) {
-        diff = 1;
+    // Send X/Y changes:
+    // X = 127, T = 0
+    if (read_bit(xy, curr.amp[0].fx) != read_bit(xy, last.amp[0].fx)) {
+        midi_set_axe_cc(axe_cc_xy_amp1, calc_cc_toggle(!read_bit(xy, curr.amp[0].fx)));
     }
-    if (last.amp[1].fx != curr.amp[1].fx) {
-        diff = 1;
+    if (read_bit(xy, curr.amp[1].fx) != read_bit(xy, last.amp[1].fx)) {
+        midi_set_axe_cc(axe_cc_xy_amp2, calc_cc_toggle(!read_bit(xy, curr.amp[1].fx)));
     }
+#endif
 
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
@@ -360,43 +390,40 @@ static void calc_midi(void) {
         diff = 1;
     }
 
+    if (curr.amp[0].fx != last.amp[0].fx) {
+        diff = 1;
+    }
+    if (curr.amp[1].fx != last.amp[1].fx) {
+        diff = 1;
+    }
+
     // Enable FX:
     if (read_bit(delay, curr.amp[0].fx) != read_bit(delay, last.amp[0].fx)) {
         midi_set_axe_cc(axe_cc_byp_delay1, calc_cc_toggle(read_bit(delay, curr.amp[0].fx)));
-        diff = 1;
     }
     if (read_bit(delay, curr.amp[1].fx) != read_bit(delay, last.amp[1].fx)) {
         midi_set_axe_cc(axe_cc_byp_delay2, calc_cc_toggle(read_bit(delay, curr.amp[1].fx)));
-        diff = 1;
     }
 
     if (read_bit(pitch, curr.amp[0].fx) != read_bit(pitch, last.amp[0].fx)) {
         midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
-        diff = 1;
     }
     if (read_bit(pitch, curr.amp[1].fx) != read_bit(pitch, last.amp[1].fx)) {
         midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
-        diff = 1;
     }
 
     if (read_bit(chorus, curr.amp[0].fx) != read_bit(chorus, last.amp[0].fx)) {
         midi_set_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(read_bit(chorus, curr.amp[0].fx)));
-        diff = 1;
     }
     if (read_bit(chorus, curr.amp[1].fx) != read_bit(chorus, last.amp[1].fx)) {
         midi_set_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(read_bit(chorus, curr.amp[1].fx)));
-        diff = 1;
     }
 
     if (read_bit(filter, curr.amp[0].fx) != read_bit(filter, last.amp[0].fx)) {
-        // TODO: need a CC
-        //midi_set_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(read_bit(filter, curr.amp[0].fx)));
-        diff = 1;
+        midi_set_axe_cc(axe_cc_byp_phaser1, calc_cc_toggle(read_bit(filter, curr.amp[0].fx)));
     }
     if (read_bit(filter, curr.amp[1].fx) != read_bit(filter, last.amp[1].fx)) {
-        // TODO: need a CC
-        //midi_set_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(read_bit(filter, curr.amp[1].fx)));
-        diff = 1;
+        midi_set_axe_cc(axe_cc_byp_phaser2, calc_cc_toggle(read_bit(filter, curr.amp[1].fx)));
     }
 
     if (curr.pr_idx != last.pr_idx) {
@@ -537,8 +564,8 @@ void controller_init(void) {
     last.leds = 0xFFFFU;
     curr.leds = 0x0000U;
 
-    // For program mode:
-    pr_max = 127;
+    last.setlist_mode = 0;
+    curr.setlist_mode = 1;
 
     // Load setlist:
     flash_load((u16)(128 * sizeof(struct program)), sizeof(struct set_list), (u8 *)&sl);
@@ -552,6 +579,12 @@ void controller_init(void) {
     // Copy current scene settings into state:
     curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
     curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
+
+    // Invert last settings to force initial switch:
+    last.amp[0].fx = ~curr.amp[0].fx;
+    last.amp[1].fx = ~curr.amp[1].fx;
+    last.amp[0].volume = ~curr.amp[0].volume;
+    last.amp[1].volume = ~curr.amp[1].volume;
 
     // Select JD amp by default:
     curr.selected_amp = 1;
@@ -575,37 +608,47 @@ void controller_init(void) {
 }
 
 struct timers {
+    // Repeating timers:
     u8 bot_4;
     u8 bot_5;
+    // Once-only timer:
+    u8 bot_6;
 } timers;
 
 // called every 10ms
 void controller_10msec_timer(void) {
     if (is_bot_button_held(M_4)) {
-        if ((timers.bot_4 & 0xC0) != 0) {
-            timers.bot_4 = (timers.bot_4 & 0xC0) | ((timers.bot_4 & 0x3F) + 1) & 0x3F;
+        if ((timers.bot_4 & (u8)0xC0) != (u8)0) {
+            timers.bot_4 = (timers.bot_4 & (u8)0xC0) | ((timers.bot_4 & (u8)0x3F) + (u8)1) & (u8)0x3F;
         }
-        if (((timers.bot_4 & 0x80) != 0) && ((timers.bot_4 & 0x3F) >= 0x20)) {
-            timers.bot_4 |= 0x40;
+        if (((timers.bot_4 & (u8)0x80) != (u8)0) && ((timers.bot_4 & (u8)0x3F) >= (u8)0x20)) {
+            timers.bot_4 |= (u8)0x40;
         }
-        if (((timers.bot_4 & 0x40) != 0) && ((timers.bot_4 & 0x07) == 0)) {
-            if (curr.amp[curr.selected_amp].volume > 0) {
+        if (((timers.bot_4 & (u8)0x40) != (u8)0) && ((timers.bot_4 & (u8)0x07) == (u8)0)) {
+            if (curr.amp[curr.selected_amp].volume > (u8)0) {
                 curr.amp[curr.selected_amp].volume--;
             }
         }
     }
 
     if (is_bot_button_held(M_5)) {
-        if ((timers.bot_5 & 0xC0) != 0) {
-            timers.bot_5 = (timers.bot_5 & 0xC0) | ((timers.bot_5 & 0x3F) + 1) & 0x3F;
+        if ((timers.bot_5 & (u8)0xC0) != (u8)0) {
+            timers.bot_5 = (timers.bot_5 & (u8)0xC0) | ((timers.bot_5 & (u8)0x3F) + (u8)1) & (u8)0x3F;
         }
-        if (((timers.bot_5 & 0x80) != 0) && ((timers.bot_5 & 0x3F) >= 0x20)) {
-            timers.bot_5 |= 0x40;
+        if (((timers.bot_5 & (u8)0x80) != (u8)0) && ((timers.bot_5 & (u8)0x3F) >= (u8)0x20)) {
+            timers.bot_5 |= (u8)0x40;
         }
-        if (((timers.bot_5 & 0x40) != 0) && ((timers.bot_5 & 0x07) == 0)) {
-            if (curr.amp[curr.selected_amp].volume < 127) {
+        if (((timers.bot_5 & (u8)0x40) != (u8)0) && ((timers.bot_5 & (u8)0x07) == (u8)0)) {
+            if (curr.amp[curr.selected_amp].volume < (u8)127) {
                 curr.amp[curr.selected_amp].volume++;
             }
+        }
+    }
+
+    if (is_bot_button_held(M_6)) {
+        // Increment and cap timer to 0x7F:
+        if (((timers.bot_6 & (u8)0x80) != 0) && ((timers.bot_6 & (u8)0x7F) < (u8)0x7F)) {
+            timers.bot_6 = (timers.bot_6 & (u8)0x80) | ((timers.bot_6 & (u8)0x7F) + (u8)1);
         }
     }
 }
@@ -614,8 +657,8 @@ void controller_10msec_timer(void) {
 void controller_handle(void) {
     // poll foot-switch depression status:
     u16 tmp = fsw_poll();
-    curr.fsw.bot.byte = (u8)(tmp & 0xFF);
-    curr.fsw.top.byte = (u8)((tmp >> 8) & 0xFF);
+    curr.fsw.bot.byte = (u8)(tmp & (u8)0xFF);
+    curr.fsw.top.byte = (u8)((tmp >> (u8)8) & (u8)0xFF);
 
     // Handle bottom control switches:
     if (is_bot_button_pressed(M_1)) {
@@ -630,26 +673,53 @@ void controller_handle(void) {
     }
     // VOL--
     if (is_bot_button_pressed(M_4)) {
-        timers.bot_4 = 0x80;
+        timers.bot_4 = (u8)0x80;
         if (curr.amp[curr.selected_amp].volume > 0) {
             curr.amp[curr.selected_amp].volume--;
         }
     } else if (is_bot_button_released(M_4)) {
-        timers.bot_4 &= ~0xC0;
+        timers.bot_4 &= ~(u8)0xC0;
     }
     // VOL++
     if (is_bot_button_pressed(M_5)) {
-        timers.bot_5 = 0x80;
+        timers.bot_5 = (u8)0x80;
         if (curr.amp[curr.selected_amp].volume < 127) {
             curr.amp[curr.selected_amp].volume++;
         }
     } else if (is_bot_button_released(M_5)) {
-        timers.bot_5 &= ~0xC0;
+        timers.bot_5 &= ~(u8)0xC0;
     }
     // TAP:
     if (is_bot_button_pressed(M_6)) {
-        curr.tap ^= 0x7F;
+        // Toggle TAP CC value between 0x00 and 0x7F:
+        timers.bot_6 = (u8)0x80;
+        curr.tap ^= (u8)0x7F;
         midi_set_axe_cc(axe_cc_taptempo, curr.tap);
+    } else if (is_bot_button_held(M_6)) {
+        // MODE switch:
+        if (((timers.bot_6 & (u8)0x80) != (u8)0) && ((timers.bot_6 & (u8)0x7F) >= (u8)0x7F)) {
+            timers.bot_6 = 0;
+            curr.setlist_mode ^= (u8)1;
+            // Remap pr_idx:
+            if (curr.setlist_mode == 1) {
+                pr_max = sl.count - (u8)1;
+                u8 i;
+                for (i = 0; i < sl.count; i++) {
+                    if (sl.entries[i].program == curr.pr_idx) {
+                        curr.pr_idx = i;
+                        break;
+                    }
+                }
+                if (i == sl.count) {
+                    curr.pr_idx = 0;
+                }
+            } else {
+                pr_max = 127;
+                curr.pr_idx = sl.entries[curr.pr_idx].program;
+            }
+        }
+    } else if (is_bot_button_pressed(M_6)) {
+        timers.bot_6 = 0;
     }
     // PREV/NEXT SCENE:
     if (is_bot_button_pressed(M_7)) {
@@ -696,9 +766,15 @@ void controller_handle(void) {
     }
 
     // Update state:
-    if (curr.pr_idx != last.pr_idx) {
+    if ((curr.setlist_mode != last.setlist_mode) || (curr.pr_idx != last.pr_idx)) {
         // Load program:
-        flash_load((u16) (sl.entries[curr.pr_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
+        u8 pr_num;
+        if (curr.setlist_mode == 1) {
+            pr_num = sl.entries[curr.pr_idx].program;
+        } else {
+            pr_num = curr.pr_idx;
+        }
+        flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
         curr.sc_idx = 0;
         last.sc_idx = 255;
     }
