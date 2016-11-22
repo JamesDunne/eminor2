@@ -793,7 +793,7 @@ programs:
     MG:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
     JD:
       xy: X
@@ -1007,7 +1007,7 @@ programs:
     MG:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
     JD:
       xy: "Y"
@@ -1018,7 +1018,7 @@ programs:
     MG:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
     JD:
       xy: X
@@ -1051,7 +1051,7 @@ programs:
     MG:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
     JD:
       xy: "Y"

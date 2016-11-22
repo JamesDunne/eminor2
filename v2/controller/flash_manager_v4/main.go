@@ -751,7 +751,7 @@ func main() {
 				}
 				s4.MG.XY = "X"
 				if s3.AxeScene == 4 {
-					s4.MG.Level = 3
+					s4.MG.Level = 6
 					s4.MG.FX = []string{"delay"}
 					s4.Name += ";MG lead"
 				} else {
