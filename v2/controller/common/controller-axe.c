@@ -268,6 +268,16 @@ static s8 litoa(u8 *s, u8 n, s8 i) {
 	return i;
 }
 
+static void copy_str_lcd(u8 *src, u8 *dst) {
+    u8 i;
+    for (i = 0; src[i] != 0 && i < LCD_COLS; ++i) {
+        dst[i] = src[i];
+    }
+    for (; i < LCD_COLS; i++) {
+        dst[i] = ' ';
+    }
+}
+
 static void send_leds(void) {
 	// Update LEDs:
     curr.leds = (u16)curr.mode_leds[curr.mode].bot.byte | ((u16)curr.mode_leds[curr.mode].top.byte << 8);
@@ -414,6 +424,8 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     s8 i;
+    u8 *pr_name;
+    u8 *sc_name;
 #endif
 #ifdef HWFEAT_LABEL_UPDATES
     // Bottom row:
@@ -441,6 +453,11 @@ static void update_lcd(void) {
     label_row_update(1);
 #endif
 #ifdef FEAT_LCD
+    pr_name = name_get(curr.pr.name_index);
+    sc_name = name_get(curr.pr.scene[curr.sc_idx].name_index);
+    copy_str_lcd(pr_name, lcd_rows[2]);
+    copy_str_lcd(sc_name, lcd_rows[3]);
+
     lcd_updated_all();
 #endif
 }

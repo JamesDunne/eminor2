@@ -7,9 +7,9 @@ set(SOURCE_FILES
     common/controller-axe.c
     common/hardware.h
     common/types.h
-    PIC/flash_v3_bank0.h
-    PIC/flash_v3_bank1.h
-    PIC/flash_v3_bank2.h
+    PIC/flash_v4_bank0.h
+    PIC/flash_v4_bank1.h
+    PIC/flash_v4_bank2.h
     Win32/eminorv2.c
     Win32/font-5x8.h)
 
