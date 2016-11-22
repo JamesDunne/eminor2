@@ -12,11 +12,11 @@
 LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
-|   DIRTY  DELAY  PITCH  CHORUS VOL--  VOL++  PR_PRV PR_NXT  |
+|   DIRTY   X/Y   DELAY  PITCH  CHORUS FILTER PR_PRV PR_NXT  |
 |                                             PR_ONE         |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   AMP1   AMP2    X/Y                  TAP   SC_PRV SC_NXT  |
+|   AMP1   AMP2   VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
 |  RESET1 RESET2                       STORE  SC_ONE         |
 |------------------------------------------------------------|
 
@@ -26,9 +26,9 @@ Press AMP1   to select AMP1 for modification on top row
 Press AMP2   to select AMP2 for modification on top row
 Hold  RESET1 to reset AMP1 to basic dirty tone and select AMP1
 Hold  RESET2 to reset AMP2 to basic dirty tone and select AMP2
-Press X/Y    to switch AMP1&2 between X and Y settings; causes audio gap
 
 Press DIRTY  to change from clean to dirty (LED off is clean, on is dirty); gapless audio using scene controllers to modify amp gain
+Press X/Y    to switch AMP1&2 between X and Y settings; causes audio gap
 Press DELAY  to toggle delay effect
 Press PITCH  to toggle pitch effect
 Press CHORUS to toggle chorus effect
@@ -319,6 +319,9 @@ void controller_init(void) {
     curr.amp[0] = curr.pr.scene[curr.sc_idx].amp[0];
     curr.amp[1] = curr.pr.scene[curr.sc_idx].amp[1];
 
+    // Select JD amp by default:
+    curr.selected_amp = 1;
+
     // Get volume-ramp lookup table:
     volume_ramp = lookup_table(0);
 
@@ -335,11 +338,6 @@ void controller_init(void) {
 
     update_lcd();
 #endif
-}
-
-// called every 10ms
-void controller_10msec_timer(void) {
-
 }
 
 static u8 calc_scene(struct amp amp[]) {
@@ -371,10 +369,12 @@ static void calc_midi(void) {
         last.amp[0].delay  = 0;
         last.amp[0].pitch  = 0;
         last.amp[0].chorus = 0;
+        last.amp[0].filter = 0;
         last.amp[0].volume = 0;
         last.amp[1].delay  = 0;
         last.amp[1].pitch  = 0;
         last.amp[1].chorus = 0;
+        last.amp[1].filter = 0;
         last.amp[1].volume = 0;
         diff = 1;
     }
@@ -415,6 +415,17 @@ static void calc_midi(void) {
         diff = 1;
     }
 
+    if (curr.amp[0].filter != last.amp[0].filter) {
+        // TODO: need a CC
+        //midi_set_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(curr.amp[0].filter));
+        diff = 1;
+    }
+    if (curr.amp[1].filter != last.amp[1].filter) {
+        // TODO: need a CC
+        //midi_set_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(curr.amp[1].filter));
+        diff = 1;
+    }
+
     if (curr.pr_idx != last.pr_idx) {
         diff = 1;
     } else if (curr.sc_idx != last.sc_idx) {
@@ -442,9 +453,9 @@ static void update_lcd(void) {
     labels = label_row_get(0);
     labels[0] = "AMP1";
     labels[1] = "AMP2";
-    labels[2] = "X/Y";
-    labels[3] = "";
-    labels[4] = "";
+    labels[2] = "VOL=0";
+    labels[3] = "VOL--";
+    labels[4] = "VOL++";
     labels[5] = "TAP/STORE";
     labels[6] = "PREV SCENE";
     labels[7] = "NEXT SCENE";
@@ -453,11 +464,11 @@ static void update_lcd(void) {
     // Top row:
     labels = label_row_get(1);
     labels[0] = "DIRTY";
-    labels[1] = "DELAY";
-    labels[2] = "PITCH";
-    labels[3] = "CHORUS";
-    labels[4] = "VOL--";
-    labels[5] = "VOL++";
+    labels[1] = "X/Y";
+    labels[2] = "DELAY";
+    labels[3] = "PITCH";
+    labels[4] = "CHORUS";
+    labels[5] = "FILTER";
     labels[6] = "PREV SONG";
     labels[7] = "NEXT SONG";
     label_row_update(1);
@@ -478,28 +489,28 @@ static void update_lcd(void) {
 LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
-|   DIRTY  DELAY  PITCH  CHORUS VOL--  VOL++  PR_PRV PR_NXT  |
+|   DIRTY   X/Y   DELAY  PITCH  CHORUS FILTER PR_PRV PR_NXT  |
 |                                             PR_ONE         |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   AMP1   AMP2    X/Y                  TAP   SC_PRV SC_NXT  |
+|   AMP1   AMP2   VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
 |  RESET1 RESET2                       STORE  SC_ONE         |
 |------------------------------------------------------------|
 */
 
 static void calc_leds(void) {
     curr.mode_leds[curr.mode].top.bits._1 = curr.amp[curr.selected_amp].dirty;
-    curr.mode_leds[curr.mode].top.bits._2 = curr.amp[curr.selected_amp].delay;
-    curr.mode_leds[curr.mode].top.bits._3 = curr.amp[curr.selected_amp].pitch;
-    curr.mode_leds[curr.mode].top.bits._4 = curr.amp[curr.selected_amp].chorus;
-    curr.mode_leds[curr.mode].top.bits._5 = curr.fsw.top.bits._5;
-    curr.mode_leds[curr.mode].top.bits._6 = curr.fsw.top.bits._6;
+    curr.mode_leds[curr.mode].top.bits._2 = curr.amp[curr.selected_amp].xy;
+    curr.mode_leds[curr.mode].top.bits._3 = curr.amp[curr.selected_amp].delay;
+    curr.mode_leds[curr.mode].top.bits._4 = curr.amp[curr.selected_amp].pitch;
+    curr.mode_leds[curr.mode].top.bits._5 = curr.amp[curr.selected_amp].chorus;
+    curr.mode_leds[curr.mode].top.bits._6 = curr.amp[curr.selected_amp].filter;
     curr.mode_leds[curr.mode].top.bits._7 = curr.fsw.top.bits._7;
     curr.mode_leds[curr.mode].top.bits._8 = curr.fsw.top.bits._8;
 
-    curr.mode_leds[curr.mode].bot.bits._1 = !(curr.selected_amp & 1);
-    curr.mode_leds[curr.mode].bot.bits._2 = (curr.selected_amp & 1);
-    curr.mode_leds[curr.mode].bot.bits._3 = curr.amp[0].xy;
+    curr.mode_leds[curr.mode].bot.bits._1 = ~curr.selected_amp;
+    curr.mode_leds[curr.mode].bot.bits._2 = curr.selected_amp;
+    curr.mode_leds[curr.mode].bot.bits._3 = curr.fsw.bot.bits._3;
     curr.mode_leds[curr.mode].bot.bits._4 = curr.fsw.bot.bits._4;
     curr.mode_leds[curr.mode].bot.bits._5 = curr.fsw.bot.bits._5;
     curr.mode_leds[curr.mode].bot.bits._6 = curr.fsw.bot.bits._6;
@@ -507,6 +518,20 @@ static void calc_leds(void) {
     curr.mode_leds[curr.mode].bot.bits._8 = curr.fsw.bot.bits._8;
 
     send_leds();
+}
+
+// called every 10ms
+void controller_10msec_timer(void) {
+    if (is_bot_button_held(M_4)) {
+        if (curr.amp[curr.selected_amp].volume > 1) {
+            curr.amp[curr.selected_amp].volume--;
+        }
+    }
+    if (is_bot_button_held(M_5)) {
+        if (curr.amp[curr.selected_amp].volume < 127) {
+            curr.amp[curr.selected_amp].volume++;
+        }
+    }
 }
 
 // main control loop
@@ -523,8 +548,21 @@ void controller_handle(void) {
     if (is_bot_button_pressed(M_2)) {
         curr.selected_amp = 1;
     }
+    // VOL=0
     if (is_bot_button_pressed(M_3)) {
-        curr.amp[0].xy ^= 1;
+        curr.amp[curr.selected_amp].volume = 0;
+    }
+    // VOL--
+    if (is_bot_button_pressed(M_4)) {
+        if (curr.amp[curr.selected_amp].volume > 1) {
+            curr.amp[curr.selected_amp].volume--;
+        }
+    }
+    // VOL++
+    if (is_bot_button_pressed(M_5)) {
+        if (curr.amp[curr.selected_amp].volume < 127) {
+            curr.amp[curr.selected_amp].volume++;
+        }
     }
     // PREV/NEXT SCENE:
     if (is_bot_button_pressed(M_7)) {
@@ -543,26 +581,21 @@ void controller_handle(void) {
         curr.amp[curr.selected_amp].dirty ^= 1;
     }
     if (is_top_button_pressed(M_2)) {
-        curr.amp[curr.selected_amp].delay ^= 1;
+        curr.amp[curr.selected_amp].xy ^= 1;
     }
     if (is_top_button_pressed(M_3)) {
-        curr.amp[curr.selected_amp].pitch ^= 1;
+        curr.amp[curr.selected_amp].delay ^= 1;
     }
     if (is_top_button_pressed(M_4)) {
+        curr.amp[curr.selected_amp].pitch ^= 1;
+    }
+    if (is_top_button_pressed(M_5)) {
         curr.amp[curr.selected_amp].chorus ^= 1;
     }
-    // VOL--
-    if (is_top_button_pressed(M_5)) {
-        if (curr.amp[curr.selected_amp].volume > 1) {
-            curr.amp[curr.selected_amp].volume--;
-        }
-    }
-    // VOL++
     if (is_top_button_pressed(M_6)) {
-        if (curr.amp[curr.selected_amp].volume < 127) {
-            curr.amp[curr.selected_amp].volume++;
-        }
+        curr.amp[curr.selected_amp].filter ^= 1;
     }
+
     // PREV/NEXT SONG:
     if (is_top_button_pressed(M_7)) {
         if (curr.pr_idx > 0) {
