@@ -17,7 +17,7 @@ LIVE:
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
 |   AMP1   AMP2   VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
-|  RESET1 RESET2                       STORE  SC_ONE         |
+|  RESET1 RESET2  VOL=6                 MODE  SC_ONE         |
 |------------------------------------------------------------|
 
 Top row of buttons controls selected amp settings
@@ -36,7 +36,7 @@ Press VOL--  to decrease amp volume
 Press VOL++  to increase amp volume
 
 Press TAP    to send tap tempo
-Hold  STORE  to store current scene settings
+Hold  MODE   to switch between setlist and program mode
 
 Press SC_PRV to move to previous scene
 Press SC_NXT to move to next scene
@@ -198,6 +198,9 @@ struct state {
     u8 mode;
     // LED state per mode:
     io16 mode_leds[MODE_count];
+
+    // Tap tempo CC value (toggles between 0x00 and 0x7F):
+    u8 tap;
 
     // Current program:
     u8 pr_idx;
@@ -443,7 +446,7 @@ static void update_lcd(void) {
     labels[2] = "VOL=0";
     labels[3] = "VOL--";
     labels[4] = "VOL++";
-    labels[5] = "TAP/STORE";
+    labels[5] = "TAP";
     labels[6] = "PREV SCENE";
     labels[7] = "NEXT SCENE";
     label_row_update(0);
@@ -494,7 +497,7 @@ LIVE:
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
 |   AMP1   AMP2   VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
-|  RESET1 RESET2                       STORE  SC_ONE         |
+|  RESET1 RESET2  VOL=6                 MODE  SC_ONE         |
 |------------------------------------------------------------|
 */
 
@@ -642,6 +645,11 @@ void controller_handle(void) {
         }
     } else if (is_bot_button_released(M_5)) {
         timers.bot_5 &= ~0xC0;
+    }
+    // TAP:
+    if (is_bot_button_pressed(M_6)) {
+        curr.tap ^= 0x7F;
+        midi_set_axe_cc(axe_cc_taptempo, curr.tap);
     }
     // PREV/NEXT SCENE:
     if (is_bot_button_pressed(M_7)) {
