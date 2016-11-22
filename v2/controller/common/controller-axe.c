@@ -430,6 +430,7 @@ static void update_lcd(void) {
     s8 i;
     u8 *pr_name;
     u8 *sc_name;
+    s8 volhalfdb;
 #endif
 #ifdef HWFEAT_LABEL_UPDATES
     // Bottom row:
@@ -465,7 +466,7 @@ static void update_lcd(void) {
     }
 
     // Print volume levels:
-    s8 volhalfdb = (s8)curr.amp[0].volume - (s8)(127 - 12);
+    volhalfdb = (s8)curr.amp[0].volume - (s8)(127 - 12);
     print_half(lcd_rows[0], 4, volhalfdb);
     volhalfdb = (s8)curr.amp[1].volume - (s8)(127 - 12);
     print_half(lcd_rows[0], 15, volhalfdb);

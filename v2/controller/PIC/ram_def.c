@@ -83,8 +83,28 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
 #include "flash_v3_bank2.h"
     }
 };
+#elif HW_VERSION == 4
+rom unsigned char ROM_SAVEDATA[3][4096] = {
+    {
+#include "flash_v4_bank0.h"
+    },
+    {
+#include "flash_v4_bank1.h"
+    },
+    {
+#include "flash_v4_bank2.h"
+    }
+};
+
+rom unsigned char LOOKUP_TABLE[128] = {
+#include "v4_lookup.h"
+};
+
+unsigned char *lookup_table(unsigned char table) {
+    return LOOKUP_TABLE;
+}
 #else
-#error HW_ VERSION must be "1", "2", or "3"
+#error HW_ VERSION must be "1", "2", "3", or "4"
 #endif
 
 unsigned char LCDRamMap[4][20];
