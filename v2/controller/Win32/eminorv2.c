@@ -983,6 +983,9 @@ u8 flash_bank[3][4096] = {
 #include "../PIC/flash_v4_bank2.h"
 	}
 };
+u8 lookup[0][128] = {
+#include "../PIC/v4_lookup.h"
+};
 #else
 #error HW_ VERSION must be either "1" or "2"!
 #endif
@@ -1015,4 +1018,9 @@ u8 *flash_addr(u16 addr) {
     addr &= 0x0FFF;
 
     return (u8 *)flash_bank[bank] + addr;
+}
+
+u8 *lookup_table(u8 table) {
+    // ignore table parameter for now
+    return lookup[0];
 }

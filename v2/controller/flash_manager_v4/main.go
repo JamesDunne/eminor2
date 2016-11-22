@@ -5,6 +5,7 @@ import (
 	//"encoding/hex"
 	"encoding/json"
 	"flag"
+	"math"
 	//"io"
 	"strconv"
 	//"bytes"
@@ -34,7 +35,7 @@ const (
 type Ampv4 struct {
 	XY      string   `yaml:"xy"`      // "X" or "Y" amp settings
 	Channel string   `yaml:"channel"` // "clean" or "dirty"
-	Level   int      `yaml:"level"`   // 3-bit signed volume level
+	Level   float64  `yaml:"level"`   // dB
 	FX      []string `yaml:"fx,flow"` // any combo of "delay", "pitch", or "chorus"
 }
 
@@ -407,7 +408,12 @@ func generatePICH() {
 						b1 |= FX4_Delay
 					}
 				}
-				b2 = uint8(amp.Level & 0x7F)
+
+				// 0x00 =   0% volume (-58dB)
+				// 0x3F = 100% volume (  0dB)
+				// 0x7F = 200% volume ( +3dB)
+				b2 = volume_7bit(amp.Level)
+
 				bw.WriteHex(b1)
 				bw.WriteHex(b2)
 			}
@@ -611,9 +617,32 @@ func parseHex(s string) int64 {
 	return value
 }
 
+func volume_7bit(level float64) uint8 {
+	p := math.Pow(10.0, ((level / 2.0) / 20.0))
+	p = (p * 64)
+	v := uint8(p)
+	return v
+}
+
+func genVolumeTable() {
+	// 7 bit signed volume in half-dB increments, where (0dB = 127 - 12):
+	for level := -115; level <= 12; level++ {
+		p := math.Pow(10.0, (float64(level) / 40.0))
+		p = (p * 64)
+		v := uint8(p)
+		fmt.Printf(", %3v // %+5.1f dB\n", v, float64(level)/2.0)
+	}
+}
+
 func main() {
 	convertV3toV4 := flag.Bool("convert", false, "Convert V3 to V4 YAML")
+	genVolume := flag.Bool("volume", false, "Generate volume table")
 	flag.Parse()
+
+	if *genVolume {
+		genVolumeTable()
+		return
+	}
 
 	version = os.Getenv("HW_VERSION")
 	if version != "1" && version != "2" && version != "3" && version != "4" {
@@ -699,7 +728,7 @@ func main() {
 					}
 				}
 
-				s4.JD.Level = s3.Level * 3 / 5
+				s4.JD.Level = float64(s3.Level * 6 / 5)
 
 				// Filter out bad FX that no longer apply:
 				s4.JD.FX = make([]string, 0, len(s3.FX))

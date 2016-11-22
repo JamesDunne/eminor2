@@ -47,7 +47,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay, pitch]
   - name: JD dirty;MG clean
     MG:
@@ -69,7 +69,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay, pitch]
   - name: JD dirty;MG clean
     MG:
@@ -91,7 +91,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
   - name: JD dirty;MG clean
     MG:
@@ -115,7 +115,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 3
+      level: 6
       fx: []
 - name: Buddy Holly
   scenes:
@@ -139,7 +139,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
   - name: JD dirty;MG clean
     MG:
@@ -189,7 +189,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 3
+      level: 6
       fx: []
 - name: When I Come Around
   scenes:
@@ -213,7 +213,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
   - name: JD dirty;MG clean
     MG:
@@ -237,7 +237,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
   - name: JD dirty;MG clean
     MG:
@@ -259,7 +259,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
   - name: JD dirty;MG clean
     MG:
@@ -281,7 +281,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
   - name: JD dirty;MG clean
     MG:
@@ -338,7 +338,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
   - name: JD lead;MG dirty
     MG:
@@ -349,7 +349,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 0
+      level: 1
       fx: [delay]
   - name: JD clean;MG dirty
     MG:
@@ -393,7 +393,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
 - name: Crawling in the Dark
   scenes:
@@ -406,7 +406,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 1
+      level: 2
       fx: [filter, delay]
   - name: JD dirty;MG clean
     MG:
@@ -428,7 +428,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 1
+      level: 2
       fx: [filter, delay]
   - name: JD dirty;MG clean
     MG:
@@ -450,7 +450,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 1
+      level: 2
       fx: [filter, delay]
   - name: JD dirty;MG clean
     MG:
@@ -472,7 +472,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 1
+      level: 2
       fx: [filter, delay]
   - name: JD dirty;MG clean
     MG:
@@ -645,7 +645,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
   - name: JD clean;MG clean
     MG:
@@ -678,7 +678,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
 - name: In Bloom
   scenes:
@@ -702,7 +702,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: []
   - name: JD dirty;MG clean
     MG:
@@ -737,7 +737,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
   - name: JD dirty;MG clean
     MG:
@@ -1119,7 +1119,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 2
+      level: 4
       fx: []
   - name: JD dirty;MG clean
     MG:
@@ -1130,7 +1130,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 0
+      level: -1
       fx: [filter, delay]
   - name: JD dirty;MG clean
     MG:
@@ -1187,7 +1187,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: -1
+      level: -3
       fx: [delay]
   - name: JD dirty;MG clean
     MG:
@@ -1231,7 +1231,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 2
+      level: 4
       fx: [chorus]
 - name: If You Could Only See
   scenes:
@@ -1244,7 +1244,7 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 1
+      level: 3
       fx: [delay]
 - name: Beautiful Disaster
   scenes:
@@ -1281,7 +1281,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
 - name: Fuel
   scenes:
@@ -1305,17 +1305,6 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 1
-      fx: []
-  - name: JD lead;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: "Y"
-      channel: dirty
       level: 2
       fx: []
   - name: JD lead;MG clean
@@ -1327,7 +1316,18 @@ programs:
     JD:
       xy: "Y"
       channel: dirty
-      level: 1
+      level: 4
+      fx: []
+  - name: JD lead;MG clean
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: "Y"
+      channel: dirty
+      level: 2
       fx: [delay]
   - name: JD dirty;MG clean
     MG:
@@ -1362,7 +1362,7 @@ programs:
     JD:
       xy: X
       channel: clean
-      level: 3
+      level: 6
       fx: []
   - name: JD clean;MG dirty
     MG:
@@ -1384,7 +1384,7 @@ programs:
     JD:
       xy: X
       channel: clean
-      level: 3
+      level: 6
       fx: []
   - name: JD clean;MG dirty
     MG:
@@ -1452,7 +1452,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 2
+      level: 4
       fx: []
   - name: JD dirty;MG clean
     MG:
@@ -1638,7 +1638,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]
   - name: JD dirty;MG clean
     MG:
@@ -1660,5 +1660,5 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 3
+      level: 6
       fx: [delay]

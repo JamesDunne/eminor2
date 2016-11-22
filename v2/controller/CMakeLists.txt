@@ -11,7 +11,7 @@ set(SOURCE_FILES
     PIC/flash_v4_bank1.h
     PIC/flash_v4_bank2.h
     Win32/eminorv2.c
-    Win32/font-5x8.h)
+    Win32/font-5x8.h PIC/v4_lookup.h)
 
 add_executable(controller ${SOURCE_FILES})
 target_link_libraries(controller kernel32 gdi32 user32 winmm)

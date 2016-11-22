@@ -108,6 +108,9 @@ extern void flash_store(u16 addr, u16 count, u8 *data);
 // Get a pointer to flash memory at address:
 extern u8 *flash_addr(u16 addr);
 
+// Get a pointer to a lookup table:
+extern u8 *lookup_table(u8 table);
+
 // --------------- Controller logic interface functions:
 
 /* export */ extern void controller_init(void);
