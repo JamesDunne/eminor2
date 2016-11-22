@@ -320,42 +320,19 @@ static void send_leds(void) {
 
 static void update_lcd(void);
 
-static u8 calc_scene(struct amp amp[]) {
-    // Not a typo: X/Y is only controlled from amp[0].
-    return (read_bit(dirty, amp[0].fx) | (read_bit(dirty, amp[1].fx) << 1))
-           | (read_bit(xy, amp[0].fx) << 2);
-}
-
 static u8 calc_mixer_level(u8 volume) {
     return volume_ramp[volume & 0x7F];
 }
 
 static u8 calc_cc_toggle(u8 enable) {
     // TODO: replace me with branchless bit twiddling.
-    return enable == 0 ? 0 : 0x7F;
+    return enable == 0 ? (u8)0 : (u8)0x7F;
 }
 
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     u8 diff = 0;
 
-#if 0
-    // Calculate scene numbers:
-    u8 curr_scene = calc_scene(curr.amp);
-    u8 last_scene = calc_scene(last.amp);
-
-    // Change scene if applicable:
-    if (curr_scene != last_scene) {
-        // TODO: see if modifying external controllers causes no gap
-        midi_set_axe_cc(axe_cc_scene, curr_scene);
-        // Treat all last FX as off after a scene change:
-        last.amp[0].fx = 0;
-        last.amp[0].volume = 0;
-        last.amp[1].fx = 0;
-        last.amp[1].volume = 0;
-        diff = 1;
-    }
-#else
     // Send gain controller changes:
     if (read_bit(dirty, curr.amp[0].fx) != read_bit(dirty, last.amp[0].fx)) {
         u8 dirty = read_bit(dirty, curr.amp[0].fx);
@@ -378,7 +355,6 @@ static void calc_midi(void) {
     if (read_bit(xy, curr.amp[1].fx) != read_bit(xy, last.amp[1].fx)) {
         midi_set_axe_cc(axe_cc_xy_amp2, calc_cc_toggle(!read_bit(xy, curr.amp[1].fx)));
     }
-#endif
 
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
