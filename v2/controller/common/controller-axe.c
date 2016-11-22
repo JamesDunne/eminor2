@@ -59,17 +59,26 @@ GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/
 #include "../common/types.h"
 #include "../common/hardware.h"
 
-struct amp {
-    u8 dirty  : 1;  // clean or dirty tone
-    u8 xy     : 1;  // X or Y amp (applies to both amps due to scene design)
-    u8 delay  : 1;  // delay on or off
-    u8 pitch  : 1;  // pitch on or off
-    u8 chorus : 1;  // chorus on or off
-    u8 filter : 1;  // filter on or off
-    u8 _7 : 1;
-    u8 _8 : 1;
+#define fxm_dirty  (u8)0x01
+#define fxm_xy     (u8)0x02
+#define fxm_delay  (u8)0x04
+#define fxm_pitch  (u8)0x08
+#define fxm_chorus (u8)0x10
+#define fxm_filter (u8)0x20
 
-    u8 volume;      // volume (7-bit)
+#define fxb_dirty  (u8)0
+#define fxb_xy     (u8)1
+#define fxb_delay  (u8)2
+#define fxb_pitch  (u8)3
+#define fxb_chorus (u8)4
+#define fxb_filter (u8)5
+
+#define read_bit(name,e)   ((e & fxm_##name) >> fxb_##name)
+#define toggle_bit(name,e) e = e ^ fxm_##name
+
+struct amp {
+    u8 fx;
+    u8 volume;  // volume (7-bit) represented as half-dB where 0dB = 127-12, +6dB = 127.
 };
 
 // amp state is 2 bytes:
@@ -296,7 +305,8 @@ static void update_lcd(void);
 
 static u8 calc_scene(struct amp amp[]) {
     // Not a typo: X/Y is only controlled from amp[0].
-    return (amp[0].dirty | (amp[1].dirty << 1)) | ((amp[0].xy & 1) << 2);
+    return (read_bit(dirty, amp[0].fx) | (read_bit(dirty, amp[1].fx) << 1))
+           | (read_bit(xy, amp[0].fx) << 2);
 }
 
 static u8 calc_mixer_level(u8 volume) {
@@ -318,20 +328,23 @@ static void calc_midi(void) {
 
     // Change scene if applicable:
     if (curr_scene != last_scene) {
+        // TODO: see if modifying external controllers causes no gap
         midi_set_axe_cc(axe_cc_scene, curr_scene);
         // Treat all last FX as off after a scene change:
-        last.amp[0].delay  = 0;
-        last.amp[0].pitch  = 0;
-        last.amp[0].chorus = 0;
-        last.amp[0].filter = 0;
+        last.amp[0].fx = 0;
         last.amp[0].volume = 0;
-        last.amp[1].delay  = 0;
-        last.amp[1].pitch  = 0;
-        last.amp[1].chorus = 0;
-        last.amp[1].filter = 0;
+        last.amp[1].fx = 0;
         last.amp[1].volume = 0;
         diff = 1;
     }
+
+    if (last.amp[0].fx != curr.amp[0].fx) {
+        diff = 1;
+    }
+    if (last.amp[1].fx != curr.amp[1].fx) {
+        diff = 1;
+    }
+
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
         midi_set_axe_cc(axe_cc_external1, calc_mixer_level(curr.amp[0].volume));
@@ -341,42 +354,43 @@ static void calc_midi(void) {
         midi_set_axe_cc(axe_cc_external2, calc_mixer_level(curr.amp[1].volume));
         diff = 1;
     }
+
     // Enable FX:
-    if (curr.amp[0].delay != last.amp[0].delay) {
-        midi_set_axe_cc(axe_cc_byp_delay1, calc_cc_toggle(curr.amp[0].delay));
+    if (read_bit(delay, curr.amp[0].fx) != read_bit(delay, last.amp[0].fx)) {
+        midi_set_axe_cc(axe_cc_byp_delay1, calc_cc_toggle(read_bit(delay, curr.amp[0].fx)));
         diff = 1;
     }
-    if (curr.amp[1].delay != last.amp[1].delay) {
-        midi_set_axe_cc(axe_cc_byp_delay2, calc_cc_toggle(curr.amp[1].delay));
-        diff = 1;
-    }
-
-    if (curr.amp[0].pitch != last.amp[0].pitch) {
-        midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(curr.amp[0].pitch));
-        diff = 1;
-    }
-    if (curr.amp[1].pitch != last.amp[1].pitch) {
-        midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(curr.amp[1].pitch));
+    if (read_bit(delay, curr.amp[1].fx) != read_bit(delay, last.amp[1].fx)) {
+        midi_set_axe_cc(axe_cc_byp_delay2, calc_cc_toggle(read_bit(delay, curr.amp[1].fx)));
         diff = 1;
     }
 
-    if (curr.amp[0].chorus != last.amp[0].chorus) {
-        midi_set_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(curr.amp[0].chorus));
+    if (read_bit(pitch, curr.amp[0].fx) != read_bit(pitch, last.amp[0].fx)) {
+        midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
         diff = 1;
     }
-    if (curr.amp[1].chorus != last.amp[1].chorus) {
-        midi_set_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(curr.amp[1].chorus));
+    if (read_bit(pitch, curr.amp[1].fx) != read_bit(pitch, last.amp[1].fx)) {
+        midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
         diff = 1;
     }
 
-    if (curr.amp[0].filter != last.amp[0].filter) {
+    if (read_bit(chorus, curr.amp[0].fx) != read_bit(chorus, last.amp[0].fx)) {
+        midi_set_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(read_bit(chorus, curr.amp[0].fx)));
+        diff = 1;
+    }
+    if (read_bit(chorus, curr.amp[1].fx) != read_bit(chorus, last.amp[1].fx)) {
+        midi_set_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(read_bit(chorus, curr.amp[1].fx)));
+        diff = 1;
+    }
+
+    if (read_bit(filter, curr.amp[0].fx) != read_bit(filter, last.amp[0].fx)) {
         // TODO: need a CC
-        //midi_set_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(curr.amp[0].filter));
+        //midi_set_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(read_bit(filter, curr.amp[0].fx)));
         diff = 1;
     }
-    if (curr.amp[1].filter != last.amp[1].filter) {
+    if (read_bit(filter, curr.amp[1].fx) != read_bit(filter, last.amp[1].fx)) {
         // TODO: need a CC
-        //midi_set_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(curr.amp[1].filter));
+        //midi_set_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(read_bit(filter, curr.amp[1].fx)));
         diff = 1;
     }
 
@@ -482,12 +496,12 @@ LIVE:
 */
 
 static void calc_leds(void) {
-    curr.mode_leds[curr.mode].top.bits._1 = curr.amp[curr.selected_amp].dirty;
-    curr.mode_leds[curr.mode].top.bits._2 = curr.amp[curr.selected_amp].xy;
-    curr.mode_leds[curr.mode].top.bits._3 = curr.amp[curr.selected_amp].delay;
-    curr.mode_leds[curr.mode].top.bits._4 = curr.amp[curr.selected_amp].pitch;
-    curr.mode_leds[curr.mode].top.bits._5 = curr.amp[curr.selected_amp].chorus;
-    curr.mode_leds[curr.mode].top.bits._6 = curr.amp[curr.selected_amp].filter;
+    curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[curr.selected_amp].fx);
+    curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[curr.selected_amp].fx);
+    curr.mode_leds[curr.mode].top.bits._3 = read_bit(delay,  curr.amp[curr.selected_amp].fx);
+    curr.mode_leds[curr.mode].top.bits._4 = read_bit(pitch,  curr.amp[curr.selected_amp].fx);
+    curr.mode_leds[curr.mode].top.bits._5 = read_bit(chorus, curr.amp[curr.selected_amp].fx);
+    curr.mode_leds[curr.mode].top.bits._6 = read_bit(filter, curr.amp[curr.selected_amp].fx);
     curr.mode_leds[curr.mode].top.bits._7 = curr.fsw.top.bits._7;
     curr.mode_leds[curr.mode].top.bits._8 = curr.fsw.top.bits._8;
 
@@ -634,22 +648,22 @@ void controller_handle(void) {
 
     // Handle top amp effects:
     if (is_top_button_pressed(M_1)) {
-        curr.amp[curr.selected_amp].dirty ^= 1;
+        toggle_bit(dirty, curr.amp[curr.selected_amp].fx);
     }
     if (is_top_button_pressed(M_2)) {
-        curr.amp[curr.selected_amp].xy ^= 1;
+        toggle_bit(xy, curr.amp[curr.selected_amp].fx);
     }
     if (is_top_button_pressed(M_3)) {
-        curr.amp[curr.selected_amp].delay ^= 1;
+        toggle_bit(delay, curr.amp[curr.selected_amp].fx);
     }
     if (is_top_button_pressed(M_4)) {
-        curr.amp[curr.selected_amp].pitch ^= 1;
+        toggle_bit(pitch, curr.amp[curr.selected_amp].fx);
     }
     if (is_top_button_pressed(M_5)) {
-        curr.amp[curr.selected_amp].chorus ^= 1;
+        toggle_bit(chorus, curr.amp[curr.selected_amp].fx);
     }
     if (is_top_button_pressed(M_6)) {
-        curr.amp[curr.selected_amp].filter ^= 1;
+        toggle_bit(filter, curr.amp[curr.selected_amp].fx);
     }
 
     // PREV/NEXT SONG:

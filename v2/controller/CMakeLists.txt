@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(controller)
 
-set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -std=c99 -D HW_VERSION=4 -D HWFEAT_LABEL_UPDATES -D WIN32 -D _CONSOLE -D UNICODE -D _UNICODE")
+set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -std=gnu99 -D HW_VERSION=4 -D HWFEAT_LABEL_UPDATES -D WIN32 -D _CONSOLE -D UNICODE -D _UNICODE")
 
 set(SOURCE_FILES
     common/controller-axe.c

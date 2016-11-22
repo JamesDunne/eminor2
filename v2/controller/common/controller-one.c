@@ -51,6 +51,28 @@ struct program {
     u8 fx[6];
 };
 
+#define m_channel_initial 0x80U
+
+// FX button enable bitmasks:
+#define fxm_compressor  0x01
+#define fxm_filter      0x02
+#define fxm_pitch       0x04
+#define fxm_chorus      0x08
+#define fxm_delay       0x10
+#define fxm_reverb      0x20
+#define fxm_noisegate   0x40
+#define fxm_eq          0x80
+
+// FX button labels:
+#define fxb_compressor  0
+#define fxb_filter      1
+#define fxb_pitch       2
+#define fxb_chorus      3
+#define fxb_delay       4
+#define fxb_reverb      5
+#define fxb_noisegate   6
+#define fxb_eq          7
+
 // Mark V channel 1
 #define rjm_channel_1   0x00
 // Mark V channel 2
