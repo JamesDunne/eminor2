@@ -409,10 +409,13 @@ func generatePICH() {
 					}
 				}
 
-				// 0x00 =   0% volume (-58dB)
-				// 0x3F = 100% volume (  0dB)
-				// 0x7F = 200% volume ( +3dB)
-				b2 = volume_7bit(amp.Level)
+				if amp.Level < -57.5 {
+					amp.Level = -57.5
+				}
+				if amp.Level > 6 {
+					amp.Level = 6
+				}
+				b2 = uint8((amp.Level * 2) + (127 - 12))
 
 				bw.WriteHex(b1)
 				bw.WriteHex(b2)
@@ -618,7 +621,7 @@ func parseHex(s string) int64 {
 }
 
 func volume_7bit(level float64) uint8 {
-	p := math.Pow(10.0, ((level / 2.0) / 20.0))
+	p := math.Pow(10.0, (level / 20.0))
 	p = (p * 64)
 	v := uint8(p)
 	return v
@@ -627,9 +630,7 @@ func volume_7bit(level float64) uint8 {
 func genVolumeTable() {
 	// 7 bit signed volume in half-dB increments, where (0dB = 127 - 12):
 	for level := -115; level <= 12; level++ {
-		p := math.Pow(10.0, (float64(level) / 40.0))
-		p = (p * 64)
-		v := uint8(p)
+		v := volume_7bit(float64(level) / 2.0)
 		fmt.Printf(", %3v // %+5.1f dB\n", v, float64(level)/2.0)
 	}
 }
