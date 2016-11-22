@@ -61,69 +61,37 @@ GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/
 
 struct amp {
     u8 dirty  : 1;  // clean or dirty tone
+    u8 xy     : 1;  // X or Y amp (applies to both amps due to scene design)
     u8 delay  : 1;  // delay on or off
     u8 pitch  : 1;  // pitch on or off
     u8 chorus : 1;  // chorus on or off
-    u8 xy     : 1;  // X or Y amp (applies to both amps due to scene design)
-    s8 volume : 3;  // volume = signed [-4, 3]
+    u8 filter : 1;  // filter on or off
+    u8 _7 : 1;
+    u8 _8 : 1;
+
+    u8 volume;      // volume (7-bit)
 };
 
-// amp state is 1 byte:
-COMPILE_ASSERT(sizeof(struct amp) == 1);
-
-struct sequence_v3 {
-    // Number of entries in the sequence
-    u8 count;
-
-    u8 scenes[19];
-};
-
-// Program v3 (current) data structure loaded from / written to flash memory:
-struct program_v3 {
-    // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
-    u8 name[20];
-
-    // Scene descriptors:
-    struct scene_descriptor_v3 {
-        // Ivvv vvCC
-        // |||| ||||
-        // |||| ||\--- (unsigned 0-3 = RJM channel)
-        // |\--------- (  signed -16..+15, offset -9 = -25..+6)
-        // \---------- Is Initial Scene
-        u8 part1;
-
-        // M000 00CC
-        // |      ||
-        // |      \--- (unsigned 0-3 = Axe-FX scene)
-        // |
-        // \---------- Is Muted
-        // TODO: volume ramp from previous!
-        u8 part2;
-    } scene[8];
-
-    // G-major effects enabled per scene (see fxm_*):
-    u8 fx[8];
-
-    // Sequence of pre-programmed scene changes:
-    struct sequence_v3 sequence;
-};
+// amp state is 2 bytes:
+COMPILE_ASSERT(sizeof(struct amp) == 2);
 
 // Program v4 (next gen) data structure loaded from / written to flash memory:
 struct program {
-    // Name of the program in ASCII, max 20 chars, NUL terminator is optional at 20 char limit; NUL padding is preferred:
-    u8 name[20];
+    // Index into the name table for the name of the program (song):
+    u8 name_index;
 
     // Number of scenes defined:
     u8 scene_count;
-    u8 _unused;
+    u8 _unused1;    // perhaps AXE-FX program # for different songs?
+    u8 _unused2;
 
-    // Scene descriptors (2 bytes each):
+    // Scene descriptors (5 bytes each):
     struct scene_descriptor {
-        // Amp definitions:
-        struct amp amp[2];
-        // Index into name table:
+        // Index into the name table for the name of the scene:
         u8 name_index;
-    } scene[14];
+        // 2 amps:
+        struct amp amp[2];
+    } scene[12];
 };
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
@@ -398,11 +366,11 @@ static void calc_midi(void) {
     }
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
-        midi_set_axe_cc(axe_cc_external1, calc_boost_level(curr.amp[0].volume));
+        midi_set_axe_cc(axe_cc_external1, (curr.amp[0].volume & 0x7F));
         diff = 1;
     }
     if (curr.amp[1].volume != last.amp[1].volume) {
-        midi_set_axe_cc(axe_cc_external2, calc_boost_level(curr.amp[1].volume));
+        midi_set_axe_cc(axe_cc_external2, (curr.amp[1].volume & 0x7F));
         diff = 1;
     }
     // Enable FX:
