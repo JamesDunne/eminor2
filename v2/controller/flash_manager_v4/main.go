@@ -312,6 +312,25 @@ func generatePICH() {
 		fmt.Println("Closed.")
 	}()
 
+	// Define name_table:
+	name_table := make([]string, 0, len(programs.Programs))
+	name_table_lookup := make(map[string]int)
+
+	// Function to set or get name_table entry:
+	set_name_table := func(name string) uint8 {
+		if idx, ok := name_table_lookup[name]; ok {
+			return uint8(idx)
+		} else {
+			idx := len(name_table)
+			name_table_lookup[name] = idx
+			name_table = append(name_table, name)
+			if idx > 255 {
+				panic("Ran out of name_table entries!")
+			}
+			return uint8(idx)
+		}
+	}
+
 	// Translate YAML to binary data for FLASH memory (see common/controller.c):
 	songs := 0
 	for i, p := range programs.Programs {
@@ -333,38 +352,81 @@ func generatePICH() {
 			return
 		}
 
-		// Copy name characters:
-		for j := 0; j < song_name_max_length; j++ {
-			if j >= len(short_name) {
-				bw.WriteDecimal(0)
-				continue
+		// Write name into name table:
+		bw.WriteHex(set_name_table(short_name))
+
+		// Copy scenes:
+		/*
+		struct program {
+		    // Index into the name table for the name of the program (song):
+		    u8 name_index;
+
+		    // Number of scenes defined:
+		    u8 scene_count;
+		    u8 _unused1;    // perhaps AXE-FX program # for different songs?
+		    u8 _unused2;
+
+		    // Scene descriptors (5 bytes each):
+		    struct scene_descriptor {
+		        // Index into the name table for the name of the scene:
+		        u8 name_index;
+		        // 2 amps:
+		        struct amp amp[2];
+		    } scene[12];
+		};
+		*/
+
+		// Write scene count:
+		bw.WriteDecimal(uint8(len(p.SceneDescriptors)))
+		bw.WriteDecimal(0)
+		bw.WriteDecimal(0)
+
+		// Write scene descriptors (5 bytes each):
+		n := 0
+		for _, s := range p.SceneDescriptors {
+			n++
+
+			// Write name_table index of scene name:
+			bw.WriteHex(set_name_table(s.Name))
+
+			// Write amp descriptors:
+			for _, amp := range []*Ampv4{&s.MG, &s.JD} {
+				b1, b2 := byte(0), byte(0)
+				if amp.Channel == "dirty" {
+					b1 |= FX4_Dirty
+				}
+				if amp.XY == "Y" {
+					b1 |= FX4_XY
+				}
+				for _, effect := range amp.FX {
+					if effect == "pitch" {
+						b1 |= FX4_Pitch
+					} else if effect == "chorus" {
+						b1 |= FX4_Chorus
+					} else if effect == "delay" {
+						b1 |= FX4_Delay
+					}
+				}
+				b2 = uint8(amp.Level & 0x7F)
+				bw.WriteHex(b1)
+				bw.WriteHex(b2)
 			}
-			c := short_name[j]
-			if c < 32 {
-				bw.WriteDecimal(0)
-			}
-			bw.WriteChar(c)
 		}
 
-		// Effects:
-		//for j := 0; j < len(s); j++ {
-		//	// Translate effect name strings into bit flags:
-		//	b := uint8(0)
-		//	for _, effect := range s[j].MG.FX {
-		//		if effect == "pitch" {
-		//			b |= FX4_Pitch
-		//		} else if effect == "chorus" {
-		//			b |= FX4_Chorus
-		//		} else if effect == "delay" {
-		//			b |= FX4_Delay
-		//		}
-		//	}
-		//
-		//	bw.WriteHex(b)
-		//}
+		if n < 12 {
+			// Pad the remaining scenes:
+			for ; n < 12; n++ {
+				bw.WriteDecimal(0)
+				bw.WriteDecimal(0)
+				bw.WriteDecimal(0)
+				bw.WriteDecimal(0)
+				bw.WriteDecimal(0)
+			}
+		}
 	}
 
-	for songs = songs; songs < 128; songs++ {
+	for ; songs < 128; songs++ {
+		// Pad the remaining songs:
 		for j := 0; j < 64; j++ {
 			bw.WriteDecimal(0)
 		}
@@ -445,8 +507,20 @@ func generatePICH() {
 		}
 	}
 
-	// Generate name table:
-	// TODO
+	// Generate name table (20 chars each):
+	for _, name := range name_table {
+		for j := 0; j < 20; j++ {
+			if j >= len(name) {
+				bw.WriteDecimal(0)
+				continue
+			}
+			c := name[j]
+			if c < 32 {
+				bw.WriteDecimal(0)
+			}
+			bw.WriteChar(c)
+		}
+	}
 }
 
 // Generate JSON for Google Docs setlist generator script:
@@ -679,7 +753,7 @@ func main() {
 	}
 	//fmt.Printf("%+v\n\n", programs)
 
-	//generatePICH()
+	generatePICH()
 
 	//generateJSON()
 }
