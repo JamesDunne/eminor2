@@ -411,6 +411,12 @@ static void calc_midi(void) {
         diff = 1;
     }
 
+    if (curr.pr_idx != last.pr_idx) {
+        diff = 1;
+    } else if (curr.sc_idx != last.sc_idx) {
+        diff = 1;
+    }
+
     // Update LCD if the state changed:
     if (diff) {
         update_lcd();
@@ -457,6 +463,8 @@ static void update_lcd(void) {
     sc_name = name_get(curr.pr.scene[curr.sc_idx].name_index);
     copy_str_lcd(pr_name, lcd_rows[2]);
     copy_str_lcd(sc_name, lcd_rows[3]);
+
+    ritoa(lcd_rows[3], curr.sc_idx, 19);
 
     lcd_updated_all();
 #endif
@@ -514,6 +522,17 @@ void controller_handle(void) {
     if (is_bot_button_pressed(M_3)) {
         curr.amp[0].xy ^= 1;
     }
+    // PREV/NEXT SCENE:
+    if (is_bot_button_pressed(M_7)) {
+        if (curr.sc_idx > 0) {
+            curr.sc_idx--;
+        }
+    }
+    if (is_bot_button_pressed(M_8)) {
+        if (curr.sc_idx < curr.pr.scene_count - 1) {
+            curr.sc_idx++;
+        }
+    }
 
     // Handle top amp effects:
     if (is_top_button_pressed(M_1)) {
@@ -527,6 +546,32 @@ void controller_handle(void) {
     }
     if (is_top_button_pressed(M_4)) {
         curr.amp[curr.selected_amp].chorus ^= 1;
+    }
+    // PREV/NEXT SONG:
+    if (is_top_button_pressed(M_7)) {
+        if (curr.pr_idx > 0) {
+            curr.pr_idx--;
+        }
+    }
+    if (is_top_button_pressed(M_8)) {
+        if (curr.pr_idx < 44) {
+            curr.pr_idx++;
+        }
+    }
+
+    // Update state:
+    if (curr.pr_idx != last.pr_idx) {
+        // Load program:
+        flash_load((u16)(curr.pr_idx * sizeof(struct program)), sizeof(struct program), (u8 *)&curr.pr);
+        curr.sc_idx = 0;
+
+        // Copy current scene settings into state:
+        curr.amp[0] = curr.pr.scene[curr.sc_idx].amp[0];
+        curr.amp[1] = curr.pr.scene[curr.sc_idx].amp[1];
+    } else if (curr.sc_idx != last.sc_idx) {
+        // Copy current scene settings into state:
+        curr.amp[0] = curr.pr.scene[curr.sc_idx].amp[0];
+        curr.amp[1] = curr.pr.scene[curr.sc_idx].amp[1];
     }
 
     calc_midi();
