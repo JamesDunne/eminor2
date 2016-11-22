@@ -719,15 +719,6 @@ func main() {
 				} else {
 					s4.JD.XY = "X"
 				}
-				if s3.Level > 0 && s3.Channel != 1 {
-					s4.Name += "JD lead"
-				} else {
-					if s3.Channel == 1 {
-						s4.Name += "JD clean"
-					} else {
-						s4.Name += "JD dirty"
-					}
-				}
 
 				s4.JD.Level = float64(s3.Level * 6 / 5)
 
@@ -738,6 +729,17 @@ func main() {
 						continue
 					}
 					s4.JD.FX = append(s4.JD.FX, fx)
+				}
+
+				// If any FX are enabled and we're on a dirty channel it's a lead:
+				if s3.Channel != 1 && (s3.Level > 0 || len(s4.JD.FX) > 0) {
+					s4.Name += "JD lead"
+				} else {
+					if s3.Channel == 1 {
+						s4.Name += "JD clean"
+					} else {
+						s4.Name += "JD dirty"
+					}
 				}
 
 				if s3.AxeScene == 1 {
@@ -753,9 +755,9 @@ func main() {
 				} else {
 					s4.MG.Level = 0
 					if s3.AxeScene == 1 {
-						s4.Name += ";MG dirty"
-					} else {
 						s4.Name += ";MG clean"
+					} else {
+						s4.Name += ";MG dirty"
 					}
 				}
 			}

@@ -1,7 +1,7 @@
 programs:
 - name: Monkeywrench
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -14,7 +14,7 @@ programs:
       fx: []
 - name: Even Flow
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -27,7 +27,7 @@ programs:
       fx: []
 - name: Zero
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -38,29 +38,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: dirty
-      level: 6
-      fx: [delay, pitch]
-  - name: JD dirty;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -71,7 +49,7 @@ programs:
       channel: dirty
       level: 6
       fx: [delay, pitch]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -82,7 +60,29 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: dirty
+      level: 6
+      fx: [delay, pitch]
+  - name: JD dirty;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -93,7 +93,7 @@ programs:
       channel: dirty
       level: 6
       fx: [delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -106,7 +106,7 @@ programs:
       fx: []
 - name: Wonderwall
   scenes:
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -119,7 +119,7 @@ programs:
       fx: []
 - name: Buddy Holly
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -130,7 +130,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -141,7 +141,7 @@ programs:
       channel: dirty
       level: 6
       fx: [delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -154,7 +154,7 @@ programs:
       fx: []
 - name: Plush
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -167,7 +167,7 @@ programs:
       fx: [chorus]
 - name: Come Out and Play
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -180,7 +180,7 @@ programs:
       fx: []
 - name: Drive
   scenes:
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -193,7 +193,7 @@ programs:
       fx: []
 - name: When I Come Around
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -204,7 +204,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -215,7 +215,7 @@ programs:
       channel: dirty
       level: 6
       fx: [delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -228,7 +228,7 @@ programs:
       fx: []
 - name: Everything Zen
   scenes:
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -239,7 +239,7 @@ programs:
       channel: dirty
       level: 6
       fx: [delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -250,29 +250,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: "Y"
-      channel: dirty
-      level: 6
-      fx: [delay]
-  - name: JD dirty;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: "Y"
-      channel: dirty
-      level: 0
-      fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -283,7 +261,29 @@ programs:
       channel: dirty
       level: 6
       fx: [delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: "Y"
+      channel: dirty
+      level: 0
+      fx: []
+  - name: JD lead;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: "Y"
+      channel: dirty
+      level: 6
+      fx: [delay]
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -294,7 +294,7 @@ programs:
       channel: dirty
       level: 0
       fx: [delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -307,7 +307,7 @@ programs:
       fx: []
 - name: Enter Sandman
   scenes:
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -318,7 +318,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -329,7 +329,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -340,7 +340,7 @@ programs:
       channel: dirty
       level: 6
       fx: [delay]
-  - name: JD lead;MG dirty
+  - name: JD lead;MG clean
     MG:
       xy: X
       channel: clean
@@ -351,20 +351,20 @@ programs:
       channel: dirty
       level: 1
       fx: [delay]
-  - name: JD clean;MG dirty
-    MG:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
+      channel: clean
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+  - name: JD clean;MG dirty
+    MG:
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -373,7 +373,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -384,7 +384,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -397,7 +397,7 @@ programs:
       fx: [delay]
 - name: Crawling in the Dark
   scenes:
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -408,7 +408,7 @@ programs:
       channel: dirty
       level: 2
       fx: [filter, delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -419,29 +419,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: "Y"
-      channel: dirty
-      level: 2
-      fx: [filter, delay]
-  - name: JD dirty;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: "Y"
-      channel: dirty
-      level: 0
-      fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -452,7 +430,7 @@ programs:
       channel: dirty
       level: 2
       fx: [filter, delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -463,7 +441,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -474,7 +452,29 @@ programs:
       channel: dirty
       level: 2
       fx: [filter, delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: "Y"
+      channel: dirty
+      level: 0
+      fx: []
+  - name: JD lead;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: "Y"
+      channel: dirty
+      level: 2
+      fx: [filter, delay]
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -487,7 +487,7 @@ programs:
       fx: []
 - name: Song 2
   scenes:
-  - name: JD clean;MG clean
+  - name: JD clean;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -498,7 +498,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -509,29 +509,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD clean;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-  - name: JD dirty;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-  - name: JD clean;MG clean
+  - name: JD clean;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -542,7 +520,29 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+  - name: JD clean;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -555,7 +555,7 @@ programs:
       fx: []
 - name: Sex Type Thing
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -568,7 +568,7 @@ programs:
       fx: []
 - name: Mr Jones
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -581,7 +581,7 @@ programs:
       fx: []
 - name: Counting Blue Cars
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -592,7 +592,7 @@ programs:
       channel: dirty
       level: 0
       fx: [delay]
-  - name: JD clean;MG clean
+  - name: JD clean;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -603,7 +603,7 @@ programs:
       channel: clean
       level: 0
       fx: [chorus, delay]
-  - name: JD dirty;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -614,7 +614,7 @@ programs:
       channel: dirty
       level: 0
       fx: [delay]
-  - name: JD clean;MG clean
+  - name: JD clean;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -625,7 +625,7 @@ programs:
       channel: clean
       level: 0
       fx: [chorus, delay]
-  - name: JD dirty;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -636,7 +636,7 @@ programs:
       channel: dirty
       level: 0
       fx: [delay]
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -647,7 +647,7 @@ programs:
       channel: dirty
       level: 6
       fx: [delay]
-  - name: JD clean;MG clean
+  - name: JD clean;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -658,7 +658,7 @@ programs:
       channel: clean
       level: 0
       fx: [chorus, delay]
-  - name: JD dirty;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -669,7 +669,7 @@ programs:
       channel: dirty
       level: 0
       fx: [delay]
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -682,7 +682,7 @@ programs:
       fx: [delay]
 - name: In Bloom
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -693,7 +693,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -704,7 +704,7 @@ programs:
       channel: dirty
       level: 6
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -717,7 +717,7 @@ programs:
       fx: []
 - name: Hash Pipe
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -728,7 +728,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -739,7 +739,7 @@ programs:
       channel: dirty
       level: 6
       fx: [delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -752,7 +752,7 @@ programs:
       fx: []
 - name: My Hero
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -765,7 +765,7 @@ programs:
       fx: []
 - name: Machinehead
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -778,7 +778,7 @@ programs:
       fx: []
 - name: Holiday
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -800,7 +800,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -813,7 +813,7 @@ programs:
       fx: []
 - name: Closing Time
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -824,7 +824,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -835,7 +835,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -848,7 +848,7 @@ programs:
       fx: []
 - name: Brain Stew
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -861,7 +861,7 @@ programs:
       fx: []
 - name: Bound for the Floor
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -872,7 +872,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -883,7 +883,7 @@ programs:
       channel: dirty
       level: 0
       fx: [delay, chorus]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -896,7 +896,7 @@ programs:
       fx: []
 - name: I Alone
   scenes:
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -909,7 +909,7 @@ programs:
       fx: [delay, chorus]
 - name: Cumbersome
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -922,7 +922,7 @@ programs:
       fx: []
 - name: Lump
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -935,7 +935,7 @@ programs:
       fx: []
 - name: Hey Jealousy
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -948,7 +948,7 @@ programs:
       fx: []
 - name: Kryptonite
   scenes:
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -959,7 +959,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -970,7 +970,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD clean;MG clean
+  - name: JD clean;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -981,7 +981,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -992,7 +992,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1025,7 +1025,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -1036,7 +1036,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1060,7 +1060,7 @@ programs:
       fx: []
 - name: Dammit
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1073,7 +1073,7 @@ programs:
       fx: []
 - name: Semi-charmed Life
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1086,7 +1086,7 @@ programs:
       fx: []
 - name: My Own Worst Enemy
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1099,7 +1099,7 @@ programs:
       fx: []
 - name: The Middle
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1110,7 +1110,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1121,7 +1121,7 @@ programs:
       channel: dirty
       level: 4
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1132,7 +1132,7 @@ programs:
       channel: dirty
       level: -1
       fx: [filter, delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1145,29 +1145,7 @@ programs:
       fx: []
 - name: Bullet With Butterfly Wings
   scenes:
-  - name: JD clean;MG dirty
-    MG:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-  - name: JD dirty;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -1181,6 +1159,28 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+  - name: JD clean;MG clean
+    MG:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+  - name: JD lead;MG clean
+    MG:
+      xy: X
       channel: clean
       level: 0
       fx: []
@@ -1189,7 +1189,7 @@ programs:
       channel: dirty
       level: -3
       fx: [delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1200,7 +1200,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -1211,7 +1211,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1222,7 +1222,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1235,7 +1235,7 @@ programs:
       fx: [chorus]
 - name: If You Could Only See
   scenes:
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1248,7 +1248,7 @@ programs:
       fx: [delay]
 - name: Beautiful Disaster
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1261,7 +1261,7 @@ programs:
       fx: []
 - name: Bells
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1272,7 +1272,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1285,7 +1285,7 @@ programs:
       fx: [delay]
 - name: Fuel
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1296,7 +1296,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1307,7 +1307,7 @@ programs:
       channel: dirty
       level: 2
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1318,7 +1318,7 @@ programs:
       channel: dirty
       level: 4
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1329,7 +1329,7 @@ programs:
       channel: dirty
       level: 2
       fx: [delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1342,7 +1342,7 @@ programs:
       fx: []
 - name: What I Got
   scenes:
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -1353,29 +1353,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD clean;MG dirty
-    MG:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: clean
-      level: 6
-      fx: []
-  - name: JD clean;MG dirty
-    MG:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -1386,7 +1364,29 @@ programs:
       channel: clean
       level: 6
       fx: []
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
+    MG:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+  - name: JD clean;MG clean
+    MG:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: clean
+      level: 6
+      fx: []
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -1399,7 +1399,7 @@ programs:
       fx: []
 - name: Say It Aint So
   scenes:
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -1410,51 +1410,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: "Y"
-      channel: dirty
-      level: 0
-      fx: []
-  - name: JD clean;MG dirty
-    MG:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-  - name: JD dirty;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: "Y"
-      channel: dirty
-      level: 0
-      fx: []
-  - name: JD lead;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: dirty
-      level: 4
-      fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1466,6 +1422,50 @@ programs:
       level: 0
       fx: []
   - name: JD clean;MG clean
+    MG:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+  - name: JD dirty;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: "Y"
+      channel: dirty
+      level: 0
+      fx: []
+  - name: JD lead;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: dirty
+      level: 4
+      fx: []
+  - name: JD dirty;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: "Y"
+      channel: dirty
+      level: 0
+      fx: []
+  - name: JD clean;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1478,7 +1478,7 @@ programs:
       fx: []
 - name: Shine
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1491,7 +1491,7 @@ programs:
       fx: []
 - name: Basketcase
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1504,7 +1504,7 @@ programs:
       fx: []
 - name: Breed
   scenes:
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1517,7 +1517,7 @@ programs:
       fx: []
 - name: Lithium
   scenes:
-  - name: JD clean;MG clean
+  - name: JD clean;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1528,7 +1528,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1539,29 +1539,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD clean;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-  - name: JD dirty;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-  - name: JD clean;MG clean
+  - name: JD clean;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1572,7 +1550,29 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+  - name: JD clean;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1585,7 +1585,7 @@ programs:
       fx: []
 - name: Undone
   scenes:
-  - name: JD clean;MG dirty
+  - name: JD clean;MG clean
     MG:
       xy: X
       channel: clean
@@ -1596,29 +1596,7 @@ programs:
       channel: clean
       level: 0
       fx: []
-  - name: JD dirty;MG clean
-    MG:
-      xy: X
-      channel: dirty
-      level: 0
-      fx: []
-    JD:
-      xy: "Y"
-      channel: dirty
-      level: 0
-      fx: []
-  - name: JD clean;MG dirty
-    MG:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-    JD:
-      xy: X
-      channel: clean
-      level: 0
-      fx: []
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1629,7 +1607,29 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD clean;MG clean
+    MG:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+  - name: JD dirty;MG dirty
+    MG:
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      xy: "Y"
+      channel: dirty
+      level: 0
+      fx: []
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1640,7 +1640,7 @@ programs:
       channel: dirty
       level: 6
       fx: [delay]
-  - name: JD dirty;MG clean
+  - name: JD dirty;MG dirty
     MG:
       xy: X
       channel: dirty
@@ -1651,7 +1651,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG clean
+  - name: JD lead;MG dirty
     MG:
       xy: X
       channel: dirty
