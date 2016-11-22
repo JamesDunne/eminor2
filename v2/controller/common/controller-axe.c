@@ -520,14 +520,26 @@ static void calc_leds(void) {
     send_leds();
 }
 
+struct timers {
+    u8 bot_4;
+    u8 bot_5;
+} timers;
+
 // called every 10ms
 void controller_10msec_timer(void) {
-    if (is_bot_button_held(M_4)) {
+    if ((timers.bot_4 & 0x80) != 0) {
+        timers.bot_4 = (timers.bot_4 & 0x80) | ((timers.bot_4 & 0x7F) + 1);
+    }
+    if ((timers.bot_5 & 0x80) != 0) {
+        timers.bot_5 = (timers.bot_5 & 0x80) | ((timers.bot_5 & 0x7F) + 1);
+    }
+
+    if (is_bot_button_held(M_4) && ((timers.bot_4 & 0x80) != 0) && ((timers.bot_4 & 0x0F) == 0)) {
         if (curr.amp[curr.selected_amp].volume > 1) {
             curr.amp[curr.selected_amp].volume--;
         }
     }
-    if (is_bot_button_held(M_5)) {
+    if (is_bot_button_held(M_5) && ((timers.bot_5 & 0x80) != 0) && ((timers.bot_5 & 0x0F) == 0)) {
         if (curr.amp[curr.selected_amp].volume < 127) {
             curr.amp[curr.selected_amp].volume++;
         }
@@ -550,19 +562,25 @@ void controller_handle(void) {
     }
     // VOL=0
     if (is_bot_button_pressed(M_3)) {
-        curr.amp[curr.selected_amp].volume = 0;
+        curr.amp[curr.selected_amp].volume = 127 - 12;
     }
     // VOL--
     if (is_bot_button_pressed(M_4)) {
+        timers.bot_4 = 0x80;
         if (curr.amp[curr.selected_amp].volume > 1) {
             curr.amp[curr.selected_amp].volume--;
         }
+    } else if (is_bot_button_released(M_4)) {
+        timers.bot_4 &= ~0x80;
     }
     // VOL++
     if (is_bot_button_pressed(M_5)) {
+        timers.bot_5 = 0x80;
         if (curr.amp[curr.selected_amp].volume < 127) {
             curr.amp[curr.selected_amp].volume++;
         }
+    } else if (is_bot_button_released(M_5)) {
+        timers.bot_5 &= ~0x80;
     }
     // PREV/NEXT SCENE:
     if (is_bot_button_pressed(M_7)) {
