@@ -199,14 +199,10 @@ struct state {
     // LED state per mode:
     io16 mode_leds[MODE_count];
 
-    // Setlist index:
-    u8 sl_idx;
     // Current program:
     u8 pr_idx;
     // Current scene:
     u8 sc_idx;
-    // Loaded program:
-    struct program pr;
 
     // Selected amp (0 or 1):
     u8 selected_amp;
@@ -219,6 +215,13 @@ struct state curr, last;
 
 // Volume-ramp table (from PIC/v4_lookup.h):
 u8 *volume_ramp = 0;
+
+// Max program #:
+u8 pr_max;
+// Loaded setlist:
+struct set_list sl;
+// Loaded program:
+struct program pr;
 
 #define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
 
@@ -471,8 +474,8 @@ static void update_lcd(void) {
     volhalfdb = (s8)curr.amp[1].volume - (s8)(127 - 12);
     print_half(lcd_rows[0], 15, volhalfdb);
 
-    pr_name = name_get(curr.pr.name_index);
-    sc_name = name_get(curr.pr.scene[curr.sc_idx].name_index);
+    pr_name = name_get(pr.name_index);
+    sc_name = name_get(pr.scene[curr.sc_idx].name_index);
     copy_str_lcd(pr_name, lcd_rows[2]);
     copy_str_lcd(sc_name, lcd_rows[3]);
 
@@ -531,15 +534,21 @@ void controller_init(void) {
     last.leds = 0xFFFFU;
     curr.leds = 0x0000U;
 
-    // Load first program:
-    curr.sl_idx = 0;
-    curr.sc_idx = 0;
+    // For program mode:
+    pr_max = 127;
+
+    // Load setlist:
+    flash_load((u16)(128 * sizeof(struct program)), sizeof(struct set_list), (u8 *)&sl);
+    pr_max = sl.count - (u8)1;
+
+    // Load first program in setlist:
     curr.pr_idx = 0;
-    flash_load((u16)(curr.pr_idx * sizeof(struct program)), sizeof(struct program), (u8 *)&curr.pr);
+    curr.sc_idx = 0;
+    flash_load((u16)(sl.entries[curr.pr_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *)&pr);
 
     // Copy current scene settings into state:
-    curr.amp[0] = curr.pr.scene[curr.sc_idx].amp[0];
-    curr.amp[1] = curr.pr.scene[curr.sc_idx].amp[1];
+    curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
+    curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
 
     // Select JD amp by default:
     curr.selected_amp = 1;
@@ -641,7 +650,7 @@ void controller_handle(void) {
         }
     }
     if (is_bot_button_pressed(M_8)) {
-        if (curr.sc_idx < curr.pr.scene_count - 1) {
+        if (curr.sc_idx < pr.scene_count - 1) {
             curr.sc_idx++;
         }
     }
@@ -673,7 +682,7 @@ void controller_handle(void) {
         }
     }
     if (is_top_button_pressed(M_8)) {
-        if (curr.pr_idx < 44) {
+        if (curr.pr_idx < pr_max) {
             curr.pr_idx++;
         }
     }
@@ -681,16 +690,14 @@ void controller_handle(void) {
     // Update state:
     if (curr.pr_idx != last.pr_idx) {
         // Load program:
-        flash_load((u16)(curr.pr_idx * sizeof(struct program)), sizeof(struct program), (u8 *)&curr.pr);
+        flash_load((u16) (sl.entries[curr.pr_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
         curr.sc_idx = 0;
-
+        last.sc_idx = 255;
+    }
+    if (curr.sc_idx != last.sc_idx) {
         // Copy current scene settings into state:
-        curr.amp[0] = curr.pr.scene[curr.sc_idx].amp[0];
-        curr.amp[1] = curr.pr.scene[curr.sc_idx].amp[1];
-    } else if (curr.sc_idx != last.sc_idx) {
-        // Copy current scene settings into state:
-        curr.amp[0] = curr.pr.scene[curr.sc_idx].amp[0];
-        curr.amp[1] = curr.pr.scene[curr.sc_idx].amp[1];
+        curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
+        curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
     }
 
     calc_midi();
