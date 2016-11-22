@@ -209,6 +209,9 @@ struct state {
 // Current and last state:
 struct state curr, last;
 
+// Volume-ramp table (from PIC/v4_lookup.h):
+u8 *volume_ramp = 0;
+
 #define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
 
 // Get the name text for the given name_index from flash memory:
@@ -316,6 +319,9 @@ void controller_init(void) {
     curr.amp[0] = curr.pr.scene[curr.sc_idx].amp[0];
     curr.amp[1] = curr.pr.scene[curr.sc_idx].amp[1];
 
+    // Get volume-ramp lookup table:
+    volume_ramp = lookup_table(0);
+
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_ROWS; ++i)
         lcd_rows[i] = lcd_row_get(i);
@@ -341,10 +347,8 @@ static u8 calc_scene(struct amp amp[]) {
     return (amp[0].dirty | (amp[1].dirty << 1)) | ((amp[0].xy & 1) << 2);
 }
 
-// volume is a signed 3-bit value
-static u8 calc_boost_level(s8 volume) {
-    // TODO: fix me.
-    return (127 - 64) + ((volume & 1) << 6);
+static u8 calc_mixer_level(u8 volume) {
+    return volume_ramp[volume & 0x7F];
 }
 
 static u8 calc_cc_toggle(u8 enable) {
@@ -376,11 +380,11 @@ static void calc_midi(void) {
     }
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
-        midi_set_axe_cc(axe_cc_external1, (curr.amp[0].volume & 0x7F));
+        midi_set_axe_cc(axe_cc_external1, calc_mixer_level(curr.amp[0].volume));
         diff = 1;
     }
     if (curr.amp[1].volume != last.amp[1].volume) {
-        midi_set_axe_cc(axe_cc_external2, (curr.amp[1].volume & 0x7F));
+        midi_set_axe_cc(axe_cc_external2, calc_mixer_level(curr.amp[1].volume));
         diff = 1;
     }
     // Enable FX:
@@ -546,6 +550,18 @@ void controller_handle(void) {
     }
     if (is_top_button_pressed(M_4)) {
         curr.amp[curr.selected_amp].chorus ^= 1;
+    }
+    // VOL--
+    if (is_top_button_pressed(M_5)) {
+        if (curr.amp[curr.selected_amp].volume > 1) {
+            curr.amp[curr.selected_amp].volume--;
+        }
+    }
+    // VOL++
+    if (is_top_button_pressed(M_6)) {
+        if (curr.amp[curr.selected_amp].volume < 127) {
+            curr.amp[curr.selected_amp].volume++;
+        }
     }
     // PREV/NEXT SONG:
     if (is_top_button_pressed(M_7)) {
