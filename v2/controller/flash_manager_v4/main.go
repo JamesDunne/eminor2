@@ -357,23 +357,23 @@ func generatePICH() {
 
 		// Copy scenes:
 		/*
-		struct program {
-		    // Index into the name table for the name of the program (song):
-		    u8 name_index;
+			struct program {
+			    // Index into the name table for the name of the program (song):
+			    u8 name_index;
 
-		    // Number of scenes defined:
-		    u8 scene_count;
-		    u8 _unused1;    // perhaps AXE-FX program # for different songs?
-		    u8 _unused2;
+			    // Number of scenes defined:
+			    u8 scene_count;
+			    u8 _unused1;    // perhaps AXE-FX program # for different songs?
+			    u8 _unused2;
 
-		    // Scene descriptors (5 bytes each):
-		    struct scene_descriptor {
-		        // Index into the name table for the name of the scene:
-		        u8 name_index;
-		        // 2 amps:
-		        struct amp amp[2];
-		    } scene[12];
-		};
+			    // Scene descriptors (5 bytes each):
+			    struct scene_descriptor {
+			        // Index into the name table for the name of the scene:
+			        u8 name_index;
+			        // 2 amps:
+			        struct amp amp[2];
+			    } scene[12];
+			};
 		*/
 
 		// Write scene count:
