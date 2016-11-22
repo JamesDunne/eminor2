@@ -26,10 +26,11 @@ var version string
 
 const (
 	FX4_Dirty uint8 = 1 << iota
+	FX4_XY
 	FX4_Delay
 	FX4_Pitch
 	FX4_Chorus
-	FX4_XY
+	FX4_Filter
 )
 
 type Ampv4 struct {
@@ -400,6 +401,7 @@ func generatePICH() {
 					b1 |= FX4_XY
 				}
 				for _, effect := range amp.FX {
+					fmt.Printf("'%s'\n", effect)
 					if effect == "pitch" {
 						b1 |= FX4_Pitch
 					} else if effect == "chorus" {
