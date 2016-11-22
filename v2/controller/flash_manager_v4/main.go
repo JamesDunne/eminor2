@@ -319,18 +319,23 @@ func generatePICH() {
 	name_table_lookup := make(map[string]int)
 
 	// Function to set or get name_table entry:
-	set_name_table := func(name string) uint8 {
+	write_name_table_idx := func(name string) {
+		var idx16 uint16
 		if idx, ok := name_table_lookup[name]; ok {
-			return uint8(idx)
+			idx16 = uint16(idx)
 		} else {
 			idx := len(name_table)
 			name_table_lookup[name] = idx
 			name_table = append(name_table, name)
-			if idx > 255 {
+			if idx > math.MaxUint16 {
 				panic("Ran out of name_table entries!")
 			}
-			return uint8(idx)
+			idx16 = uint16(idx)
 		}
+
+		// Write both bytes:
+		bw.WriteHex(uint8(idx16 & 0xFF))
+		bw.WriteHex(uint8(idx16 >> 8))
 	}
 
 	// Translate YAML to binary data for FLASH memory (see common/controller.c):
@@ -355,32 +360,30 @@ func generatePICH() {
 		}
 
 		// Write name into name table:
-		bw.WriteHex(set_name_table(short_name))
+		write_name_table_idx(short_name)
 
 		// Copy scenes:
 		/*
 			struct program {
 			    // Index into the name table for the name of the program (song):
-			    u8 name_index;
+			    u16 name_index;
 
 			    // Number of scenes defined:
 			    u8 scene_count;
 			    u8 _unused1;    // perhaps AXE-FX program # for different songs?
-			    u8 _unused2;
 
 			    // Scene descriptors (5 bytes each):
 			    struct scene_descriptor {
 			        // Index into the name table for the name of the scene:
-			        u8 name_index;
+			        u16 name_index;
 			        // 2 amps:
 			        struct amp amp[2];
-			    } scene[12];
+			    } scene[10];
 			};
 		*/
 
 		// Write scene count:
 		bw.WriteDecimal(uint8(len(p.SceneDescriptors)))
-		bw.WriteDecimal(0)
 		bw.WriteDecimal(0)
 
 		// Write scene descriptors (5 bytes each):
@@ -389,7 +392,7 @@ func generatePICH() {
 			n++
 
 			// Write name_table index of scene name:
-			bw.WriteHex(set_name_table(s.Name))
+			write_name_table_idx(s.Name)
 
 			// Write amp descriptors:
 			for _, amp := range []*Ampv4{&s.MG, &s.JD} {
@@ -401,7 +404,6 @@ func generatePICH() {
 					b1 |= FX4_XY
 				}
 				for _, effect := range amp.FX {
-					fmt.Printf("'%s'\n", effect)
 					if effect == "pitch" {
 						b1 |= FX4_Pitch
 					} else if effect == "chorus" {
@@ -424,9 +426,11 @@ func generatePICH() {
 			}
 		}
 
-		if n < 12 {
+		const max_scene_count = 10
+		if n < max_scene_count {
 			// Pad the remaining scenes:
-			for ; n < 12; n++ {
+			for ; n < max_scene_count; n++ {
+				bw.WriteDecimal(0)
 				bw.WriteDecimal(0)
 				bw.WriteDecimal(0)
 				bw.WriteDecimal(0)

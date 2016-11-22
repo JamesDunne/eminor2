@@ -87,20 +87,19 @@ COMPILE_ASSERT(sizeof(struct amp) == 2);
 // Program v4 (next gen) data structure loaded from / written to flash memory:
 struct program {
     // Index into the name table for the name of the program (song):
-    u8 name_index;
+    u16 name_index;
 
     // Number of scenes defined:
     u8 scene_count;
     u8 _unused1;    // perhaps AXE-FX program # for different songs?
-    u8 _unused2;
 
     // Scene descriptors (5 bytes each):
     struct scene_descriptor {
         // Index into the name table for the name of the scene:
-        u8 name_index;
+        u16 name_index;
         // 2 amps:
         struct amp amp[2];
-    } scene[12];
+    } scene[10];
 };
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
@@ -224,7 +223,7 @@ u8 *volume_ramp = 0;
 #define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
 
 // Get the name text for the given name_index from flash memory:
-static u8 *name_get(u8 name_index) {
+static u8 *name_get(u16 name_index) {
     return flash_addr(name_table_offs + (name_index * 20));
 }
 
