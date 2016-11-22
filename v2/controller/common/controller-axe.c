@@ -250,14 +250,14 @@ static u8 is_bot_button_held(u8 mask) {
     return (curr.fsw.top.byte == 0) && (curr.fsw.bot.byte == mask);
 }
 
-static s8 ritoa(u8 *s, u8 n, s8 i) {
+static s8 ritoa(u8 *dst, s8 col, u8 n) {
 	do {
-		s[i--] = (n % 10) + '0';
+		dst[col--] = (n % 10) + '0';
 	} while ((n /= 10) > 0);
-	return i;
+	return col;
 }
 
-static s8 litoa(u8 *s, u8 n, s8 i) {
+static s8 litoa(u8 *dst, s8 col, u8 n) {
 	// Write the integer to temporary storage:
 	u8 tmp[3];
 	s8 c = 0;
@@ -265,10 +265,10 @@ static s8 litoa(u8 *s, u8 n, s8 i) {
 		tmp[c++] = (n % 10) + '0';
 	} while ((n /= 10) > 0);
 	// Write the left-aligned integer to the destination:
-	for (c--; c >= 0; c--, i++) {
-		s[i] = tmp[c];
+	for (c--; c >= 0; c--, col++) {
+		dst[col] = tmp[c];
 	}
-	return i;
+	return col;
 }
 
 static void copy_str_lcd(u8 *src, u8 *dst) {
@@ -392,19 +392,19 @@ static void calc_midi(void) {
     }
 }
 
-void print_half(s8 volhalfdb, u8 col) {
+void print_half(u8 *dst, u8 col, s8 volhalfdb) {
     s8 i;
     if (volhalfdb < 0) {
-        i = ritoa(lcd_rows[0], (u8)(-volhalfdb) >> 1, col);
-        lcd_rows[0][i] = '-';
+        i = ritoa(dst, col, (u8) (-volhalfdb) >> 1);
+        dst[i] = '-';
     } else {
-        ritoa(lcd_rows[0], (u8)volhalfdb >> 1, col);
+        ritoa(dst, col, (u8) volhalfdb >> 1);
     }
-    lcd_rows[0][col+1] = '.';
+    dst[col + 1] = '.';
     if (((u8)volhalfdb & 1) != 0) {
-        lcd_rows[0][col+2] = '5';
+        dst[col + 2] = '5';
     } else {
-        lcd_rows[0][col+2] = '0';
+        dst[col + 2] = '0';
     }
 }
 
@@ -453,16 +453,16 @@ static void update_lcd(void) {
 
     // Print volume levels:
     s8 volhalfdb = (s8)curr.amp[0].volume - (s8)(127 - 12);
-    print_half(volhalfdb, 4);
+    print_half(lcd_rows[0], 4, volhalfdb);
     volhalfdb = (s8)curr.amp[1].volume - (s8)(127 - 12);
-    print_half(volhalfdb, 15);
+    print_half(lcd_rows[0], 15, volhalfdb);
 
     pr_name = name_get(curr.pr.name_index);
     sc_name = name_get(curr.pr.scene[curr.sc_idx].name_index);
     copy_str_lcd(pr_name, lcd_rows[2]);
     copy_str_lcd(sc_name, lcd_rows[3]);
 
-    ritoa(lcd_rows[3], curr.sc_idx+(u8)1, 19);
+    ritoa(lcd_rows[3], 19, curr.sc_idx + (u8) 1);
 
     lcd_updated_all();
 #endif
