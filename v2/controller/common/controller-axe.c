@@ -294,52 +294,6 @@ static void send_leds(void) {
 
 static void update_lcd(void);
 
-// set the controller to an initial state
-void controller_init(void) {
-    u8 i;
-    u8 **labels;
-
-    last.mode = MODE_LIVE;
-    curr.mode = MODE_LIVE;
-    for (i = 0; i < MODE_count; i++) {
-        curr.mode_leds[i].top.byte = 0;
-        curr.mode_leds[i].bot.byte = 0;
-    }
-
-    last.leds = 0xFFFFU;
-    curr.leds = 0x0000U;
-
-    // Load first program:
-    curr.sl_idx = 0;
-    curr.sc_idx = 0;
-    curr.pr_idx = 0;
-    flash_load((u16)(curr.pr_idx * sizeof(struct program)), sizeof(struct program), (u8 *)&curr.pr);
-
-    // Copy current scene settings into state:
-    curr.amp[0] = curr.pr.scene[curr.sc_idx].amp[0];
-    curr.amp[1] = curr.pr.scene[curr.sc_idx].amp[1];
-
-    // Select JD amp by default:
-    curr.selected_amp = 1;
-
-    // Get volume-ramp lookup table:
-    volume_ramp = lookup_table(0);
-
-#ifdef FEAT_LCD
-    for (i = 0; i < LCD_ROWS; ++i)
-        lcd_rows[i] = lcd_row_get(i);
-
-    for (i = 0; i < LCD_COLS; ++i) {
-        lcd_rows[0][i] = "                    "[i];
-        lcd_rows[1][i] = "                    "[i];
-        lcd_rows[2][i] = "                    "[i];
-        lcd_rows[3][i] = "                    "[i];
-    }
-
-    update_lcd();
-#endif
-}
-
 static u8 calc_scene(struct amp amp[]) {
     // Not a typo: X/Y is only controlled from amp[0].
     return (amp[0].dirty | (amp[1].dirty << 1)) | ((amp[0].xy & 1) << 2);
@@ -438,6 +392,22 @@ static void calc_midi(void) {
     }
 }
 
+void print_half(s8 volhalfdb, u8 col) {
+    s8 i;
+    if (volhalfdb < 0) {
+        i = ritoa(lcd_rows[0], (u8)(-volhalfdb) >> 1, col);
+        lcd_rows[0][i] = '-';
+    } else {
+        ritoa(lcd_rows[0], (u8)volhalfdb >> 1, col);
+    }
+    lcd_rows[0][col+1] = '.';
+    if (((u8)volhalfdb & 1) != 0) {
+        lcd_rows[0][col+2] = '5';
+    } else {
+        lcd_rows[0][col+2] = '0';
+    }
+}
+
 // Update LCD display:
 static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
@@ -474,6 +444,19 @@ static void update_lcd(void) {
     label_row_update(1);
 #endif
 #ifdef FEAT_LCD
+    for (i = 0; i < LCD_COLS; ++i) {
+        lcd_rows[0][i] = "MG  0.0dB  JD  0.0dB"[i];
+        lcd_rows[1][i] = "                    "[i];
+        lcd_rows[2][i] = "                    "[i];
+        lcd_rows[3][i] = "                    "[i];
+    }
+
+    // Print volume levels:
+    s8 volhalfdb = (s8)curr.amp[0].volume - (s8)(127 - 12);
+    print_half(volhalfdb, 4);
+    volhalfdb = (s8)curr.amp[1].volume - (s8)(127 - 12);
+    print_half(volhalfdb, 15);
+
     pr_name = name_get(curr.pr.name_index);
     sc_name = name_get(curr.pr.scene[curr.sc_idx].name_index);
     copy_str_lcd(pr_name, lcd_rows[2]);
@@ -518,6 +501,51 @@ static void calc_leds(void) {
     curr.mode_leds[curr.mode].bot.bits._8 = curr.fsw.bot.bits._8;
 
     send_leds();
+}
+
+// set the controller to an initial state
+void controller_init(void) {
+    u8 i;
+
+    last.mode = MODE_LIVE;
+    curr.mode = MODE_LIVE;
+    for (i = 0; i < MODE_count; i++) {
+        curr.mode_leds[i].top.byte = 0;
+        curr.mode_leds[i].bot.byte = 0;
+    }
+
+    last.leds = 0xFFFFU;
+    curr.leds = 0x0000U;
+
+    // Load first program:
+    curr.sl_idx = 0;
+    curr.sc_idx = 0;
+    curr.pr_idx = 0;
+    flash_load((u16)(curr.pr_idx * sizeof(struct program)), sizeof(struct program), (u8 *)&curr.pr);
+
+    // Copy current scene settings into state:
+    curr.amp[0] = curr.pr.scene[curr.sc_idx].amp[0];
+    curr.amp[1] = curr.pr.scene[curr.sc_idx].amp[1];
+
+    // Select JD amp by default:
+    curr.selected_amp = 1;
+
+    // Get volume-ramp lookup table:
+    volume_ramp = lookup_table(0);
+
+#ifdef FEAT_LCD
+    for (i = 0; i < LCD_ROWS; ++i)
+        lcd_rows[i] = lcd_row_get(i);
+
+    for (i = 0; i < LCD_COLS; ++i) {
+        lcd_rows[0][i] = "                    "[i];
+        lcd_rows[1][i] = "                    "[i];
+        lcd_rows[2][i] = "                    "[i];
+        lcd_rows[3][i] = "                    "[i];
+    }
+
+    update_lcd();
+#endif
 }
 
 struct timers {
