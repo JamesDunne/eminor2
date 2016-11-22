@@ -462,7 +462,7 @@ static void update_lcd(void) {
     copy_str_lcd(pr_name, lcd_rows[2]);
     copy_str_lcd(sc_name, lcd_rows[3]);
 
-    ritoa(lcd_rows[3], curr.sc_idx, 19);
+    ritoa(lcd_rows[3], curr.sc_idx+(u8)1, 19);
 
     lcd_updated_all();
 #endif
