@@ -113,7 +113,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 6
       fx: []
@@ -187,7 +187,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 6
       fx: []
@@ -235,7 +235,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 6
       fx: [delay]
@@ -246,7 +246,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -257,7 +257,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 6
       fx: [delay]
@@ -268,7 +268,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -279,7 +279,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 6
       fx: [delay]
@@ -290,7 +290,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: [delay]
@@ -301,7 +301,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -404,7 +404,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 2
       fx: [filter, delay]
@@ -415,7 +415,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -426,7 +426,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 2
       fx: [filter, delay]
@@ -437,7 +437,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -448,7 +448,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 2
       fx: [filter, delay]
@@ -459,7 +459,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -470,7 +470,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 2
       fx: [filter, delay]
@@ -481,7 +481,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -575,7 +575,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -772,7 +772,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -820,7 +820,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -831,7 +831,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -842,7 +842,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -868,7 +868,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -879,7 +879,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: [delay, chorus]
@@ -890,7 +890,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -916,7 +916,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -929,7 +929,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -942,7 +942,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -966,7 +966,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -999,7 +999,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1010,7 +1010,7 @@ programs:
       level: 6
       fx: [delay]
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1043,7 +1043,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1054,7 +1054,7 @@ programs:
       level: 6
       fx: [delay]
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1067,7 +1067,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1080,7 +1080,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1093,7 +1093,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1106,7 +1106,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1117,7 +1117,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 4
       fx: []
@@ -1128,7 +1128,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: -1
       fx: [filter, delay]
@@ -1139,7 +1139,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1242,7 +1242,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 3
       fx: [delay]
@@ -1292,7 +1292,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1303,7 +1303,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 2
       fx: []
@@ -1314,7 +1314,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 4
       fx: []
@@ -1325,7 +1325,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 2
       fx: [delay]
@@ -1336,7 +1336,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1417,7 +1417,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1439,7 +1439,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1461,7 +1461,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1485,7 +1485,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1498,7 +1498,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1603,7 +1603,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1625,7 +1625,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []
@@ -1647,7 +1647,7 @@ programs:
       level: 0
       fx: []
     JD:
-      xy: "Y"
+      xy: X
       channel: dirty
       level: 0
       fx: []

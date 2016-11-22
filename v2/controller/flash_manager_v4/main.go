@@ -720,11 +720,7 @@ func main() {
 				} else {
 					s4.JD.Channel = "dirty"
 				}
-				if s3.Channel == 2 {
-					s4.JD.XY = "Y"
-				} else {
-					s4.JD.XY = "X"
-				}
+				s4.JD.XY = "X"
 
 				s4.JD.Level = float64(s3.Level * 6 / 5)
 
