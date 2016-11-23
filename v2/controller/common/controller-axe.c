@@ -498,6 +498,29 @@ static void update_lcd(void) {
     volhalfdb = (s8)curr.amp[1].volume - (s8)volume_0dB;
     print_half(lcd_rows[0], 15, volhalfdb);
 
+    // Print setlist date:
+
+    if (curr.setlist_mode == 0) {
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[1][i] = "Program         #   "[i];
+        }
+        ritoa(lcd_rows[1], 19, curr.pr_idx + 1);
+    } else {
+        // Show setlist data:
+        u8 yyyy = sl.d1 >> 1;
+        u8 mm = ((sl.d1 & (u8)1) << 3) | (sl.d0 >> 5);
+        u8 dd = (sl.d0 & (u8)31);
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[1][i] = "2014-01-01       # 0"[i];
+        }
+        ritoa(lcd_rows[1], 3, yyyy + (u8)14);
+        ritoa(lcd_rows[1], 6, mm + (u8)1);
+        ritoa(lcd_rows[1], 9, dd + (u8)1);
+
+        ritoa(lcd_rows[1], 19, curr.sl_idx + (u8)1);
+    }
+
+
     pr_name = name_get(pr.name_index);
     sc_name = name_get(pr.scene[curr.sc_idx].name_index);
     copy_str_lcd(pr_name, lcd_rows[2]);
