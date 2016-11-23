@@ -783,10 +783,12 @@ void controller_handle(void) {
     if (is_top_button_pressed(M_7)) {
         if (curr.setlist_mode == 0) {
             if (curr.pr_idx > 0) {
+                DEBUG_LOG("prev program");
                 curr.pr_idx--;
             }
         } else {
             if (curr.sl_idx > 0) {
+                DEBUG_LOG("prev song");
                 curr.sl_idx--;
             }
         }
@@ -794,10 +796,12 @@ void controller_handle(void) {
     if (is_top_button_pressed(M_8)) {
         if (curr.setlist_mode == 0) {
             if (curr.pr_idx < 127) {
+                DEBUG_LOG("next program");
                 curr.pr_idx++;
             }
         } else {
             if (curr.sl_idx < sl_max) {
+                DEBUG_LOG("next song");
                 curr.sl_idx++;
             }
         }
@@ -807,6 +811,9 @@ void controller_handle(void) {
     if ((curr.setlist_mode != last.setlist_mode) || (curr.sl_idx != last.sl_idx) || (curr.pr_idx != last.pr_idx)) {
         // Load program:
         u8 pr_num;
+
+        DEBUG_LOG("load program");
+
         if (curr.setlist_mode == 1) {
             pr_num = sl.entries[curr.sl_idx].program;
         } else {
@@ -820,6 +827,8 @@ void controller_handle(void) {
     }
 
     if (curr.sc_idx != last.sc_idx) {
+        DEBUG_LOG("scene change");
+
         // Store last state into program for recall:
         pr.scene[last.sc_idx].amp[0] = curr.amp[0];
         pr.scene[last.sc_idx].amp[1] = curr.amp[1];

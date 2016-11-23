@@ -815,6 +815,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
     return 0;
 }
 
+void debug_log(char *str) {
+    printf("DEBUG: %s\n", str);
+}
+
 #ifdef HWFEAT_LABEL_UPDATES
 
 u8 **label_row_get(u8 row) {
