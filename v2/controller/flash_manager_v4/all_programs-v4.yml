@@ -307,7 +307,7 @@ programs:
       fx: []
 - name: Enter Sandman
   scenes:
-  - name: JD clean;MG clean
+  - name: Clean intro
     MG:
       xy: X
       channel: clean
@@ -316,9 +316,20 @@ programs:
     JD:
       xy: X
       channel: clean
+      level: -1.0
+      fx: []
+  - name: Intro
+    MG:
+      xy: X
+      channel: dirty
       level: 0
       fx: []
-  - name: JD dirty;MG dirty
+    JD:
+      xy: X
+      channel: dirty
+      level: -4.5
+      fx: []
+  - name: Verse
     MG:
       xy: X
       channel: dirty
@@ -329,7 +340,7 @@ programs:
       channel: dirty
       level: 0
       fx: []
-  - name: JD lead;MG dirty
+  - name: JD lead
     MG:
       xy: X
       channel: dirty
@@ -349,7 +360,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 1
+      level: 2
       fx: [delay]
   - name: JD clean;MG clean
     MG:
