@@ -81,6 +81,9 @@ struct amp {
     u8 volume;  // volume (7-bit) represented as half-dB where 0dB = 127-12, +6dB = 127.
 };
 
+#define volume_0dB (127 - 12)
+#define volume_6dB (127)
+
 // amp state is 2 bytes:
 COMPILE_ASSERT(sizeof(struct amp) == 2);
 
@@ -214,6 +217,8 @@ struct state {
 
     // 0 for program mode, 1 for setlist mode:
     u8 setlist_mode;
+    // Current setlist entry:
+    u8 sl_idx;
     // Current program:
     u8 pr_idx;
     // Current scene:
@@ -232,7 +237,7 @@ struct state curr, last;
 u8 *volume_ramp = 0;
 
 // Max program #:
-u8 pr_max;
+u8 sl_max;
 // Loaded setlist:
 struct set_list sl;
 // Loaded program:
@@ -475,9 +480,9 @@ static void update_lcd(void) {
     }
 
     // Print volume levels:
-    volhalfdb = (s8)curr.amp[0].volume - (s8)(127 - 12);
+    volhalfdb = (s8)curr.amp[0].volume - (s8)volume_0dB;
     print_half(lcd_rows[0], 4, volhalfdb);
-    volhalfdb = (s8)curr.amp[1].volume - (s8)(127 - 12);
+    volhalfdb = (s8)curr.amp[1].volume - (s8)volume_0dB;
     print_half(lcd_rows[0], 15, volhalfdb);
 
     pr_name = name_get(pr.name_index);
@@ -545,12 +550,13 @@ void controller_init(void) {
 
     // Load setlist:
     flash_load((u16)(128 * sizeof(struct program)), sizeof(struct set_list), (u8 *)&sl);
-    pr_max = sl.count - (u8)1;
+    sl_max = sl.count - (u8)1;
 
     // Load first program in setlist:
+    curr.sl_idx = 0;
     curr.pr_idx = 0;
     curr.sc_idx = 0;
-    flash_load((u16)(sl.entries[curr.pr_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *)&pr);
+    flash_load((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *)&pr);
 
     // Copy current scene settings into state:
     curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
@@ -584,6 +590,8 @@ void controller_init(void) {
 }
 
 struct timers {
+    u8 bot_1;
+    u8 bot_2;
     // Repeating timers:
     u8 bot_4;
     u8 bot_5;
@@ -621,6 +629,18 @@ void controller_10msec_timer(void) {
         }
     }
 
+    if (is_bot_button_held(M_1)) {
+        // Increment and cap timer to 0x7F:
+        if (((timers.bot_1 & (u8)0x80) != 0) && ((timers.bot_1 & (u8)0x7F) < (u8)0x7F)) {
+            timers.bot_1 = (timers.bot_1 & (u8)0x80) | ((timers.bot_1 & (u8)0x7F) + (u8)1);
+        }
+    }
+    if (is_bot_button_held(M_2)) {
+        // Increment and cap timer to 0x7F:
+        if (((timers.bot_2 & (u8)0x80) != 0) && ((timers.bot_2 & (u8)0x7F) < (u8)0x7F)) {
+            timers.bot_2 = (timers.bot_2 & (u8)0x80) | ((timers.bot_2 & (u8)0x7F) + (u8)1);
+        }
+    }
     if (is_bot_button_held(M_6)) {
         // Increment and cap timer to 0x7F:
         if (((timers.bot_6 & (u8)0x80) != 0) && ((timers.bot_6 & (u8)0x7F) < (u8)0x7F)) {
@@ -639,14 +659,42 @@ void controller_handle(void) {
     // Handle bottom control switches:
     if (is_bot_button_pressed(M_1)) {
         curr.selected_amp = 0;
+        timers.bot_1 = (u8)0x80;
+    } else if (is_bot_button_held(M_1)) {
+        // RESET amp1:
+        if (((timers.bot_1 & (u8)0x80) != (u8)0) && ((timers.bot_1 & (u8)0x7F) >= (u8)0x7F)) {
+            timers.bot_1 = (u8)0;
+            curr.amp[0].fx = fxm_dirty;
+            curr.amp[0].volume = volume_0dB;
+        }
+    } else if (is_bot_button_released(M_1)) {
+        timers.bot_1 = (u8)0;
     }
+
     if (is_bot_button_pressed(M_2)) {
         curr.selected_amp = 1;
+        timers.bot_2 = (u8)0x80;
+    } else if (is_bot_button_held(M_2)) {
+        // RESET amp2:
+        if (((timers.bot_2 & (u8)0x80) != (u8)0) && ((timers.bot_2 & (u8)0x7F) >= (u8)0x7F)) {
+            timers.bot_2 = (u8)0;
+            curr.amp[1].fx = fxm_dirty;
+            curr.amp[1].volume = volume_0dB;
+        }
+    } else if (is_bot_button_released(M_2)) {
+        timers.bot_2 = (u8)0;
     }
+
     // VOL=0
     if (is_bot_button_pressed(M_3)) {
-        curr.amp[curr.selected_amp].volume = 127 - 12;
+        // Toggle between 0dB and +6dB:
+        if (curr.amp[curr.selected_amp].volume == volume_0dB) {
+            curr.amp[curr.selected_amp].volume = volume_6dB;
+        } else {
+            curr.amp[curr.selected_amp].volume = volume_0dB;
+        }
     }
+
     // VOL--
     if (is_bot_button_pressed(M_4)) {
         timers.bot_4 = (u8)0x80;
@@ -656,6 +704,7 @@ void controller_handle(void) {
     } else if (is_bot_button_released(M_4)) {
         timers.bot_4 &= ~(u8)0xC0;
     }
+
     // VOL++
     if (is_bot_button_pressed(M_5)) {
         timers.bot_5 = (u8)0x80;
@@ -665,6 +714,7 @@ void controller_handle(void) {
     } else if (is_bot_button_released(M_5)) {
         timers.bot_5 &= ~(u8)0xC0;
     }
+
     // TAP:
     if (is_bot_button_pressed(M_6)) {
         // Toggle TAP CC value between 0x00 and 0x7F:
@@ -676,27 +726,27 @@ void controller_handle(void) {
         if (((timers.bot_6 & (u8)0x80) != (u8)0) && ((timers.bot_6 & (u8)0x7F) >= (u8)0x7F)) {
             timers.bot_6 = 0;
             curr.setlist_mode ^= (u8)1;
-            // Remap pr_idx:
             if (curr.setlist_mode == 1) {
-                pr_max = sl.count - (u8)1;
+                // Remap sl_idx by looking up program in setlist otherwise default to first setlist entry:
                 u8 i;
+                sl_max = sl.count - (u8)1;
+                curr.sl_idx = 0;
                 for (i = 0; i < sl.count; i++) {
                     if (sl.entries[i].program == curr.pr_idx) {
-                        curr.pr_idx = i;
+                        curr.sl_idx = i;
                         break;
                     }
                 }
-                if (i == sl.count) {
-                    curr.pr_idx = 0;
-                }
             } else {
-                pr_max = 127;
-                curr.pr_idx = sl.entries[curr.pr_idx].program;
+                // Lookup program number from setlist:
+                sl_max = 127;
+                curr.pr_idx = sl.entries[curr.sl_idx].program;
             }
         }
     } else if (is_bot_button_pressed(M_6)) {
         timers.bot_6 = 0;
     }
+
     // PREV/NEXT SCENE:
     if (is_bot_button_pressed(M_7)) {
         if (curr.sc_idx > 0) {
@@ -731,31 +781,50 @@ void controller_handle(void) {
 
     // PREV/NEXT SONG:
     if (is_top_button_pressed(M_7)) {
-        if (curr.pr_idx > 0) {
-            curr.pr_idx--;
+        if (curr.setlist_mode == 0) {
+            if (curr.pr_idx > 0) {
+                curr.pr_idx--;
+            }
+        } else {
+            if (curr.sl_idx > 0) {
+                curr.sl_idx--;
+            }
         }
     }
     if (is_top_button_pressed(M_8)) {
-        if (curr.pr_idx < pr_max) {
-            curr.pr_idx++;
+        if (curr.setlist_mode == 0) {
+            if (curr.pr_idx < 127) {
+                curr.pr_idx++;
+            }
+        } else {
+            if (curr.sl_idx < sl_max) {
+                curr.sl_idx++;
+            }
         }
     }
 
     // Update state:
-    if ((curr.setlist_mode != last.setlist_mode) || (curr.pr_idx != last.pr_idx)) {
+    if ((curr.setlist_mode != last.setlist_mode) || (curr.sl_idx != last.sl_idx) || (curr.pr_idx != last.pr_idx)) {
         // Load program:
         u8 pr_num;
         if (curr.setlist_mode == 1) {
-            pr_num = sl.entries[curr.pr_idx].program;
+            pr_num = sl.entries[curr.sl_idx].program;
         } else {
             pr_num = curr.pr_idx;
         }
         flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
+
+        // Trigger a scene reload:
         curr.sc_idx = 0;
         last.sc_idx = 255;
     }
+
     if (curr.sc_idx != last.sc_idx) {
-        // Copy current scene settings into state:
+        // Store last state into program for recall:
+        pr.scene[last.sc_idx].amp[0] = curr.amp[0];
+        pr.scene[last.sc_idx].amp[1] = curr.amp[1];
+
+        // Copy new scene settings into current state:
         curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
         curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
     }
