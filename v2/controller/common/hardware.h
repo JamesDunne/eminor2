@@ -21,12 +21,15 @@
 #define rom
 #endif
 
-// Define a DEBUG_LOG macro:
+// Define a DEBUG_LOG0 macro:
 #ifdef __MCC18
-#define DEBUG_LOG(str) (str)
+#define DEBUG_LOG0(fmt) (fmt)
+#define DEBUG_LOG1(fmt,a1) (fmt)
 #else
-extern void debug_log(char *str);
-#define DEBUG_LOG(str) debug_log(str)
+extern void debug_log(const char *fmt, ...);
+#define DEBUG_LOG0(fmt) debug_log(fmt)
+#define DEBUG_LOG1(fmt,a1) debug_log(fmt,a1)
+#define DEBUG_LOG2(fmt,a1,a2) debug_log(fmt,a1,a2)
 #endif
 
 // --------------- Momentary toggle foot-switches and LEDs:

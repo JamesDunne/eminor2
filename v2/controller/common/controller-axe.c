@@ -337,44 +337,49 @@ static u8 calc_cc_toggle(u8 enable) {
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     u8 diff = 0;
+    u8 dirty;
+    u8 xy;
 
     // Send gain controller changes:
-    if (read_bit(dirty, curr.amp[0].fx) != read_bit(dirty, last.amp[0].fx)) {
-        u8 dirty = read_bit(dirty, curr.amp[0].fx);
+    dirty = read_bit(dirty, curr.amp[0].fx);
+    if (dirty != read_bit(dirty, last.amp[0].fx)) {
+        DEBUG_LOG1("MIDI set AMP1 %s", dirty == 0 ? "clean" : "dirty");
         midi_set_axe_cc(axe_cc_external3, calc_cc_toggle(dirty));
         midi_set_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(dirty));
         midi_set_axe_cc(axe_cc_byp_compressor1, calc_cc_toggle(!dirty));
     }
-    if (read_bit(dirty, curr.amp[1].fx) != read_bit(dirty, last.amp[1].fx)) {
-        u8 dirty = read_bit(dirty, curr.amp[1].fx);
+    dirty = read_bit(dirty, curr.amp[1].fx);
+    if (dirty != read_bit(dirty, last.amp[1].fx)) {
+        DEBUG_LOG1("MIDI set AMP2 %s", dirty == 0 ? "clean" : "dirty");
         midi_set_axe_cc(axe_cc_external4, calc_cc_toggle(dirty));
         midi_set_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(dirty));
         midi_set_axe_cc(axe_cc_byp_compressor2, calc_cc_toggle(!dirty));
     }
 
     // Send X/Y changes:
-    // X = 127, T = 0
-    if (read_bit(xy, curr.amp[0].fx) != read_bit(xy, last.amp[0].fx)) {
-        midi_set_axe_cc(axe_cc_xy_amp1, calc_cc_toggle(!read_bit(xy, curr.amp[0].fx)));
+    // X = 127, Y = 0
+    xy = read_bit(xy, curr.amp[0].fx);
+    if (xy != read_bit(xy, last.amp[0].fx)) {
+        DEBUG_LOG1("MIDI set AMP1 %s", xy == 0 ? "X" : "Y");
+        midi_set_axe_cc(axe_cc_xy_amp1, calc_cc_toggle(!xy));
     }
-    if (read_bit(xy, curr.amp[1].fx) != read_bit(xy, last.amp[1].fx)) {
-        midi_set_axe_cc(axe_cc_xy_amp2, calc_cc_toggle(!read_bit(xy, curr.amp[1].fx)));
+    xy = read_bit(xy, curr.amp[1].fx);
+    if (xy != read_bit(xy, last.amp[1].fx)) {
+        DEBUG_LOG1("MIDI set AMP2 %s", xy == 0 ? "X" : "Y");
+        midi_set_axe_cc(axe_cc_xy_amp2, calc_cc_toggle(!xy));
     }
 
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
+        s8 vol = (curr.amp[0].volume - (s8)volume_0dB);
+        DEBUG_LOG2("MIDI set AMP1 volume = %d.%s", vol >> 1, ((u8)vol & (u8)1) == 0 ? "0" : "5");
         midi_set_axe_cc(axe_cc_external1, calc_mixer_level(curr.amp[0].volume));
         diff = 1;
     }
     if (curr.amp[1].volume != last.amp[1].volume) {
+        s8 vol = (curr.amp[1].volume - (s8)volume_0dB);
+        DEBUG_LOG2("MIDI set AMP2 volume = %d.%s", vol >> 1, ((u8)vol & (u8)1) == 0 ? "0" : "5");
         midi_set_axe_cc(axe_cc_external2, calc_mixer_level(curr.amp[1].volume));
-        diff = 1;
-    }
-
-    if (curr.amp[0].fx != last.amp[0].fx) {
-        diff = 1;
-    }
-    if (curr.amp[1].fx != last.amp[1].fx) {
         diff = 1;
     }
 
@@ -405,6 +410,13 @@ static void calc_midi(void) {
     }
     if (read_bit(filter, curr.amp[1].fx) != read_bit(filter, last.amp[1].fx)) {
         midi_set_axe_cc(axe_cc_byp_phaser2, calc_cc_toggle(read_bit(filter, curr.amp[1].fx)));
+    }
+
+    if (curr.amp[0].fx != last.amp[0].fx) {
+        diff = 1;
+    }
+    if (curr.amp[1].fx != last.amp[1].fx) {
+        diff = 1;
     }
 
     if (curr.pr_idx != last.pr_idx) {
@@ -446,6 +458,7 @@ static void update_lcd(void) {
     u8 *sc_name;
     s8 volhalfdb;
 #endif
+    DEBUG_LOG0("update LCD");
 #ifdef HWFEAT_LABEL_UPDATES
     // Bottom row:
     labels = label_row_get(0);
@@ -663,6 +676,7 @@ void controller_handle(void) {
     } else if (is_bot_button_held(M_1)) {
         // RESET amp1:
         if (((timers.bot_1 & (u8)0x80) != (u8)0) && ((timers.bot_1 & (u8)0x7F) >= (u8)0x7F)) {
+            DEBUG_LOG0("reset amp1");
             timers.bot_1 = (u8)0;
             curr.amp[0].fx = fxm_dirty;
             curr.amp[0].volume = volume_0dB;
@@ -677,6 +691,7 @@ void controller_handle(void) {
     } else if (is_bot_button_held(M_2)) {
         // RESET amp2:
         if (((timers.bot_2 & (u8)0x80) != (u8)0) && ((timers.bot_2 & (u8)0x7F) >= (u8)0x7F)) {
+            DEBUG_LOG0("reset amp2");
             timers.bot_2 = (u8)0;
             curr.amp[1].fx = fxm_dirty;
             curr.amp[1].volume = volume_0dB;
@@ -724,6 +739,7 @@ void controller_handle(void) {
     } else if (is_bot_button_held(M_6)) {
         // MODE switch:
         if (((timers.bot_6 & (u8)0x80) != (u8)0) && ((timers.bot_6 & (u8)0x7F) >= (u8)0x7F)) {
+            DEBUG_LOG0("change setlist mode");
             timers.bot_6 = 0;
             curr.setlist_mode ^= (u8)1;
             if (curr.setlist_mode == 1) {
@@ -750,12 +766,16 @@ void controller_handle(void) {
     // PREV/NEXT SCENE:
     if (is_bot_button_pressed(M_7)) {
         if (curr.sc_idx > 0) {
+            DEBUG_LOG0("prev scene");
             curr.sc_idx--;
         }
     }
     if (is_bot_button_pressed(M_8)) {
         if (curr.sc_idx < pr.scene_count - 1) {
+            DEBUG_LOG0("next scene");
             curr.sc_idx++;
+        } else {
+            DEBUG_LOG0("create scene?");
         }
     }
 
@@ -783,12 +803,12 @@ void controller_handle(void) {
     if (is_top_button_pressed(M_7)) {
         if (curr.setlist_mode == 0) {
             if (curr.pr_idx > 0) {
-                DEBUG_LOG("prev program");
+                DEBUG_LOG0("prev program");
                 curr.pr_idx--;
             }
         } else {
             if (curr.sl_idx > 0) {
-                DEBUG_LOG("prev song");
+                DEBUG_LOG0("prev song");
                 curr.sl_idx--;
             }
         }
@@ -796,12 +816,12 @@ void controller_handle(void) {
     if (is_top_button_pressed(M_8)) {
         if (curr.setlist_mode == 0) {
             if (curr.pr_idx < 127) {
-                DEBUG_LOG("next program");
+                DEBUG_LOG0("next program");
                 curr.pr_idx++;
             }
         } else {
             if (curr.sl_idx < sl_max) {
-                DEBUG_LOG("next song");
+                DEBUG_LOG0("next song");
                 curr.sl_idx++;
             }
         }
@@ -812,7 +832,7 @@ void controller_handle(void) {
         // Load program:
         u8 pr_num;
 
-        DEBUG_LOG("load program");
+        DEBUG_LOG0("load program");
 
         if (curr.setlist_mode == 1) {
             pr_num = sl.entries[curr.sl_idx].program;
@@ -827,7 +847,7 @@ void controller_handle(void) {
     }
 
     if (curr.sc_idx != last.sc_idx) {
-        DEBUG_LOG("scene change");
+        DEBUG_LOG0("scene change");
 
         // Store last state into program for recall:
         pr.scene[last.sc_idx].amp[0] = curr.amp[0];

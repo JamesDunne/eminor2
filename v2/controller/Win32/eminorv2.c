@@ -815,8 +815,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
     return 0;
 }
 
-void debug_log(char *str) {
-    printf("DEBUG: %s\n", str);
+void debug_log(const char *fmt, ...) {
+    va_list ap;
+    printf("DEBUG: ");
+    va_start(ap, fmt);
+    vprintf(fmt, ap);
+    va_end(ap);
+    printf("\n");
 }
 
 #ifdef HWFEAT_LABEL_UPDATES
