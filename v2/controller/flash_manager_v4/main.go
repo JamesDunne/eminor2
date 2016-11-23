@@ -404,12 +404,15 @@ func generatePICH() {
 					b1 |= FX4_XY
 				}
 				for _, effect := range amp.FX {
-					if effect == "pitch" {
+
+					if effect == "delay" {
+						b1 |= FX4_Delay
+					} else if effect == "pitch" {
 						b1 |= FX4_Pitch
 					} else if effect == "chorus" {
 						b1 |= FX4_Chorus
-					} else if effect == "delay" {
-						b1 |= FX4_Delay
+					} else if effect == "filter" {
+						b1 |= FX4_Filter
 					}
 				}
 
