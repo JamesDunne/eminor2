@@ -269,14 +269,10 @@ void flash_store(u16 addr, u16 count, u8 *data) {
     Write32Pending = true;
 }
 
-u8 *flash_addr(u16 addr) {
+rom u8 *flash_addr(u16 addr) {
     u8 bank;
-    u16 saddr;
-
-    // Make sure read is in flash memory range:
-    assert(addr + count < WRITABLE_SEG_LEN);
 
     bank = (u8)(addr >> 12);
     addr &= 0x0FFF;
-    return &ROM_SAVEDATA[bank][saddr];
+    return (rom u8 *)&ROM_SAVEDATA[bank][addr];
 }
