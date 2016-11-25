@@ -1022,14 +1022,14 @@ void flash_store(u16 addr, u16 count, u8 *data) {
 }
 
 // Get a pointer to flash memory at address:
-u8 *flash_addr(u16 addr) {
+rom const u8 *flash_addr(u16 addr) {
     u8 bank = (u8)(addr >> 12);
     addr &= 0x0FFF;
 
     return (u8 *)flash_bank[bank] + addr;
 }
 
-u8 *lookup_table(u8 table) {
+rom const u8 *lookup_table(u8 table) {
     // ignore table parameter for now
     return lookup;
 }

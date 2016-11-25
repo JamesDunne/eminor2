@@ -234,7 +234,7 @@ struct state {
 struct state curr, last;
 
 // Volume-ramp table (from PIC/v4_lookup.h):
-rom u8 *volume_ramp = 0;
+rom const u8 *volume_ramp = 0;
 
 // Max program #:
 u8 sl_max;
@@ -246,7 +246,7 @@ struct program pr;
 #define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
 
 // Get the name text for the given name_index from flash memory:
-static rom u8 *name_get(u16 name_index) {
+static rom const u8 *name_get(u16 name_index) {
     return flash_addr(name_table_offs + (name_index * 20));
 }
 
@@ -302,7 +302,7 @@ static s8 litoa(u8 *dst, s8 col, u8 n) {
 	return col;
 }
 
-static void copy_str_lcd(rom u8 *src, u8 *dst) {
+static void copy_str_lcd(rom const u8 *src, u8 *dst) {
     u8 i;
     for (i = 0; src[i] != 0 && i < LCD_COLS; ++i) {
         dst[i] = src[i];
@@ -454,8 +454,8 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     s8 i;
-    rom u8 *pr_name;
-    rom u8 *sc_name;
+    rom const u8 *pr_name;
+    rom const u8 *sc_name;
     s8 volhalfdb;
 #endif
     DEBUG_LOG0("update LCD");
