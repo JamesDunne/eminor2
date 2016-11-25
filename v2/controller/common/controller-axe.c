@@ -372,13 +372,13 @@ static void calc_midi(void) {
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
         s8 vol = (curr.amp[0].volume - (s8)volume_0dB);
-        DEBUG_LOG2("MIDI set AMP1 volume = %d.%s", vol >> 1, ((u8)vol & (u8)1) == 0 ? "0" : "5");
+        DEBUG_LOG3("MIDI set AMP1 volume = %c%d.%s", (vol < 0 ? '-' : ' '), (vol < 0 ? -vol : vol) / 2, ((u8)vol & (u8)1) == 0 ? "0" : "5");
         midi_set_axe_cc(axe_cc_external1, calc_mixer_level(curr.amp[0].volume));
         diff = 1;
     }
     if (curr.amp[1].volume != last.amp[1].volume) {
         s8 vol = (curr.amp[1].volume - (s8)volume_0dB);
-        DEBUG_LOG2("MIDI set AMP2 volume = %d.%s", vol >> 1, ((u8)vol & (u8)1) == 0 ? "0" : "5");
+        DEBUG_LOG3("MIDI set AMP2 volume = %c%d.%s", (vol < 0 ? '-' : ' '), (vol < 0 ? -vol : vol) / 2, ((u8)vol & (u8)1) == 0 ? "0" : "5");
         midi_set_axe_cc(axe_cc_external2, calc_mixer_level(curr.amp[1].volume));
         diff = 1;
     }

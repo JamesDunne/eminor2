@@ -26,11 +26,13 @@
 #define DEBUG_LOG0(fmt) (fmt)
 #define DEBUG_LOG1(fmt,a1) (fmt)
 #define DEBUG_LOG2(fmt,a1,a2) (fmt)
+#define DEBUG_LOG3(fmt,a1,a2,a3) (fmt)
 #else
 extern void debug_log(const char *fmt, ...);
 #define DEBUG_LOG0(fmt) debug_log(fmt)
 #define DEBUG_LOG1(fmt,a1) debug_log(fmt,a1)
 #define DEBUG_LOG2(fmt,a1,a2) debug_log(fmt,a1,a2)
+#define DEBUG_LOG3(fmt,a1,a2,a3) debug_log(fmt,a1,a2,a3)
 #endif
 
 // --------------- Momentary toggle foot-switches and LEDs:
