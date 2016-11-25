@@ -41,11 +41,16 @@ rom const u8 *lookup_table(u8 table) {
 	return lookup;
 }
 
+extern void midi_log_cwrap(const char *text);
+
 void debug_log(const char *fmt, ...) {
+    char target[128];
     va_list ap;
-    printf("DEBUG: ");
+
     va_start(ap, fmt);
-    vprintf(fmt, ap);
+    vsprintf(target, fmt, ap);
     va_end(ap);
-    printf("\n");
+
+    // Send it to MIDI log:
+    midi_log_cwrap(target);
 }

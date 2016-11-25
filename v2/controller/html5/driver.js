@@ -13,6 +13,7 @@ var led_state_top = 0;
 var led_state_bot = 0;
 var lcd_rows = ['01234567890123456789', '01234567890123456789', '01234567890123456789', '01234567890123456789'];
 var lcd_rows_text_ptrs = [0,0,0,0];
+var label_rows_text_ptrs = [0,0];
 /** @const */var flash_size = 4096;
 var flash = null;
 
@@ -356,7 +357,9 @@ function hex2(v) {
 // char *lcd_row_get(u8 row)
 function _lcd_row_get(row) {
     // malloc a 20-byte buffer for the asked-for row of text (0-3):
-    lcd_rows_text_ptrs[row] = Module._malloc(20);
+    if (lcd_rows_text_ptrs[row] == 0) {
+        lcd_rows_text_ptrs[row] = Module._malloc(20);
+    }
     return lcd_rows_text_ptrs[row];
 }
 
@@ -411,16 +414,40 @@ function _lcd_updated_all() {
 function _midi_send_cmd1(cmd, chan, data1) {
     // TODO: add commentary about recognized commands
     var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + "\n";
-    midiLog.appendChild(document.createTextNode(f));
-    midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
+    midi_log(f);
 }
 
 // called to send MIDI command with two data bytes:
 function _midi_send_cmd2(cmd, chan, data1, data2) {
     // TODO: add commentary about recognized commands
     var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + " " + hex2(data2) + "\n";
-    midiLog.appendChild(document.createTextNode(f));
+    midi_log(f);
+}
+
+function _midi_log_cwrap(text_ptr) {
+    midi_log(Module.UTF8ToString(text_ptr) + "\n");
+}
+
+function midi_log(text) {
+    midiLog.appendChild(document.createTextNode(text));
     midiLog.scrollTop = midiLog.scrollHeight - midiLogHeight;
+}
+
+function _label_row_get(row) {
+    if (label_rows_text_ptrs[row] === 0) {
+        label_rows_text_ptrs[row] = Module._malloc(8 * 4);
+    }
+    return label_rows_text_ptrs[row];
+}
+
+function _label_row_update(row) {
+    var i;
+    for (i = 0; i < 8; i++) {
+        var p = label_rows_text_ptrs[row] + (4 * i);
+        var t = Module.getValue(p, 'i8*');
+        labels[row][i] = Module.UTF8ToString(t);
+    }
+    ui_modified = true;
 }
 
 // ----------------------------- Startup:
