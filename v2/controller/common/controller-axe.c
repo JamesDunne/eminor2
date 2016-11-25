@@ -639,7 +639,7 @@ struct timers {
 void controller_10msec_timer(void) {
     if (is_bot_button_held(M_4)) {
         if ((timers.bot_4 & (u8)0xC0) != (u8)0) {
-            timers.bot_4 = (timers.bot_4 & (u8)0xC0) | ((timers.bot_4 & (u8)0x3F) + (u8)1) & (u8)0x3F;
+            timers.bot_4 = (timers.bot_4 & (u8)0xC0) | (((timers.bot_4 & (u8)0x3F) + (u8)1) & (u8)0x3F);
         }
         if (((timers.bot_4 & (u8)0x80) != (u8)0) && ((timers.bot_4 & (u8)0x3F) >= (u8)0x20)) {
             timers.bot_4 |= (u8)0x40;
@@ -653,7 +653,7 @@ void controller_10msec_timer(void) {
 
     if (is_bot_button_held(M_5)) {
         if ((timers.bot_5 & (u8)0xC0) != (u8)0) {
-            timers.bot_5 = (timers.bot_5 & (u8)0xC0) | ((timers.bot_5 & (u8)0x3F) + (u8)1) & (u8)0x3F;
+            timers.bot_5 = (timers.bot_5 & (u8)0xC0) | (((timers.bot_5 & (u8)0x3F) + (u8)1) & (u8)0x3F);
         }
         if (((timers.bot_5 & (u8)0x80) != (u8)0) && ((timers.bot_5 & (u8)0x3F) >= (u8)0x20)) {
             timers.bot_5 |= (u8)0x40;
