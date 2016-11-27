@@ -65,7 +65,7 @@ const static LPCWSTR keylabels[2][8] = {
 #ifdef HWFEAT_LABEL_UPDATES
 
 WCHAR *labels[2][8];
-u8 *labels_ascii[2][8];
+char *labels_ascii[2][8];
 
 #else
 
@@ -79,7 +79,7 @@ const static LPCWSTR labels[2][8] = {
 #ifdef FEAT_LCD
 // currently displayed LCD text in row X col format:
 WCHAR lcd_text[LCD_ROWS][LCD_COLS];
-u8 lcd_ascii[LCD_ROWS][LCD_COLS];
+char lcd_ascii[LCD_ROWS][LCD_COLS];
 #endif
 
 static bool show_dimensions = false;
@@ -826,7 +826,7 @@ void debug_log(const char *fmt, ...) {
 
 #ifdef HWFEAT_LABEL_UPDATES
 
-u8 **label_row_get(u8 row) {
+char **label_row_get(u8 row) {
     return labels_ascii[row];
 }
 
@@ -856,7 +856,7 @@ void label_row_update(u8 row) {
 #ifdef FEAT_LCD
 
 // Pass back the LCD text buffer for the given row:
-u8 *lcd_row_get(u8 row) {
+char *lcd_row_get(u8 row) {
     assert(row < 4);
     return lcd_ascii[row];
 }

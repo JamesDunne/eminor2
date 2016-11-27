@@ -64,4 +64,4 @@ extern unsigned char LCDUpdateStage;
 
 extern TwoBytes tTimer1Value;
 
-extern unsigned char LCDRamMap[4][20];
+extern char LCDRamMap[4][20];

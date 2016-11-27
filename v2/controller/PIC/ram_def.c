@@ -107,4 +107,4 @@ unsigned char *lookup_table(unsigned char table) {
 #error HW_ VERSION must be "1", "2", "3", or "4"
 #endif
 
-unsigned char LCDRamMap[4][20];
+char LCDRamMap[4][20];

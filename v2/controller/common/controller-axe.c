@@ -193,7 +193,7 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 
 #ifdef FEAT_LCD
 // Pointers to LCD character rows:
-u8 *lcd_rows[LCD_ROWS];
+char *lcd_rows[LCD_ROWS];
 #endif
 
 enum {
@@ -246,11 +246,11 @@ struct program pr;
 #define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
 
 // Get the name text for the given name_index from flash memory:
-static rom const u8 *name_get(u16 name_index) {
+static rom const char *name_get(u16 name_index) {
     if (name_index == (u16)0) {
         return "";
     }
-    return flash_addr(name_table_offs + ((name_index - 1) * 20));
+    return (rom const char *)flash_addr(name_table_offs + ((name_index - 1) * 20));
 }
 
 // Set Axe-FX CC value
@@ -284,20 +284,20 @@ static u8 is_bot_button_held(u8 mask) {
     return (curr.fsw.top.byte == 0) && (curr.fsw.bot.byte == mask);
 }
 
-static s8 ritoa(u8 *dst, s8 col, u8 n) {
+static s8 ritoa(char *dst, s8 col, u8 n) {
 	do {
-		dst[col--] = (n % 10) + '0';
-	} while ((n /= 10) > 0);
+		dst[col--] = (n % (char)10) + (char)'0';
+	} while ((n /= (u8)10) > (u8)0);
 	return col;
 }
 
-static s8 litoa(u8 *dst, s8 col, u8 n) {
+static s8 litoa(char *dst, s8 col, u8 n) {
 	// Write the integer to temporary storage:
-	u8 tmp[3];
+	char tmp[3];
 	s8 c = 0;
 	do {
-		tmp[c++] = (n % 10) + '0';
-	} while ((n /= 10) > 0);
+		tmp[c++] = (n % (char)10) + (char)'0';
+	} while ((n /= (u8)10) > (u8)0);
 	// Write the left-aligned integer to the destination:
 	for (c--; c >= 0; c--, col++) {
 		dst[col] = tmp[c];
@@ -305,7 +305,7 @@ static s8 litoa(u8 *dst, s8 col, u8 n) {
 	return col;
 }
 
-static void copy_str_lcd(rom const u8 *src, u8 *dst) {
+static void copy_str_lcd(rom const char *src, char *dst) {
     u8 i;
     for (i = 0; src[i] != 0 && i < LCD_COLS; ++i) {
         dst[i] = src[i];
@@ -452,7 +452,7 @@ static void calc_midi(void) {
     }
 }
 
-void print_half(u8 *dst, u8 col, s8 volhalfdb) {
+void print_half(char *dst, u8 col, s8 volhalfdb) {
     s8 i;
     if (volhalfdb < 0) {
         i = ritoa(dst, col, (u8) (-volhalfdb) >> 1);
@@ -471,12 +471,12 @@ void print_half(u8 *dst, u8 col, s8 volhalfdb) {
 // Update LCD display:
 static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
-    u8 **labels;
+    char **labels;
 #endif
 #ifdef FEAT_LCD
     s8 i;
-    rom const u8 *pr_name;
-    rom const u8 *sc_name;
+    rom const char *pr_name;
+    rom const char *sc_name;
     s8 volhalfdb;
 #endif
     DEBUG_LOG0("update LCD");

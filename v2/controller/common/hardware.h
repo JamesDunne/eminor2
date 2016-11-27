@@ -63,7 +63,7 @@ extern void led_set(u16 leds);
 
 // Get pointer to a specific LCD row:
 // A terminating NUL character will clear the rest of the row with empty space.
-extern u8 *lcd_row_get(u8 row);
+extern char *lcd_row_get(u8 row);
 
 // Mark the LCD display row as updated:
 extern void lcd_updated_row(u8 row);
@@ -113,7 +113,7 @@ extern rom const u8 *lookup_table(u8 table);
 
 // --------------- Change button labels (for Win32 / HTML5 interfaces only):
 
-/* export */ extern u8 **label_row_get(u8 row);
+/* export */ extern char **label_row_get(u8 row);
 /* export */ extern void label_row_update(u8 row);
 
 #endif
