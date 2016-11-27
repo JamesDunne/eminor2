@@ -827,6 +827,7 @@ void controller_handle(void) {
 
         // Establish a sane default for an undefined program:
         if (pr.name_index == (u16)0) {
+            DEBUG_LOG0("default program");
             pr.scene_count = 1;
             pr.scene[0].name_index = 0;
             pr.scene[0].amp[0].fx = fxm_dirty;
@@ -880,18 +881,16 @@ void toggle_setlist_mode() {
     }
 }
 
-void amp2_reset() {
-    DEBUG_LOG0("reset amp2");
-    timers.bot_2 = (u8)0;
-    curr.amp[1].fx = fxm_dirty;
-    curr.amp[1].volume = volume_0dB;
-}
-
 void amp1_reset() {
     DEBUG_LOG0("reset amp1");
-    timers.bot_1 = (u8)0;
-    curr.amp[0].fx = fxm_dirty;
-    curr.amp[0].volume = volume_0dB;
+    last.amp[0].fx = ~curr.amp[0].fx;
+    last.amp[0].volume = ~curr.amp[0].volume;
+}
+
+void amp2_reset() {
+    DEBUG_LOG0("reset amp2");
+    last.amp[1].fx = ~curr.amp[1].fx;
+    last.amp[1].volume = ~curr.amp[1].volume;
 }
 
 void next_song() {
