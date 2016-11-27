@@ -328,23 +328,23 @@ static void send_leds(void) {
 
 static void update_lcd(void);
 
-void curr_amp_vol_decrease();
+void curr_amp_vol_decrease(void);
 
-void curr_amp_vol_increase();
+void curr_amp_vol_increase(void);
 
-void prev_scene();
+void prev_scene(void);
 
-void next_scene();
+void next_scene(void);
 
-void prev_song();
+void prev_song(void);
 
-void next_song();
+void next_song(void);
 
-void amp1_reset();
+void amp1_reset(void);
 
-void amp2_reset();
+void amp2_reset(void);
 
-void toggle_setlist_mode();
+void toggle_setlist_mode(void);
 
 static u8 calc_mixer_level(u8 volume) {
     return volume_ramp[volume & 0x7F];

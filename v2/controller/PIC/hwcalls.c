@@ -269,7 +269,7 @@ void flash_store(u16 addr, u16 count, u8 *data) {
     Write32Pending = true;
 }
 
-rom u8 *flash_addr(u16 addr) {
+rom const u8 *flash_addr(u16 addr) {
     u8 bank;
 
     bank = (u8)(addr >> 12);
