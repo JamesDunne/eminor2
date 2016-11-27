@@ -333,6 +333,9 @@ func generatePICH() {
 			idx16 = uint16(idx)
 		}
 
+		// We reserve 0 entry for empty string:
+		idx16 += 1
+
 		// Write both bytes:
 		bw.WriteHex(uint8(idx16 & 0xFF))
 		bw.WriteHex(uint8(idx16 >> 8))

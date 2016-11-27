@@ -247,7 +247,10 @@ struct program pr;
 
 // Get the name text for the given name_index from flash memory:
 static rom const u8 *name_get(u16 name_index) {
-    return flash_addr(name_table_offs + (name_index * 20));
+    if (name_index == (u16)0) {
+        return "";
+    }
+    return flash_addr(name_table_offs + ((name_index - 1) * 20));
 }
 
 // Set Axe-FX CC value
