@@ -340,6 +340,12 @@ void prev_song();
 
 void next_song();
 
+void amp1_reset();
+
+void amp2_reset();
+
+void toggle_setlist_mode();
+
 static u8 calc_mixer_level(u8 volume) {
     return volume_ramp[volume & 0x7F];
 }
@@ -552,11 +558,11 @@ LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
 |   DIRTY   X/Y   DELAY  PITCH  CHORUS FILTER PR_PRV PR_NXT  |
-|                                             PR_ONE         |
+|                                                            |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
 |   AMP1   AMP2   VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
-|  RESET1 RESET2  VOL=6                 MODE  SC_ONE         |
+|  RESET1 RESET2  VOL=6                 MODE  SC_ONE SC_ADD  |
 |------------------------------------------------------------|
 */
 
@@ -656,97 +662,47 @@ struct timers {
 
 // called every 10ms
 void controller_10msec_timer(void) {
-    if (is_bot_button_held(M_4)) {
-        if ((timers.bot_4 & (u8)0xC0) != (u8)0) {
-            timers.bot_4 = (timers.bot_4 & (u8)0xC0) | (((timers.bot_4 & (u8)0x3F) + (u8)1) & (u8)0x3F);
-        }
-        if (((timers.bot_4 & (u8)0x80) != (u8)0) && ((timers.bot_4 & (u8)0x3F) >= (u8)0x20)) {
-            timers.bot_4 |= (u8)0x40;
-        }
-        if (((timers.bot_4 & (u8)0x40) != (u8)0) && ((timers.bot_4 & (u8)0x07) == (u8)0)) {
-            curr_amp_vol_decrease();
-        }
+#define one_shot(row,n,max,op_func) \
+    if (is_##row##_button_held(M_##n) && ((timers.row##_##n & (u8)0x80) != 0)) { \
+        /* Increment and cap timer to 0x7F: */ \
+        if ((timers.row##_##n & (u8)0x7F) < (u8)max) { \
+            timers.row##_##n = (timers.row##_##n & (u8)0x80) | ((timers.row##_##n & (u8)0x7F) + (u8)1); \
+            if ((timers.row##_##n & (u8)0x7F) == (u8)max) { \
+                timers.row##_##n = (u8)0x00; \
+                op_func(); \
+            } \
+        } \
     }
 
-    if (is_bot_button_held(M_5)) {
-        if ((timers.bot_5 & (u8)0xC0) != (u8)0) {
-            timers.bot_5 = (timers.bot_5 & (u8)0xC0) | (((timers.bot_5 & (u8)0x3F) + (u8)1) & (u8)0x3F);
-        }
-        if (((timers.bot_5 & (u8)0x80) != (u8)0) && ((timers.bot_5 & (u8)0x3F) >= (u8)0x20)) {
-            timers.bot_5 |= (u8)0x40;
-        }
-        if (((timers.bot_5 & (u8)0x40) != (u8)0) && ((timers.bot_5 & (u8)0x07) == (u8)0)) {
-            curr_amp_vol_increase();
-        }
+#define repeater(row,n,min,mask,op_func) \
+    if (is_##row##_button_held(M_##n)) { \
+        if ((timers.row##_##n & (u8)0xC0) != (u8)0) { \
+            timers.row##_##n = (timers.row##_##n & (u8)0xC0) | (((timers.row##_##n & (u8)0x3F) + (u8)1) & (u8)0x3F); \
+        } \
+        if (((timers.row##_##n & (u8)0x80) != (u8)0) && ((timers.row##_##n & (u8)0x3F) >= (u8)min)) { \
+            timers.row##_##n |= (u8)0x40; \
+        } \
+        if (((timers.row##_##n & (u8)0x40) != (u8)0) && ((timers.row##_##n & (u8)mask) == (u8)0)) { \
+            op_func(); \
+        } \
     }
 
-    if (is_bot_button_held(M_7)) {
-        if ((timers.bot_7 & (u8)0xC0) != (u8)0) {
-            timers.bot_7 = (timers.bot_7 & (u8)0xC0) | (((timers.bot_7 & (u8)0x3F) + (u8)1) & (u8)0x3F);
-        }
-        if (((timers.bot_7 & (u8)0x80) != (u8)0) && ((timers.bot_7 & (u8)0x3F) >= (u8)0x20)) {
-            timers.bot_7 |= (u8)0x40;
-        }
-        if (((timers.bot_7 & (u8)0x40) != (u8)0) && ((timers.bot_7 & (u8)0x07) == (u8)0)) {
-            prev_scene();
-        }
-    }
+    one_shot(bot,1,0x7F,amp1_reset)
+    one_shot(bot,2,0x7F,amp2_reset)
 
-    if (is_bot_button_held(M_8)) {
-        if ((timers.bot_8 & (u8)0xC0) != (u8)0) {
-            timers.bot_8 = (timers.bot_8 & (u8)0xC0) | (((timers.bot_8 & (u8)0x3F) + (u8)1) & (u8)0x3F);
-        }
-        if (((timers.bot_8 & (u8)0x80) != (u8)0) && ((timers.bot_8 & (u8)0x3F) >= (u8)0x20)) {
-            timers.bot_8 |= (u8)0x40;
-        }
-        if (((timers.bot_8 & (u8)0x40) != (u8)0) && ((timers.bot_8 & (u8)0x07) == (u8)0)) {
-            next_scene();
-        }
-    }
+    repeater(bot,4,0x20,0x07,curr_amp_vol_decrease)
+    repeater(bot,5,0x20,0x07,curr_amp_vol_increase)
 
-    if (is_top_button_held(M_7)) {
-        if ((timers.top_7 & (u8)0xC0) != (u8)0) {
-            timers.top_7 = (timers.top_7 & (u8)0xC0) | (((timers.top_7 & (u8)0x3F) + (u8)1) & (u8)0x3F);
-        }
-        if (((timers.top_7 & (u8)0x80) != (u8)0) && ((timers.top_7 & (u8)0x3F) >= (u8)0x20)) {
-            timers.top_7 |= (u8)0x40;
-        }
-        if (((timers.top_7 & (u8)0x40) != (u8)0) && ((timers.top_7 & (u8)0x07) == (u8)0)) {
-            prev_song();
-        }
-    }
+    one_shot(bot,6,0x7F,toggle_setlist_mode)
 
-    if (is_top_button_held(M_8)) {
-        if ((timers.top_8 & (u8)0xC0) != (u8)0) {
-            timers.top_8 = (timers.top_8 & (u8)0xC0) | (((timers.top_8 & (u8)0x3F) + (u8)1) & (u8)0x3F);
-        }
-        if (((timers.top_8 & (u8)0x80) != (u8)0) && ((timers.top_8 & (u8)0x3F) >= (u8)0x20)) {
-            timers.top_8 |= (u8)0x40;
-        }
-        if (((timers.top_8 & (u8)0x40) != (u8)0) && ((timers.top_8 & (u8)0x07) == (u8)0)) {
-            next_song();
-        }
-    }
+    //one_shot(bot,7,0x7F)
+    //one_shot(bot,8,0x7F)
 
+    repeater(top,7,0x20,0x07,prev_song)
+    repeater(top,8,0x20,0x07,next_song)
 
-    if (is_bot_button_held(M_1)) {
-        // Increment and cap timer to 0x7F:
-        if (((timers.bot_1 & (u8)0x80) != 0) && ((timers.bot_1 & (u8)0x7F) < (u8)0x7F)) {
-            timers.bot_1 = (timers.bot_1 & (u8)0x80) | ((timers.bot_1 & (u8)0x7F) + (u8)1);
-        }
-    }
-    if (is_bot_button_held(M_2)) {
-        // Increment and cap timer to 0x7F:
-        if (((timers.bot_2 & (u8)0x80) != 0) && ((timers.bot_2 & (u8)0x7F) < (u8)0x7F)) {
-            timers.bot_2 = (timers.bot_2 & (u8)0x80) | ((timers.bot_2 & (u8)0x7F) + (u8)1);
-        }
-    }
-    if (is_bot_button_held(M_6)) {
-        // Increment and cap timer to 0x7F:
-        if (((timers.bot_6 & (u8)0x80) != 0) && ((timers.bot_6 & (u8)0x7F) < (u8)0x7F)) {
-            timers.bot_6 = (timers.bot_6 & (u8)0x80) | ((timers.bot_6 & (u8)0x7F) + (u8)1);
-        }
-    }
+#undef repeater
+#undef one_shot
 }
 
 // main control loop
@@ -760,14 +716,6 @@ void controller_handle(void) {
     if (is_bot_button_pressed(M_1)) {
         curr.selected_amp = 0;
         timers.bot_1 = (u8)0x80;
-    } else if (is_bot_button_held(M_1)) {
-        // RESET amp1:
-        if (((timers.bot_1 & (u8)0x80) != (u8)0) && ((timers.bot_1 & (u8)0x7F) >= (u8)0x7F)) {
-            DEBUG_LOG0("reset amp1");
-            timers.bot_1 = (u8)0;
-            curr.amp[0].fx = fxm_dirty;
-            curr.amp[0].volume = volume_0dB;
-        }
     } else if (is_bot_button_released(M_1)) {
         timers.bot_1 = (u8)0;
     }
@@ -775,14 +723,6 @@ void controller_handle(void) {
     if (is_bot_button_pressed(M_2)) {
         curr.selected_amp = 1;
         timers.bot_2 = (u8)0x80;
-    } else if (is_bot_button_held(M_2)) {
-        // RESET amp2:
-        if (((timers.bot_2 & (u8)0x80) != (u8)0) && ((timers.bot_2 & (u8)0x7F) >= (u8)0x7F)) {
-            DEBUG_LOG0("reset amp2");
-            timers.bot_2 = (u8)0;
-            curr.amp[1].fx = fxm_dirty;
-            curr.amp[1].volume = volume_0dB;
-        }
     } else if (is_bot_button_released(M_2)) {
         timers.bot_2 = (u8)0;
     }
@@ -819,31 +759,8 @@ void controller_handle(void) {
         timers.bot_6 = (u8)0x80;
         curr.tap ^= (u8)0x7F;
         midi_set_axe_cc(axe_cc_taptempo, curr.tap);
-    } else if (is_bot_button_held(M_6)) {
-        // MODE switch:
-        if (((timers.bot_6 & (u8)0x80) != (u8)0) && ((timers.bot_6 & (u8)0x7F) >= (u8)0x7F)) {
-            DEBUG_LOG0("change setlist mode");
-            timers.bot_6 = 0;
-            curr.setlist_mode ^= (u8)1;
-            if (curr.setlist_mode == 1) {
-                // Remap sl_idx by looking up program in setlist otherwise default to first setlist entry:
-                u8 i;
-                sl_max = sl.count - (u8)1;
-                curr.sl_idx = 0;
-                for (i = 0; i < sl.count; i++) {
-                    if (sl.entries[i].program == curr.pr_idx) {
-                        curr.sl_idx = i;
-                        break;
-                    }
-                }
-            } else {
-                // Lookup program number from setlist:
-                sl_max = 127;
-                curr.pr_idx = sl.entries[curr.sl_idx].program;
-            }
-        }
     } else if (is_bot_button_pressed(M_6)) {
-        timers.bot_6 = 0;
+        timers.bot_6 = (u8)0x00;
     }
 
     // PREV/NEXT SCENE:
@@ -940,6 +857,41 @@ void controller_handle(void) {
 
     // Record the previous state:
     last = curr;
+}
+
+void toggle_setlist_mode() {
+    DEBUG_LOG0("change setlist mode");
+    curr.setlist_mode ^= (u8)1;
+    if (curr.setlist_mode == 1) {
+        // Remap sl_idx by looking up program in setlist otherwise default to first setlist entry:
+        u8 i;
+        sl_max = sl.count - (u8)1;
+        curr.sl_idx = 0;
+        for (i = 0; i < sl.count; i++) {
+            if (sl.entries[i].program == curr.pr_idx) {
+                curr.sl_idx = i;
+                break;
+            }
+        }
+    } else {
+        // Lookup program number from setlist:
+        sl_max = 127;
+        curr.pr_idx = sl.entries[curr.sl_idx].program;
+    }
+}
+
+void amp2_reset() {
+    DEBUG_LOG0("reset amp2");
+    timers.bot_2 = (u8)0;
+    curr.amp[1].fx = fxm_dirty;
+    curr.amp[1].volume = volume_0dB;
+}
+
+void amp1_reset() {
+    DEBUG_LOG0("reset amp1");
+    timers.bot_1 = (u8)0;
+    curr.amp[0].fx = fxm_dirty;
+    curr.amp[0].volume = volume_0dB;
 }
 
 void next_song() {
