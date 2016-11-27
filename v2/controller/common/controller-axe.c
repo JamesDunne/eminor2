@@ -908,6 +908,16 @@ void controller_handle(void) {
         }
         flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
 
+        // Establish a sane default for an undefined program:
+        if (pr.name_index == (u16)0) {
+            pr.scene_count = 1;
+            pr.scene[0].name_index = 0;
+            pr.scene[0].amp[0].fx = fxm_dirty;
+            pr.scene[0].amp[0].volume = volume_0dB;
+            pr.scene[0].amp[1].fx = fxm_dirty;
+            pr.scene[0].amp[1].volume = volume_0dB;
+        }
+
         // Trigger a scene reload:
         curr.sc_idx = 0;
         last.sc_idx = 255;
