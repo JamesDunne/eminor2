@@ -346,7 +346,7 @@ void curr_amp_reset(void);
 
 void toggle_setlist_mode(void);
 
-void curr_amp_vol_toggle();
+void curr_amp_vol_toggle(void);
 
 static u8 calc_mixer_level(u8 volume) {
     return volume_ramp[volume & 0x7F];
