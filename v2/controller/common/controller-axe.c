@@ -226,6 +226,8 @@ struct state {
 
     // Selected amp (0 or 1):
     u8 selected_amp;
+    // Selected both amps (0 or 1):
+    u8 selected_both;
     // Amp definitions:
     struct amp amp[2];
 };
@@ -340,11 +342,11 @@ void prev_song(void);
 
 void next_song(void);
 
-void amp1_reset(void);
-
-void amp2_reset(void);
+void curr_amp_reset(void);
 
 void toggle_setlist_mode(void);
+
+void curr_amp_vol_toggle();
 
 static u8 calc_mixer_level(u8 volume) {
     return volume_ramp[volume & 0x7F];
@@ -446,6 +448,13 @@ static void calc_midi(void) {
         diff = 1;
     }
 
+    if (curr.selected_amp != last.selected_amp) {
+        diff = 1;
+    }
+    if (curr.selected_both != last.selected_both) {
+        diff = 1;
+    }
+
     // Update LCD if the state changed:
     if (diff) {
         update_lcd();
@@ -483,8 +492,8 @@ static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
     // Bottom row:
     labels = label_row_get(0);
-    labels[0] = "AMP1";
-    labels[1] = "AMP2";
+    labels[0] = "1 AND 2";
+    labels[1] = "1 OR 2";
     labels[2] = "VOL=0";
     labels[3] = "VOL--";
     labels[4] = "VOL++";
@@ -512,6 +521,9 @@ static void update_lcd(void) {
         lcd_rows[2][i] = "                    "[i];
         lcd_rows[3][i] = "                    "[i];
     }
+
+    lcd_rows[0][2] = (curr.selected_amp == 0) ? (char)'*' : (char)' ';
+    lcd_rows[0][13] = (curr.selected_amp == 1) ? (char)'*' : (char)' ';
 
     // Print volume levels:
     volhalfdb = (s8)curr.amp[0].volume - (s8)volume_0dB;
@@ -561,22 +573,31 @@ LIVE:
 |                                                            |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   AMP1   AMP2   VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
+|   1 & 2  1 | 2  VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
 |  RESET1 RESET2  VOL=6                 MODE  SC_ONE SC_ADD  |
 |------------------------------------------------------------|
 */
 
 static void calc_leds(void) {
-    curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[curr.selected_amp].fx);
-    curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[curr.selected_amp].fx);
-    curr.mode_leds[curr.mode].top.bits._3 = read_bit(pitch,  curr.amp[curr.selected_amp].fx);
-    curr.mode_leds[curr.mode].top.bits._4 = read_bit(chorus, curr.amp[curr.selected_amp].fx);
-    curr.mode_leds[curr.mode].top.bits._5 = read_bit(delay,  curr.amp[curr.selected_amp].fx);
-    curr.mode_leds[curr.mode].top.bits._6 = read_bit(filter, curr.amp[curr.selected_amp].fx);
+    if (curr.selected_both) {
+        curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[0].fx) | read_bit(dirty,  curr.amp[1].fx);
+        curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[0].fx) | read_bit(xy,     curr.amp[1].fx);
+        curr.mode_leds[curr.mode].top.bits._3 = read_bit(pitch,  curr.amp[0].fx) | read_bit(pitch,  curr.amp[1].fx);
+        curr.mode_leds[curr.mode].top.bits._4 = read_bit(chorus, curr.amp[0].fx) | read_bit(chorus, curr.amp[1].fx);
+        curr.mode_leds[curr.mode].top.bits._5 = read_bit(delay,  curr.amp[0].fx) | read_bit(delay,  curr.amp[1].fx);
+        curr.mode_leds[curr.mode].top.bits._6 = read_bit(filter, curr.amp[0].fx) | read_bit(filter, curr.amp[1].fx);
+    } else {
+        curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[curr.selected_amp].fx);
+        curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[curr.selected_amp].fx);
+        curr.mode_leds[curr.mode].top.bits._3 = read_bit(pitch,  curr.amp[curr.selected_amp].fx);
+        curr.mode_leds[curr.mode].top.bits._4 = read_bit(chorus, curr.amp[curr.selected_amp].fx);
+        curr.mode_leds[curr.mode].top.bits._5 = read_bit(delay,  curr.amp[curr.selected_amp].fx);
+        curr.mode_leds[curr.mode].top.bits._6 = read_bit(filter, curr.amp[curr.selected_amp].fx);
+    }
     curr.mode_leds[curr.mode].top.bits._7 = curr.fsw.top.bits._7;
     curr.mode_leds[curr.mode].top.bits._8 = curr.fsw.top.bits._8;
 
-    curr.mode_leds[curr.mode].bot.bits._1 = ~curr.selected_amp;
+    curr.mode_leds[curr.mode].bot.bits._1 = curr.selected_both;
     curr.mode_leds[curr.mode].bot.bits._2 = curr.selected_amp;
     curr.mode_leds[curr.mode].bot.bits._3 = curr.fsw.bot.bits._3 | (curr.amp[curr.selected_amp].volume != volume_0dB);
     curr.mode_leds[curr.mode].bot.bits._4 = curr.fsw.bot.bits._4 | (curr.amp[curr.selected_amp].volume > volume_0dB);
@@ -625,8 +646,9 @@ void controller_init(void) {
     last.amp[0].volume = ~curr.amp[0].volume;
     last.amp[1].volume = ~curr.amp[1].volume;
 
-    // Select JD amp by default:
+    // Select only JD amp by default:
     curr.selected_amp = 1;
+    curr.selected_both = 0;
 
     // Get volume-ramp lookup table:
     volume_ramp = lookup_table(0);
@@ -687,8 +709,7 @@ void controller_10msec_timer(void) {
         } \
     }
 
-    one_shot(bot,1,0x7F,amp1_reset)
-    one_shot(bot,2,0x7F,amp2_reset)
+    one_shot(bot,2,0x7F,curr_amp_reset)
 
     repeater(bot,4,0x20,0x07,curr_amp_vol_decrease)
     repeater(bot,5,0x20,0x07,curr_amp_vol_increase)
@@ -713,28 +734,26 @@ void controller_handle(void) {
     curr.fsw.top.byte = (u8)((tmp >> (u8)8) & (u8)0xFF);
 
     // Handle bottom control switches:
+    // AMP (1 and 2)
     if (is_bot_button_pressed(M_1)) {
-        curr.selected_amp = 0;
+        curr.selected_both ^= 1;
         timers.bot_1 = (u8)0x80;
     } else if (is_bot_button_released(M_1)) {
         timers.bot_1 = (u8)0;
     }
 
+    // AMP (1 or 2)
     if (is_bot_button_pressed(M_2)) {
-        curr.selected_amp = 1;
+        curr.selected_amp ^= 1;
+        //curr.selected_both = 0;
         timers.bot_2 = (u8)0x80;
     } else if (is_bot_button_released(M_2)) {
         timers.bot_2 = (u8)0;
     }
 
-    // VOL=0
+    // VOL=0 or +6
     if (is_bot_button_pressed(M_3)) {
-        // Toggle between 0dB and +6dB:
-        if (curr.amp[curr.selected_amp].volume == volume_0dB) {
-            curr.amp[curr.selected_amp].volume = volume_6dB;
-        } else {
-            curr.amp[curr.selected_amp].volume = volume_0dB;
-        }
+        curr_amp_vol_toggle();
     }
 
     // VOL--
@@ -778,23 +797,32 @@ void controller_handle(void) {
     }
 
     // Handle top amp effects:
+#define toggle_fx(name) \
+        if (curr.selected_both) { \
+            u8 fx = (curr.amp[0].fx | curr.amp[1].fx) & fxm_##name ^ fxm_##name; \
+            curr.amp[0].fx = (curr.amp[0].fx & ~fxm_##name) | fx; \
+            curr.amp[1].fx = (curr.amp[1].fx & ~fxm_##name) | fx; \
+        } else { \
+            toggle_bit(name, curr.amp[curr.selected_amp].fx); \
+        }
+
     if (is_top_button_pressed(M_1)) {
-        toggle_bit(dirty, curr.amp[curr.selected_amp].fx);
+        toggle_fx(dirty)
     }
     if (is_top_button_pressed(M_2)) {
-        toggle_bit(xy, curr.amp[curr.selected_amp].fx);
+        toggle_fx(xy)
     }
     if (is_top_button_pressed(M_3)) {
-        toggle_bit(pitch, curr.amp[curr.selected_amp].fx);
+        toggle_fx(pitch)
     }
     if (is_top_button_pressed(M_4)) {
-        toggle_bit(chorus, curr.amp[curr.selected_amp].fx);
+        toggle_fx(chorus)
     }
     if (is_top_button_pressed(M_5)) {
-        toggle_bit(delay, curr.amp[curr.selected_amp].fx);
+        toggle_fx(delay)
     }
     if (is_top_button_pressed(M_6)) {
-        toggle_bit(filter, curr.amp[curr.selected_amp].fx);
+        toggle_fx(filter)
     }
 
     // PREV/NEXT SONG:
@@ -881,16 +909,18 @@ void toggle_setlist_mode() {
     }
 }
 
-void amp1_reset() {
-    DEBUG_LOG0("reset amp1");
-    last.amp[0].fx = ~curr.amp[0].fx;
-    last.amp[0].volume = ~curr.amp[0].volume;
-}
-
-void amp2_reset() {
-    DEBUG_LOG0("reset amp2");
-    last.amp[1].fx = ~curr.amp[1].fx;
-    last.amp[1].volume = ~curr.amp[1].volume;
+void curr_amp_reset() {
+    if (curr.selected_both) {
+        DEBUG_LOG0("reset amps");
+        last.amp[0].fx = ~curr.amp[0].fx;
+        last.amp[0].volume = ~curr.amp[0].volume;
+        last.amp[1].fx = ~curr.amp[1].fx;
+        last.amp[1].volume = ~curr.amp[1].volume;
+    } else {
+        DEBUG_LOG1("reset amp%c", curr.selected_amp + '1');
+        last.amp[curr.selected_amp].fx = ~curr.amp[curr.selected_amp].fx;
+        last.amp[curr.selected_amp].volume = ~curr.amp[curr.selected_amp].volume;
+    }
 }
 
 void next_song() {
@@ -932,6 +962,15 @@ void prev_scene() {
     if (curr.sc_idx > 0) {
         DEBUG_LOG0("prev scene");
         curr.sc_idx--;
+    }
+}
+
+void curr_amp_vol_toggle() {
+    // Toggle between 0dB and +6dB:
+    if (curr.amp[curr.selected_amp].volume == volume_0dB) {
+        curr.amp[curr.selected_amp].volume = volume_6dB;
+    } else {
+        curr.amp[curr.selected_amp].volume = volume_0dB;
     }
 }
 
