@@ -27,9 +27,9 @@ var version string
 const (
 	FX4_Dirty uint8 = 1 << iota
 	FX4_XY
-	FX4_Delay
 	FX4_Pitch
 	FX4_Chorus
+	FX4_Delay
 	FX4_Filter
 )
 

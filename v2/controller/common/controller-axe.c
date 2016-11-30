@@ -12,7 +12,7 @@
 LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
-|   DIRTY   X/Y   DELAY  PITCH  CHORUS FILTER PR_PRV PR_NXT  |
+|   DIRTY   X/Y   PITCH  CHORUS DELAY  FILTER PR_PRV PR_NXT  |
 |                                             PR_ONE         |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
@@ -61,16 +61,16 @@ GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/
 
 #define fxm_dirty  (u8)0x01
 #define fxm_xy     (u8)0x02
-#define fxm_delay  (u8)0x04
-#define fxm_pitch  (u8)0x08
-#define fxm_chorus (u8)0x10
+#define fxm_pitch  (u8)0x04
+#define fxm_chorus (u8)0x08
+#define fxm_delay  (u8)0x10
 #define fxm_filter (u8)0x20
 
 #define fxb_dirty  (u8)0
 #define fxb_xy     (u8)1
-#define fxb_delay  (u8)2
-#define fxb_pitch  (u8)3
-#define fxb_chorus (u8)4
+#define fxb_pitch  (u8)2
+#define fxb_chorus (u8)3
+#define fxb_delay  (u8)4
 #define fxb_filter (u8)5
 
 #define read_bit(name,e)   ((e & fxm_##name) >> fxb_##name)
@@ -497,9 +497,9 @@ static void update_lcd(void) {
     labels = label_row_get(1);
     labels[0] = "DIRTY";
     labels[1] = "X/Y";
-    labels[2] = "DELAY";
-    labels[3] = "PITCH";
-    labels[4] = "CHORUS";
+    labels[2] = "PITCH";
+    labels[3] = "CHORUS";
+    labels[4] = "DELAY";
     labels[5] = "FILTER";
     labels[6] = "PREV SONG";
     labels[7] = "NEXT SONG";
@@ -557,7 +557,7 @@ static void update_lcd(void) {
 LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
-|   DIRTY   X/Y   DELAY  PITCH  CHORUS FILTER PR_PRV PR_NXT  |
+|   DIRTY   X/Y   PITCH  CHORUS DELAY  FILTER PR_PRV PR_NXT  |
 |                                                            |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
@@ -569,18 +569,18 @@ LIVE:
 static void calc_leds(void) {
     curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[curr.selected_amp].fx);
     curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[curr.selected_amp].fx);
-    curr.mode_leds[curr.mode].top.bits._3 = read_bit(delay,  curr.amp[curr.selected_amp].fx);
-    curr.mode_leds[curr.mode].top.bits._4 = read_bit(pitch,  curr.amp[curr.selected_amp].fx);
-    curr.mode_leds[curr.mode].top.bits._5 = read_bit(chorus, curr.amp[curr.selected_amp].fx);
+    curr.mode_leds[curr.mode].top.bits._3 = read_bit(pitch,  curr.amp[curr.selected_amp].fx);
+    curr.mode_leds[curr.mode].top.bits._4 = read_bit(chorus, curr.amp[curr.selected_amp].fx);
+    curr.mode_leds[curr.mode].top.bits._5 = read_bit(delay,  curr.amp[curr.selected_amp].fx);
     curr.mode_leds[curr.mode].top.bits._6 = read_bit(filter, curr.amp[curr.selected_amp].fx);
     curr.mode_leds[curr.mode].top.bits._7 = curr.fsw.top.bits._7;
     curr.mode_leds[curr.mode].top.bits._8 = curr.fsw.top.bits._8;
 
     curr.mode_leds[curr.mode].bot.bits._1 = ~curr.selected_amp;
     curr.mode_leds[curr.mode].bot.bits._2 = curr.selected_amp;
-    curr.mode_leds[curr.mode].bot.bits._3 = curr.fsw.bot.bits._3;
-    curr.mode_leds[curr.mode].bot.bits._4 = curr.fsw.bot.bits._4;
-    curr.mode_leds[curr.mode].bot.bits._5 = curr.fsw.bot.bits._5;
+    curr.mode_leds[curr.mode].bot.bits._3 = curr.fsw.bot.bits._3 | (curr.amp[curr.selected_amp].volume != volume_0dB);
+    curr.mode_leds[curr.mode].bot.bits._4 = curr.fsw.bot.bits._4 | (curr.amp[curr.selected_amp].volume > volume_0dB);
+    curr.mode_leds[curr.mode].bot.bits._5 = curr.fsw.bot.bits._5 | (curr.amp[curr.selected_amp].volume < volume_0dB);
     curr.mode_leds[curr.mode].bot.bits._6 = curr.fsw.bot.bits._6;
     curr.mode_leds[curr.mode].bot.bits._7 = curr.fsw.bot.bits._7;
     curr.mode_leds[curr.mode].bot.bits._8 = curr.fsw.bot.bits._8;
@@ -785,13 +785,13 @@ void controller_handle(void) {
         toggle_bit(xy, curr.amp[curr.selected_amp].fx);
     }
     if (is_top_button_pressed(M_3)) {
-        toggle_bit(delay, curr.amp[curr.selected_amp].fx);
-    }
-    if (is_top_button_pressed(M_4)) {
         toggle_bit(pitch, curr.amp[curr.selected_amp].fx);
     }
-    if (is_top_button_pressed(M_5)) {
+    if (is_top_button_pressed(M_4)) {
         toggle_bit(chorus, curr.amp[curr.selected_amp].fx);
+    }
+    if (is_top_button_pressed(M_5)) {
+        toggle_bit(delay, curr.amp[curr.selected_amp].fx);
     }
     if (is_top_button_pressed(M_6)) {
         toggle_bit(filter, curr.amp[curr.selected_amp].fx);
