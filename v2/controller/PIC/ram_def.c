@@ -96,6 +96,7 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
     }
 };
 
+#pragma romdata LOOKUP_TABLE=LOOKUP_SEG_ADDR
 rom unsigned char LOOKUP_TABLE[128] = {
 #include "v4_lookup.h"
 };
