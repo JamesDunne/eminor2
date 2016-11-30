@@ -178,3 +178,11 @@ songs:
 - names: [Undone, Sweater Song, The Sweater Song]
   short_name: Undone
   starts: Bremer
+
+- names: [Story of a Girl, Absolutely]
+  short_name: Story of a Girl
+  starts: MG
+
+- names: [Trippin, Trippin on a Hole in a Paper Heart]
+  short_name: Trippin
+  starts: Bremer

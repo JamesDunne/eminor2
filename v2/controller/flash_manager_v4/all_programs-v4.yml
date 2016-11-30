@@ -1673,3 +1673,53 @@ programs:
       channel: dirty
       level: 6
       fx: [delay]
+- name: Story of a Girl
+  scenes:
+  - name: Rhythm
+    MG:
+      xy: Y
+      channel: dirty
+    JD:
+      xy: Y
+      channel: dirty
+  - name: JD lead
+    MG:
+      xy: Y
+      channel: dirty
+    JD:
+      xy: Y
+      channel: dirty
+      level: 6
+      fx: [chorus]
+  - name: Rhythm
+    MG:
+      xy: Y
+      channel: dirty
+    JD:
+      xy: Y
+      channel: dirty
+- name: Trippin
+  scenes:
+  - name: Rhythm
+    MG:
+      xy: Y
+      channel: dirty
+    JD:
+      xy: Y
+      channel: dirty
+  - name: JD lead
+    MG:
+      xy: Y
+      channel: dirty
+    JD:
+      xy: Y
+      channel: dirty
+      level: 6
+      fx: [chorus]
+  - name: Rhythm
+    MG:
+      xy: Y
+      channel: dirty
+    JD:
+      xy: Y
+      channel: dirty
