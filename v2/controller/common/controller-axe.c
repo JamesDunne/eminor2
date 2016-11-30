@@ -988,6 +988,6 @@ void curr_amp_vol_decrease() {
 
 #else
 
-static void nothing(void) {}
+typedef int nothing4;
 
 #endif

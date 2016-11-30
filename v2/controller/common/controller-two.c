@@ -1327,6 +1327,6 @@ void controller_handle(void) {
 
 #else
 
-static void nothing(void) {}
+typedef int nothing2;
 
 #endif
