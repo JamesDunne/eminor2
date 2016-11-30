@@ -836,7 +836,6 @@ void label_row_update(u8 row) {
     // Convert ASCII to UTF-16:
     int c, i;
     for (i = 0; i < 8; ++i) {
-        u8 *label = labels_ascii[row][i];
         for (c = 0; c < 20; ++c) {
             if (labels_ascii[row][i][c] == 0) {
                 labels[row][i][c] = (WCHAR)0;
