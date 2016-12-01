@@ -16,7 +16,7 @@ x64/
 dist/
 build/
 *.err
-*.map
+*.mcs
 Object/
 *.o
 midicontroller.cof

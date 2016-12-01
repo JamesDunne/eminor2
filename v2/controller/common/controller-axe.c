@@ -132,9 +132,6 @@ struct set_list {
 // Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
 COMPILE_ASSERT(sizeof(struct set_list) == 64);
 
-// Useful macros:
-#define tglbit(VAR,Place) VAR ^= (1 << Place)
-
 // Hard-coded MIDI channel #s:
 #define gmaj_midi_channel	 0
 #define rjm_midi_channel	 1
@@ -177,19 +174,6 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define axe_cc_xy_delay2   107
 #define axe_cc_xy_pitch1   114
 #define axe_cc_xy_pitch2   115
-
-#define is_pressed(rowname, mask) is_##rowname##_button_pressed(mask)
-#define is_held(rowname, mask) is_##rowname##_button_held(mask)
-#define is_released(rowname, mask) is_##rowname##_button_released(mask)
-
-// Define our buttons by name:
-#define is_pressed_prev()       is_pressed(top, M_7)
-#define is_held_prev()          is_held(top, M_7)
-#define is_released_prev()      is_released(top, M_7)
-
-#define is_pressed_next()       is_pressed(top, M_8)
-#define is_held_next()          is_held(top, M_8)
-#define is_released_next()      is_released(top, M_8)
 
 #ifdef FEAT_LCD
 // Pointers to LCD character rows:
@@ -260,31 +244,25 @@ static void midi_set_axe_cc(u8 cc, u8 val) {
     midi_send_cmd2(0xB, axe_midi_channel, cc, val);
 }
 
-static u8 is_top_button_pressed(u8 mask) {
-	// Top switch press cannot be an accident:
-    return (last.fsw.bot.byte == 0) && (curr.fsw.bot.byte == 0) && (last.fsw.top.byte == 0) && (curr.fsw.top.byte == mask);
-}
+// Top switch press cannot be an accident:
+#define is_top_button_pressed(mask) \
+    ((last.fsw.bot.byte == 0) && (curr.fsw.bot.byte == 0) && (last.fsw.top.byte == 0) && (curr.fsw.top.byte == mask))
 
-static u8 is_bot_button_pressed(u8 mask) {
-	// Always switch programs regardless of whether a top switch was accidentally depressed:
-    return (last.fsw.bot.byte == 0) && (curr.fsw.bot.byte == mask);
-}
+// Always switch programs regardless of whether a top switch was accidentally depressed:
+#define is_bot_button_pressed(mask) \
+    ((last.fsw.bot.byte == 0) && (curr.fsw.bot.byte == mask))
 
-static u8 is_top_button_released(u8 mask) {
-    return ((last.fsw.top.byte & mask) == mask) && ((curr.fsw.top.byte & mask) == 0);
-}
+#define is_top_button_released(mask) \
+    (((last.fsw.top.byte & mask) == mask) && ((curr.fsw.top.byte & mask) == 0))
 
-static u8 is_bot_button_released(u8 mask) {
-    return ((last.fsw.bot.byte & mask) == mask) && ((curr.fsw.bot.byte & mask) == 0);
-}
+#define is_bot_button_released(mask) \
+    (((last.fsw.bot.byte & mask) == mask) && ((curr.fsw.bot.byte & mask) == 0))
 
-static u8 is_top_button_held(u8 mask) {
-    return (curr.fsw.bot.byte == 0) && (curr.fsw.top.byte == mask);
-}
+#define is_top_button_held(mask) \
+    ((curr.fsw.bot.byte == 0) && (curr.fsw.top.byte == mask))
 
-static u8 is_bot_button_held(u8 mask) {
-    return (curr.fsw.top.byte == 0) && (curr.fsw.bot.byte == mask);
-}
+#define is_bot_button_held(mask) \
+    ((curr.fsw.top.byte == 0) && (curr.fsw.bot.byte == mask))
 
 static s8 ritoa(char *dst, s8 col, u8 n) {
 	do {
@@ -492,8 +470,8 @@ static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
     // Bottom row:
     labels = label_row_get(0);
-    labels[0] = "1 AND 2";
-    labels[1] = "1 OR 2";
+    labels[0] = "BOTH";
+    labels[1] = "MG/JD";
     labels[2] = "VOL=0";
     labels[3] = "VOL--";
     labels[4] = "VOL++";
