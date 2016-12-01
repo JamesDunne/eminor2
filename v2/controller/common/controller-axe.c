@@ -16,8 +16,8 @@ LIVE:
 |                                             PR_ONE         |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   AMP1   AMP2   VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
-|  RESET1 RESET2  VOL=6                 MODE  SC_ONE         |
+|   BOTH   MG/JD  VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
+|          RESET  VOL=6                 MODE  SC_DEL SC_INS  |
 |------------------------------------------------------------|
 
 Top row of buttons controls selected amp settings
@@ -87,6 +87,8 @@ struct amp {
 // amp state is 2 bytes:
 COMPILE_ASSERT(sizeof(struct amp) == 2);
 
+#define scene_count_max 10
+
 // Program v4 (next gen) data structure loaded from / written to flash memory:
 struct program {
     // Index into the name table for the name of the program (song):
@@ -102,7 +104,7 @@ struct program {
         u16 name_index;
         // 2 amps:
         struct amp amp[2];
-    } scene[10];
+    } scene[scene_count_max];
 };
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
@@ -314,6 +316,10 @@ static void prev_scene(void);
 
 static void next_scene(void);
 
+static void scene_delete(void);
+
+static void scene_insert(void);
+
 static void prev_song(void);
 
 static void next_song(void);
@@ -323,6 +329,8 @@ static void curr_amp_reset(void);
 static void toggle_setlist_mode(void);
 
 static void curr_amp_vol_toggle(void);
+
+static void scene_default(void);
 
 #define calc_mixer_level(volume) \
     volume_ramp[volume & 0x7F]
@@ -547,8 +555,8 @@ LIVE:
 |                                                            |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   1 & 2  1 | 2  VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
-|  RESET1 RESET2  VOL=6                 MODE  SC_ONE SC_ADD  |
+|   BOTH   MG/JD  VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
+|          RESET  VOL=6                 MODE  SC_DEL SC_INS  |
 |------------------------------------------------------------|
 */
 
@@ -690,8 +698,8 @@ void controller_10msec_timer(void) {
 
     one_shot(bot,6,0x7F,toggle_setlist_mode)
 
-    //one_shot(bot,7,0x7F)
-    //one_shot(bot,8,0x7F)
+    one_shot(bot,7,0x7F,scene_delete)
+    one_shot(bot,8,0x7F,scene_insert)
 
     repeater(top,7,0x20,0x07,prev_song)
     repeater(top,8,0x20,0x07,next_song)
@@ -758,15 +766,19 @@ void controller_handle(void) {
 
     // PREV/NEXT SCENE:
     if (is_bot_button_pressed(M_7)) {
-        prev_scene();
         timers.bot_7 = (u8)0x80;
     } else if (is_bot_button_released(M_7)) {
+        if ((timers.bot_7 & (u8)0x80) != (u8)0) {
+            prev_scene();
+        }
         timers.bot_7 = (u8)0x00;
     }
     if (is_bot_button_pressed(M_8)) {
-        next_scene();
         timers.bot_8 = (u8)0x80;
     } else if (is_bot_button_released(M_8)) {
+        if ((timers.bot_8 & (u8)0x80) != (u8)0) {
+            next_scene();
+        }
         timers.bot_8 = (u8)0x00;
     }
 
@@ -828,19 +840,14 @@ void controller_handle(void) {
         flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
 
         // Establish a sane default for an undefined program:
+        curr.sc_idx = 0;
         if (pr.name_index == (u16)0) {
-            DEBUG_LOG0("default program");
             pr.scene_count = 1;
-            pr.scene[0].name_index = 0;
-            pr.scene[0].amp[0].fx = fxm_dirty;
-            pr.scene[0].amp[0].volume = volume_0dB;
-            pr.scene[0].amp[1].fx = fxm_dirty;
-            pr.scene[0].amp[1].volume = volume_0dB;
+            scene_default();
         }
 
         // Trigger a scene reload:
-        curr.sc_idx = 0;
-        last.sc_idx = 255;
+        last.sc_idx = ~curr.sc_idx;
     }
 
     if (curr.sc_idx != last.sc_idx) {
@@ -860,6 +867,15 @@ void controller_handle(void) {
 
     // Record the previous state:
     last = curr;
+}
+
+void scene_default(void) {
+    DEBUG_LOG0("default scene");
+    pr.scene[curr.sc_idx].name_index = 0;
+    pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
+    pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
+    pr.scene[curr.sc_idx].amp[1].fx = fxm_dirty;
+    pr.scene[curr.sc_idx].amp[1].volume = volume_0dB;
 }
 
 static void toggle_setlist_mode() {
@@ -937,6 +953,43 @@ static void prev_scene() {
         DEBUG_LOG0("prev scene");
         curr.sc_idx--;
     }
+}
+
+static void scene_delete(void) {
+    u8 i;
+    if (pr.scene_count <= 1) {
+        return;
+    }
+
+    // Copy all scenes behind 1:
+    for (i = curr.sc_idx; i < pr.scene_count; i++) {
+        pr.scene[i] = pr.scene[i+1];
+    }
+
+    pr.scene_count--;
+
+    // Force a reload of current scene:
+    last.sc_idx = ~curr.sc_idx;
+}
+
+static void scene_insert(void) {
+    u8 i;
+    if (pr.scene_count >= scene_count_max) {
+        return;
+    }
+
+    // Copy all scenes ahead 1:
+    for (i = pr.scene_count; i > curr.sc_idx; i--) {
+        pr.scene[i] = pr.scene[i-1];
+    }
+
+    pr.scene_count++;
+
+    // Reset current scene to default:
+    scene_default();
+
+    // Force a reload of current scene:
+    last.sc_idx = ~curr.sc_idx;
 }
 
 static void curr_amp_vol_toggle() {
