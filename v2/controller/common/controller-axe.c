@@ -859,8 +859,8 @@ void controller_handle(void) {
         pr.scene[last.sc_idx].amp[0] = curr.amp[0];
         pr.scene[last.sc_idx].amp[1] = curr.amp[1];
 
-        // Check if scene is undefined:
-        if (pr.scene[curr.sc_idx].name_index == (u16)0) {
+        // Check if non-first scene is undefined:
+        if ((curr.sc_idx > 0) && (pr.scene[curr.sc_idx].name_index == (u16)0)) {
             // Copy last scene:
             pr.scene[curr.sc_idx] = pr.scene[curr.sc_idx - (u8)1];
             pr.scene[curr.sc_idx].name_index = (u16)0;
