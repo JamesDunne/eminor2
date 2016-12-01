@@ -115,26 +115,6 @@ void ReadButtons(void) {
       | ((TempButtons1.byte & (u8)(1 << 5)) >> 1)
       | ((TempButtons1.byte & (u8)(1 << 6)))
       | ((TempButtons1.byte & (u8)(1 << 7)) >> 2);
-
-//    ButtonStateBot = 0;
-//    if (!TempButtons0.bit0) setbit(ButtonStateBot, 2);
-//    if (!TempButtons0.bit1) setbit(ButtonStateBot, 1);
-//    if (!TempButtons0.bit2) setbit(ButtonStateBot, 0);
-//    if (!TempButtons0.bit3) setbit(ButtonStateBot, 3);
-//    if (!TempButtons0.bit4) setbit(ButtonStateBot, 7);
-//    if (!TempButtons0.bit5) setbit(ButtonStateBot, 4);
-//    if (!TempButtons0.bit6) setbit(ButtonStateBot, 6);
-//    if (!TempButtons0.bit7) setbit(ButtonStateBot, 5);
-//
-//    ButtonStateTop = 0;
-//    if (!TempButtons1.bit0) setbit(ButtonStateTop, 2);
-//    if (!TempButtons1.bit1) setbit(ButtonStateTop, 1);
-//    if (!TempButtons1.bit2) setbit(ButtonStateTop, 0);
-//    if (!TempButtons1.bit3) setbit(ButtonStateTop, 3);
-//    if (!TempButtons1.bit4) setbit(ButtonStateTop, 7);
-//    if (!TempButtons1.bit5) setbit(ButtonStateTop, 4);
-//    if (!TempButtons1.bit6) setbit(ButtonStateTop, 6);
-//    if (!TempButtons1.bit7) setbit(ButtonStateTop, 5);
 }
 
 void SetDipAddress(unsigned char Address) {
