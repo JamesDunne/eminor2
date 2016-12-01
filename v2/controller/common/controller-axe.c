@@ -240,9 +240,7 @@ static rom const char *name_get(u16 name_index) {
 }
 
 // Set Axe-FX CC value
-static void midi_set_axe_cc(u8 cc, u8 val) {
-    midi_send_cmd2(0xB, axe_midi_channel, cc, val);
-}
+#define midi_set_axe_cc(cc, val) midi_send_cmd2(0xB, axe_midi_channel, cc, val)
 
 // Top switch press cannot be an accident:
 #define is_top_button_pressed(mask) \
@@ -308,32 +306,30 @@ static void send_leds(void) {
 
 static void update_lcd(void);
 
-void curr_amp_vol_decrease(void);
+static void curr_amp_vol_decrease(void);
 
-void curr_amp_vol_increase(void);
+static void curr_amp_vol_increase(void);
 
-void prev_scene(void);
+static void prev_scene(void);
 
-void next_scene(void);
+static void next_scene(void);
 
-void prev_song(void);
+static void prev_song(void);
 
-void next_song(void);
+static void next_song(void);
 
-void curr_amp_reset(void);
+static void curr_amp_reset(void);
 
-void toggle_setlist_mode(void);
+static void toggle_setlist_mode(void);
 
-void curr_amp_vol_toggle(void);
+static void curr_amp_vol_toggle(void);
 
-static u8 calc_mixer_level(u8 volume) {
-    return volume_ramp[volume & 0x7F];
-}
+#define calc_mixer_level(volume) \
+    volume_ramp[volume & 0x7F]
 
-static u8 calc_cc_toggle(u8 enable) {
-    // TODO: replace me with branchless bit twiddling.
-    return enable == 0 ? (u8)0 : (u8)0x7F;
-}
+// TODO: replace me with branchless bit twiddling.
+#define calc_cc_toggle(enable) \
+    (enable == 0 ? (u8)0 : (u8)0x7F)
 
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
@@ -439,7 +435,7 @@ static void calc_midi(void) {
     }
 }
 
-void print_half(char *dst, u8 col, s8 volhalfdb) {
+static void print_half(char *dst, u8 col, s8 volhalfdb) {
     s8 i;
     if (volhalfdb < 0) {
         i = ritoa(dst, col, (u8) (-volhalfdb) >> 1);
@@ -866,7 +862,7 @@ void controller_handle(void) {
     last = curr;
 }
 
-void toggle_setlist_mode() {
+static void toggle_setlist_mode() {
     DEBUG_LOG0("change setlist mode");
     curr.setlist_mode ^= (u8)1;
     if (curr.setlist_mode == 1) {
@@ -887,7 +883,7 @@ void toggle_setlist_mode() {
     }
 }
 
-void curr_amp_reset() {
+static void curr_amp_reset() {
     if (curr.selected_both) {
         DEBUG_LOG0("reset amps");
         last.amp[0].fx = ~curr.amp[0].fx;
@@ -901,7 +897,7 @@ void curr_amp_reset() {
     }
 }
 
-void next_song() {
+static void next_song() {
     if (curr.setlist_mode == 0) {
         if (curr.pr_idx < 127) {
             DEBUG_LOG0("next program");
@@ -915,7 +911,7 @@ void next_song() {
     }
 }
 
-void prev_song() {
+static void prev_song() {
     if (curr.setlist_mode == 0) {
         if (curr.pr_idx > 0) {
             DEBUG_LOG0("prev program");
@@ -929,21 +925,21 @@ void prev_song() {
     }
 }
 
-void next_scene() {
+static void next_scene() {
     if (curr.sc_idx < pr.scene_count - 1) {
         DEBUG_LOG0("next scene");
         curr.sc_idx++;
     }
 }
 
-void prev_scene() {
+static void prev_scene() {
     if (curr.sc_idx > 0) {
         DEBUG_LOG0("prev scene");
         curr.sc_idx--;
     }
 }
 
-void curr_amp_vol_toggle() {
+static void curr_amp_vol_toggle() {
     // Toggle between 0dB and +6dB:
     if (curr.amp[curr.selected_amp].volume == volume_0dB) {
         curr.amp[curr.selected_amp].volume = volume_6dB;
@@ -952,13 +948,13 @@ void curr_amp_vol_toggle() {
     }
 }
 
-void curr_amp_vol_increase() {
+static void curr_amp_vol_increase() {
     if (curr.amp[curr.selected_amp].volume < (u8)127) {
         curr.amp[curr.selected_amp].volume++;
     }
 }
 
-void curr_amp_vol_decrease() {
+static void curr_amp_vol_decrease() {
     if (curr.amp[curr.selected_amp].volume > (u8)0) {
         curr.amp[curr.selected_amp].volume--;
     }
