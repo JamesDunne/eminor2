@@ -726,10 +726,12 @@ void controller_handle(void) {
 
     // AMP (1 or 2)
     if (is_bot_button_pressed(M_2)) {
-        curr.selected_amp ^= 1;
-        //curr.selected_both = 0;
         timers.bot_2 = (u8)0x80;
     } else if (is_bot_button_released(M_2)) {
+        if ((timers.bot_2 & (u8)0x80) != (u8)0) {
+            curr.selected_amp ^= 1;
+            //curr.selected_both = 0;
+        }
         timers.bot_2 = (u8)0;
     }
 
@@ -851,11 +853,19 @@ void controller_handle(void) {
     }
 
     if (curr.sc_idx != last.sc_idx) {
-        DEBUG_LOG0("scene change");
+        DEBUG_LOG0("load scene");
 
         // Store last state into program for recall:
         pr.scene[last.sc_idx].amp[0] = curr.amp[0];
         pr.scene[last.sc_idx].amp[1] = curr.amp[1];
+
+        // Check if scene is undefined:
+        if (pr.scene[curr.sc_idx].name_index == (u16)0) {
+            // Copy last scene:
+            pr.scene[curr.sc_idx] = pr.scene[curr.sc_idx - (u8)1];
+            pr.scene[curr.sc_idx].name_index = (u16)0;
+            //scene_default();
+        }
 
         // Copy new scene settings into current state:
         curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
@@ -942,7 +952,8 @@ static void prev_song() {
 }
 
 static void next_scene() {
-    if (curr.sc_idx < pr.scene_count - 1) {
+    // Purposely allowing moving past last-defined scene so scene_insert will work as append.
+    if (curr.sc_idx < pr.scene_count) {
         DEBUG_LOG0("next scene");
         curr.sc_idx++;
     }
@@ -957,7 +968,8 @@ static void prev_scene() {
 
 static void scene_delete(void) {
     u8 i;
-    if (pr.scene_count <= 1) {
+
+    if ((pr.scene_count <= 1) || (curr.sc_idx >= pr.scene_count)) {
         return;
     }
 
@@ -967,6 +979,9 @@ static void scene_delete(void) {
     }
 
     pr.scene_count--;
+    if (curr.sc_idx >= pr.scene_count) {
+        curr.sc_idx = pr.scene_count - (u8)1;
+    }
 
     // Force a reload of current scene:
     last.sc_idx = ~curr.sc_idx;
