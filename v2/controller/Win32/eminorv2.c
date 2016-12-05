@@ -91,6 +91,8 @@ static io16 led_state;
 
 static HWND hwndMain;
 
+static UINT IDT_TIMER10MS = 101, IDT_TIMER40MS = 102;
+
 // MIDI I/O:
 
 #ifdef FEAT_MIDI
@@ -211,8 +213,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
     for (int i = 0; i < 8; i++) {
         labels[0][i] = (WCHAR *)malloc(sizeof(WCHAR) * 21);
         labels[1][i] = (WCHAR *)malloc(sizeof(WCHAR) * 21);
-        labels_ascii[0][i] = (u8 *)malloc(sizeof(u8) * 20);
-        labels_ascii[1][i] = (u8 *)malloc(sizeof(u8) * 20);
+        labels_ascii[0][i] = (char *)malloc(sizeof(char) * 20);
+        labels_ascii[1][i] = (char *)malloc(sizeof(char) * 20);
     }
 
 #endif
@@ -230,28 +232,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
     ShowWindow(hwndMain, nCmdShow);
     UpdateWindow(hwndMain);
 
+    SetTimer(hwndMain, IDT_TIMER10MS, 10, (TIMERPROC) NULL);
+
     PeekMessage(&Msg, NULL, 0, 0, PM_NOREMOVE);
 
     // default Win32 message pump
-    DWORD timeLast = timeGetTime();
+    //DWORD timeLast = timeGetTime();
     while (Msg.message != WM_QUIT) {
-        if (PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE)) {
-            TranslateMessage(&Msg);
-            DispatchMessage(&Msg);
-        } else {
-            // handle the 10ms timer:
-            DWORD timeCurr = timeGetTime();
-            if (timeCurr - timeLast >= 10) {
-                controller_10msec_timer();
-                timeLast = timeCurr;
-            }
-
-            // give control to the logic controller:
-            controller_handle();
-
-            // yield CPU since we don't need much:
-            Sleep(1);
+        if (!GetMessage(&Msg, NULL, 0, 0)) {
+            break;
         }
+        TranslateMessage(&Msg);
+        DispatchMessage(&Msg);
     }
 
     return 0;
@@ -694,6 +686,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             }
 #endif
             PostQuitMessage(0);
+            break;
+        case WM_TIMER:
+            // TODO: sample buttons on 40ms interval to replicate PIC behavior.
+            if (wParam == IDT_TIMER10MS) {
+                // handle the 10ms timer:
+                controller_10msec_timer();
+
+                // give control to the logic controller:
+                controller_handle();
+            }
             break;
         case WM_PAINT:
             paintFacePlate(hwnd);
