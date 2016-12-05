@@ -4,12 +4,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Even Flow
@@ -17,12 +17,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Zero
@@ -30,78 +30,78 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay, pitch]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay, pitch]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Wonderwall
@@ -109,12 +109,12 @@ programs:
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: []
 - name: Buddy Holly
@@ -122,34 +122,34 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Plush
@@ -157,12 +157,12 @@ programs:
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: [chorus]
 - name: Come Out and Play
@@ -170,12 +170,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Drive
@@ -183,12 +183,12 @@ programs:
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: []
 - name: When I Come Around
@@ -196,34 +196,34 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Everything Zen
@@ -231,78 +231,78 @@ programs:
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Enter Sandman
@@ -310,100 +310,100 @@ programs:
   - name: Clean intro
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: -1.0
       fx: []
   - name: Intro
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: -4.5
       fx: []
   - name: Verse
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
   - name: JD lead;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 2
       fx: [delay]
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
 - name: Crawling in the Dark
@@ -411,89 +411,89 @@ programs:
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 2
       fx: [filter, delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 2
       fx: [filter, delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 2
       fx: [filter, delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 2
       fx: [filter, delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Song 2
@@ -501,67 +501,67 @@ programs:
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Sex Type Thing
@@ -569,12 +569,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Mr Jones
@@ -582,12 +582,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Counting Blue Cars
@@ -595,100 +595,100 @@ programs:
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: [delay]
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: [chorus, delay]
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: [delay]
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: [chorus, delay]
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: [delay]
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: [chorus, delay]
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: [delay]
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
 - name: In Bloom
@@ -696,34 +696,34 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Hash Pipe
@@ -731,34 +731,34 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: My Hero
@@ -766,12 +766,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Machinehead
@@ -779,12 +779,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Holiday
@@ -792,34 +792,34 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD dirty;MG lead
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Closing Time
@@ -827,34 +827,34 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Brain Stew
@@ -862,12 +862,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Bound for the Floor
@@ -875,34 +875,34 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: [delay, chorus]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: I Alone
@@ -910,12 +910,12 @@ programs:
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: [delay, chorus]
 - name: Cumbersome
@@ -923,12 +923,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Lump
@@ -936,12 +936,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Hey Jealousy
@@ -949,12 +949,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Kryptonite
@@ -962,111 +962,111 @@ programs:
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD dirty;MG lead
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG lead
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD dirty;MG lead
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Dammit
@@ -1074,12 +1074,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Semi-charmed Life
@@ -1087,12 +1087,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: My Own Worst Enemy
@@ -1100,12 +1100,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: The Middle
@@ -1113,45 +1113,45 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 4
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: -1
       fx: [filter, delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Bullet With Butterfly Wings
@@ -1159,89 +1159,89 @@ programs:
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD lead;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: -3
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 4
       fx: [chorus]
 - name: If You Could Only See
@@ -1249,12 +1249,12 @@ programs:
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 3
       fx: [delay]
 - name: Beautiful Disaster
@@ -1262,12 +1262,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Bells
@@ -1275,23 +1275,23 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
 - name: Fuel
@@ -1299,56 +1299,56 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 2
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 4
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 2
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: What I Got
@@ -1356,56 +1356,56 @@ programs:
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 6
       fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 6
       fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
 - name: Say It Aint So
@@ -1413,78 +1413,78 @@ programs:
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 4
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
 - name: Shine
@@ -1492,12 +1492,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Basketcase
@@ -1505,12 +1505,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Breed
@@ -1518,12 +1518,12 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Lithium
@@ -1531,67 +1531,67 @@ programs:
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
 - name: Undone
@@ -1599,78 +1599,78 @@ programs:
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD clean;MG clean
     MG:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
     JD:
       xy: X
-      channel: clean
+      gain: 0
       level: 0
       fx: []
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
   - name: JD lead;MG dirty
     MG:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 0
       fx: []
     JD:
       xy: X
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [delay]
 - name: Story of a Girl
@@ -1678,48 +1678,48 @@ programs:
   - name: Rhythm
     MG:
       xy: Y
-      channel: dirty
+      gain: 57.5
     JD:
       xy: Y
-      channel: dirty
+      gain: 57.5
   - name: JD lead
     MG:
       xy: Y
-      channel: dirty
+      gain: 57.5
     JD:
       xy: Y
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [chorus]
   - name: Rhythm
     MG:
       xy: Y
-      channel: dirty
+      gain: 57.5
     JD:
       xy: Y
-      channel: dirty
+      gain: 57.5
 - name: Trippin
   scenes:
   - name: Rhythm
     MG:
       xy: Y
-      channel: dirty
+      gain: 57.5
     JD:
       xy: Y
-      channel: dirty
+      gain: 57.5
   - name: JD lead
     MG:
       xy: Y
-      channel: dirty
+      gain: 57.5
     JD:
       xy: Y
-      channel: dirty
+      gain: 57.5
       level: 6
       fx: [chorus]
   - name: Rhythm
     MG:
       xy: Y
-      channel: dirty
+      gain: 57.5
     JD:
       xy: Y
-      channel: dirty
+      gain: 57.5

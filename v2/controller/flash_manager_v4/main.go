@@ -34,10 +34,10 @@ const (
 )
 
 type Ampv4 struct {
-	XY      string   `yaml:"xy"`      // "X" or "Y" amp settings
-	Channel string   `yaml:"channel"` // "clean" or "dirty"
-	Level   float64  `yaml:"level"`   // dB
-	FX      []string `yaml:"fx,flow"` // any combo of "delay", "pitch", or "chorus"
+	XY    string   `yaml:"xy"`      // "X" or "Y" amp settings
+	Gain  float64  `yaml:"gain"` 	// 0 = clean, 100 = dirty
+	Level float64  `yaml:"level"`   // dB
+	FX    []string `yaml:"fx,flow"` // any combo of "delay", "pitch", or "chorus"
 }
 
 type SceneDescriptorv4 struct {
@@ -367,6 +367,12 @@ func generatePICH() {
 
 		// Copy scenes:
 		/*
+			struct amp {
+				u8 gain;    // amp gain (7-bit) values 0-127 are mapped to 0%-100%; 0x49 is about 57.5%.
+				u8 fx;
+				u8 volume;  // volume (7-bit) represented as half-dB where 0dB = 127-12, +6dB = 127.
+			};
+
 			struct program {
 			    // Index into the name table for the name of the program (song):
 			    u16 name_index;
@@ -377,8 +383,6 @@ func generatePICH() {
 
 			    // Scene descriptors (5 bytes each):
 			    struct scene_descriptor {
-			        // Index into the name table for the name of the scene:
-			        u16 name_index;
 			        // 2 amps:
 			        struct amp amp[2];
 			    } scene[10];
@@ -389,25 +393,26 @@ func generatePICH() {
 		bw.WriteDecimal(uint8(len(p.SceneDescriptors)))
 		bw.WriteDecimal(0)
 
-		// Write scene descriptors (5 bytes each):
+		// Write scene descriptors (6 bytes each):
 		n := 0
 		for _, s := range p.SceneDescriptors {
 			n++
 
 			// Write name_table index of scene name:
-			write_name_table_idx(s.Name)
+			//write_name_table_idx(s.Name)
 
 			// Write amp descriptors:
 			for _, amp := range []*Ampv4{&s.MG, &s.JD} {
-				b1, b2 := byte(0), byte(0)
-				if amp.Channel == "dirty" {
-					b1 |= FX4_Dirty
-				}
+				b0, b1, b2 := byte(0), byte(0), byte(0)
+
+				// Calculate amp gain from 0-127:
+				b0 = byte(amp.Gain * 127. / 100.)
+
+				// Calculate FX bits:
 				if amp.XY == "Y" {
 					b1 |= FX4_XY
 				}
 				for _, effect := range amp.FX {
-
 					if effect == "delay" {
 						b1 |= FX4_Delay
 					} else if effect == "pitch" {
@@ -419,14 +424,17 @@ func generatePICH() {
 					}
 				}
 
+				// Bounds for volume:
 				if amp.Level < -57.5 {
 					amp.Level = -57.5
 				}
 				if amp.Level > 6 {
 					amp.Level = 6
 				}
+				// Calculate final volume in half-dB from 0-127:
 				b2 = uint8((amp.Level * 2) + (127 - 12))
 
+				bw.WriteHex(b0)
 				bw.WriteHex(b1)
 				bw.WriteHex(b2)
 			}
@@ -722,9 +730,9 @@ func main() {
 
 				s4.Name = ""
 				if s3.Channel == 1 {
-					s4.JD.Channel = "clean"
+					s4.JD.Gain = 0
 				} else {
-					s4.JD.Channel = "dirty"
+					s4.JD.Gain = 57.5
 				}
 				s4.JD.XY = "X"
 
@@ -751,9 +759,9 @@ func main() {
 				}
 
 				if s3.AxeScene == 1 {
-					s4.MG.Channel = "clean"
+					s4.MG.Gain = 0
 				} else {
-					s4.MG.Channel = "dirty"
+					s4.MG.Gain = 57.5
 				}
 				s4.MG.XY = "X"
 				if s3.AxeScene == 4 {
