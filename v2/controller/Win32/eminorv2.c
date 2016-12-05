@@ -450,8 +450,8 @@ void paintFacePlate(HWND hwnd) {
     const double lcdCenterY = 1.25;
 
     // Draw PCB outline:
-    SelectObject(hDC, brsWhite);
-    dpi_Rectangle(hDC, lcdCenterX - ((98 * mmToIn) * 0.5), lcdCenterY - (60 * mmToIn * 0.5), lcdCenterX + ((98 * mmToIn) * 0.5), lcdCenterY + (60 * mmToIn * 0.5));
+    //SelectObject(hDC, brsWhite);
+    //dpi_Rectangle(hDC, lcdCenterX - ((98 * mmToIn) * 0.5), lcdCenterY - (60 * mmToIn * 0.5), lcdCenterX + ((98 * mmToIn) * 0.5), lcdCenterY + (60 * mmToIn * 0.5));
 
     // Draw screw mounting holes:
     const double screwRadius = 1.25 * mmToIn;
@@ -811,6 +811,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             }
             InvalidateRect(hwnd, NULL, TRUE);
             break;
+        case WM_GETMINMAXINFO: {
+            // Specify max window bounds:
+            DefWindowProc(hwnd, Message, wParam, lParam);
+            MINMAXINFO* pmmi = (MINMAXINFO*)lParam;
+            pmmi->ptMaxTrackSize.x = (int)(inWidth * dpi) + 6;
+            pmmi->ptMaxTrackSize.y = (int)(inHeight * dpi) + 28;
+            return 0;
+        }
         default:
             return DefWindowProc(hwnd, Message, wParam, lParam);
     }
