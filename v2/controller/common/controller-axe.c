@@ -664,6 +664,8 @@ struct timers {
     u8 bot_6;
 } timers;
 
+u8 val;
+
 // called every 10ms
 void controller_10msec_timer(void) {
 #define one_shot(row,n,max,op_func) \
@@ -706,6 +708,23 @@ void controller_10msec_timer(void) {
 
 #undef repeater
 #undef one_shot
+
+#if 0
+    // TESTING; change gain of both amps with a triangle oscillator:
+    midi_set_axe_cc(axe_cc_external3, (val & (u8)0x7F));
+    midi_set_axe_cc(axe_cc_external4, (val & (u8)0x7F));
+    if ((val & (u8)0x80) == (u8)0x80) {
+        val--;
+        if ((val & (u8)0x7F) == (u8)0) {
+            val &= ~(u8)0x80;
+        }
+    } else {
+        val++;
+        if ((val & (u8)0x7F) == (u8)127) {
+            val |= (u8)0x80;
+        }
+    }
+#endif
 }
 
 // main control loop
