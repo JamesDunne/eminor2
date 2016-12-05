@@ -77,6 +77,7 @@ GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/
 #define toggle_bit(name,e) e = e ^ fxm_##name
 
 struct amp {
+    u8 gain;    // amp gain (7-bit) values 0-127 are mapped to 0%-100%; 0x49 is about 57.5%.
     u8 fx;
     u8 volume;  // volume (7-bit) represented as half-dB where 0dB = 127-12, +6dB = 127.
 };
@@ -85,7 +86,7 @@ struct amp {
 #define volume_6dB (127)
 
 // amp state is 2 bytes:
-COMPILE_ASSERT(sizeof(struct amp) == 2);
+COMPILE_ASSERT(sizeof(struct amp) == 3);
 
 #define scene_count_max 10
 
@@ -100,8 +101,6 @@ struct program {
 
     // Scene descriptors (5 bytes each):
     struct scene_descriptor {
-        // Index into the name table for the name of the scene:
-        u16 name_index;
         // 2 amps:
         struct amp amp[2];
     } scene[scene_count_max];
@@ -312,6 +311,10 @@ static void curr_amp_vol_decrease(void);
 
 static void curr_amp_vol_increase(void);
 
+static void curr_amp_gain_decrease(void);
+
+static void curr_amp_gain_increase(void);
+
 static void prev_scene(void);
 
 static void next_scene(void);
@@ -339,26 +342,35 @@ static void scene_default(void);
 #define calc_cc_toggle(enable) \
     (enable == 0 ? (u8)0 : (u8)0x7F)
 
+#define is_dirty(gain) \
+    (gain >= (u8)0x10)
+
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     u8 diff = 0;
-    u8 dirty;
+    u8 gain, dirty;
     u8 xy;
 
     // Send gain controller changes:
-    dirty = read_bit(dirty, curr.amp[0].fx);
-    if (dirty != read_bit(dirty, last.amp[0].fx)) {
-        DEBUG_LOG1("MIDI set AMP1 %s", dirty == 0 ? "clean" : "dirty");
-        midi_set_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : (u8)0x49);
-        midi_set_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(dirty));
-        midi_set_axe_cc(axe_cc_byp_compressor1, calc_cc_toggle(!dirty));
+    gain = curr.amp[0].gain;
+    dirty = (u8)is_dirty(gain);
+    if (gain != last.amp[0].gain) {
+        DEBUG_LOG1("MIDI set AMP1 gain=%d", gain);
+        midi_set_axe_cc(axe_cc_external3, gain & (u8)0x7F);
+        if (dirty != is_dirty(last.amp[0].gain)) {
+            midi_set_axe_cc(axe_cc_byp_gate1, dirty ? (u8) 0x7F : (u8) 0x00);
+            midi_set_axe_cc(axe_cc_byp_compressor1, dirty ? (u8) 0x00 : (u8) 0x7F);
+        }
     }
-    dirty = read_bit(dirty, curr.amp[1].fx);
-    if (dirty != read_bit(dirty, last.amp[1].fx)) {
-        DEBUG_LOG1("MIDI set AMP2 %s", dirty == 0 ? "clean" : "dirty");
-        midi_set_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : (u8)0x49);
-        midi_set_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(dirty));
-        midi_set_axe_cc(axe_cc_byp_compressor2, calc_cc_toggle(!dirty));
+    gain = curr.amp[1].gain;
+    dirty = (u8)is_dirty(gain);
+    if (gain != last.amp[1].gain) {
+        DEBUG_LOG1("MIDI set AMP2 gain=%d", gain);
+        midi_set_axe_cc(axe_cc_external4, gain & (u8)0x7F);
+        if (dirty != is_dirty(last.amp[1].gain)) {
+            midi_set_axe_cc(axe_cc_byp_gate2, is_dirty(gain) ? (u8) 0x7F : (u8) 0x00);
+            midi_set_axe_cc(axe_cc_byp_compressor2, is_dirty(gain) ? (u8) 0x00 : (u8) 0x7F);
+        }
     }
 
     // Send X/Y changes:
@@ -486,8 +498,8 @@ static void update_lcd(void) {
 
     // Top row:
     labels = label_row_get(1);
-    labels[0] = "DIRTY";
-    labels[1] = "X/Y";
+    labels[0] = "GAIN--";
+    labels[1] = "GAIN++";
     labels[2] = "PITCH";
     labels[3] = "CHORUS";
     labels[4] = "DELAY";
@@ -498,49 +510,57 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_COLS; ++i) {
-        lcd_rows[0][i] = "MG  0.0dB  JD  0.0dB"[i];
+        lcd_rows[0][i] = "                    "[i];
         lcd_rows[1][i] = "                    "[i];
-        lcd_rows[2][i] = "                    "[i];
+        lcd_rows[2][i] = "MG  0.0dB  JD  0.0dB"[i];
         lcd_rows[3][i] = "                    "[i];
     }
 
-    lcd_rows[0][2] = (curr.selected_amp == 0) ? (char)'*' : (char)' ';
-    lcd_rows[0][13] = (curr.selected_amp == 1) ? (char)'*' : (char)' ';
+    lcd_rows[2][2] = (curr.selected_amp == 0) ? (char)'*' : (char)' ';
+    lcd_rows[2][13] = (curr.selected_amp == 1) ? (char)'*' : (char)' ';
 
     // Print volume levels:
     volhalfdb = (s8)curr.amp[0].volume - (s8)volume_0dB;
-    print_half(lcd_rows[0], 4, volhalfdb);
+    print_half(lcd_rows[2], 4, volhalfdb);
     volhalfdb = (s8)curr.amp[1].volume - (s8)volume_0dB;
-    print_half(lcd_rows[0], 15, volhalfdb);
+    print_half(lcd_rows[2], 15, volhalfdb);
 
     // Print setlist date:
 
     if (curr.setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = "Program         #   "[i];
+            lcd_rows[0][i] = "Program         #   "[i];
         }
-        ritoa(lcd_rows[1], 19, curr.pr_idx + 1);
+        ritoa(lcd_rows[0], 19, curr.pr_idx + 1);
     } else {
         // Show setlist data:
         u8 yyyy = sl.d1 >> 1;
         u8 mm = ((sl.d1 & (u8)1) << 3) | (sl.d0 >> 5);
         u8 dd = (sl.d0 & (u8)31);
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = "2014-01-01       # 0"[i];
+            lcd_rows[0][i] = "2014-01-01       # 0"[i];
         }
-        ritoa(lcd_rows[1], 3, yyyy + (u8)14);
-        ritoa(lcd_rows[1], 6, mm + (u8)1);
-        ritoa(lcd_rows[1], 9, dd + (u8)1);
-
-        ritoa(lcd_rows[1], 19, curr.sl_idx + (u8)1);
+        ritoa(lcd_rows[0], 3, yyyy + (u8)14);
+        ritoa(lcd_rows[0], 6, mm + (u8)1);
+        ritoa(lcd_rows[0], 9, dd + (u8)1);
+        ritoa(lcd_rows[0], 19, curr.sl_idx + (u8)1);
     }
 
-
+    // Program name:
     pr_name = name_get(pr.name_index);
-    sc_name = name_get(pr.scene[curr.sc_idx].name_index);
-    copy_str_lcd(pr_name, lcd_rows[2]);
-    copy_str_lcd(sc_name, lcd_rows[3]);
+    copy_str_lcd(pr_name, lcd_rows[1]);
 
+    // Amp status on row 4:
+    //  01234567890123456789
+    // "Xpcdf127 Xpcdf127 31";
+
+    lcd_rows[3][ 0] = (char)'X' + (char)read_bit(xy, curr.amp[0].fx);
+    lcd_rows[3][ 1] = (char)'P' | (char)(!read_bit(pitch, curr.amp[0].fx) << 5);
+
+    lcd_rows[3][ 9] = (char)'X' + (char)read_bit(xy, curr.amp[1].fx);
+    lcd_rows[3][10] = (char)'P' | (char)(!read_bit(pitch, curr.amp[1].fx) << 5);
+
+    // Scene number on last column:
     ritoa(lcd_rows[3], 19, curr.sc_idx + (u8) 1);
 
     lcd_updated_all();
@@ -562,14 +582,14 @@ LIVE:
 
 static void calc_leds(void) {
     if (curr.selected_both) {
-        curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[0].fx) | read_bit(dirty,  curr.amp[1].fx);
+        curr.mode_leds[curr.mode].top.bits._1 = (u8)is_dirty(curr.amp[0].gain) | (u8)is_dirty(curr.amp[1].gain);
         curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[0].fx) | read_bit(xy,     curr.amp[1].fx);
         curr.mode_leds[curr.mode].top.bits._3 = read_bit(pitch,  curr.amp[0].fx) | read_bit(pitch,  curr.amp[1].fx);
         curr.mode_leds[curr.mode].top.bits._4 = read_bit(chorus, curr.amp[0].fx) | read_bit(chorus, curr.amp[1].fx);
         curr.mode_leds[curr.mode].top.bits._5 = read_bit(delay,  curr.amp[0].fx) | read_bit(delay,  curr.amp[1].fx);
         curr.mode_leds[curr.mode].top.bits._6 = read_bit(filter, curr.amp[0].fx) | read_bit(filter, curr.amp[1].fx);
     } else {
-        curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[curr.selected_amp].fx);
+        curr.mode_leds[curr.mode].top.bits._1 = (u8)is_dirty(curr.amp[0].gain);
         curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[curr.selected_amp].fx);
         curr.mode_leds[curr.mode].top.bits._3 = read_bit(pitch,  curr.amp[curr.selected_amp].fx);
         curr.mode_leds[curr.mode].top.bits._4 = read_bit(chorus, curr.amp[curr.selected_amp].fx);
@@ -656,6 +676,8 @@ struct timers {
     u8 bot_5;
     u8 bot_7;
     u8 bot_8;
+    u8 top_1;
+    u8 top_2;
     u8 top_7;
     u8 top_8;
     // Once-only timers:
@@ -703,6 +725,8 @@ void controller_10msec_timer(void) {
     one_shot(bot,7,0x7F,scene_delete)
     one_shot(bot,8,0x7F,scene_insert)
 
+    repeater(top,1,0x20,0x07,curr_amp_gain_decrease)
+    repeater(top,2,0x20,0x07,curr_amp_gain_increase)
     repeater(top,7,0x20,0x07,prev_song)
     repeater(top,8,0x20,0x07,next_song)
 
@@ -813,12 +837,22 @@ void controller_handle(void) {
             toggle_bit(name, curr.amp[curr.selected_amp].fx); \
         }
 
+    // GAIN--
     if (is_top_button_pressed(M_1)) {
-        toggle_fx(dirty)
+        curr_amp_gain_decrease();
+        timers.top_1 = (u8)0x80;
+    } else if (is_top_button_released(M_1)) {
+        timers.top_1 = (u8)0x00;
     }
+    // GAIN++
     if (is_top_button_pressed(M_2)) {
-        toggle_fx(xy)
+        curr_amp_gain_increase();
+        timers.top_2 = (u8)0x80;
+    } else if (is_top_button_released(M_2)) {
+        timers.top_2 = (u8)0x00;
     }
+    // TODO: need `toggle_fx(xy)` button
+
     if (is_top_button_pressed(M_3)) {
         toggle_fx(pitch)
     }
@@ -878,14 +912,6 @@ void controller_handle(void) {
         pr.scene[last.sc_idx].amp[0] = curr.amp[0];
         pr.scene[last.sc_idx].amp[1] = curr.amp[1];
 
-        // Check if non-first scene is undefined:
-        if ((curr.sc_idx > 0) && (pr.scene[curr.sc_idx].name_index == (u16)0)) {
-            // Copy last scene:
-            pr.scene[curr.sc_idx] = pr.scene[curr.sc_idx - (u8)1];
-            pr.scene[curr.sc_idx].name_index = (u16)0;
-            //scene_default();
-        }
-
         // Copy new scene settings into current state:
         curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
         curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
@@ -898,12 +924,47 @@ void controller_handle(void) {
     last = curr;
 }
 
-void scene_default(void) {
+static void curr_amp_gain_increase() {
+    if (curr.selected_both) {
+        u8 gain = curr.amp[0].gain;
+        if (curr.amp[1].gain > gain) {
+            gain = curr.amp[1].gain;
+        }
+        if (gain < 127) {
+            curr.amp[0].gain = gain + (u8)1;
+            curr.amp[1].gain = gain + (u8)1;
+        }
+    } else {
+        if (curr.amp[curr.selected_amp].gain < 127) {
+            curr.amp[curr.selected_amp].gain++;
+        }
+    }
+}
+
+static void curr_amp_gain_decrease() {
+    if (curr.selected_both) {
+        u8 gain = curr.amp[0].gain;
+        if (curr.amp[1].gain > gain) {
+            gain = curr.amp[1].gain;
+        }
+        if (gain > 0) {
+            curr.amp[0].gain = gain - (u8)1;
+            curr.amp[1].gain = gain - (u8)1;
+        }
+    } else {
+        if (curr.amp[curr.selected_amp].gain > 0) {
+            curr.amp[curr.selected_amp].gain--;
+        }
+    }
+}
+
+static void scene_default(void) {
     DEBUG_LOG0("default scene");
-    pr.scene[curr.sc_idx].name_index = 0;
-    pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
+    pr.scene[curr.sc_idx].amp[0].gain = 0x49;
+    pr.scene[curr.sc_idx].amp[0].fx = 0;
     pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
-    pr.scene[curr.sc_idx].amp[1].fx = fxm_dirty;
+    pr.scene[curr.sc_idx].amp[1].gain = 0x49;
+    pr.scene[curr.sc_idx].amp[1].fx = 0;
     pr.scene[curr.sc_idx].amp[1].volume = volume_0dB;
 }
 
