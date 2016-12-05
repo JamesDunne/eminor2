@@ -526,7 +526,7 @@ void paintFacePlate(HWND hwnd) {
     }
 
     DeleteObject(lcdBMP);
-    DeleteObject(lcdDC);
+    DeleteDC(lcdDC);
 
     if (show_dimensions) {
         // 4 corners of LCD's PCB:
