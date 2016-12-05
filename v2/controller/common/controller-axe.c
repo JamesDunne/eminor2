@@ -717,18 +717,19 @@ void controller_10msec_timer(void) {
 
     one_shot(bot,2,0x7F,curr_amp_reset)
 
-    repeater(bot,4,0x20,0x07,curr_amp_vol_decrease)
-    repeater(bot,5,0x20,0x07,curr_amp_vol_increase)
+    repeater(bot,4,0x20,0x03,curr_amp_vol_decrease)
+    repeater(bot,5,0x20,0x03,curr_amp_vol_increase)
 
     one_shot(bot,6,0x7F,toggle_setlist_mode)
 
     one_shot(bot,7,0x7F,scene_delete)
     one_shot(bot,8,0x7F,scene_insert)
 
-    repeater(top,1,0x20,0x07,curr_amp_gain_decrease)
-    repeater(top,2,0x20,0x07,curr_amp_gain_increase)
-    repeater(top,7,0x20,0x07,prev_song)
-    repeater(top,8,0x20,0x07,next_song)
+    // TODO: hold down DIRTY button and use VOL--/VOL++ buttons to affect gain
+    repeater(top,1,0x20,0x01,curr_amp_gain_decrease)
+    repeater(top,2,0x20,0x01,curr_amp_gain_increase)
+    repeater(top,7,0x20,0x03,prev_song)
+    repeater(top,8,0x20,0x03,next_song)
 
 #undef repeater
 #undef one_shot
