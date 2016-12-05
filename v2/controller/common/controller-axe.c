@@ -349,14 +349,14 @@ static void calc_midi(void) {
     dirty = read_bit(dirty, curr.amp[0].fx);
     if (dirty != read_bit(dirty, last.amp[0].fx)) {
         DEBUG_LOG1("MIDI set AMP1 %s", dirty == 0 ? "clean" : "dirty");
-        midi_set_axe_cc(axe_cc_external3, calc_cc_toggle(dirty));
+        midi_set_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : (u8)0x49);
         midi_set_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(dirty));
         midi_set_axe_cc(axe_cc_byp_compressor1, calc_cc_toggle(!dirty));
     }
     dirty = read_bit(dirty, curr.amp[1].fx);
     if (dirty != read_bit(dirty, last.amp[1].fx)) {
         DEBUG_LOG1("MIDI set AMP2 %s", dirty == 0 ? "clean" : "dirty");
-        midi_set_axe_cc(axe_cc_external4, calc_cc_toggle(dirty));
+        midi_set_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : (u8)0x49);
         midi_set_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(dirty));
         midi_set_axe_cc(axe_cc_byp_compressor2, calc_cc_toggle(!dirty));
     }
