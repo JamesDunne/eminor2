@@ -16,24 +16,22 @@ LIVE:
 |                                             PR_ONE         |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   BOTH   MG/JD  VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
-|          RESET  VOL=6                 MODE  SC_DEL SC_INS  |
+|   BOTH   MG/JD  RESET   DEC    INC    TAP   SC_PRV SC_NXT  |
+|          RESET                        MODE  SC_DEL SC_INS  |
 |------------------------------------------------------------|
 
 Top row of buttons controls selected amp settings
 
-Press AMP1   to select AMP1 for modification on top row
-Press AMP2   to select AMP2 for modification on top row
-Hold  RESET1 to reset AMP1 to basic dirty tone and select AMP1
-Hold  RESET2 to reset AMP2 to basic dirty tone and select AMP2
+Press BOTH   to select AMP1+2 for modification on top row
+Press MG/JD  to select AMP1 or AMP2 for modification on top row
 
 Press DIRTY  to change from clean to dirty (LED off is clean, on is dirty); gapless audio using scene controllers to modify amp gain
 Press X/Y    to switch AMP1&2 between X and Y settings; causes audio gap
 Press DELAY  to toggle delay effect
 Press PITCH  to toggle pitch effect
 Press CHORUS to toggle chorus effect
-Press VOL--  to decrease amp volume
-Press VOL++  to increase amp volume
+Press DEC    to decrease amp volume, hold DIRTY to affect amp gain
+Press INC    to increase amp volume, hold DIRTY to affect amp gain
 
 Press TAP    to send tap tempo
 Hold  MODE   to switch between setlist and program mode
@@ -47,11 +45,6 @@ Press PR_NXT to move to next setlist song / program #
 Use scene controllers to transition from clean to dirty on both AMP1 and AMP2, controlled separately
 
 Press MODE   to switch between set-list order and program # order
-
-GATE1 -- PITCH1 -- CHORUS1 -- AMP1 -- COMP1 -- PHASER1 -- DELAY1 -\
-\- VOL1 --- CAB
-/- VOL2 -/
-GATE2 -- PITCH2 -- CHORUS2 -- AMP2 -- COMP2 -- PHASER2 -- DELAY2 -/
 */
 
 #if HW_VERSION == 4
@@ -504,9 +497,9 @@ static void update_lcd(void) {
     labels = label_row_get(0);
     labels[0] = "BOTH";
     labels[1] = "MG/JD";
-    labels[2] = "VOL=0";
-    labels[3] = "VOL--";
-    labels[4] = "VOL++";
+    labels[2] = "RESET";
+    labels[3] = "DEC";
+    labels[4] = "INC";
     labels[5] = "TAP";
     labels[6] = "PREV SCENE";
     labels[7] = "NEXT SCENE";
@@ -583,8 +576,8 @@ LIVE:
 |                                                            |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   BOTH   MG/JD  VOL=0  VOL--  VOL++   TAP   SC_PRV SC_NXT  |
-|          RESET  VOL=6                 MODE  SC_DEL SC_INS  |
+|   BOTH   MG/JD  RESET   DEC    INC    TAP   SC_PRV SC_NXT  |
+|          RESET                        MODE  SC_DEL SC_INS  |
 |------------------------------------------------------------|
 */
 
@@ -787,12 +780,12 @@ void controller_handle(void) {
         timers.bot_2 = (u8)0;
     }
 
-    // VOL=0 or +6
+    // RESET
     if (is_bot_button_pressed(M_3)) {
         curr_amp_toggle();
     }
 
-    // VOL--
+    // DEC
     if (is_bot_button_pressed(M_4)) {
         timers.bot_4 = (u8)0x80;
         curr_amp_dec();
@@ -800,7 +793,7 @@ void controller_handle(void) {
         timers.bot_4 &= ~(u8)0xC0;
     }
 
-    // VOL++
+    // INC
     if (is_bot_button_pressed(M_5)) {
         timers.bot_5 = (u8)0x80;
         curr_amp_inc();
