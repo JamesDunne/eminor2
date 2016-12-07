@@ -216,6 +216,10 @@ struct state {
     u8 selected_both;
     // Amp definitions:
     struct amp amp[2];
+    // Per-amp global gain setting:
+    u8 gain[2];
+    // Whether DIRTY+{INC,DEC,TOGGLE} was used or not:
+    u8 gain_mode;
 };
 
 // Current and last state:
@@ -246,7 +250,7 @@ static rom const char *name_get(u16 name_index) {
 
 // Top switch press cannot be an accident:
 #define is_top_button_pressed(mask) \
-    ((last.fsw.bot.byte == 0) && (curr.fsw.bot.byte == 0) && (last.fsw.top.byte == 0) && (curr.fsw.top.byte == mask))
+    ((last.fsw.top.byte == 0) && (curr.fsw.top.byte == mask))
 
 // Always switch programs regardless of whether a top switch was accidentally depressed:
 #define is_bot_button_pressed(mask) \
@@ -259,10 +263,10 @@ static rom const char *name_get(u16 name_index) {
     (((last.fsw.bot.byte & mask) == mask) && ((curr.fsw.bot.byte & mask) == 0))
 
 #define is_top_button_held(mask) \
-    ((curr.fsw.bot.byte == 0) && (curr.fsw.top.byte == mask))
+    (curr.fsw.top.byte == mask)
 
 #define is_bot_button_held(mask) \
-    ((curr.fsw.top.byte == 0) && (curr.fsw.bot.byte == mask))
+    (curr.fsw.bot.byte == mask)
 
 static s8 ritoa(char *dst, s8 col, u8 n) {
 	do {
@@ -308,9 +312,23 @@ static void send_leds(void) {
 
 static void update_lcd(void);
 
+static void curr_amp_dec(void);
+
+static void curr_amp_inc(void);
+
+static void curr_amp_toggle(void);
+
 static void curr_amp_vol_decrease(void);
 
 static void curr_amp_vol_increase(void);
+
+static void curr_amp_vol_toggle(void);
+
+static void curr_amp_gain_decrease(void);
+
+static void curr_amp_gain_increase(void);
+
+static void curr_amp_gain_toggle(void);
 
 static void prev_scene(void);
 
@@ -328,8 +346,6 @@ static void curr_amp_reset(void);
 
 static void toggle_setlist_mode(void);
 
-static void curr_amp_vol_toggle(void);
-
 static void scene_default(void);
 
 #define calc_mixer_level(volume) \
@@ -344,21 +360,33 @@ static void calc_midi(void) {
     u8 diff = 0;
     u8 dirty;
     u8 xy;
+    u8 send_gain;
+    u8 dirty_changed;
 
     // Send gain controller changes:
     dirty = read_bit(dirty, curr.amp[0].fx);
-    if (dirty != read_bit(dirty, last.amp[0].fx)) {
+    dirty_changed = (u8)(dirty != read_bit(dirty, last.amp[0].fx));
+    send_gain = (u8)((dirty && (curr.gain[0] != last.gain[0])) || dirty_changed);
+    if (send_gain) {
         DEBUG_LOG1("MIDI set AMP1 %s", dirty == 0 ? "clean" : "dirty");
-        midi_set_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : (u8)0x49);
-        midi_set_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(dirty));
-        midi_set_axe_cc(axe_cc_byp_compressor1, calc_cc_toggle(!dirty));
+        midi_set_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : (u8)curr.gain[0]);
+        if (dirty_changed) {
+            midi_set_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(dirty));
+            midi_set_axe_cc(axe_cc_byp_compressor1, calc_cc_toggle(!dirty));
+        }
+        diff = 1;
     }
     dirty = read_bit(dirty, curr.amp[1].fx);
-    if (dirty != read_bit(dirty, last.amp[1].fx)) {
+    dirty_changed = (u8)(dirty != read_bit(dirty, last.amp[1].fx));
+    send_gain = (u8)((dirty && (curr.gain[1] != last.gain[1])) || dirty_changed);
+    if (send_gain) {
         DEBUG_LOG1("MIDI set AMP2 %s", dirty == 0 ? "clean" : "dirty");
-        midi_set_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : (u8)0x49);
-        midi_set_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(dirty));
-        midi_set_axe_cc(axe_cc_byp_compressor2, calc_cc_toggle(!dirty));
+        midi_set_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : (u8)curr.gain[1]);
+        if (dirty_changed) {
+            midi_set_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(dirty));
+            midi_set_axe_cc(axe_cc_byp_compressor2, calc_cc_toggle(!dirty));
+        }
+        diff = 1;
     }
 
     // Send X/Y changes:
@@ -608,6 +636,11 @@ void controller_init(void) {
     last.setlist_mode = 0;
     curr.setlist_mode = 1;
 
+    curr.gain[0] = 0x49;
+    curr.gain[1] = 0x49;
+    last.gain[0] = ~curr.gain[0];
+    last.gain[1] = ~curr.gain[1];
+
     // Load setlist:
     flash_load((u16)(128 * sizeof(struct program)), sizeof(struct set_list), (u8 *)&sl);
     sl_max = sl.count - (u8)1;
@@ -695,16 +728,16 @@ void controller_10msec_timer(void) {
 
     one_shot(bot,2,0x7F,curr_amp_reset)
 
-    repeater(bot,4,0x20,0x07,curr_amp_vol_decrease)
-    repeater(bot,5,0x20,0x07,curr_amp_vol_increase)
+    repeater(bot,4,0x20,0x03,curr_amp_dec)
+    repeater(bot,5,0x20,0x03,curr_amp_inc)
 
     one_shot(bot,6,0x7F,toggle_setlist_mode)
 
     one_shot(bot,7,0x7F,scene_delete)
     one_shot(bot,8,0x7F,scene_insert)
 
-    repeater(top,7,0x20,0x07,prev_song)
-    repeater(top,8,0x20,0x07,next_song)
+    repeater(top,7,0x20,0x03,prev_song)
+    repeater(top,8,0x20,0x03,next_song)
 
 #undef repeater
 #undef one_shot
@@ -756,13 +789,13 @@ void controller_handle(void) {
 
     // VOL=0 or +6
     if (is_bot_button_pressed(M_3)) {
-        curr_amp_vol_toggle();
+        curr_amp_toggle();
     }
 
     // VOL--
     if (is_bot_button_pressed(M_4)) {
         timers.bot_4 = (u8)0x80;
-        curr_amp_vol_decrease();
+        curr_amp_dec();
     } else if (is_bot_button_released(M_4)) {
         timers.bot_4 &= ~(u8)0xC0;
     }
@@ -770,7 +803,7 @@ void controller_handle(void) {
     // VOL++
     if (is_bot_button_pressed(M_5)) {
         timers.bot_5 = (u8)0x80;
-        curr_amp_vol_increase();
+        curr_amp_inc();
     } else if (is_bot_button_released(M_5)) {
         timers.bot_5 &= ~(u8)0xC0;
     }
@@ -814,7 +847,13 @@ void controller_handle(void) {
         }
 
     if (is_top_button_pressed(M_1)) {
-        toggle_fx(dirty)
+        curr.gain_mode = (u8)0;
+    }
+    if (is_top_button_released(M_1)) {
+        if (curr.gain_mode == (u8)0) {
+            toggle_fx(dirty)
+        }
+        curr.gain_mode = (u8)0;
     }
     if (is_top_button_pressed(M_2)) {
         toggle_fx(xy)
@@ -1044,6 +1083,80 @@ static void curr_amp_vol_increase() {
 static void curr_amp_vol_decrease() {
     if (curr.amp[curr.selected_amp].volume > (u8)0) {
         curr.amp[curr.selected_amp].volume--;
+    }
+}
+
+static void curr_amp_gain_toggle() {
+    // Reset gain to 0x49:
+    if (curr.selected_both) {
+        curr.gain[0] = 0x49;
+        curr.gain[1] = 0x49;
+    } else {
+        curr.gain[curr.selected_amp] = 0x49;
+    }
+}
+
+static void curr_amp_gain_increase() {
+    if (curr.selected_both) {
+        u8 gain = curr.gain[0];
+        if (curr.gain[1] > gain) {
+            gain = curr.gain[1];
+        }
+        if (gain < (u8)127) {
+            curr.gain[0] = gain + (u8)1;
+            curr.gain[1] = gain + (u8)1;
+        }
+    } else {
+        if (curr.gain[curr.selected_amp] < (u8)127) {
+            curr.gain[curr.selected_amp]++;
+        }
+    }
+}
+
+static void curr_amp_gain_decrease() {
+    if (curr.selected_both) {
+        u8 gain = curr.gain[0];
+        if (curr.gain[1] > gain) {
+            gain = curr.gain[1];
+        }
+        if (gain > (u8)0) {
+            curr.gain[0] = gain - (u8)1;
+            curr.gain[1] = gain - (u8)1;
+        }
+    } else {
+        if (curr.gain[curr.selected_amp] > (u8)0) {
+            curr.gain[curr.selected_amp]--;
+        }
+    }
+}
+
+static void curr_amp_toggle() {
+    // If DIRTY button is held, affect gain instead of volume:
+    if (is_top_button_held(M_1)) {
+        curr.gain_mode = (u8)1;
+        curr_amp_gain_toggle();
+    } else {
+        curr_amp_vol_toggle();
+    }
+}
+
+static void curr_amp_inc() {
+    // If DIRTY button is held, affect gain instead of volume:
+    if (is_top_button_held(M_1)) {
+        curr.gain_mode = (u8)1;
+        curr_amp_gain_increase();
+    } else {
+        curr_amp_vol_increase();
+    }
+}
+
+static void curr_amp_dec() {
+    // If DIRTY button is held, affect gain instead of volume:
+    if (is_top_button_held(M_1)) {
+        curr.gain_mode = (u8)1;
+        curr_amp_gain_decrease();
+    } else {
+        curr_amp_vol_decrease();
     }
 }
 
