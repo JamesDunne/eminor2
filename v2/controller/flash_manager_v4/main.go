@@ -641,15 +641,36 @@ func dB(percent float64) float64 {
 }
 
 func genVolumeTable() {
-	// 128/128 =    0dB
-	//  64/128 =  -14dB
-	//   1/128 = -INFdB
+	//   0/127 = -INFdB
+	//  63/127 =  -14dB
+	// 127/127 =    0dB
 	for n := 0; n <= 127; n++ {
 		p := float64(n) / 127.0
-		// log20a taper
-		p = (math.Pow(25.0, p) - 1.0) / 24.0
+		// log20a taper (50% -> 20%)
+		p = (math.Pow(15.5, p) - 1.0) / 14.5
+		//fmt.Printf("%3.f\n", p * 127.0)
 		db := dB(p) + 6.0
-		fmt.Printf("%+5.1f, // %d\n", db, n)
+		//fmt.Printf("\"%+5.1f\", // %d\n", dB(p) + 6.0, n)
+		//db10 := db * 10.0
+		//fmt.Printf("%5.f, // %d\n", db10, n)
+
+		posdb := math.Abs(db)
+
+		// Represent as u16 in BCD:
+		bcd0 := uint16((posdb - math.Floor(posdb)) * 10)
+		bcd1 := uint16(((posdb / 10.0) - math.Floor(posdb / 10.0)) * 10)
+		bcd2 := uint16(((posdb / 100.0) - math.Floor(posdb / 100.0)) * 10)
+		var bcd3 uint16
+		if (math.Signbit(db)) {
+			bcd3 = 0x0F
+		} else {
+			bcd3 = 0x00
+		}
+		db10s := (bcd3 << 12) | (bcd2 << 8) | (bcd1 << 4) | bcd0
+		if math.IsInf(db, -1) {
+			db10s = math.MaxUint16
+		}
+		fmt.Printf("0x%04X, // %d\n", db10s, n)
 	}
 }
 
