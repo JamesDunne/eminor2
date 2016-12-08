@@ -632,18 +632,24 @@ func parseHex(s string) int64 {
 	return value
 }
 
-func volume_7bit(level float64) uint8 {
-	p := math.Pow(10.0, (level / 20.0))
-	p = (p * 64)
-	v := uint8(p)
-	return v
+//  p = 10 ^ (dB / 20)
+// dB = log10(p) * 20
+// Log20A means 20% percent at half-way point of knob, i.e. dB = 20 * ln(0.20) / ln(10) = -13.98dB
+func dB(percent float64) float64 {
+	db := math.Log10(percent) * 20.0
+	return db
 }
 
 func genVolumeTable() {
-	// 7 bit signed volume in half-dB increments, where (0dB = 127 - 12):
-	for level := -115; level <= 12; level++ {
-		v := volume_7bit(float64(level) / 2.0)
-		fmt.Printf(", %3v // %+5.1f dB\n", v, float64(level)/2.0)
+	// 128/128 =    0dB
+	//  64/128 =  -14dB
+	//   1/128 = -INFdB
+	for n := 0; n <= 127; n++ {
+		p := float64(n) / 127.0
+		// log20a taper
+		p = (math.Pow(25.0, p) - 1.0) / 24.0
+		db := dB(p) + 6.0
+		fmt.Printf("%+5.1f, // %d\n", db, n)
 	}
 }
 
