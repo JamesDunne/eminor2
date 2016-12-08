@@ -34,14 +34,14 @@ const (
 )
 
 type Ampv4 struct {
+	Gain    float64  `yaml:"gain"`	  // amp gain (0-100)
 	XY      string   `yaml:"xy"`      // "X" or "Y" amp settings
 	Channel string   `yaml:"channel"` // "clean" or "dirty"
-	Level   float64  `yaml:"level"`   // dB
+	Level   float64  `yaml:"level"`   // pre-delay volume in dB (-inf to +6dB)
 	FX      []string `yaml:"fx,flow"` // any combo of "delay", "pitch", or "chorus"
 }
 
 type SceneDescriptorv4 struct {
-	Name string `yaml:"name"`
 	MG   Ampv4  `yaml:"MG"`
 	JD   Ampv4  `yaml:"JD"`
 }
@@ -367,39 +367,49 @@ func generatePICH() {
 
 		// Copy scenes:
 		/*
-			struct program {
-			    // Index into the name table for the name of the program (song):
-			    u16 name_index;
+struct amp {
+    u8 gain;    // amp gain (7-bit), if 0 then the default gain is used
+    u8 fx;      // bitfield for FX enable/disable, including clean/dirty switch.
+    u8 volume;  // volume (7-bit) represented as dB where 127 = +6dB, 0dB = 67
+};
 
-			    // Number of scenes defined:
-			    u8 scene_count;
-			    u8 _unused1;    // perhaps AXE-FX program # for different songs?
+// Program v4 (next gen) data structure loaded from / written to flash memory:
+struct program {
+    // Index into the name table for the name of the program (song):
+    u16 name_index;
 
-			    // Scene descriptors (5 bytes each):
-			    struct scene_descriptor {
-			        // Index into the name table for the name of the scene:
-			        u16 name_index;
-			        // 2 amps:
-			        struct amp amp[2];
-			    } scene[10];
-			};
+    // AXE-FX program # to switch to (7 bit)
+    u8 midi_program;
+
+    u8 scene_count;
+
+    // Scene descriptors (5 bytes each):
+    struct scene_descriptor {
+        // 2 amps:
+        struct amp amp[2];
+    } scene[scene_count_max];
+};
 		*/
+
+		// Write MIDI program number:
+		bw.WriteDecimal(0)
 
 		// Write scene count:
 		bw.WriteDecimal(uint8(len(p.SceneDescriptors)))
-		bw.WriteDecimal(0)
 
 		// Write scene descriptors (5 bytes each):
 		n := 0
 		for _, s := range p.SceneDescriptors {
 			n++
 
-			// Write name_table index of scene name:
-			write_name_table_idx(s.Name)
-
 			// Write amp descriptors:
 			for _, amp := range []*Ampv4{&s.MG, &s.JD} {
-				b1, b2 := byte(0), byte(0)
+				b0, b1, b2 := byte(0), byte(0), byte(0)
+
+				// Gain (0 = default gain):
+				b0 = uint8(amp.Gain / 100.0 * 127.0)
+
+				// FX:
 				if amp.Channel == "dirty" {
 					b1 |= FX4_Dirty
 				}
@@ -407,7 +417,6 @@ func generatePICH() {
 					b1 |= FX4_XY
 				}
 				for _, effect := range amp.FX {
-
 					if effect == "delay" {
 						b1 |= FX4_Delay
 					} else if effect == "pitch" {
@@ -419,14 +428,14 @@ func generatePICH() {
 					}
 				}
 
-				if amp.Level < -57.5 {
-					amp.Level = -57.5
-				}
+				// Volume:
 				if amp.Level > 6 {
 					amp.Level = 6
 				}
-				b2 = uint8((amp.Level * 2) + (127 - 12))
+				b2 = DBtoMIDI(amp.Level)
 
+				// Write the descriptor:
+				bw.WriteHex(b0)
 				bw.WriteHex(b1)
 				bw.WriteHex(b2)
 			}
@@ -640,19 +649,38 @@ func dB(percent float64) float64 {
 	return db
 }
 
+func MIDItoDB(n uint8) float64 {
+	p := float64(n) / 127.0
+	// log20a taper (50% -> 20%)
+	p = (math.Pow(15.5, p) - 1.0) / 14.5
+	//fmt.Printf("%3.f\n", p * 127.0)
+	db := dB(p) + 6.0
+	return db
+}
+
+func round(n float64) float64 {
+	if (n - math.Floor(n)) >= 0.5 {
+		return math.Ceil(n)
+	} else {
+		return math.Floor(n)
+	}
+}
+
+func DBtoMIDI(db float64) uint8 {
+	db = db - 6.0
+	p := math.Pow(10.0, (db / 20.0))
+	plog := math.Log10(p * 14.5 + 1.0) / math.Log10(15.5)
+	plog *= 127.0
+	return uint8(round(plog))
+}
+
 func genVolumeTable() {
 	//   0/127 = -INFdB
 	//  63/127 =  -14dB
 	// 127/127 =    0dB
-	for n := 0; n <= 127; n++ {
-		p := float64(n) / 127.0
-		// log20a taper (50% -> 20%)
-		p = (math.Pow(15.5, p) - 1.0) / 14.5
-		//fmt.Printf("%3.f\n", p * 127.0)
-		db := dB(p) + 6.0
-		//fmt.Printf("\"%+5.1f\", // %d\n", dB(p) + 6.0, n)
-		//db10 := db * 10.0
-		//fmt.Printf("%5.f, // %d\n", db10, n)
+	for n := uint8(0); n <= 127; n++ {
+		db := MIDItoDB(n)
+		//fmt.Printf("\"%+5.1f\", // %d == %d\n", db, n, dBtoMIDI(db))
 
 		posdb := math.Abs(db)
 
@@ -747,7 +775,6 @@ func main() {
 				p4.SceneDescriptors = append(p4.SceneDescriptors, SceneDescriptorv4{})
 				s4 := &p4.SceneDescriptors[len(p4.SceneDescriptors)-1]
 
-				s4.Name = ""
 				if s3.Channel == 1 {
 					s4.JD.Channel = "clean"
 				} else {
@@ -766,17 +793,6 @@ func main() {
 					s4.JD.FX = append(s4.JD.FX, fx)
 				}
 
-				// If any FX are enabled and we're on a dirty channel it's a lead:
-				if s3.Channel != 1 && (s3.Level > 0 || len(s4.JD.FX) > 0) {
-					s4.Name += "JD lead"
-				} else {
-					if s3.Channel == 1 {
-						s4.Name += "JD clean"
-					} else {
-						s4.Name += "JD dirty"
-					}
-				}
-
 				if s3.AxeScene == 1 {
 					s4.MG.Channel = "clean"
 				} else {
@@ -786,14 +802,8 @@ func main() {
 				if s3.AxeScene == 4 {
 					s4.MG.Level = 6
 					s4.MG.FX = []string{"delay"}
-					s4.Name += ";MG lead"
 				} else {
 					s4.MG.Level = 0
-					if s3.AxeScene == 1 {
-						s4.Name += ";MG clean"
-					} else {
-						s4.Name += ";MG dirty"
-					}
 				}
 			}
 		}

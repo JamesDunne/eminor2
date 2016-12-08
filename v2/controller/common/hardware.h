@@ -101,7 +101,7 @@ extern void flash_store(u16 addr, u16 count, u8 *data);
 extern rom const u8 *flash_addr(u16 addr);
 
 // Get a pointer to a lookup table:
-extern rom const u8 *lookup_table(u8 table);
+extern rom const u16 *get_dB_bcd_lookup(void);
 
 // --------------- Controller logic interface functions:
 

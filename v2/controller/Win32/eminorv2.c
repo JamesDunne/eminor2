@@ -1001,7 +1001,7 @@ u8 flash_bank[3][4096] = {
 #include "../PIC/flash_v4_bank2.h"
 	}
 };
-u8 lookup[128] = {
+u16 lookup[128] = {
 #include "../PIC/v4_lookup.h"
 };
 #else
@@ -1038,7 +1038,6 @@ rom const u8 *flash_addr(u16 addr) {
     return (u8 *)flash_bank[bank] + addr;
 }
 
-rom const u8 *lookup_table(u8 table) {
-    // ignore table parameter for now
+rom const u16 *get_dB_bcd_lookup(void) {
     return lookup;
 }

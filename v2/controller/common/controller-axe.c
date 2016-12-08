@@ -69,36 +69,42 @@ Press MODE   to switch between set-list order and program # order
 #define read_bit(name,e)   ((e & fxm_##name) >> fxb_##name)
 #define toggle_bit(name,e) e = e ^ fxm_##name
 
-struct amp {
-    u8 fx;
-    u8 volume;  // volume (7-bit) represented as half-dB where 0dB = 127-12, +6dB = 127.
-};
+#define default_gain ((u8)0x49)
 
-#define volume_0dB (127 - 12)
-#define volume_6dB (127)
-
-// amp state is 2 bytes:
-COMPILE_ASSERT(sizeof(struct amp) == 2);
+// For the Axe-FX Vol block, Log 20A means that the resistance is 20% at the halfway point in the travel.
+// If you put the knob at noon, the volume would be 20% of maximum (about -14 dB).
+// So, 0 = -INFdB, 63 = -14dB and 127 = 0dB
+// We adjust the scale by +6dB to define 0dB at 98 and +6dB at 127
+#define volume_0dB 98
+#define volume_6dB 127
 
 #define scene_count_max 10
+
+struct amp {
+    u8 gain;    // amp gain (7-bit), if 0 then the default gain is used
+    u8 fx;      // bitfield for FX enable/disable, including clean/dirty switch.
+    u8 volume;  // volume (7-bit) represented as quarter-dB where 127 = +6dB, 0dB = 67
+};
 
 // Program v4 (next gen) data structure loaded from / written to flash memory:
 struct program {
     // Index into the name table for the name of the program (song):
     u16 name_index;
 
-    // Number of scenes defined:
+    // AXE-FX program # to switch to (7 bit)
+    u8 midi_program;
+
     u8 scene_count;
-    u8 _unused1;    // perhaps AXE-FX program # for different songs?
 
     // Scene descriptors (5 bytes each):
     struct scene_descriptor {
-        // Index into the name table for the name of the scene:
-        u16 name_index;
         // 2 amps:
         struct amp amp[2];
     } scene[scene_count_max];
 };
+
+// amp state is 3 bytes:
+COMPILE_ASSERT(sizeof(struct amp) == 3);
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
 // Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
@@ -209,8 +215,6 @@ struct state {
     u8 selected_both;
     // Amp definitions:
     struct amp amp[2];
-    // Per-amp global gain setting:
-    u8 gain[2];
     // Whether DIRTY+{INC,DEC,TOGGLE} was used or not:
     u8 gain_mode;
 };
@@ -218,8 +222,8 @@ struct state {
 // Current and last state:
 struct state curr, last;
 
-// Volume-ramp table (from PIC/v4_lookup.h):
-rom const u8 *volume_ramp = 0;
+// BCD-encoded dB value table (from PIC/v4_lookup.h):
+rom const u16 *dB_bcd_lookup = 0;
 
 // Max program #:
 u8 sl_max;
@@ -341,9 +345,6 @@ static void toggle_setlist_mode(void);
 
 static void scene_default(void);
 
-#define calc_mixer_level(volume) \
-    volume_ramp[volume & 0x7F]
-
 // TODO: replace me with branchless bit twiddling.
 #define calc_cc_toggle(enable) \
     (enable == 0 ? (u8)0 : (u8)0x7F)
@@ -351,6 +352,7 @@ static void scene_default(void);
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     u8 diff = 0;
+    u8 gain;
     u8 dirty;
     u8 xy;
     u8 send_gain;
@@ -359,22 +361,31 @@ static void calc_midi(void) {
     // Send gain controller changes:
     dirty = read_bit(dirty, curr.amp[0].fx);
     dirty_changed = (u8)(dirty != read_bit(dirty, last.amp[0].fx));
-    send_gain = (u8)((dirty && (curr.gain[0] != last.gain[0])) || dirty_changed);
+    gain = curr.amp[0].gain;
+    send_gain = (u8)((dirty && (gain != last.amp[0].gain)) || dirty_changed);
     if (send_gain) {
+        if (gain == 0) {
+            gain = default_gain;
+        }
         DEBUG_LOG1("MIDI set AMP1 %s", dirty == 0 ? "clean" : "dirty");
-        midi_set_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : (u8)curr.gain[0]);
+        midi_set_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
         if (dirty_changed) {
             midi_set_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(dirty));
             midi_set_axe_cc(axe_cc_byp_compressor1, calc_cc_toggle(!dirty));
         }
         diff = 1;
     }
+
     dirty = read_bit(dirty, curr.amp[1].fx);
     dirty_changed = (u8)(dirty != read_bit(dirty, last.amp[1].fx));
-    send_gain = (u8)((dirty && (curr.gain[1] != last.gain[1])) || dirty_changed);
+    gain = curr.amp[1].gain;
+    send_gain = (u8)((dirty && (gain != last.amp[1].gain)) || dirty_changed);
     if (send_gain) {
+        if (gain == 0) {
+            gain = default_gain;
+        }
         DEBUG_LOG1("MIDI set AMP2 %s", dirty == 0 ? "clean" : "dirty");
-        midi_set_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : (u8)curr.gain[1]);
+        midi_set_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
         if (dirty_changed) {
             midi_set_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(dirty));
             midi_set_axe_cc(axe_cc_byp_compressor2, calc_cc_toggle(!dirty));
@@ -399,13 +410,13 @@ static void calc_midi(void) {
     if (curr.amp[0].volume != last.amp[0].volume) {
         s8 vol = (curr.amp[0].volume - (s8)volume_0dB);
         DEBUG_LOG3("MIDI set AMP1 volume = %c%d.%s", (vol < 0 ? '-' : ' '), (vol < 0 ? -vol : vol) / 2, ((u8)vol & (u8)1) == 0 ? "0" : "5");
-        midi_set_axe_cc(axe_cc_external1, calc_mixer_level(curr.amp[0].volume));
+        midi_set_axe_cc(axe_cc_external1, (curr.amp[0].volume));
         diff = 1;
     }
     if (curr.amp[1].volume != last.amp[1].volume) {
         s8 vol = (curr.amp[1].volume - (s8)volume_0dB);
         DEBUG_LOG3("MIDI set AMP2 volume = %c%d.%s", (vol < 0 ? '-' : ' '), (vol < 0 ? -vol : vol) / 2, ((u8)vol & (u8)1) == 0 ? "0" : "5");
-        midi_set_axe_cc(axe_cc_external2, calc_mixer_level(curr.amp[1].volume));
+        midi_set_axe_cc(axe_cc_external2, (curr.amp[1].volume));
         diff = 1;
     }
 
@@ -480,6 +491,23 @@ static void print_half(char *dst, u8 col, s8 volhalfdb) {
     }
 }
 
+// BCD is 2.1 format with MSB indicating sign
+static void bcdtoa(char *dst, u8 col, u16 bcd) {
+    dst += col;
+    u8 sign = (u8)((bcd & 0x8000) != 0);
+    *dst-- = (char)'0' + (char)(bcd & 0x0F);
+    *dst-- = '.';
+    bcd >>= 4;
+    *dst-- = (char)'0' + (char)(bcd & 0x0F);
+    bcd >>= 4;
+    if ((bcd & 0x0F) > 0) {
+        *dst-- = (char)'0' + (char)(bcd & 0x0F);
+    }
+    if (sign) {
+        *dst = '-';
+    }
+}
+
 // Update LCD display:
 static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
@@ -519,7 +547,7 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_COLS; ++i) {
-        lcd_rows[0][i] = "MG  0.0dB  JD  0.0dB"[i];
+        lcd_rows[0][i] = "MG     0.0 JD    0.0"[i];
         lcd_rows[1][i] = "                    "[i];
         lcd_rows[2][i] = "                    "[i];
         lcd_rows[3][i] = "                    "[i];
@@ -529,10 +557,8 @@ static void update_lcd(void) {
     lcd_rows[0][13] = (curr.selected_amp == 1) ? (char)'*' : (char)' ';
 
     // Print volume levels:
-    volhalfdb = (s8)curr.amp[0].volume - (s8)volume_0dB;
-    print_half(lcd_rows[0], 4, volhalfdb);
-    volhalfdb = (s8)curr.amp[1].volume - (s8)volume_0dB;
-    print_half(lcd_rows[0], 15, volhalfdb);
+    bcdtoa(lcd_rows[0],  9, dB_bcd_lookup[curr.amp[0].volume]);
+    bcdtoa(lcd_rows[0], 19, dB_bcd_lookup[curr.amp[1].volume]);
 
     // Print setlist date:
 
@@ -558,9 +584,7 @@ static void update_lcd(void) {
 
 
     pr_name = name_get(pr.name_index);
-    sc_name = name_get(pr.scene[curr.sc_idx].name_index);
     copy_str_lcd(pr_name, lcd_rows[2]);
-    copy_str_lcd(sc_name, lcd_rows[3]);
 
     ritoa(lcd_rows[3], 19, curr.sc_idx + (u8) 1);
 
@@ -629,10 +653,10 @@ void controller_init(void) {
     last.setlist_mode = 0;
     curr.setlist_mode = 1;
 
-    curr.gain[0] = 0x49;
-    curr.gain[1] = 0x49;
-    last.gain[0] = ~curr.gain[0];
-    last.gain[1] = ~curr.gain[1];
+    curr.amp[0].gain = 0;
+    curr.amp[1].gain = 0;
+    last.amp[0].gain = ~curr.amp[0].gain;
+    last.amp[1].gain = ~curr.amp[1].gain;
 
     // Load setlist:
     flash_load((u16)(128 * sizeof(struct program)), sizeof(struct set_list), (u8 *)&sl);
@@ -659,7 +683,7 @@ void controller_init(void) {
     curr.selected_both = 0;
 
     // Get volume-ramp lookup table:
-    volume_ramp = lookup_table(0);
+    dB_bcd_lookup = get_dB_bcd_lookup();
 
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_ROWS; ++i)
@@ -721,8 +745,8 @@ void controller_10msec_timer(void) {
 
     one_shot(bot,2,0x7F,curr_amp_reset)
 
-    repeater(bot,4,0x20,0x03,curr_amp_dec)
-    repeater(bot,5,0x20,0x03,curr_amp_inc)
+    repeater(bot,4,0x20,0x01,curr_amp_dec)
+    repeater(bot,5,0x20,0x01,curr_amp_inc)
 
     one_shot(bot,6,0x7F,toggle_setlist_mode)
 
@@ -910,14 +934,6 @@ void controller_handle(void) {
         pr.scene[last.sc_idx].amp[0] = curr.amp[0];
         pr.scene[last.sc_idx].amp[1] = curr.amp[1];
 
-        // Check if non-first scene is undefined:
-        if ((curr.sc_idx > 0) && (pr.scene[curr.sc_idx].name_index == (u16)0)) {
-            // Copy last scene:
-            pr.scene[curr.sc_idx] = pr.scene[curr.sc_idx - (u8)1];
-            pr.scene[curr.sc_idx].name_index = (u16)0;
-            //scene_default();
-        }
-
         // Copy new scene settings into current state:
         curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
         curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
@@ -932,9 +948,10 @@ void controller_handle(void) {
 
 void scene_default(void) {
     DEBUG_LOG0("default scene");
-    pr.scene[curr.sc_idx].name_index = 0;
+    pr.scene[curr.sc_idx].amp[0].gain = 0;
     pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
     pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
+    pr.scene[curr.sc_idx].amp[1].gain = 0;
     pr.scene[curr.sc_idx].amp[1].fx = fxm_dirty;
     pr.scene[curr.sc_idx].amp[1].volume = volume_0dB;
 }
@@ -1080,45 +1097,45 @@ static void curr_amp_vol_decrease() {
 }
 
 static void curr_amp_gain_toggle() {
-    // Reset gain to 0x49:
+    // Reset gain to default_gain:
     if (curr.selected_both) {
-        curr.gain[0] = 0x49;
-        curr.gain[1] = 0x49;
+        curr.amp[0].gain = 0;
+        curr.amp[1].gain = 0;
     } else {
-        curr.gain[curr.selected_amp] = 0x49;
+        curr.amp[curr.selected_amp].gain = 0;
     }
 }
 
 static void curr_amp_gain_increase() {
     if (curr.selected_both) {
-        u8 gain = curr.gain[0];
-        if (curr.gain[1] > gain) {
-            gain = curr.gain[1];
+        u8 gain = curr.amp[0].gain;
+        if (curr.amp[1].gain > gain) {
+            gain = curr.amp[1].gain;
         }
         if (gain < (u8)127) {
-            curr.gain[0] = gain + (u8)1;
-            curr.gain[1] = gain + (u8)1;
+            curr.amp[0].gain = gain + (u8)1;
+            curr.amp[1].gain = gain + (u8)1;
         }
     } else {
-        if (curr.gain[curr.selected_amp] < (u8)127) {
-            curr.gain[curr.selected_amp]++;
+        if (curr.amp[curr.selected_amp].gain < (u8)127) {
+            curr.amp[curr.selected_amp].gain++;
         }
     }
 }
 
 static void curr_amp_gain_decrease() {
     if (curr.selected_both) {
-        u8 gain = curr.gain[0];
-        if (curr.gain[1] > gain) {
-            gain = curr.gain[1];
+        u8 gain = curr.amp[0].gain;
+        if (curr.amp[1].gain > gain) {
+            gain = curr.amp[1].gain;
         }
         if (gain > (u8)0) {
-            curr.gain[0] = gain - (u8)1;
-            curr.gain[1] = gain - (u8)1;
+            curr.amp[0].gain = gain - (u8)1;
+            curr.amp[1].gain = gain - (u8)1;
         }
     } else {
-        if (curr.gain[curr.selected_amp] > (u8)0) {
-            curr.gain[curr.selected_amp]--;
+        if (curr.amp[curr.selected_amp].gain > (u8)0) {
+            curr.amp[curr.selected_amp].gain--;
         }
     }
 }
