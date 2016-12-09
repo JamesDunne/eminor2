@@ -309,6 +309,18 @@ static void bcdtoa(char *dst, u8 col, u16 bcd) {
     }
 }
 
+char bcd_tmp[6];
+static char *bcd(u16 n) {
+    bcd_tmp[5] = 0;
+    bcd_tmp[4] = ' ';
+    bcd_tmp[3] = ' ';
+    bcd_tmp[2] = ' ';
+    bcd_tmp[1] = ' ';
+    bcd_tmp[0] = ' ';
+    bcdtoa(bcd_tmp, 4, n);
+    return bcd_tmp;
+}
+
 // Copies a fixed-length string optionally NUL-terminated to the LCD display row:
 static void copy_str_lcd(rom const char *src, char *dst) {
     u8 i;
@@ -469,14 +481,12 @@ static void calc_midi(void) {
 
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
-        s8 vol = (curr.amp[0].volume - (s8)volume_0dB);
-        DEBUG_LOG3("MIDI set AMP1 volume = %c%d.%s", (vol < 0 ? '-' : ' '), (vol < 0 ? -vol : vol) / 2, ((u8)vol & (u8)1) == 0 ? "0" : "5");
+        DEBUG_LOG1("MIDI set AMP1 volume = %s", bcd(dB_bcd_lookup[curr.amp[0].volume]));
         midi_set_axe_cc(axe_cc_external1, (curr.amp[0].volume));
         diff = 1;
     }
     if (curr.amp[1].volume != last.amp[1].volume) {
-        s8 vol = (curr.amp[1].volume - (s8)volume_0dB);
-        DEBUG_LOG3("MIDI set AMP2 volume = %c%d.%s", (vol < 0 ? '-' : ' '), (vol < 0 ? -vol : vol) / 2, ((u8)vol & (u8)1) == 0 ? "0" : "5");
+        DEBUG_LOG1("MIDI set AMP2 volume = %s", bcd(dB_bcd_lookup[curr.amp[1].volume]));
         midi_set_axe_cc(axe_cc_external2, (curr.amp[1].volume));
         diff = 1;
     }
