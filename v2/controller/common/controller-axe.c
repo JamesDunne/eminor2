@@ -270,6 +270,14 @@ static rom const char *name_get(u16 name_index) {
 #define is_bot_button_held(mask) \
     (curr.fsw.bot.byte == mask)
 
+rom char hex[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
+static void hextoa(char *dst, u8 col, u8 n) {
+    dst += col;
+    *dst-- = hex[n & 0x0F];
+    *dst = hex[(n >> 4) & 0x0F];
+}
+
 static s8 ritoa(char *dst, s8 col, u8 n) {
 	do {
 		dst[col--] = (n % (char)10) + (char)'0';
@@ -277,6 +285,43 @@ static s8 ritoa(char *dst, s8 col, u8 n) {
 	return col;
 }
 
+// BCD is 2.1 format with MSB indicating sign
+static void bcdtoa(char *dst, u8 col, u16 bcd) {
+    u8 sign;
+    dst += col;
+    sign = (u8) ((bcd & 0x8000) != 0);
+    if ((bcd & 0x7FFF) == 0x7FFF) {
+        *dst-- = 'f';
+        *dst-- = 'n';
+        *dst-- = 'i';
+    } else {
+        *dst-- = (char) '0' + (char) (bcd & 0x0F);
+        *dst-- = '.';
+        bcd >>= 4;
+        *dst-- = (char) '0' + (char) (bcd & 0x0F);
+        bcd >>= 4;
+        if ((bcd & 0x0F) > 0) {
+            *dst-- = (char) '0' + (char) (bcd & 0x0F);
+        }
+    }
+    if (sign) {
+        *dst = '-';
+    }
+}
+
+// Copies a fixed-length string optionally NUL-terminated to the LCD display row:
+static void copy_str_lcd(rom const char *src, char *dst) {
+    u8 i;
+    for (i = 0; src[i] != 0 && i < LCD_COLS; ++i) {
+        dst[i] = src[i];
+    }
+    for (; i < LCD_COLS; i++) {
+        dst[i] = ' ';
+    }
+}
+
+// Comment-out unused functions so they don't take up code space on PIC.
+#if 0
 static s8 litoa(char *dst, s8 col, u8 n) {
 	// Write the integer to temporary storage:
 	char tmp[3];
@@ -291,15 +336,22 @@ static s8 litoa(char *dst, s8 col, u8 n) {
 	return col;
 }
 
-static void copy_str_lcd(rom const char *src, char *dst) {
-    u8 i;
-    for (i = 0; src[i] != 0 && i < LCD_COLS; ++i) {
-        dst[i] = src[i];
+static void print_half(char *dst, u8 col, s8 volhalfdb) {
+    s8 i;
+    if (volhalfdb < 0) {
+        i = ritoa(dst, col, (u8) (-volhalfdb) >> 1);
+        dst[i] = '-';
+    } else {
+        ritoa(dst, col, (u8) volhalfdb >> 1);
     }
-    for (; i < LCD_COLS; i++) {
-        dst[i] = ' ';
+    dst[col + 1] = '.';
+    if (((u8)volhalfdb & 1) != 0) {
+        dst[col + 2] = '5';
+    } else {
+        dst[col + 2] = '0';
     }
 }
+#endif
 
 static void send_leds(void) {
 	// Update LEDs:
@@ -468,54 +520,6 @@ static void calc_midi(void) {
     if (diff) {
         update_lcd();
     }
-}
-
-static void print_half(char *dst, u8 col, s8 volhalfdb) {
-    s8 i;
-    if (volhalfdb < 0) {
-        i = ritoa(dst, col, (u8) (-volhalfdb) >> 1);
-        dst[i] = '-';
-    } else {
-        ritoa(dst, col, (u8) volhalfdb >> 1);
-    }
-    dst[col + 1] = '.';
-    if (((u8)volhalfdb & 1) != 0) {
-        dst[col + 2] = '5';
-    } else {
-        dst[col + 2] = '0';
-    }
-}
-
-// BCD is 2.1 format with MSB indicating sign
-static void bcdtoa(char *dst, u8 col, u16 bcd) {
-    u8 sign;
-    dst += col;
-    sign = (u8) ((bcd & 0x8000) != 0);
-    if ((bcd & 0x7FFF) == 0x7FFF) {
-        *dst-- = 'f';
-        *dst-- = 'n';
-        *dst-- = 'i';
-    } else {
-        *dst-- = (char) '0' + (char) (bcd & 0x0F);
-        *dst-- = '.';
-        bcd >>= 4;
-        *dst-- = (char) '0' + (char) (bcd & 0x0F);
-        bcd >>= 4;
-        if ((bcd & 0x0F) > 0) {
-            *dst-- = (char) '0' + (char) (bcd & 0x0F);
-        }
-    }
-    if (sign) {
-        *dst = '-';
-    }
-}
-
-rom char hex[16] = "0123456789ABCDEF";
-
-static void hextoa(char *dst, u8 col, u8 n) {
-    dst += col;
-    *dst-- = hex[n & 0x0F];
-    *dst = hex[(n >> 4) & 0x0F];
 }
 
 // Update LCD display:
