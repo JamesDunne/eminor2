@@ -594,7 +594,7 @@ static void update_lcd(void) {
     lcd_rows[row_amp2][ 3] = (char)'C' | (char)(!read_bit(chorus, curr.amp[0].fx) << 5);
     lcd_rows[row_amp2][ 4] = (char)'D' | (char)(!read_bit(delay, curr.amp[0].fx) << 5);
     lcd_rows[row_amp2][ 5] = (char)'F' | (char)(!read_bit(filter, curr.amp[0].fx) << 5);
-    hextoa(lcd_rows[row_amp2], 8, curr.amp[0].gain);
+    hextoa(lcd_rows[row_amp2], 8, or_default(curr.amp[0].gain));
 
     lcd_rows[row_amp2][11] = (char)'G' | (char)(!read_bit(dirty, curr.amp[1].fx) << 5);
     lcd_rows[row_amp2][12] = (char)'X' | (char)(read_bit(xy, curr.amp[1].fx));
@@ -602,7 +602,7 @@ static void update_lcd(void) {
     lcd_rows[row_amp2][14] = (char)'C' | (char)(!read_bit(chorus, curr.amp[1].fx) << 5);
     lcd_rows[row_amp2][15] = (char)'D' | (char)(!read_bit(delay, curr.amp[1].fx) << 5);
     lcd_rows[row_amp2][16] = (char)'F' | (char)(!read_bit(filter, curr.amp[1].fx) << 5);
-    hextoa(lcd_rows[row_amp2], 19, curr.amp[1].gain);
+    hextoa(lcd_rows[row_amp2], 19, or_default(curr.amp[1].gain));
 
     lcd_updated_all();
 #endif
@@ -1093,9 +1093,11 @@ static void curr_amp_gain_increase() {
     }
 }
 
+#define min(a,b) (a < b ? a : b)
+
 static void curr_amp_gain_decrease() {
     if (curr.selected_both) {
-        u8 gain = max(or_default(curr.amp[0].gain), or_default(curr.amp[1].gain));
+        u8 gain = min(or_default(curr.amp[0].gain), or_default(curr.amp[1].gain));
         if (gain > (u8)1) {
             gain--;
             curr.amp[0].gain = gain;
