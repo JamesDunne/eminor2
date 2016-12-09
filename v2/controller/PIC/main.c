@@ -68,10 +68,6 @@ void main() {
             SystemTimeRoutine();        //1mS system time routine
         }
 
-        if (LCDUpdate && swuart_mode == SWUARTMODE_TX_IDLE) {
-            lcd_update_screen();
-        }
-
         if (CheckButtons) {
             CheckButtons = false;
             ReadButtons();              //read buttons off the multiplexor
@@ -82,14 +78,22 @@ void main() {
             UpdateLeds();               //handle leds
         }
 
+        if (ControllerTiming) {
+            ControllerTiming = false;
+            controller_10msec_timer();  //controller timing functions
+        }
+
         if (HandleController) {
             HandleController = false;
             controller_handle();        //handle UI and other midi commands
         }
 
-        if (ControllerTiming) {
-            ControllerTiming = false;
-            controller_10msec_timer();  //controller timing functions
+        if (LCDUpdateRequest && !LCDUpdate) {
+            LCDUpdate = true;
+            LCDUpdateRequest = false;
+        }
+        if (LCDUpdate && (swuart_mode == SWUARTMODE_TX_IDLE)) {
+            lcd_update_screen();
         }
 
         midi_tx();      //handles sending/receiving midi data

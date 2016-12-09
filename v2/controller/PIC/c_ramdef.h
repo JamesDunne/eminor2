@@ -27,6 +27,7 @@ near extern BitField ArbFlags2;
 #define CheckButtons        ArbFlags2.bit0
 #define ControllerTiming    ArbFlags2.bit1
 #define LCDUpdate           ArbFlags2.bit2
+#define LCDUpdateRequest    ArbFlags2.bit3
 
 //----------------------------Main variables----------------------------------------
 

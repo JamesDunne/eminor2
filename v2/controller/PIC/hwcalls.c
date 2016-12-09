@@ -168,14 +168,12 @@ char *lcd_row_get(u8 row) {
 }
 
 void lcd_row_updated(u8 row) {
-    LCDUpdate = true;
-    LCDUpdateStage = 0;      //start at the beginning if the screen needs to be redrawn
+    LCDUpdateRequest = true;
 }
 
 // Marks entire LCD screen as ready to be sent:
 void lcd_updated_all(void) {
-    LCDUpdate = true;
-    LCDUpdateStage = 0;      //start at the beginning if the screen needs to be redrawn
+    LCDUpdateRequest = true;
 }    
 
 /* --------------- MIDI I/O functions: */
