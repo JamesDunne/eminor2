@@ -954,7 +954,8 @@ void controller_handle(void) {
         if ((pr.scene[curr.sc_idx].amp[0].gain == 0) && (pr.scene[curr.sc_idx].amp[0].volume == 0) &&
             (pr.scene[curr.sc_idx].amp[1].gain == 0) && (pr.scene[curr.sc_idx].amp[1].volume == 0)) {
             // Reset to default scene state:
-            scene_default();
+            //scene_default();
+            pr.scene[curr.sc_idx] = pr.scene[curr.sc_idx-1];
         }
 
         // Copy new scene settings into current state:

@@ -1514,20 +1514,20 @@ programs:
   scenes:
   - name: JD dirty;MG dirty
     MG:
-      gain: 50
+      gain: 40
       xy: X
       channel: dirty
       level: 0
       fx: []
     JD:
-      gain: 50
+      gain: 40
       xy: X
       channel: dirty
       level: 0
       fx: []
   - name: JD lead
     MG:
-      gain: 50
+      gain: 40
       xy: X
       channel: dirty
       level: 0
@@ -1540,13 +1540,13 @@ programs:
       fx: []
   - name: JD dirty;MG dirty
     MG:
-      gain: 50
+      gain: 40
       xy: X
       channel: dirty
       level: 0
       fx: []
     JD:
-      gain: 50
+      gain: 40
       xy: X
       channel: dirty
       level: 0
