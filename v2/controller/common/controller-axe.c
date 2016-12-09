@@ -309,6 +309,7 @@ static void bcdtoa(char *dst, u8 col, u16 bcd) {
     }
 }
 
+#ifndef __MCC18
 char bcd_tmp[6];
 static char *bcd(u16 n) {
     bcd_tmp[5] = 0;
@@ -320,6 +321,7 @@ static char *bcd(u16 n) {
     bcdtoa(bcd_tmp, 4, n);
     return bcd_tmp;
 }
+#endif
 
 // Copies a fixed-length string optionally NUL-terminated to the LCD display row:
 static void copy_str_lcd(rom const char *src, char *dst) {
