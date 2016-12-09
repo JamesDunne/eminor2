@@ -63,7 +63,7 @@
 #define SWUARTMODE_TX_START_BIT 2
 #define SWUARTMODE_TX_BYTE      3
 
-#define LOOKUP_SEG_ADDR         0x4780
+#define LOOKUP_SEG_ADDR         0x4700
 
 //Size of writable flash segment:
 #define WRITABLE_SEG_ADDR       0x4800      //Also update this in the lkr file if it needs to change!!
