@@ -488,15 +488,22 @@ static void print_half(char *dst, u8 col, s8 volhalfdb) {
 
 // BCD is 2.1 format with MSB indicating sign
 static void bcdtoa(char *dst, u8 col, u16 bcd) {
+    u8 sign;
     dst += col;
-    u8 sign = (u8)((bcd & 0x8000) != 0);
-    *dst-- = (char)'0' + (char)(bcd & 0x0F);
-    *dst-- = '.';
-    bcd >>= 4;
-    *dst-- = (char)'0' + (char)(bcd & 0x0F);
-    bcd >>= 4;
-    if ((bcd & 0x0F) > 0) {
-        *dst-- = (char)'0' + (char)(bcd & 0x0F);
+    sign = (u8) ((bcd & 0x8000) != 0);
+    if ((bcd & 0x7FFF) == 0x7FFF) {
+        *dst-- = 'f';
+        *dst-- = 'n';
+        *dst-- = 'i';
+    } else {
+        *dst-- = (char) '0' + (char) (bcd & 0x0F);
+        *dst-- = '.';
+        bcd >>= 4;
+        *dst-- = (char) '0' + (char) (bcd & 0x0F);
+        bcd >>= 4;
+        if ((bcd & 0x0F) > 0) {
+            *dst-- = (char) '0' + (char) (bcd & 0x0F);
+        }
     }
     if (sign) {
         *dst = '-';
@@ -1052,15 +1059,40 @@ static void curr_amp_vol_toggle() {
     }
 }
 
+#define min(a,b) (a < b ? a : b)
+#define max(a,b) (a > b ? a : b)
+
 static void curr_amp_vol_increase() {
-    if (curr.amp[curr.selected_amp].volume < (u8)127) {
-        curr.amp[curr.selected_amp].volume++;
+    if (curr.selected_both) {
+        u8 volume = max((curr.amp[0].volume), (curr.amp[1].volume));
+        if (volume < (u8)127) {
+            volume++;
+            curr.amp[0].volume = volume;
+            curr.amp[1].volume = volume;
+        }
+    } else {
+        u8 volume = (curr.amp[curr.selected_amp].volume);
+        if (volume < (u8)127) {
+            volume++;
+            curr.amp[curr.selected_amp].volume = volume;
+        }
     }
 }
 
 static void curr_amp_vol_decrease() {
-    if (curr.amp[curr.selected_amp].volume > (u8)0) {
-        curr.amp[curr.selected_amp].volume--;
+    if (curr.selected_both) {
+        u8 volume = min((curr.amp[0].volume), (curr.amp[1].volume));
+        if (volume > (u8)0) {
+            volume--;
+            curr.amp[0].volume = volume;
+            curr.amp[1].volume = volume;
+        }
+    } else {
+        u8 volume = (curr.amp[curr.selected_amp].volume);
+        if (volume > (u8)0) {
+            volume--;
+            curr.amp[curr.selected_amp].volume = volume;
+        }
     }
 }
 
@@ -1073,8 +1105,6 @@ static void curr_amp_gain_toggle() {
         curr.amp[curr.selected_amp].gain = 0;
     }
 }
-
-#define max(a,b) (a > b ? a : b)
 
 static void curr_amp_gain_increase() {
     if (curr.selected_both) {
@@ -1092,8 +1122,6 @@ static void curr_amp_gain_increase() {
         }
     }
 }
-
-#define min(a,b) (a < b ? a : b)
 
 static void curr_amp_gain_decrease() {
     if (curr.selected_both) {
@@ -1125,6 +1153,14 @@ static void curr_amp_dec() {
         curr_amp_gain_decrease();
     } else {
         curr_amp_vol_decrease();
+    }
+}
+
+static void curr_amp_toggle() {
+    if (curr.gain_mode == (u8)0) {
+        curr_amp_gain_toggle();
+    } else {
+        curr_amp_vol_toggle();
     }
 }
 
