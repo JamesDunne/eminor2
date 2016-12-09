@@ -180,16 +180,39 @@ programs:
       fx: []
 - name: Drive
   scenes:
-  - name: JD lead;MG dirty
+  - name: Clean
     MG:
       xy: X
-      channel: dirty
+      channel: clean
       level: 0
       fx: []
     JD:
       xy: X
+      channel: clean
+      level: 0
+      fx: []
+  - name: MG Lead
+    MG:
+      gain: 10
+      xy: X
       channel: dirty
       level: 6
+      fx: [chorus,delay]
+    JD:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+  - name: Clean
+    MG:
+      xy: X
+      channel: clean
+      level: 0
+      fx: []
+    JD:
+      xy: X
+      channel: clean
+      level: 0
       fx: []
 - name: When I Come Around
   scenes:
@@ -417,7 +440,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 2
+      level: 0
       fx: [filter, delay]
   - name: JD dirty;MG dirty
     MG:
@@ -439,7 +462,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 2
+      level: 0
       fx: [filter, delay]
   - name: JD dirty;MG dirty
     MG:
@@ -461,7 +484,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 2
+      level: 0
       fx: [filter, delay]
   - name: JD dirty;MG dirty
     MG:
@@ -483,7 +506,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: 2
+      level: 0
       fx: [filter, delay]
   - name: JD dirty;MG dirty
     MG:
@@ -1491,11 +1514,39 @@ programs:
   scenes:
   - name: JD dirty;MG dirty
     MG:
+      gain: 50
       xy: X
       channel: dirty
       level: 0
       fx: []
     JD:
+      gain: 50
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+  - name: JD lead
+    MG:
+      gain: 50
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      gain: 90
+      xy: X
+      channel: dirty
+      level: 6
+      fx: []
+  - name: JD dirty;MG dirty
+    MG:
+      gain: 50
+      xy: X
+      channel: dirty
+      level: 0
+      fx: []
+    JD:
+      gain: 50
       xy: X
       channel: dirty
       level: 0
@@ -1677,49 +1728,61 @@ programs:
   scenes:
   - name: Rhythm
     MG:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
     JD:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
   - name: JD lead
     MG:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
     JD:
-      xy: Y
+      gain: 60
+      xy: X
       channel: dirty
       level: 6
-      fx: [chorus]
+      fx: []
   - name: Rhythm
     MG:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
     JD:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
 - name: Trippin
   scenes:
   - name: Rhythm
     MG:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
     JD:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
   - name: JD lead
     MG:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
     JD:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
       level: 6
-      fx: [chorus]
+      fx: []
   - name: Rhythm
     MG:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
     JD:
-      xy: Y
+      gain: 40
+      xy: X
       channel: dirty
