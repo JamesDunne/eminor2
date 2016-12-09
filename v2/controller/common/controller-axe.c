@@ -734,6 +734,7 @@ struct timers {
     // Once-only timers:
     u8 bot_1;
     u8 bot_2;
+    u8 bot_3;
     u8 bot_6;
 } timers;
 
@@ -766,15 +767,16 @@ void controller_10msec_timer(void) {
         } \
     }
 
-    one_shot(bot,2,0x7F,curr_amp_reset)
+    one_shot(bot,2,0x1F,curr_amp_reset)
+    one_shot(bot,3,0x1F,curr_amp_toggle)
 
     repeater(bot,4,0x20,0x01,curr_amp_dec)
     repeater(bot,5,0x20,0x01,curr_amp_inc)
 
-    one_shot(bot,6,0x7F,toggle_setlist_mode)
+    one_shot(bot,6,0x1F,toggle_setlist_mode)
 
-    //one_shot(bot,7,0x7F,scene_delete)
-    //one_shot(bot,8,0x7F,scene_insert)
+    //one_shot(bot,7,0x1F,scene_delete)
+    //one_shot(bot,8,0x1F,scene_insert)
 
     repeater(top,7,0x20,0x03,prev_song)
     repeater(top,8,0x20,0x03,next_song)
@@ -829,7 +831,12 @@ void controller_handle(void) {
 
     // GAIN/VOL
     if (is_bot_button_pressed(M_3)) {
-        curr.gain_mode ^= (u8)1;
+        timers.bot_3 = (u8)0x80;
+    } else if (is_bot_button_released(M_3)) {
+        if ((timers.bot_3 & (u8)0x80) != (u8)0) {
+            curr.gain_mode ^= (u8)1;
+        }
+        timers.bot_3 = (u8)0;
     }
 
     // DEC
@@ -1057,17 +1064,28 @@ static void prev_scene() {
     }
 }
 
-static void curr_amp_vol_toggle() {
-    // Toggle between 0dB and +6dB:
-    if (curr.amp[curr.selected_amp].volume == volume_0dB) {
-        curr.amp[curr.selected_amp].volume = volume_6dB;
-    } else {
-        curr.amp[curr.selected_amp].volume = volume_0dB;
-    }
-}
-
 #define min(a,b) (a < b ? a : b)
 #define max(a,b) (a > b ? a : b)
+
+static void curr_amp_vol_toggle() {
+    // Toggle between 0dB and +6dB:
+    if (curr.selected_both) {
+        u8 volume = max((curr.amp[0].volume), (curr.amp[1].volume));
+        if (volume == volume_0dB) {
+            curr.amp[0].volume = volume_6dB;
+            curr.amp[1].volume = volume_6dB;
+        } else {
+            curr.amp[0].volume = volume_0dB;
+            curr.amp[1].volume = volume_0dB;
+        }
+    } else {
+        if (curr.amp[curr.selected_amp].volume == volume_0dB) {
+            curr.amp[curr.selected_amp].volume = volume_6dB;
+        } else {
+            curr.amp[curr.selected_amp].volume = volume_0dB;
+        }
+    }
+}
 
 static void curr_amp_vol_increase() {
     if (curr.selected_both) {
