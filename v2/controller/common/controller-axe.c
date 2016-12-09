@@ -336,10 +336,6 @@ static void prev_scene(void);
 
 static void next_scene(void);
 
-static void scene_delete(void);
-
-static void scene_insert(void);
-
 static void prev_song(void);
 
 static void next_song(void);
@@ -770,8 +766,8 @@ void controller_10msec_timer(void) {
 
     one_shot(bot,6,0x7F,toggle_setlist_mode)
 
-    one_shot(bot,7,0x7F,scene_delete)
-    one_shot(bot,8,0x7F,scene_insert)
+    //one_shot(bot,7,0x7F,scene_delete)
+    //one_shot(bot,8,0x7F,scene_insert)
 
     repeater(top,7,0x20,0x03,prev_song)
     repeater(top,8,0x20,0x03,next_song)
@@ -1034,8 +1030,7 @@ static void prev_song() {
 }
 
 static void next_scene() {
-    // Purposely allowing moving past last-defined scene so scene_insert will work as append.
-    if (curr.sc_idx < pr.scene_count) {
+    if (curr.sc_idx < scene_count_max) {
         DEBUG_LOG0("next scene");
         curr.sc_idx++;
     }
@@ -1046,47 +1041,6 @@ static void prev_scene() {
         DEBUG_LOG0("prev scene");
         curr.sc_idx--;
     }
-}
-
-static void scene_delete(void) {
-    u8 i;
-
-    if ((pr.scene_count <= 1) || (curr.sc_idx >= pr.scene_count)) {
-        return;
-    }
-
-    // Copy all scenes behind 1:
-    for (i = curr.sc_idx; i < pr.scene_count; i++) {
-        pr.scene[i] = pr.scene[i+1];
-    }
-
-    pr.scene_count--;
-    if (curr.sc_idx >= pr.scene_count) {
-        curr.sc_idx = pr.scene_count - (u8)1;
-    }
-
-    // Force a reload of current scene:
-    last.sc_idx = ~curr.sc_idx;
-}
-
-static void scene_insert(void) {
-    u8 i;
-    if (pr.scene_count >= scene_count_max) {
-        return;
-    }
-
-    // Copy all scenes ahead 1:
-    for (i = pr.scene_count; i > curr.sc_idx; i--) {
-        pr.scene[i] = pr.scene[i-1];
-    }
-
-    pr.scene_count++;
-
-    // Reset current scene to default:
-    scene_default();
-
-    // Force a reload of current scene:
-    last.sc_idx = ~curr.sc_idx;
 }
 
 static void curr_amp_vol_toggle() {
