@@ -564,7 +564,7 @@ static void update_lcd(void) {
     // Print setlist date:
     if (curr.setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[row_status][i] = "Program    # 0  0/ 0"[i];
+            lcd_rows[row_status][i] = "Program    # 0 sc  0"[i];
         }
         ritoa(lcd_rows[row_status], 13, curr.pr_idx + (u8)1);
     } else {
@@ -573,14 +573,14 @@ static void update_lcd(void) {
         u8 mm = ((sl.d1 & (u8)1) << 3) | (sl.d0 >> 5);
         u8 dd = (sl.d0 & (u8)31);
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[row_status][i] = "2014-01-01 # 0  0/ 0"[i];
+            lcd_rows[row_status][i] = "2014-01-01 # 0 sc  0"[i];
         }
         ritoa(lcd_rows[row_status], 3, yyyy + (u8)14);
         ritoa(lcd_rows[row_status], 6, mm + (u8)1);
         ritoa(lcd_rows[row_status], 9, dd + (u8)1);
         ritoa(lcd_rows[row_status], 13, curr.sl_idx + (u8)1);
     }
-    ritoa(lcd_rows[row_status], 16, curr.sc_idx + (u8)1);
+    ritoa(lcd_rows[row_status], 19, curr.sc_idx + (u8)1);
 
     // Song name:
     pr_name = name_get(pr.name_index);
@@ -936,7 +936,6 @@ void controller_handle(void) {
         // Establish a sane default for an undefined program:
         curr.sc_idx = 0;
         if (pr.name_index == (u16)0) {
-            pr.scene_count = 1;
             scene_default();
         }
 
@@ -945,11 +944,18 @@ void controller_handle(void) {
     }
 
     if (curr.sc_idx != last.sc_idx) {
-        DEBUG_LOG0("load scene");
+        DEBUG_LOG1("load scene %d", curr.sc_idx);
 
         // Store last state into program for recall:
         pr.scene[last.sc_idx].amp[0] = curr.amp[0];
         pr.scene[last.sc_idx].amp[1] = curr.amp[1];
+
+        // Detect if scene is uninitialized:
+        if ((pr.scene[curr.sc_idx].amp[0].gain == 0) && (pr.scene[curr.sc_idx].amp[0].volume == 0) &&
+            (pr.scene[curr.sc_idx].amp[1].gain == 0) && (pr.scene[curr.sc_idx].amp[1].volume == 0)) {
+            // Reset to default scene state:
+            scene_default();
+        }
 
         // Copy new scene settings into current state:
         curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
@@ -964,7 +970,7 @@ void controller_handle(void) {
 }
 
 void scene_default(void) {
-    DEBUG_LOG0("default scene");
+    DEBUG_LOG1("default scene %d", curr.sc_idx);
     pr.scene[curr.sc_idx].amp[0].gain = 0;
     pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
     pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
@@ -1037,7 +1043,7 @@ static void prev_song() {
 }
 
 static void next_scene() {
-    if (curr.sc_idx < scene_count_max) {
+    if (curr.sc_idx < scene_count_max - 1) {
         DEBUG_LOG0("next scene");
         curr.sc_idx++;
     }
