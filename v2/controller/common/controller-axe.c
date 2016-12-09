@@ -69,7 +69,7 @@ Press MODE   to switch between set-list order and program # order
 #define read_bit(name,e)   ((e & fxm_##name) >> fxb_##name)
 #define toggle_bit(name,e) e = e ^ fxm_##name
 
-#define default_gain ((u8)0x49)
+#define default_gain ((u8)0x40)
 #define or_default(gain) (gain == 0 ? default_gain : gain)
 
 // For the Axe-FX Vol block, Log 20A means that the resistance is 20% at the halfway point in the travel.
@@ -432,7 +432,7 @@ static void calc_midi(void) {
     dirty = read_bit(dirty, curr.amp[1].fx);
     dirty_changed = (u8)(dirty != read_bit(dirty, last.amp[1].fx));
     gain = or_default(curr.amp[1].gain);
-    gain_changed = (u8)(gain != or_default(last.amp[0].gain));
+    gain_changed = (u8)(gain != or_default(last.amp[1].gain));
     diff |= gain_changed;
     send_gain = (u8)((dirty && gain_changed) || dirty_changed);
     if (send_gain) {

@@ -26,6 +26,7 @@ programs:
       level: 0
       fx: []
 - name: Zero
+  gain: 0x60
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -179,6 +180,7 @@ programs:
       level: 0
       fx: []
 - name: Drive
+  gain: 0x1A
   scenes:
   - name: Clean
     MG:
@@ -193,7 +195,6 @@ programs:
       fx: []
   - name: MG Lead
     MG:
-      gain: 10
       xy: X
       channel: dirty
       level: 6
@@ -350,7 +351,7 @@ programs:
     JD:
       xy: X
       channel: dirty
-      level: -4.5
+      level: -3.0
       fx: []
   - name: Verse
     MG:
@@ -381,6 +382,7 @@ programs:
       level: 0
       fx: []
     JD:
+      gain: 0x60
       xy: X
       channel: dirty
       level: 2
@@ -425,6 +427,7 @@ programs:
       level: 0
       fx: []
     JD:
+      gain: 0x60
       xy: X
       channel: dirty
       level: 6
@@ -438,6 +441,7 @@ programs:
       level: 0
       fx: []
     JD:
+      gain: 0x20
       xy: X
       channel: dirty
       level: 0
@@ -460,6 +464,7 @@ programs:
       level: 0
       fx: []
     JD:
+      gain: 0x20
       xy: X
       channel: dirty
       level: 0
@@ -482,6 +487,7 @@ programs:
       level: 0
       fx: []
     JD:
+      gain: 0x20
       xy: X
       channel: dirty
       level: 0
@@ -504,6 +510,7 @@ programs:
       level: 0
       fx: []
     JD:
+      gain: 0x20
       xy: X
       channel: dirty
       level: 0
@@ -520,6 +527,7 @@ programs:
       level: 0
       fx: []
 - name: Song 2
+  gain: 0x60
   scenes:
   - name: JD clean;MG dirty
     MG:
@@ -1511,42 +1519,38 @@ programs:
       level: 0
       fx: []
 - name: Shine
+  gain: 0x30
   scenes:
   - name: JD dirty;MG dirty
     MG:
-      gain: 40
       xy: X
       channel: dirty
       level: 0
       fx: []
     JD:
-      gain: 40
       xy: X
       channel: dirty
       level: 0
       fx: []
   - name: JD lead
     MG:
-      gain: 40
       xy: X
       channel: dirty
       level: 0
       fx: []
     JD:
-      gain: 90
+      gain: 0x6C
       xy: X
       channel: dirty
       level: 6
       fx: []
   - name: JD dirty;MG dirty
     MG:
-      gain: 40
       xy: X
       channel: dirty
       level: 0
       fx: []
     JD:
-      gain: 40
       xy: X
       channel: dirty
       level: 0
@@ -1565,6 +1569,7 @@ programs:
       level: 0
       fx: []
 - name: Breed
+  gain: 0x60
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -1578,6 +1583,7 @@ programs:
       level: 0
       fx: []
 - name: Lithium
+  gain: 0x60
   scenes:
   - name: JD clean;MG dirty
     MG:
@@ -1725,64 +1731,55 @@ programs:
       level: 6
       fx: [delay]
 - name: Story of a Girl
+  gain: 0x2A
   scenes:
   - name: Rhythm
     MG:
-      gain: 40
       xy: X
       channel: dirty
     JD:
-      gain: 40
       xy: X
       channel: dirty
   - name: JD lead
     MG:
-      gain: 40
       xy: X
       channel: dirty
     JD:
-      gain: 60
+      gain: 0x50
       xy: X
       channel: dirty
       level: 6
       fx: []
   - name: Rhythm
     MG:
-      gain: 40
       xy: X
       channel: dirty
     JD:
-      gain: 40
       xy: X
       channel: dirty
 - name: Trippin
+  gain: 0x2A
   scenes:
   - name: Rhythm
     MG:
-      gain: 40
       xy: X
       channel: dirty
     JD:
-      gain: 40
       xy: X
       channel: dirty
   - name: JD lead
     MG:
-      gain: 40
       xy: X
       channel: dirty
     JD:
-      gain: 40
       xy: X
       channel: dirty
       level: 6
       fx: []
   - name: Rhythm
     MG:
-      gain: 40
       xy: X
       channel: dirty
     JD:
-      gain: 40
       xy: X
       channel: dirty

@@ -34,7 +34,7 @@ const (
 )
 
 type Ampv4 struct {
-	Gain    float64  `yaml:"gain"`	  // amp gain (0-100)
+	Gain    int      `yaml:"gain"`    // amp gain (0-127)
 	XY      string   `yaml:"xy"`      // "X" or "Y" amp settings
 	Channel string   `yaml:"channel"` // "clean" or "dirty"
 	Level   float64  `yaml:"level"`   // pre-delay volume in dB (-inf to +6dB)
@@ -42,12 +42,13 @@ type Ampv4 struct {
 }
 
 type SceneDescriptorv4 struct {
-	MG   Ampv4  `yaml:"MG"`
-	JD   Ampv4  `yaml:"JD"`
+	MG Ampv4 `yaml:"MG"`
+	JD Ampv4 `yaml:"JD"`
 }
 
 type Programv4 struct {
 	Name             string              `yaml:"name"`
+	Gain int `yaml:"gain"`
 	SceneDescriptors []SceneDescriptorv4 `yaml:"scenes"`
 }
 
@@ -367,28 +368,28 @@ func generatePICH() {
 
 		// Copy scenes:
 		/*
-struct amp {
-    u8 gain;    // amp gain (7-bit), if 0 then the default gain is used
-    u8 fx;      // bitfield for FX enable/disable, including clean/dirty switch.
-    u8 volume;  // volume (7-bit) represented as dB where 127 = +6dB, 0dB = 67
-};
+			struct amp {
+			    u8 gain;    // amp gain (7-bit), if 0 then the default gain is used
+			    u8 fx;      // bitfield for FX enable/disable, including clean/dirty switch.
+			    u8 volume;  // volume (7-bit) represented as dB where 127 = +6dB, 0dB = 67
+			};
 
-// Program v4 (next gen) data structure loaded from / written to flash memory:
-struct program {
-    // Index into the name table for the name of the program (song):
-    u16 name_index;
+			// Program v4 (next gen) data structure loaded from / written to flash memory:
+			struct program {
+			    // Index into the name table for the name of the program (song):
+			    u16 name_index;
 
-    // AXE-FX program # to switch to (7 bit)
-    u8 midi_program;
+			    // AXE-FX program # to switch to (7 bit)
+			    u8 midi_program;
 
-    u8 scene_count;
+			    u8 scene_count;
 
-    // Scene descriptors (5 bytes each):
-    struct scene_descriptor {
-        // 2 amps:
-        struct amp amp[2];
-    } scene[scene_count_max];
-};
+			    // Scene descriptors (5 bytes each):
+			    struct scene_descriptor {
+			        // 2 amps:
+			        struct amp amp[2];
+			    } scene[scene_count_max];
+			};
 		*/
 
 		// Write MIDI program number:
@@ -406,8 +407,12 @@ struct program {
 			for _, amp := range []*Ampv4{&s.MG, &s.JD} {
 				b0, b1, b2 := byte(0), byte(0), byte(0)
 
-				// Gain (0 = default gain):
-				b0 = uint8(amp.Gain / 100.0 * 127.0)
+				// Gain (0 = default gain, 127 = full gain):
+				b0 = uint8(amp.Gain)
+				if amp.Gain == 0 {
+					// Use program's default gain:
+					b0 = uint8(p.Gain)
+				}
 
 				// FX:
 				if amp.Channel == "dirty" {
@@ -669,7 +674,7 @@ func round(n float64) float64 {
 func DBtoMIDI(db float64) uint8 {
 	db = db - 6.0
 	p := math.Pow(10.0, (db / 20.0))
-	plog := math.Log10(p * 14.5 + 1.0) / math.Log10(15.5)
+	plog := math.Log10(p*14.5+1.0) / math.Log10(15.5)
 	plog *= 127.0
 	return uint8(round(plog))
 }
@@ -686,10 +691,10 @@ func genVolumeTable() {
 
 		// Represent as u16 in BCD:
 		bcd0 := uint16((posdb - math.Floor(posdb)) * 10)
-		bcd1 := uint16(((posdb / 10.0) - math.Floor(posdb / 10.0)) * 10)
-		bcd2 := uint16(((posdb / 100.0) - math.Floor(posdb / 100.0)) * 10)
+		bcd1 := uint16(((posdb / 10.0) - math.Floor(posdb/10.0)) * 10)
+		bcd2 := uint16(((posdb / 100.0) - math.Floor(posdb/100.0)) * 10)
 		var bcd3 uint16
-		if (math.Signbit(db)) {
+		if math.Signbit(db) {
 			bcd3 = 0x0F
 		} else {
 			bcd3 = 0x00
