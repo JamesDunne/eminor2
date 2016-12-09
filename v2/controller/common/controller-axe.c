@@ -70,6 +70,7 @@ Press MODE   to switch between set-list order and program # order
 #define toggle_bit(name,e) e = e ^ fxm_##name
 
 #define default_gain ((u8)0x49)
+#define or_default(gain) (gain == 0 ? default_gain : gain)
 
 // For the Axe-FX Vol block, Log 20A means that the resistance is 20% at the halfway point in the travel.
 // If you put the knob at noon, the volume would be 20% of maximum (about -14 dB).
@@ -179,6 +180,10 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #ifdef FEAT_LCD
 // Pointers to LCD character rows:
 char *lcd_rows[LCD_ROWS];
+#define row_amp1 2
+#define row_amp2 3
+#define row_status 0
+#define row_song 1
 #endif
 
 enum {
@@ -215,7 +220,7 @@ struct state {
     u8 selected_both;
     // Amp definitions:
     struct amp amp[2];
-    // Whether DIRTY+{INC,DEC,TOGGLE} was used or not:
+    // Whether INC/DEC affects gain (0) or volume (1):
     u8 gain_mode;
 };
 
@@ -361,12 +366,9 @@ static void calc_midi(void) {
     // Send gain controller changes:
     dirty = read_bit(dirty, curr.amp[0].fx);
     dirty_changed = (u8)(dirty != read_bit(dirty, last.amp[0].fx));
-    gain = curr.amp[0].gain;
-    send_gain = (u8)((dirty && (gain != last.amp[0].gain)) || dirty_changed);
+    gain = or_default(curr.amp[0].gain);
+    send_gain = (u8)((dirty && (gain != or_default(last.amp[0].gain))) || dirty_changed);
     if (send_gain) {
-        if (gain == 0) {
-            gain = default_gain;
-        }
         DEBUG_LOG1("MIDI set AMP1 %s", dirty == 0 ? "clean" : "dirty");
         midi_set_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
         if (dirty_changed) {
@@ -378,12 +380,9 @@ static void calc_midi(void) {
 
     dirty = read_bit(dirty, curr.amp[1].fx);
     dirty_changed = (u8)(dirty != read_bit(dirty, last.amp[1].fx));
-    gain = curr.amp[1].gain;
-    send_gain = (u8)((dirty && (gain != last.amp[1].gain)) || dirty_changed);
+    gain = or_default(curr.amp[1].gain);
+    send_gain = (u8)((dirty && (gain != or_default(last.amp[1].gain))) || dirty_changed);
     if (send_gain) {
-        if (gain == 0) {
-            gain = default_gain;
-        }
         DEBUG_LOG1("MIDI set AMP2 %s", dirty == 0 ? "clean" : "dirty");
         midi_set_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
         if (dirty_changed) {
@@ -508,6 +507,14 @@ static void bcdtoa(char *dst, u8 col, u16 bcd) {
     }
 }
 
+rom char hex[16] = "0123456789ABCDEF";
+
+static void hextoa(char *dst, u8 col, u8 n) {
+    dst += col;
+    *dst-- = hex[n & 0x0F];
+    *dst = hex[(n >> 4) & 0x0F];
+}
+
 // Update LCD display:
 static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
@@ -516,8 +523,6 @@ static void update_lcd(void) {
 #ifdef FEAT_LCD
     s8 i;
     rom const char *pr_name;
-    rom const char *sc_name;
-    s8 volhalfdb;
 #endif
     DEBUG_LOG0("update LCD");
 #ifdef HWFEAT_LABEL_UPDATES
@@ -525,7 +530,7 @@ static void update_lcd(void) {
     labels = label_row_get(0);
     labels[0] = "BOTH";
     labels[1] = "MG/JD";
-    labels[2] = "RESET";
+    labels[2] = "GAIN/VOL";
     labels[3] = "DEC";
     labels[4] = "INC";
     labels[5] = "TAP";
@@ -547,46 +552,61 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_COLS; ++i) {
-        lcd_rows[0][i] = "MG     0.0 JD    0.0"[i];
-        lcd_rows[1][i] = "                    "[i];
-        lcd_rows[2][i] = "                    "[i];
-        lcd_rows[3][i] = "                    "[i];
+        lcd_rows[row_status][i] = "                    "[i];
+        lcd_rows[row_song][i] = "                    "[i];
+        lcd_rows[row_amp1][i] = "MG*   0.0  JD*   0.0"[i];
+        lcd_rows[row_amp2][i] = "GXPCDF 7F  GXPCDF 7F"[i];
     }
 
-    lcd_rows[0][2] = (curr.selected_amp == 0) ? (char)'*' : (char)' ';
-    lcd_rows[0][13] = (curr.selected_amp == 1) ? (char)'*' : (char)' ';
-
-    // Print volume levels:
-    bcdtoa(lcd_rows[0],  9, dB_bcd_lookup[curr.amp[0].volume]);
-    bcdtoa(lcd_rows[0], 19, dB_bcd_lookup[curr.amp[1].volume]);
-
     // Print setlist date:
-
     if (curr.setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = "Program         #   "[i];
+            lcd_rows[row_status][i] = "Program    # 0  0/ 0"[i];
         }
-        ritoa(lcd_rows[1], 19, curr.pr_idx + 1);
+        ritoa(lcd_rows[row_status], 13, curr.pr_idx + (u8)1);
     } else {
         // Show setlist data:
         u8 yyyy = sl.d1 >> 1;
         u8 mm = ((sl.d1 & (u8)1) << 3) | (sl.d0 >> 5);
         u8 dd = (sl.d0 & (u8)31);
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[1][i] = "2014-01-01       # 0"[i];
+            lcd_rows[row_status][i] = "2014-01-01 # 0  0/ 0"[i];
         }
-        ritoa(lcd_rows[1], 3, yyyy + (u8)14);
-        ritoa(lcd_rows[1], 6, mm + (u8)1);
-        ritoa(lcd_rows[1], 9, dd + (u8)1);
-
-        ritoa(lcd_rows[1], 19, curr.sl_idx + (u8)1);
+        ritoa(lcd_rows[row_status], 3, yyyy + (u8)14);
+        ritoa(lcd_rows[row_status], 6, mm + (u8)1);
+        ritoa(lcd_rows[row_status], 9, dd + (u8)1);
+        ritoa(lcd_rows[row_status], 13, curr.sl_idx + (u8)1);
     }
+    ritoa(lcd_rows[row_status], 16, curr.sc_idx + (u8)1);
 
-
+    // Song name:
     pr_name = name_get(pr.name_index);
-    copy_str_lcd(pr_name, lcd_rows[2]);
+    copy_str_lcd(pr_name, lcd_rows[row_song]);
 
-    ritoa(lcd_rows[3], 19, curr.sc_idx + (u8) 1);
+    // Amp row 1:
+    lcd_rows[row_amp1][ 2] = (curr.selected_amp == 0) ? (char)'*' : (char)' ';
+    lcd_rows[row_amp1][13] = (curr.selected_amp == 1) ? (char)'*' : (char)' ';
+
+    // Print volume levels:
+    bcdtoa(lcd_rows[row_amp1],  8, dB_bcd_lookup[curr.amp[0].volume]);
+    bcdtoa(lcd_rows[row_amp1], 19, dB_bcd_lookup[curr.amp[1].volume]);
+
+    // Amp row 2:
+    lcd_rows[row_amp2][ 0] = (char)'G' | (char)(!read_bit(dirty, curr.amp[0].fx) << 5);
+    lcd_rows[row_amp2][ 1] = (char)'X' | (char)(read_bit(xy, curr.amp[0].fx));
+    lcd_rows[row_amp2][ 2] = (char)'P' | (char)(!read_bit(pitch, curr.amp[0].fx) << 5);
+    lcd_rows[row_amp2][ 3] = (char)'C' | (char)(!read_bit(chorus, curr.amp[0].fx) << 5);
+    lcd_rows[row_amp2][ 4] = (char)'D' | (char)(!read_bit(delay, curr.amp[0].fx) << 5);
+    lcd_rows[row_amp2][ 5] = (char)'F' | (char)(!read_bit(filter, curr.amp[0].fx) << 5);
+    hextoa(lcd_rows[row_amp2], 8, curr.amp[0].gain);
+
+    lcd_rows[row_amp2][11] = (char)'G' | (char)(!read_bit(dirty, curr.amp[1].fx) << 5);
+    lcd_rows[row_amp2][12] = (char)'X' | (char)(read_bit(xy, curr.amp[1].fx));
+    lcd_rows[row_amp2][13] = (char)'P' | (char)(!read_bit(pitch, curr.amp[1].fx) << 5);
+    lcd_rows[row_amp2][14] = (char)'C' | (char)(!read_bit(chorus, curr.amp[1].fx) << 5);
+    lcd_rows[row_amp2][15] = (char)'D' | (char)(!read_bit(delay, curr.amp[1].fx) << 5);
+    lcd_rows[row_amp2][16] = (char)'F' | (char)(!read_bit(filter, curr.amp[1].fx) << 5);
+    hextoa(lcd_rows[row_amp2], 19, curr.amp[1].gain);
 
     lcd_updated_all();
 #endif
@@ -626,9 +646,9 @@ static void calc_leds(void) {
 
     curr.mode_leds[curr.mode].bot.bits._1 = curr.selected_both;
     curr.mode_leds[curr.mode].bot.bits._2 = curr.selected_amp;
-    curr.mode_leds[curr.mode].bot.bits._3 = curr.fsw.bot.bits._3 | (curr.amp[curr.selected_amp].volume != volume_0dB);
-    curr.mode_leds[curr.mode].bot.bits._4 = curr.fsw.bot.bits._4 | (curr.amp[curr.selected_amp].volume > volume_0dB);
-    curr.mode_leds[curr.mode].bot.bits._5 = curr.fsw.bot.bits._5 | (curr.amp[curr.selected_amp].volume < volume_0dB);
+    curr.mode_leds[curr.mode].bot.bits._3 = curr.fsw.bot.bits._3 | (curr.gain_mode);
+    curr.mode_leds[curr.mode].bot.bits._4 = curr.fsw.bot.bits._4;
+    curr.mode_leds[curr.mode].bot.bits._5 = curr.fsw.bot.bits._5;
     curr.mode_leds[curr.mode].bot.bits._6 = curr.fsw.bot.bits._6;
     curr.mode_leds[curr.mode].bot.bits._7 = curr.fsw.bot.bits._7;
     curr.mode_leds[curr.mode].bot.bits._8 = curr.fsw.bot.bits._8;
@@ -690,10 +710,10 @@ void controller_init(void) {
         lcd_rows[i] = lcd_row_get(i);
 
     for (i = 0; i < LCD_COLS; ++i) {
-        lcd_rows[0][i] = "                    "[i];
-        lcd_rows[1][i] = "                    "[i];
-        lcd_rows[2][i] = "                    "[i];
-        lcd_rows[3][i] = "                    "[i];
+        lcd_rows[row_amp1][i] = "                    "[i];
+        lcd_rows[row_amp2][i] = "                    "[i];
+        lcd_rows[row_status][i] = "                    "[i];
+        lcd_rows[row_song][i] = "                    "[i];
     }
 
     update_lcd();
@@ -804,9 +824,9 @@ void controller_handle(void) {
         timers.bot_2 = (u8)0;
     }
 
-    // RESET
+    // GAIN/VOL
     if (is_bot_button_pressed(M_3)) {
-        curr_amp_toggle();
+        curr.gain_mode ^= (u8)1;
     }
 
     // DEC
@@ -864,13 +884,7 @@ void controller_handle(void) {
         }
 
     if (is_top_button_pressed(M_1)) {
-        curr.gain_mode = (u8)0;
-    }
-    if (is_top_button_released(M_1)) {
-        if (curr.gain_mode == (u8)0) {
-            toggle_fx(dirty)
-        }
-        curr.gain_mode = (u8)0;
+        toggle_fx(dirty)
     }
     if (is_top_button_pressed(M_2)) {
         toggle_fx(xy)
@@ -1106,54 +1120,44 @@ static void curr_amp_gain_toggle() {
     }
 }
 
+#define max(a,b) (a > b ? a : b)
+
 static void curr_amp_gain_increase() {
     if (curr.selected_both) {
-        u8 gain = curr.amp[0].gain;
-        if (curr.amp[1].gain > gain) {
-            gain = curr.amp[1].gain;
-        }
+        u8 gain = max(or_default(curr.amp[0].gain), or_default(curr.amp[1].gain));
         if (gain < (u8)127) {
-            curr.amp[0].gain = gain + (u8)1;
-            curr.amp[1].gain = gain + (u8)1;
+            gain++;
+            curr.amp[0].gain = gain;
+            curr.amp[1].gain = gain;
         }
     } else {
-        if (curr.amp[curr.selected_amp].gain < (u8)127) {
-            curr.amp[curr.selected_amp].gain++;
+        u8 gain = or_default(curr.amp[curr.selected_amp].gain);
+        if (gain < (u8)127) {
+            gain++;
+            curr.amp[curr.selected_amp].gain = gain;
         }
     }
 }
 
 static void curr_amp_gain_decrease() {
     if (curr.selected_both) {
-        u8 gain = curr.amp[0].gain;
-        if (curr.amp[1].gain > gain) {
-            gain = curr.amp[1].gain;
-        }
-        if (gain > (u8)0) {
-            curr.amp[0].gain = gain - (u8)1;
-            curr.amp[1].gain = gain - (u8)1;
+        u8 gain = max(or_default(curr.amp[0].gain), or_default(curr.amp[1].gain));
+        if (gain > (u8)1) {
+            gain--;
+            curr.amp[0].gain = gain;
+            curr.amp[1].gain = gain;
         }
     } else {
-        if (curr.amp[curr.selected_amp].gain > (u8)0) {
-            curr.amp[curr.selected_amp].gain--;
+        u8 gain = or_default(curr.amp[curr.selected_amp].gain);
+        if (gain > (u8)1) {
+            gain--;
+            curr.amp[curr.selected_amp].gain = gain;
         }
-    }
-}
-
-static void curr_amp_toggle() {
-    // If DIRTY button is held, affect gain instead of volume:
-    if (is_top_button_held(M_1)) {
-        curr.gain_mode = (u8)1;
-        curr_amp_gain_toggle();
-    } else {
-        curr_amp_vol_toggle();
     }
 }
 
 static void curr_amp_inc() {
-    // If DIRTY button is held, affect gain instead of volume:
-    if (is_top_button_held(M_1)) {
-        curr.gain_mode = (u8)1;
+    if (curr.gain_mode == (u8)0) {
         curr_amp_gain_increase();
     } else {
         curr_amp_vol_increase();
@@ -1161,9 +1165,7 @@ static void curr_amp_inc() {
 }
 
 static void curr_amp_dec() {
-    // If DIRTY button is held, affect gain instead of volume:
-    if (is_top_button_held(M_1)) {
-        curr.gain_mode = (u8)1;
+    if (curr.gain_mode == (u8)0) {
         curr_amp_gain_decrease();
     } else {
         curr_amp_vol_decrease();
