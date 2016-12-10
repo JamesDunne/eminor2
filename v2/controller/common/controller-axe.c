@@ -220,8 +220,11 @@ struct state {
     u8 selected_both;
     // Amp definitions:
     struct amp amp[2];
+
     // Whether INC/DEC affects gain (0) or volume (1):
     u8 gain_mode;
+    // Whether current program is modified in any way:
+    u8 modified;
 };
 
 // Current and last state:
@@ -411,6 +414,8 @@ static void curr_amp_reset(void);
 static void toggle_setlist_mode(void);
 
 static void scene_default(void);
+
+static void program_save(void);
 
 // TODO: replace me with branchless bit twiddling.
 #define calc_cc_toggle(enable) \
@@ -615,6 +620,10 @@ static void update_lcd(void) {
     // Song name:
     pr_name = name_get(pr.name_index);
     copy_str_lcd(pr_name, lcd_rows[row_song]);
+    // Set modified bit:
+    if (curr.modified) {
+        lcd_rows[row_song][19] = '*';
+    }
 
     // Amp row 1:
     lcd_rows[row_amp1][ 2] = (curr.selected_amp == 0) ? (char)'*' : (char)' ';
@@ -720,6 +729,7 @@ void controller_init(void) {
     curr.pr_idx = 0;
     curr.sc_idx = 0;
     flash_load((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *)&pr);
+    curr.modified = 0;
 
     // Copy current scene settings into state:
     curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
@@ -806,7 +816,7 @@ void controller_10msec_timer(void) {
     one_shot(bot,6,0x1F,toggle_setlist_mode)
 
     //one_shot(bot,7,0x1F,scene_delete)
-    //one_shot(bot,8,0x1F,scene_insert)
+    one_shot(bot,8,0x1F,program_save)
 
     repeater(top,7,0x20,0x03,prev_song)
     repeater(top,8,0x20,0x03,next_song)
@@ -865,6 +875,7 @@ void controller_handle(void) {
     } else if (is_bot_button_released(M_3)) {
         if ((timers.bot_3 & (u8)0x80) != (u8)0) {
             curr.gain_mode ^= (u8)1;
+            curr.modified = 1;
         }
         timers.bot_3 = (u8)0;
     }
@@ -919,8 +930,10 @@ void controller_handle(void) {
             u8 fx = (curr.amp[0].fx | curr.amp[1].fx) & fxm_##name ^ fxm_##name; \
             curr.amp[0].fx = (curr.amp[0].fx & ~fxm_##name) | fx; \
             curr.amp[1].fx = (curr.amp[1].fx & ~fxm_##name) | fx; \
+            curr.modified = 1; \
         } else { \
             toggle_bit(name, curr.amp[curr.selected_amp].fx); \
+            curr.modified = 1; \
         }
 
     if (is_top_button_pressed(M_1)) {
@@ -969,6 +982,7 @@ void controller_handle(void) {
             pr_num = curr.pr_idx;
         }
         flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
+        curr.modified = 0;
 
         // Establish a sane default for an undefined program:
         curr.sc_idx = 0;
@@ -1201,6 +1215,7 @@ static void curr_amp_inc() {
     } else {
         curr_amp_vol_increase();
     }
+    curr.modified = 1;
 }
 
 static void curr_amp_dec() {
@@ -1209,6 +1224,7 @@ static void curr_amp_dec() {
     } else {
         curr_amp_vol_decrease();
     }
+    curr.modified = 1;
 }
 
 static void curr_amp_toggle() {
@@ -1217,6 +1233,22 @@ static void curr_amp_toggle() {
     } else {
         curr_amp_vol_toggle();
     }
+    curr.modified = 1;
+}
+
+static void program_save() {
+    u8 program = sl.entries[curr.sl_idx].program;
+    u16 addr = (u16)(program * sizeof(struct program));
+
+    // Update current scene in program from current state:
+    pr.scene[curr.sc_idx].amp[0] = curr.amp[0];
+    pr.scene[curr.sc_idx].amp[1] = curr.amp[1];
+
+    // Save current program back to flash:
+    DEBUG_LOG2("save program %d at addr 0x%04x", program+1, addr);
+    flash_store(addr, sizeof(struct program), (u8 *)&pr);
+
+    curr.modified = 0;
 }
 
 #else
