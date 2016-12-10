@@ -546,6 +546,9 @@ static void calc_midi(void) {
     if (curr.selected_both != last.selected_both) {
         diff = 1;
     }
+    if (curr.modified != last.modified) {
+        diff = 1;
+    }
 
     // Update LCD if the state changed:
     if (diff) {
