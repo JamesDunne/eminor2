@@ -23,10 +23,10 @@
 
 // Define a DEBUG_LOG0 macro:
 #ifdef __MCC18
-#define DEBUG_LOG0(fmt) (fmt)
-#define DEBUG_LOG1(fmt,a1) (fmt)
-#define DEBUG_LOG2(fmt,a1,a2) (fmt)
-#define DEBUG_LOG3(fmt,a1,a2,a3) (fmt)
+#define DEBUG_LOG0(fmt)
+#define DEBUG_LOG1(fmt,a1)
+#define DEBUG_LOG2(fmt,a1,a2)
+#define DEBUG_LOG3(fmt,a1,a2,a3)
 #else
 extern void debug_log(const char *fmt, ...);
 #define DEBUG_LOG0(fmt) debug_log(fmt)
