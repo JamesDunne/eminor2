@@ -240,7 +240,7 @@ u8 sl_max;
 // Loaded setlist:
 struct set_list sl;
 // Loaded program:
-struct program pr;
+struct program pr, origpr;
 
 #define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
 
@@ -743,6 +743,7 @@ void controller_init(void) {
     curr.pr_idx = 0;
     curr.sc_idx = 0;
     flash_load((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *)&pr);
+    origpr = pr;
     curr.modified = 0;
 
     // Copy current scene settings into state:
@@ -852,6 +853,21 @@ void controller_10msec_timer(void) {
 #endif
 }
 
+#define calc_gain_modified() \
+    curr.modified = (curr.modified & ~(u8)0x11) | \
+        ((u8)(curr.amp[0].gain != origpr.scene[curr.sc_idx].amp[0].gain) << (u8)0) | \
+        ((u8)(curr.amp[1].gain != origpr.scene[curr.sc_idx].amp[1].gain) << (u8)4)
+
+#define calc_fx_modified() \
+    curr.modified = (curr.modified & ~(u8)0x22) | \
+        ((u8)(curr.amp[0].fx != origpr.scene[curr.sc_idx].amp[0].fx) << (u8)1) | \
+        ((u8)(curr.amp[1].fx != origpr.scene[curr.sc_idx].amp[1].fx) << (u8)5)
+
+#define calc_volume_modified() \
+    curr.modified = (curr.modified & ~(u8)0x44) | \
+        ((u8)(curr.amp[0].volume != origpr.scene[curr.sc_idx].amp[0].volume) << (u8)2) | \
+        ((u8)(curr.amp[1].volume != origpr.scene[curr.sc_idx].amp[1].volume) << (u8)6)
+
 // main control loop
 void controller_handle(void) {
     // poll foot-switch depression status:
@@ -882,7 +898,6 @@ void controller_handle(void) {
     } else if (is_bot_button_released(M_3)) {
         if ((timers.bot_3 & (u8)0x80) != (u8)0) {
             curr.gain_mode ^= (u8)1;
-            curr.modified = 1;
         }
         timers.bot_3 = (u8)0;
     }
@@ -932,10 +947,10 @@ void controller_handle(void) {
             u8 fx = (curr.amp[0].fx | curr.amp[1].fx) & fxm_##name ^ fxm_##name; \
             curr.amp[0].fx = (curr.amp[0].fx & ~fxm_##name) | fx; \
             curr.amp[1].fx = (curr.amp[1].fx & ~fxm_##name) | fx; \
-            curr.modified = 1; \
+            calc_fx_modified(); \
         } else { \
             toggle_bit(name, curr.amp[curr.selected_amp].fx); \
-            curr.modified = 1; \
+            calc_fx_modified(); \
         }
 
     if (is_top_button_pressed(M_1)) {
@@ -1015,6 +1030,12 @@ void controller_handle(void) {
         // Copy new scene settings into current state:
         curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
         curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
+
+        // Recalculate modified status for this scene:
+        curr.modified = 0;
+        calc_volume_modified();
+        calc_fx_modified();
+        calc_gain_modified();
     }
 
     calc_midi();
@@ -1132,6 +1153,7 @@ static void curr_amp_vol_toggle() {
             curr.amp[curr.selected_amp].volume = volume_0dB;
         }
     }
+    calc_volume_modified();
 }
 
 static void curr_amp_vol_increase() {
@@ -1141,12 +1163,14 @@ static void curr_amp_vol_increase() {
             volume++;
             curr.amp[0].volume = volume;
             curr.amp[1].volume = volume;
+            calc_volume_modified();
         }
     } else {
         u8 volume = (curr.amp[curr.selected_amp].volume);
         if (volume < (u8)127) {
             volume++;
             curr.amp[curr.selected_amp].volume = volume;
+            calc_volume_modified();
         }
     }
 }
@@ -1158,12 +1182,14 @@ static void curr_amp_vol_decrease() {
             volume--;
             curr.amp[0].volume = volume;
             curr.amp[1].volume = volume;
+            calc_volume_modified();
         }
     } else {
         u8 volume = (curr.amp[curr.selected_amp].volume);
         if (volume > (u8)0) {
             volume--;
             curr.amp[curr.selected_amp].volume = volume;
+            calc_volume_modified();
         }
     }
 }
@@ -1176,6 +1202,7 @@ static void curr_amp_gain_toggle() {
     } else {
         curr.amp[curr.selected_amp].gain = 0;
     }
+    calc_gain_modified();
 }
 
 static void curr_amp_gain_increase() {
@@ -1185,12 +1212,14 @@ static void curr_amp_gain_increase() {
             gain++;
             curr.amp[0].gain = gain;
             curr.amp[1].gain = gain;
+            calc_gain_modified();
         }
     } else {
         u8 gain = or_default(curr.amp[curr.selected_amp].gain);
         if (gain < (u8)127) {
             gain++;
             curr.amp[curr.selected_amp].gain = gain;
+            calc_gain_modified();
         }
     }
 }
@@ -1202,12 +1231,14 @@ static void curr_amp_gain_decrease() {
             gain--;
             curr.amp[0].gain = gain;
             curr.amp[1].gain = gain;
+            calc_gain_modified();
         }
     } else {
         u8 gain = or_default(curr.amp[curr.selected_amp].gain);
         if (gain > (u8)1) {
             gain--;
             curr.amp[curr.selected_amp].gain = gain;
+            calc_gain_modified();
         }
     }
 }
@@ -1218,7 +1249,6 @@ static void curr_amp_inc() {
     } else {
         curr_amp_vol_increase();
     }
-    curr.modified = 1;
 }
 
 static void curr_amp_dec() {
@@ -1227,7 +1257,6 @@ static void curr_amp_dec() {
     } else {
         curr_amp_vol_decrease();
     }
-    curr.modified = 1;
 }
 
 static void curr_amp_toggle() {
@@ -1236,7 +1265,6 @@ static void curr_amp_toggle() {
     } else {
         curr_amp_vol_toggle();
     }
-    curr.modified = 1;
 }
 
 static void program_save() {
