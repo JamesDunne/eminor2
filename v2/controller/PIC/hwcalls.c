@@ -13,11 +13,6 @@
 
 // -----------------------------------------------
 
-/* Send a single MIDI byte. */
-void midi_send_byte(u8 data) {
-    midi_enq(data);
-}
-
 // Send MSBs first from hi to lo.
 void SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
     unsigned char DataCounter;
@@ -167,10 +162,6 @@ char *lcd_row_get(u8 row) {
     return LCDRamMap[row];
 }
 
-void lcd_row_updated(u8 row) {
-    LCDUpdateRequest = true;
-}
-
 // Marks entire LCD screen as ready to be sent:
 void lcd_updated_all(void) {
     LCDUpdateRequest = true;
@@ -264,5 +255,5 @@ rom const u8 *flash_addr(u16 addr) {
 
     bank = (u8)(addr >> 12);
     addr &= 0x0FFF;
-    return (rom u8 *)&ROM_SAVEDATA[bank][addr];
+    return (rom const u8 *)&ROM_SAVEDATA[bank][addr];
 }

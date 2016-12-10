@@ -65,17 +65,12 @@ extern void led_set(u16 leds);
 // A terminating NUL character will clear the rest of the row with empty space.
 extern char *lcd_row_get(u8 row);
 
-// Mark the LCD display row as updated:
-extern void lcd_updated_row(u8 row);
 // Update all LCD display rows as updated:
 extern void lcd_updated_all(void);
 
 #endif
 
 // --------------- MIDI I/O functions:
-
-// Send a single MIDI byte:
-extern void midi_send_byte(u8 data);
 
 /* Send multi-byte MIDI commands
      0 <= cmd     <=  F   - MIDI command
@@ -99,9 +94,6 @@ extern void flash_store(u16 addr, u16 count, u8 *data);
 
 // Get a pointer to flash memory at address:
 extern rom const u8 *flash_addr(u16 addr);
-
-// Get a pointer to a lookup table:
-extern rom const u16 *get_dB_bcd_lookup(void);
 
 // --------------- Controller logic interface functions:
 

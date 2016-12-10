@@ -688,7 +688,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             PostQuitMessage(0);
             break;
         case WM_TIMER:
-            // TODO: sample buttons on 40ms interval to replicate PIC behavior.
             if (wParam == IDT_TIMER10MS) {
                 // handle the 10ms timer:
                 controller_10msec_timer();
@@ -870,25 +869,6 @@ char *lcd_row_get(u8 row) {
     return lcd_ascii[row];
 }
 
-// Update LCD display text:
-void lcd_updated_row(u8 row) {
-    assert(row < 4);
-
-    // Convert ASCII to UTF-16:
-    int c;
-    for (c = 0; c < LCD_COLS; ++c) {
-        // Display NUL characters which show up on hardware:
-        if (lcd_ascii[row][c] == 0) {
-            lcd_text[row][c] = 1;
-            continue;
-        }
-        lcd_text[row][c] = (WCHAR)lcd_ascii[row][c];
-    }
-
-    // Request a UI repaint:
-    InvalidateRect(hwndMain, NULL, TRUE);
-}
-
 // Update all LCD display text:
 void lcd_updated_all(void) {
     // Convert ASCII to UTF-16:
@@ -1001,9 +981,6 @@ u8 flash_bank[3][4096] = {
 #include "../PIC/flash_v4_bank2.h"
 	}
 };
-u16 lookup[128] = {
-#include "../PIC/v4_lookup.h"
-};
 #else
 #error HW_ VERSION must be either "1" or "2"!
 #endif
@@ -1036,8 +1013,4 @@ rom const u8 *flash_addr(u16 addr) {
     addr &= 0x0FFF;
 
     return (u8 *)flash_bank[bank] + addr;
-}
-
-rom const u16 *get_dB_bcd_lookup(void) {
-    return lookup;
 }

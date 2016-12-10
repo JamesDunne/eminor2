@@ -63,6 +63,7 @@ void EraseProgMem(void) //TESTED: Passed
                             // (for USER ID 0x20 0x00 0x00)
 }
 
+#if 0
 unsigned char ReadEE(unsigned char Addr) //TESTED: Passed
 {
     EECON1 = 0x00;
@@ -85,7 +86,6 @@ unsigned char WriteEE(unsigned char Addr, unsigned char data) //TESTED: Passed
 //  while(EECON1_WR);       //Wait till WR bit is clear
 }
 
-/*
 //WriteConfig is different from WriteProgMem b/c it can write a byte
 void WriteConfig(void) //TESTED: Passed
 {
@@ -100,4 +100,4 @@ void WriteConfig(void) //TESTED: Passed
     TBLPTRU = 0x00;         // forces upper byte back to 0x00
                             // optional fix is to set large code model
 }//end WriteConfig
-*/
+#endif

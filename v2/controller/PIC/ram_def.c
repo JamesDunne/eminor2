@@ -95,15 +95,6 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
 #include "flash_v4_bank2.h"
     }
 };
-
-#pragma romdata LOOKUP_TABLE=LOOKUP_SEG_ADDR
-rom unsigned short LOOKUP_TABLE[128] = {
-#include "v4_lookup.h"
-};
-
-unsigned short *get_dB_bcd_lookup() {
-    return LOOKUP_TABLE;
-}
 #else
 #error HW_ VERSION must be "1", "2", "3", or "4"
 #endif

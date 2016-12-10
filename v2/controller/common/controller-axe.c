@@ -231,7 +231,9 @@ struct state {
 struct state curr, last;
 
 // BCD-encoded dB value table (from PIC/v4_lookup.h):
-rom const u16 *dB_bcd_lookup = 0;
+rom const u16 dB_bcd_lookup[128] = {
+#include "../PIC/v4_lookup.h"
+};
 
 // Max program #:
 u8 sl_max;
@@ -757,9 +759,6 @@ void controller_init(void) {
     curr.selected_amp = 1;
     curr.selected_both = 0;
 
-    // Get volume-ramp lookup table:
-    dB_bcd_lookup = get_dB_bcd_lookup();
-
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_ROWS; ++i)
         lcd_rows[i] = lcd_row_get(i);
@@ -977,13 +976,14 @@ void controller_handle(void) {
         // Load program:
         u8 pr_num;
 
-        DEBUG_LOG0("load program");
-
         if (curr.setlist_mode == 1) {
             pr_num = sl.entries[curr.sl_idx].program;
         } else {
             pr_num = curr.pr_idx;
         }
+
+        DEBUG_LOG1("load program %d", pr_num + 1);
+
         flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
         curr.modified = 0;
 
@@ -998,7 +998,7 @@ void controller_handle(void) {
     }
 
     if (curr.sc_idx != last.sc_idx) {
-        DEBUG_LOG1("load scene %d", curr.sc_idx);
+        DEBUG_LOG1("load scene %d", curr.sc_idx + 1);
 
         // Store last state into program for recall:
         pr.scene[last.sc_idx].amp[0] = curr.amp[0];
@@ -1025,7 +1025,7 @@ void controller_handle(void) {
 }
 
 void scene_default(void) {
-    DEBUG_LOG1("default scene %d", curr.sc_idx);
+    DEBUG_LOG1("default scene %d", curr.sc_idx + 1);
     pr.scene[curr.sc_idx].amp[0].gain = 0;
     pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
     pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
