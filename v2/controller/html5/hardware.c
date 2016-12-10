@@ -16,7 +16,7 @@ const unsigned char flash_memory[FLASH_LENGTH] = {
 };
 #undef FLASH_LENGTH
 
-const unsigned char lookup[128] = {
+const unsigned short lookup[128] = {
 #include "../PIC/v4_lookup.h"
 };
 
@@ -37,7 +37,7 @@ rom const u8 *flash_addr(u16 addr) {
 }
 
 // Get a pointer to a lookup table:
-rom const u8 *lookup_table(u8 table) {
+rom const u16 *get_dB_bcd_lookup() {
 	return lookup;
 }
 
