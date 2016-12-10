@@ -853,20 +853,23 @@ void controller_10msec_timer(void) {
 #endif
 }
 
-#define calc_gain_modified() \
-    curr.modified = (curr.modified & ~(u8)0x11) | \
-        ((u8)(curr.amp[0].gain != origpr.scene[curr.sc_idx].amp[0].gain) << (u8)0) | \
-        ((u8)(curr.amp[1].gain != origpr.scene[curr.sc_idx].amp[1].gain) << (u8)4)
+static void calc_gain_modified(void) {
+    curr.modified = (curr.modified & ~(u8) 0x11) |
+        ((u8) (curr.amp[0].gain != origpr.scene[curr.sc_idx].amp[0].gain) << (u8) 0) |
+        ((u8) (curr.amp[1].gain != origpr.scene[curr.sc_idx].amp[1].gain) << (u8) 4);
+}
 
-#define calc_fx_modified() \
-    curr.modified = (curr.modified & ~(u8)0x22) | \
-        ((u8)(curr.amp[0].fx != origpr.scene[curr.sc_idx].amp[0].fx) << (u8)1) | \
-        ((u8)(curr.amp[1].fx != origpr.scene[curr.sc_idx].amp[1].fx) << (u8)5)
+static void calc_fx_modified(void) {
+    curr.modified = (curr.modified & ~(u8) 0x22) |
+        ((u8) (curr.amp[0].fx != origpr.scene[curr.sc_idx].amp[0].fx) << (u8) 1) |
+        ((u8) (curr.amp[1].fx != origpr.scene[curr.sc_idx].amp[1].fx) << (u8) 5);
+}
 
-#define calc_volume_modified() \
-    curr.modified = (curr.modified & ~(u8)0x44) | \
-        ((u8)(curr.amp[0].volume != origpr.scene[curr.sc_idx].amp[0].volume) << (u8)2) | \
-        ((u8)(curr.amp[1].volume != origpr.scene[curr.sc_idx].amp[1].volume) << (u8)6)
+static void calc_volume_modified(void) {
+    curr.modified = (curr.modified & ~(u8) 0x44) |
+        ((u8) (curr.amp[0].volume != origpr.scene[curr.sc_idx].amp[0].volume) << (u8) 2) |
+        ((u8) (curr.amp[1].volume != origpr.scene[curr.sc_idx].amp[1].volume) << (u8) 6);
+}
 
 // main control loop
 void controller_handle(void) {
