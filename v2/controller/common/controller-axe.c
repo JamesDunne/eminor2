@@ -417,9 +417,9 @@ static void scene_default(void);
 
 static void program_save(void);
 
-// TODO: replace me with branchless bit twiddling.
+// (enable == 0 ? (u8)0 : (u8)0x7F)
 #define calc_cc_toggle(enable) \
-    (enable == 0 ? (u8)0 : (u8)0x7F)
+    ((u8)-((s8)enable) >> (u8)1)
 
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
@@ -700,7 +700,7 @@ static void calc_leds(void) {
 
     curr.mode_leds[curr.mode].bot.bits._1 = curr.selected_both;
     curr.mode_leds[curr.mode].bot.bits._2 = curr.selected_amp;
-    curr.mode_leds[curr.mode].bot.bits._3 = curr.fsw.bot.bits._3 | (curr.gain_mode);
+    curr.mode_leds[curr.mode].bot.bits._3 = curr.gain_mode;
     curr.mode_leds[curr.mode].bot.bits._4 = curr.fsw.bot.bits._4;
     curr.mode_leds[curr.mode].bot.bits._5 = curr.fsw.bot.bits._5;
     curr.mode_leds[curr.mode].bot.bits._6 = curr.fsw.bot.bits._6;
@@ -779,18 +779,18 @@ struct timers {
     // Repeating timers:
     u8 bot_4;
     u8 bot_5;
-    u8 bot_7;
     u8 bot_8;
     u8 top_7;
     u8 top_8;
     // Once-only timers:
-    u8 bot_1;
     u8 bot_2;
     u8 bot_3;
     u8 bot_6;
 } timers;
 
+#if 0
 u8 val;
+#endif
 
 // called every 10ms
 void controller_10msec_timer(void) {
@@ -827,7 +827,6 @@ void controller_10msec_timer(void) {
 
     one_shot(bot,6,0x1F,toggle_setlist_mode)
 
-    //one_shot(bot,7,0x1F,scene_delete)
     one_shot(bot,8,0x1F,program_save)
 
     repeater(top,7,0x20,0x03,prev_song)
@@ -865,9 +864,6 @@ void controller_handle(void) {
     // AMP (1 and 2)
     if (is_bot_button_pressed(M_1)) {
         curr.selected_both ^= 1;
-        timers.bot_1 = (u8)0x80;
-    } else if (is_bot_button_released(M_1)) {
-        timers.bot_1 = (u8)0;
     }
 
     // AMP (1 or 2)
@@ -920,12 +916,7 @@ void controller_handle(void) {
 
     // PREV/NEXT SCENE:
     if (is_bot_button_pressed(M_7)) {
-        timers.bot_7 = (u8)0x80;
-    } else if (is_bot_button_released(M_7)) {
-        if ((timers.bot_7 & (u8)0x80) != (u8)0) {
-            prev_scene();
-        }
-        timers.bot_7 = (u8)0x00;
+        prev_scene();
     }
     if (is_bot_button_pressed(M_8)) {
         timers.bot_8 = (u8)0x80;
