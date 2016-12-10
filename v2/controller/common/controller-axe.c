@@ -425,7 +425,7 @@ static void program_save(void);
 static void calc_midi(void) {
     u8 diff = 0;
     u8 gain, last_gain;
-    u8 dirty;
+    u8 dirty, last_dirty;
     u8 gate, last_gate;
     u8 xy;
     u8 send_gain;
@@ -434,13 +434,18 @@ static void calc_midi(void) {
 
     // Send gain controller changes:
     dirty = read_bit(dirty, curr.amp[0].fx);
-    dirty_changed = (u8)(dirty != read_bit(dirty, last.amp[0].fx));
+    last_dirty = read_bit(dirty, last.amp[0].fx);
+    dirty_changed = (u8)(dirty != last_dirty);
+
     gain = or_default(curr.amp[0].gain);
     last_gain = or_default(last.amp[0].gain);
     gain_changed = (u8)(gain != last_gain);
-    last_gate = (u8)(last_gain >= 0x10);
-    gate = (u8)(gain >= 0x10);
+
+    gate = (u8)(dirty && (gain >= 0x10));
+    last_gate = (u8)(last_dirty && (last_gain >= 0x10));
+
     diff |= gain_changed;
+
     send_gain = (u8)((dirty && gain_changed) || dirty_changed);
     if (send_gain) {
         DEBUG_LOG2("MIDI set AMP1 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
@@ -453,12 +458,16 @@ static void calc_midi(void) {
     }
 
     dirty = read_bit(dirty, curr.amp[1].fx);
-    dirty_changed = (u8)(dirty != read_bit(dirty, last.amp[1].fx));
+    last_dirty = read_bit(dirty, last.amp[1].fx);
+    dirty_changed = (u8)(dirty != last_dirty);
+
     gain = or_default(curr.amp[1].gain);
     last_gain = or_default(last.amp[1].gain);
     gain_changed = (u8)(gain != last_gain);
-    last_gate = (u8)(last_gain >= 0x10);
-    gate = (u8)(gain >= 0x10);
+
+    gate = (u8)(dirty && (gain >= 0x10));
+    last_gate = (u8)(last_dirty && (last_gain >= 0x10));
+
     diff |= gain_changed;
     send_gain = (u8)((dirty && gain_changed) || dirty_changed);
     if (send_gain) {
