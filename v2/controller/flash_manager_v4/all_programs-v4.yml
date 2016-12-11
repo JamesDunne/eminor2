@@ -100,7 +100,7 @@ programs:
     JD:
       channel: dirty
 - name: Drive
-  gain: 0x1A
+  gain: 0x0A
   scenes:
   - name: Clean
     MG:
@@ -110,8 +110,8 @@ programs:
   - name: MG Lead
     MG:
       channel: dirty
-      level: 6
-      fx: [chorus,delay]
+      level: 3.3
+      fx: [delay]
     JD:
       channel: clean
   - name: Clean
