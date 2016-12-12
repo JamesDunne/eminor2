@@ -230,6 +230,64 @@ struct state {
 // Current and last state:
 struct state curr, last;
 
+// Struct copying:
+#ifdef __SDCC
+#define struct_copy_amp(dst,src) { \
+    dst.gain = src.gain; \
+    dst.fx = src.fx; \
+    dst.volume = src.volume; \
+}
+#define struct_copy_program(dst,src) { \
+    dst.name_index = src.name_index; \
+    dst.midi_program = src.midi_program; \
+    dst.scene_count = src.scene_count; \
+    struct_copy_amp(dst.scene[0].amp[0], src.scene[0].amp[0]); \
+    struct_copy_amp(dst.scene[0].amp[1], src.scene[0].amp[1]); \
+    struct_copy_amp(dst.scene[1].amp[0], src.scene[1].amp[0]); \
+    struct_copy_amp(dst.scene[1].amp[1], src.scene[1].amp[1]); \
+    struct_copy_amp(dst.scene[2].amp[0], src.scene[2].amp[0]); \
+    struct_copy_amp(dst.scene[2].amp[1], src.scene[2].amp[1]); \
+    struct_copy_amp(dst.scene[3].amp[0], src.scene[3].amp[0]); \
+    struct_copy_amp(dst.scene[3].amp[1], src.scene[3].amp[1]); \
+    struct_copy_amp(dst.scene[4].amp[0], src.scene[4].amp[0]); \
+    struct_copy_amp(dst.scene[4].amp[1], src.scene[4].amp[1]); \
+    struct_copy_amp(dst.scene[5].amp[0], src.scene[5].amp[0]); \
+    struct_copy_amp(dst.scene[5].amp[1], src.scene[5].amp[1]); \
+    struct_copy_amp(dst.scene[6].amp[0], src.scene[6].amp[0]); \
+    struct_copy_amp(dst.scene[6].amp[1], src.scene[6].amp[1]); \
+    struct_copy_amp(dst.scene[7].amp[0], src.scene[7].amp[0]); \
+    struct_copy_amp(dst.scene[7].amp[1], src.scene[7].amp[1]); \
+    struct_copy_amp(dst.scene[8].amp[0], src.scene[8].amp[0]); \
+    struct_copy_amp(dst.scene[8].amp[1], src.scene[8].amp[1]); \
+    struct_copy_amp(dst.scene[9].amp[0], src.scene[9].amp[0]); \
+    struct_copy_amp(dst.scene[9].amp[1], src.scene[9].amp[1]); \
+}
+#define struct_copy_state(dst,src) { \
+    dst.fsw.bot.byte = src.fsw.bot.byte; \
+    dst.fsw.top.byte = src.fsw.top.byte; \
+    dst.leds = src.leds; \
+    dst.mode = src.mode; \
+    dst.mode_leds[0].bot.byte = src.mode_leds[0].bot.byte; \
+    dst.mode_leds[0].top.byte = src.mode_leds[0].top.byte; \
+    dst.tap = src.tap; \
+    dst.setlist_mode = src.setlist_mode; \
+    dst.sl_idx = src.sl_idx; \
+    dst.pr_idx = src.pr_idx; \
+    dst.sc_idx = src.sc_idx; \
+    dst.selected_amp = src.selected_amp; \
+    dst.selected_both = src.selected_both; \
+    struct_copy_amp(dst.amp[0], src.amp[0]); \
+    struct_copy_amp(dst.amp[1], src.amp[1]); \
+    dst.gain_mode = src.gain_mode; \
+    dst.modified = src.modified; \
+}
+#else
+#define struct_copy(dst,src) dst = src
+#define struct_copy_amp(dst,src) dst = src
+#define struct_copy_program(dst,src) dst = src
+#define struct_copy_state(dst,src) dst = src
+#endif
+
 // BCD-encoded dB value table (from PIC/v4_lookup.h):
 rom const u16 dB_bcd_lookup[128] = {
 #include "../PIC/v4_lookup.h"
@@ -743,13 +801,13 @@ void controller_init(void) {
     curr.pr_idx = 0;
     curr.sc_idx = 0;
     flash_load((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *)&pr);
-    struct_copy(origpr, pr, sizeof(struct program));
+    struct_copy_program(origpr, pr);
     //origpr = pr;
     curr.modified = 0;
 
     // Copy current scene settings into state:
-    struct_copy(curr.amp[0], pr.scene[curr.sc_idx].amp[0], sizeof(struct amp));
-    struct_copy(curr.amp[1], pr.scene[curr.sc_idx].amp[1], sizeof(struct amp));
+    struct_copy_amp(curr.amp[0], pr.scene[curr.sc_idx].amp[0]);
+    struct_copy_amp(curr.amp[1], pr.scene[curr.sc_idx].amp[1]);
 
     // Invert last settings to force initial switch:
     last.amp[0].fx = ~curr.amp[0].fx;
@@ -1020,20 +1078,20 @@ void controller_handle(void) {
         DEBUG_LOG1("load scene %d", curr.sc_idx + 1);
 
         // Store last state into program for recall:
-        struct_copy(pr.scene[last.sc_idx].amp[0], curr.amp[0], sizeof(struct amp));
-        struct_copy(pr.scene[last.sc_idx].amp[1], curr.amp[1], sizeof(struct amp));
+        struct_copy_amp(pr.scene[last.sc_idx].amp[0], curr.amp[0]);
+        struct_copy_amp(pr.scene[last.sc_idx].amp[1], curr.amp[1]);
 
         // Detect if scene is uninitialized:
         if ((pr.scene[curr.sc_idx].amp[0].gain == 0) && (pr.scene[curr.sc_idx].amp[0].volume == 0) &&
             (pr.scene[curr.sc_idx].amp[1].gain == 0) && (pr.scene[curr.sc_idx].amp[1].volume == 0)) {
-            // Reset to default scene state:
-            //scene_default();
-            struct_copy(pr.scene[curr.sc_idx], pr.scene[curr.sc_idx-1], sizeof(struct program));
+            // Copy previous scene:
+            struct_copy_amp(pr.scene[curr.sc_idx].amp[0], pr.scene[curr.sc_idx-1].amp[0]);
+            struct_copy_amp(pr.scene[curr.sc_idx].amp[1], pr.scene[curr.sc_idx-1].amp[1]);
         }
 
         // Copy new scene settings into current state:
-        struct_copy(curr.amp[0], pr.scene[curr.sc_idx].amp[0], sizeof(struct amp));
-        struct_copy(curr.amp[1], pr.scene[curr.sc_idx].amp[1], sizeof(struct amp));
+        struct_copy_amp(curr.amp[0], pr.scene[curr.sc_idx].amp[0]);
+        struct_copy_amp(curr.amp[1], pr.scene[curr.sc_idx].amp[1]);
 
         // Recalculate modified status for this scene:
         curr.modified = 0;
@@ -1046,7 +1104,7 @@ void controller_handle(void) {
     calc_leds();
 
     // Record the previous state:
-    struct_copy(last, curr, sizeof(struct state));
+    struct_copy_state(last, curr);
 }
 
 void scene_default(void) {
@@ -1276,8 +1334,8 @@ static void program_save() {
     u16 addr = (u16)(program * sizeof(struct program));
 
     // Update current scene in program from current state:
-    struct_copy(pr.scene[curr.sc_idx].amp[0], curr.amp[0], sizeof(struct amp));
-    struct_copy(pr.scene[curr.sc_idx].amp[1], curr.amp[1], sizeof(struct amp));
+    struct_copy_amp(pr.scene[curr.sc_idx].amp[0], curr.amp[0]);
+    struct_copy_amp(pr.scene[curr.sc_idx].amp[1], curr.amp[1]);
 
     // Save current program back to flash:
     DEBUG_LOG2("save program %d at addr 0x%04x", program+1, addr);

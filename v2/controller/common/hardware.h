@@ -21,14 +21,6 @@
 #define rom
 #endif
 
-// Struct copying:
-#ifdef __SDCC
-#include <string.h>
-#define struct_copy(dst,src,size) memcpy(&dst, &src, size)
-#else
-#define struct_copy(dst,src,size) dst = src
-#endif
-
 // Define DEBUG_LOG macros:
 #ifndef _DEBUG
 #define DEBUG_LOG0(fmt)
