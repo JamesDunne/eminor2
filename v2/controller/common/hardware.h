@@ -21,8 +21,16 @@
 #define rom
 #endif
 
-// Define a DEBUG_LOG0 macro:
-#ifdef __MCC18
+// Struct copying:
+#ifdef __SDCC
+#include <string.h>
+#define struct_copy(dst,src,size) memcpy(&dst, &src, size)
+#else
+#define struct_copy(dst,src,size) dst = src
+#endif
+
+// Define DEBUG_LOG macros:
+#ifndef _DEBUG
 #define DEBUG_LOG0(fmt)
 #define DEBUG_LOG1(fmt,a1)
 #define DEBUG_LOG2(fmt,a1,a2)

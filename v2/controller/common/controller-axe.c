@@ -743,12 +743,13 @@ void controller_init(void) {
     curr.pr_idx = 0;
     curr.sc_idx = 0;
     flash_load((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *)&pr);
-    origpr = pr;
+    struct_copy(origpr, pr, sizeof(struct program));
+    //origpr = pr;
     curr.modified = 0;
 
     // Copy current scene settings into state:
-    curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
-    curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
+    struct_copy(curr.amp[0], pr.scene[curr.sc_idx].amp[0], sizeof(struct amp));
+    struct_copy(curr.amp[1], pr.scene[curr.sc_idx].amp[1], sizeof(struct amp));
 
     // Invert last settings to force initial switch:
     last.amp[0].fx = ~curr.amp[0].fx;
@@ -1019,20 +1020,20 @@ void controller_handle(void) {
         DEBUG_LOG1("load scene %d", curr.sc_idx + 1);
 
         // Store last state into program for recall:
-        pr.scene[last.sc_idx].amp[0] = curr.amp[0];
-        pr.scene[last.sc_idx].amp[1] = curr.amp[1];
+        struct_copy(pr.scene[last.sc_idx].amp[0], curr.amp[0], sizeof(struct amp));
+        struct_copy(pr.scene[last.sc_idx].amp[1], curr.amp[1], sizeof(struct amp));
 
         // Detect if scene is uninitialized:
         if ((pr.scene[curr.sc_idx].amp[0].gain == 0) && (pr.scene[curr.sc_idx].amp[0].volume == 0) &&
             (pr.scene[curr.sc_idx].amp[1].gain == 0) && (pr.scene[curr.sc_idx].amp[1].volume == 0)) {
             // Reset to default scene state:
             //scene_default();
-            pr.scene[curr.sc_idx] = pr.scene[curr.sc_idx-1];
+            struct_copy(pr.scene[curr.sc_idx], pr.scene[curr.sc_idx-1], sizeof(struct program));
         }
 
         // Copy new scene settings into current state:
-        curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
-        curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
+        struct_copy(curr.amp[0], pr.scene[curr.sc_idx].amp[0], sizeof(struct amp));
+        struct_copy(curr.amp[1], pr.scene[curr.sc_idx].amp[1], sizeof(struct amp));
 
         // Recalculate modified status for this scene:
         curr.modified = 0;
@@ -1045,7 +1046,7 @@ void controller_handle(void) {
     calc_leds();
 
     // Record the previous state:
-    last = curr;
+    struct_copy(last, curr, sizeof(struct state));
 }
 
 void scene_default(void) {
@@ -1275,8 +1276,8 @@ static void program_save() {
     u16 addr = (u16)(program * sizeof(struct program));
 
     // Update current scene in program from current state:
-    pr.scene[curr.sc_idx].amp[0] = curr.amp[0];
-    pr.scene[curr.sc_idx].amp[1] = curr.amp[1];
+    struct_copy(pr.scene[curr.sc_idx].amp[0], curr.amp[0], sizeof(struct amp));
+    struct_copy(pr.scene[curr.sc_idx].amp[1], curr.amp[1], sizeof(struct amp));
 
     // Save current program back to flash:
     DEBUG_LOG2("save program %d at addr 0x%04x", program+1, addr);
