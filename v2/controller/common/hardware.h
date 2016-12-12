@@ -18,7 +18,7 @@
 #define COMPILE_ASSERT(cond) COMPILE_ASSERT2(cond,__LINE__)
 
 #ifndef __MCC18
-#define rom
+#define rom const
 #endif
 
 // Define DEBUG_LOG macros:

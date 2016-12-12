@@ -8,6 +8,11 @@
 #ifndef __18F4550_H
 #define __18F4550_H
 
+#ifdef __SDCC
+#define near
+#define far
+#endif
+
 extern volatile near unsigned char       SPPDATA;
 extern          near unsigned char       SPPCFG;
 extern          near struct {
@@ -1168,11 +1173,11 @@ extern          near unsigned            PROD;
 extern          near unsigned char       PRODL;
 extern          near unsigned char       PRODH;
 extern volatile near unsigned char       TABLAT;
-extern volatile near unsigned short long TBLPTR;
+extern volatile near unsigned short      TBLPTR;
 extern volatile near unsigned char       TBLPTRL;
 extern volatile near unsigned char       TBLPTRH;
 extern volatile near unsigned char       TBLPTRU;
-extern volatile near unsigned short long PC;
+extern volatile near unsigned short      PC;
 extern volatile near unsigned char       PCL;
 extern volatile near unsigned char       PCLATH;
 extern volatile near unsigned char       PCLATU;
@@ -1187,7 +1192,7 @@ extern volatile near struct {
   unsigned STKUNF:1;
   unsigned STKFUL:1;
 } STKPTRbits;
-extern          near unsigned short long TOS;
+extern          near unsigned short      TOS;
 extern          near unsigned char       TOSL;
 extern          near unsigned char       TOSH;
 extern          near unsigned char       TOSU;

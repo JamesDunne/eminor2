@@ -10,6 +10,10 @@
 //          *See Updates section at bottom of file*
 //#######################################################################
 
+#ifndef __MCC18
+#define rom const
+#endif
+
 #define ENABLE_ALL_INTERRUPTS()     \
     INTCONbits.GIEH = true;         \
     INTCONbits.GIEL = true;
@@ -33,7 +37,8 @@
 
 #define nop(x)      _asm NOP    _endasm
 
-#define CLRWDT(x)   _asm CLRWDT _endasm
+#define CLRWDT(x)   __asm__ ("CLRWDT");
+
 
 //---------------------------------------------------------------------------
 //Define flags here
@@ -65,8 +70,8 @@ typedef union
 
 typedef union
 {
-    unsigned short long w;                                      // Short access : var.w
-    unsigned short long ls_form;                                // Short access : var.ls_form
+    unsigned short w;                                      // Short access : var.w
+    unsigned short ls_form;                                // Short access : var.ls_form
     struct {unsigned char low, high, upper;}b_form;             // byte access : byte0 = lsbyte
     struct {unsigned char B0, B1, B2;}byte;                     // byte access : byte0 = lsbyte
     struct {unsigned short word0; unsigned char byte2;}low_word;    // ??

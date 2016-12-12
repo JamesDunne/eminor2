@@ -24,8 +24,9 @@
 #include "types.h"
 #include "hardware.h"
 
+#ifdef __MCC18
 #pragma code main_code
-
+#endif
 void main() {
     CLRWDT();
     init();
