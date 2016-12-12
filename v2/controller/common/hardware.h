@@ -93,7 +93,7 @@ extern void flash_load(u16 addr, u16 count, u8 *data);
 extern void flash_store(u16 addr, u16 count, u8 *data);
 
 // Get a pointer to flash memory at address:
-extern rom const u8 *flash_addr(u16 addr);
+extern const u8 *flash_addr(u16 addr);
 
 // --------------- Controller logic interface functions:
 

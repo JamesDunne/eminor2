@@ -66,8 +66,11 @@ Press MODE   to switch between set-list order and program # order
 #define fxb_delay  (u8)4
 #define fxb_filter (u8)5
 
-#define read_bit(name,e)   ((e & fxm_##name) >> fxb_##name)
-#define toggle_bit(name,e) e = e ^ fxm_##name
+#define fxmname(name) fxm_##name
+#define fxbname(name) fxb_##name
+
+#define read_bit(name,e)   ((e & fxmname(name)) >> fxbname(name))
+#define toggle_bit(name,e) e = e ^ fxmname(name)
 
 #define default_gain ((u8)0x40)
 #define or_default(gain) (gain == 0 ? default_gain : gain)
@@ -231,7 +234,7 @@ struct state {
 struct state curr, last;
 
 // BCD-encoded dB value table (from PIC/v4_lookup.h):
-rom const u16 dB_bcd_lookup[128] = {
+const u16 dB_bcd_lookup[128] = {
 #include "../PIC/v4_lookup.h"
 };
 
@@ -245,11 +248,11 @@ struct program pr, origpr;
 #define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
 
 // Get the name text for the given name_index from flash memory:
-static rom const char *name_get(u16 name_index) {
+static const char *name_get(u16 name_index) {
     if (name_index == (u16)0) {
         return "";
     }
-    return (rom const char *)flash_addr(name_table_offs + ((name_index - 1) * 20));
+    return (const char *)flash_addr(name_table_offs + ((name_index - 1) * 20));
 }
 
 // Set Axe-FX CC value
@@ -275,7 +278,7 @@ static rom const char *name_get(u16 name_index) {
 #define is_bot_button_held(mask) \
     (curr.fsw.bot.byte == mask)
 
-rom char hex[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+const char hex[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
 static void hextoa(char *dst, u8 col, u8 n) {
     dst += col;
@@ -329,7 +332,7 @@ static char *bcd(u16 n) {
 #endif
 
 // Copies a fixed-length string optionally NUL-terminated to the LCD display row:
-static void copy_str_lcd(rom const char *src, char *dst) {
+static void copy_str_lcd(const char *src, char *dst) {
     u8 i;
     for (i = 0; src[i] != 0 && i < LCD_COLS; ++i) {
         dst[i] = src[i];
@@ -574,7 +577,7 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     s8 i;
-    rom const char *pr_name;
+    const char *pr_name;
 #endif
     DEBUG_LOG0("update LCD");
 #ifdef HWFEAT_LABEL_UPDATES
@@ -792,10 +795,12 @@ struct timers {
 u8 val;
 #endif
 
+#define Mnum(num) M_##num
+
 // called every 10ms
 void controller_10msec_timer(void) {
 #define one_shot(row,n,max,op_func) \
-    if (is_##row##_button_held(M_##n) && ((timers.row##_##n & (u8)0x80) != 0)) { \
+    if (is_##row##_button_held(Mnum(n)) && ((timers.row##_##n & (u8)0x80) != 0)) { \
         /* Increment and cap timer to 0x7F: */ \
         if ((timers.row##_##n & (u8)0x7F) < (u8)max) { \
             timers.row##_##n = (timers.row##_##n & (u8)0x80) | ((timers.row##_##n & (u8)0x7F) + (u8)1); \
@@ -807,7 +812,7 @@ void controller_10msec_timer(void) {
     }
 
 #define repeater(row,n,min,mask,op_func) \
-    if (is_##row##_button_held(M_##n)) { \
+    if (is_##row##_button_held(Mnum(n))) { \
         if ((timers.row##_##n & (u8)0xC0) != (u8)0) { \
             timers.row##_##n = (timers.row##_##n & (u8)0xC0) | (((timers.row##_##n & (u8)0x3F) + (u8)1) & (u8)0x3F); \
         } \
@@ -1048,7 +1053,7 @@ void controller_handle(void) {
     last = curr;
 }
 
-void scene_default(void) {
+static void scene_default(void) {
     DEBUG_LOG1("default scene %d", curr.sc_idx + 1);
     pr.scene[curr.sc_idx].amp[0].gain = 0;
     pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
