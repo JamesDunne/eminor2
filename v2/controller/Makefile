@@ -1,11 +1,13 @@
-sdcc_opts = -DHW_VERSION=4 -Icommon -IPIC --use-non-free -mpic16 -p18f4550 --mplab-comp --opt-code-size --obanksel=2 --pno-banksel --optimize-cmp --optimize-df
+#--mplab-comp 
+sdcc_opts = -DHW_VERSION=4 -Icommon -IPIC --use-non-free -mpic16 -p18f4550 --opt-code-size --obanksel=2 --pno-banksel --optimize-cmp --optimize-df
 
 srcs = PIC/main.c common/controller-axe.c PIC/hwcalls.c PIC/comm_midi.c PIC/comm_lcd.c PIC/init.c PIC/intslct.c PIC/ram_def.c PIC/startup.c PIC/systick.c PIC/UserAppCode.c PIC/writeprogmem.c
 objs = $(patsubst %.c,%.o,$(srcs))
 
 controller.hex: $(objs) depend
-	#gplink --mplink-compatible -m -s PIC/18f4550.lkr -o controller.hex $(objs)
-	mplink PIC/18f4550.lkr $(objs) p18f4550.lib -p18f4550 -lC:\mplabc18\v3.46\lib -mcontroller.map -ocontroller.hex
+	gplink "-IC:\Program Files\SDCC\lib\pic16" -m -s PIC/18f4550.lkr -o controller.hex $(objs) libsdcc.lib libc18f.lib
+	#gplink "-IC:\Program Files\SDCC\lib\small" --mplink-compatible -m -s PIC/18f4550.lkr -o controller.hex $(objs) libsdcc.lib
+	#mplink PIC/18f4550.lkr $(objs) p18f4550.lib -p18f4550 -lC:\mplabc18\v3.46\lib -mcontroller.map -ocontroller.hex
 
 %.o: %.c
 	sdcc $(sdcc_opts) -c $< -o $(<:.c=.o)
