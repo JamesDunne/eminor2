@@ -5,13 +5,14 @@
  * (c) Copyright 1999-2004 Microchip Technology, All rights reserved
  *-------------------------------------------------------------------------*/
 
-#ifndef __18F4550_H
-#define __18F4550_H
+#include <pic18f4550.h>
 
 #ifdef __SDCC
 #define near
 #define far
 #endif
+
+#if 0
 
 extern volatile near unsigned char       SPPDATA;
 extern          near unsigned char       SPPCFG;

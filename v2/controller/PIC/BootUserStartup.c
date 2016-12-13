@@ -12,7 +12,8 @@
 
 
 /** I N C L U D E S **********************************************************/
-#include <p18cxxx.h>
+//#include <p18cxxx.h>
+#include "p18f4550.h"
 #include "typedefs.h"
 //#include "usb.h"
 //#include "io_cfg.h"
@@ -40,12 +41,18 @@ void bootNopFunc(void);
 
 /****** Program memory vectors, constants, and application remapping*********************/
 //Be careful if modifying the below code.  The below code is absolute address sensitive.
+#ifdef __MCC18
 #pragma code true_entry_scn=0x000000        //Reset vector is at 0x00.  Device begins executing code from 0x00 after a reset or POR event
+#endif
+#ifdef __SDCC
+#pragma code true_entry 0x0
+#endif
 void true_entry (void)
 {
-     _asm goto UninitializedMain _endasm
+     __asm goto _UninitializedMain __endasm;
 }
 
+#ifdef __MCC18
 //The hardware high priority interrupt vector.  This bootloader firmware does
 //not use interrupts at all.  If an interrupt occurs, it is due to application
 //mode operation.  Therefore, if an interrupt occurs, we should just jump to
@@ -69,12 +76,17 @@ void interrupt_at_low_vector(void)
                                 //unless the application firmware executes an
                                 //intentional _asm goto 0x001C _endasm ("#asm goto 0x001C #endasm" if using XC8 compiler).
 }
-
+#endif
 
 
 
 /** D E C L A R A T I O N S **************************************************/
+#ifdef __MCC18
 #pragma code    BOOTSTARTUP
+#endif
+#ifdef __SDCC
+#pragma code UninitializedMain 0x0
+#endif
 /******************************************************************************
  * Function:        void UninitializedMain(void)
  *
@@ -145,7 +157,9 @@ void UninitializedMain(void)
     else
     {
         //User is pressing the pushbutton.  We should stay in bootloader mode
-        _asm goto BOOT_MAIN _endasm
+        __asm
+                goto BOOT_MAIN
+        __endasm;
     }
 
 DoFlashSignatureCheck:
@@ -157,14 +171,18 @@ DoFlashSignatureCheck:
             //erase/program/verify operation was a success.
 
             //Go ahead and jump out of bootloader mode into the application run mode
-            _asm goto REMAPPED_APPLICATION_RESET_VECTOR _endasm
+            __asm
+                    goto REMAPPED_APPLICATION_RESET_VECTOR
+            __endasm;
         }
         //else the application image is missing or corrupt.  In this case, we
         //need to stay in the bootloader mode, so the user has the ability to
         //try (again) to re-program a valid application image into the device.
 
         //We should stay in bootloader mode
-        _asm goto BOOT_MAIN _endasm
+        __asm
+            goto BOOT_MAIN
+        __endasm;
     #else
 
         //Ideally we shouldn't get here.  It is not recommended for the user to

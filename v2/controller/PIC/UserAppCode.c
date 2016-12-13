@@ -20,8 +20,20 @@
 
 
 //Initialize with a valid application signature already loaded to allow the code to run at startup rather than jumping to bootload mode.
+#ifdef __MCC18
 #pragma romdata app_signature=APP_SIGNATURE_ADDRESS
-rom const unsigned short app_sig = {APP_SIGNATURE_VALUE};
+rom 
+#endif
+#ifdef __SDCC
+__code __at (APP_SIGNATURE_ADDRESS)
+#endif
+const unsigned short app_sig = {APP_SIGNATURE_VALUE};
 
+#ifdef __MCC18
 #pragma romdata app_version=APP_VERSION_ADDRESS
-rom const unsigned short app_ver = {APP_VERSION};
+rom 
+#endif
+#ifdef __SDCC
+__code __at (APP_VERSION_ADDRESS)
+#endif
+const unsigned short app_ver = {APP_VERSION};
