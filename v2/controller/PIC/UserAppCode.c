@@ -14,9 +14,8 @@
 
 
 /** I N C L U D E S **********************************************************/
-#include <p18cxxx.h>
+//#include <p18cxxx.h>
 #include "typedefs.h"
-//#include "usb.h"
 #include "boot.h"
 
 

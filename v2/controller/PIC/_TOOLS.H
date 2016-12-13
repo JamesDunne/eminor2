@@ -10,10 +10,6 @@
 //          *See Updates section at bottom of file*
 //#######################################################################
 
-#ifndef __MCC18
-#define rom const
-#endif
-
 #define ENABLE_ALL_INTERRUPTS()     \
     INTCONbits.GIEH = true;         \
     INTCONbits.GIEL = true;

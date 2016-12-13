@@ -21,3 +21,11 @@ typedef struct {
     b8  bot;
     b8  top;
 } io16;
+
+#ifndef __MCC18
+#  ifdef __SDCC
+#define rom __code
+#  else
+#define rom
+#  endif
+#endif

@@ -10,7 +10,12 @@ near BitField ArbFlags2;
 near BitField MiscFlags1;
 
 //----------------------------Main variables----------------------------------------
+#ifdef __MCC18
 #pragma udata gpr1
+#endif
+#ifdef __SDCC
+#pragma udata gpr1 ProgMemAddr
+#endif
 TwoBytes ProgMemAddr;
 unsigned char ProgmemBuffer[64];
 
@@ -46,9 +51,15 @@ TwoBytes tTimer1Value;
 unsigned char LCDUpdateStage;
 
 // User-writable flash memory:
+#ifdef __MCC18
 #pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
+rom
+#endif
+#ifdef __SDCC
+__code __at (WRITABLE_SEG_ADDR)
+#endif
 #if HW_VERSION == 1
-rom unsigned char ROM_SAVEDATA[3][4096] = {
+unsigned char ROM_SAVEDATA[3][4096] = {
     {
 #include "flash_v1_bank0.h"
     },
@@ -60,7 +71,7 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
     }
 };
 #elif HW_VERSION == 2
-rom unsigned char ROM_SAVEDATA[3][4096] = {
+unsigned char ROM_SAVEDATA[3][4096] = {
     {
 #include "flash_v2_bank0.h"
     },
@@ -72,7 +83,7 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
     }
 };
 #elif HW_VERSION == 3
-rom unsigned char ROM_SAVEDATA[3][4096] = {
+unsigned char ROM_SAVEDATA[3][4096] = {
     {
 #include "flash_v3_bank0.h"
     },
@@ -84,7 +95,7 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
     }
 };
 #elif HW_VERSION == 4
-rom unsigned char ROM_SAVEDATA[3][4096] = {
+unsigned char ROM_SAVEDATA[3][4096] = {
     {
 #include "flash_v4_bank0.h"
     },

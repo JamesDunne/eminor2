@@ -7,20 +7,11 @@
 //;#                                                                          #
 //;############################################################################
 #include "_tools.h"
+#include "typedefs.h"
 #include "p18f4550.h"
 #include "c_cnstdef.h"
 #include "c_ramdef.h"
 #include "c_portdef.h"
-
-//-----------------------------------------------------------------------------
-//macros:
-#define ENABLE_ALL_INTERRUPTS()     \
-    INTCONbits.GIEH = true;         \
-    INTCONbits.GIEL = true;
-
-#define DISABLE_ALL_INTERRUPTS()    \
-    INTCONbits.GIEH = false;        \
-    INTCONbits.GIEL = false;
 
 //-----------------------------------------------------------------------------
 //generic function prototypes:
@@ -31,7 +22,11 @@ void    EraseProgMem(void);
 void    WriteProgMem(unsigned char index);
 
 //routine prototypes:
-void    InterruptHandlerHigh();
+void    InterruptHandlerHigh()
+#ifdef __SDCC
+__interrupt 1
+#endif
+;
 void    SystemTimeRoutine(void);
 void    init(void);
 
@@ -50,7 +45,14 @@ void    lcd_update_screen(void);
 void    swuart_tx_start(void);
 void    swuart_tx_interrupt(void);
 
-extern rom unsigned char ROM_SAVEDATA[3][4096];
+extern
+#ifdef __MCC18
+rom
+#endif
+#ifdef __SDCC
+__code __at (WRITABLE_SEG_ADDR)
+#endif
+unsigned char ROM_SAVEDATA[3][4096];
 //-----------------------------------------------------------------------------
 
 // NOTE(jsd): These macros are just plain broken on the MPLAB SIM; unknown on PIC18.

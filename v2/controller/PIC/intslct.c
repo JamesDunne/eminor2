@@ -12,6 +12,7 @@
 
 #include "c_system.h"
 
+#ifdef __MCC18
 #pragma code InterruptVectorHigh = 0x1008
 void InterruptVectorHigh (void)
 {
@@ -19,14 +20,20 @@ void InterruptVectorHigh (void)
     goto InterruptHandlerHigh //jump to interrupt routine
   _endasm
 }
+#endif
 
 //----------------------------------------------------------------------------
 // High priority interrupt routine
 
+#ifdef __MCC18
 #pragma code
-
 #pragma interrupt InterruptHandlerHigh
-void InterruptHandlerHigh (void) {
+#endif
+void InterruptHandlerHigh (void)
+#ifdef __SDCC
+__interrupt 1
+#endif
+{
     if (PIR1bits.TMR1IF) {
         // Call to SWUART for timer1:
         swuart_tx_interrupt();
@@ -47,6 +54,8 @@ void InterruptHandlerHigh (void) {
     }
 }
 
+#ifdef __MCC18
 #pragma code
+#endif
 
 //----------------------------------------------------------------------------

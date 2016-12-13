@@ -24,6 +24,7 @@ void StartWrite(void)
 //NOTE: index should be either 0 or 32.  (0 for the first 32 bytes, 32 for the second)
 void WriteProgMem(unsigned char index) //TESTED: Passed
 {
+#ifndef __SDCC
     unsigned char counter;
 
     /*
@@ -39,11 +40,12 @@ void WriteProgMem(unsigned char index) //TESTED: Passed
     //LEN = # of byte to write
 
     for (counter = index; counter < index+32; counter++) {
-        *(rom far char *)(ProgMemAddr.s_form+counter) = ProgmemBuffer[counter];
+        *(rom char *)(ProgMemAddr.s_form+counter) = ProgmemBuffer[counter];
         if ((counter & 0b00011111) == 0b00011111) {
             StartWrite();
         }
     }
+#endif
 }
 
 //uses TwoBytes ProgMemAddr;

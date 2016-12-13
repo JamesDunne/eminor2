@@ -21,7 +21,6 @@
 #pragma config DEBUG = OFF
 
 #include "c_system.h"
-#include "types.h"
 #include "hardware.h"
 
 #ifdef __MCC18
