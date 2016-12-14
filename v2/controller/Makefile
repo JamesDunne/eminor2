@@ -1,7 +1,7 @@
 #--mplab-comp 
 sdcc_opts = -DHW_VERSION=4 -Icommon -IPIC "-IC:\Program Files\SDCC\include" "-IC:\Program Files\SDCC\include\pic16" "-IC:\Program Files\SDCC\non-free\include\pic16" --use-non-free -mpic16 -p18f4550 --opt-code-size --obanksel=2 --pno-banksel --optimize-cmp --optimize-df
 
-srcs = PIC/main.c PIC/startup.c PIC/BootUserStartup.c PIC/bootcode.c PIC/comm_lcd.c PIC/init.c PIC/intslct.c PIC/ram_def.c PIC/systick.c PIC/UserAppCode.c PIC/writeprogmem.c PIC/comm_midi.c PIC/hwcalls.c common/controller-axe.c
+srcs = PIC/BootUserStartup.c PIC/bootcode.c PIC/main.c PIC/startup.c PIC/comm_lcd.c PIC/init.c PIC/intslct.c PIC/ram_def.c PIC/systick.c PIC/UserAppCode.c PIC/writeprogmem.c PIC/comm_midi.c PIC/hwcalls.c common/controller-axe.c
 objs = $(patsubst %.c,build/%.o,$(srcs))
 
 build/controller.hex: $(objs) depend
