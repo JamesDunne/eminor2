@@ -26,7 +26,7 @@ void _entry (void)
 #endif
 #ifdef __SDCC
 #pragma code _entry REMAPPED_APPLICATION_RESET_VECTOR
-void _entry (void)
+void _entry (void) __naked
 {
   __asm
     goto _startup
@@ -66,7 +66,7 @@ loop:
 }                               /* end _startup() */
 #endif
 #ifdef __SDCC
-void startup (void)
+void startup (void) __naked
 {
   __asm
     // Initialize the stack pointer
