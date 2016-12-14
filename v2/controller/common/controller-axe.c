@@ -1003,6 +1003,7 @@ void controller_handle(void) {
         DEBUG_LOG1("load program %d", pr_num + 1);
 
         flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
+        origpr = pr;
         curr.modified = 0;
 
         // Establish a sane default for an undefined program:
