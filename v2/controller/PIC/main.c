@@ -26,7 +26,7 @@
 #ifdef __MCC18
 #pragma code main_code
 #endif
-void main(void) {
+void user_main(void) {
     CLRWDT();
     init();
     CLRWDT();

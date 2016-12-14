@@ -43,7 +43,7 @@ void bootNopFunc(void);
 //Be careful if modifying the below code.  The below code is absolute address sensitive.
 #ifdef __MCC18
 #pragma code true_entry_scn=0x000000        //Reset vector is at 0x00.  Device begins executing code from 0x00 after a reset or POR event
-void true_entry (void)
+void main (void)
 {
     _asm
         goto UninitializedMain
@@ -51,8 +51,8 @@ void true_entry (void)
 }
 #endif
 #ifdef __SDCC
-#pragma code true_entry 0x0
-void true_entry (void)
+#pragma code main 0x0
+void main (void)
 __naked
 {
     __asm

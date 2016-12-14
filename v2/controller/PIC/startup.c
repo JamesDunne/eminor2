@@ -8,7 +8,7 @@
 /* MPLAB-C18 startup code */
 
 /* external reference to the user's main routine */
-extern void main (void);
+extern void user_main (void);
 /* prototype for the startup function */
 void _entry (void);
 void startup (void);
@@ -25,7 +25,7 @@ void _entry (void)
 }
 #endif
 #ifdef __SDCC
-#pragma code _entry 0x0
+#pragma code _entry REMAPPED_APPLICATION_RESET_VECTOR
 void _entry (void)
 {
   __asm
@@ -60,13 +60,12 @@ RAMCLEAR:
 loop:
 
   // Call the user's main routine
-  main ();
+  user_main ();
 
   goto loop;
 }                               /* end _startup() */
 #endif
 #ifdef __SDCC
-#pragma code startup 0x1000
 void startup (void)
 {
   __asm
@@ -91,7 +90,7 @@ RAMCLEAR:
 loop:
 
   // Call the user's main routine
-  main ();
+  user_main ();
 
   goto loop;
 }                               /* end _startup() */
