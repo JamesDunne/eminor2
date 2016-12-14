@@ -51,6 +51,7 @@ void WriteProgMem(unsigned char index) //TESTED: Passed
 //uses TwoBytes ProgMemAddr;
 void EraseProgMem(void) //TESTED: Passed
 {
+#ifndef __SDCC
     //The most significant 16 bits of the address pointer points to the block
     //being erased. Bits5:0 are ignored. (In hardware).
 
@@ -63,6 +64,7 @@ void EraseProgMem(void) //TESTED: Passed
     TBLPTRU = 0;            // forces upper byte back to 0x00
                             // optional fix is to set large code model
                             // (for USER ID 0x20 0x00 0x00)
+#endif
 }
 
 #if 0

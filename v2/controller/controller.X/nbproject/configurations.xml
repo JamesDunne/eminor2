@@ -435,7 +435,7 @@
         <property key="noloopreverse" value="false"/>
         <property key="nolospre" value="false"/>
         <property key="nooverlay" value="false"/>
-        <property key="obanksel" value="2"/>
+        <property key="obanksel" value="1"/>
         <property key="opt-code-size" value="true"/>
         <property key="opt-code-speed" value="false"/>
         <property key="optimize-cmp" value="true"/>
