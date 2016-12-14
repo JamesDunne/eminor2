@@ -111,7 +111,7 @@ programs:
     MG:
       channel: dirty
       level: 6
-      fx: [chorus,delay]
+      fx: [rotary,delay]
     JD:
       channel: clean
   - name: Clean

@@ -27,10 +27,12 @@ var version string
 const (
 	FX4_Dirty uint8 = 1 << iota
 	FX4_XY
-	FX4_Pitch
+	FX4_PitchOrRotary
 	FX4_Chorus
 	FX4_Delay
 	FX4_Filter
+	FX4_unused
+	FX4_UseRotary
 )
 
 type Ampv4 struct {
@@ -408,11 +410,17 @@ func generatePICH() {
 				b0, b1, b2 := byte(0), byte(0), byte(0)
 
 				// Gain (0 = default gain, 127 = full gain):
-				b0 = uint8(amp.Gain)
+				b0 = uint8(amp.Gain) & 0x7F
 				if amp.Gain == 0 {
 					// Use program's default gain:
-					b0 = uint8(p.Gain)
+					b0 = uint8(p.Gain) & 0x7F
 				}
+
+				// Volume:
+				if amp.Level > 6 {
+					amp.Level = 6
+				}
+				b2 = DBtoMIDI(amp.Level)
 
 				// FX:
 				if amp.Channel == "dirty" {
@@ -424,20 +432,17 @@ func generatePICH() {
 				for _, effect := range amp.FX {
 					if effect == "delay" {
 						b1 |= FX4_Delay
+					} else if effect == "rotary" {
+						b1 |= FX4_PitchOrRotary
+						b1 |= FX4_UseRotary
 					} else if effect == "pitch" {
-						b1 |= FX4_Pitch
+						b1 |= FX4_PitchOrRotary
 					} else if effect == "chorus" {
 						b1 |= FX4_Chorus
 					} else if effect == "filter" {
 						b1 |= FX4_Filter
 					}
 				}
-
-				// Volume:
-				if amp.Level > 6 {
-					amp.Level = 6
-				}
-				b2 = DBtoMIDI(amp.Level)
 
 				// Write the descriptor:
 				bw.WriteHex(b0)
