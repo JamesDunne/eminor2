@@ -435,7 +435,7 @@
         <property key="noloopreverse" value="false"/>
         <property key="nolospre" value="false"/>
         <property key="nooverlay" value="false"/>
-        <property key="obanksel" value="1"/>
+        <property key="obanksel" value="0"/>
         <property key="opt-code-size" value="true"/>
         <property key="opt-code-speed" value="false"/>
         <property key="optimize-cmp" value="true"/>
@@ -451,7 +451,7 @@
         <property key="user-defines" value="HW_VERSION=4"/>
         <property key="user-includes" value="../PIC;../common"/>
         <property key="verbose" value="false"/>
-        <appendMe value="-Wl-S2 -Wl-s../PIC/18f4550.lkr"/>
+        <appendMe value="-Wl-S2"/>
       </sdcc-config>
     </conf>
   </confs>

@@ -5,14 +5,13 @@
  * (c) Copyright 1999-2004 Microchip Technology, All rights reserved
  *-------------------------------------------------------------------------*/
 
-#include <pic18f4550.h>
-
 #ifdef __SDCC
+#include <pic18f4550.h>
 #define near
 #define far
 #endif
 
-#if 0
+#ifdef __MCC18
 
 extern volatile near unsigned char       SPPDATA;
 extern          near unsigned char       SPPCFG;
@@ -1174,7 +1173,7 @@ extern          near unsigned            PROD;
 extern          near unsigned char       PRODL;
 extern          near unsigned char       PRODH;
 extern volatile near unsigned char       TABLAT;
-extern volatile near unsigned short      TBLPTR;
+extern volatile near unsigned short long TBLPTR;
 extern volatile near unsigned char       TBLPTRL;
 extern volatile near unsigned char       TBLPTRH;
 extern volatile near unsigned char       TBLPTRU;
@@ -1193,7 +1192,7 @@ extern volatile near struct {
   unsigned STKUNF:1;
   unsigned STKFUL:1;
 } STKPTRbits;
-extern          near unsigned short      TOS;
+extern          near unsigned short long TOS;
 extern          near unsigned char       TOSL;
 extern          near unsigned char       TOSH;
 extern          near unsigned char       TOSU;
@@ -1224,6 +1223,5 @@ extern          near unsigned char       TOSU;
  * These are locations which are commonly used by the compiler.
  *-------------------------------------------------------------------------*/
 #define INTSAVELOCS TBLPTR, TABLAT, PROD
-
 
 #endif

@@ -43,16 +43,23 @@ void bootNopFunc(void);
 //Be careful if modifying the below code.  The below code is absolute address sensitive.
 #ifdef __MCC18
 #pragma code true_entry_scn=0x000000        //Reset vector is at 0x00.  Device begins executing code from 0x00 after a reset or POR event
+void true_entry (void)
+{
+    _asm
+        goto UninitializedMain
+    _endasm;
+}
 #endif
 #ifdef __SDCC
 #pragma code true_entry 0x0
-#endif
-void true_entry (void) __naked
+void true_entry (void)
+__naked
 {
-     __asm
+    __asm
         goto _UninitializedMain
     __endasm;
 }
+#endif
 
 #ifdef __MCC18
 //The hardware high priority interrupt vector.  This bootloader firmware does
@@ -156,9 +163,14 @@ void UninitializedMain(void)
     else
     {
         //User is pressing the pushbutton.  We should stay in bootloader mode
+#ifdef __MCC18
+		_asm goto BOOT_MAIN _endasm;
+#endif
+#ifdef __SDCC
         __asm
                 goto BOOT_MAIN
         __endasm;
+#endif
     }
 
 DoFlashSignatureCheck:
@@ -170,18 +182,28 @@ DoFlashSignatureCheck:
             //erase/program/verify operation was a success.
 
             //Go ahead and jump out of bootloader mode into the application run mode
+#ifdef __MCC18
+		_asm goto REMAPPED_APPLICATION_RESET_VECTOR _endasm;
+#endif
+#ifdef __SDCC
             __asm
-                    goto REMAPPED_APPLICATION_RESET_VECTOR
+                 goto REMAPPED_APPLICATION_RESET_VECTOR
             __endasm;
+#endif
         }
         //else the application image is missing or corrupt.  In this case, we
         //need to stay in the bootloader mode, so the user has the ability to
         //try (again) to re-program a valid application image into the device.
 
         //We should stay in bootloader mode
+#ifdef __MCC18
+		_asm goto BOOT_MAIN _endasm;
+#endif
+#ifdef __SDCC
         __asm
             goto BOOT_MAIN
         __endasm;
+#endif
     #else
 
         //Ideally we shouldn't get here.  It is not recommended for the user to

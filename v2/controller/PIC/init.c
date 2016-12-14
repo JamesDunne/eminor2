@@ -9,6 +9,7 @@
 
 #include "c_system.h"
 
+#ifdef __SDCC
 void CLEAR_RAM(void) __naked {
     __asm
     clrf    _FSR0H
@@ -23,6 +24,7 @@ RAMCLEAR1:
 
     __endasm;
 }
+#endif
 
 void init(void) {
     CLEAR_RAM();

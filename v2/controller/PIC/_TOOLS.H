@@ -33,8 +33,12 @@
 
 #define nop(x)      _asm NOP    _endasm
 
+#ifdef __MCC18
+#define CLRWDT(x)   _asm CLRWDT _endasm
+#endif
+#ifdef __SDCC
 #define CLRWDT(x)   __asm__ ("CLRWDT");
-
+#endif
 
 //---------------------------------------------------------------------------
 //Define flags here
