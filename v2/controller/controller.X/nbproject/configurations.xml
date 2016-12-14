@@ -45,7 +45,6 @@
       <itemPath>../PIC/intslct.c</itemPath>
       <itemPath>../PIC/main.c</itemPath>
       <itemPath>../PIC/ram_def.c</itemPath>
-      <itemPath>../PIC/startup.c</itemPath>
       <itemPath>../PIC/systick.c</itemPath>
       <itemPath>../PIC/writeprogmem.c</itemPath>
     </logicalFolder>

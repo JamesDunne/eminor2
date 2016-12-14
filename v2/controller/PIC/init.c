@@ -9,6 +9,21 @@
 
 #include "c_system.h"
 
+void CLEAR_RAM(void) __naked {
+    __asm
+    clrf    _FSR0H
+    clrf    _FSR0L
+
+RAMCLEAR1:
+    CLRWDT
+    clrf    _POSTINC0
+    btfss   _FSR0H, 3
+    bra RAMCLEAR1
+    return
+
+    __endasm;
+}
+
 void init(void) {
     CLEAR_RAM();
 

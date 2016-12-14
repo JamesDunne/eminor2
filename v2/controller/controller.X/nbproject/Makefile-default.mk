@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=../common/controller-axe.c ../PIC/BootUserStartup.c ../PIC/UserAppCode.c ../PIC/bootcode.c ../PIC/comm_lcd.c ../PIC/comm_midi.c ../PIC/hwcalls.c ../PIC/init.c ../PIC/intslct.c ../PIC/main.c ../PIC/ram_def.c ../PIC/startup.c ../PIC/systick.c ../PIC/writeprogmem.c
+SOURCEFILES_QUOTED_IF_SPACED=../common/controller-axe.c ../PIC/BootUserStartup.c ../PIC/UserAppCode.c ../PIC/bootcode.c ../PIC/comm_lcd.c ../PIC/comm_midi.c ../PIC/hwcalls.c ../PIC/init.c ../PIC/intslct.c ../PIC/main.c ../PIC/ram_def.c ../PIC/systick.c ../PIC/writeprogmem.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/1270477542/controller-axe.o ${OBJECTDIR}/_ext/1360902299/BootUserStartup.o ${OBJECTDIR}/_ext/1360902299/UserAppCode.o ${OBJECTDIR}/_ext/1360902299/bootcode.o ${OBJECTDIR}/_ext/1360902299/comm_lcd.o ${OBJECTDIR}/_ext/1360902299/comm_midi.o ${OBJECTDIR}/_ext/1360902299/hwcalls.o ${OBJECTDIR}/_ext/1360902299/init.o ${OBJECTDIR}/_ext/1360902299/intslct.o ${OBJECTDIR}/_ext/1360902299/main.o ${OBJECTDIR}/_ext/1360902299/ram_def.o ${OBJECTDIR}/_ext/1360902299/startup.o ${OBJECTDIR}/_ext/1360902299/systick.o ${OBJECTDIR}/_ext/1360902299/writeprogmem.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/1270477542/controller-axe.o.d ${OBJECTDIR}/_ext/1360902299/BootUserStartup.o.d ${OBJECTDIR}/_ext/1360902299/UserAppCode.o.d ${OBJECTDIR}/_ext/1360902299/bootcode.o.d ${OBJECTDIR}/_ext/1360902299/comm_lcd.o.d ${OBJECTDIR}/_ext/1360902299/comm_midi.o.d ${OBJECTDIR}/_ext/1360902299/hwcalls.o.d ${OBJECTDIR}/_ext/1360902299/init.o.d ${OBJECTDIR}/_ext/1360902299/intslct.o.d ${OBJECTDIR}/_ext/1360902299/main.o.d ${OBJECTDIR}/_ext/1360902299/ram_def.o.d ${OBJECTDIR}/_ext/1360902299/startup.o.d ${OBJECTDIR}/_ext/1360902299/systick.o.d ${OBJECTDIR}/_ext/1360902299/writeprogmem.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/1270477542/controller-axe.o ${OBJECTDIR}/_ext/1360902299/BootUserStartup.o ${OBJECTDIR}/_ext/1360902299/UserAppCode.o ${OBJECTDIR}/_ext/1360902299/bootcode.o ${OBJECTDIR}/_ext/1360902299/comm_lcd.o ${OBJECTDIR}/_ext/1360902299/comm_midi.o ${OBJECTDIR}/_ext/1360902299/hwcalls.o ${OBJECTDIR}/_ext/1360902299/init.o ${OBJECTDIR}/_ext/1360902299/intslct.o ${OBJECTDIR}/_ext/1360902299/main.o ${OBJECTDIR}/_ext/1360902299/ram_def.o ${OBJECTDIR}/_ext/1360902299/systick.o ${OBJECTDIR}/_ext/1360902299/writeprogmem.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/1270477542/controller-axe.o.d ${OBJECTDIR}/_ext/1360902299/BootUserStartup.o.d ${OBJECTDIR}/_ext/1360902299/UserAppCode.o.d ${OBJECTDIR}/_ext/1360902299/bootcode.o.d ${OBJECTDIR}/_ext/1360902299/comm_lcd.o.d ${OBJECTDIR}/_ext/1360902299/comm_midi.o.d ${OBJECTDIR}/_ext/1360902299/hwcalls.o.d ${OBJECTDIR}/_ext/1360902299/init.o.d ${OBJECTDIR}/_ext/1360902299/intslct.o.d ${OBJECTDIR}/_ext/1360902299/main.o.d ${OBJECTDIR}/_ext/1360902299/ram_def.o.d ${OBJECTDIR}/_ext/1360902299/systick.o.d ${OBJECTDIR}/_ext/1360902299/writeprogmem.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/1270477542/controller-axe.o ${OBJECTDIR}/_ext/1360902299/BootUserStartup.o ${OBJECTDIR}/_ext/1360902299/UserAppCode.o ${OBJECTDIR}/_ext/1360902299/bootcode.o ${OBJECTDIR}/_ext/1360902299/comm_lcd.o ${OBJECTDIR}/_ext/1360902299/comm_midi.o ${OBJECTDIR}/_ext/1360902299/hwcalls.o ${OBJECTDIR}/_ext/1360902299/init.o ${OBJECTDIR}/_ext/1360902299/intslct.o ${OBJECTDIR}/_ext/1360902299/main.o ${OBJECTDIR}/_ext/1360902299/ram_def.o ${OBJECTDIR}/_ext/1360902299/startup.o ${OBJECTDIR}/_ext/1360902299/systick.o ${OBJECTDIR}/_ext/1360902299/writeprogmem.o
+OBJECTFILES=${OBJECTDIR}/_ext/1270477542/controller-axe.o ${OBJECTDIR}/_ext/1360902299/BootUserStartup.o ${OBJECTDIR}/_ext/1360902299/UserAppCode.o ${OBJECTDIR}/_ext/1360902299/bootcode.o ${OBJECTDIR}/_ext/1360902299/comm_lcd.o ${OBJECTDIR}/_ext/1360902299/comm_midi.o ${OBJECTDIR}/_ext/1360902299/hwcalls.o ${OBJECTDIR}/_ext/1360902299/init.o ${OBJECTDIR}/_ext/1360902299/intslct.o ${OBJECTDIR}/_ext/1360902299/main.o ${OBJECTDIR}/_ext/1360902299/ram_def.o ${OBJECTDIR}/_ext/1360902299/systick.o ${OBJECTDIR}/_ext/1360902299/writeprogmem.o
 
 # Source Files
-SOURCEFILES=../common/controller-axe.c ../PIC/BootUserStartup.c ../PIC/UserAppCode.c ../PIC/bootcode.c ../PIC/comm_lcd.c ../PIC/comm_midi.c ../PIC/hwcalls.c ../PIC/init.c ../PIC/intslct.c ../PIC/main.c ../PIC/ram_def.c ../PIC/startup.c ../PIC/systick.c ../PIC/writeprogmem.c
+SOURCEFILES=../common/controller-axe.c ../PIC/BootUserStartup.c ../PIC/UserAppCode.c ../PIC/bootcode.c ../PIC/comm_lcd.c ../PIC/comm_midi.c ../PIC/hwcalls.c ../PIC/init.c ../PIC/intslct.c ../PIC/main.c ../PIC/ram_def.c ../PIC/systick.c ../PIC/writeprogmem.c
 
 
 CFLAGS=
@@ -141,11 +141,6 @@ ${OBJECTDIR}/_ext/1360902299/ram_def.o: ../PIC/ram_def.c  nbproject/Makefile-${C
 	${RM} ${OBJECTDIR}/_ext/1360902299/ram_def.o 
 	${MP_CC} --use-non-free -DHW_VERSION=4 -I"../PIC" -I"../common" --opt-code-size --obanksel=2 --optimize-cmp --optimize-df -Wl-S2 -c -mpic16 -p18f4550 ../PIC/ram_def.c  -o${OBJECTDIR}/_ext/1360902299/ram_def.o
 	
-${OBJECTDIR}/_ext/1360902299/startup.o: ../PIC/startup.c  nbproject/Makefile-${CND_CONF}.mk
-	${MKDIR} ${OBJECTDIR}/_ext/1360902299 
-	${RM} ${OBJECTDIR}/_ext/1360902299/startup.o 
-	${MP_CC} --use-non-free -DHW_VERSION=4 -I"../PIC" -I"../common" --opt-code-size --obanksel=2 --optimize-cmp --optimize-df -Wl-S2 -c -mpic16 -p18f4550 ../PIC/startup.c  -o${OBJECTDIR}/_ext/1360902299/startup.o
-	
 ${OBJECTDIR}/_ext/1360902299/systick.o: ../PIC/systick.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/1360902299 
 	${RM} ${OBJECTDIR}/_ext/1360902299/systick.o 
@@ -211,11 +206,6 @@ ${OBJECTDIR}/_ext/1360902299/ram_def.o: ../PIC/ram_def.c  nbproject/Makefile-${C
 	${MKDIR} ${OBJECTDIR}/_ext/1360902299 
 	${RM} ${OBJECTDIR}/_ext/1360902299/ram_def.o 
 	${MP_CC} --use-non-free -DHW_VERSION=4 -I"../PIC" -I"../common" --opt-code-size --obanksel=2 --optimize-cmp --optimize-df -Wl-S2 -c -mpic16 -p18f4550 ../PIC/ram_def.c  -o${OBJECTDIR}/_ext/1360902299/ram_def.o
-	
-${OBJECTDIR}/_ext/1360902299/startup.o: ../PIC/startup.c  nbproject/Makefile-${CND_CONF}.mk
-	${MKDIR} ${OBJECTDIR}/_ext/1360902299 
-	${RM} ${OBJECTDIR}/_ext/1360902299/startup.o 
-	${MP_CC} --use-non-free -DHW_VERSION=4 -I"../PIC" -I"../common" --opt-code-size --obanksel=2 --optimize-cmp --optimize-df -Wl-S2 -c -mpic16 -p18f4550 ../PIC/startup.c  -o${OBJECTDIR}/_ext/1360902299/startup.o
 	
 ${OBJECTDIR}/_ext/1360902299/systick.o: ../PIC/systick.c  nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} ${OBJECTDIR}/_ext/1360902299 

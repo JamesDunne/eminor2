@@ -47,9 +47,11 @@ void bootNopFunc(void);
 #ifdef __SDCC
 #pragma code true_entry 0x0
 #endif
-void true_entry (void)
+void true_entry (void) __naked
 {
-     __asm goto _UninitializedMain __endasm;
+     __asm
+        goto _UninitializedMain
+    __endasm;
 }
 
 #ifdef __MCC18
@@ -83,9 +85,6 @@ void interrupt_at_low_vector(void)
 /** D E C L A R A T I O N S **************************************************/
 #ifdef __MCC18
 #pragma code    BOOTSTARTUP
-#endif
-#ifdef __SDCC
-#pragma code UninitializedMain 0x0
 #endif
 /******************************************************************************
  * Function:        void UninitializedMain(void)
