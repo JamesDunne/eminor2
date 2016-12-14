@@ -419,7 +419,7 @@
         <property key="extended" value="false"/>
         <property key="ivt-loc" value=""/>
         <property key="no-c-code-in-asm" value="false"/>
-        <property key="no-crt" value="false"/>
+        <property key="no-crt" value="true"/>
         <property key="no-extended-instr" value="false"/>
         <property key="no-optimize-goto" value="false"/>
         <property key="no-pcode-opt" value="false"/>
