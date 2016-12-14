@@ -16,8 +16,8 @@ LIVE:
 |                                             PR_ONE         |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   BOTH   MG/JD  RESET   DEC    INC    TAP   SC_PRV SC_NXT  |
-|          RESET                        MODE  SC_DEL SC_INS  |
+|   BOTH   MG/JD GAIN/VOL DEC    INC    TAP   SC_PRV SC_NXT  |
+|          RESET                        MODE          SAVE   |
 |------------------------------------------------------------|
 
 Top row of buttons controls selected amp settings
@@ -673,11 +673,11 @@ LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
 |   DIRTY   X/Y   PITCH  CHORUS DELAY  FILTER PR_PRV PR_NXT  |
-|                                                            |
+|                                             PR_ONE         |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
-|   BOTH   MG/JD  RESET   DEC    INC    TAP   SC_PRV SC_NXT  |
-|          RESET                        MODE  SC_DEL SC_INS  |
+|   BOTH   MG/JD GAIN/VOL DEC    INC    TAP   SC_PRV SC_NXT  |
+|          RESET                        MODE          SAVE   |
 |------------------------------------------------------------|
 */
 
