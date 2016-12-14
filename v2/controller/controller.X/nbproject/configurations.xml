@@ -79,9 +79,9 @@
         <archiverTool>
         </archiverTool>
         <loading>
-          <useAlternateLoadableFile>false</useAlternateLoadableFile>
+          <useAlternateLoadableFile>true</useAlternateLoadableFile>
           <parseOnProdLoad>false</parseOnProdLoad>
-          <alternateLoadableFile></alternateLoadableFile>
+          <alternateLoadableFile>../PIC/controller.hex</alternateLoadableFile>
         </loading>
         <subordinates>
         </subordinates>
@@ -93,7 +93,7 @@
         <makeCustomizationPostStep></makeCustomizationPostStep>
         <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
-        <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
+        <makeCustomizationNormalizeHexFile>true</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
       <Simulator>
         <property key="codecoverage.enabled" value="Disable"/>
@@ -451,7 +451,7 @@
         <property key="user-defines" value="HW_VERSION=4"/>
         <property key="user-includes" value="../PIC;../common"/>
         <property key="verbose" value="false"/>
-        <appendMe value="-Wl-S2"/>
+        <appendMe value="-Wl-S2 -Wl-s../PIC/18f4550.lkr --pno-banksel"/>
       </sdcc-config>
     </conf>
   </confs>
