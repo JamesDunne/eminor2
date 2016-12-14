@@ -167,6 +167,8 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #define axe_cc_byp_phaser2      76
 #define axe_cc_byp_pitch1       77
 #define axe_cc_byp_pitch2       78
+#define axe_cc_byp_rotary1      86
+#define axe_cc_byp_rotary2      87
 
 #define axe_cc_xy_amp1     100
 #define axe_cc_xy_amp2     101
@@ -511,30 +513,67 @@ static void calc_midi(void) {
 
     // Enable FX:
     if (read_bit(delay, curr.amp[0].fx) != read_bit(delay, last.amp[0].fx)) {
+        DEBUG_LOG1("MIDI set AMP1 delay %s", read_bit(delay, curr.amp[0].fx) == 0 ? "off" : "on");
         midi_set_axe_cc(axe_cc_byp_delay1, calc_cc_toggle(read_bit(delay, curr.amp[0].fx)));
     }
     if (read_bit(delay, curr.amp[1].fx) != read_bit(delay, last.amp[1].fx)) {
+        DEBUG_LOG1("MIDI set AMP2 delay %s", read_bit(delay, curr.amp[1].fx) == 0 ? "off" : "on");
         midi_set_axe_cc(axe_cc_byp_delay2, calc_cc_toggle(read_bit(delay, curr.amp[1].fx)));
     }
 
+    if ((curr.amp[0].fx & (u8)0x80) != (last.amp[0].fx & (u8)0x80)) {
+        if ((last.amp[0].fx & (u8)0x80) != (u8)0) {
+            DEBUG_LOG1("MIDI set AMP1 rotary %s", "off");
+            midi_set_axe_cc(axe_cc_byp_rotary1, calc_cc_toggle(0));
+        } else {
+            DEBUG_LOG1("MIDI set AMP1 pitch %s", "off");
+            midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(0));
+        }
+    }
     if (read_bit(pitch, curr.amp[0].fx) != read_bit(pitch, last.amp[0].fx)) {
-        midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
+        if ((curr.amp[0].fx & (u8)0x80) != (u8)0) {
+            DEBUG_LOG1("MIDI set AMP1 rotary %s", read_bit(pitch, curr.amp[0].fx) == 0 ? "off" : "on");
+            midi_set_axe_cc(axe_cc_byp_rotary1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
+        } else {
+            DEBUG_LOG1("MIDI set AMP1 pitch %s", read_bit(pitch, curr.amp[0].fx) == 0 ? "off" : "on");
+            midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
+        }
+    }
+
+    if ((curr.amp[1].fx & (u8)0x80) != (last.amp[1].fx & (u8)0x80)) {
+        if ((last.amp[1].fx & (u8)0x80) != (u8)0) {
+            DEBUG_LOG1("MIDI set AMP2 rotary %s", "off");
+            midi_set_axe_cc(axe_cc_byp_rotary2, calc_cc_toggle(0));
+        } else {
+            DEBUG_LOG1("MIDI set AMP2 pitch %s", "off");
+            midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(0));
+        }
     }
     if (read_bit(pitch, curr.amp[1].fx) != read_bit(pitch, last.amp[1].fx)) {
-        midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
+        if ((curr.amp[1].fx & (u8)0x80) != (u8)0) {
+            DEBUG_LOG1("MIDI set AMP2 rotary %s", read_bit(pitch, curr.amp[1].fx) == 0 ? "off" : "on");
+            midi_set_axe_cc(axe_cc_byp_rotary2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
+        } else {
+            DEBUG_LOG1("MIDI set AMP2 pitch %s", read_bit(pitch, curr.amp[1].fx) == 0 ? "off" : "on");
+            midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
+        }
     }
 
     if (read_bit(chorus, curr.amp[0].fx) != read_bit(chorus, last.amp[0].fx)) {
+        DEBUG_LOG1("MIDI set AMP1 chorus %s", read_bit(chorus, curr.amp[1].fx) == 0 ? "off" : "on");
         midi_set_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(read_bit(chorus, curr.amp[0].fx)));
     }
     if (read_bit(chorus, curr.amp[1].fx) != read_bit(chorus, last.amp[1].fx)) {
+        DEBUG_LOG1("MIDI set AMP2 chorus %s", read_bit(chorus, curr.amp[1].fx) == 0 ? "off" : "on");
         midi_set_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(read_bit(chorus, curr.amp[1].fx)));
     }
 
     if (read_bit(filter, curr.amp[0].fx) != read_bit(filter, last.amp[0].fx)) {
+        DEBUG_LOG1("MIDI set AMP1 filter %s", read_bit(filter, curr.amp[1].fx) == 0 ? "off" : "on");
         midi_set_axe_cc(axe_cc_byp_phaser1, calc_cc_toggle(read_bit(filter, curr.amp[0].fx)));
     }
     if (read_bit(filter, curr.amp[1].fx) != read_bit(filter, last.amp[1].fx)) {
+        DEBUG_LOG1("MIDI set AMP2 filter %s", read_bit(filter, curr.amp[1].fx) == 0 ? "off" : "on");
         midi_set_axe_cc(axe_cc_byp_phaser2, calc_cc_toggle(read_bit(filter, curr.amp[1].fx)));
     }
 
