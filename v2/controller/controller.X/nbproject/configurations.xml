@@ -46,7 +46,7 @@
       <itemPath>../PIC/ram_def.c</itemPath>
       <itemPath>../PIC/systick.c</itemPath>
       <itemPath>../PIC/writeprogmem.c</itemPath>
-      <itemPath>../common/controller-dumb.c</itemPath>
+      <itemPath>../common/controller-axe.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -412,11 +412,11 @@
       <sdcc-config>
         <property key="V-show-commands-compiler" value="false"/>
         <property key="Werror" value="false"/>
-        <property key="allow-unsafe-read" value="false"/>
+        <property key="allow-unsafe-read" value="true"/>
         <property key="debug-ralloc" value="false"/>
         <property key="debug-xtra14" value="false"/>
         <property key="debug-xtra16" value="false"/>
-        <property key="extended" value="false"/>
+        <property key="extended" value="true"/>
         <property key="ivt-loc" value=""/>
         <property key="no-c-code-in-asm" value="false"/>
         <property key="no-crt" value="true"/>
@@ -441,9 +441,9 @@
         <property key="optimize-cmp" value="true"/>
         <property key="optimize-df" value="true"/>
         <property key="pcode-verbose" value="false"/>
-        <property key="peep-asm" value="false"/>
-        <property key="peep-return" value="false"/>
-        <property key="pno-banksel" value="false"/>
+        <property key="peep-asm" value="true"/>
+        <property key="peep-return" value="true"/>
+        <property key="pno-banksel" value="true"/>
         <property key="pstack-model" value="small"/>
         <property key="stack-loc" value=""/>
         <property key="use-crt" value=""/>
@@ -451,7 +451,7 @@
         <property key="user-defines" value="HW_VERSION=4"/>
         <property key="user-includes" value="../PIC;../common"/>
         <property key="verbose" value="false"/>
-        <appendMe value="-Wl-S2 -Wl-s../PIC/18f4550.lkr --pno-banksel"/>
+        <appendMe value="-Wl-S2 -Wl-s../PIC/18f4550.lkr"/>
       </sdcc-config>
     </conf>
   </confs>
