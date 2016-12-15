@@ -100,7 +100,7 @@ programs:
     JD:
       channel: dirty
 - name: Drive
-  gain: 0x1A
+  gain: 0x26
   scenes:
   - name: Clean
     MG:
