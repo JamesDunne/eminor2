@@ -864,9 +864,9 @@ void controller_10msec_timer(void) {
     repeater(bot,4,0x20,0x01,curr_amp_dec)
     repeater(bot,5,0x20,0x01,curr_amp_inc)
 
-    one_shot(bot,6,0x1F,toggle_setlist_mode)
+    one_shot(bot,6,0x3F,toggle_setlist_mode)
 
-    one_shot(bot,8,0x1F,program_save)
+    one_shot(bot,8,0x3F,program_save)
 
     repeater(top,7,0x20,0x03,prev_song)
     repeater(top,8,0x20,0x03,next_song)
@@ -1311,15 +1311,23 @@ static void curr_amp_toggle() {
 }
 
 static void program_save() {
-    u8 program = sl.entries[curr.sl_idx].program;
-    u16 addr = (u16)(program * sizeof(struct program));
+    // Load program:
+    u8 pr_num;
+    u16 addr;
+
+    if (curr.setlist_mode == 1) {
+        pr_num = sl.entries[curr.sl_idx].program;
+    } else {
+        pr_num = curr.pr_idx;
+    }
 
     // Update current scene in program from current state:
     pr.scene[curr.sc_idx].amp[0] = curr.amp[0];
     pr.scene[curr.sc_idx].amp[1] = curr.amp[1];
 
     // Save current program back to flash:
-    DEBUG_LOG2("save program %d at addr 0x%04x", program+1, addr);
+    addr = (u16)(pr_num * sizeof(struct program));
+    DEBUG_LOG2("save program %d at addr 0x%04x", pr_num+1, addr);
     flash_store(addr, sizeof(struct program), (u8 *)&pr);
 
     curr.modified = 0;
