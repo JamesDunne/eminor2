@@ -27,12 +27,12 @@ var version string
 const (
 	FX4_Dirty uint8 = 1 << iota
 	FX4_XY
-	FX4_PitchOrRotary
+	FX4_Pitch
 	FX4_Chorus
 	FX4_Delay
 	FX4_Filter
+	FX4_Rotary
 	FX4_unused
-	FX4_UseRotary
 )
 
 type Ampv4 struct {
@@ -433,10 +433,9 @@ func generatePICH() {
 					if effect == "delay" {
 						b1 |= FX4_Delay
 					} else if effect == "rotary" {
-						b1 |= FX4_PitchOrRotary
-						b1 |= FX4_UseRotary
+						b1 |= FX4_Rotary
 					} else if effect == "pitch" {
-						b1 |= FX4_PitchOrRotary
+						b1 |= FX4_Pitch
 					} else if effect == "chorus" {
 						b1 |= FX4_Chorus
 					} else if effect == "filter" {

@@ -616,6 +616,7 @@ programs:
     JD:
       channel: dirty
 - name: The Middle
+  gain: 0x22
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -627,7 +628,8 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 4
+      gain: 0x4A
+      level: 6
   - name: JD lead;MG dirty
     MG:
       channel: dirty

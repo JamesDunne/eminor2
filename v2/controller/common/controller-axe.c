@@ -58,6 +58,7 @@ Press MODE   to switch between set-list order and program # order
 #define fxm_chorus (u8)0x08
 #define fxm_delay  (u8)0x10
 #define fxm_filter (u8)0x20
+#define fxm_rotary (u8)0x40
 
 #define fxb_dirty  (u8)0
 #define fxb_xy     (u8)1
@@ -65,6 +66,7 @@ Press MODE   to switch between set-list order and program # order
 #define fxb_chorus (u8)3
 #define fxb_delay  (u8)4
 #define fxb_filter (u8)5
+#define fxb_rotary (u8)6
 
 #define read_bit(name,e)   ((e & fxm_##name) >> fxb_##name)
 #define toggle_bit(name,e) e = e ^ fxm_##name
@@ -521,42 +523,22 @@ static void calc_midi(void) {
         midi_set_axe_cc(axe_cc_byp_delay2, calc_cc_toggle(read_bit(delay, curr.amp[1].fx)));
     }
 
-    if ((curr.amp[0].fx & (u8)0x80) != (last.amp[0].fx & (u8)0x80)) {
-        if ((last.amp[0].fx & (u8)0x80) != (u8)0) {
-            DEBUG_LOG1("MIDI set AMP1 rotary %s", "off");
-            midi_set_axe_cc(axe_cc_byp_rotary1, calc_cc_toggle(0));
-        } else {
-            DEBUG_LOG1("MIDI set AMP1 pitch %s", "off");
-            midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(0));
-        }
+    if (read_bit(rotary, curr.amp[0].fx) != read_bit(rotary, last.amp[0].fx)) {
+        DEBUG_LOG1("MIDI set AMP1 rotary %s", read_bit(rotary, curr.amp[0].fx) == 0 ? "off" : "on");
+        midi_set_axe_cc(axe_cc_byp_rotary1, calc_cc_toggle(read_bit(rotary, curr.amp[0].fx)));
     }
-    if (read_bit(pitch, curr.amp[0].fx) != read_bit(pitch, last.amp[0].fx)) {
-        if ((curr.amp[0].fx & (u8)0x80) != (u8)0) {
-            DEBUG_LOG1("MIDI set AMP1 rotary %s", read_bit(pitch, curr.amp[0].fx) == 0 ? "off" : "on");
-            midi_set_axe_cc(axe_cc_byp_rotary1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
-        } else {
-            DEBUG_LOG1("MIDI set AMP1 pitch %s", read_bit(pitch, curr.amp[0].fx) == 0 ? "off" : "on");
-            midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
-        }
+    if (read_bit(rotary, curr.amp[1].fx) != read_bit(rotary, last.amp[1].fx)) {
+        DEBUG_LOG1("MIDI set AMP2 rotary %s", read_bit(rotary, curr.amp[1].fx) == 0 ? "off" : "on");
+        midi_set_axe_cc(axe_cc_byp_rotary2, calc_cc_toggle(read_bit(rotary, curr.amp[1].fx)));
     }
 
-    if ((curr.amp[1].fx & (u8)0x80) != (last.amp[1].fx & (u8)0x80)) {
-        if ((last.amp[1].fx & (u8)0x80) != (u8)0) {
-            DEBUG_LOG1("MIDI set AMP2 rotary %s", "off");
-            midi_set_axe_cc(axe_cc_byp_rotary2, calc_cc_toggle(0));
-        } else {
-            DEBUG_LOG1("MIDI set AMP2 pitch %s", "off");
-            midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(0));
-        }
+    if (read_bit(pitch, curr.amp[0].fx) != read_bit(pitch, last.amp[0].fx)) {
+        DEBUG_LOG1("MIDI set AMP1 pitch %s", read_bit(pitch, curr.amp[0].fx) == 0 ? "off" : "on");
+        midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
     }
     if (read_bit(pitch, curr.amp[1].fx) != read_bit(pitch, last.amp[1].fx)) {
-        if ((curr.amp[1].fx & (u8)0x80) != (u8)0) {
-            DEBUG_LOG1("MIDI set AMP2 rotary %s", read_bit(pitch, curr.amp[1].fx) == 0 ? "off" : "on");
-            midi_set_axe_cc(axe_cc_byp_rotary2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
-        } else {
-            DEBUG_LOG1("MIDI set AMP2 pitch %s", read_bit(pitch, curr.amp[1].fx) == 0 ? "off" : "on");
-            midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
-        }
+        DEBUG_LOG1("MIDI set AMP2 pitch %s", read_bit(pitch, curr.amp[1].fx) == 0 ? "off" : "on");
+        midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
     }
 
     if (read_bit(chorus, curr.amp[0].fx) != read_bit(chorus, last.amp[0].fx)) {
