@@ -1,5 +1,13 @@
+#ifndef WINVER                  // Specifies that the minimum required platform is Windows 7.
+#define WINVER 0x0601           // Change this to the appropriate value to target other versions of Windows.
+#endif
+
+#ifndef _WIN32_WINNT            // Specifies that the minimum required platform is Windows 7.
+#define _WIN32_WINNT 0x0601     // Change this to the appropriate value to target other versions of Windows.
+#endif
+
 #include <windows.h>
-//#include <windowsx.h>
+#include <windowsx.h>
 #include <wchar.h>
 #include <winuser.h>
 #include <stdio.h>
@@ -18,7 +26,7 @@
 #endif
 #if _WIN32
 #  define swprintf _snwprintf
-#endif 
+#endif
 
 #define FEAT_MIDI
 #ifdef __TINYC__
@@ -28,6 +36,10 @@
 typedef unsigned long u32;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+void handleButtonDown(HWND hwnd, POINT point);
+
+void handleButtonUp(HWND hwnd);
 
 static HINSTANCE zhInstance = NULL;
 
@@ -170,6 +182,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
         MessageBoxW(0, L"Error Creating Window!", L"Error!", MB_ICONSTOP | MB_OK);
         return 0;
     }
+
+    // register the window for touch instead of gestures
+    RegisterTouchWindow(hwndMain, TWF_WANTPALM);
 
 #define TARGET_RESOLUTION 1         // 1-millisecond target resolution
 
@@ -670,6 +685,10 @@ void paintFacePlate(HWND hwnd) {
 // message processing function:
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
     RECT rect;
+    UINT cInputs;
+    TOUCHINPUT pInputs[10];
+    POINT ptInput;
+
     switch (Message) {
         case WM_CLOSE:
             DestroyWindow(hwnd);
@@ -699,40 +718,36 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
         case WM_PAINT:
             paintFacePlate(hwnd);
             break;
-        case WM_LBUTTONDOWN: {
-            int h, b;
-
-            double x = (double)LOWORD(lParam) / dpi,
-                y = (double)HIWORD(lParam) / dpi;
-            const double r_sqr = (inFswOuterDiam * 0.5) * (inFswOuterDiam * 0.5);
-
-            // Find out which foot-switch the mouse cursor is inside:
-            b = 1;
-            for (h = 0; h < 8; ++h, b <<= 1) {
-                double bx = (hLeft + (h * hSpacing));
-                double by = (vStart - (0 * vSpacing));
-                double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
-                if (dist_sqr <= r_sqr) {
-                    fsw_state.bot.byte |= b;
-                }
-            }
-            b = 1;
-            for (h = 0; h < 8; ++h, b <<= 1) {
-                double bx = (hLeft + (h * hSpacing));
-                double by = (vStart - (1 * vSpacing));
-                double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
-                if (dist_sqr <= r_sqr) {
-                    fsw_state.top.byte |= b;
-                }
-            }
-
-            InvalidateRect(hwnd, NULL, TRUE);
+        case WM_LBUTTONDOWN:
+            ptInput.x = LOWORD(lParam);
+            ptInput.y = HIWORD(lParam);
+            handleButtonDown(hwnd, ptInput);
             break;
-        }
         case WM_LBUTTONUP:
-            fsw_state.bot.byte = 0;
-            fsw_state.top.byte = 0;
-            InvalidateRect(hwnd, NULL, TRUE);
+            handleButtonUp(hwnd);
+            break;
+        case WM_TOUCH:
+            cInputs = LOWORD(wParam);
+            if (GetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, pInputs, sizeof(TOUCHINPUT))){
+                for (UINT i=0; i < cInputs; i++) {
+                    TOUCHINPUT ti = pInputs[i];
+
+                    if (ti.dwFlags & TOUCHEVENTF_UP) {
+                        printf("TOUCH button %02x UP\n", ti.dwID);
+                        handleButtonUp(hwnd);
+                    } else {
+                        // Find the client coord of the touch:
+                        ptInput.x = TOUCH_COORD_TO_PIXEL(ti.x);
+                        ptInput.y = TOUCH_COORD_TO_PIXEL(ti.y);
+                        ScreenToClient(hwnd, &ptInput);
+
+                        printf("TOUCH button %02x DN x=%03d, y=%03d\n", ti.dwID, ptInput.x, ptInput.y);
+                        handleButtonDown(hwnd, ptInput);
+                    }
+                }
+            }
+            // If you handled the message and don't want anything else done with it, you can close it
+            CloseTouchInputHandle((HTOUCHINPUT)lParam);
             break;
         case WM_MOUSEWHEEL:
             if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
@@ -822,6 +837,41 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             return DefWindowProc(hwnd, Message, wParam, lParam);
     }
     return 0;
+}
+
+void handleButtonUp(HWND hwnd) {
+    fsw_state.bot.byte = 0;
+    fsw_state.top.byte = 0;
+    InvalidateRect(hwnd, NULL, TRUE);
+}
+
+void handleButtonDown(HWND hwnd, POINT point) {
+    int h, b;
+
+    double x = (double) point.x / dpi, y = (double) point.y / dpi;
+    const double r_sqr = (inFswOuterDiam * 0.5) * (inFswOuterDiam * 0.5);
+
+    // Find out which foot-switch the mouse cursor is inside:
+    b = 1;
+    for (h = 0; h < 8; ++h, b <<= 1) {
+        double bx = (hLeft + (h * hSpacing));
+        double by = (vStart - (0 * vSpacing));
+        double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
+        if (dist_sqr <= r_sqr) {
+            fsw_state.bot.byte |= b;
+        }
+    }
+    b = 1;
+    for (h = 0; h < 8; ++h, b <<= 1) {
+        double bx = (hLeft + (h * hSpacing));
+        double by = (vStart - (1 * vSpacing));
+        double dist_sqr = ((x - bx) * (x - bx)) + ((y - by) * (y - by));
+        if (dist_sqr <= r_sqr) {
+            fsw_state.top.byte |= b;
+        }
+    }
+
+    InvalidateRect(hwnd, NULL, TRUE);
 }
 
 void debug_log(const char *fmt, ...) {
