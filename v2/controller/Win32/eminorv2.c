@@ -682,6 +682,8 @@ void paintFacePlate(HWND hwnd) {
     EndPaint(hwnd, &ps);
 }
 
+#define MOUSEEVENTF_FROMTOUCH 0xFF515700
+
 // message processing function:
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
     RECT rect;
@@ -719,48 +721,56 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             paintFacePlate(hwnd);
             break;
         case WM_LBUTTONDOWN:
-            ptInput.x = LOWORD(lParam);
-            ptInput.y = HIWORD(lParam);
-            handleButtonDown(hwnd, ptInput);
+            if ((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) != MOUSEEVENTF_FROMTOUCH) {
+                //printf("lbuttondown 0x%08x 0x%08x\n", lParam, wParam);
+                ptInput.x = LOWORD(lParam);
+                ptInput.y = HIWORD(lParam);
+                handleButtonDown(hwnd, ptInput);
+            }
             break;
         case WM_LBUTTONUP:
-            handleButtonUp(hwnd);
+            if ((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) != MOUSEEVENTF_FROMTOUCH) {
+                //printf("lbuttonup   0x%08x 0x%08x\n", lParam, wParam);
+                handleButtonUp(hwnd);
+            }
             break;
         case WM_TOUCH:
             cInputs = LOWORD(wParam);
-            if (GetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, pInputs, sizeof(TOUCHINPUT))){
+            if (GetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, pInputs, sizeof(TOUCHINPUT))) {
                 for (UINT i=0; i < cInputs; i++) {
                     TOUCHINPUT ti = pInputs[i];
 
                     if (ti.dwFlags & TOUCHEVENTF_UP) {
-                        printf("TOUCH button %02x UP\n", ti.dwID);
+                        //printf("TOUCH button %02x UP\n", ti.dwID);
                         handleButtonUp(hwnd);
-                    } else {
+                    } else if (ti.dwFlags & TOUCHEVENTF_DOWN) {
                         // Find the client coord of the touch:
                         ptInput.x = TOUCH_COORD_TO_PIXEL(ti.x);
                         ptInput.y = TOUCH_COORD_TO_PIXEL(ti.y);
                         ScreenToClient(hwnd, &ptInput);
 
-                        printf("TOUCH button %02x DN x=%03d, y=%03d\n", ti.dwID, ptInput.x, ptInput.y);
+                        //printf("TOUCH button %02x DN x=%03d, y=%03d\n", ti.dwID, ptInput.x, ptInput.y);
                         handleButtonDown(hwnd, ptInput);
                     }
                 }
             }
-            // If you handled the message and don't want anything else done with it, you can close it
             CloseTouchInputHandle((HTOUCHINPUT)lParam);
-            break;
+            return DefWindowProc(hwnd, Message, wParam, lParam);
         case WM_MOUSEWHEEL:
-            if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
-                // mwheel up
-                dpi += 0.125 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
-            } else {
-                // mwheel down
-                dpi -= 0.125 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
-                if (dpi < 1.0) dpi = 1.0;
+            if ((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) != MOUSEEVENTF_FROMTOUCH) {
+                if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
+                    // mwheel up
+                    dpi += 0.125 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
+                } else {
+                    // mwheel down
+                    dpi -= 0.125 * (GET_KEYSTATE_WPARAM(wParam) & MK_CONTROL ? 10.0 : 1.0);
+                    if (dpi < 1.0) dpi = 1.0;
+                }
+                GetWindowRect(hwnd, &rect);
+                SetWindowPos(hwnd, 0, rect.left, rect.top, (int) (inWidth * dpi) + 6, (int) (inHeight * dpi) + 28,
+                             SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+                InvalidateRect(hwnd, NULL, TRUE);
             }
-            GetWindowRect(hwnd, &rect);
-            SetWindowPos(hwnd, 0, rect.left, rect.top, (int)(inWidth * dpi) + 6, (int)(inHeight * dpi) + 28, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
-            InvalidateRect(hwnd, NULL, TRUE);
             break;
         case WM_KEYDOWN:
             // only fire if the previous button state was UP (i.e. ignore autorepeat messages)
