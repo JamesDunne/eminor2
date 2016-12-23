@@ -12,7 +12,7 @@
 LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
-|   DIRTY   X/Y   PITCH  CHORUS DELAY  FILTER PR_PRV PR_NXT  |
+|   DIRTY  ROTARY PITCH  CHORUS DELAY  FILTER PR_PRV PR_NXT  |
 |                                             PR_ONE         |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
@@ -26,7 +26,7 @@ Press BOTH   to select AMP1+2 for modification on top row
 Press MG/JD  to select AMP1 or AMP2 for modification on top row
 
 Press DIRTY  to change from clean to dirty (LED off is clean, on is dirty); gapless audio using scene controllers to modify amp gain
-Press X/Y    to switch AMP1&2 between X and Y settings; causes audio gap
+Press ROTARY to toggle rotary effect
 Press DELAY  to toggle delay effect
 Press PITCH  to toggle pitch effect
 Press CHORUS to toggle chorus effect
@@ -486,6 +486,7 @@ static void calc_midi(void) {
         diff = 1;
     }
 
+#if 0
     // Send X/Y changes:
     // X = 127, Y = 0
     xy = read_bit(xy, curr.amp[0].fx);
@@ -500,6 +501,7 @@ static void calc_midi(void) {
         midi_set_axe_cc(axe_cc_xy_amp2, calc_cc_toggle(!xy));
         diff = 1;
     }
+#endif
 
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
@@ -614,7 +616,7 @@ static void update_lcd(void) {
     // Top row:
     labels = label_row_get(1);
     labels[0] = "DIRTY";
-    labels[1] = "X/Y";
+    labels[1] = "ROTARY";
     labels[2] = "PITCH";
     labels[3] = "CHORUS";
     labels[4] = "DELAY";
@@ -670,7 +672,11 @@ static void update_lcd(void) {
 
     // Amp row 2:
     lcd_rows[row_amp2][ 0] = (char)'G' | (char)(!read_bit(dirty, curr.amp[0].fx) << 5);
+#if 0
     lcd_rows[row_amp2][ 1] = (char)'X' | (char)(read_bit(xy, curr.amp[0].fx));
+#else
+    lcd_rows[row_amp2][ 1] = (char)'R' | (char)(!read_bit(rotary, curr.amp[0].fx) << 5);
+#endif
     lcd_rows[row_amp2][ 2] = (char)'P' | (char)(!read_bit(pitch, curr.amp[0].fx) << 5);
     lcd_rows[row_amp2][ 3] = (char)'C' | (char)(!read_bit(chorus, curr.amp[0].fx) << 5);
     lcd_rows[row_amp2][ 4] = (char)'D' | (char)(!read_bit(delay, curr.amp[0].fx) << 5);
@@ -678,7 +684,11 @@ static void update_lcd(void) {
     hextoa(lcd_rows[row_amp2], 8, or_default(curr.amp[0].gain));
 
     lcd_rows[row_amp2][11] = (char)'G' | (char)(!read_bit(dirty, curr.amp[1].fx) << 5);
+#if 0
     lcd_rows[row_amp2][12] = (char)'X' | (char)(read_bit(xy, curr.amp[1].fx));
+#else
+    lcd_rows[row_amp2][12] = (char)'R' | (char)(!read_bit(rotary, curr.amp[1].fx) << 5);
+#endif
     lcd_rows[row_amp2][13] = (char)'P' | (char)(!read_bit(pitch, curr.amp[1].fx) << 5);
     lcd_rows[row_amp2][14] = (char)'C' | (char)(!read_bit(chorus, curr.amp[1].fx) << 5);
     lcd_rows[row_amp2][15] = (char)'D' | (char)(!read_bit(delay, curr.amp[1].fx) << 5);
@@ -693,7 +703,7 @@ static void update_lcd(void) {
 LIVE:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |
-|   DIRTY   X/Y   PITCH  CHORUS DELAY  FILTER PR_PRV PR_NXT  |
+|   DIRTY  ROTARY PITCH  CHORUS DELAY  FILTER PR_PRV PR_NXT  |
 |                                             PR_ONE         |
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
@@ -705,14 +715,22 @@ LIVE:
 static void calc_leds(void) {
     if (curr.selected_both) {
         curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[0].fx) | read_bit(dirty,  curr.amp[1].fx);
+#if 0
         curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[0].fx) | read_bit(xy,     curr.amp[1].fx);
+#else
+        curr.mode_leds[curr.mode].top.bits._2 = read_bit(rotary, curr.amp[0].fx) | read_bit(rotary, curr.amp[1].fx);
+#endif
         curr.mode_leds[curr.mode].top.bits._3 = read_bit(pitch,  curr.amp[0].fx) | read_bit(pitch,  curr.amp[1].fx);
         curr.mode_leds[curr.mode].top.bits._4 = read_bit(chorus, curr.amp[0].fx) | read_bit(chorus, curr.amp[1].fx);
         curr.mode_leds[curr.mode].top.bits._5 = read_bit(delay,  curr.amp[0].fx) | read_bit(delay,  curr.amp[1].fx);
         curr.mode_leds[curr.mode].top.bits._6 = read_bit(filter, curr.amp[0].fx) | read_bit(filter, curr.amp[1].fx);
     } else {
         curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[curr.selected_amp].fx);
+#if 0
         curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[curr.selected_amp].fx);
+#else
+        curr.mode_leds[curr.mode].top.bits._2 = read_bit(rotary, curr.amp[curr.selected_amp].fx);
+#endif
         curr.mode_leds[curr.mode].top.bits._3 = read_bit(pitch,  curr.amp[curr.selected_amp].fx);
         curr.mode_leds[curr.mode].top.bits._4 = read_bit(chorus, curr.amp[curr.selected_amp].fx);
         curr.mode_leds[curr.mode].top.bits._5 = read_bit(delay,  curr.amp[curr.selected_amp].fx);
@@ -981,7 +999,11 @@ void controller_handle(void) {
         toggle_fx(dirty)
     }
     if (is_top_button_pressed(M_2)) {
+#if 0
         toggle_fx(xy)
+#else
+        toggle_fx(rotary)
+#endif
     }
     if (is_top_button_pressed(M_3)) {
         toggle_fx(pitch)
