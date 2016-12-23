@@ -859,7 +859,7 @@ void handleButtonDown(HWND hwnd, POINT point) {
     int h, b;
 
     double x = (double) point.x / dpi, y = (double) point.y / dpi;
-    const double r_sqr = (inFswOuterDiam * 0.5) * (inFswOuterDiam * 0.5);
+    const double r_sqr = (inFswOuterDiam * 1.5 * 0.5) * (inFswOuterDiam * 1.5 * 0.5);
 
     // Find out which foot-switch the mouse cursor is inside:
     b = 1;
