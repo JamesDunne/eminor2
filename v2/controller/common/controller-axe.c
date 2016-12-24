@@ -195,6 +195,7 @@ enum {
     MODE_count
 };
 
+// Structure to represent state that should be compared from current to last to detect changes.
 struct state {
     // Footswitch state:
     io16 fsw;
@@ -209,6 +210,8 @@ struct state {
     u8 pr_idx;
     // Current scene:
     u8 sc_idx;
+    // Current MIDI program #:
+    u8 midi_program;
 
     // Selected amp (0 or 1):
     u8 selected_amp;
@@ -259,6 +262,7 @@ static rom const char *name_get(u16 name_index) {
 
 // Set Axe-FX CC value
 #define midi_set_axe_cc(cc, val) midi_send_cmd2(0xB, axe_midi_channel, cc, val)
+#define midi_set_axe_program(program) midi_send_cmd1(0xC, axe_midi_channel, program)
 
 // Top switch press cannot be an accident:
 #define is_top_button_pressed(mask) \
@@ -382,7 +386,6 @@ static void send_leds(void) {
     curr.leds = (u16)mode_leds[mode].bot.byte | ((u16)mode_leds[mode].top.byte << 8);
 	if (curr.leds != last.leds) {
 		led_set(curr.leds);
-		last.leds = curr.leds;
 	}
 }
 
@@ -438,6 +441,12 @@ static void calc_midi(void) {
     u8 send_gain;
     u8 dirty_changed;
     u8 gain_changed;
+
+    // Send MIDI program change:
+    if (curr.midi_program != last.midi_program) {
+        DEBUG_LOG1("MIDI change program %d", curr.midi_program);
+        midi_set_axe_program(curr.midi_program);
+    }
 
     // Send gain controller changes:
     dirty = read_bit(dirty, curr.amp[0].fx);
@@ -770,8 +779,8 @@ void controller_init(void) {
 
     curr.amp[0].gain = 0;
     curr.amp[1].gain = 0;
-    last.amp[0].gain = ~curr.amp[0].gain;
-    last.amp[1].gain = ~curr.amp[1].gain;
+    last.amp[0].gain = ~(u8)0;
+    last.amp[1].gain = ~(u8)0;
 
     // Load setlist:
     flash_load((u16)(128 * sizeof(struct program)), sizeof(struct set_list), (u8 *)&sl);
@@ -784,6 +793,8 @@ void controller_init(void) {
     flash_load((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *)&pr);
     origpr = pr;
     curr.modified = 0;
+    curr.midi_program = pr.midi_program;
+    last.midi_program = ~pr.midi_program;
 
     // Copy current scene settings into state:
     curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
@@ -1048,6 +1059,7 @@ void controller_handle(void) {
         flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
         origpr = pr;
         curr.modified = 0;
+        curr.midi_program = pr.midi_program;
 
         // Establish a sane default for an undefined program:
         curr.sc_idx = 0;
