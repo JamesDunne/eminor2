@@ -100,6 +100,7 @@ programs:
     JD:
       channel: dirty
 - name: Drive
+  midi: 1
   gain: 0x60
   scenes:
   - name: Clean

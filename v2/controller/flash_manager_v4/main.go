@@ -50,7 +50,8 @@ type SceneDescriptorv4 struct {
 
 type Programv4 struct {
 	Name             string              `yaml:"name"`
-	Gain int `yaml:"gain"`
+	MidiProgram      int                 `yaml:"midi"`
+	Gain             int                 `yaml:"gain"`
 	SceneDescriptors []SceneDescriptorv4 `yaml:"scenes"`
 }
 
@@ -395,7 +396,7 @@ func generatePICH() {
 		*/
 
 		// Write MIDI program number:
-		bw.WriteDecimal(0)
+		bw.WriteDecimal(uint8(p.MidiProgram))
 
 		// Write scene count:
 		bw.WriteDecimal(uint8(len(p.SceneDescriptors)))
