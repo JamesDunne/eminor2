@@ -201,14 +201,6 @@ struct state {
     // Actual LED state:
     u16 leds;
 
-    // Current mode:
-    u8 mode;
-    // LED state per mode:
-    io16 mode_leds[MODE_count];
-
-    // Tap tempo CC value (toggles between 0x00 and 0x7F):
-    u8 tap;
-
     // 0 for program mode, 1 for setlist mode:
     u8 setlist_mode;
     // Current setlist entry:
@@ -225,14 +217,23 @@ struct state {
     // Amp definitions:
     struct amp amp[2];
 
-    // Whether INC/DEC affects gain (0) or volume (1):
-    u8 gain_mode;
     // Whether current program is modified in any way:
     u8 modified;
 };
 
 // Current and last state:
 struct state curr, last;
+
+// Tap tempo CC value (toggles between 0x00 and 0x7F):
+u8 tap;
+
+// Current mode:
+u8 mode;
+// LED state per mode:
+io16 mode_leds[MODE_count];
+
+// Whether INC/DEC affects gain (0) or volume (1):
+u8 gain_mode;
 
 // BCD-encoded dB value table (from PIC/v4_lookup.h):
 rom const u16 dB_bcd_lookup[128] = {
@@ -378,7 +379,7 @@ static void print_half(char *dst, u8 col, s8 volhalfdb) {
 
 static void send_leds(void) {
 	// Update LEDs:
-    curr.leds = (u16)curr.mode_leds[curr.mode].bot.byte | ((u16)curr.mode_leds[curr.mode].top.byte << 8);
+    curr.leds = (u16)mode_leds[mode].bot.byte | ((u16)mode_leds[mode].top.byte << 8);
 	if (curr.leds != last.leds) {
 		led_set(curr.leds);
 		last.leds = curr.leds;
@@ -714,39 +715,39 @@ LIVE:
 
 static void calc_leds(void) {
     if (curr.selected_both) {
-        curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[0].fx) | read_bit(dirty,  curr.amp[1].fx);
+        mode_leds[mode].top.bits._1 = read_bit(dirty,  curr.amp[0].fx) | read_bit(dirty,  curr.amp[1].fx);
 #if 0
-        curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[0].fx) | read_bit(xy,     curr.amp[1].fx);
+        mode_leds[mode].top.bits._2 = read_bit(xy,     curr.amp[0].fx) | read_bit(xy,     curr.amp[1].fx);
 #else
-        curr.mode_leds[curr.mode].top.bits._2 = read_bit(rotary, curr.amp[0].fx) | read_bit(rotary, curr.amp[1].fx);
+        mode_leds[mode].top.bits._2 = read_bit(rotary, curr.amp[0].fx) | read_bit(rotary, curr.amp[1].fx);
 #endif
-        curr.mode_leds[curr.mode].top.bits._3 = read_bit(pitch,  curr.amp[0].fx) | read_bit(pitch,  curr.amp[1].fx);
-        curr.mode_leds[curr.mode].top.bits._4 = read_bit(chorus, curr.amp[0].fx) | read_bit(chorus, curr.amp[1].fx);
-        curr.mode_leds[curr.mode].top.bits._5 = read_bit(delay,  curr.amp[0].fx) | read_bit(delay,  curr.amp[1].fx);
-        curr.mode_leds[curr.mode].top.bits._6 = read_bit(filter, curr.amp[0].fx) | read_bit(filter, curr.amp[1].fx);
+        mode_leds[mode].top.bits._3 = read_bit(pitch,  curr.amp[0].fx) | read_bit(pitch,  curr.amp[1].fx);
+        mode_leds[mode].top.bits._4 = read_bit(chorus, curr.amp[0].fx) | read_bit(chorus, curr.amp[1].fx);
+        mode_leds[mode].top.bits._5 = read_bit(delay,  curr.amp[0].fx) | read_bit(delay,  curr.amp[1].fx);
+        mode_leds[mode].top.bits._6 = read_bit(filter, curr.amp[0].fx) | read_bit(filter, curr.amp[1].fx);
     } else {
-        curr.mode_leds[curr.mode].top.bits._1 = read_bit(dirty,  curr.amp[curr.selected_amp].fx);
+        mode_leds[mode].top.bits._1 = read_bit(dirty,  curr.amp[curr.selected_amp].fx);
 #if 0
-        curr.mode_leds[curr.mode].top.bits._2 = read_bit(xy,     curr.amp[curr.selected_amp].fx);
+        mode_leds[mode].top.bits._2 = read_bit(xy,     curr.amp[curr.selected_amp].fx);
 #else
-        curr.mode_leds[curr.mode].top.bits._2 = read_bit(rotary, curr.amp[curr.selected_amp].fx);
+        mode_leds[mode].top.bits._2 = read_bit(rotary, curr.amp[curr.selected_amp].fx);
 #endif
-        curr.mode_leds[curr.mode].top.bits._3 = read_bit(pitch,  curr.amp[curr.selected_amp].fx);
-        curr.mode_leds[curr.mode].top.bits._4 = read_bit(chorus, curr.amp[curr.selected_amp].fx);
-        curr.mode_leds[curr.mode].top.bits._5 = read_bit(delay,  curr.amp[curr.selected_amp].fx);
-        curr.mode_leds[curr.mode].top.bits._6 = read_bit(filter, curr.amp[curr.selected_amp].fx);
+        mode_leds[mode].top.bits._3 = read_bit(pitch,  curr.amp[curr.selected_amp].fx);
+        mode_leds[mode].top.bits._4 = read_bit(chorus, curr.amp[curr.selected_amp].fx);
+        mode_leds[mode].top.bits._5 = read_bit(delay,  curr.amp[curr.selected_amp].fx);
+        mode_leds[mode].top.bits._6 = read_bit(filter, curr.amp[curr.selected_amp].fx);
     }
-    curr.mode_leds[curr.mode].top.bits._7 = curr.fsw.top.bits._7;
-    curr.mode_leds[curr.mode].top.bits._8 = curr.fsw.top.bits._8;
+    mode_leds[mode].top.bits._7 = curr.fsw.top.bits._7;
+    mode_leds[mode].top.bits._8 = curr.fsw.top.bits._8;
 
-    curr.mode_leds[curr.mode].bot.bits._1 = curr.selected_both;
-    curr.mode_leds[curr.mode].bot.bits._2 = curr.selected_amp;
-    curr.mode_leds[curr.mode].bot.bits._3 = curr.gain_mode;
-    curr.mode_leds[curr.mode].bot.bits._4 = curr.fsw.bot.bits._4;
-    curr.mode_leds[curr.mode].bot.bits._5 = curr.fsw.bot.bits._5;
-    curr.mode_leds[curr.mode].bot.bits._6 = curr.fsw.bot.bits._6;
-    curr.mode_leds[curr.mode].bot.bits._7 = curr.fsw.bot.bits._7;
-    curr.mode_leds[curr.mode].bot.bits._8 = curr.fsw.bot.bits._8;
+    mode_leds[mode].bot.bits._1 = curr.selected_both;
+    mode_leds[mode].bot.bits._2 = curr.selected_amp;
+    mode_leds[mode].bot.bits._3 = gain_mode;
+    mode_leds[mode].bot.bits._4 = curr.fsw.bot.bits._4;
+    mode_leds[mode].bot.bits._5 = curr.fsw.bot.bits._5;
+    mode_leds[mode].bot.bits._6 = curr.fsw.bot.bits._6;
+    mode_leds[mode].bot.bits._7 = curr.fsw.bot.bits._7;
+    mode_leds[mode].bot.bits._8 = curr.fsw.bot.bits._8;
 
     send_leds();
 }
@@ -755,11 +756,10 @@ static void calc_leds(void) {
 void controller_init(void) {
     u8 i;
 
-    last.mode = MODE_LIVE;
-    curr.mode = MODE_LIVE;
+    mode = MODE_LIVE;
     for (i = 0; i < MODE_count; i++) {
-        curr.mode_leds[i].top.byte = 0;
-        curr.mode_leds[i].bot.byte = 0;
+        mode_leds[i].top.byte = 0;
+        mode_leds[i].bot.byte = 0;
     }
 
     last.leds = 0xFFFFU;
@@ -939,7 +939,7 @@ void controller_handle(void) {
         timers.bot_3 = (u8)0x80;
     } else if (is_bot_button_released(M_3)) {
         if ((timers.bot_3 & (u8)0x80) != (u8)0) {
-            curr.gain_mode ^= (u8)1;
+            gain_mode ^= (u8)1;
         }
         timers.bot_3 = (u8)0;
     }
@@ -964,8 +964,8 @@ void controller_handle(void) {
     if (is_bot_button_pressed(M_6)) {
         // Toggle TAP CC value between 0x00 and 0x7F:
         timers.bot_6 = (u8)0x80;
-        curr.tap ^= (u8)0x7F;
-        midi_set_axe_cc(axe_cc_taptempo, curr.tap);
+        tap ^= (u8)0x7F;
+        midi_set_axe_cc(axe_cc_taptempo, tap);
     } else if (is_bot_button_pressed(M_6)) {
         timers.bot_6 = (u8)0x00;
     }
@@ -1291,7 +1291,7 @@ static void curr_amp_gain_decrease() {
 }
 
 static void curr_amp_inc() {
-    if (curr.gain_mode == (u8)0) {
+    if (gain_mode == (u8)0) {
         curr_amp_gain_increase();
     } else {
         curr_amp_vol_increase();
@@ -1299,7 +1299,7 @@ static void curr_amp_inc() {
 }
 
 static void curr_amp_dec() {
-    if (curr.gain_mode == (u8)0) {
+    if (gain_mode == (u8)0) {
         curr_amp_gain_decrease();
     } else {
         curr_amp_vol_decrease();
@@ -1307,7 +1307,7 @@ static void curr_amp_dec() {
 }
 
 static void curr_amp_toggle() {
-    if (curr.gain_mode == (u8)0) {
+    if (gain_mode == (u8)0) {
         curr_amp_gain_toggle();
     } else {
         curr_amp_vol_toggle();
