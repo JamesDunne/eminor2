@@ -33,3 +33,4 @@ Thumbs.db
 
 uart-out.txt
 
+cmake-build-debug/
