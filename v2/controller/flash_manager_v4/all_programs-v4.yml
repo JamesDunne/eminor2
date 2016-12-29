@@ -965,3 +965,68 @@ programs:
       channel: dirty
     JD:
       channel: dirty
+- name: Puppets
+  midi: 3
+  gain: 0x4A
+  scenes:
+  - name: Main
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD riff
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      fx: []
+  - name: Main
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Breakdown
+    MG:
+      channel: clean
+      fx: [chorus]
+    JD:
+      channel: clean
+      fx: [chorus]
+  - name: Breakdown harm
+    MG:
+      channel: clean
+      fx: [chorus]
+    JD:
+      channel: dirty
+  - name: Breakdown lead
+    MG:
+      channel: clean
+      fx: [chorus]
+    JD:
+      channel: dirty
+      level: 6
+      cab: Y
+      fx: [delay]
+  - name: Breakdown harm
+    MG:
+      channel: clean
+      fx: [chorus]
+    JD:
+      channel: dirty
+  - name: Main
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+      fx: [delay]
+  - name: Main
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
