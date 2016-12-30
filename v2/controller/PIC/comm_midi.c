@@ -10,7 +10,9 @@
 
 void midi_tx() {
     // Check if we received a byte:
-    if (PIR1bits.RCIF) return;
+    if (PIR1bits.RCIF) {
+        return;
+    }
 
     // If no character is received, check if any data is pending transmission
     if (MIDITxBufOutPtr == MIDITxBufPtr) {
@@ -18,7 +20,9 @@ void midi_tx() {
         return;                     //and exit
     }
 
-    if (!PIR1bits.TXIF) return;         //USART is still transmitting data
+    if (!PIR1bits.TXIF) {
+        return;         //USART is still transmitting data
+    }
 
     TXREG = MIDITxBuffer[MIDITxBufOutPtr];          //send out the byte
     MIDITxBufOutPtr++;                          //increment transmit out pointer.
@@ -29,10 +33,12 @@ void midi_tx() {
 //-----------------------------------------------------------------------
 // This routine will store a character into the MIDITxBuffer.
 void midi_enq(unsigned char Input) {
-    if (MIDITxBufPtr >= MAX_MIDI_TX_LENGTH) return;     //Exit if buffer full.
+    if (MIDITxBufPtr >= MAX_MIDI_TX_LENGTH) {
+        return;     //Exit if buffer full.
+    }
     MIDITxBuffer[MIDITxBufPtr] = Input; //Store value in buffer.
     MIDITxBufPtr++;                 //Update input ptr.
-	midi_tx();
+    midi_tx();
 }
 
 //-----------------------------------------------------------------------
