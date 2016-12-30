@@ -41,6 +41,11 @@ void lcd_init(void) {
 void lcd_update_screen(void) {
     u8 i, row;
 
+	// Since we have a small buffer, let's not overload it:
+	if (swuart_tx_bufoutptr > 0) {
+		return;
+	}
+
     row = LCDUpdateStage;
 
     // Position cursor on start of row, col 1:

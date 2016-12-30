@@ -14,10 +14,6 @@ near BitField MiscFlags1;
 TwoBytes ProgMemAddr;
 unsigned char ProgmemBuffer[64];
 
-TwoBytes NVRCommAddr;
-TwoBytes RAMCommAddr;
-TwoBytes ROMCommAddr;
-
 unsigned char LedStatesTop;
 unsigned char LedStatesBot;
 unsigned char ButtonStateTop;
@@ -25,8 +21,6 @@ unsigned char ButtonStateBot;
 unsigned char SystickCntr;
 unsigned char SystickCntr2;
 unsigned char SystickCntr3;
-unsigned char SystickCntr4;
-unsigned char SystickCntr5;
 
 unsigned char MIDITxBuffer[MAX_MIDI_TX_LENGTH];
 unsigned char MIDITxBufPtr;

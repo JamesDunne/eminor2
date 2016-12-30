@@ -248,7 +248,9 @@ u8 sl_max;
 // Loaded setlist:
 struct set_list sl;
 // Loaded program:
-struct program pr, origpr;
+struct program pr;
+// Pointer to unmodified program:
+rom struct program *origpr;
 
 #define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
 
@@ -761,6 +763,34 @@ static void calc_leds(void) {
     send_leds();
 }
 
+void load_program(void) {
+    // Load program:
+    u8 pr_num;
+
+    if (curr.setlist_mode == 1) {
+        pr_num = sl.entries[curr.sl_idx].program;
+    } else {
+        pr_num = curr.pr_idx;
+    }
+
+    DEBUG_LOG1("load program %d", pr_num + 1);
+
+    flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
+
+    origpr = (rom struct program *)flash_addr((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)));
+    curr.modified = 0;
+    curr.midi_program = pr.midi_program;
+
+    // Establish a sane default for an undefined program:
+    curr.sc_idx = 0;
+    if (pr.name_index == (u16)0) {
+        scene_default();
+    }
+
+    // Trigger a scene reload:
+    last.sc_idx = ~curr.sc_idx;
+}
+
 // set the controller to an initial state
 void controller_init(void) {
     u8 i;
@@ -789,11 +819,7 @@ void controller_init(void) {
     // Load first program in setlist:
     curr.sl_idx = 0;
     curr.pr_idx = 0;
-    curr.sc_idx = 0;
-    flash_load((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)), sizeof(struct program), (u8 *)&pr);
-    origpr = pr;
-    curr.modified = 0;
-    curr.midi_program = pr.midi_program;
+	load_program();
     last.midi_program = ~pr.midi_program;
 
     // Copy current scene settings into state:
@@ -905,20 +931,20 @@ void controller_10msec_timer(void) {
 
 static void calc_gain_modified(void) {
     curr.modified = (curr.modified & ~(u8) 0x11) |
-        ((u8) (curr.amp[0].gain != origpr.scene[curr.sc_idx].amp[0].gain) << (u8) 0) |
-        ((u8) (curr.amp[1].gain != origpr.scene[curr.sc_idx].amp[1].gain) << (u8) 4);
+        ((u8) (curr.amp[0].gain != origpr->scene[curr.sc_idx].amp[0].gain) << (u8) 0) |
+        ((u8) (curr.amp[1].gain != origpr->scene[curr.sc_idx].amp[1].gain) << (u8) 4);
 }
 
 static void calc_fx_modified(void) {
     curr.modified = (curr.modified & ~(u8) 0x22) |
-        ((u8) (curr.amp[0].fx != origpr.scene[curr.sc_idx].amp[0].fx) << (u8) 1) |
-        ((u8) (curr.amp[1].fx != origpr.scene[curr.sc_idx].amp[1].fx) << (u8) 5);
+        ((u8) (curr.amp[0].fx != origpr->scene[curr.sc_idx].amp[0].fx) << (u8) 1) |
+        ((u8) (curr.amp[1].fx != origpr->scene[curr.sc_idx].amp[1].fx) << (u8) 5);
 }
 
 static void calc_volume_modified(void) {
     curr.modified = (curr.modified & ~(u8) 0x44) |
-        ((u8) (curr.amp[0].volume != origpr.scene[curr.sc_idx].amp[0].volume) << (u8) 2) |
-        ((u8) (curr.amp[1].volume != origpr.scene[curr.sc_idx].amp[1].volume) << (u8) 6);
+        ((u8) (curr.amp[0].volume != origpr->scene[curr.sc_idx].amp[0].volume) << (u8) 2) |
+        ((u8) (curr.amp[1].volume != origpr->scene[curr.sc_idx].amp[1].volume) << (u8) 6);
 }
 
 // main control loop
@@ -1045,30 +1071,7 @@ void controller_handle(void) {
 
     // Update state:
     if ((curr.setlist_mode != last.setlist_mode) || (curr.sl_idx != last.sl_idx) || (curr.pr_idx != last.pr_idx)) {
-        // Load program:
-        u8 pr_num;
-
-        if (curr.setlist_mode == 1) {
-            pr_num = sl.entries[curr.sl_idx].program;
-        } else {
-            pr_num = curr.pr_idx;
-        }
-
-        DEBUG_LOG1("load program %d", pr_num + 1);
-
-        flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
-        origpr = pr;
-        curr.modified = 0;
-        curr.midi_program = pr.midi_program;
-
-        // Establish a sane default for an undefined program:
-        curr.sc_idx = 0;
-        if (pr.name_index == (u16)0) {
-            scene_default();
-        }
-
-        // Trigger a scene reload:
-        last.sc_idx = ~curr.sc_idx;
+		load_program();
     }
 
     if (curr.sc_idx != last.sc_idx) {

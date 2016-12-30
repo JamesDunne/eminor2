@@ -34,10 +34,6 @@ near extern BitField ArbFlags2;
 extern TwoBytes ProgMemAddr;
 extern unsigned char ProgmemBuffer[64];
 
-extern TwoBytes NVRCommAddr;
-extern TwoBytes RAMCommAddr;
-extern TwoBytes ROMCommAddr;
-
 extern unsigned char LedStatesTop;
 extern unsigned char LedStatesBot;
 extern unsigned char ButtonStateTop;
@@ -45,8 +41,6 @@ extern unsigned char ButtonStateBot;
 extern unsigned char SystickCntr;
 extern unsigned char SystickCntr2;
 extern unsigned char SystickCntr3;
-extern unsigned char SystickCntr4;
-extern unsigned char SystickCntr5;
 
 extern unsigned char MIDITxBuffer[MAX_MIDI_TX_LENGTH];
 extern unsigned char MIDITxBufPtr;

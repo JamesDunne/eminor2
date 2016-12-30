@@ -54,8 +54,9 @@
 #define BTN_SAMPLE_DELAY        5   //probably unnecessary (sampling time for buttons)
 
 //UART comm buffer lengths:
-#define MAX_MIDI_TX_LENGTH      42
-#define MAX_LCD_TX_LENGTH       42
+#define MAX_MIDI_TX_LENGTH      64
+//#define MAX_LCD_TX_LENGTH       42
+#define MAX_LCD_TX_LENGTH       24
 
 // SWUART modes:
 #define SWUARTMODE_TX_IDLE      0

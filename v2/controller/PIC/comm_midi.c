@@ -32,6 +32,7 @@ void midi_enq(unsigned char Input) {
     if (MIDITxBufPtr >= MAX_MIDI_TX_LENGTH) return;     //Exit if buffer full.
     MIDITxBuffer[MIDITxBufPtr] = Input; //Store value in buffer.
     MIDITxBufPtr++;                 //Update input ptr.
+	midi_tx();
 }
 
 //-----------------------------------------------------------------------

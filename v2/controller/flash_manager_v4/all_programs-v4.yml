@@ -974,18 +974,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-  - name: JD riff
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-      fx: []
-  - name: Main
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: Breakdown
+  - name: Breakdown clean
     MG:
       channel: clean
       fx: [chorus]

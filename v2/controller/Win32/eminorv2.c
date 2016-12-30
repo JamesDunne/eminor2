@@ -105,6 +105,7 @@ static HWND hwndMain;
 
 static UINT IDT_TIMER10MS = 101, IDT_TIMER40MS = 102;
 
+int midi_count;
 // MIDI I/O:
 
 #ifdef FEAT_MIDI
@@ -710,11 +711,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
             break;
         case WM_TIMER:
             if (wParam == IDT_TIMER10MS) {
+                midi_count = 0;
+
                 // handle the 10ms timer:
                 controller_10msec_timer();
 
                 // give control to the logic controller:
                 controller_handle();
+
+                if (midi_count > 0) {
+                    printf("MIDI sent %d bytes this iteration\n", midi_count);
+                }
             }
             break;
         case WM_PAINT:
@@ -981,6 +988,7 @@ void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
         midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8));
     }
 #endif
+    midi_count += 2;
     printf("MIDI: %1X%1X %02X\r\n", cmd, channel, data1);
 }
 
@@ -991,6 +999,7 @@ void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
         midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8) | ((u32)data2 << 16));
     }
 #endif
+    midi_count += 3;
     printf("MIDI: %1X%1X %02X %02X\r\n", cmd, channel, data1, data2);
 }
 

@@ -22,25 +22,11 @@ void    SystemTimeRoutine(void) {
         HandleLeds = true;
         ControllerTiming = true;
 
-        SystickCntr4++;
-        if (SystickCntr4 == SYSTEM_TIME_40MS) {
-            SystickCntr4 = 0;
+        SystickCntr3++;
+        if (SystickCntr3 == SYSTEM_TIME_40MS) {
+            SystickCntr3 = 0;
             // 40mS routines:
             CheckButtons = true;
-        }
-
-        SystickCntr5++;
-        if (SystickCntr5 == 2) {
-            SystickCntr5 = 0;
-            // 20mS routines:
-        }
-
-        SystickCntr3++;
-        if (SystickCntr3 == SYSTEM_TIME_1S) {
-            SystickCntr3 = 0;
-            //1S routines:
-
-            LCDUpdate = true;
         }
     }
 }
