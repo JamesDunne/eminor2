@@ -746,8 +746,6 @@ sets:
 
   - date: "2016-09-23"
     venue: Q Bar
-    active: true
-    print: true
     songs:
       - Zero
       - My Own Worst Enemy
@@ -762,3 +760,31 @@ sets:
       - Fuel
       - 'BREAK: ENCORE'
       - When I Come Around
+
+  - date: "2017-01-21"
+    venue: Bungalow Joe's
+    active: true
+    print: true
+    songs:
+      - Holiday
+      - Machinehead
+      - Zero
+      - Brainstew
+      - The Middle
+      - Monkeywrench
+      - Plush
+      - Bound for the Floor
+      - Hash Pipe
+      - Song 2
+      - Dammit
+      - Beautiful Disaster
+      - Say it ain't so
+      - Everything Zen
+      - Shine
+      - My own worst enemy
+      - Buddy Holly
+      - Cumbersome
+      - Fuel
+      - Basketcase
+      - Trippin
+      - Story of a Girl
