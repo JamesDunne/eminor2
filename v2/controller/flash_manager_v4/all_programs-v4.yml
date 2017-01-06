@@ -57,14 +57,6 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-- name: Wonderwall
-  scenes:
-  - name: JD lead;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-      level: 6
 - name: Buddy Holly
   scenes:
   - name: JD dirty;MG dirty
@@ -92,13 +84,6 @@ programs:
     JD:
       channel: dirty
       fx: [chorus]
-- name: Come Out and Play
-  scenes:
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
 - name: Drive
   midi: 1
   gain: 0x60
@@ -331,13 +316,6 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-- name: Mr Jones
-  scenes:
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
 - name: Counting Blue Cars
   scenes:
   - name: JD lead;MG dirty
@@ -441,6 +419,7 @@ programs:
     JD:
       channel: dirty
 - name: Machinehead
+  gain: 0x30
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -508,14 +487,6 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-- name: I Alone
-  scenes:
-  - name: JD clean;MG clean
-    MG:
-      channel: clean
-    JD:
-      channel: clean
-      fx: [delay, chorus]
 - name: Cumbersome
   scenes:
   - name: JD dirty;MG dirty
@@ -602,13 +573,6 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-- name: Semi-charmed Life
-  scenes:
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
 - name: My Own Worst Enemy
   scenes:
   - name: JD dirty;MG dirty
@@ -689,15 +653,6 @@ programs:
       channel: dirty
       level: 4
       fx: [chorus]
-- name: If You Could Only See
-  scenes:
-  - name: JD lead;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-      level: 3
-      fx: [delay]
 - name: Beautiful Disaster
   scenes:
   - name: JD dirty;MG dirty
@@ -751,6 +706,7 @@ programs:
     JD:
       channel: dirty
 - name: What I Got
+  midi: 1
   scenes:
   - name: JD clean;MG clean
     MG:
@@ -966,7 +922,6 @@ programs:
     JD:
       channel: dirty
 - name: Puppets
-  midi: 3
   gain: 0x4A
   scenes:
   - name: Main
@@ -995,60 +950,6 @@ programs:
       channel: dirty
       level: 6
       cab: Y
-      fx: [delay]
-  - name: Breakdown harm
-    MG:
-      channel: clean
-      fx: [chorus]
-    JD:
-      channel: dirty
-  - name: Main
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: Lead
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-      level: 6
-      fx: [delay]
-  - name: Main
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-- name: Metallica
-  midi: 4
-  gain: 0x70
-  scenes:
-  - name: Main
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: Breakdown
-    MG:
-      channel: clean
-      fx: [chorus]
-    JD:
-      channel: clean
-      fx: [chorus]
-  - name: Breakdown harm
-    MG:
-      channel: clean
-      fx: [chorus]
-    JD:
-      channel: dirty
-      fx: [delay]
-  - name: Breakdown lead
-    MG:
-      channel: clean
-      fx: [chorus]
-    JD:
-      channel: dirty
-      level: 6
       fx: [delay]
   - name: Breakdown harm
     MG:
