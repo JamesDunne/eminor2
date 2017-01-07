@@ -97,7 +97,8 @@ struct program {
     // AXE-FX program # to switch to (7 bit)
     u8 midi_program;
 
-    u8 scene_count;
+    // Tempo in bpm:
+    u8 tempo;
 
     // Scene descriptors (5 bytes each):
     struct scene_descriptor {
@@ -213,7 +214,7 @@ struct state {
     // Current MIDI program #:
     u8 midi_program;
     // Current tempo (bpm):
-    u16 tempo;
+    u8 tempo;
 
     // Selected amp (0 or 1):
     u8 selected_amp;
@@ -465,36 +466,6 @@ static void calc_midi(void) {
         midi_axe_pc(curr.midi_program);
     }
 
-    // Send MIDI tempo change:
-    if (curr.tempo != last.tempo) {
-        // http://forum.fractalaudio.com/threads/is-it-possible-to-set-tempo-on-the-axe-fx-ii-via-sysex.101437/
-        // Example SysEx runs for tempo change on Axe-FX II:
-        // F0 00 01 74 03 02 0D 01 20 00 1E 00 00 01 37 F7   =  30 BPM
-        // F0 00 01 74 03 02 0D 01 20 00 78 00 00 01 51 F7   = 120 BPM
-        // F0 00 01 74 03 02 0D 01 20 00 0C 01 00 01 24 F7   = 140 BPM
-
-        // Precompute a checksum that excludes only the 2 tempo bytes:
-        u8 cs = 0xF0 ^ 0x00 ^ 0x01 ^ 0x74 ^ 0x03 ^ 0x02 ^ 0x0D ^ 0x01 ^ 0x20 ^ 0x00 ^ 0x00 ^ 0x01;
-        u8 d;
-        // Start the sysex command targeted at the Axe-FX II to initiate tempo change:
-        midi_axe_sysex_start(0x02);
-        midi_send_sysex(0x0D);
-        midi_send_sysex(0x01);
-        midi_send_sysex(0x20);
-        midi_send_sysex(0x00);
-        // Tempo value split in 2x 7-bit values:
-        d = (u8)(curr.tempo & (u8)0x7F);
-        cs ^= d;
-        midi_send_sysex(d);
-        d = (u8)(curr.tempo >> (u8)7) & (u8)0x7F;
-        cs ^= d;
-        midi_send_sysex(d);
-        //  Finish the tempo command and send the sysex checksum and terminator:
-        midi_send_sysex(0x00);
-        midi_send_sysex(0x01);
-        midi_axe_sysex_end(cs & (u8) 0x7F);
-    }
-
     // Send gain controller changes:
     dirty = read_bit(dirty, curr.amp[0].fx);
     last_dirty = read_bit(dirty, last.amp[0].fx);
@@ -616,6 +587,36 @@ static void calc_midi(void) {
     if (read_bit(filter, curr.amp[1].fx) != read_bit(filter, last.amp[1].fx)) {
         DEBUG_LOG1("MIDI set AMP2 filter %s", read_bit(filter, curr.amp[1].fx) == 0 ? "off" : "on");
         midi_axe_cc(axe_cc_byp_phaser2, calc_cc_toggle(read_bit(filter, curr.amp[1].fx)));
+    }
+
+    // Send MIDI tempo change:
+    if ((curr.tempo != last.tempo) && (curr.tempo >= 30)) {
+        // http://forum.fractalaudio.com/threads/is-it-possible-to-set-tempo-on-the-axe-fx-ii-via-sysex.101437/
+        // Example SysEx runs for tempo change on Axe-FX II:
+        // F0 00 01 74 03 02 0D 01 20 00 1E 00 00 01 37 F7   =  30 BPM
+        // F0 00 01 74 03 02 0D 01 20 00 78 00 00 01 51 F7   = 120 BPM
+        // F0 00 01 74 03 02 0D 01 20 00 0C 01 00 01 24 F7   = 140 BPM
+
+        // Precompute a checksum that excludes only the 2 tempo bytes:
+        u8 cs = 0xF0 ^ 0x00 ^ 0x01 ^ 0x74 ^ 0x03 ^ 0x02 ^ 0x0D ^ 0x01 ^ 0x20 ^ 0x00 ^ 0x00 ^ 0x01;
+        u8 d;
+        // Start the sysex command targeted at the Axe-FX II to initiate tempo change:
+        midi_axe_sysex_start(0x02);
+        midi_send_sysex(0x0D);
+        midi_send_sysex(0x01);
+        midi_send_sysex(0x20);
+        midi_send_sysex(0x00);
+        // Tempo value split in 2x 7-bit values:
+        d = (curr.tempo & (u8)0x7F);
+        cs ^= d;
+        midi_send_sysex(d);
+        d = (curr.tempo >> (u8)7);
+        cs ^= d;
+        midi_send_sysex(d);
+        //  Finish the tempo command and send the sysex checksum and terminator:
+        midi_send_sysex(0x00);
+        midi_send_sysex(0x01);
+        midi_axe_sysex_end(cs & (u8) 0x7F);
     }
 
     if (curr.amp[0].fx != last.amp[0].fx) {
@@ -825,8 +826,7 @@ void load_program(void) {
     origpr = (rom struct program *)flash_addr((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)));
     curr.modified = 0;
     curr.midi_program = pr.midi_program;
-    curr.tempo = (u16)120;
-    last.tempo = ~(u16)120;
+    curr.tempo = pr.tempo;
 
     // Establish a sane default for an undefined program:
     curr.sc_idx = 0;
@@ -867,7 +867,9 @@ void controller_init(void) {
     curr.sl_idx = 0;
     curr.pr_idx = 0;
 	load_program();
-    last.midi_program = ~pr.midi_program;
+
+    // Force changes on init:
+    midi_invalidate();
 
     // Copy current scene settings into state:
     curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
@@ -1187,8 +1189,9 @@ static void toggle_setlist_mode() {
 
 static void midi_invalidate() {
     // Invalidate all current MIDI state so it gets re-sent at end of loop:
-    DEBUG_LOG0("resend all MIDI state");
+    DEBUG_LOG0("invalidate MIDI state");
     last.midi_program  = ~curr.midi_program;
+    last.tempo         = ~curr.tempo;
     last.amp[0].gain   = ~curr.amp[0].gain;
     last.amp[0].fx     = ~curr.amp[0].fx;
     last.amp[0].volume = ~curr.amp[0].volume;

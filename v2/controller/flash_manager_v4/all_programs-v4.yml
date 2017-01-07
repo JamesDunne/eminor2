@@ -1,12 +1,6 @@
 programs:
-- name: Monkeywrench
-  scenes:
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-- name: Even Flow
+- name: Monkey Wrench
+  tempo: 175
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -14,6 +8,7 @@ programs:
     JD:
       channel: dirty
 - name: Zero
+  tempo: 129
   gain: 0x60
   scenes:
   - name: JD dirty;MG dirty
@@ -58,6 +53,7 @@ programs:
     JD:
       channel: dirty
 - name: Buddy Holly
+  tempo: 121
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -77,6 +73,7 @@ programs:
     JD:
       channel: dirty
 - name: Plush
+  tempo: 145
   scenes:
   - name: JD lead;MG dirty
     MG:
@@ -85,6 +82,7 @@ programs:
       channel: dirty
       fx: [chorus]
 - name: Drive
+  tempo: 91
   midi: 1
   gain: 0x60
   scenes:
@@ -106,6 +104,7 @@ programs:
     JD:
       channel: clean
 - name: When I Come Around
+  tempo: 98
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -125,6 +124,7 @@ programs:
     JD:
       channel: dirty
 - name: Everything Zen
+  tempo: 135
   scenes:
   - name: JD lead;MG dirty
     MG:
@@ -169,6 +169,7 @@ programs:
     JD:
       channel: dirty
 - name: Enter Sandman
+  tempo: 124
   scenes:
   - name: Clean intro
     MG:
@@ -227,6 +228,7 @@ programs:
       level: 6
       fx: [delay]
 - name: Crawling in the Dark
+  tempo: 94
   scenes:
   - name: JD lead;MG dirty
     MG:
@@ -277,6 +279,7 @@ programs:
     JD:
       channel: dirty
 - name: Song 2
+  tempo: 130
   gain: 0x60
   scenes:
   - name: JD clean;MG dirty
@@ -310,6 +313,7 @@ programs:
     JD:
       channel: dirty
 - name: Sex Type Thing
+  tempo: 135
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -317,6 +321,7 @@ programs:
     JD:
       channel: dirty
 - name: Counting Blue Cars
+  tempo: 101
   scenes:
   - name: JD lead;MG dirty
     MG:
@@ -375,6 +380,7 @@ programs:
       level: 6
       fx: [delay]
 - name: In Bloom
+  tempo: 80
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -393,6 +399,7 @@ programs:
     JD:
       channel: dirty
 - name: Hash Pipe
+  tempo: 126
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -412,6 +419,7 @@ programs:
     JD:
       channel: dirty
 - name: My Hero
+  tempo: 154
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -419,6 +427,7 @@ programs:
     JD:
       channel: dirty
 - name: Machinehead
+  tempo: 110
   gain: 0x30
   scenes:
   - name: JD dirty;MG dirty
@@ -427,6 +436,7 @@ programs:
     JD:
       channel: dirty
 - name: Holiday
+  tempo: 168
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -445,24 +455,8 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-- name: Closing Time
-  scenes:
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
 - name: Brain Stew
+  tempo: 76
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -470,6 +464,7 @@ programs:
     JD:
       channel: dirty
 - name: Bound for the Floor
+  tempo: 120
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -488,6 +483,7 @@ programs:
     JD:
       channel: dirty
 - name: Cumbersome
+  tempo: 81
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -495,6 +491,7 @@ programs:
     JD:
       channel: dirty
 - name: Lump
+  tempo: 143
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -502,6 +499,7 @@ programs:
     JD:
       channel: dirty
 - name: Hey Jealousy
+  tempo: 154
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -509,6 +507,7 @@ programs:
     JD:
       channel: dirty
 - name: Kryptonite
+  tempo: 100
   scenes:
   - name: JD clean;MG clean
     MG:
@@ -567,6 +566,7 @@ programs:
     JD:
       channel: dirty
 - name: Dammit
+  tempo: 110
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -574,6 +574,7 @@ programs:
     JD:
       channel: dirty
 - name: My Own Worst Enemy
+  tempo: 104
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -581,6 +582,7 @@ programs:
     JD:
       channel: dirty
 - name: The Middle
+  tempo: 162
   gain: 0x22
   scenes:
   - name: JD dirty;MG dirty
@@ -608,6 +610,7 @@ programs:
     JD:
       channel: dirty
 - name: Bullet With Butterfly Wings
+  tempo: 122
   scenes:
   - name: JD clean;MG clean
     MG:
@@ -654,6 +657,7 @@ programs:
       level: 4
       fx: [chorus]
 - name: Beautiful Disaster
+  tempo: 169
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -661,6 +665,7 @@ programs:
     JD:
       channel: dirty
 - name: Bells
+  tempo: 118
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -675,6 +680,7 @@ programs:
       level: 6
       fx: [delay]
 - name: Fuel
+  tempo: 107
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -706,6 +712,7 @@ programs:
     JD:
       channel: dirty
 - name: What I Got
+  tempo: 96
   midi: 1
   scenes:
   - name: JD clean;MG clean
@@ -736,6 +743,7 @@ programs:
     JD:
       channel: clean
 - name: Say It Aint So
+  tempo: 77
   scenes:
   - name: JD clean;MG clean
     MG:
@@ -774,6 +782,7 @@ programs:
     JD:
       channel: clean
 - name: Shine
+  tempo: 151
   gain: 0x30
   scenes:
   - name: JD dirty;MG dirty
@@ -794,6 +803,7 @@ programs:
     JD:
       channel: dirty
 - name: Basketcase
+  tempo: 86
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -801,6 +811,7 @@ programs:
     JD:
       channel: dirty
 - name: Breed
+  tempo: 159
   gain: 0x60
   scenes:
   - name: JD dirty;MG dirty
@@ -809,6 +820,7 @@ programs:
     JD:
       channel: dirty
 - name: Lithium
+  tempo: 124
   gain: 0x60
   scenes:
   - name: JD clean;MG dirty
@@ -842,6 +854,7 @@ programs:
     JD:
       channel: dirty
 - name: Undone
+  tempo: 81
   scenes:
   - name: JD clean;MG clean
     MG:
@@ -883,6 +896,7 @@ programs:
       level: 6
       fx: [delay]
 - name: Story of a Girl
+  tempo: 97
   gain: 0x2A
   scenes:
   - name: Rhythm
@@ -903,6 +917,7 @@ programs:
     JD:
       channel: dirty
 - name: Trippin
+  tempo: 107
   gain: 0x2A
   scenes:
   - name: Rhythm
@@ -922,6 +937,7 @@ programs:
     JD:
       channel: dirty
 - name: Puppets
+  tempo: 106
   gain: 0x4A
   scenes:
   - name: Main
