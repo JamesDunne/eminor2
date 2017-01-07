@@ -600,6 +600,8 @@ static void calc_midi(void) {
         // Precompute a checksum that excludes only the 2 tempo bytes:
         u8 cs = 0xF0 ^ 0x00 ^ 0x01 ^ 0x74 ^ 0x03 ^ 0x02 ^ 0x0D ^ 0x01 ^ 0x20 ^ 0x00 ^ 0x00 ^ 0x01;
         u8 d;
+
+        DEBUG_LOG1("MIDI set tempo = %d bpm", curr.tempo);
         // Start the sysex command targeted at the Axe-FX II to initiate tempo change:
         midi_axe_sysex_start(0x02);
         midi_send_sysex(0x0D);
@@ -809,6 +811,24 @@ static void calc_leds(void) {
     send_leds();
 }
 
+static void calc_gain_modified(void) {
+    curr.modified = (curr.modified & ~(u8) 0x11) |
+                    ((u8) (curr.amp[0].gain != origpr->scene[curr.sc_idx].amp[0].gain) << (u8) 0) |
+                    ((u8) (curr.amp[1].gain != origpr->scene[curr.sc_idx].amp[1].gain) << (u8) 4);
+}
+
+static void calc_fx_modified(void) {
+    curr.modified = (curr.modified & ~(u8) 0x22) |
+                    ((u8) (curr.amp[0].fx != origpr->scene[curr.sc_idx].amp[0].fx) << (u8) 1) |
+                    ((u8) (curr.amp[1].fx != origpr->scene[curr.sc_idx].amp[1].fx) << (u8) 5);
+}
+
+static void calc_volume_modified(void) {
+    curr.modified = (curr.modified & ~(u8) 0x44) |
+                    ((u8) (curr.amp[0].volume != origpr->scene[curr.sc_idx].amp[0].volume) << (u8) 2) |
+                    ((u8) (curr.amp[1].volume != origpr->scene[curr.sc_idx].amp[1].volume) << (u8) 6);
+}
+
 void load_program(void) {
     // Load program:
     u8 pr_num;
@@ -838,6 +858,32 @@ void load_program(void) {
     last.sc_idx = ~curr.sc_idx;
 }
 
+void load_scene(void) {
+    DEBUG_LOG1("load scene %d", curr.sc_idx + 1);
+
+    // Store last state into program for recall:
+    pr.scene[last.sc_idx].amp[0] = curr.amp[0];
+    pr.scene[last.sc_idx].amp[1] = curr.amp[1];
+
+    // Detect if scene is uninitialized:
+    if ((pr.scene[curr.sc_idx].amp[0].gain == 0) && (pr.scene[curr.sc_idx].amp[0].volume == 0) &&
+        (pr.scene[curr.sc_idx].amp[1].gain == 0) && (pr.scene[curr.sc_idx].amp[1].volume == 0)) {
+        // Reset to default scene state:
+        //scene_default();
+        pr.scene[curr.sc_idx] = pr.scene[curr.sc_idx-1];
+    }
+
+    // Copy new scene settings into current state:
+    curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
+    curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
+
+    // Recalculate modified status for this scene:
+    curr.modified = 0;
+    calc_volume_modified();
+    calc_fx_modified();
+    calc_gain_modified();
+}
+
 // set the controller to an initial state
 void controller_init(void) {
     u8 i;
@@ -851,7 +897,7 @@ void controller_init(void) {
     last.leds = 0xFFFFU;
     curr.leds = 0x0000U;
 
-    last.setlist_mode = 0;
+    last.setlist_mode = 1;
     curr.setlist_mode = 1;
 
     curr.amp[0].gain = 0;
@@ -866,7 +912,11 @@ void controller_init(void) {
     // Load first program in setlist:
     curr.sl_idx = 0;
     curr.pr_idx = 0;
+    last.sl_idx = 0;
+    last.pr_idx = 0;
 	load_program();
+    load_scene();
+    last.sc_idx = curr.sc_idx;
 
     // Force changes on init:
     midi_invalidate();
@@ -896,7 +946,7 @@ void controller_init(void) {
         lcd_rows[row_song][i] = "                    "[i];
     }
 
-    update_lcd();
+    //update_lcd();
 #endif
 }
 
@@ -976,24 +1026,6 @@ void controller_10msec_timer(void) {
         }
     }
 #endif
-}
-
-static void calc_gain_modified(void) {
-    curr.modified = (curr.modified & ~(u8) 0x11) |
-        ((u8) (curr.amp[0].gain != origpr->scene[curr.sc_idx].amp[0].gain) << (u8) 0) |
-        ((u8) (curr.amp[1].gain != origpr->scene[curr.sc_idx].amp[1].gain) << (u8) 4);
-}
-
-static void calc_fx_modified(void) {
-    curr.modified = (curr.modified & ~(u8) 0x22) |
-        ((u8) (curr.amp[0].fx != origpr->scene[curr.sc_idx].amp[0].fx) << (u8) 1) |
-        ((u8) (curr.amp[1].fx != origpr->scene[curr.sc_idx].amp[1].fx) << (u8) 5);
-}
-
-static void calc_volume_modified(void) {
-    curr.modified = (curr.modified & ~(u8) 0x44) |
-        ((u8) (curr.amp[0].volume != origpr->scene[curr.sc_idx].amp[0].volume) << (u8) 2) |
-        ((u8) (curr.amp[1].volume != origpr->scene[curr.sc_idx].amp[1].volume) << (u8) 6);
 }
 
 // main control loop
@@ -1124,29 +1156,8 @@ void controller_handle(void) {
     }
 
     if (curr.sc_idx != last.sc_idx) {
-        DEBUG_LOG1("load scene %d", curr.sc_idx + 1);
+        load_scene();
 
-        // Store last state into program for recall:
-        pr.scene[last.sc_idx].amp[0] = curr.amp[0];
-        pr.scene[last.sc_idx].amp[1] = curr.amp[1];
-
-        // Detect if scene is uninitialized:
-        if ((pr.scene[curr.sc_idx].amp[0].gain == 0) && (pr.scene[curr.sc_idx].amp[0].volume == 0) &&
-            (pr.scene[curr.sc_idx].amp[1].gain == 0) && (pr.scene[curr.sc_idx].amp[1].volume == 0)) {
-            // Reset to default scene state:
-            //scene_default();
-            pr.scene[curr.sc_idx] = pr.scene[curr.sc_idx-1];
-        }
-
-        // Copy new scene settings into current state:
-        curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
-        curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
-
-        // Recalculate modified status for this scene:
-        curr.modified = 0;
-        calc_volume_modified();
-        calc_fx_modified();
-        calc_gain_modified();
     }
 
     calc_midi();
