@@ -143,7 +143,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
 
     zhInstance = hInstance;
 
-    PWSTR pCmdLine = GetCommandLineW();
+    //PWSTR pCmdLine = GetCommandLineW();
 
     WndClass.cbSize = sizeof(WNDCLASSEXW);
     WndClass.style = 0; // disable CS_DBLCLKS
@@ -212,9 +212,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
 #ifdef FEAT_MIDI
     // Open the MIDI Mapper
     UINT midiDeviceID = (UINT)1;
-    if (wcslen(pCmdLine) > 0) {
-        if (swscanf(pCmdLine, L"%d", &midiDeviceID) == 0)
-            midiDeviceID = (UINT)1;
+    if (strlen(paCmdLine) > 0) {
+        if (sscanf(paCmdLine, "\"%d\"", &midiDeviceID) == 0) {
+            midiDeviceID = (UINT) 1;
+        }
     }
     printf("Opening MIDI device ID #%d...\r\n", midiDeviceID);
     result = midiOutOpen(&outHandle, midiDeviceID, 0, 0, CALLBACK_WINDOW);
