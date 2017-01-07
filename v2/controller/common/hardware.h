@@ -78,8 +78,10 @@ extern void lcd_updated_all(void);
     00 <= data1   <= FF   - first data byte of MIDI command
     00 <= data2   <= FF   - second (optional) data byte of MIDI command
 */
-extern void midi_send_cmd1(u8 cmd, u8 channel, u8 data1);
-extern void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2);
+#define midi_send_cmd1(cmd, channel, data1) midi_send_cmd1_impl(((cmd & (u8)0xF) << (u8)4) | (channel & (u8)0xF), data1)
+extern void midi_send_cmd1_impl(u8 cmd_byte, u8 data1);
+#define midi_send_cmd2(cmd, channel, data1, data2) midi_send_cmd2_impl(((cmd & (u8)0xF) << (u8)4) | (channel & (u8)0xF), data1, data2)
+extern void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2);
 
 // --------------- Flash memory functions:
 

@@ -42,9 +42,11 @@ extern unsigned char SystickCntr;
 extern unsigned char SystickCntr2;
 extern unsigned char SystickCntr3;
 
+#ifdef MIDI_BUFFER
 extern unsigned char MIDITxBuffer[MAX_MIDI_TX_LENGTH];
 extern unsigned char MIDITxBufPtr;
 extern unsigned char MIDITxBufOutPtr;
+#endif
 
 extern unsigned char swuart_tx_buffer[MAX_LCD_TX_LENGTH];
 extern unsigned char swuart_tx_bufptr;

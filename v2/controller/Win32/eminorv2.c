@@ -982,26 +982,26 @@ void led_set(u16 leds) {
     00 <= data1   <= FF   - first data byte of MIDI command
     00 <= data2   <= FF   - second (optional) data byte of MIDI command
     */
-void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
+void midi_send_cmd1_impl(u8 cmd_byte, u8 data1) {
 #ifdef FEAT_MIDI
     if (outHandle != 0) {
         // send the MIDI command to the opened MIDI Mapper device:
-        midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8));
+        midiOutShortMsg(outHandle, cmd_byte | ((u32)data1 << 8));
     }
 #endif
     midi_count += 2;
-    printf("MIDI: %1X%1X %02X\r\n", cmd, channel, data1);
+    printf("MIDI: %02X %02X\r\n", cmd_byte, data1);
 }
 
-void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
+void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2) {
 #ifdef FEAT_MIDI
     if (outHandle != 0) {
         // send the MIDI command to the opened MIDI Mapper device:
-        midiOutShortMsg(outHandle, ((cmd & 0xF) << 4) | (channel & 0xF) | ((u32)data1 << 8) | ((u32)data2 << 16));
+        midiOutShortMsg(outHandle, cmd_byte | ((u32)data1 << 8) | ((u32)data2 << 16));
     }
 #endif
     midi_count += 3;
-    printf("MIDI: %1X%1X %02X %02X\r\n", cmd, channel, data1, data2);
+    printf("MIDI: %02X %02X %02X\r\n", cmd_byte, data1, data2);
 }
 
 // --------------- Flash memory interface:

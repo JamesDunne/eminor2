@@ -8,6 +8,7 @@
 
 #include "c_system.h"
 
+#ifdef MIDI_BUFFER
 void midi_tx() {
     // Check if we received a byte:
     if (PIR1bits.RCIF) {
@@ -47,3 +48,4 @@ void midi_clear_buffer(void) {
     MIDITxBufPtr = 0;       //Point to buffer start.
     MIDITxBufOutPtr = 0;        //Point to buffer start.
 }
+#endif

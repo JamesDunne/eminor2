@@ -22,9 +22,11 @@ unsigned char SystickCntr;
 unsigned char SystickCntr2;
 unsigned char SystickCntr3;
 
+#ifdef MIDI_BUFFER
 unsigned char MIDITxBuffer[MAX_MIDI_TX_LENGTH];
 unsigned char MIDITxBufPtr;
 unsigned char MIDITxBufOutPtr;
+#endif
 
 unsigned char swuart_tx_buffer[MAX_LCD_TX_LENGTH];
 unsigned char swuart_tx_bufptr;

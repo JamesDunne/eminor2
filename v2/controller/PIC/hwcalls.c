@@ -169,26 +169,31 @@ void lcd_updated_all(void) {
 
 /* --------------- MIDI I/O functions: */
 
-/* Send formatted MIDI commands.
+#ifdef MIDI_BUFFER
+#else
+// Non-buffered (immediate, blocking) MIDI transmission functions:
+#define midi_enq(byte) { \
+	while (!PIR1bits.TXIF) {} \
+	TXREG = byte; \
+}
+#endif
 
-     0 <= cmd <= F      - MIDI command
-     0 <= channel <= F  - MIDI channel to send command to
+/* Send formatted MIDI commands.
+    00 <= cmd <= FF     - MIDI command
     00 <= data1 <= 7F   - data byte of MIDI command
 */
-void midi_send_cmd1(u8 cmd, u8 channel, u8 data1) {
-    midi_enq(((cmd & 0xF) << 4) | (channel & 0xF));
+void midi_send_cmd1_impl(u8 cmd_byte, u8 data1) {
+    midi_enq(cmd_byte);
     midi_enq(data1);
 }
 
 /* Send formatted MIDI commands.
-
-     0 <= cmd <= F      - MIDI command
-     0 <= channel <= F  - MIDI channel to send command to
+    00 <= cmd <= FF     - MIDI command
     00 <= data1 <= 7F   - first data byte of MIDI command
     00 <= data2 <= 7F   - second (optional) data byte of MIDI command
 */
-void midi_send_cmd2(u8 cmd, u8 channel, u8 data1, u8 data2) {
-    midi_enq(((cmd & 0xF) << 4) | (channel & 0xF));
+void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2) {
+    midi_enq(cmd_byte);
     midi_enq(data1);
     midi_enq(data2);
 }

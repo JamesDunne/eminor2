@@ -96,6 +96,9 @@ void main() {
             lcd_update_screen();
         }
 
+
+#ifdef MIDI_BUFFER
         midi_tx();      //handles sending/receiving midi data
+#endif
     }
 }
