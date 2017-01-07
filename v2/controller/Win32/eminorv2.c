@@ -979,6 +979,7 @@ void led_set(u16 leds) {
 MIDIHDR sysex;
 BOOL sysex_queuing = FALSE;
 DWORD sysex_ptr = 0;
+CHAR midiErrorText[1024];
 
 void midi_send_sysex(u8 byte) {
     if (!sysex_queuing) {
@@ -1005,8 +1006,17 @@ void midi_send_sysex(u8 byte) {
         sysex_queuing = FALSE;
 #ifdef FEAT_MIDI
         if (outHandle != 0) {
-            midiOutPrepareHeader(outHandle, &sysex, sizeof(sysex));
-            midiOutLongMsg(outHandle, &sysex, sizeof(sysex));
+            MMRESULT r;
+            r = midiOutPrepareHeader(outHandle, &sysex, sizeof(sysex));
+            if (r != MMSYSERR_NOERROR) {
+                midiOutGetErrorTextA(r, midiErrorText, 1024);
+                printf("MIDI ERROR: %s\n", midiErrorText);
+            }
+            r = midiOutLongMsg(outHandle, &sysex, sizeof(sysex));
+            if (r != MMSYSERR_NOERROR) {
+                midiOutGetErrorTextA(r, midiErrorText, 1024);
+                printf("MIDI ERROR: %s\n", midiErrorText);
+            }
         }
 #endif
     }
@@ -1021,8 +1031,13 @@ void midi_send_sysex(u8 byte) {
 void midi_send_cmd1_impl(u8 cmd_byte, u8 data1) {
 #ifdef FEAT_MIDI
     if (outHandle != 0) {
+        MMRESULT r;
         // send the MIDI command to the opened MIDI Mapper device:
-        midiOutShortMsg(outHandle, cmd_byte | ((u32)data1 << 8));
+        r = midiOutShortMsg(outHandle, cmd_byte | ((u32)data1 << 8));
+        if (r != MMSYSERR_NOERROR) {
+            midiOutGetErrorTextA(r, midiErrorText, 1024);
+            printf("MIDI ERROR: %s\n", midiErrorText);
+        }
     }
 #endif
     midi_count += 2;
@@ -1032,8 +1047,13 @@ void midi_send_cmd1_impl(u8 cmd_byte, u8 data1) {
 void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2) {
 #ifdef FEAT_MIDI
     if (outHandle != 0) {
+        MMRESULT r;
         // send the MIDI command to the opened MIDI Mapper device:
-        midiOutShortMsg(outHandle, cmd_byte | ((u32)data1 << 8) | ((u32)data2 << 16));
+        r = midiOutShortMsg(outHandle, cmd_byte | ((u32)data1 << 8) | ((u32)data2 << 16));
+        if (r != MMSYSERR_NOERROR) {
+            midiOutGetErrorTextA(r, midiErrorText, 1024);
+            printf("MIDI ERROR: %s\n", midiErrorText);
+        }
     }
 #endif
     midi_count += 3;

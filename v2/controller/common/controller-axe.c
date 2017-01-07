@@ -825,8 +825,8 @@ void load_program(void) {
     origpr = (rom struct program *)flash_addr((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)));
     curr.modified = 0;
     curr.midi_program = pr.midi_program;
-    curr.tempo = (u16)30;
-    last.tempo = ~(u16)30;
+    curr.tempo = (u16)120;
+    last.tempo = ~(u16)120;
 
     // Establish a sane default for an undefined program:
     curr.sc_idx = 0;
