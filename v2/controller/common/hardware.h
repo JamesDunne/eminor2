@@ -83,6 +83,9 @@ extern void midi_send_cmd1_impl(u8 cmd_byte, u8 data1);
 #define midi_send_cmd2(cmd, channel, data1, data2) midi_send_cmd2_impl(((cmd & (u8)0xF) << (u8)4) | (channel & (u8)0xF), data1, data2)
 extern void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2);
 
+// Send a single byte for SysEx:
+extern void midi_send_sysex(u8 byte);
+
 // --------------- Flash memory functions:
 
 // Flash addresses are 0-based where 0 is the first available byte of

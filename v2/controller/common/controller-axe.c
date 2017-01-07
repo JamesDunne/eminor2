@@ -212,6 +212,8 @@ struct state {
     u8 sc_idx;
     // Current MIDI program #:
     u8 midi_program;
+    // Current tempo (bpm):
+    u16 tempo;
 
     // Selected amp (0 or 1):
     u8 selected_amp;
@@ -263,8 +265,20 @@ static rom const char *name_get(u16 name_index) {
 }
 
 // Set Axe-FX CC value
-#define midi_set_axe_cc(cc, val) midi_send_cmd2(0xB, axe_midi_channel, cc, val)
-#define midi_set_axe_program(program) midi_send_cmd1(0xC, axe_midi_channel, program)
+#define midi_axe_cc(cc, val) midi_send_cmd2(0xB, axe_midi_channel, cc, val)
+#define midi_axe_pc(program) midi_send_cmd1(0xC, axe_midi_channel, program)
+#define midi_axe_sysex_start(fn) { \
+  midi_send_sysex(0xF0); \
+  midi_send_sysex(0x00); \
+  midi_send_sysex(0x01); \
+  midi_send_sysex(0x74); \
+  midi_send_sysex(0x03); \
+  midi_send_sysex(fn); \
+}
+#define midi_axe_sysex_end(chksum) { \
+  midi_send_sysex(chksum); \
+  midi_send_sysex(0xF7); \
+}
 
 // Top switch press cannot be an accident:
 #define is_top_button_pressed(mask) \
@@ -433,6 +447,7 @@ static void program_save(void);
 #define calc_cc_toggle(enable) \
     ((u8)-((s8)enable) >> (u8)1)
 
+// MIDI is sent at a fixed 3,125 bytes/sec transfer rate; 56 bytes takes 175ms to complete.
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     u8 diff = 0;
@@ -447,7 +462,37 @@ static void calc_midi(void) {
     // Send MIDI program change:
     if (curr.midi_program != last.midi_program) {
         DEBUG_LOG1("MIDI change program %d", curr.midi_program);
-        midi_set_axe_program(curr.midi_program);
+        midi_axe_pc(curr.midi_program);
+    }
+
+    // Send MIDI tempo change:
+    if (curr.tempo != last.tempo) {
+        // http://forum.fractalaudio.com/threads/is-it-possible-to-set-tempo-on-the-axe-fx-ii-via-sysex.101437/
+        // Example SysEx runs for tempo change on Axe-FX II:
+        // F0 00 01 74 03 02 0D 01 20 00 1E 00 00 01 37 F7   =  30 BPM
+        // F0 00 01 74 03 02 0D 01 20 00 78 00 00 01 51 F7   = 120 BPM
+        // F0 00 01 74 03 02 0D 01 20 00 0C 01 00 01 24 F7   = 140 BPM
+
+        // Precompute a checksum that excludes only the 2 tempo bytes:
+        u8 cs = 0xF0 ^ 0x00 ^ 0x01 ^ 0x74 ^ 0x03 ^ 0x02 ^ 0x0D ^ 0x01 ^ 0x20 ^ 0x00 ^ 0x00 ^ 0x01;
+        u8 d;
+        // Start the sysex command targeted at the Axe-FX II to initiate tempo change:
+        midi_axe_sysex_start(0x02);
+        midi_send_sysex(0x0D);
+        midi_send_sysex(0x01);
+        midi_send_sysex(0x20);
+        midi_send_sysex(0x00);
+        // Tempo value split in 2x 7-bit values:
+        d = (u8)(curr.tempo & (u8)0x7F);
+        cs ^= d;
+        midi_send_sysex(d);
+        d = (u8)(curr.tempo >> (u8)7) & (u8)0x7F;
+        cs ^= d;
+        midi_send_sysex(d);
+        //  Finish the tempo command and send the sysex checksum and terminator:
+        midi_send_sysex(0x00);
+        midi_send_sysex(0x01);
+        midi_axe_sysex_end(cs & (u8) 0x7F);
     }
 
     // Send gain controller changes:
@@ -467,10 +512,10 @@ static void calc_midi(void) {
     send_gain = (u8)((dirty && gain_changed) || dirty_changed);
     if (send_gain) {
         DEBUG_LOG2("MIDI set AMP1 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
-        midi_set_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
+        midi_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
         if (gate != last_gate) {
-            midi_set_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(gate));
-            midi_set_axe_cc(axe_cc_byp_compressor1, calc_cc_toggle(!gate));
+            midi_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(gate));
+            midi_axe_cc(axe_cc_byp_compressor1, calc_cc_toggle(!gate));
         }
         diff = 1;
     }
@@ -490,10 +535,10 @@ static void calc_midi(void) {
     send_gain = (u8)((dirty && gain_changed) || dirty_changed);
     if (send_gain) {
         DEBUG_LOG2("MIDI set AMP2 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
-        midi_set_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
+        midi_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
         if (gate != last_gate) {
-            midi_set_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(gate));
-            midi_set_axe_cc(axe_cc_byp_compressor2, calc_cc_toggle(!gate));
+            midi_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(gate));
+            midi_axe_cc(axe_cc_byp_compressor2, calc_cc_toggle(!gate));
         }
         diff = 1;
     }
@@ -504,13 +549,13 @@ static void calc_midi(void) {
     xy = read_bit(xy, curr.amp[0].fx);
     if (xy != read_bit(xy, last.amp[0].fx)) {
         DEBUG_LOG1("MIDI set AMP1 %s", xy == 0 ? "X" : "Y");
-        midi_set_axe_cc(axe_cc_xy_amp1, calc_cc_toggle(!xy));
+        midi_axe_cc(axe_cc_xy_amp1, calc_cc_toggle(!xy));
         diff = 1;
     }
     xy = read_bit(xy, curr.amp[1].fx);
     if (xy != read_bit(xy, last.amp[1].fx)) {
         DEBUG_LOG1("MIDI set AMP2 %s", xy == 0 ? "X" : "Y");
-        midi_set_axe_cc(axe_cc_xy_amp2, calc_cc_toggle(!xy));
+        midi_axe_cc(axe_cc_xy_amp2, calc_cc_toggle(!xy));
         diff = 1;
     }
 #endif
@@ -518,59 +563,59 @@ static void calc_midi(void) {
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
         DEBUG_LOG1("MIDI set AMP1 volume = %s", bcd(dB_bcd_lookup[curr.amp[0].volume]));
-        midi_set_axe_cc(axe_cc_external1, (curr.amp[0].volume));
+        midi_axe_cc(axe_cc_external1, (curr.amp[0].volume));
         diff = 1;
     }
     if (curr.amp[1].volume != last.amp[1].volume) {
         DEBUG_LOG1("MIDI set AMP2 volume = %s", bcd(dB_bcd_lookup[curr.amp[1].volume]));
-        midi_set_axe_cc(axe_cc_external2, (curr.amp[1].volume));
+        midi_axe_cc(axe_cc_external2, (curr.amp[1].volume));
         diff = 1;
     }
 
     // Enable FX:
     if (read_bit(delay, curr.amp[0].fx) != read_bit(delay, last.amp[0].fx)) {
         DEBUG_LOG1("MIDI set AMP1 delay %s", read_bit(delay, curr.amp[0].fx) == 0 ? "off" : "on");
-        midi_set_axe_cc(axe_cc_byp_delay1, calc_cc_toggle(read_bit(delay, curr.amp[0].fx)));
+        midi_axe_cc(axe_cc_byp_delay1, calc_cc_toggle(read_bit(delay, curr.amp[0].fx)));
     }
     if (read_bit(delay, curr.amp[1].fx) != read_bit(delay, last.amp[1].fx)) {
         DEBUG_LOG1("MIDI set AMP2 delay %s", read_bit(delay, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_set_axe_cc(axe_cc_byp_delay2, calc_cc_toggle(read_bit(delay, curr.amp[1].fx)));
+        midi_axe_cc(axe_cc_byp_delay2, calc_cc_toggle(read_bit(delay, curr.amp[1].fx)));
     }
 
     if (read_bit(rotary, curr.amp[0].fx) != read_bit(rotary, last.amp[0].fx)) {
         DEBUG_LOG1("MIDI set AMP1 rotary %s", read_bit(rotary, curr.amp[0].fx) == 0 ? "off" : "on");
-        midi_set_axe_cc(axe_cc_byp_rotary1, calc_cc_toggle(read_bit(rotary, curr.amp[0].fx)));
+        midi_axe_cc(axe_cc_byp_rotary1, calc_cc_toggle(read_bit(rotary, curr.amp[0].fx)));
     }
     if (read_bit(rotary, curr.amp[1].fx) != read_bit(rotary, last.amp[1].fx)) {
         DEBUG_LOG1("MIDI set AMP2 rotary %s", read_bit(rotary, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_set_axe_cc(axe_cc_byp_rotary2, calc_cc_toggle(read_bit(rotary, curr.amp[1].fx)));
+        midi_axe_cc(axe_cc_byp_rotary2, calc_cc_toggle(read_bit(rotary, curr.amp[1].fx)));
     }
 
     if (read_bit(pitch, curr.amp[0].fx) != read_bit(pitch, last.amp[0].fx)) {
         DEBUG_LOG1("MIDI set AMP1 pitch %s", read_bit(pitch, curr.amp[0].fx) == 0 ? "off" : "on");
-        midi_set_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
+        midi_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
     }
     if (read_bit(pitch, curr.amp[1].fx) != read_bit(pitch, last.amp[1].fx)) {
         DEBUG_LOG1("MIDI set AMP2 pitch %s", read_bit(pitch, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_set_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
+        midi_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
     }
 
     if (read_bit(chorus, curr.amp[0].fx) != read_bit(chorus, last.amp[0].fx)) {
         DEBUG_LOG1("MIDI set AMP1 chorus %s", read_bit(chorus, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_set_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(read_bit(chorus, curr.amp[0].fx)));
+        midi_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(read_bit(chorus, curr.amp[0].fx)));
     }
     if (read_bit(chorus, curr.amp[1].fx) != read_bit(chorus, last.amp[1].fx)) {
         DEBUG_LOG1("MIDI set AMP2 chorus %s", read_bit(chorus, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_set_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(read_bit(chorus, curr.amp[1].fx)));
+        midi_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(read_bit(chorus, curr.amp[1].fx)));
     }
 
     if (read_bit(filter, curr.amp[0].fx) != read_bit(filter, last.amp[0].fx)) {
         DEBUG_LOG1("MIDI set AMP1 filter %s", read_bit(filter, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_set_axe_cc(axe_cc_byp_phaser1, calc_cc_toggle(read_bit(filter, curr.amp[0].fx)));
+        midi_axe_cc(axe_cc_byp_phaser1, calc_cc_toggle(read_bit(filter, curr.amp[0].fx)));
     }
     if (read_bit(filter, curr.amp[1].fx) != read_bit(filter, last.amp[1].fx)) {
         DEBUG_LOG1("MIDI set AMP2 filter %s", read_bit(filter, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_set_axe_cc(axe_cc_byp_phaser2, calc_cc_toggle(read_bit(filter, curr.amp[1].fx)));
+        midi_axe_cc(axe_cc_byp_phaser2, calc_cc_toggle(read_bit(filter, curr.amp[1].fx)));
     }
 
     if (curr.amp[0].fx != last.amp[0].fx) {
@@ -780,6 +825,8 @@ void load_program(void) {
     origpr = (rom struct program *)flash_addr((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)));
     curr.modified = 0;
     curr.midi_program = pr.midi_program;
+    curr.tempo = (u16)30;
+    last.tempo = ~(u16)30;
 
     // Establish a sane default for an undefined program:
     curr.sc_idx = 0;
@@ -913,8 +960,8 @@ void controller_10msec_timer(void) {
 
 #if 0
     // TESTING; change gain of both amps with a triangle oscillator:
-    midi_set_axe_cc(axe_cc_external3, (val & (u8)0x7F));
-    midi_set_axe_cc(axe_cc_external4, (val & (u8)0x7F));
+    midi_axe_cc(axe_cc_external3, (val & (u8)0x7F));
+    midi_axe_cc(axe_cc_external4, (val & (u8)0x7F));
     if ((val & (u8)0x80) == (u8)0x80) {
         val--;
         if ((val & (u8)0x7F) == (u8)0) {
@@ -1002,7 +1049,7 @@ void controller_handle(void) {
         // Toggle TAP CC value between 0x00 and 0x7F:
         timers.bot_6 = (u8)0x80;
         tap ^= (u8)0x7F;
-        midi_set_axe_cc(axe_cc_taptempo, tap);
+        midi_axe_cc(axe_cc_taptempo, tap);
     } else if (is_bot_button_pressed(M_6)) {
         timers.bot_6 = (u8)0x00;
     }

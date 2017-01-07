@@ -178,6 +178,11 @@ void lcd_updated_all(void) {
 }
 #endif
 
+// Send a single MIDI byte for SysEx:
+void midi_send_sysex(u8 byte) {
+	midi_enq(byte);
+}
+
 /* Send formatted MIDI commands.
     00 <= cmd <= FF     - MIDI command
     00 <= data1 <= 7F   - data byte of MIDI command

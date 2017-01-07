@@ -976,6 +976,42 @@ void led_set(u16 leds) {
 
 // --------------- MIDI I/O interface:
 
+MIDIHDR sysex;
+BOOL sysex_queuing = FALSE;
+DWORD sysex_ptr = 0;
+
+void midi_send_sysex(u8 byte) {
+    if (!sysex_queuing) {
+        if (sysex.lpData == NULL) {
+            sysex.lpData = malloc(128);
+        }
+        sysex_queuing = TRUE;
+        sysex_ptr = 0;
+    }
+
+    // Enqueue byte:
+    sysex.lpData[sysex_ptr++] = byte;
+    midi_count += 1;
+
+    // Send SysEx stream:
+    if (byte == 0xF7) {
+        sysex.dwFlags = 0;
+        sysex.dwBufferLength = sysex_ptr;
+        printf("MIDI SysEx:");
+        for (DWORD i = 0; i < sysex_ptr; i++) {
+            printf(" %02X", (u8)sysex.lpData[i]);
+        }
+        printf("\n");
+        sysex_queuing = FALSE;
+#ifdef FEAT_MIDI
+        if (outHandle != 0) {
+            midiOutPrepareHeader(outHandle, &sysex, sizeof(sysex));
+            midiOutLongMsg(outHandle, &sysex, sizeof(sysex));
+        }
+#endif
+    }
+}
+
 /* Send multi-byte MIDI commands
     0 <= cmd     <=  F   - MIDI command
     0 <= channel <=  F   - MIDI channel to send command to
