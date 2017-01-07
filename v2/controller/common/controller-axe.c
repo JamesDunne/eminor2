@@ -421,7 +421,7 @@ static void prev_song(void);
 
 static void next_song(void);
 
-static void curr_amp_reset(void);
+static void midi_invalidate(void);
 
 static void toggle_setlist_mode(void);
 
@@ -895,7 +895,7 @@ void controller_10msec_timer(void) {
         } \
     }
 
-    one_shot(bot,2,0x1F,curr_amp_reset)
+    one_shot(bot,2,0x1F,midi_invalidate)
     one_shot(bot,3,0x1F,curr_amp_toggle)
 
     repeater(bot,4,0x20,0x01,curr_amp_dec)
@@ -1138,18 +1138,16 @@ static void toggle_setlist_mode() {
     }
 }
 
-static void curr_amp_reset() {
-    if (curr.selected_both) {
-        DEBUG_LOG0("reset amps");
-        last.amp[0].fx = ~curr.amp[0].fx;
-        last.amp[0].volume = ~curr.amp[0].volume;
-        last.amp[1].fx = ~curr.amp[1].fx;
-        last.amp[1].volume = ~curr.amp[1].volume;
-    } else {
-        DEBUG_LOG1("reset amp%c", curr.selected_amp + '1');
-        last.amp[curr.selected_amp].fx = ~curr.amp[curr.selected_amp].fx;
-        last.amp[curr.selected_amp].volume = ~curr.amp[curr.selected_amp].volume;
-    }
+static void midi_invalidate() {
+    // Invalidate all current MIDI state so it gets re-sent at end of loop:
+    DEBUG_LOG0("resend all MIDI state");
+    last.midi_program  = ~curr.midi_program;
+    last.amp[0].gain   = ~curr.amp[0].gain;
+    last.amp[0].fx     = ~curr.amp[0].fx;
+    last.amp[0].volume = ~curr.amp[0].volume;
+    last.amp[1].gain   = ~curr.amp[1].gain;
+    last.amp[1].fx     = ~curr.amp[1].fx;
+    last.amp[1].volume = ~curr.amp[1].volume;
 }
 
 static void next_song() {
