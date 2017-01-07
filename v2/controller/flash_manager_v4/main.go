@@ -843,5 +843,5 @@ func main() {
 
 	generatePICH()
 
-	//generateJSON()
+	generateJSON()
 }
