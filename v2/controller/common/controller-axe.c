@@ -1201,8 +1201,8 @@ static void toggle_setlist_mode() {
 static void midi_invalidate() {
     // Invalidate all current MIDI state so it gets re-sent at end of loop:
     DEBUG_LOG0("invalidate MIDI state");
-    last.midi_program  = ~curr.midi_program;
-    last.tempo         = ~curr.tempo;
+    //last.midi_program  = ~curr.midi_program;
+    //last.tempo         = ~curr.tempo;
     last.amp[0].gain   = ~curr.amp[0].gain;
     last.amp[0].fx     = ~curr.amp[0].fx;
     last.amp[0].volume = ~curr.amp[0].volume;

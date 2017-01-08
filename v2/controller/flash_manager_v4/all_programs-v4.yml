@@ -938,6 +938,7 @@ programs:
       channel: dirty
 - name: Puppets
   tempo: 106
+  midi: 2
   gain: 0x4A
   scenes:
   - name: Main
@@ -950,22 +951,7 @@ programs:
       channel: clean
       fx: [chorus]
     JD:
-      channel: clean
-      fx: [chorus]
-  - name: Breakdown harm
-    MG:
-      channel: clean
-      fx: [chorus]
-    JD:
       channel: dirty
-  - name: Breakdown lead
-    MG:
-      channel: clean
-      fx: [chorus]
-    JD:
-      channel: dirty
-      level: 6
-      cab: Y
       fx: [delay]
   - name: Breakdown harm
     MG:
@@ -973,6 +959,22 @@ programs:
       fx: [chorus]
     JD:
       channel: dirty
+      fx: [delay,pitch]
+  - name: Breakdown lead
+    MG:
+      channel: clean
+      fx: [chorus]
+    JD:
+      channel: dirty
+      level: 6
+      fx: [delay]
+  - name: Breakdown harm
+    MG:
+      channel: clean
+      fx: [chorus]
+    JD:
+      channel: dirty
+      fx: [delay,pitch]
   - name: Main
     MG:
       channel: dirty
@@ -984,9 +986,18 @@ programs:
     JD:
       channel: dirty
       level: 6
+      gain: 0x70
       fx: [delay]
   - name: Main
     MG:
       channel: dirty
     JD:
       channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 3
+      gain: 0x70
+      fx: [delay]
