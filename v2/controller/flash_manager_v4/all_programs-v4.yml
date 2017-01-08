@@ -949,6 +949,7 @@ programs:
   - name: Breakdown clean
     MG:
       channel: clean
+      level: 3
       fx: [chorus]
     JD:
       channel: dirty
@@ -956,13 +957,16 @@ programs:
   - name: Breakdown harm
     MG:
       channel: clean
+      level: 3
       fx: [chorus]
     JD:
       channel: dirty
+      level: -1.5
       fx: [delay,pitch]
   - name: Breakdown lead
     MG:
       channel: clean
+      level: 3
       fx: [chorus]
     JD:
       channel: dirty
@@ -971,9 +975,11 @@ programs:
   - name: Breakdown harm
     MG:
       channel: clean
+      level: 3
       fx: [chorus]
     JD:
       channel: dirty
+      level: -1.5
       fx: [delay,pitch]
   - name: Main
     MG:
