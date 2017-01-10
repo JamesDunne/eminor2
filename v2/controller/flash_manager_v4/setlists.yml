@@ -766,6 +766,16 @@ sets:
     active: true
     print: true
     songs:
+      # Audition for Chris on 2017-01-11
+      - Plush
+      - Beautiful disaster
+      - Drive
+      - Hash pipe
+      - The middle
+      - Kryptonite
+      - Puppets
+
+      # Unordered set list for 1/21
       - Holiday
       - Machinehead
       - Zero
