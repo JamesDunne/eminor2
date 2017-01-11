@@ -94,7 +94,7 @@ programs:
   - name: MG Lead
     MG:
       channel: dirty
-      level: 6
+      level: 3
       fx: [rotary,delay]
     JD:
       channel: clean
