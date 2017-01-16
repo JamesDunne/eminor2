@@ -1,1 +1,1 @@
-gcc -DHW_VERSION=4 -I../common main.c ../common/controller-axe.c
+gcc -g -DHW_VERSION=4 -I../common main.c ../common/controller-axe.c
