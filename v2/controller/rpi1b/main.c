@@ -69,11 +69,14 @@ void debug_log(const char *fmt, ...) {
 
 // Poll 16 foot-switch states:
 u16 fsw_poll(void) {
+    // http://www.airspayce.com/mikem/bcm2835/
+    // TODO: use GPIO pins to poll multiplexers similarly to PIC backend.
     return (u16)0;
 }
 
 // Explicitly set the state of all 16 LEDs:
 void led_set(u16 leds) {
+    // TODO: use GPIO pins to write LED state to shift register and pulse clock.
 }
 
 #ifdef FEAT_LCD
@@ -88,6 +91,7 @@ char *lcd_row_get(u8 row) {
 
 // Update all LCD display rows as updated:
 void lcd_updated_all(void) {
+    // TODO: Use SPI bus to communicate with LCD.
 }
 
 #endif
