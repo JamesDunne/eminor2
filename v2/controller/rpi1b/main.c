@@ -14,7 +14,6 @@
 //At bootup, pins 8 and 10 are already set to UART0_TXD, UART0_RXD (ie the alt0 function) respectively
 int uart0_filestream = -1;
 
-
 int midi_init(void) {
     //OPEN THE UART
     //The flags (defined in fcntl.h):
@@ -94,25 +93,44 @@ void lcd_updated_all(void) {
 #endif
 
 void midi_send_cmd1_impl(u8 cmd_byte, u8 data1) {
+    int count;
     u8 buf[2];
     buf[0] = cmd_byte;
     buf[1] = data1;
-    write(uart0_filestream, buf, 2);
+    count = write(uart0_filestream, buf, 2);
+    if (count < 0) {
+        perror("Error sending MIDI bytes");
+        return;
+    }
+    printf("MIDI: %02X %02X\n", cmd_byte, data1);
 }
 
 void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2) {
+    int count;
     u8 buf[3];
     buf[0] = cmd_byte;
     buf[1] = data1;
     buf[2] = data2;
-    write(uart0_filestream, buf, 3);
+    count = write(uart0_filestream, buf, 3);
+    if (count < 0) {
+        perror("Error sending MIDI bytes");
+        return;
+    }
+    printf("MIDI: %02X %02X %02X\n", cmd_byte, data1, data2);
 }
 
 // Send a single byte for SysEx:
 void midi_send_sysex(u8 byte) {
+    int count;
     u8 buf[1];
     buf[0] = byte;
-    write(uart0_filestream, buf, 1);
+    count = write(uart0_filestream, buf, 1);
+    if (count < 0) {
+        perror("Error sending MIDI bytes");
+        return;
+    }
+    // TODO: buffer this until 0xF7.
+    printf("MIDI: %02X\n", byte);
 }
 
 // --------------- Flash memory functions:
