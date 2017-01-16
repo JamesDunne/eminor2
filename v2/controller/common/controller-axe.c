@@ -861,10 +861,6 @@ void load_program(void) {
 void load_scene(void) {
     DEBUG_LOG1("load scene %d", curr.sc_idx + 1);
 
-    // Store last state into program for recall:
-    pr.scene[last.sc_idx].amp[0] = curr.amp[0];
-    pr.scene[last.sc_idx].amp[1] = curr.amp[1];
-
     // Detect if scene is uninitialized:
     if ((pr.scene[curr.sc_idx].amp[0].gain == 0) && (pr.scene[curr.sc_idx].amp[0].volume == 0) &&
         (pr.scene[curr.sc_idx].amp[1].gain == 0) && (pr.scene[curr.sc_idx].amp[1].volume == 0)) {
@@ -1156,6 +1152,11 @@ void controller_handle(void) {
     }
 
     if (curr.sc_idx != last.sc_idx) {
+
+        // Store last state into program for recall:
+        pr.scene[last.sc_idx].amp[0] = curr.amp[0];
+        pr.scene[last.sc_idx].amp[1] = curr.amp[1];
+
         load_scene();
 
     }
