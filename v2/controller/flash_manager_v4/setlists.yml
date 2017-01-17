@@ -766,7 +766,53 @@ sets:
     active: true
     print: true
     songs:
-      # Audition for Chris on 2017-01-11
+      # Unordered set list for 1/21
+      - Trippin on a Hole in a Paper Heart
+      - Holiday
+      - Song 2
+
+      - 'BREAK: INTRO'
+
+      - Machinehead
+      - Bound for the Floor
+      - Hash Pipe
+
+      - 'BREAK: DOWNTUNE'
+
+      - Monkey Wrench
+      - Shine
+      - The Middle
+
+      - 'BREAK: UPTUNE'
+
+      - Plush
+      - Story of a Girl
+      - Everything Zen
+
+      - 'BREAK: BREAK'
+
+      - Damnit
+      - Cumbersome
+      - Buddy Holly
+
+      - 'BREAK: BREAK'
+
+      - Beautiful Disaster
+      - Zero
+      - Brain Stew
+
+      - 'BREAK: BREAK'
+
+      - Say It Ain't So
+      - Basket Case
+      - My Own Worst Enemy
+
+      - 'BREAK: GOODBYE'
+
+      - Fuel
+
+      - 'BREAK: AUDITION'
+      # Audition for Chris
       - Plush
       - Beautiful disaster
       - Drive
@@ -774,27 +820,3 @@ sets:
       - The middle
       - Kryptonite
       - Puppets
-
-      # Unordered set list for 1/21
-      - Holiday
-      - Machinehead
-      - Zero
-      - Brainstew
-      - The Middle
-      - Monkeywrench
-      - Plush
-      - Bound for the Floor
-      - Hash Pipe
-      - Song 2
-      - Dammit
-      - Beautiful Disaster
-      - Say it ain't so
-      - Everything Zen
-      - Shine
-      - My own worst enemy
-      - Buddy Holly
-      - Cumbersome
-      - Fuel
-      - Basketcase
-      - Trippin
-      - Story of a Girl
