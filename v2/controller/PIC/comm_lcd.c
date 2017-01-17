@@ -11,6 +11,21 @@
 // LCD communication is done with a bit-banged RS232 impl using timer interrupts
 // with RD7 as the TX pin. No RX is necessary.
 
+unsigned char swuart_tx_buffer[MAX_LCD_TX_LENGTH];
+unsigned char swuart_tx_bufptr;
+unsigned char swuart_tx_bufoutptr;
+
+unsigned char swuart_txbyte;
+unsigned char swuart_txmask;
+unsigned char swuart_mode;
+unsigned char swuart_started;
+
+unsigned char LCDUpdateStage;
+
+// TODO: inline LCDRamMap rows of chars with commands to erase screen and change cursor position so it can be
+// sent as one blob without queueing individual characters and doubling memory requirements.
+char LCDRamMap[4][20];
+
 // Wait for the LCD to initialize.
 void lcd_init(void) {
     unsigned char i;

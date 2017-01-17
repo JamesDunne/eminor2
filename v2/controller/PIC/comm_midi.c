@@ -8,7 +8,11 @@
 
 #include "c_system.h"
 
-#ifdef MIDI_BUFFER
+#ifndef MIDI_BLOCKING
+unsigned char MIDITxBuffer[MAX_MIDI_TX_LENGTH];
+unsigned char MIDITxBufPtr;
+unsigned char MIDITxBufOutPtr;
+
 void midi_tx() {
     // Check if we received a byte:
     if (PIR1bits.RCIF) {

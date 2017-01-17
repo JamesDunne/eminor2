@@ -169,10 +169,10 @@ void lcd_updated_all(void) {
 
 /* --------------- MIDI I/O functions: */
 
-#ifdef MIDI_BUFFER
-#else
+#ifdef MIDI_BLOCKING
 // Non-buffered (immediate, blocking) MIDI transmission functions:
 #define midi_enq(byte) { \
+	while (!PIR1bits.TRMT) {} \
 	while (!PIR1bits.TXIF) {} \
 	TXREG = byte; \
 }

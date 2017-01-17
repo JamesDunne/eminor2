@@ -22,24 +22,7 @@ unsigned char SystickCntr;
 unsigned char SystickCntr2;
 unsigned char SystickCntr3;
 
-#ifdef MIDI_BUFFER
-unsigned char MIDITxBuffer[MAX_MIDI_TX_LENGTH];
-unsigned char MIDITxBufPtr;
-unsigned char MIDITxBufOutPtr;
-#endif
-
-unsigned char swuart_tx_buffer[MAX_LCD_TX_LENGTH];
-unsigned char swuart_tx_bufptr;
-unsigned char swuart_tx_bufoutptr;
-
-unsigned char swuart_txbyte;
-unsigned char swuart_txmask;
-unsigned char swuart_mode;
-unsigned char swuart_started;
-
 TwoBytes tTimer1Value;
-
-unsigned char LCDUpdateStage;
 
 // User-writable flash memory:
 #pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
@@ -94,5 +77,3 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
 #else
 #error HW_ VERSION must be "1", "2", "3", or "4"
 #endif
-
-char LCDRamMap[4][20];

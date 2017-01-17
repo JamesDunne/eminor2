@@ -38,7 +38,7 @@ void    init(void);
 void    UpdateLeds(void);
 void    ReadButtons(void);
 
-#ifdef MIDI_BUFFER
+#ifndef MIDI_BLOCKING
 void    midi_clear_buffer(void);
 void    midi_enq(unsigned char Input);
 void    midi_tx(void);
