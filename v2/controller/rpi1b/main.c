@@ -5,6 +5,12 @@
 #include <fcntl.h>          //Used for UART
 #include <termios.h>        //Used for UART
 
+#include <stdlib.h>
+#include <linux/i2c-dev.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
 #include "types.h"
 #include "hardware.h"
 
@@ -54,6 +60,30 @@ int midi_init(void) {
     options.c_lflag = 0;
     tcflush(uart0_filestream, TCIFLUSH);
     tcsetattr(uart0_filestream, TCSANOW, &options);
+    return 0;
+}
+
+int i2c_fd = -1;
+const char *i2c_fname = "/dev/i2c-1";
+// SX1509 breakout board exposes ADD1 and ADD0 jumpers for configuring I2C address.
+// https://learn.sparkfun.com/tutorials/sx1509-io-expander-breakout-hookup-guide#sx1509-breakout-board-overview
+const u8 i2c_sx1509_led_addr = 0x3E;  // ADD1 = 0, ADD0 = 0
+const u8 i2c_sx1509_btn_addr = 0x70;  // ADD1 = 1, ADD0 = 0
+
+// http://www.robot-electronics.co.uk/files/rpi_lcd05.c
+int i2c_init() {
+    if ((i2c_fd = open(i2c_fname, O_RDWR)) < 0) {
+        perror("open /dev/i2c-1");
+        return -1;
+    }
+
+    if (ioctl(i2c_fd, I2C_SLAVE, i2c_sx1509_led_addr) < 0) {
+        perror("ioctl I2C_SLAVE for LEDs");
+        return -1;
+    }
+
+    // TODO: figure out how to communicate with the SX1509.
+
     return 0;
 }
 
