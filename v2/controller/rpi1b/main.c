@@ -19,6 +19,7 @@
 //-------------------------
 //At bootup, pins 8 and 10 are already set to UART0_TXD, UART0_RXD (ie the alt0 function) respectively
 int uart0_filestream = -1;
+const char *midi_dev_fname = "/dev/ttyAMA0";
 
 int midi_init(void) {
     //OPEN THE UART
@@ -34,7 +35,7 @@ int midi_init(void) {
     //
     //  O_NOCTTY - When set and path identifies a terminal device, open() shall not cause the terminal device to become the controlling terminal for the process.
     //Open in non blocking read/write mode
-    uart0_filestream = open("/dev/ttyAMA0", O_WRONLY | O_NOCTTY | O_NDELAY);
+    uart0_filestream = open(midi_dev_fname, O_WRONLY | O_NOCTTY | O_NDELAY);
     if (uart0_filestream == -1)
     {
         //ERROR - CAN'T OPEN SERIAL PORT
