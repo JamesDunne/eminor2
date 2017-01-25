@@ -5,11 +5,13 @@
 #include <fcntl.h>          //Used for UART
 #include <termios.h>        //Used for UART
 
+#ifdef __linux
 #include <stdlib.h>
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#endif
 
 #include "types.h"
 #include "hardware.h"
@@ -18,8 +20,16 @@
 //----- SETUP USART 0 -----
 //-------------------------
 //At bootup, pins 8 and 10 are already set to UART0_TXD, UART0_RXD (ie the alt0 function) respectively
-int uart0_filestream = -1;
-const char *midi_dev_fname = "/dev/ttyAMA0";
+int uart0_fd = -1;
+const char *midi_fname = "/dev/ttyAMA0";
+
+int i2c_fd = -1;
+const char *i2c_fname = "/dev/i2c-1";
+
+// SX1509 breakout board exposes ADD1 and ADD0 jumpers for configuring I2C address.
+// https://learn.sparkfun.com/tutorials/sx1509-io-expander-breakout-hookup-guide#sx1509-breakout-board-overview
+const u8 i2c_sx1509_led_addr = 0x3E;  // ADD1 = 0, ADD0 = 0
+const u8 i2c_sx1509_btn_addr = 0x70;  // ADD1 = 1, ADD0 = 0
 
 int midi_init(void) {
     //OPEN THE UART
@@ -35,11 +45,11 @@ int midi_init(void) {
     //
     //  O_NOCTTY - When set and path identifies a terminal device, open() shall not cause the terminal device to become the controlling terminal for the process.
     //Open in non blocking read/write mode
-    uart0_filestream = open(midi_dev_fname, O_WRONLY | O_NOCTTY | O_NDELAY);
-    if (uart0_filestream == -1)
-    {
-        //ERROR - CAN'T OPEN SERIAL PORT
-        perror("open(\"/dev/ttyAMA0\")");
+    uart0_fd = open(midi_fname, O_WRONLY | O_NOCTTY | O_NDELAY);
+    if (uart0_fd == -1) {
+        char err[100];
+        sprintf(err, "open('%s')", midi_fname);
+        perror(err);
         return -1;
     }
 
@@ -54,27 +64,23 @@ int midi_init(void) {
     //  PARENB - Parity enable
     //  PARODD - Odd parity (else even)
     struct termios options;
-    tcgetattr(uart0_filestream, &options);
+    tcgetattr(uart0_fd, &options);
     options.c_cflag = B38400 | CS8 | CLOCAL;     //<Set baud rate
     options.c_iflag = IGNPAR;
     options.c_oflag = 0;
     options.c_lflag = 0;
-    tcflush(uart0_filestream, TCIFLUSH);
-    tcsetattr(uart0_filestream, TCSANOW, &options);
+    tcflush(uart0_fd, TCIFLUSH);
+    tcsetattr(uart0_fd, TCSANOW, &options);
     return 0;
 }
 
-int i2c_fd = -1;
-const char *i2c_fname = "/dev/i2c-1";
-// SX1509 breakout board exposes ADD1 and ADD0 jumpers for configuring I2C address.
-// https://learn.sparkfun.com/tutorials/sx1509-io-expander-breakout-hookup-guide#sx1509-breakout-board-overview
-const u8 i2c_sx1509_led_addr = 0x3E;  // ADD1 = 0, ADD0 = 0
-const u8 i2c_sx1509_btn_addr = 0x70;  // ADD1 = 1, ADD0 = 0
-
+#ifdef __linux
 // http://www.robot-electronics.co.uk/files/rpi_lcd05.c
 int i2c_init() {
     if ((i2c_fd = open(i2c_fname, O_RDWR)) < 0) {
-        perror("open /dev/i2c-1");
+        char err[100];
+        sprintf(err, "open('%s')", i2c_fname);
+        perror(err);
         return -1;
     }
 
@@ -87,6 +93,7 @@ int i2c_init() {
 
     return 0;
 }
+#endif
 
 // Hardware interface from controller:
 void debug_log(const char *fmt, ...) {
@@ -132,7 +139,7 @@ void midi_send_cmd1_impl(u8 cmd_byte, u8 data1) {
     u8 buf[2];
     buf[0] = cmd_byte;
     buf[1] = data1;
-    count = write(uart0_filestream, buf, 2);
+    count = write(uart0_fd, buf, 2);
     if (count < 0) {
         perror("Error sending MIDI bytes");
         return;
@@ -146,7 +153,7 @@ void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2) {
     buf[0] = cmd_byte;
     buf[1] = data1;
     buf[2] = data2;
-    count = write(uart0_filestream, buf, 3);
+    count = write(uart0_fd, buf, 3);
     if (count < 0) {
         perror("Error sending MIDI bytes");
         return;
@@ -159,7 +166,7 @@ void midi_send_sysex(u8 byte) {
     int count;
     u8 buf[1];
     buf[0] = byte;
-    count = write(uart0_filestream, buf, 1);
+    count = write(uart0_fd, buf, 1);
     if (count < 0) {
         perror("Error sending MIDI bytes");
         return;
@@ -240,5 +247,5 @@ int main(void) {
         while (nanosleep(&t, &t));
     }
 
-    close(uart0_filestream);
+    close(uart0_fd);
 }
