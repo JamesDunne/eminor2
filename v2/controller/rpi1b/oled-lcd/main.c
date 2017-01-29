@@ -61,13 +61,16 @@ int main(int argc, char **argv) {
 
     buf[0] = 0x40;
     for (j = 0; j < 16*16; j++) {
-    for (i = 1; i <= 1024; i++) {
-        buf[i] = 0xff ^ (i&0xff) ^ (j&0xff);
-    }
-    if (write(fd, buf, 1025) != 1025) {
-        perror("write");
-        return -1;
-    }
+        cmd(0x40);
+        cmd(0xd3);
+        cmd(0x00);
+        for (i = 1; i <= 1024; i++) {
+            buf[i] = 0xff ^ (i&0xff) ^ (j&0xff);
+        }
+        if (write(fd, buf, 1025) != 1025) {
+            perror("write");
+            return -1;
+        }
     }
 
     close(fd);
