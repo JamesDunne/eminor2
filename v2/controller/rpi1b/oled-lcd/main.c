@@ -18,7 +18,7 @@ int cmd(unsigned char c) {
 }
 
 int main(int argc, char **argv) {
-    int i;
+    int i, j;
     const char *fname = "/dev/i2c-1";
     const int address = 0x3c;
     unsigned char buf[1025];
@@ -43,12 +43,12 @@ int main(int argc, char **argv) {
     cmd(0x40);
     cmd(0x8d);
     cmd(0x14);
-    cmd(0x20);
-    cmd(0x00);
-    cmd(0xa1);
-    cmd(0xc8);
-    cmd(0xda);
-    cmd(0x12);
+    cmd(0x20);  // memory mode
+    cmd(0x00);  // 0x00 = horizontal, 0x01 = vertical, 0x02 = paged
+    cmd(0xa1);  // set segment remap
+    cmd(0xc8);  // see table 10-3 (0xc8)
+    cmd(0xda);  // set COM pins hw config
+    cmd(0x02);  // was 0x12
     cmd(0x81);
     cmd(0xcf);
     cmd(0xd9);
@@ -60,12 +60,14 @@ int main(int argc, char **argv) {
     cmd(0xaf);
 
     buf[0] = 0x40;
+    for (j = 0; j < 16*16; j++) {
     for (i = 1; i <= 1024; i++) {
-        buf[i] = 0xAA >> (i & 1);
+        buf[i] = 0xff ^ (i&0xff) ^ (j&0xff);
     }
     if (write(fd, buf, 1025) != 1025) {
         perror("write");
         return -1;
+    }
     }
 
     close(fd);
