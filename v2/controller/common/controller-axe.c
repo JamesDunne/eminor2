@@ -138,9 +138,9 @@ struct set_list {
 COMPILE_ASSERT(sizeof(struct set_list) == 64);
 
 // Hard-coded MIDI channel #s:
-#define gmaj_midi_channel	 0
-#define rjm_midi_channel	 1
-#define axe_midi_channel	 2
+#define gmaj_midi_channel    0
+#define rjm_midi_channel     1
+#define axe_midi_channel     2
 #define triaxis_midi_channel 3
 
 // Axe-FX II CC messages:
@@ -310,10 +310,10 @@ static void hextoa(char *dst, u8 col, u8 n) {
 }
 
 static s8 ritoa(char *dst, s8 col, u8 n) {
-	do {
-		dst[col--] = (n % (char)10) + (char)'0';
-	} while ((n /= (u8)10) > (u8)0);
-	return col;
+    do {
+        dst[col--] = (n % (char)10) + (char)'0';
+    } while ((n /= (u8)10) > (u8)0);
+    return col;
 }
 
 // BCD is 2.1 format with MSB indicating sign
@@ -368,17 +368,17 @@ static void copy_str_lcd(rom const char *src, char *dst) {
 // Comment-out unused functions so they don't take up code space on PIC.
 #if 0
 static s8 litoa(char *dst, s8 col, u8 n) {
-	// Write the integer to temporary storage:
-	char tmp[3];
-	s8 c = 0;
-	do {
-		tmp[c++] = (n % (char)10) + (char)'0';
-	} while ((n /= (u8)10) > (u8)0);
-	// Write the left-aligned integer to the destination:
-	for (c--; c >= 0; c--, col++) {
-		dst[col] = tmp[c];
-	}
-	return col;
+    // Write the integer to temporary storage:
+    char tmp[3];
+    s8 c = 0;
+    do {
+        tmp[c++] = (n % (char)10) + (char)'0';
+    } while ((n /= (u8)10) > (u8)0);
+    // Write the left-aligned integer to the destination:
+    for (c--; c >= 0; c--, col++) {
+        dst[col] = tmp[c];
+    }
+    return col;
 }
 
 static void print_half(char *dst, u8 col, s8 volhalfdb) {
@@ -399,11 +399,11 @@ static void print_half(char *dst, u8 col, s8 volhalfdb) {
 #endif
 
 static void send_leds(void) {
-	// Update LEDs:
+    // Update LEDs:
     curr.leds = (u16)mode_leds[mode].bot.byte | ((u16)mode_leds[mode].top.byte << 8);
-	if (curr.leds != last.leds) {
-		led_set(curr.leds);
-	}
+    if (curr.leds != last.leds) {
+        led_set(curr.leds);
+    }
 }
 
 // ------------------------- Actual controller logic -------------------------
@@ -910,7 +910,7 @@ void controller_init(void) {
     curr.pr_idx = 0;
     last.sl_idx = 0;
     last.pr_idx = 0;
-	load_program();
+    load_program();
     load_scene();
     last.sc_idx = curr.sc_idx;
 
@@ -1148,7 +1148,7 @@ void controller_handle(void) {
 
     // Update state:
     if ((curr.setlist_mode != last.setlist_mode) || (curr.sl_idx != last.sl_idx) || (curr.pr_idx != last.pr_idx)) {
-		load_program();
+        load_program();
     }
 
     if (curr.sc_idx != last.sc_idx) {
