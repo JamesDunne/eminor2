@@ -1007,3 +1007,152 @@ programs:
       level: 3
       gain: 0x70
       fx: [delay]
+
+
+- name: Inside Out
+  tempo: 107
+  gain: 0x30
+  scenes:
+  - name: Intro
+    gain: 0x20
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Verse/Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+
+- name: Cherub Rock
+  tempo: 84
+  gain: 0x60
+  scenes:
+  - name: Intro clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+      fx: [flanger]
+  - name: Dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4
+      fx: [chorus]
+  - name: Dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+
+- name: Beverly Hills
+  tempo: 88
+  scenes:
+  - name: Dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 5
+      fx: [autowah]
+  - name: Clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: Dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 5
+      fx: [autowah]
+  - name: Dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+
+- name: Low
+  tempo: 86
+  gain: 0x20
+  scenes:
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Verse
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
+      fx: [delay]
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Verse
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
+      fx: [delay]
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+      gain: 0x40
+      fx: [delay]
+    # Blue blue is the sun...
+  - name: Bridge
+    MG:
+      channel: clean
+    # Whale calls
+    JD:
+      channel: dirty
+      gain: 0x40
+      fx: [delay]
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Outro Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 0
+      gain: 0x40
+      fx: [delay]
+

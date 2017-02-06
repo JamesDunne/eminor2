@@ -1,175 +1,51 @@
 [
   {
-    "date": "2017-01-21",
-    "venue": "Bungalow Joe's",
+    "date": "2017-02-25",
+    "venue": "Addison",
     "songs": [
       {
         "i": 1,
-        "title": "Trippin",
-        "starts": "Bremer"
-      },
-      {
-        "i": 2,
-        "title": "Holiday",
+        "title": "Beautiful Disaster",
         "starts": "Jim"
       },
       {
-        "i": 3,
-        "title": "Song 2",
-        "starts": "Bremer"
-      },
-      {
-        "breakText": "INTRO"
-      },
-      {
-        "i": 4,
+        "i": 2,
         "title": "Machinehead",
         "starts": "Jim"
       },
       {
-        "i": 5,
-        "title": "Bound for the Floor",
-        "starts": "Jim"
-      },
-      {
-        "i": 6,
-        "title": "Hash Pipe",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "breakText": "DOWNTUNE"
-      },
-      {
-        "i": 7,
-        "title": "Monkey Wrench",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 8,
-        "title": "Shine",
-        "starts": "Jim"
-      },
-      {
-        "i": 9,
-        "title": "The Middle",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "UPTUNE"
-      },
-      {
-        "i": 10,
-        "title": "Plush",
-        "starts": "Bremer 2 ct"
-      },
-      {
-        "i": 11,
-        "title": "Story of a Girl",
-        "starts": "MG"
-      },
-      {
-        "i": 12,
-        "title": "Everything Zen",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 13,
-        "title": "Dammit",
-        "starts": "Jim"
-      },
-      {
-        "i": 14,
-        "title": "Cumbersome",
-        "starts": "Jim"
-      },
-      {
-        "i": 15,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 16,
-        "title": "Beautiful Disaster",
-        "starts": "Jim"
-      },
-      {
-        "i": 17,
-        "title": "Zero",
-        "starts": "Jim"
-      },
-      {
-        "i": 18,
-        "title": "Brain Stew",
-        "starts": "Jim"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 19,
-        "title": "Say It Aint So",
-        "starts": "Jim"
-      },
-      {
-        "i": 20,
-        "title": "Basketcase",
-        "starts": "Glaz"
-      },
-      {
-        "i": 21,
+        "i": 3,
         "title": "My Own Worst Enemy",
         "starts": "Jim"
       },
       {
-        "breakText": "GOODBYE"
+        "i": 4,
+        "title": "For Whom The Bell Tolls",
+        "starts": "Bremer"
       },
       {
-        "i": 22,
-        "title": "Fuel",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "AUDITION"
-      },
-      {
-        "i": 23,
-        "title": "Plush",
-        "starts": "Bremer 2 ct"
-      },
-      {
-        "i": 24,
-        "title": "Beautiful Disaster",
-        "starts": "Jim"
-      },
-      {
-        "i": 25,
-        "title": "Drive",
-        "starts": "Jim"
-      },
-      {
-        "i": 26,
+        "i": 5,
         "title": "Hash Pipe",
         "starts": "Bremer+Adam"
       },
       {
-        "i": 27,
-        "title": "The Middle",
-        "starts": "Glaz"
+        "i": 6,
+        "title": "Inside Out",
+        "starts": "MG"
       },
       {
-        "i": 28,
-        "title": "Kryptonite",
-        "starts": "Glaz"
+        "i": 7,
+        "title": "Cherub Rock",
+        "starts": "Bremer"
       },
       {
-        "i": 29,
-        "title": "Master of Puppets",
+        "i": 8,
+        "title": "Beverly Hills",
+        "starts": "Bremer"
+      },
+      {
+        "i": 9,
+        "title": "Low",
         "starts": "Bremer"
       }
     ]

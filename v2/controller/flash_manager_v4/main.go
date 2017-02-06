@@ -27,6 +27,7 @@ var version string
 const (
 	FX4_Dirty uint8 = 1 << iota
 	FX4_XY
+	// TODO: define custom FX CCs per song or maybe per MIDI program
 	FX4_Pitch
 	FX4_Chorus
 	FX4_Delay
@@ -187,9 +188,9 @@ func partial_match_song_name(name string) (*SongMeta, error) {
 	}
 
 	if len(candidates) == 0 {
-		return nil, fmt.Errorf("No match for song name")
+		return nil, fmt.Errorf("No match for song name '%s' in song-names.yml", name)
 	}
-	return nil, fmt.Errorf("Multiple matches for partial song name")
+	return nil, fmt.Errorf("Multiple matches for partial song name '%s' in song-names.yml", name)
 }
 
 func parse_yaml(path string, dest interface{}) error {
@@ -442,6 +443,8 @@ func generatePICH() {
 						b1 |= FX4_Chorus
 					} else if effect == "filter" {
 						b1 |= FX4_Filter
+					} else {
+						fmt.Printf("Unrecognized effect name: '%s'\n", effect)
 					}
 				}
 

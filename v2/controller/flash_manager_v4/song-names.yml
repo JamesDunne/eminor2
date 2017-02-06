@@ -190,3 +190,19 @@ songs:
 - names: [Master of Puppets, Puppets]
   short_name: Puppets
   starts: Bremer
+
+- names: [Inside Out]
+  short_name: Inside Out
+  starts: MG
+
+- names: [Cherub Rock]
+  short_name: Cherub Rock
+  starts: Bremer
+
+- names: [Beverly Hills]
+  short_name: Beverly Hills
+  starts: Bremer
+
+- names: [Low]
+  short_name: Low
+  starts: Bremer
