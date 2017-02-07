@@ -213,7 +213,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
     // Open the MIDI Mapper
     UINT midiDeviceID = (UINT)1;
     if (strlen(paCmdLine) > 0) {
-        if (sscanf(paCmdLine, "\"%d\"", &midiDeviceID) == 0) {
+        if (sscanf(paCmdLine, "%d", &midiDeviceID) == 0) {
             midiDeviceID = (UINT) 1;
         }
     }
