@@ -628,7 +628,9 @@ static void calc_midi(void) {
         diff = 1;
     }
 
-    if (curr.pr_idx != last.pr_idx) {
+    if (curr.sl_idx != last.sl_idx) {
+        diff = 1;
+    } else if (curr.pr_idx != last.pr_idx) {
         diff = 1;
     } else if (curr.sc_idx != last.sc_idx) {
         diff = 1;
@@ -855,7 +857,7 @@ void load_program(void) {
     }
 
     // Trigger a scene reload:
-    last.sc_idx = ~curr.sc_idx;
+    //last.sc_idx = ~curr.sc_idx;
 }
 
 void load_scene(void) {
@@ -1149,16 +1151,13 @@ void controller_handle(void) {
     // Update state:
     if ((curr.setlist_mode != last.setlist_mode) || (curr.sl_idx != last.sl_idx) || (curr.pr_idx != last.pr_idx)) {
         load_program();
-    }
-
-    if (curr.sc_idx != last.sc_idx) {
-
+        load_scene();
+    } else if (curr.sc_idx != last.sc_idx) {
         // Store last state into program for recall:
         pr.scene[last.sc_idx].amp[0] = curr.amp[0];
         pr.scene[last.sc_idx].amp[1] = curr.amp[1];
 
         load_scene();
-
     }
 
     calc_midi();
