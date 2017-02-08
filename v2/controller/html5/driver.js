@@ -411,17 +411,21 @@ function _lcd_updated_all() {
 }
 
 // called to send MIDI command with one data byte:
-function _midi_send_cmd1(cmd, chan, data1) {
+function _midi_send_cmd1_impl(cmd, data1) {
     // TODO: add commentary about recognized commands
-    var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + "\n";
+    var f = "" + hex2(cmd) + " " + hex2(data1) + "\n";
     midi_log(f);
 }
 
 // called to send MIDI command with two data bytes:
-function _midi_send_cmd2(cmd, chan, data1, data2) {
+function _midi_send_cmd2_impl(cmd, data1, data2) {
     // TODO: add commentary about recognized commands
-    var f = "" + hex1(cmd) + hex1(chan) + " " + hex2(data1) + " " + hex2(data2) + "\n";
+    var f = "" + hex2(cmd) + " " + hex2(data1) + " " + hex2(data2) + "\n";
     midi_log(f);
+}
+
+function _midi_send_sysex(byte) {
+    midi_log("" + hex2(byte) + "\n");
 }
 
 function _midi_log_cwrap(text_ptr) {
