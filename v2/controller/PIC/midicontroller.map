@@ -1,5 +1,5 @@
 MPLINK 4.48, Linker
-Linker Map File - Created Mon Jan 16 20:23:19 2017
+Linker Map File - Created Wed Feb 08 18:39:18 2017
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -218,11 +218,11 @@ Linker Map File - Created Mon Jan 16 20:23:19 2017
                   app_ver   0x001016    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c
                    bcdtoa   0x001176    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
               bootNopFunc   0x00007a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
-         calc_fx_modified   0x0026de    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-       calc_gain_modified   0x002654    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                calc_leds   0x00218e    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+         calc_fx_modified   0x0026e4    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+       calc_gain_modified   0x00265a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                calc_leds   0x002194    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                 calc_midi   0x00143a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-     calc_volume_modified   0x002774    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+     calc_volume_modified   0x00277a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                 compare_l   0x00460c    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
   controller_10msec_timer   0x002bbe    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
         controller_handle   0x002daa    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
@@ -254,7 +254,7 @@ Linker Map File - Created Mon Jan 16 20:23:19 2017
         lcd_update_screen   0x00403c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
           lcd_updated_all   0x003cae    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
                   led_set   0x003c4c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-             load_program   0x00280e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             load_program   0x002814    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                load_scene   0x0028bc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                      loop   0x004662    program     static                          
                      loop   0x004630    program     static                          
@@ -281,7 +281,7 @@ Linker Map File - Created Mon Jan 16 20:23:19 2017
           swuart_tx_start   0x00411a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
       toggle_setlist_mode   0x0033ac    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                true_entry   0x000000    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
-               update_lcd   0x001b92    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               update_lcd   0x001b98    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                zero_block   0x004604    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                    ADCON0   0x000fc2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                ADCON0bits   0x000fc2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
@@ -630,12 +630,12 @@ Linker Map File - Created Mon Jan 16 20:23:19 2017
              copy_str_lcd   0x00133c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                 send_leds   0x0013dc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                 calc_midi   0x00143a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               update_lcd   0x001b92    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                calc_leds   0x00218e    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-       calc_gain_modified   0x002654    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-         calc_fx_modified   0x0026de    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-     calc_volume_modified   0x002774    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-             load_program   0x00280e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               update_lcd   0x001b98    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                calc_leds   0x002194    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+       calc_gain_modified   0x00265a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+         calc_fx_modified   0x0026e4    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+     calc_volume_modified   0x00277a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             load_program   0x002814    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                load_scene   0x0028bc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
           controller_init   0x0029e8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
   controller_10msec_timer   0x002bbe    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
