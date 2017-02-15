@@ -823,14 +823,32 @@ sets:
     active: true
     print: true
     songs:
-      # Just for rehearsal
-      - Beautiful Disaster
-      - Machinehead
-      - My Own Worst Enemy
-      - Bells
+      - Trippin
+      - Holiday
+      - Dammit
+      - 'BREAK: INTRO'
+      - My Hero
       - Hash Pipe
-      # NEW
-      - Inside Out
-      - Cherub Rock
-      - Beverly Hills
-      - Low
+      - Story of a Girl
+      - 'BREAK: BREAK'
+      - Bound for the Floor
+      - Beautiful Disaster
+      - My Own Worst Enemy
+      - Everything Zen
+      - 'BREAK: DOWNTUNE'
+      - The Middle
+      - Shine
+      - Monkey Wrench
+      - Lump
+      - 'BREAK: UPTUNE'
+      - Say It Aint So
+      - Basket Case
+      - Kryptonite
+      - 'BREAK: BREAK'
+      - What I Got
+      - Brain Stew
+      - Fuel
+      - 'BREAK: GOODBYE'
+      - Bullet With Butterfly Wings
+      - 'BREAK: ENCORE'
+      - Master of Puppets

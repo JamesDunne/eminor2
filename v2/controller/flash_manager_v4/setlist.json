@@ -5,23 +5,26 @@
     "songs": [
       {
         "i": 1,
-        "title": "Beautiful Disaster",
-        "starts": "Jim"
+        "title": "Trippin",
+        "starts": "Bremer"
       },
       {
         "i": 2,
-        "title": "Machinehead",
+        "title": "Holiday",
         "starts": "Jim"
       },
       {
         "i": 3,
-        "title": "My Own Worst Enemy",
+        "title": "Dammit",
         "starts": "Jim"
       },
       {
+        "breakText": "INTRO"
+      },
+      {
         "i": 4,
-        "title": "For Whom The Bell Tolls",
-        "starts": "Bremer"
+        "title": "My Hero",
+        "starts": "Bremer+Adam"
       },
       {
         "i": 5,
@@ -30,22 +33,105 @@
       },
       {
         "i": 6,
-        "title": "Inside Out",
+        "title": "Story of a Girl",
         "starts": "MG"
       },
       {
+        "breakText": "BREAK"
+      },
+      {
         "i": 7,
-        "title": "Cherub Rock",
-        "starts": "Bremer"
+        "title": "Bound for the Floor",
+        "starts": "Jim"
       },
       {
         "i": 8,
-        "title": "Beverly Hills",
-        "starts": "Bremer"
+        "title": "Beautiful Disaster",
+        "starts": "Jim"
       },
       {
         "i": 9,
-        "title": "Low",
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
+      },
+      {
+        "i": 10,
+        "title": "Everything Zen",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "DOWNTUNE"
+      },
+      {
+        "i": 11,
+        "title": "The Middle",
+        "starts": "Glaz"
+      },
+      {
+        "i": 12,
+        "title": "Shine",
+        "starts": "Jim"
+      },
+      {
+        "i": 13,
+        "title": "Monkey Wrench",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 14,
+        "title": "Lump",
+        "starts": "Bremer+Glaz"
+      },
+      {
+        "breakText": "UPTUNE"
+      },
+      {
+        "i": 15,
+        "title": "Say It Aint So",
+        "starts": "Jim"
+      },
+      {
+        "i": 16,
+        "title": "Basketcase",
+        "starts": "Glaz"
+      },
+      {
+        "i": 17,
+        "title": "Kryptonite",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 18,
+        "title": "What I Got",
+        "starts": "Bremer"
+      },
+      {
+        "i": 19,
+        "title": "Brain Stew",
+        "starts": "Jim"
+      },
+      {
+        "i": 20,
+        "title": "Fuel",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "GOODBYE"
+      },
+      {
+        "i": 21,
+        "title": "Bullet With Butterfly Wings",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "ENCORE"
+      },
+      {
+        "i": 22,
+        "title": "Master of Puppets",
         "starts": "Bremer"
       }
     ]
