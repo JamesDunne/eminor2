@@ -44,7 +44,7 @@ int i2c_write(u8 slave_addr, u8 reg, u16 data_size, u8 *data) {
     outbuf[0] = reg;
     memcpy(outbuf+1, data, data_size);
 
-    if (ioctl(i2c_fd, I2C_RDWR, &msgset) != 0) {
+    if (ioctl(i2c_fd, I2C_RDWR, &msgset) < 0) {
         perror("ioctl(I2C_RDWR)");
         return -1;
     }
@@ -69,13 +69,14 @@ int i2c_read(u8 slave_addr, u8 reg, u16 result_size, u8 *result) {
     msgs[1].buf = inbuf;
 
     msgset[0].msgs = msgs;
-    msgset[0].nmsgs = 1;
+    msgset[0].nmsgs = 2;
 
     outbuf[0] = reg;
 
     inbuf[0] = 0;
 
-    if (ioctl(i2c_fd, I2C_RDWR, &msgset) != 0) {
+    *result = 0;
+    if (ioctl(i2c_fd, I2C_RDWR, &msgset) < 0) {
         perror("ioctl(I2C_RDWR)");
         return -1;
     }
