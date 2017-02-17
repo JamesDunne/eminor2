@@ -1,17 +1,26 @@
 #include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <unistd.h>         //Used for UART
-#include <fcntl.h>          //Used for UART
-#include <termios.h>        //Used for UART
-
-#ifdef __linux
-#include <stdlib.h>
-#include <linux/i2c-dev.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#endif
-
 #include "types.h"
 #include "i2c.h"
+
+typedef u8 byte;
+#include "sx1509_registers.h"
+
+u16 sx1509_read(u8 slave_addr) {
+    u8 buf[2];
+    if (i2c_read(slave_addr, REG_DATA_A, 1, &buf[0]) != 0) {
+        return 0;
+    }
+    if (i2c_read(slave_addr, REG_DATA_B, 1, &buf[1]) != 0) {
+        return 0;
+    }
+    return ((u16)buf[1] << 8) | (u16)buf[0];
+}
+
+int main() {
+    i2c_init();
+
+    u16 buttons = sx1509_read(0x3E);
+    printf("%04X\n", buttons);
+
+    i2c_close();
+}
