@@ -5,7 +5,13 @@
 typedef u8 byte;
 #include "sx1509_registers.h"
 
-u16 sx1509_read(u8 slave_addr) {
+int sx1509_set_register(u8 slave_addr, u8 reg, u8 value) {
+    u8 buf[1];
+    buf[0] = value;
+    return i2c_write(slave_addr, reg, 1, &buf[0]);
+}
+
+u16 sx1509_read_data(u8 slave_addr) {
     u8 buf[2];
     if (i2c_read(slave_addr, REG_DATA_A, 1, &buf[0]) != 0) {
         return 0;
@@ -19,11 +25,20 @@ u16 sx1509_read(u8 slave_addr) {
 int main() {
     i2c_init();
 
+    // Pull-up resistor on button pins:
+    if (sx1509_set_register(0x3E, REG_PULL_UP_A, 0xFF) != 0) {
+        goto fail;
+    }
+    if (sx1509_set_register(0x3E, REG_PULL_UP_B, 0xFF) != 0) {
+        goto fail;
+    }
+
     while (1) {
-        u16 buttons = sx1509_read(0x3E);
+        u16 buttons = sx1509_read_data(0x3E);
         printf("%04X\n", buttons);
         usleep(50L * 1000L);
     }
 
+fail:
     i2c_close();
 }
