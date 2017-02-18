@@ -36,13 +36,15 @@ int main() {
 
     i2c_init();
 
+    // Enable all inputs:
+    if (sx1509_set_register(slave_addr, REG_INPUT_DISABLE_A, 0x00) != 0) goto fail;
+    if (sx1509_set_register(slave_addr, REG_INPUT_DISABLE_B, 0x00) != 0) goto fail;
+
     // Pull-up resistor on button pins:
-    if (sx1509_set_register(slave_addr, REG_PULL_UP_A, 0xFF) != 0) {
-        goto fail;
-    }
-    if (sx1509_set_register(slave_addr, REG_PULL_UP_B, 0xFF) != 0) {
-        goto fail;
-    }
+    if (sx1509_set_register(slave_addr, REG_PULL_UP_A, 0xFF) != 0) goto fail;
+    if (sx1509_set_register(slave_addr, REG_PULL_UP_B, 0xFF) != 0) goto fail;
+    if (sx1509_set_register(slave_addr, REG_PULL_DOWN_A, 0x00) != 0) goto fail;
+    if (sx1509_set_register(slave_addr, REG_PULL_DOWN_B, 0x00) != 0) goto fail;
 
     while (1) {
         u16 buttons = sx1509_read_data(slave_addr);
