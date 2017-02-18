@@ -34,8 +34,10 @@ u16 sx1509_read_data(u8 slave_addr) {
 int main() {
     const u8 slave_addr = 0x3E;
 
+    printf("i2c_init()\n");
     i2c_init();
 
+    printf("sx1509_setup()\n");
     // Enable all inputs:
     if (sx1509_set_register(slave_addr, REG_INPUT_DISABLE_A, 0x00) != 0) goto fail;
     if (sx1509_set_register(slave_addr, REG_INPUT_DISABLE_B, 0x00) != 0) goto fail;
@@ -46,6 +48,7 @@ int main() {
     if (sx1509_set_register(slave_addr, REG_PULL_DOWN_A, 0x00) != 0) goto fail;
     if (sx1509_set_register(slave_addr, REG_PULL_DOWN_B, 0x00) != 0) goto fail;
 
+    printf("loop\n");
     while (1) {
         u16 buttons = sx1509_read_data(slave_addr);
         printf(
@@ -53,7 +56,7 @@ int main() {
             BYTE_TO_BINARY(buttons>>8),
             BYTE_TO_BINARY(buttons)
         );
-        usleep(10L * 1000L);
+        usleep(100L * 1000L);
     }
 
 fail:
