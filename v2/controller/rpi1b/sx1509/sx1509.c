@@ -19,8 +19,11 @@ u16 sx1509_read(u8 slave_addr) {
 int main() {
     i2c_init();
 
-    u16 buttons = sx1509_read(0x3E);
-    printf("%04X\n", buttons);
+    while (1) {
+        u16 buttons = sx1509_read(0x3E);
+        printf("%04X\n", buttons);
+        usleep(50L * 1000L);
+    }
 
     i2c_close();
 }
