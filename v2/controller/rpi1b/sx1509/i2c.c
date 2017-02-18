@@ -29,22 +29,23 @@ void i2c_close() {
     close(i2c_fd);
 }
 
-int i2c_write(u8 slave_addr, u8 reg, u16 data_size, u8 *data) {
+int i2c_write(u8 slave_addr, u8 reg, u8 data) {
     int retval;
-    u8 outbuf[1];
+    u8 outbuf[2];
+
     struct i2c_msg msgs[1];
     struct i2c_rdwr_ioctl_data msgset[1];
 
+    outbuf[0] = reg;
+    outbuf[1] = data;
+
     msgs[0].addr = slave_addr;
     msgs[0].flags = 0;
-    msgs[0].len = 1 + data_size;
+    msgs[0].len = 2;
     msgs[0].buf = outbuf;
 
     msgset[0].msgs = msgs;
     msgset[0].nmsgs = 1;
-
-    outbuf[0] = reg;
-    memcpy(outbuf+1, data, data_size);
 
     if (ioctl(i2c_fd, I2C_RDWR, &msgset) < 0) {
         perror("ioctl(I2C_RDWR)");
@@ -54,7 +55,7 @@ int i2c_write(u8 slave_addr, u8 reg, u16 data_size, u8 *data) {
     return 0;
 }
 
-int i2c_read(u8 slave_addr, u8 reg, u16 result_size, u8 *result) {
+int i2c_read(u8 slave_addr, u8 reg, u8 *result) {
     int retval;
     u8 outbuf[1], inbuf[1];
     struct i2c_msg msgs[2];
@@ -66,7 +67,7 @@ int i2c_read(u8 slave_addr, u8 reg, u16 result_size, u8 *result) {
     msgs[0].buf = outbuf;
 
     msgs[1].addr = slave_addr;
-    msgs[1].flags = I2C_M_RD;
+    msgs[1].flags = I2C_M_RD | I2C_M_NOSTART;
     msgs[1].len = 1;
     msgs[1].buf = inbuf;
 
