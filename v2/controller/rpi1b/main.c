@@ -4,6 +4,7 @@
 #include <unistd.h>         //Used for UART
 #include <fcntl.h>          //Used for UART
 #include <termios.h>        //Used for UART
+#include <time.h>
 
 #ifdef __linux
 #include <stdlib.h>
@@ -15,6 +16,9 @@
 
 #include "types.h"
 #include "hardware.h"
+#include "i2c.h"
+#include "midi.h"
+#include "fsw.h"
 
 // Hardware interface from controller:
 void debug_log(const char *fmt, ...) {
@@ -49,17 +53,24 @@ int main(void) {
         return 1;
     }
 
+    if (i2c_init()) {
+        return 2;
+    }
+
+    // Init SX1509 for reading buttons (fsw):
+    fsw_init();
+
     // Initialize controller:
     controller_init();
 
     while (1) {
-        // Run controller code:
-        controller_handle();
+        // Sleep for 10ms:
+        while (nanosleep(&t, &t));
 
         // Run timer handler:
         controller_10msec_timer();
 
-        // Sleep for 10ms:
-        while (nanosleep(&t, &t));
+        // Run controller code:
+        controller_handle();
     }
 }

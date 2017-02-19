@@ -84,6 +84,7 @@ void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2) {
     printf("MIDI: %02X %02X %02X\n", cmd_byte, data1, data2);
 }
 
+// TODO: buffer up sysex commands and send all bytes from F0 .. F7 at once in a write().
 // Send a single byte for SysEx:
 void midi_send_sysex(u8 byte) {
     int count;
