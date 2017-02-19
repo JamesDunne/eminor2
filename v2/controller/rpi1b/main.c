@@ -50,17 +50,17 @@ int main(void) {
     t.tv_nsec = 10000000L;  // 10 ms
 
     // Open UART0 for MIDI write:
-    if (midi_init()) {
+    if (midi_init() < 0) {
         return 1;
     }
 
     // Open I2C bus for FSWs and LEDs:
-    if (i2c_init()) {
+    if (i2c_init() < 0) {
         return 2;
     }
 
     // Init SX1509 for reading FSWs (buttons):
-    if (fsw_init()) {
+    if (fsw_init() < 0) {
         return 3;
     }
 
