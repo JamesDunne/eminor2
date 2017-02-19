@@ -6,6 +6,7 @@
 typedef u8 byte;
 #include "sx1509_registers.h"
 
+// Initialize SX1509 for buttons by enabling all pins as inputs and pull-up resistors:
 int fsw_init(void) {
     // Enable all inputs:
     if (i2c_write(i2c_sx1509_btn_addr, REG_INPUT_DISABLE_A, 0x00) != 0) goto fail;

@@ -54,7 +54,7 @@ int midi_init(void) {
     options.c_lflag = 0;
     tcflush(uart0_fd, TCIFLUSH);
     tcsetattr(uart0_fd, TCSANOW, &options);
-    return 0;
+    return uart0_fd;
 }
 
 void midi_send_cmd1_impl(u8 cmd_byte, u8 data1) {
