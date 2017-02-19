@@ -84,17 +84,34 @@ void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2) {
     printf("MIDI: %02X %02X %02X\n", cmd_byte, data1, data2);
 }
 
-// TODO: buffer up sysex commands and send all bytes from F0 .. F7 at once in a write().
-// Send a single byte for SysEx:
+u8 sysex[256];
+size_t sysex_p = 0;
+
 void midi_send_sysex(u8 byte) {
-    int count;
-    u8 buf[1];
-    buf[0] = byte;
-    count = write(uart0_fd, buf, 1);
-    if (count < 0) {
-        perror("Error sending MIDI bytes");
-        return;
+    //printf("MIDI: %02X\n", byte);
+
+    // Buffer data:
+    sysex[sysex_p++] = byte;
+
+    if (byte == 0xF7) {
+        size_t i;
+        size_t write_count = sysex_p;
+        sysex_p = 0;
+
+        printf("MIDI SysEx:");
+        for (i = 0; i < write_count; i++) {
+            printf(" %02X", sysex[i]);
+        }
+        printf("\n");
+
+        ssize_t count = write(uart0_fd, sysex, write_count);
+        if (count < 0) {
+            perror("write in midi_send_sysex");
+            return;
+        }
+        if (count != write_count) {
+            fprintf(stderr, "midi_send_sysex write didnt write enough bytes\n");
+            return;
+        }
     }
-    // TODO: buffer this until 0xF7.
-    printf("MIDI: %02X\n", byte);
 }
