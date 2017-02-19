@@ -17,7 +17,18 @@ char *lcd_row_get(u8 row) {
 
 // Update all LCD display rows as updated:
 void lcd_updated_all(void) {
-    // TODO: Use SPI bus to communicate with LCD.
+	int j, i;
+
+	// TODO: Use SPI bus to communicate with LCD.
+
+	for (j = 0; j < LCD_ROWS; j++) {
+		for (i = 0; i < LCD_COLS; i++) {
+			char c = lcd_ascii[j][i];
+			if (c < 32) c = 32;
+			printf("%c", c);
+		}
+		printf("\n");
+	}
 }
 
 #endif
