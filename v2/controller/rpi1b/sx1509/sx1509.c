@@ -5,10 +5,6 @@
 typedef u8 byte;
 #include "sx1509_registers.h"
 
-int sx1509_set_register(u8 slave_addr, u8 reg, u8 value) {
-    return i2c_write(slave_addr, reg, value);
-}
-
 u16 sx1509_read_data(u8 slave_addr) {
     u8 buf[2];
     if (i2c_read(slave_addr, REG_DATA_A, &buf[0]) != 0) {
@@ -39,14 +35,14 @@ int main() {
 
     printf("sx1509_setup()\n");
     // Enable all inputs:
-    if (sx1509_set_register(slave_addr, REG_INPUT_DISABLE_A, 0x00) != 0) goto fail;
-    if (sx1509_set_register(slave_addr, REG_INPUT_DISABLE_B, 0x00) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_INPUT_DISABLE_A, 0x00) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_INPUT_DISABLE_B, 0x00) != 0) goto fail;
 
     // Pull-up resistor on button pins:
-    if (sx1509_set_register(slave_addr, REG_PULL_UP_A,   0xFF) != 0) goto fail;
-    if (sx1509_set_register(slave_addr, REG_PULL_UP_B,   0xFF) != 0) goto fail;
-    if (sx1509_set_register(slave_addr, REG_PULL_DOWN_A, 0x00) != 0) goto fail;
-    if (sx1509_set_register(slave_addr, REG_PULL_DOWN_B, 0x00) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_PULL_UP_A,   0xFF) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_PULL_UP_B,   0xFF) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_PULL_DOWN_A, 0x00) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_PULL_DOWN_B, 0x00) != 0) goto fail;
 
     printf("loop\n");
     while (1) {
