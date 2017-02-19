@@ -47,7 +47,7 @@ void led_set(u16 leds) {
 int main(void) {
     struct timespec t;
     t.tv_sec  = 0;
-    t.tv_nsec = 10000000L;  // 10 ms
+    t.tv_nsec = 10L * 1000000L;  // 10 ms
 
     // Open UART0 for MIDI write:
     if (midi_init() < 0) {
