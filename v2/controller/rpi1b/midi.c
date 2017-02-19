@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
-#include <unistd.h>         //Used for UART
-#include <fcntl.h>          //Used for UART
-#include <termios.h>        //Used for UART
+
+#include <errno.h>
+#include <fcntl.h> 
+#include <termios.h>
+#include <unistd.h>
 
 #include "types.h"
 #include "hardware.h"
@@ -14,46 +16,75 @@
 int uart0_fd = -1;
 const char *midi_fname = "/dev/ttyAMA0";
 
+int set_interface_attribs(int fd, int speed, int parity) {
+    struct termios tty;
+    memset(&tty, 0, sizeof tty);
+    if (tcgetattr(fd, &tty) != 0) {
+        perror("tcgetattr");
+        return -1;
+    }
+
+    cfsetospeed(&tty, speed);
+    cfsetispeed(&tty, speed);
+
+    tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;     // 8-bit chars
+    // disable IGNBRK for mismatched speed tests; otherwise receive break
+    // as \000 chars
+    tty.c_iflag &= ~IGNBRK;         // disable break processing
+    tty.c_lflag = 0;                // no signaling chars, no echo,
+                                    // no canonical processing
+    tty.c_oflag = 0;                // no remapping, no delays
+    tty.c_cc[VMIN]  = 0;            // read doesn't block
+    tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
+
+    tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
+
+    tty.c_cflag |= (CLOCAL | CREAD);// ignore modem controls,
+                                    // enable reading
+    tty.c_cflag &= ~(PARENB | PARODD);      // shut off parity
+    tty.c_cflag |= parity;
+    tty.c_cflag &= ~CSTOPB;
+    tty.c_cflag &= ~CRTSCTS;
+
+    if (tcsetattr(fd, TCSANOW, &tty) != 0) {
+        perror("tcsetattr");
+        return -1;
+    }
+    return 0;
+}
+
+int set_blocking(int fd, int should_block) {
+    struct termios tty;
+    memset(&tty, 0, sizeof tty);
+    if (tcgetattr(fd, &tty) != 0) {
+        perror("tcgetattr");
+        return -1;
+    }
+
+    tty.c_cc[VMIN]  = should_block ? 1 : 0;
+    tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
+
+    if (tcsetattr(fd, TCSANOW, &tty) != 0) {
+        perror("tcsetattr");
+        return -1;
+    }
+    return 0;
+}
+
 int midi_init(void) {
-    //OPEN THE UART
-    //The flags (defined in fcntl.h):
-    //  Access modes (use 1 of these):
-    //      O_RDONLY - Open for reading only.
-    //      O_RDWR - Open for reading and writing.
-    //      O_WRONLY - Open for writing only.
-    //
-    //  O_NDELAY / O_NONBLOCK (same function) - Enables nonblocking mode. When set read requests on the file can return immediately with a failure status
-    //                                          if there is no input immediately available (instead of blocking). Likewise, write requests can also return
-    //                                          immediately with a failure status if the output can't be written immediately.
-    //
-    //  O_NOCTTY - When set and path identifies a terminal device, open() shall not cause the terminal device to become the controlling terminal for the process.
-    //Open in non blocking read/write mode
-    uart0_fd = open(midi_fname, O_WRONLY | O_NOCTTY | O_NDELAY);
+    uart0_fd = open(midi_fname, O_RDWR | O_NOCTTY | O_SYNC);
     if (uart0_fd == -1) {
         char err[100];
         sprintf(err, "open('%s')", midi_fname);
         perror(err);
         return -1;
     }
-    
-    //CONFIGURE THE UART
-    //The flags (defined in /usr/include/termios.h - see http://pubs.opengroup.org/onlinepubs/007908799/xsh/termios.h.html):
-    //  Baud rate:- B1200, B2400, B4800, B9600, B19200, B38400, B57600, B115200, B230400, B460800, B500000, B576000, B921600, B1000000, B1152000, B1500000, B2000000, B2500000, B3000000, B3500000, B4000000
-    //  CSIZE:- CS5, CS6, CS7, CS8
-    //  CLOCAL - Ignore modem status lines
-    //  CREAD - Enable receiver
-    //  IGNPAR = Ignore characters with parity errors
-    //  ICRNL - Map CR to NL on input (Use for ASCII comms where you want to auto correct end of line characters - don't use for bianry comms!)
-    //  PARENB - Parity enable
-    //  PARODD - Odd parity (else even)
-    struct termios options;
-    tcgetattr(uart0_fd, &options);
-    options.c_cflag = B38400 | CS8 | CLOCAL;     //<Set baud rate
-    options.c_iflag = IGNPAR;
-    options.c_oflag = 0;
-    options.c_lflag = 0;
-    tcflush(uart0_fd, TCIFLUSH);
-    tcsetattr(uart0_fd, TCSANOW, &options);
+
+	// set speed to 38,400 bps, 8n1 (no parity)
+	set_interface_attribs(uart0_fd, B38400, 0);
+	// set no blocking
+	set_blocking(uart0_fd, 0);
+
     return uart0_fd;
 }
 
@@ -89,6 +120,11 @@ size_t sysex_p = 0;
 
 void midi_send_sysex(u8 byte) {
     //printf("MIDI: %02X\n", byte);
+
+    if (sysex_p >= 256) {
+        fprintf(stderr, "MIDI SysEx data too large (>= 256 bytes)\n");
+        return;
+    }
 
     // Buffer data:
     sysex[sysex_p++] = byte;
