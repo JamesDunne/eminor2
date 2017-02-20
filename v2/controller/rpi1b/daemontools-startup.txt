@@ -1,0 +1,34 @@
+    
+The answer by Xer0FyT is probably the simplest way to automatically start a program on the PI. But problems occur once the started program crashes for any reason because it won't get restarted, since there no process monitoring. I personally would recommend using daemontools instead. It's pretty simple to setup (and is included in Raspbian). Basically you create a service directory which contains a run shell script that starts your program. daemontools will then make sure that your program is started and restarted should it crash for any reason.
+
+Setting daemontools up is pretty simple. Just
+
+apt-get install daemontools daemontools-run
+Then create your service directory containing an executable run script:
+
+# create the service directory
+mkdir -p /service/my-service
+
+# create the run script
+cat > /service/my-service/run <<EOF
+#!/bin/sh
+echo "I'm an example service executed by daemontools"
+sleep 1
+# Replace those 2 lines with a real call to your program like this:
+# exec /my/program.py --arguments
+EOF
+
+# make it executable
+chmod 755 /service/my-service/run
+Have a look at /service/my-service/run and edit it, so it starts your own program instead of running echo. Once that's done, symlink that directory into /etc/service so daemontools automatically (re)starts it:
+
+cd /etc/service
+ln -s /service/my-service .
+After about 5 seconds your program should run. You can start/stop it using
+
+# stop it
+$ svc -d /service/my-service
+
+# start it
+$ svc -u /service/my-service
+It's also possible to log to (for example) syslog. So the output of your program doesn't get lost. I wrote a more complete blog post about this here: https://info-beamer.com/blog/running-info-beamer-in-production
