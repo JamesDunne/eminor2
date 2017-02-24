@@ -101,7 +101,7 @@
         "starts": "Glaz"
       },
       {
-        "breakText": "BREAK"
+        "breakText": "GOODBYE"
       },
       {
         "i": 18,
@@ -119,18 +119,10 @@
         "starts": "Glaz"
       },
       {
-        "breakText": "GOODBYE"
-      },
-      {
-        "i": 21,
-        "title": "Bullet With Butterfly Wings",
-        "starts": "Glaz"
-      },
-      {
         "breakText": "ENCORE"
       },
       {
-        "i": 22,
+        "i": 21,
         "title": "Master of Puppets",
         "starts": "Bremer"
       }
