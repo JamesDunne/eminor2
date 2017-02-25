@@ -34,6 +34,8 @@ int main() {
     i2c_init();
 
     printf("sx1509_setup()\n");
+
+#if 0
     // Enable all inputs:
     if (i2c_write(slave_addr, REG_INPUT_DISABLE_A, 0x00) != 0) goto fail;
     if (i2c_write(slave_addr, REG_INPUT_DISABLE_B, 0x00) != 0) goto fail;
@@ -54,6 +56,26 @@ int main() {
         );
         usleep(100L * 1000L);
     }
+#else
+    // Set only pin 15 as output for LED.
+    if (i2c_write(slave_addr, REG_INPUT_DISABLE_A, 0x00) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_INPUT_DISABLE_B, 0x80) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_DIR_A,       0xFF) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_DIR_B,       0x7F) != 0) goto fail;
+
+    // Pull-up resistor on button pins:
+    if (i2c_write(slave_addr, REG_PULL_UP_A,   0xFF) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_PULL_UP_B,   0x7F) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_PULL_DOWN_A, 0x00) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_PULL_DOWN_B, 0x00) != 0) goto fail;
+
+    while (1) {
+        i2c_write(slave_addr, REG_DATA_B, 0x80);
+        usleep(500L * 1000L);
+        i2c_write(slave_addr, REG_DATA_B, 0x00);
+        usleep(500L * 1000L);
+    }
+#endif
 
 fail:
     i2c_close();
