@@ -15,9 +15,9 @@ unsigned char MIDITxBufOutPtr;
 
 void midi_tx() {
     // Check if we received a byte:
-    if (PIR1bits.RCIF) {
-        return;
-    }
+    // if (PIR1bits.RCIF) {
+    //     return;
+    // }
 
     // If no character is received, check if any data is pending transmission
     if (MIDITxBufOutPtr == MIDITxBufPtr) {
@@ -25,12 +25,15 @@ void midi_tx() {
         return;                     //and exit
     }
 
-    if (!PIR1bits.TXIF) {
-        return;         //USART is still transmitting data
+    // USART is still transmitting data
+    if (PIR1bits.TXIF == 0) {
+        return;
     }
 
-    TXREG = MIDITxBuffer[MIDITxBufOutPtr];          //send out the byte
-    MIDITxBufOutPtr++;                          //increment transmit out pointer.
+    // Send out the byte:
+    TXREG = MIDITxBuffer[MIDITxBufOutPtr];
+    // Increment transmit out pointer:
+    MIDITxBufOutPtr++;
 
     return;
 }

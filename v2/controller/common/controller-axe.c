@@ -912,12 +912,11 @@ void controller_init(void) {
     curr.pr_idx = 0;
     last.sl_idx = 0;
     last.pr_idx = 0;
+    last.midi_program = 0x7F;
+    last.tempo = 0;
     load_program();
     load_scene();
     last.sc_idx = curr.sc_idx;
-
-    // Force changes on init:
-    midi_invalidate();
 
     // Copy current scene settings into state:
     curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
@@ -932,6 +931,9 @@ void controller_init(void) {
     // Select only JD amp by default:
     curr.selected_amp = 1;
     curr.selected_both = 0;
+
+    // Force MIDI changes on init:
+    midi_invalidate();
 
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_ROWS; ++i)
@@ -1201,8 +1203,8 @@ static void toggle_setlist_mode() {
 static void midi_invalidate() {
     // Invalidate all current MIDI state so it gets re-sent at end of loop:
     DEBUG_LOG0("invalidate MIDI state");
-    //last.midi_program  = ~curr.midi_program;
-    //last.tempo         = ~curr.tempo;
+    last.midi_program  = ~curr.midi_program;
+    last.tempo         = ~curr.tempo;
     last.amp[0].gain   = ~curr.amp[0].gain;
     last.amp[0].fx     = ~curr.amp[0].fx;
     last.amp[0].volume = ~curr.amp[0].volume;
