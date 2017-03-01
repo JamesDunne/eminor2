@@ -172,7 +172,6 @@ void lcd_updated_all(void) {
 #ifdef MIDI_BLOCKING
 // Non-buffered (immediate, blocking) MIDI transmission functions:
 #define midi_enq(byte) { \
-    while (TXSTAbits.TRMT == 1) {} \
 	nop(); \
 	nop(); \
 	while (PIR1bits.TXIF == 0) {} \
