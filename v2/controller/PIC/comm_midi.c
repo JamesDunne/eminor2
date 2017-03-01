@@ -14,11 +14,6 @@ unsigned char MIDITxBufPtr;
 unsigned char MIDITxBufOutPtr;
 
 void midi_tx() {
-    // Check if we received a byte:
-    // if (PIR1bits.RCIF) {
-    //     return;
-    // }
-
     // If no character is received, check if any data is pending transmission
     if (MIDITxBufOutPtr == MIDITxBufPtr) {
         midi_clear_buffer();        //no data to send, so reset transmit buffer.
