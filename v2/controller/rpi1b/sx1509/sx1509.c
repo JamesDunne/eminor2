@@ -70,10 +70,12 @@ int main() {
     if (i2c_write(slave_addr, REG_PULL_DOWN_B, 0x00) != 0) goto fail;
 
     while (1) {
-        i2c_write(slave_addr, REG_DATA_B, 0x80);
-        usleep(500L * 1000L);
-        i2c_write(slave_addr, REG_DATA_B, 0x00);
-        usleep(500L * 1000L);
+        u8 btn = 0;
+        // Read input pin5 and transfer its state to output pin15:
+        i2c_read(slave_addr, REG_DATA_A, &btn);
+        btn = ~btn;
+        i2c_write(slave_addr, REG_DATA_B, (btn & 0x20) << 2);
+        usleep(10L * 1000L);
     }
 #endif
 
