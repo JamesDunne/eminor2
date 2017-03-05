@@ -137,6 +137,7 @@ Distributed as-is; no warranty is given.
 #define 	REG_TEST_1				0x7E	//	RegTest1 Test register 0000 0000
 #define 	REG_TEST_2				0x7F	//	RegTest2 Test register 0000 0000
 
+#if 0
 byte REG_I_ON[16] = {REG_I_ON_0, REG_I_ON_1, REG_I_ON_2, REG_I_ON_3,
 					REG_I_ON_4, REG_I_ON_5, REG_I_ON_6, REG_I_ON_7,
 					REG_I_ON_8, REG_I_ON_9, REG_I_ON_10, REG_I_ON_11,
@@ -161,3 +162,4 @@ byte REG_T_FALL[16] = {0xFF, 0xFF, 0xFF, 0xFF,
 					REG_T_FALL_4, REG_T_FALL_5, REG_T_FALL_6, REG_T_FALL_7,
 					0xFF, 0xFF, 0xFF, 0xFF,
 					REG_T_FALL_12, REG_T_FALL_13, REG_T_FALL_14, REG_T_FALL_15};
+#endif

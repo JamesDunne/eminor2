@@ -30,10 +30,6 @@ void debug_log(const char *fmt, ...) {
     printf("\n");
 }
 
-// Explicitly set the state of all 16 LEDs:
-void led_set(u16 leds) {
-}
-
 #ifdef HWFEAT_LABEL_UPDATES
 
 // --------------- Change button labels (for Win32 / HTML5 interfaces only):
@@ -62,6 +58,11 @@ int main(void) {
     // Init SX1509 for reading FSWs (buttons):
     if (fsw_init() < 0) {
         return 3;
+    }
+
+    // Init SX1509 for outputting LEDs:
+    if (led_init() < 0) {
+        return 4;
     }
 
     // Initialize controller:
