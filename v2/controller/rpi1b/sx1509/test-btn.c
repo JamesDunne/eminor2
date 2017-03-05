@@ -37,6 +37,8 @@ int main() {
 
 #if 0
     // Enable all inputs:
+    if (i2c_write(slave_addr, REG_DIR_A,           0xFF) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_DIR_B,           0xFF) != 0) goto fail;
     if (i2c_write(slave_addr, REG_INPUT_DISABLE_A, 0x00) != 0) goto fail;
     if (i2c_write(slave_addr, REG_INPUT_DISABLE_B, 0x00) != 0) goto fail;
 
@@ -58,10 +60,10 @@ int main() {
     }
 #else
     // Set only pin 15 as output for LED.
+    if (i2c_write(slave_addr, REG_DIR_A,           0xFF) != 0) goto fail;
+    if (i2c_write(slave_addr, REG_DIR_B,           0x7F) != 0) goto fail;
     if (i2c_write(slave_addr, REG_INPUT_DISABLE_A, 0x00) != 0) goto fail;
     if (i2c_write(slave_addr, REG_INPUT_DISABLE_B, 0x80) != 0) goto fail;
-    if (i2c_write(slave_addr, REG_DIR_A,       0xFF) != 0) goto fail;
-    if (i2c_write(slave_addr, REG_DIR_B,       0x7F) != 0) goto fail;
 
     // Pull-up resistor on button pins:
     if (i2c_write(slave_addr, REG_PULL_UP_A,   0xFF) != 0) goto fail;
