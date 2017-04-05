@@ -356,7 +356,7 @@ func generatePICH() {
 		meta, err := partial_match_song_name(p.Name)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
-			return
+			continue
 		}
 		songs_by_name[meta.PrimaryName] = i
 
@@ -536,7 +536,8 @@ func generatePICH() {
 				// Look up song by name, case-insensitive:
 				meta, err := partial_match_song_name(set.SongNames[j])
 				if err != nil {
-					panic(err)
+					//panic(err)
+					continue
 				}
 
 				song_index, exists := songs_by_name[meta.PrimaryName]
@@ -617,7 +618,15 @@ func generateJSON() {
 			}
 
 			// We know we'll find the song; we would've panic()d above already.
-			meta, _ := partial_match_song_name(song_name)
+			meta, err := partial_match_song_name(song_name)
+			if err != nil {
+				meta = &SongMeta{
+					PrimaryName: song_name,
+					Names:       []string{song_name},
+					ShortName:   song_name,
+					Starts:      "",
+				}
+			}
 			j++
 
 			setlistData.Songs = append(setlistData.Songs, &struct {
