@@ -820,8 +820,6 @@ sets:
 
   - date: "2017-02-25"
     venue: Addison
-    active: true
-    print: true
     songs:
       - Trippin
       - Holiday
@@ -850,3 +848,80 @@ sets:
       - Fuel
       - 'BREAK: ENCORE'
       - Master of Puppets
+
+  - date: "2017-04-08"
+    venue: Romeoville
+    active: true
+    print: true
+    songs:
+      - 'BREAK: SET 1'
+
+      - Dammit
+      - Trippin
+      - Zero
+
+      - 'BREAK: INTRO'
+
+      - My Own Worst Enemy
+      - Bound for the Floor
+      - Hash Pipe
+
+      - 'BREAK: BREAK'
+
+      - Hey Jealousy
+      - My Hero
+      - Holiday
+      - Enter Sandman
+
+      - 'BREAK: SET 2'
+
+      - Monkey Wrench
+      - The Middle
+      - Shine
+
+      - 'BREAK: BREAK'
+
+      - Story of a Girl
+      - Song 2
+      - Beautiful Disaster
+
+      - 'BREAK: BREAK'
+
+      - Say It Ain't So
+      - Basket Case
+      - Counting Blue Cars
+      - Master of Puppets
+
+
+      - 'BREAK: MG MINI-SET'
+
+      - Ketchup
+      - I'm Giving Up Church for Lent
+      - Got It Made
+
+
+      - 'BREAK: SET 3'
+
+      - Fuel
+      - Cumbersome
+      - Machinehead
+
+      - 'BREAK: BREAK'
+
+      - Plush
+      - When I Come Around
+      - Everything Zen
+
+      - 'BREAK: BREAK'
+
+      - Buddy Holly
+      - What I Got
+      - Sex Type Thing
+
+      - 'BREAK: GOODBYE'
+
+      - Brain Stew
+
+      - 'BREAK: ENCORE'
+
+      - Bells
