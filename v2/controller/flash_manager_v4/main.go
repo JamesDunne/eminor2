@@ -350,14 +350,14 @@ func generatePICH() {
 	// Translate YAML to binary data for FLASH memory (see common/controller.c):
 	songs := 0
 	for i, p := range programs.Programs {
-		songs++
-
 		// Record the name-to-index mapping:
 		meta, err := partial_match_song_name(p.Name)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
-			continue
+			return
 		}
+
+		songs++
 		songs_by_name[meta.PrimaryName] = i
 
 		short_name := meta.ShortName
@@ -528,6 +528,7 @@ func generatePICH() {
 		bw.WriteHex(d1)
 		fmt.Printf("  Date:  %04d-%02d-%02d\n", yyyy+2014, mm+1, dd+1)
 
+		last_song_index := 0
 		// Write out the song indices for the setlist:
 		for j := 0; j < max_set_length; j++ {
 			if j >= len(set.SongNames) {
@@ -537,6 +538,8 @@ func generatePICH() {
 				meta, err := partial_match_song_name(set.SongNames[j])
 				if err != nil {
 					//panic(err)
+					fmt.Fprintln(os.Stderr, err)
+					bw.WriteDecimal(byte(last_song_index))
 					continue
 				}
 
@@ -548,6 +551,7 @@ func generatePICH() {
 				// Write out song index:
 				bw.WriteDecimal(byte(song_index))
 				fmt.Printf("  %2d) %3d %s\n", j+1, song_index+1, meta.PrimaryName)
+				last_song_index = song_index
 			}
 		}
 	}
