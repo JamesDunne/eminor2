@@ -506,6 +506,18 @@ programs:
       channel: dirty
     JD:
       channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+      fx: [delay]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
 - name: Kryptonite
   tempo: 100
   scenes:
