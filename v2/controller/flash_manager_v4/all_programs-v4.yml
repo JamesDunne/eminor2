@@ -704,25 +704,31 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 2
+      level: 3
   - name: JD lead;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
-      level: 4
+      level: 6
   - name: JD lead;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
-      level: 2
+      level: 3
       fx: [delay]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
+  - name: JD echo
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      fx: [delay]
 - name: What I Got
   tempo: 96
   midi: 1
@@ -795,7 +801,7 @@ programs:
       channel: clean
 - name: Shine
   tempo: 151
-  gain: 0x30
+  gain: 0x20
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -1020,7 +1026,6 @@ programs:
       gain: 0x70
       fx: [delay]
 
-
 - name: Inside Out
   tempo: 107
   gain: 0x30
@@ -1036,7 +1041,6 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-
 
 - name: Cherub Rock
   tempo: 84
@@ -1105,7 +1109,6 @@ programs:
     JD:
       channel: dirty
 
-
 - name: Low
   tempo: 86
   gain: 0x20
@@ -1168,3 +1171,76 @@ programs:
       gain: 0x40
       fx: [delay]
 
+- name: Closing Time
+  tempo: 120
+  gain: 0x40
+  scenes:
+  - name: Intro
+    MG:
+      channel: dirty
+      gain: 0x20
+      level: -5
+    JD:
+      channel: dirty
+      gain: 0x20
+      level: -5
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Verse
+    MG:
+      channel: dirty
+      gain: 0x20
+      level: -5
+    JD:
+      channel: dirty
+      gain: 0x20
+      level: -5
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Outro
+    MG:
+      channel: dirty
+      gain: 0x20
+      level: -5
+    JD:
+      channel: dirty
+      gain: 0x20
+      level: -5
+
+- name: Slayer
+  tempo: 130
+  scenes:
+  - name: Intro
+    MG:
+      channel: dirty
+      fx: [delay]
+    JD:
+      channel: dirty
+      fx: [delay]
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+      fx: [delay]
+
+- name: Happy Birthday
+  tempo: 130
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty

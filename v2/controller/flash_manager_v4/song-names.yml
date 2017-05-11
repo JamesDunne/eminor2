@@ -181,7 +181,7 @@ songs:
 
 - names: [Story of a Girl, Absolutely]
   short_name: Story of a Girl
-  starts: MG
+  starts: Glaz
 
 - names: [Trippin, Trippin on a Hole in a Paper Heart, Trippin on a Hole, Tripping, Tripping on a Hole in a Paper Heart, Tripping on a Hole]
   short_name: Trippin
@@ -193,7 +193,7 @@ songs:
 
 - names: [Inside Out]
   short_name: Inside Out
-  starts: MG
+  starts: Glaz
 
 - names: [Cherub Rock]
   short_name: Cherub Rock
@@ -206,3 +206,11 @@ songs:
 - names: [Low]
   short_name: Low
   starts: Bremer
+
+- names: [Slayer, Raining Blood]
+  short_name: Slayer
+  starts: Bremer
+
+- names: [Happy Birthday]
+  short_name: Birthday
+  starts: Glaz
