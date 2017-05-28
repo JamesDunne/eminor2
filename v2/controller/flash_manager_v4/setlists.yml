@@ -851,8 +851,6 @@ sets:
 
   - date: "2017-04-08"
     venue: Romeoville
-    active: true
-    print: true
     songs:
       - 'BREAK: SET 1'
 
@@ -923,5 +921,92 @@ sets:
       - Brain Stew
 
       - 'BREAK: ENCORE'
+
+      - Bells
+
+  - date: "2017-06-03"
+    venue: Romeoville
+    active: true
+    print: true
+    songs:
+      - 'BREAK: SET 1'
+
+      - Dammit
+      - Trippin
+      - Zero
+
+      - Bound for the Floor
+      - Hash Pipe
+
+      - Plush
+      - Story of a Girl
+
+      - Hey Jealousy
+
+      - Cumbersome
+      - Everything Zen
+
+      - Undone
+
+      - Brain Stew
+
+      - Enter Sandman
+
+      - 'BREAK: SET 2'
+
+      - Beautiful Disaster
+
+      - Machinehead
+
+      - Happy Birthday
+
+      - My Hero
+      - Fuel
+
+      - Say It Aint So
+      - Basket Case
+
+      - Bullet With Butterfly Wings
+
+      - Counting Blue Cars
+      - Kryptonite
+
+      - What I Got
+
+      - Holiday
+
+      - Low
+
+      - Master of Puppets
+
+      - 'BREAK: MINI-SET'
+
+      - Time of Your Life
+      - The Satan Song
+      - Ketchup
+      - Drive
+      - The Greatest Song in the World
+      - American
+
+      - 'BREAK: SET 3'
+
+      - Monkey Wrench
+
+      - The Middle
+
+      - Lump
+
+      - Shine
+
+      - When I Come Around
+
+      - Buddy Holly
+
+      - My Own Worst Enemy
+      - Song 2
+
+      - Sex Type Thing
+
+      - Closing Time
 
       - Bells
