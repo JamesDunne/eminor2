@@ -801,7 +801,7 @@ programs:
       channel: clean
 - name: Shine
   tempo: 151
-  gain: 0x20
+  gain: 0x50
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -812,7 +812,7 @@ programs:
     MG:
       channel: dirty
     JD:
-      gain: 0x6C
+      gain: 0x7C
       channel: dirty
       level: 6
   - name: JD dirty;MG dirty
