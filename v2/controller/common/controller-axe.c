@@ -17,7 +17,7 @@ LIVE:
 |                                                            |
 |     *      *      *      *      *      *      *      *     |
 |   BOTH   MG/JD GAIN/VOL DEC    INC    TAP   SC_PRV SC_NXT  |
-|          RESET                        MODE          SAVE   |
+|   SAVE   RESET                        MODE                 |
 |------------------------------------------------------------|
 
 Top row of buttons controls selected amp settings
@@ -951,16 +951,14 @@ void controller_init(void) {
 }
 
 struct timers {
-    // Repeating timers:
-    u8 bot_4;
-    u8 bot_5;
-    u8 bot_8;
-    u8 top_7;
-    u8 top_8;
-    // Once-only timers:
+    u8 bot_1;
     u8 bot_2;
     u8 bot_3;
+    u8 bot_4;
+    u8 bot_5;
     u8 bot_6;
+    u8 top_7;
+    u8 top_8;
 } timers;
 
 #if 0
@@ -994,6 +992,8 @@ void controller_10msec_timer(void) {
         } \
     }
 
+    one_shot(bot,1,0x3F,program_save)
+
     one_shot(bot,2,0x1F,midi_invalidate)
     one_shot(bot,3,0x1F,curr_amp_toggle)
 
@@ -1001,8 +1001,6 @@ void controller_10msec_timer(void) {
     repeater(bot,5,0x20,0x01,curr_amp_inc)
 
     one_shot(bot,6,0x3F,toggle_setlist_mode)
-
-    one_shot(bot,8,0x3F,program_save)
 
     repeater(top,7,0x20,0x03,prev_song)
     repeater(top,8,0x20,0x03,next_song)
@@ -1093,12 +1091,7 @@ void controller_handle(void) {
         prev_scene();
     }
     if (is_bot_button_pressed(M_8)) {
-        timers.bot_8 = (u8)0x80;
-    } else if (is_bot_button_released(M_8)) {
-        if ((timers.bot_8 & (u8)0x80) != (u8)0) {
-            next_scene();
-        }
-        timers.bot_8 = (u8)0x00;
+    	next_scene();
     }
 
     // Handle top amp effects:
