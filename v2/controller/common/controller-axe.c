@@ -1037,6 +1037,9 @@ void controller_handle(void) {
     // AMP (1 and 2)
     if (is_bot_button_pressed(M_1)) {
         curr.selected_both ^= 1;
+        timers.bot_1 = (u8)0x80;
+    } else if (is_bot_button_released(M_1)) {
+        timers.bot_1 = (u8)0;
     }
 
     // AMP (1 or 2)
@@ -1091,7 +1094,7 @@ void controller_handle(void) {
         prev_scene();
     }
     if (is_bot_button_pressed(M_8)) {
-    	next_scene();
+        next_scene();
     }
 
     // Handle top amp effects:
