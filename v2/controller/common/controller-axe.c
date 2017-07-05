@@ -1036,9 +1036,11 @@ void controller_handle(void) {
     // Handle bottom control switches:
     // AMP (1 and 2)
     if (is_bot_button_pressed(M_1)) {
-        curr.selected_both ^= 1;
         timers.bot_1 = (u8)0x80;
     } else if (is_bot_button_released(M_1)) {
+        if ((timers.bot_1 & (u8)0x80) != (u8)0) {
+            curr.selected_both ^= 1;
+        }
         timers.bot_1 = (u8)0;
     }
 
