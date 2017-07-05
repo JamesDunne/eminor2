@@ -717,8 +717,16 @@ static void update_lcd(void) {
     ritoa(lcd_rows[row_status], 19, curr.sc_idx + (u8)1);
 
     // Song name:
-    pr_name = name_get(pr.name_index);
-    copy_str_lcd(pr_name, lcd_rows[row_song]);
+    if (pr.name_index == 0) {
+        // Show unnamed song index:
+        for (i = 0; i < LCD_COLS; i++) {
+            lcd_rows[row_song][i] = "__unnamed song #    "[i];
+        }
+        ritoa(lcd_rows[row_song], 18, curr.pr_idx + (u8)1);
+    } else {
+        pr_name = name_get(pr.name_index);
+        copy_str_lcd(pr_name, lcd_rows[row_song]);
+    }
     // Set modified bit:
     if (curr.modified) {
         lcd_rows[row_song][19] = '*';
@@ -817,18 +825,21 @@ static void calc_gain_modified(void) {
     curr.modified = (curr.modified & ~(u8) 0x11) |
                     ((u8) (curr.amp[0].gain != origpr->scene[curr.sc_idx].amp[0].gain) << (u8) 0) |
                     ((u8) (curr.amp[1].gain != origpr->scene[curr.sc_idx].amp[1].gain) << (u8) 4);
+    // DEBUG_LOG1("calc_gain_modified():   0x%02X", curr.modified);
 }
 
 static void calc_fx_modified(void) {
     curr.modified = (curr.modified & ~(u8) 0x22) |
                     ((u8) (curr.amp[0].fx != origpr->scene[curr.sc_idx].amp[0].fx) << (u8) 1) |
                     ((u8) (curr.amp[1].fx != origpr->scene[curr.sc_idx].amp[1].fx) << (u8) 5);
+    // DEBUG_LOG1("calc_fx_modified():     0x%02X", curr.modified);
 }
 
 static void calc_volume_modified(void) {
     curr.modified = (curr.modified & ~(u8) 0x44) |
                     ((u8) (curr.amp[0].volume != origpr->scene[curr.sc_idx].amp[0].volume) << (u8) 2) |
                     ((u8) (curr.amp[1].volume != origpr->scene[curr.sc_idx].amp[1].volume) << (u8) 6);
+    // DEBUG_LOG1("calc_volume_modified(): 0x%02X", curr.modified);
 }
 
 void load_program(void) {
@@ -852,7 +863,10 @@ void load_program(void) {
 
     // Establish a sane default for an undefined program:
     curr.sc_idx = 0;
-    if (pr.name_index == (u16)0) {
+    // TODO: better define how an undefined program is detected.
+    // For now the heuristic is if an amp's volume is non-zero. A properly initialized amp will likely
+    // have a value near `volume_0dB` (98).
+    if (pr.scene[0].amp[1].volume == 0) {
         scene_default();
     }
 
