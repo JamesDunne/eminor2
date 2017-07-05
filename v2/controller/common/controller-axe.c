@@ -845,7 +845,7 @@ void load_program(void) {
 
     flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
 
-    origpr = (rom struct program *)flash_addr((u16)(sl.entries[curr.sl_idx].program * sizeof(struct program)));
+    origpr = (rom struct program *)flash_addr((u16)(pr_num * sizeof(struct program)));
     curr.modified = 0;
     curr.midi_program = pr.midi_program;
     curr.tempo = pr.tempo;
