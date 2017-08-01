@@ -8,231 +8,168 @@
       },
       {
         "i": 1,
-        "title": "Dammit",
-        "starts": "Jim"
-      },
-      {
-        "i": 2,
-        "title": "Trippin",
-        "starts": "Bremer"
-      },
-      {
-        "i": 3,
-        "title": "Zero",
-        "starts": "Jim"
-      },
-      {
-        "i": 4,
-        "title": "Bound for the Floor",
-        "starts": "Jim"
-      },
-      {
-        "i": 5,
-        "title": "Hash Pipe",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "i": 6,
-        "title": "Plush",
-        "starts": "Bremer 2 ct"
-      },
-      {
-        "i": 7,
-        "title": "Story of a Girl",
-        "starts": "Glaz"
-      },
-      {
-        "i": 8,
-        "title": "Hey Jealousy",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 9,
-        "title": "Cumbersome",
-        "starts": "Jim"
-      },
-      {
-        "i": 10,
-        "title": "Everything Zen",
-        "starts": "Glaz"
-      },
-      {
-        "i": 11,
-        "title": "Undone",
-        "starts": "Bremer"
-      },
-      {
-        "i": 12,
-        "title": "Brain Stew",
-        "starts": "Jim"
-      },
-      {
-        "i": 13,
-        "title": "Enter Sandman",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "SET 2"
-      },
-      {
-        "i": 14,
-        "title": "Beautiful Disaster",
-        "starts": "Jim"
-      },
-      {
-        "i": 15,
-        "title": "Machinehead",
-        "starts": "Jim"
-      },
-      {
-        "i": 16,
-        "title": "Happy Birthday",
-        "starts": "Glaz"
-      },
-      {
-        "i": 17,
-        "title": "My Hero",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "i": 18,
-        "title": "Fuel",
-        "starts": "Glaz"
-      },
-      {
-        "i": 19,
-        "title": "Say It Aint So",
-        "starts": "Jim"
-      },
-      {
-        "i": 20,
-        "title": "Basketcase",
-        "starts": "Glaz"
-      },
-      {
-        "i": 21,
-        "title": "Bullet With Butterfly Wings",
-        "starts": "Glaz"
-      },
-      {
-        "i": 22,
-        "title": "Counting Blue Cars",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 23,
-        "title": "Kryptonite",
-        "starts": "Glaz"
-      },
-      {
-        "i": 24,
-        "title": "What I Got",
-        "starts": "Bremer"
-      },
-      {
-        "i": 25,
-        "title": "Holiday",
-        "starts": "Jim"
-      },
-      {
-        "i": 26,
-        "title": "Low",
-        "starts": "Bremer"
-      },
-      {
-        "i": 27,
-        "title": "Master of Puppets",
-        "starts": "Bremer"
-      },
-      {
-        "breakText": "MINI-SET"
-      },
-      {
-        "i": 28,
-        "title": "Time of Your Life",
-        "starts": ""
-      },
-      {
-        "i": 29,
-        "title": "The Satan Song",
-        "starts": ""
-      },
-      {
-        "i": 30,
-        "title": "Ketchup",
-        "starts": ""
-      },
-      {
-        "i": 31,
-        "title": "Drive",
-        "starts": "Jim"
-      },
-      {
-        "i": 32,
-        "title": "The Greatest Song in the World",
-        "starts": ""
-      },
-      {
-        "i": 33,
-        "title": "American",
-        "starts": ""
-      },
-      {
-        "breakText": "SET 3"
-      },
-      {
-        "i": 34,
-        "title": "Monkey Wrench",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 35,
-        "title": "The Middle",
-        "starts": "Glaz"
-      },
-      {
-        "i": 36,
-        "title": "Lump",
-        "starts": "Bremer+Glaz"
-      },
-      {
-        "i": 37,
-        "title": "Shine",
-        "starts": "Jim"
-      },
-      {
-        "i": 38,
-        "title": "When I Come Around",
-        "starts": "Jim"
-      },
-      {
-        "i": 39,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
-      },
-      {
-        "i": 40,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
-      },
-      {
-        "i": 41,
         "title": "Song 2",
         "starts": "Bremer"
       },
       {
-        "i": 42,
-        "title": "Sex Type Thing",
-        "starts": "Bremer 4 ct"
+        "i": 2,
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
       },
       {
-        "i": 43,
-        "title": "Closing Time",
+        "i": 3,
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
+      },
+      {
+        "i": 4,
+        "title": "The Middle",
         "starts": "Glaz"
       },
       {
-        "i": 44,
-        "title": "For Whom The Bell Tolls",
+        "i": 5,
+        "title": "Monkey Wrench",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 6,
+        "title": "Lump",
+        "starts": "Bremer+Glaz"
+      },
+      {
+        "i": 7,
+        "title": "Counting Blue Cars",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 8,
+        "title": "Bouncing off the Walls",
+        "starts": "Jim"
+      },
+      {
+        "i": 9,
+        "title": "Trippin’",
+        "starts": ""
+      },
+      {
+        "i": 10,
+        "title": "Brain Stew",
+        "starts": "Jim"
+      },
+      {
+        "i": 11,
+        "title": "Bullet With Butterfly Wings",
+        "starts": "Glaz"
+      },
+      {
+        "i": 12,
+        "title": "Plush",
+        "starts": "Bremer 2 ct"
+      },
+      {
+        "i": 13,
+        "title": "When I Come Around",
+        "starts": "Jim"
+      },
+      {
+        "i": 14,
+        "title": "Enter Sandman",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "MG Mini Set"
+      },
+      {
+        "i": 15,
+        "title": "Drive",
+        "starts": "Jim"
+      },
+      {
+        "i": 16,
+        "title": "The Satan Song",
+        "starts": ""
+      },
+      {
+        "i": 17,
+        "title": "Ketchup",
+        "starts": ""
+      },
+      {
+        "i": 18,
+        "title": "Angel Song",
+        "starts": ""
+      },
+      {
+        "breakText": "Set 2"
+      },
+      {
+        "i": 19,
+        "title": "Holiday",
+        "starts": "Jim"
+      },
+      {
+        "i": 20,
+        "title": "Zero",
+        "starts": "Jim"
+      },
+      {
+        "i": 21,
+        "title": "Beautiful Disaster",
+        "starts": "Jim"
+      },
+      {
+        "i": 22,
+        "title": "Undone",
+        "starts": "Bremer"
+      },
+      {
+        "i": 23,
+        "title": "Fuel",
+        "starts": "Glaz"
+      },
+      {
+        "i": 24,
+        "title": "December",
+        "starts": "Jim"
+      },
+      {
+        "i": 25,
+        "title": "Story of a Girl",
+        "starts": "Glaz"
+      },
+      {
+        "i": 26,
+        "title": "Everything Zen",
+        "starts": "Glaz"
+      },
+      {
+        "i": 27,
+        "title": "Low",
+        "starts": "Bremer"
+      },
+      {
+        "i": 28,
+        "title": "Machinehead",
+        "starts": "Jim"
+      },
+      {
+        "i": 29,
+        "title": "Basketcase",
+        "starts": "Glaz"
+      },
+      {
+        "i": 30,
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
+      },
+      {
+        "i": 31,
+        "title": "Dammit",
+        "starts": "Jim"
+      },
+      {
+        "i": 32,
+        "title": "Master of Puppets",
         "starts": "Bremer"
       }
     ]

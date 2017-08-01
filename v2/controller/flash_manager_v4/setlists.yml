@@ -926,8 +926,6 @@ sets:
 
   - date: "2017-06-03"
     venue: Romeoville
-    active: true
-    print: true
     songs:
       - 'BREAK: SET 1'
 
@@ -1010,3 +1008,51 @@ sets:
       - Closing Time
 
       - Bells
+
+  - date: "2017-06-03"
+    venue: Romeoville
+    active: true
+    print: true
+    songs:
+      - 'BREAK: SET 1'
+      - Song 2
+      - Hash Pipe
+      - My Own Worst Enemy
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - Counting Blue Cars
+      - Bouncing off the Walls
+      - Trippin’
+      - Brain Stew
+      - Bullet With Butterfly Wings
+      - Plush
+      - When I Come Around
+      - Enter Sandman
+
+      - 'BREAK: MG Mini Set'
+
+      - Drive
+      - The Satan Song
+      - Ketchup
+      - Angel Song
+
+      - 'BREAK: Set 2'
+
+      - Holiday
+      - Zero
+      - Beautiful Disaster
+      - Undone
+      - Fuel
+      - December
+      - Story of a Girl
+      - Everything Zen
+      - Low
+      - Machinehead
+      - Basket Case
+      - Buddy Holly
+      - Dammit
+
+      - Master of Puppets
