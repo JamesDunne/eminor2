@@ -1010,7 +1010,7 @@ sets:
       - Bells
 
   - date: "2017-06-03"
-    venue: Romeoville
+    venue: Duke's Ale House
     active: true
     print: true
     songs:
