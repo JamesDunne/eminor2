@@ -486,7 +486,7 @@ static void calc_midi(void) {
         midi_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
         if (gate != last_gate) {
             midi_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(gate));
-            midi_axe_cc(axe_cc_byp_compressor1, calc_cc_toggle(!gate));
+            midi_axe_cc(axe_cc_byp_compressor1, 0x7F);
         }
         diff = 1;
     }
@@ -509,7 +509,7 @@ static void calc_midi(void) {
         midi_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
         if (gate != last_gate) {
             midi_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(gate));
-            midi_axe_cc(axe_cc_byp_compressor2, calc_cc_toggle(!gate));
+            midi_axe_cc(axe_cc_byp_compressor2, 0x7F);
         }
         diff = 1;
     }
