@@ -308,8 +308,8 @@ func (w *BankedWriter) WriteChar(b uint8) {
 }
 
 func logTaper(b int) int {
-	// 127*ln(x+1)^2/(ln(127+1))^2
-	return int(127.0*math.Pow(math.Log10(float64(b)+1.0),2)/math.Pow(math.Log10(127.0+1.0),2))
+	// 127 * (ln(x+1)^2) / (ln(127+1)^2)
+	return int(127.0 * math.Pow(math.Log2(float64(b)+1.0), 2) / math.Pow(math.Log2(127.0+1.0), 2))
 }
 
 // Generate flash_rom_init.h for #include in controller C code projects
@@ -410,7 +410,7 @@ func generatePICH() {
 
 		// Enforce a reasonable default gain if not set:
 		if (p.Gain == 0) {
-			p.Gain = 0x60
+			p.Gain = 0x40
 		}
 
 		// Write scene descriptors (5 bytes each):
