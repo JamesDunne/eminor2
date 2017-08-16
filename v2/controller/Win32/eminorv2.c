@@ -8,6 +8,7 @@
 
 #include <windows.h>
 #include <windowsx.h>
+#include <shellapi.h>
 #include <wchar.h>
 #include <winuser.h>
 #include <stdio.h>
@@ -109,27 +110,28 @@ int midi_count;
 // MIDI I/O:
 
 #ifdef FEAT_MIDI
-HMIDIOUT outHandle;
+HMIDIOUT    outHandle;
+MIDIOUTCAPS outDevices[10];
+unsigned long outNumDevs;
 #endif
 
 void show_midi_output_devices() {
 #ifdef FEAT_MIDI
-    MIDIOUTCAPS     moc;
-    unsigned long iNumDevs, i;
+    unsigned long i;
 
     // Get the number of MIDI Out devices in this computer
-    iNumDevs = midiOutGetNumDevs();
+    outNumDevs = midiOutGetNumDevs();
 
     // Go through all of those devices, displaying their names
-    if (iNumDevs > 0) {
+    if (outNumDevs > 0) {
         printf("MIDI Devices:\r\n");
     }
 
-    for (i = 0; i < iNumDevs; i++) {
+    for (i = 0; i < outNumDevs; i++) {
         // Get info about the next device
-        if (!midiOutGetDevCaps(i, &moc, sizeof(MIDIOUTCAPS))) {
+        if (!midiOutGetDevCaps(i, &outDevices[i], sizeof(MIDIOUTCAPS))) {
             // Display its Device ID and name
-            printf("  #%d: %ls\r\n", i, moc.szPname);
+            printf("  #%d: %ls\r\n", i, outDevices[i].szPname);
         }
     }
 #endif
@@ -140,10 +142,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
     WNDCLASSEXW WndClass;
     MSG Msg;
     unsigned long result;
+    LPWSTR *szArglist;
+    int nArgs;
 
     zhInstance = hInstance;
-
-    //PWSTR pCmdLine = GetCommandLineW();
 
     WndClass.cbSize = sizeof(WNDCLASSEXW);
     WndClass.style = 0; // disable CS_DBLCLKS
@@ -212,11 +214,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
 #ifdef FEAT_MIDI
     // Open the MIDI Mapper
     UINT midiDeviceID = (UINT)1;
-    if (strlen(paCmdLine) > 0) {
-        if (sscanf(paCmdLine, "%d", &midiDeviceID) == 0) {
-            midiDeviceID = (UINT) 1;
+    szArglist = CommandLineToArgvW(GetCommandLineW(), &nArgs);
+
+    if (nArgs > 1) {
+        for (int i = 0; i < outNumDevs; i++) {
+            if (wcsicmp(szArglist[1], outDevices[i].szPname) == 0) {
+                midiDeviceID = i;
+                printf("Selected MIDI device #%d: %ls\n", i, outDevices[i].szPname);
+                break;
+            }
         }
     }
+
     printf("Opening MIDI device ID #%d...\r\n", midiDeviceID);
     result = midiOutOpen(&outHandle, midiDeviceID, 0, 0, CALLBACK_WINDOW);
     if (result)

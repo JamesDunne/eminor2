@@ -281,7 +281,7 @@
       <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;gdi32.lib;user32.lib;winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;gdi32.lib;user32.lib;winmm.lib;shell32.lib</AdditionalDependencies>
       <OutputFile>$(ProjectDir)\$(TargetName)-$(PlatformShortName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
