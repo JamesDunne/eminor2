@@ -307,6 +307,11 @@ func (w *BankedWriter) WriteChar(b uint8) {
 	w.cycle()
 }
 
+func logTaper(b int) int {
+	// 127*ln(x+1)^2/(ln(127+1))^2
+	return int(127.0*math.Pow(math.Log10(float64(b)+1.0),2)/math.Pow(math.Log10(127.0+1.0),2))
+}
+
 // Generate flash_rom_init.h for #include in controller C code projects
 func generatePICH() {
 	//var err error
@@ -403,6 +408,11 @@ func generatePICH() {
 		// Write tempo:
 		bw.WriteDecimal(uint8(p.Tempo))
 
+		// Enforce a reasonable default gain if not set:
+		if (p.Gain == 0) {
+			p.Gain = 0x60
+		}
+
 		// Write scene descriptors (5 bytes each):
 		n := 0
 		for _, s := range p.SceneDescriptors {
@@ -413,11 +423,13 @@ func generatePICH() {
 				b0, b1, b2 := byte(0), byte(0), byte(0)
 
 				// Gain (0 = default gain, 127 = full gain):
-				b0 = uint8(amp.Gain) & 0x7F
+				b0 = uint8(logTaper(amp.Gain)) & 0x7F
 				if amp.Gain == 0 {
 					// Use program's default gain:
-					b0 = uint8(p.Gain) & 0x7F
+					b0 = uint8(logTaper(p.Gain)) & 0x7F
 				}
+
+				// fmt.Printf("%02x or %02x -> %02x\n", amp.Gain, p.Gain, b0)
 
 				// Volume:
 				if amp.Level > 6 {
