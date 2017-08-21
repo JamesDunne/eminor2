@@ -343,10 +343,16 @@ function touchend(e) {
 // ----------------------------- Utility functions:
 
 function hex1(v) {
+	// fix signed to unsigned:
+	if (v < 0) { v = (255 - ~v) & 0xFF; }
+
     var h = v.toString(16).toUpperCase();
     return (h).substring(0, 1);
 }
 function hex2(v) {
+	// fix signed to unsigned:
+	if (v < 0) { v = (255 - ~v) & 0xFF; }
+
     var h = v.toString(16).toUpperCase();
     return ("00" + h).substring(h.length);
 }
