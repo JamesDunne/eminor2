@@ -433,7 +433,11 @@ function _midi_send_cmd1_impl(cmd, data1) {
     if (!midiSupport) return;
     if (!midiOutput) return;
     // TODO: maybe queue up bytes and deliver at end of main loop?
-    midiOutput.send([i8tou8(cmd), i8tou8(data1)]);
+    try {
+        midiOutput.send([i8tou8(cmd), i8tou8(data1)]);
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 // called to send MIDI command with two data bytes:
@@ -445,7 +449,11 @@ function _midi_send_cmd2_impl(cmd, data1, data2) {
     if (!midiSupport) return;
     if (!midiOutput) return;
     // TODO: maybe queue up bytes and deliver at end of main loop?
-    midiOutput.send([i8tou8(cmd), i8tou8(data1)]);
+    try {
+        midiOutput.send([i8tou8(cmd), i8tou8(data1), i8tou8(data2)]);
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 function _midi_send_sysex(byte) {
@@ -454,7 +462,7 @@ function _midi_send_sysex(byte) {
     if (!midiSupport) return;
     if (!midiOutput) return;
     // TODO: maybe queue up bytes and deliver at F7 or at end of main loop?
-    midiOutput.send([i8tou8(byte)]);
+    // midiOutput.send([i8tou8(byte)]);
 }
 
 function _midi_log_cwrap(text_ptr) {
@@ -555,10 +563,10 @@ function init() {
                     midiSupport = true;
 
                     // Could be 0..n outputs; try to select first if any:
-                    midiAccess.outputs.forEach(function(name, output) {
+                    midiAccess.outputs.forEach(function(output, key) {
                         // TODO: add a MIDI device <select>or to the UI.
                         midiOutput = output;
-                        console.log(name);
+                        console.log(output.name);
                         return false;
                     });
 
