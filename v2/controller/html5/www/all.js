@@ -91828,6 +91828,9 @@ var label_rows_text_ptrs = [0,0];
 /** @const */var flash_size = 4096;
 var flash = null;
 
+var midiAccess = null;
+var midiSupport = null;
+
 // ----------------------------- UI code:
 
 var midiLog;
@@ -92154,15 +92157,15 @@ function touchend(e) {
 // ----------------------------- Utility functions:
 
 function hex1(v) {
-	// fix signed to unsigned:
-	if (v < 0) { v = (255 - ~v) & 0xFF; }
+    // fix signed to unsigned:
+    if (v < 0) { v = (255 - ~v) & 0xFF; }
 
     var h = v.toString(16).toUpperCase();
     return (h).substring(0, 1);
 }
 function hex2(v) {
-	// fix signed to unsigned:
-	if (v < 0) { v = (255 - ~v) & 0xFF; }
+    // fix signed to unsigned:
+    if (v < 0) { v = (255 - ~v) & 0xFF; }
 
     var h = v.toString(16).toUpperCase();
     return ("00" + h).substring(h.length);
@@ -92333,6 +92336,29 @@ function init() {
             return false;
         });
 
+    // check for web-midi with sysex access:
+    midiSupport = null;
+    if (navigator.requestMIDIAccess) {
+        navigator.requestMIDIAccess({sysex: true})
+            .then(
+                function (access) {
+                    midiAccess = access;
+                    midiSupport = true;
+
+                    startMachine();
+                },
+                function (err) {
+                    midiSupport = false;
+                    startMachine();
+                }
+            );
+    } else {
+        midiSupport = false;
+        startMachine();
+    }
+}
+
+function startMachine() {
     // Initialize controller:
     // NOTE(jsd): `Module` is the name of the emscripten compiled module; exported functions have a leading '_'.
     Module._controller_init();
