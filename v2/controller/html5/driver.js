@@ -19,6 +19,7 @@ var flash = null;
 
 var midiAccess = null;
 var midiSupport = null;
+var midiOutput = null;
 
 // ----------------------------- UI code:
 
@@ -345,17 +346,21 @@ function touchend(e) {
 
 // ----------------------------- Utility functions:
 
-function hex1(v) {
-    // fix signed to unsigned:
-    if (v < 0) { v = (255 - ~v) & 0xFF; }
+// fix signed to unsigned:
+function i8tou8(v) {
+    if (v < 0) {
+        return (255 - ~v) & 0xFF;
+    }
+    return v;
+}
 
+function hex1(v) {
+    v = i8tou8(v);
     var h = v.toString(16).toUpperCase();
     return (h).substring(0, 1);
 }
 function hex2(v) {
-    // fix signed to unsigned:
-    if (v < 0) { v = (255 - ~v) & 0xFF; }
-
+    v = i8tou8(v);
     var h = v.toString(16).toUpperCase();
     return ("00" + h).substring(h.length);
 }
@@ -424,6 +429,11 @@ function _midi_send_cmd1_impl(cmd, data1) {
     // TODO: add commentary about recognized commands
     var f = "" + hex2(cmd) + " " + hex2(data1) + "\n";
     midi_log(f);
+
+    if (!midiSupport) return;
+    if (!midiOutput) return;
+    // TODO: maybe queue up bytes and deliver at end of main loop?
+    midiOutput.send([i8tou8(cmd), i8tou8(data1)]);
 }
 
 // called to send MIDI command with two data bytes:
@@ -431,10 +441,20 @@ function _midi_send_cmd2_impl(cmd, data1, data2) {
     // TODO: add commentary about recognized commands
     var f = "" + hex2(cmd) + " " + hex2(data1) + " " + hex2(data2) + "\n";
     midi_log(f);
+
+    if (!midiSupport) return;
+    if (!midiOutput) return;
+    // TODO: maybe queue up bytes and deliver at end of main loop?
+    midiOutput.send([i8tou8(cmd), i8tou8(data1)]);
 }
 
 function _midi_send_sysex(byte) {
     midi_log("" + hex2(byte) + "\n");
+
+    if (!midiSupport) return;
+    if (!midiOutput) return;
+    // TODO: maybe queue up bytes and deliver at F7 or at end of main loop?
+    midiOutput.send([i8tou8(byte)]);
 }
 
 function _midi_log_cwrap(text_ptr) {
@@ -533,6 +553,14 @@ function init() {
                 function (access) {
                     midiAccess = access;
                     midiSupport = true;
+
+                    // Could be 0..n outputs; try to select first if any:
+                    midiAccess.outputs.forEach(function(name, output) {
+                        // TODO: add a MIDI device <select>or to the UI.
+                        midiOutput = output;
+                        console.log(name);
+                        return false;
+                    });
 
                     startMachine();
                 },
