@@ -587,13 +587,46 @@ function init() {
                 function (access) {
                     midiAccess = access;
                     midiSupport = true;
+                    midiOutput = null;
+
+                    var midiSelect = document.getElementById("midiSelect");
+
+                    // onchange event:
+                    if (midiSelect) {
+                        midiSelect.addEventListener("change", function (e) {
+                            if (midiSelect.value == 0) {
+                                console.log("disable MIDI");
+                                midiOutput = null;
+                                return;
+                            }
+
+                            midiOutput = midiAccess.outputs.get(parseInt(midiSelect.value, 10));
+                            if (midiOutput) {
+                                console.log("change MIDI to " + midiOutput.name);
+                            } else {
+                                console.error("failed to find MIDI by key=" + midiSelect.value);
+                            }
+                        });
+                    }
 
                     // Could be 0..n outputs; try to select first if any:
                     midiAccess.outputs.forEach(function(output, key) {
-                        // TODO: add a MIDI device <select>or to the UI.
-                        midiOutput = output;
-                        console.log(output.name);
-                        return false;
+                        if (midiSelect) {
+                            // Create an <option> for the MIDI output port:
+                            var opt = document.createElement("option");
+                            opt.setAttribute("value", key);
+                            opt.appendChild(document.createTextNode(output.name));
+                            midiSelect.appendChild(opt);
+
+                            if (midiOutput === null) {
+                                midiOutput = output;
+                                midiSelect.value = key;
+                            }
+                        } else {
+                            if (midiOutput === null) {
+                                midiOutput = output;
+                            }
+                        }
                     });
 
                     startMachine();
