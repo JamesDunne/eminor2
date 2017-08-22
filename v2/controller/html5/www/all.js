@@ -91831,6 +91831,7 @@ var flash = null;
 var midiAccess = null;
 var midiSupport = null;
 var midiOutput = null;
+var sysexMsg = null;
 
 // ----------------------------- UI code:
 
@@ -92165,13 +92166,7 @@ function i8tou8(v) {
     return v;
 }
 
-function hex1(v) {
-    v = i8tou8(v);
-    var h = v.toString(16).toUpperCase();
-    return (h).substring(0, 1);
-}
 function hex2(v) {
-    v = i8tou8(v);
     var h = v.toString(16).toUpperCase();
     return ("00" + h).substring(h.length);
 }
@@ -92237,6 +92232,9 @@ function _lcd_updated_all() {
 
 // called to send MIDI command with one data byte:
 function _midi_send_cmd1_impl(cmd, data1) {
+    cmd = i8tou8(cmd);
+    data1 = i8tou8(data1);
+
     // TODO: add commentary about recognized commands
     var f = "" + hex2(cmd) + " " + hex2(data1) + "\n";
     midi_log(f);
@@ -92245,7 +92243,7 @@ function _midi_send_cmd1_impl(cmd, data1) {
     if (!midiOutput) return;
     // TODO: maybe queue up bytes and deliver at end of main loop?
     try {
-        midiOutput.send([i8tou8(cmd), i8tou8(data1)]);
+        midiOutput.send([cmd, data1]);
     } catch (e) {
         console.error(e);
     }
@@ -92253,6 +92251,10 @@ function _midi_send_cmd1_impl(cmd, data1) {
 
 // called to send MIDI command with two data bytes:
 function _midi_send_cmd2_impl(cmd, data1, data2) {
+    cmd = i8tou8(cmd);
+    data1 = i8tou8(data1);
+    data2 = i8tou8(data2);
+
     // TODO: add commentary about recognized commands
     var f = "" + hex2(cmd) + " " + hex2(data1) + " " + hex2(data2) + "\n";
     midi_log(f);
@@ -92261,19 +92263,43 @@ function _midi_send_cmd2_impl(cmd, data1, data2) {
     if (!midiOutput) return;
     // TODO: maybe queue up bytes and deliver at end of main loop?
     try {
-        midiOutput.send([i8tou8(cmd), i8tou8(data1), i8tou8(data2)]);
+        midiOutput.send([cmd, data1, data2]);
     } catch (e) {
         console.error(e);
     }
 }
 
 function _midi_send_sysex(byte) {
-    midi_log("" + hex2(byte) + "\n");
+    byte = i8tou8(byte);
 
-    if (!midiSupport) return;
-    if (!midiOutput) return;
-    // TODO: maybe queue up bytes and deliver at F7 or at end of main loop?
-    // midiOutput.send([i8tou8(byte)]);
+    if (sysexMsg === null) {
+         if (byte === 0xF0) {
+            sysexMsg = [0xF0];
+         } else {
+            console.error("Attempting to start SysEx message without 0xF0! " + byte);
+         }
+    } else {
+        sysexMsg.push(byte);
+        if (byte === 0xF7) {
+            if (midiSupport && midiOutput) {
+                try {
+                    midiOutput.send(sysexMsg);
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+
+            try {
+                str = ""
+                for (var i = 0; i < sysexMsg.length; i++) {
+                    str += hex2(sysexMsg[i]) + " ";
+                }
+                midi_log("" + str + "\n");
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    }
 }
 
 function _midi_log_cwrap(text_ptr) {
