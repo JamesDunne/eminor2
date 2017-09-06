@@ -1303,3 +1303,75 @@ programs:
     JD:
       channel: dirty
 
+- name: Kids Arent Alright
+  tempo: 140
+  scenes:
+  - name: Intro
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: +6
+  - name: Verse 1
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: +6
+  - name: Verse 2
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Solo
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: +6
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+- name: Satan Song
+  tempo: 140
+  scenes:
+  - name: Verse
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
+      level: +6
+  - name: Verse
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
+      level: +6
+  - name: Verse
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
