@@ -409,7 +409,7 @@ func generatePICH() {
 		bw.WriteDecimal(uint8(p.Tempo))
 
 		// Enforce a reasonable default gain if not set:
-		if (p.Gain == 0) {
+		if p.Gain == 0 {
 			p.Gain = 0x40
 		}
 
@@ -672,6 +672,26 @@ func generateJSON() {
 	}
 }
 
+func generateTSV() {
+
+	tsv, err := os.Create("songs.tsv")
+	if err != nil {
+		panic(err)
+	}
+	defer tsv.Close()
+
+	// Translate YAML to binary data for FLASH memory (see common/controller.c):
+	for i, p := range programs.Programs {
+		meta, err := partial_match_song_name(p.Name)
+		if err != nil {
+			return
+		}
+
+		fmt.Fprintf(tsv, "%d\t%s\n", i+1, meta.PrimaryName)
+	}
+
+}
+
 func parseHex(s string) int64 {
 	value, err := strconv.ParseInt(s, 16, 64)
 	if err != nil {
@@ -872,4 +892,6 @@ func main() {
 	generatePICH()
 
 	generateJSON()
+
+	generateTSV()
 }
