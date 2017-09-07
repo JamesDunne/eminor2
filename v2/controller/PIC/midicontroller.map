@@ -1,5 +1,5 @@
 MPLINK 4.48, Linker
-Linker Map File - Created Tue Sep 05 20:00:15 2017
+Linker Map File - Created Wed Sep 06 20:04:09 2017
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -149,24 +149,24 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-                CLEAR_RAM   0x004622    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\config.asm
+                CLEAR_RAM   0x004622    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\config.asm
     DoFlashSignatureCheck   0x000050    program     static                          
-             EraseProgMem   0x00452c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
+             EraseProgMem   0x00452c    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
                  FXD0808U   0x004694    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\fxd0808u.c
-     InterruptHandlerHigh   0x004410    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\intslct.c
-      InterruptVectorHigh   0x001008    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\intslct.c
+     InterruptHandlerHigh   0x004410    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\intslct.c
+      InterruptVectorHigh   0x001008    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\intslct.c
                  RAMCLEAR   0x004660    program     static                          
-                RAMCLEAR1   0x004626    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\config.asm
-             ROM_SAVEDATA   0x004800    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-              ReadButtons   0x0039b4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-     SendDataToShiftReg16   0x003940    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-            SetDipAddress   0x003b66    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-               StartWrite   0x0044be    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
-        SystemTimeRoutine   0x004672    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\systick.c
-            USBBootloader   0x0000c0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\bootcode.c
-        UninitializedMain   0x000022    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
-               UpdateLeds   0x003bce    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-             WriteProgMem   0x0044ca    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
+                RAMCLEAR1   0x004626    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\config.asm
+             ROM_SAVEDATA   0x004800    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+              ReadButtons   0x0039b4    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+     SendDataToShiftReg16   0x003940    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+            SetDipAddress   0x003b66    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+               StartWrite   0x0044be    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
+        SystemTimeRoutine   0x004672    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\systick.c
+            USBBootloader   0x0000c0    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\bootcode.c
+        UninitializedMain   0x000022    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+               UpdateLeds   0x003bce    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+             WriteProgMem   0x0044ca    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
          ___else_lbl00005   0x00004c    program     static                          
           ___for_lbl00001   0x00440c    program     static                          
           ___for_lbl00002   0x00440e    program     static                          
@@ -206,96 +206,96 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
         ___while_lbl00051   0x003d84    program     static                          
         ___while_lbl00052   0x003d96    program     static                          
         ___while_lbl00053   0x003d9a    program     static                          
-               __config_0   0x300000    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_1   0x300001    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-              __config_10   0x30000d    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_2   0x300002    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_3   0x300005    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_4   0x300006    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_5   0x300008    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_6   0x300009    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_7   0x30000a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_8   0x30000b    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_9   0x30000c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __string_0   0x0045be    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_1   0x0045a9    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_2   0x004594    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_3   0x00457f    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_4   0x00456a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_5   0x004555    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_6   0x004540    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __config_0   0x300000    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_1   0x300001    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+              __config_10   0x30000d    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_2   0x300002    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_3   0x300005    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_4   0x300006    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_5   0x300008    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_6   0x300009    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_7   0x30000a    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_8   0x30000b    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_9   0x30000c    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __string_0   0x0045be    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_1   0x0045a9    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_2   0x004594    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_3   0x00457f    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_4   0x00456a    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_5   0x004555    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_6   0x004540    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                __tmplbl_0   0x0043f8    program     static                          
                __tmplbl_1   0x0043f2    program     static                          
                __tmplbl_2   0x004408    program     static                          
                __tmplbl_3   0x004402    program     static                          
             __zero_memory   0x004630    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-                   _entry   0x001000    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c
-                 _startup   0x004650    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c
-                  app_sig   0x001006    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c
-                  app_ver   0x001016    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c
-                   bcdtoa   0x001176    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-              bootNopFunc   0x00007a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
-         calc_fx_modified   0x002734    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-       calc_gain_modified   0x0026aa    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                calc_leds   0x0021e4    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                calc_midi   0x00143a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-     calc_volume_modified   0x0027ca    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                   _entry   0x001000    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c
+                 _startup   0x004650    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c
+                  app_sig   0x001006    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c
+                  app_ver   0x001016    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c
+                   bcdtoa   0x001176    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+              bootNopFunc   0x00007a    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+         calc_fx_modified   0x002734    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+       calc_gain_modified   0x0026aa    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                calc_leds   0x0021e4    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                calc_midi   0x00143a    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+     calc_volume_modified   0x0027ca    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                 compare_l   0x004646    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-  controller_10msec_timer   0x002c04    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-        controller_handle   0x002dec    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-          controller_init   0x002a28    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-             copy_str_lcd   0x00133c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-             curr_amp_dec   0x003866    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-   curr_amp_gain_decrease   0x003790    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-   curr_amp_gain_increase   0x0036bc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-     curr_amp_gain_toggle   0x003696    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-             curr_amp_inc   0x003858    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-          curr_amp_toggle   0x003874    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-    curr_amp_vol_decrease   0x0035fe    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-    curr_amp_vol_increase   0x00355a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-      curr_amp_vol_toggle   0x0034b8    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-            dB_bcd_lookup   0x00423e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+  controller_10msec_timer   0x002c04    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+        controller_handle   0x002dec    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+          controller_init   0x002a28    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             copy_str_lcd   0x00133c    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             curr_amp_dec   0x003866    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+   curr_amp_gain_decrease   0x003790    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+   curr_amp_gain_increase   0x0036bc    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+     curr_amp_gain_toggle   0x003696    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             curr_amp_inc   0x003858    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+          curr_amp_toggle   0x003874    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+    curr_amp_vol_decrease   0x0035fe    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+    curr_amp_vol_increase   0x00355a    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+      curr_amp_vol_toggle   0x0034b8    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+            dB_bcd_lookup   0x00423e    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                   endloop   0x0046aa    program     static                          
-               flash_addr   0x004020    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-               flash_load   0x003db0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-              flash_store   0x003e86    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-                 fsw_poll   0x003b90    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-                      hex   0x00433e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                   hextoa   0x001084    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                     init   0x0045c0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\init.c
- interrupt_at_high_vector   0x000008    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
-  interrupt_at_low_vector   0x000018    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
-              lcd_enqueue   0x00416e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-                 lcd_init   0x004084    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-              lcd_row_get   0x003cca    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-        lcd_update_screen   0x0040c2    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-          lcd_updated_all   0x003cf8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-                  led_set   0x003c96    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-             load_program   0x002864    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               load_scene   0x0028fc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               flash_addr   0x004020    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+               flash_load   0x003db0    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+              flash_store   0x003e86    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+                 fsw_poll   0x003b90    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+                      hex   0x00433e    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                   hextoa   0x001084    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                     init   0x0045c0    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\init.c
+ interrupt_at_high_vector   0x000008    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+  interrupt_at_low_vector   0x000018    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+              lcd_enqueue   0x00416e    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+                 lcd_init   0x004084    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+              lcd_row_get   0x003cca    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+        lcd_update_screen   0x0040c2    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+          lcd_updated_all   0x003cf8    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+                  led_set   0x003c96    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+             load_program   0x002864    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               load_scene   0x0028fc    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                      loop   0x00466a    program     static                          
                      loop   0x00469c    program     static                          
                    loop_h   0x00463e    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                    loop_l   0x004648    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-                     main   0x00434e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-          midi_invalidate   0x003448    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-      midi_send_cmd1_impl   0x003d22    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-      midi_send_cmd2_impl   0x003d5e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-          midi_send_sysex   0x003cfc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-                 name_get   0x001018    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               next_scene   0x0034a0    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                next_song   0x00346c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               prev_scene   0x0034ac    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                prev_song   0x003486    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-             program_save   0x003882    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                    ritoa   0x001108    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-            scene_default   0x003332    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                send_leds   0x0013dc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-      swuart_tx_interrupt   0x0041b8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-          swuart_tx_start   0x0041a0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-      toggle_setlist_mode   0x0033ee    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               true_entry   0x000000    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
-               update_lcd   0x001b78    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                     main   0x00434e    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+          midi_invalidate   0x003448    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+      midi_send_cmd1_impl   0x003d22    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+      midi_send_cmd2_impl   0x003d5e    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+          midi_send_sysex   0x003cfc    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+                 name_get   0x001018    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               next_scene   0x0034a0    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                next_song   0x00346c    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               prev_scene   0x0034ac    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                prev_song   0x003486    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             program_save   0x003882    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                    ritoa   0x001108    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+            scene_default   0x003332    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                send_leds   0x0013dc    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+      swuart_tx_interrupt   0x0041b8    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+          swuart_tx_start   0x0041a0    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+      toggle_setlist_mode   0x0033ee    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               true_entry   0x000000    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+               update_lcd   0x001b78    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
                zero_block   0x00463e    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                    ADCON0   0x000fc2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                ADCON0bits   0x000fc2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
@@ -306,15 +306,15 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
                     ADRES   0x000fc3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                    ADRESH   0x000fc4       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                    ADRESL   0x000fc3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-                ArbFlags1   0x000018       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-                ArbFlags2   0x000019       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+                ArbFlags1   0x000018       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+                ArbFlags2   0x000019       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
                   BAUDCON   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
               BAUDCONbits   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                   BAUDCTL   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
               BAUDCTLbits   0x000fb8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                       BSR   0x000fe0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-           ButtonStateBot   0x000245       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-           ButtonStateTop   0x000244       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+           ButtonStateBot   0x000245       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+           ButtonStateTop   0x000244       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
                    CCP1AS   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                CCP1ASbits   0x000fb6       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                   CCP1CON   0x000fbd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
@@ -333,7 +333,7 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
                 CMCONbits   0x000fb4       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                    CVRCON   0x000fb5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                CVRCONbits   0x000fb5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-               CommFlags1   0x000017       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+               CommFlags1   0x000017       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
                      DDRA   0x000f92       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                  DDRAbits   0x000f92       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                      DDRB   0x000f93       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
@@ -389,13 +389,13 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
                  LATDbits   0x000f8c       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                      LATE   0x000f8d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                  LATEbits   0x000f8d       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-                LCDRamMap   0x00007f       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-           LCDUpdateStage   0x00007e       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+                LCDRamMap   0x00007f       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+           LCDUpdateStage   0x00007e       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
                    LVDCON   0x000fd2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                LVDCONbits   0x000fd2       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-             LedStatesBot   0x000243       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-             LedStatesTop   0x000242       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-               MiscFlags1   0x00001a       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+             LedStatesBot   0x000243       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+             LedStatesTop   0x000242       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+               MiscFlags1   0x00001a       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
                    OSCCON   0x000fd3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                OSCCONbits   0x000fd3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                   OSCTUNE   0x000f9b       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
@@ -438,8 +438,8 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
                      PROD   0x000ff3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                     PRODH   0x000ff4       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                     PRODL   0x000ff3       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-              ProgMemAddr   0x000200       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-            ProgmemBuffer   0x000202       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+              ProgMemAddr   0x000200       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+            ProgmemBuffer   0x000202       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
                      RCON   0x000fd0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                  RCONbits   0x000fd0       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                     RCREG   0x000fae       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
@@ -467,9 +467,9 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
                STATUSbits   0x000fd8       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                    STKPTR   0x000ffc       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                STKPTRbits   0x000ffc       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-              SystickCntr   0x000246       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-             SystickCntr2   0x000247       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-             SystickCntr3   0x000248       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+              SystickCntr   0x000246       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+             SystickCntr2   0x000247       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+             SystickCntr3   0x000248       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
                     T0CON   0x000fd5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                 T0CONbits   0x000fd5       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                     T1CON   0x000fcd       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
@@ -583,110 +583,110 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
                   __REMB1   0x000002       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                   __REMB2   0x000001       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                   __REMB3   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
-                     curr   0x000108       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                gain_mode   0x000132       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                     last   0x00011b       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                 lcd_rows   0x000100       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                     mode   0x00012f       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                mode_leds   0x000130       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                   origpr   0x0001b4       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                       pr   0x000174       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                       sl   0x000134       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                   sl_max   0x000133       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-              swuart_mode   0x00007c       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-           swuart_started   0x00007d       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-         swuart_tx_buffer   0x000060       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-      swuart_tx_bufoutptr   0x000079       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-         swuart_tx_bufptr   0x000078       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-            swuart_txbyte   0x00007a       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-            swuart_txmask   0x00007b       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-             tTimer1Value   0x000249       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-                      tap   0x00012e       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                   timers   0x0001b6       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                  __tmp_0   0x000010       data     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                  __tmp_0   0x000010       data     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+                  __tmp_0   0x000010       data     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+                  __tmp_0   0x000010       data     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
+                  __tmp_0   0x000010       data     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+                     curr   0x000108       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                gain_mode   0x000132       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                     last   0x00011b       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                 lcd_rows   0x000100       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                     mode   0x00012f       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                mode_leds   0x000130       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                   origpr   0x0001b4       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                       pr   0x000174       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                       sl   0x000134       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                   sl_max   0x000133       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+              swuart_mode   0x00007c       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+           swuart_started   0x00007d       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+         swuart_tx_buffer   0x000060       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+      swuart_tx_bufoutptr   0x000079       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+         swuart_tx_bufptr   0x000078       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+            swuart_txbyte   0x00007a       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+            swuart_txmask   0x00007b       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+             tTimer1Value   0x000249       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+                      tap   0x00012e       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                   timers   0x0001b6       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
 
 
 
                               Symbols - Sorted by Address
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-               true_entry   0x000000    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+               true_entry   0x000000    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
        ___return_lbl00000   0x000004    program     static                          
- interrupt_at_high_vector   0x000008    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+ interrupt_at_high_vector   0x000008    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
        ___return_lbl00001   0x00000c    program     static                          
-  interrupt_at_low_vector   0x000018    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+  interrupt_at_low_vector   0x000018    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
        ___return_lbl00002   0x000020    program     static                          
-        UninitializedMain   0x000022    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+        UninitializedMain   0x000022    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
          ___else_lbl00005   0x00004c    program     static                          
     DoFlashSignatureCheck   0x000050    program     static                          
            ___if_lbl00004   0x000050    program     static                          
            ___if_lbl00006   0x000074    program     static                          
        ___return_lbl00003   0x000078    program     static                          
-              bootNopFunc   0x00007a    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
-            USBBootloader   0x0000c0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\bootcode.c
-                   _entry   0x001000    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c
+              bootNopFunc   0x00007a    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+            USBBootloader   0x0000c0    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\bootcode.c
+                   _entry   0x001000    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c
        ___return_lbl00000   0x001004    program     static                          
-                  app_sig   0x001006    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c
-      InterruptVectorHigh   0x001008    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\intslct.c
+                  app_sig   0x001006    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c
+      InterruptVectorHigh   0x001008    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\intslct.c
        ___return_lbl00000   0x00100c    program     static                          
-                  app_ver   0x001016    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c
-                 name_get   0x001018    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                   hextoa   0x001084    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                    ritoa   0x001108    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                   bcdtoa   0x001176    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-             copy_str_lcd   0x00133c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                send_leds   0x0013dc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                calc_midi   0x00143a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               update_lcd   0x001b78    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                calc_leds   0x0021e4    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-       calc_gain_modified   0x0026aa    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-         calc_fx_modified   0x002734    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-     calc_volume_modified   0x0027ca    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-             load_program   0x002864    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               load_scene   0x0028fc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-          controller_init   0x002a28    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-  controller_10msec_timer   0x002c04    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-        controller_handle   0x002dec    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-            scene_default   0x003332    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-      toggle_setlist_mode   0x0033ee    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-          midi_invalidate   0x003448    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                next_song   0x00346c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                prev_song   0x003486    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               next_scene   0x0034a0    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               prev_scene   0x0034ac    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-      curr_amp_vol_toggle   0x0034b8    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-    curr_amp_vol_increase   0x00355a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-    curr_amp_vol_decrease   0x0035fe    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-     curr_amp_gain_toggle   0x003696    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-   curr_amp_gain_increase   0x0036bc    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-   curr_amp_gain_decrease   0x003790    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-             curr_amp_inc   0x003858    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-             curr_amp_dec   0x003866    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-          curr_amp_toggle   0x003874    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-             program_save   0x003882    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-     SendDataToShiftReg16   0x003940    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-              ReadButtons   0x0039b4    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-            SetDipAddress   0x003b66    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-                 fsw_poll   0x003b90    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-               UpdateLeds   0x003bce    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-                  led_set   0x003c96    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-              lcd_row_get   0x003cca    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-          lcd_updated_all   0x003cf8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-          midi_send_sysex   0x003cfc    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+                  app_ver   0x001016    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c
+                 name_get   0x001018    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                   hextoa   0x001084    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                    ritoa   0x001108    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                   bcdtoa   0x001176    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             copy_str_lcd   0x00133c    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                send_leds   0x0013dc    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                calc_midi   0x00143a    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               update_lcd   0x001b78    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                calc_leds   0x0021e4    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+       calc_gain_modified   0x0026aa    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+         calc_fx_modified   0x002734    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+     calc_volume_modified   0x0027ca    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             load_program   0x002864    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               load_scene   0x0028fc    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+          controller_init   0x002a28    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+  controller_10msec_timer   0x002c04    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+        controller_handle   0x002dec    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+            scene_default   0x003332    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+      toggle_setlist_mode   0x0033ee    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+          midi_invalidate   0x003448    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                next_song   0x00346c    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                prev_song   0x003486    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               next_scene   0x0034a0    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               prev_scene   0x0034ac    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+      curr_amp_vol_toggle   0x0034b8    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+    curr_amp_vol_increase   0x00355a    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+    curr_amp_vol_decrease   0x0035fe    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+     curr_amp_gain_toggle   0x003696    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+   curr_amp_gain_increase   0x0036bc    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+   curr_amp_gain_decrease   0x003790    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             curr_amp_inc   0x003858    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             curr_amp_dec   0x003866    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+          curr_amp_toggle   0x003874    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+             program_save   0x003882    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+     SendDataToShiftReg16   0x003940    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+              ReadButtons   0x0039b4    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+            SetDipAddress   0x003b66    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+                 fsw_poll   0x003b90    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+               UpdateLeds   0x003bce    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+                  led_set   0x003c96    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+              lcd_row_get   0x003cca    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+          lcd_updated_all   0x003cf8    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+          midi_send_sysex   0x003cfc    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
         ___while_lbl00040   0x003d08    program     static                          
         ___while_lbl00041   0x003d0c    program     static                          
        ___return_lbl00039   0x003d1a    program     static                          
-      midi_send_cmd1_impl   0x003d22    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+      midi_send_cmd1_impl   0x003d22    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
         ___while_lbl00043   0x003d2e    program     static                          
         ___while_lbl00044   0x003d32    program     static                          
         ___while_lbl00045   0x003d44    program     static                          
         ___while_lbl00046   0x003d48    program     static                          
        ___return_lbl00042   0x003d56    program     static                          
-      midi_send_cmd2_impl   0x003d5e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+      midi_send_cmd2_impl   0x003d5e    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
         ___while_lbl00048   0x003d6a    program     static                          
         ___while_lbl00049   0x003d6e    program     static                          
         ___while_lbl00050   0x003d80    program     static                          
@@ -694,17 +694,17 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
         ___while_lbl00052   0x003d96    program     static                          
         ___while_lbl00053   0x003d9a    program     static                          
        ___return_lbl00047   0x003da8    program     static                          
-               flash_load   0x003db0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-              flash_store   0x003e86    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-               flash_addr   0x004020    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-                 lcd_init   0x004084    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-        lcd_update_screen   0x0040c2    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-              lcd_enqueue   0x00416e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-          swuart_tx_start   0x0041a0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-      swuart_tx_interrupt   0x0041b8    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-            dB_bcd_lookup   0x00423e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                      hex   0x00433e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                     main   0x00434e    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               flash_load   0x003db0    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+              flash_store   0x003e86    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+               flash_addr   0x004020    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+                 lcd_init   0x004084    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+        lcd_update_screen   0x0040c2    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+              lcd_enqueue   0x00416e    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+          swuart_tx_start   0x0041a0    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+      swuart_tx_interrupt   0x0041b8    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+            dB_bcd_lookup   0x00423e    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                      hex   0x00433e    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                     main   0x00434e    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
           ___for_lbl00014   0x004396    program     static                          
            ___if_lbl00003   0x0043aa    program     static                          
            ___if_lbl00004   0x0043ba    program     static                          
@@ -722,46 +722,46 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
           ___for_lbl00001   0x00440c    program     static                          
        ___return_lbl00000   0x00440e    program     static                          
           ___for_lbl00002   0x00440e    program     static                          
-     InterruptHandlerHigh   0x004410    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\intslct.c
-               StartWrite   0x0044be    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
-             WriteProgMem   0x0044ca    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
-             EraseProgMem   0x00452c    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
-               __string_6   0x004540    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_5   0x004555    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_4   0x00456a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_3   0x00457f    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_2   0x004594    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_1   0x0045a9    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-               __string_0   0x0045be    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                     init   0x0045c0    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\init.c
-                CLEAR_RAM   0x004622    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\config.asm
-                RAMCLEAR1   0x004626    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\config.asm
+     InterruptHandlerHigh   0x004410    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\intslct.c
+               StartWrite   0x0044be    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
+             WriteProgMem   0x0044ca    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
+             EraseProgMem   0x00452c    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
+               __string_6   0x004540    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_5   0x004555    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_4   0x00456a    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_3   0x00457f    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_2   0x004594    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_1   0x0045a9    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+               __string_0   0x0045be    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                     init   0x0045c0    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\init.c
+                CLEAR_RAM   0x004622    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\config.asm
+                RAMCLEAR1   0x004626    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\config.asm
             __zero_memory   0x004630    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                zero_block   0x00463e    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                    loop_h   0x00463e    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                 compare_l   0x004646    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                    loop_l   0x004648    program     static E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
-                 _startup   0x004650    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c
+                 _startup   0x004650    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c
                  RAMCLEAR   0x004660    program     static                          
                      loop   0x00466a    program     static                          
        ___return_lbl00001   0x004670    program     static                          
-        SystemTimeRoutine   0x004672    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\systick.c
+        SystemTimeRoutine   0x004672    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\systick.c
                  FXD0808U   0x004694    program     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\fxd0808u.c
                      loop   0x00469c    program     static                          
                   endloop   0x0046aa    program     static                          
        ___return_lbl00000   0x0046ae    program     static                          
-             ROM_SAVEDATA   0x004800    program     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-               __config_0   0x300000    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_1   0x300001    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_2   0x300002    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_3   0x300005    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_4   0x300006    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_5   0x300008    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_6   0x300009    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_7   0x30000a    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_8   0x30000b    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-               __config_9   0x30000c    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
-              __config_10   0x30000d    program     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+             ROM_SAVEDATA   0x004800    program     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+               __config_0   0x300000    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_1   0x300001    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_2   0x300002    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_3   0x300005    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_4   0x300006    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_5   0x300008    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_6   0x300009    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_7   0x30000a    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_8   0x30000b    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+               __config_9   0x30000c    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
+              __config_10   0x30000d    program     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c
                   __REMB3   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                  __AARGB7   0x000000       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
                   __REMB2   0x000001       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\aarg.asm
@@ -783,46 +783,46 @@ Linker Map File - Created Tue Sep 05 20:00:15 2017
                      SIGN   0x00000e       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\cmath18.asm
                 __FPFLAGS   0x00000f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\cmath18.asm
             __FPFLAGSbits   0x00000f       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\math\cmath18.asm
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
-                  __tmp_0   0x000010       data     static C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
-               CommFlags1   0x000017       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-                ArbFlags1   0x000018       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-                ArbFlags2   0x000019       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-               MiscFlags1   0x00001a       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-         swuart_tx_buffer   0x000060       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-         swuart_tx_bufptr   0x000078       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-      swuart_tx_bufoutptr   0x000079       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-            swuart_txbyte   0x00007a       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-            swuart_txmask   0x00007b       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-              swuart_mode   0x00007c       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-           swuart_started   0x00007d       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-           LCDUpdateStage   0x00007e       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-                LCDRamMap   0x00007f       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
-                 lcd_rows   0x000100       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                     curr   0x000108       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                     last   0x00011b       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                      tap   0x00012e       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                     mode   0x00012f       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                mode_leds   0x000130       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                gain_mode   0x000132       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                   sl_max   0x000133       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                       sl   0x000134       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                       pr   0x000174       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                   origpr   0x0001b4       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-                   timers   0x0001b6       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
-              ProgMemAddr   0x000200       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-            ProgmemBuffer   0x000202       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-             LedStatesTop   0x000242       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-             LedStatesBot   0x000243       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-           ButtonStateTop   0x000244       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-           ButtonStateBot   0x000245       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-              SystickCntr   0x000246       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-             SystickCntr2   0x000247       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-             SystickCntr3   0x000248       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
-             tTimer1Value   0x000249       data     extern C:\git\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+                  __tmp_0   0x000010       data     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                  __tmp_0   0x000010       data     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+                  __tmp_0   0x000010       data     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c
+                  __tmp_0   0x000010       data     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c
+                  __tmp_0   0x000010       data     static C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c
+               CommFlags1   0x000017       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+                ArbFlags1   0x000018       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+                ArbFlags2   0x000019       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+               MiscFlags1   0x00001a       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+         swuart_tx_buffer   0x000060       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+         swuart_tx_bufptr   0x000078       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+      swuart_tx_bufoutptr   0x000079       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+            swuart_txbyte   0x00007a       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+            swuart_txmask   0x00007b       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+              swuart_mode   0x00007c       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+           swuart_started   0x00007d       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+           LCDUpdateStage   0x00007e       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+                LCDRamMap   0x00007f       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c
+                 lcd_rows   0x000100       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                     curr   0x000108       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                     last   0x00011b       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                      tap   0x00012e       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                     mode   0x00012f       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                mode_leds   0x000130       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                gain_mode   0x000132       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                   sl_max   0x000133       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                       sl   0x000134       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                       pr   0x000174       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                   origpr   0x0001b4       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+                   timers   0x0001b6       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-axe.c
+              ProgMemAddr   0x000200       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+            ProgmemBuffer   0x000202       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+             LedStatesTop   0x000242       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+             LedStatesBot   0x000243       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+           ButtonStateTop   0x000244       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+           ButtonStateBot   0x000245       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+              SystickCntr   0x000246       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+             SystickCntr2   0x000247       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+             SystickCntr3   0x000248       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
+             tTimer1Value   0x000249       data     extern C:\msys64\home\Jaymz\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c
                   SPPDATA   0x000f62       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                    SPPCFG   0x000f63       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
                SPPCFGbits   0x000f63       data     extern E:\c18v3.46\pic18-lt\cxx-framework\src\traditional\proc\p18f4550.asm
