@@ -1011,8 +1011,6 @@ sets:
 
   - date: "2017-08-05"
     venue: Duke's Ale House
-    active: true
-    print: true
     songs:
       - 'BREAK: SET 1'
       - Song 2
@@ -1056,3 +1054,36 @@ sets:
       - Dammit
 
       - Master of Puppets
+
+
+  - date: "2017-09-16"
+    venue: MT Barrels
+    active: true
+    print: true
+    songs:
+      - Bouncing off the Walls
+      - Dammit
+      - Hash Pipe
+
+      - 'BREAK: HELLO'
+
+      - My Own Worst Enemy
+      - Hey Jealousy
+      - Trippin’
+      - Brain Stew
+      - Song 2
+      - Machinehead
+      - The Satan Song
+      - Buddy Holly
+      - Holiday
+      - What I Got
+      - Low
+      - Fuel
+      - Story of a Girl
+      - Say It Ain’t So
+      - Zero
+      - Basket Case
+
+      - 'BREAK: ENCORE`
+
+      - The Middle
