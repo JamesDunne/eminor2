@@ -1,176 +1,113 @@
 [
   {
-    "date": "2017-08-05",
-    "venue": "Duke's Ale House",
+    "date": "2017-09-16",
+    "venue": "MT Barrels",
     "songs": [
       {
-        "breakText": "SET 1"
-      },
-      {
         "i": 1,
-        "title": "Song 2",
-        "starts": "Bremer"
-      },
-      {
-        "i": 2,
-        "title": "Hash Pipe",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "i": 3,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
-      },
-      {
-        "i": 4,
-        "title": "The Middle",
-        "starts": "Glaz"
-      },
-      {
-        "i": 5,
-        "title": "Monkey Wrench",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 6,
-        "title": "Lump",
-        "starts": "Bremer+Glaz"
-      },
-      {
-        "i": 7,
-        "title": "Counting Blue Cars",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 8,
         "title": "Bouncing off the Walls",
         "starts": "Jim"
       },
       {
-        "i": 9,
-        "title": "Trippin",
-        "starts": "Bremer"
-      },
-      {
-        "i": 10,
-        "title": "Brain Stew",
-        "starts": "Jim"
-      },
-      {
-        "i": 11,
-        "title": "Bullet With Butterfly Wings",
-        "starts": "Glaz"
-      },
-      {
-        "i": 12,
-        "title": "Plush",
-        "starts": "Bremer 2 ct"
-      },
-      {
-        "i": 13,
-        "title": "When I Come Around",
-        "starts": "Jim"
-      },
-      {
-        "i": 14,
-        "title": "Enter Sandman",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "MG Mini Set"
-      },
-      {
-        "i": 15,
-        "title": "Drive",
-        "starts": "Jim"
-      },
-      {
-        "i": 16,
-        "title": "Satan Song",
-        "starts": "Bremer"
-      },
-      {
-        "i": 17,
-        "title": "Ketchup",
-        "starts": ""
-      },
-      {
-        "i": 18,
-        "title": "Angel Song",
-        "starts": ""
-      },
-      {
-        "breakText": "Set 2"
-      },
-      {
-        "i": 19,
-        "title": "Holiday",
-        "starts": "Jim"
-      },
-      {
-        "i": 20,
-        "title": "Zero",
-        "starts": "Jim"
-      },
-      {
-        "i": 21,
-        "title": "Beautiful Disaster",
-        "starts": "Jim"
-      },
-      {
-        "i": 22,
-        "title": "Undone",
-        "starts": "Bremer"
-      },
-      {
-        "i": 23,
-        "title": "Fuel",
-        "starts": "Glaz"
-      },
-      {
-        "i": 24,
-        "title": "December",
-        "starts": "Jim"
-      },
-      {
-        "i": 25,
-        "title": "Story of a Girl",
-        "starts": "Glaz"
-      },
-      {
-        "i": 26,
-        "title": "Everything Zen",
-        "starts": "Glaz"
-      },
-      {
-        "i": 27,
-        "title": "Low",
-        "starts": "Bremer"
-      },
-      {
-        "i": 28,
-        "title": "Machinehead",
-        "starts": "Jim"
-      },
-      {
-        "i": 29,
-        "title": "Basketcase",
-        "starts": "Glaz"
-      },
-      {
-        "i": 30,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
-      },
-      {
-        "i": 31,
+        "i": 2,
         "title": "Dammit",
         "starts": "Jim"
       },
       {
-        "i": 32,
-        "title": "Master of Puppets",
+        "i": 3,
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "breakText": "HELLO"
+      },
+      {
+        "i": 4,
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
+      },
+      {
+        "i": 5,
+        "title": "Hey Jealousy",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 6,
+        "title": "Trippin",
         "starts": "Bremer"
+      },
+      {
+        "i": 7,
+        "title": "Brain Stew",
+        "starts": "Jim"
+      },
+      {
+        "i": 8,
+        "title": "Song 2",
+        "starts": "Bremer"
+      },
+      {
+        "i": 9,
+        "title": "Machinehead",
+        "starts": "Jim"
+      },
+      {
+        "i": 10,
+        "title": "Satan Song",
+        "starts": "Bremer"
+      },
+      {
+        "i": 11,
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
+      },
+      {
+        "i": 12,
+        "title": "Holiday",
+        "starts": "Jim"
+      },
+      {
+        "i": 13,
+        "title": "What I Got",
+        "starts": "Bremer"
+      },
+      {
+        "i": 14,
+        "title": "Low",
+        "starts": "Bremer"
+      },
+      {
+        "i": 15,
+        "title": "Fuel",
+        "starts": "Glaz"
+      },
+      {
+        "i": 16,
+        "title": "Story of a Girl",
+        "starts": "Glaz"
+      },
+      {
+        "i": 17,
+        "title": "Say It Ain’t So",
+        "starts": ""
+      },
+      {
+        "i": 18,
+        "title": "Zero",
+        "starts": "Jim"
+      },
+      {
+        "i": 19,
+        "title": "Basketcase",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "ENCORE"
+      },
+      {
+        "i": 20,
+        "title": "The Middle",
+        "starts": "Glaz"
       }
     ]
   }
