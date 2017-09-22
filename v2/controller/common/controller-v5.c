@@ -79,11 +79,11 @@ FX controls:
 |------------------------------------------------------------|    
 |     *      *      *      *      *      *      *      *     |          /--------------------\
 |   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
-|         SELECT1 SELECT2                                    |          |Sng 62/62  Scn  2/ 3|
+|          SELECT SELECT                                     |          |Sng 62/62  Scn  2/ 3|
 |                                                            |    LCD:  |A g=58 v= -inf P12CD|
 |     *      *      *      *      *      *      *      *     |          |A g=5E v=  6.0 ---CD|
 |   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    MODE  SC_NXT  |          \--------------------/
-|         SELECT1 SELECT2                      SAVE  SC_ONE  |
+|          SELECT SELECT                       SAVE  SC_ONE  |
 |------------------------------------------------------------|    
 
 Press AMP to switch row to AMP mode
@@ -98,7 +98,7 @@ SELECT controls (top):
 |                                                            |    LCD:  |Custom1:   Filter   |
 |     *      *      *      *      *      *      *      *     |          | F=0 F-- F++ OK CNC |
 |   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    MODE  SC_NXT  |          \--------------------/
-|         SELECT1 SELECT2                      SAVE  SC_ONE  |
+|          SELECT SELECT                       SAVE  SC_ONE  |
 |------------------------------------------------------------|
 
 */
