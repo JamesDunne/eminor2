@@ -36,17 +36,43 @@
 AMP controls:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |          /--------------------\
-|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX    PR_PRV PR_NXT  |          |Beautiful_Disaster_*|
-|  ACOUSTC VOL=0  VOL=6  GAIN=D        RESET  PR_ONE         |          |Sng 62/62  Scn  1/10|
+|  CLN|DRV VOL=0  VOL=6  d=GAIN GAIN=d  FX    PR_PRV PR_NXT  |          |Beautiful_Disaster_*|
+|  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET  PR_ONE         |          |Sng 62/62  Scn  1/10|
 |                                                            |    LCD:  |C g=58 v=-99.9 P12CD|
 |     *      *      *      *      *      *      *      *     |          |D g=5E v=  0.0 -1---|
-|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX     TAP   SC_NXT  |          \--------------------/
-|  ACOUSTC VOL=0  VOL=6  GAIN=D        RESET   MODE  SC_ONE  |
+|  CLN|DRV VOL=0  VOL=6  d=GAIN GAIN=d  FX     TAP   SC_NXT  |          \--------------------/
+|  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET   MODE  SC_ONE  |
 |------------------------------------------------------------|
 
-Press MODE   to switch between set-list order and program # order
+Press CLN|DRV to toggle clean vs overdrive mode (AMP -> X, CAB -> X, gain = 0 or n)
+Hold  ACOUSTC to switch to acoustic emulation   (AMP -> Y, CAB -> Y, gain = 0?)
 
-Press FX to switch row to FX mode
+Press VOL=0   to set volume to 0dB
+Hold  VOL--   to decrease volume slowly
+
+Press VOL=6   to set volume to +6dB
+Hold  VOL++   to increase volume slowly
+
+Press d=GAIN  to recall default1 or default2 gain
+Hold  GAIN--  to decrease gain
+
+Press GAIN=d  to store gain as default1 or default2
+Hold  GAIN++  to increase gain
+
+Press FX      to switch row to FX mode
+
+Hold  RESET   to resend MIDI state for amp
+
+Press TAP     to send tap-tempo MIDI CC alternating 0x00, 0x7F
+Hold  MODE    to switch between set-list order and program # order
+
+Press SC_NXT  to advance to next scene, move to next song scene 1 if at end
+Hold  SC_ONE  to reset scene to 1 on current song
+
+Press PR_PRV  to select previous song or program depending on MODE
+Hold  PR_ONE  to select first song in setlist or program #0 depending on MODE
+
+Press PR_NXT  to select next song
 
 FX controls:
 |------------------------------------------------------------|    
