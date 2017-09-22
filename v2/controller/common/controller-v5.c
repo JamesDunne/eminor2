@@ -920,6 +920,251 @@ void load_scene(void) {
     calc_gain_modified();
 }
 
+
+void scene_default(void) {
+    DEBUG_LOG1("default scene %d", curr.sc_idx + 1);
+    pr.scene[curr.sc_idx].amp[0].gain = 0;
+    pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
+    pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
+    pr.scene[curr.sc_idx].amp[1].gain = 0;
+    pr.scene[curr.sc_idx].amp[1].fx = fxm_dirty;
+    pr.scene[curr.sc_idx].amp[1].volume = volume_0dB;
+}
+
+static void toggle_setlist_mode() {
+    DEBUG_LOG0("change setlist mode");
+    curr.setlist_mode ^= (u8)1;
+    if (curr.setlist_mode == 1) {
+        // Remap sl_idx by looking up program in setlist otherwise default to first setlist entry:
+        u8 i;
+        sl_max = sl.count - (u8)1;
+        curr.sl_idx = 0;
+        for (i = 0; i < sl.count; i++) {
+            if (sl.entries[i].program == curr.pr_idx) {
+                curr.sl_idx = i;
+                break;
+            }
+        }
+    } else {
+        // Lookup program number from setlist:
+        sl_max = 127;
+        curr.pr_idx = sl.entries[curr.sl_idx].program;
+    }
+}
+
+static void midi_invalidate() {
+    // Invalidate all current MIDI state so it gets re-sent at end of loop:
+    DEBUG_LOG0("invalidate MIDI state");
+    last.midi_program = ~curr.midi_program;
+    last.tempo = ~curr.tempo;
+    last.amp[0].gain = ~curr.amp[0].gain;
+    last.amp[0].fx = ~curr.amp[0].fx;
+    last.amp[0].volume = ~curr.amp[0].volume;
+    last.amp[1].gain = ~curr.amp[1].gain;
+    last.amp[1].fx = ~curr.amp[1].fx;
+    last.amp[1].volume = ~curr.amp[1].volume;
+}
+
+static void next_song() {
+    if (curr.setlist_mode == 0) {
+        if (curr.pr_idx < 127) {
+            DEBUG_LOG0("next program");
+            curr.pr_idx++;
+        }
+    } else {
+        if (curr.sl_idx < sl_max) {
+            DEBUG_LOG0("next song");
+            curr.sl_idx++;
+        }
+    }
+}
+
+static void prev_song() {
+    if (curr.setlist_mode == 0) {
+        if (curr.pr_idx > 0) {
+            DEBUG_LOG0("prev program");
+            curr.pr_idx--;
+        }
+    } else {
+        if (curr.sl_idx > 0) {
+            DEBUG_LOG0("prev song");
+            curr.sl_idx--;
+        }
+    }
+}
+
+static void next_scene() {
+    if (curr.sc_idx < scene_count_max - 1) {
+        DEBUG_LOG0("next scene");
+        curr.sc_idx++;
+    }
+}
+
+static void prev_scene() {
+    if (curr.sc_idx > 0) {
+        DEBUG_LOG0("prev scene");
+        curr.sc_idx--;
+    }
+}
+
+#define min(a,b) (a < b ? a : b)
+#define max(a,b) (a > b ? a : b)
+
+static void curr_amp_vol_toggle() {
+    // Toggle between 0dB and +6dB:
+    if (curr.selected_both) {
+        u8 volume = max((curr.amp[0].volume), (curr.amp[1].volume));
+        if (volume == volume_0dB) {
+            curr.amp[0].volume = volume_6dB;
+            curr.amp[1].volume = volume_6dB;
+        } else {
+            curr.amp[0].volume = volume_0dB;
+            curr.amp[1].volume = volume_0dB;
+        }
+    } else {
+        if (curr.amp[curr.selected_amp].volume == volume_0dB) {
+            curr.amp[curr.selected_amp].volume = volume_6dB;
+        } else {
+            curr.amp[curr.selected_amp].volume = volume_0dB;
+        }
+    }
+    calc_volume_modified();
+}
+
+static void curr_amp_vol_increase() {
+    if (curr.selected_both) {
+        u8 volume = max((curr.amp[0].volume), (curr.amp[1].volume));
+        if (volume < (u8)127) {
+            volume++;
+            curr.amp[0].volume = volume;
+            curr.amp[1].volume = volume;
+            calc_volume_modified();
+        }
+    } else {
+        u8 volume = (curr.amp[curr.selected_amp].volume);
+        if (volume < (u8)127) {
+            volume++;
+            curr.amp[curr.selected_amp].volume = volume;
+            calc_volume_modified();
+        }
+    }
+}
+
+static void curr_amp_vol_decrease() {
+    if (curr.selected_both) {
+        u8 volume = min((curr.amp[0].volume), (curr.amp[1].volume));
+        if (volume > (u8)0) {
+            volume--;
+            curr.amp[0].volume = volume;
+            curr.amp[1].volume = volume;
+            calc_volume_modified();
+        }
+    } else {
+        u8 volume = (curr.amp[curr.selected_amp].volume);
+        if (volume > (u8)0) {
+            volume--;
+            curr.amp[curr.selected_amp].volume = volume;
+            calc_volume_modified();
+        }
+    }
+}
+
+static void curr_amp_gain_toggle() {
+    // Reset gain to default_gain:
+    if (curr.selected_both) {
+        curr.amp[0].gain = 0;
+        curr.amp[1].gain = 0;
+    } else {
+        curr.amp[curr.selected_amp].gain = 0;
+    }
+    calc_gain_modified();
+}
+
+static void curr_amp_gain_increase() {
+    if (curr.selected_both) {
+        u8 gain = max(or_default(curr.amp[0].gain), or_default(curr.amp[1].gain));
+        if (gain < (u8)127) {
+            gain++;
+            curr.amp[0].gain = gain;
+            curr.amp[1].gain = gain;
+            calc_gain_modified();
+        }
+    } else {
+        u8 gain = or_default(curr.amp[curr.selected_amp].gain);
+        if (gain < (u8)127) {
+            gain++;
+            curr.amp[curr.selected_amp].gain = gain;
+            calc_gain_modified();
+        }
+    }
+}
+
+static void curr_amp_gain_decrease() {
+    if (curr.selected_both) {
+        u8 gain = min(or_default(curr.amp[0].gain), or_default(curr.amp[1].gain));
+        if (gain > (u8)1) {
+            gain--;
+            curr.amp[0].gain = gain;
+            curr.amp[1].gain = gain;
+            calc_gain_modified();
+        }
+    } else {
+        u8 gain = or_default(curr.amp[curr.selected_amp].gain);
+        if (gain > (u8)1) {
+            gain--;
+            curr.amp[curr.selected_amp].gain = gain;
+            calc_gain_modified();
+        }
+    }
+}
+
+static void curr_amp_inc() {
+    if (gain_mode == (u8)0) {
+        curr_amp_gain_increase();
+    } else {
+        curr_amp_vol_increase();
+    }
+}
+
+static void curr_amp_dec() {
+    if (gain_mode == (u8)0) {
+        curr_amp_gain_decrease();
+    } else {
+        curr_amp_vol_decrease();
+    }
+}
+
+static void curr_amp_toggle() {
+    if (gain_mode == (u8)0) {
+        curr_amp_gain_toggle();
+    } else {
+        curr_amp_vol_toggle();
+    }
+}
+
+static void program_save() {
+    // Load program:
+    u8 pr_num;
+    u16 addr;
+
+    if (curr.setlist_mode == 1) {
+        pr_num = sl.entries[curr.sl_idx].program;
+    } else {
+        pr_num = curr.pr_idx;
+    }
+
+    // Update current scene in program from current state:
+    pr.scene[curr.sc_idx].amp[0] = curr.amp[0];
+    pr.scene[curr.sc_idx].amp[1] = curr.amp[1];
+
+    // Save current program back to flash:
+    addr = (u16)(pr_num * sizeof(struct program));
+    DEBUG_LOG2("save program %d at addr 0x%04x", pr_num + 1, addr);
+    flash_store(addr, sizeof(struct program), (u8 *)&pr);
+
+    curr.modified = 0;
+}
+
 // set the controller to an initial state
 void controller_init(void) {
     u8 i;
@@ -1203,250 +1448,6 @@ void controller_handle(void) {
 
     // Record the previous state:
     last = curr;
-}
-
-void scene_default(void) {
-    DEBUG_LOG1("default scene %d", curr.sc_idx + 1);
-    pr.scene[curr.sc_idx].amp[0].gain = 0;
-    pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
-    pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
-    pr.scene[curr.sc_idx].amp[1].gain = 0;
-    pr.scene[curr.sc_idx].amp[1].fx = fxm_dirty;
-    pr.scene[curr.sc_idx].amp[1].volume = volume_0dB;
-}
-
-static void toggle_setlist_mode() {
-    DEBUG_LOG0("change setlist mode");
-    curr.setlist_mode ^= (u8)1;
-    if (curr.setlist_mode == 1) {
-        // Remap sl_idx by looking up program in setlist otherwise default to first setlist entry:
-        u8 i;
-        sl_max = sl.count - (u8)1;
-        curr.sl_idx = 0;
-        for (i = 0; i < sl.count; i++) {
-            if (sl.entries[i].program == curr.pr_idx) {
-                curr.sl_idx = i;
-                break;
-            }
-        }
-    } else {
-        // Lookup program number from setlist:
-        sl_max = 127;
-        curr.pr_idx = sl.entries[curr.sl_idx].program;
-    }
-}
-
-static void midi_invalidate() {
-    // Invalidate all current MIDI state so it gets re-sent at end of loop:
-    DEBUG_LOG0("invalidate MIDI state");
-    last.midi_program  = ~curr.midi_program;
-    last.tempo         = ~curr.tempo;
-    last.amp[0].gain   = ~curr.amp[0].gain;
-    last.amp[0].fx     = ~curr.amp[0].fx;
-    last.amp[0].volume = ~curr.amp[0].volume;
-    last.amp[1].gain   = ~curr.amp[1].gain;
-    last.amp[1].fx     = ~curr.amp[1].fx;
-    last.amp[1].volume = ~curr.amp[1].volume;
-}
-
-static void next_song() {
-    if (curr.setlist_mode == 0) {
-        if (curr.pr_idx < 127) {
-            DEBUG_LOG0("next program");
-            curr.pr_idx++;
-        }
-    } else {
-        if (curr.sl_idx < sl_max) {
-            DEBUG_LOG0("next song");
-            curr.sl_idx++;
-        }
-    }
-}
-
-static void prev_song() {
-    if (curr.setlist_mode == 0) {
-        if (curr.pr_idx > 0) {
-            DEBUG_LOG0("prev program");
-            curr.pr_idx--;
-        }
-    } else {
-        if (curr.sl_idx > 0) {
-            DEBUG_LOG0("prev song");
-            curr.sl_idx--;
-        }
-    }
-}
-
-static void next_scene() {
-    if (curr.sc_idx < scene_count_max - 1) {
-        DEBUG_LOG0("next scene");
-        curr.sc_idx++;
-    }
-}
-
-static void prev_scene() {
-    if (curr.sc_idx > 0) {
-        DEBUG_LOG0("prev scene");
-        curr.sc_idx--;
-    }
-}
-
-#define min(a,b) (a < b ? a : b)
-#define max(a,b) (a > b ? a : b)
-
-static void curr_amp_vol_toggle() {
-    // Toggle between 0dB and +6dB:
-    if (curr.selected_both) {
-        u8 volume = max((curr.amp[0].volume), (curr.amp[1].volume));
-        if (volume == volume_0dB) {
-            curr.amp[0].volume = volume_6dB;
-            curr.amp[1].volume = volume_6dB;
-        } else {
-            curr.amp[0].volume = volume_0dB;
-            curr.amp[1].volume = volume_0dB;
-        }
-    } else {
-        if (curr.amp[curr.selected_amp].volume == volume_0dB) {
-            curr.amp[curr.selected_amp].volume = volume_6dB;
-        } else {
-            curr.amp[curr.selected_amp].volume = volume_0dB;
-        }
-    }
-    calc_volume_modified();
-}
-
-static void curr_amp_vol_increase() {
-    if (curr.selected_both) {
-        u8 volume = max((curr.amp[0].volume), (curr.amp[1].volume));
-        if (volume < (u8)127) {
-            volume++;
-            curr.amp[0].volume = volume;
-            curr.amp[1].volume = volume;
-            calc_volume_modified();
-        }
-    } else {
-        u8 volume = (curr.amp[curr.selected_amp].volume);
-        if (volume < (u8)127) {
-            volume++;
-            curr.amp[curr.selected_amp].volume = volume;
-            calc_volume_modified();
-        }
-    }
-}
-
-static void curr_amp_vol_decrease() {
-    if (curr.selected_both) {
-        u8 volume = min((curr.amp[0].volume), (curr.amp[1].volume));
-        if (volume > (u8)0) {
-            volume--;
-            curr.amp[0].volume = volume;
-            curr.amp[1].volume = volume;
-            calc_volume_modified();
-        }
-    } else {
-        u8 volume = (curr.amp[curr.selected_amp].volume);
-        if (volume > (u8)0) {
-            volume--;
-            curr.amp[curr.selected_amp].volume = volume;
-            calc_volume_modified();
-        }
-    }
-}
-
-static void curr_amp_gain_toggle() {
-    // Reset gain to default_gain:
-    if (curr.selected_both) {
-        curr.amp[0].gain = 0;
-        curr.amp[1].gain = 0;
-    } else {
-        curr.amp[curr.selected_amp].gain = 0;
-    }
-    calc_gain_modified();
-}
-
-static void curr_amp_gain_increase() {
-    if (curr.selected_both) {
-        u8 gain = max(or_default(curr.amp[0].gain), or_default(curr.amp[1].gain));
-        if (gain < (u8)127) {
-            gain++;
-            curr.amp[0].gain = gain;
-            curr.amp[1].gain = gain;
-            calc_gain_modified();
-        }
-    } else {
-        u8 gain = or_default(curr.amp[curr.selected_amp].gain);
-        if (gain < (u8)127) {
-            gain++;
-            curr.amp[curr.selected_amp].gain = gain;
-            calc_gain_modified();
-        }
-    }
-}
-
-static void curr_amp_gain_decrease() {
-    if (curr.selected_both) {
-        u8 gain = min(or_default(curr.amp[0].gain), or_default(curr.amp[1].gain));
-        if (gain > (u8)1) {
-            gain--;
-            curr.amp[0].gain = gain;
-            curr.amp[1].gain = gain;
-            calc_gain_modified();
-        }
-    } else {
-        u8 gain = or_default(curr.amp[curr.selected_amp].gain);
-        if (gain > (u8)1) {
-            gain--;
-            curr.amp[curr.selected_amp].gain = gain;
-            calc_gain_modified();
-        }
-    }
-}
-
-static void curr_amp_inc() {
-    if (gain_mode == (u8)0) {
-        curr_amp_gain_increase();
-    } else {
-        curr_amp_vol_increase();
-    }
-}
-
-static void curr_amp_dec() {
-    if (gain_mode == (u8)0) {
-        curr_amp_gain_decrease();
-    } else {
-        curr_amp_vol_decrease();
-    }
-}
-
-static void curr_amp_toggle() {
-    if (gain_mode == (u8)0) {
-        curr_amp_gain_toggle();
-    } else {
-        curr_amp_vol_toggle();
-    }
-}
-
-static void program_save() {
-    // Load program:
-    u8 pr_num;
-    u16 addr;
-
-    if (curr.setlist_mode == 1) {
-        pr_num = sl.entries[curr.sl_idx].program;
-    } else {
-        pr_num = curr.pr_idx;
-    }
-
-    // Update current scene in program from current state:
-    pr.scene[curr.sc_idx].amp[0] = curr.amp[0];
-    pr.scene[curr.sc_idx].amp[1] = curr.amp[1];
-
-    // Save current program back to flash:
-    addr = (u16)(pr_num * sizeof(struct program));
-    DEBUG_LOG2("save program %d at addr 0x%04x", pr_num+1, addr);
-    flash_store(addr, sizeof(struct program), (u8 *)&pr);
-
-    curr.modified = 0;
 }
 
 #else
