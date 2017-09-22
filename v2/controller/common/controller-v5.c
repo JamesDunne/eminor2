@@ -56,10 +56,10 @@ Hold  VOL--   to decrease volume slowly
 Press VOL=6   to set volume to +6dB
 Hold  VOL++   to increase volume slowly
 
-Press d=GAIN  to recall default1 or default2 gain
+Press d=GAIN  to store default1 or default2 gain
 Hold  GAIN--  to decrease gain
 
-Press GAIN=d  to store gain as default1 or default2
+Press GAIN=d  to recall default1 or default2 gain
 Hold  GAIN++  to increase gain
 
 Press FX      to switch row to FX mode
@@ -79,11 +79,11 @@ FX controls:
 |------------------------------------------------------------|    
 |     *      *      *      *      *      *      *      *     |          /--------------------\
 |   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
-|         SELECT1 SELECT2                     PR_ONE         |          |Sng 62/62  Scn  2/ 3|
+|         SELECT1 SELECT2                                    |          |Sng 62/62  Scn  2/ 3|
 |                                                            |    LCD:  |A g=58 v= -inf P12CD|
 |     *      *      *      *      *      *      *      *     |          |A g=5E v=  6.0 ---CD|
-|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    TAP   SC_NXT  |          \--------------------/
-|         SELECT1 SELECT2                      MODE  SC_ONE  |
+|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    MODE  SC_NXT  |          \--------------------/
+|         SELECT1 SELECT2                      SAVE  SC_ONE  |
 |------------------------------------------------------------|    
 
 Press AMP to switch row to AMP mode
@@ -94,11 +94,11 @@ SELECT controls (top):
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |          /--------------------\
 |    F=0    F--    F++    OK    CANCEL  AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
-|                                             PR_ONE         |          |Sng 62/62  Scn  2/ 3|
+|                                                            |          |Sng 62/62  Scn  2/ 3|
 |                                                            |    LCD:  |Custom1:   Filter   |
 |     *      *      *      *      *      *      *      *     |          | F=0 F-- F++ OK CNC |
-|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    TAP   SC_NXT  |          \--------------------/
-|         SELECT1 SELECT2                      MODE  SC_ONE  |
+|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    MODE  SC_NXT  |          \--------------------/
+|         SELECT1 SELECT2                      SAVE  SC_ONE  |
 |------------------------------------------------------------|
 
 */
