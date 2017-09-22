@@ -18,7 +18,7 @@
     <ClCompile Include="eminorv2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\controller-axe.c">
+    <ClCompile Include="..\common\controller-v5.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

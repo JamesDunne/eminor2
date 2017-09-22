@@ -1116,8 +1116,20 @@ u8 flash_bank[3][4096] = {
 #include "../PIC/flash_v4_bank2.h"
 	}
 };
+#elif HW_VERSION == 5
+u8 flash_bank[3][4096] = {
+    {
+#include "../PIC/flash_v5_bank0.h"
+    },
+    {
+#include "../PIC/flash_v5_bank1.h"
+    },
+    {
+#include "../PIC/flash_v5_bank2.h"
+    }
+};
 #else
-#error HW_ VERSION must be either "1" or "2"!
+#error HW_ VERSION must be set!
 #endif
 
 // Load `count` bytes from flash memory at address `addr` (0-based where 0 is first available byte of available flash memory) into `data`:
