@@ -78,28 +78,35 @@ Hold  SC_ONE  to reset scene to 1 on current song
 FX controls:
 |------------------------------------------------------------|    
 |     *      *      *      *      *      *      *      *     |          /--------------------\
-|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
+|   PITCH   FX1    FX2   CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
 |          SELECT SELECT                                     |          |Sng 62/62  Scn  2/ 3|
-|                                                            |    LCD:  |A g=58 v= -inf P12CD|
+|                                                            |    LCD:  | PIT FX1 FX2 CHO DLY|
 |     *      *      *      *      *      *      *      *     |          |A g=5E v=  6.0 ---CD|
-|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    MODE  SC_NXT  |          \--------------------/
-|          SELECT SELECT                       SAVE  SC_ONE  |
-|------------------------------------------------------------|    
+|  CLN|DRV VOL=0  VOL=6  d=GAIN GAIN=d  FX     MODE  SC_NXT  |          \--------------------/
+|  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET   SAVE  SC_ONE  |
+|------------------------------------------------------------|
 
 Press AMP to switch row to AMP mode
 
-Hold SELECT button to select effect MIDI CC
+Hold SELECT button to select effect MIDI CC for FX1 or FX2
 
 SELECT controls (top):
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |          /--------------------\
 |    F=0    F--    F++    OK    CANCEL  AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
 |                                                            |          |Sng 62/62  Scn  2/ 3|
-|                                                            |    LCD:  |Custom1:   Filter   |
-|     *      *      *      *      *      *      *      *     |          | F=0 F-- F++ OK CNC |
-|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    MODE  SC_NXT  |          \--------------------/
-|          SELECT SELECT                       SAVE  SC_ONE  |
+|                                                            |    LCD:  | F=0 F-- F++ OK  CNC|
+|     *      *      *      *      *      *      *      *     |          |FX1: Filter         |
+|  CLN|DRV VOL=0  VOL=6  d=GAIN GAIN=d  FX     MODE  SC_NXT  |          \--------------------/
+|  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET   SAVE  SC_ONE  |
 |------------------------------------------------------------|
+
+Press F=0    to reset back to top of FX list
+Press F--    to select previous FX (loop to end)
+Press F++    to select next FX (loop to start)
+Press OK     to apply current FX selection (also disables previous FX if enabled)
+Press CANCEL to cancel and revert to existing FX
+Press AMP    to cancel and revert to existing FX and then switch to AMP mode for the row
 
 */
 
