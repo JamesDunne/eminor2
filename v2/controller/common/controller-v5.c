@@ -10,9 +10,11 @@
     2017-09-21
 
     Axe-FX:
-    * Split stereo cab block to two mono blocks
-    * Try to remove post-cab PEQ
+    * Split stereo cab block into two mono blocks; CAB1 pan L, CAB2 pan R
+    * Try to remove pre-cab PEQ; merge curve with post-cab PEQ
+    * Post-cab PEQ handles stereo out of CABs
     * Amp X/Y for electric/acoustic (acoustic amp only wants clean volume boost)
+    * Cab X/Y for electric/acoustic
 
     Controller:
     Amp control row:
@@ -31,7 +33,8 @@
     * 5 delay
     * 6 switch to amp controls for row
 
-    TODO: save program
+TODO: adjust MIDI program # per song
+TODO: adjust tempo per song
 
 AMP controls:
 |------------------------------------------------------------|
@@ -92,7 +95,7 @@ SELECT controls (top):
 |     *      *      *      *      *      *      *      *     |          /--------------------\
 |    F=0    F--    F++    OK    CANCEL  AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
 |                                             PR_ONE         |          |Sng 62/62  Scn  2/ 3|
-|                                                            |    LCD:  |Custom1:   Filter1  |
+|                                                            |    LCD:  |Custom1:   Filter   |
 |     *      *      *      *      *      *      *      *     |          | F=0 F-- F++ OK CNC |
 |   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    TAP   SC_NXT  |          \--------------------/
 |         SELECT1 SELECT2                      MODE  SC_ONE  |
