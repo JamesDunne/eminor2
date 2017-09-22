@@ -37,11 +37,11 @@ AMP controls:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |          /--------------------\
 |  CLN|DRV VOL=0  VOL=6  d=GAIN GAIN=d  FX    PR_PRV PR_NXT  |          |Beautiful_Disaster_*|
-|  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET  PR_ONE         |          |Sng 62/62  Scn  1/10|
+|  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET                 |          |Sng 62/62  Scn  1/10|
 |                                                            |    LCD:  |C g=58 v=-99.9 P12CD|
 |     *      *      *      *      *      *      *      *     |          |D g=5E v=  0.0 -1---|
-|  CLN|DRV VOL=0  VOL=6  d=GAIN GAIN=d  FX     TAP   SC_NXT  |          \--------------------/
-|  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET   MODE  SC_ONE  |
+|  CLN|DRV VOL=0  VOL=6  d=GAIN GAIN=d  FX     MODE  SC_NXT  |          \--------------------/
+|  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET   SAVE  SC_ONE  |
 |------------------------------------------------------------|
 
 Press CLN|DRV to toggle clean vs overdrive mode (AMP -> X, CAB -> X, gain = 0 or n)
@@ -63,16 +63,14 @@ Press FX      to switch row to FX mode
 
 Hold  RESET   to resend MIDI state for amp
 
-Press TAP     to send tap-tempo MIDI CC alternating 0x00, 0x7F
-Hold  MODE    to switch between set-list order and program # order
+Press PR_PRV  to select previous song or program depending on MODE
+Press PR_NXT  to select next song or program depending on MODE
+
+Press MODE    to switch between set-list order and program # order
+Hold  SAVE    to save program
 
 Press SC_NXT  to advance to next scene, move to next song scene 1 if at end
 Hold  SC_ONE  to reset scene to 1 on current song
-
-Press PR_PRV  to select previous song or program depending on MODE
-Hold  PR_ONE  to select first song in setlist or program #0 depending on MODE
-
-Press PR_NXT  to select next song
 
 FX controls:
 |------------------------------------------------------------|    
@@ -92,7 +90,7 @@ Hold SELECT button to select effect MIDI CC
 SELECT controls (top):
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |          /--------------------\
-|    F=0    F--    F++     OK   CANCEL  AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
+|    F=0    F--    F++    OK    CANCEL  AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
 |                                             PR_ONE         |          |Sng 62/62  Scn  2/ 3|
 |                                                            |    LCD:  |Custom1:   Filter1  |
 |     *      *      *      *      *      *      *      *     |          | F=0 F-- F++ OK CNC |
