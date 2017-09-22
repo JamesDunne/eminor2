@@ -36,12 +36,12 @@
 AMP controls:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |          /--------------------\
-|   DIRTY  VOL--  VOL++  GAIN-- GAIN++  FX    PR_PRV PR_NXT  |          |Beautiful Disaster  |
-|   ACOU   VOL=0 VOL=6   GAIN=T        RESET  PR_ONE         |          |Song 1/62   sc  1/10|
-|                                                            |    LCD:  |Cln g=58 -99.9 P12CD|
-|     *      *      *      *      *      *      *      *     |          |Drv g=5E   6.0 ----D|
-|   DIRTY  VOL--  VOL++  GAIN-- GAIN++  FX     TAP   SC_NXT  |          \--------------------/
-|   ACOU   VOL=0  VOL=6                RESET   MODE  SC_ONE  |
+|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX    PR_PRV PR_NXT  |          |Beautiful_Disaster_*|
+|  ACOUSTC VOL=0  VOL=6  GAIN=D        RESET  PR_ONE         |          |Sng 62/62  Scn  1/10|
+|                                                            |    LCD:  |C g=58 v=-99.9 P12CD|
+|     *      *      *      *      *      *      *      *     |          |D g=5E v=  0.0 -1---|
+|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX     TAP   SC_NXT  |          \--------------------/
+|  ACOUSTC VOL=0  VOL=6  GAIN=D        RESET   MODE  SC_ONE  |
 |------------------------------------------------------------|
 
 Press MODE   to switch between set-list order and program # order
@@ -51,15 +51,28 @@ Press FX to switch row to FX mode
 FX controls:
 |------------------------------------------------------------|    
 |     *      *      *      *      *      *      *      *     |          /--------------------\
-|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |Beautiful Disaster  |
-|                                             PR_ONE         |          |Song 1/62   sc  1/10|
-|                                                            |    LCD:  |Cln g=58 -99.9 P12CD|
-|     *      *      *      *      *      *      *      *     |          |Drv g=5E   6.0 ----D|
+|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
+|         SELECT1 SELECT2                     PR_ONE         |          |Sng 62/62  Scn  2/ 3|
+|                                                            |    LCD:  |A g=58 v= -inf P12CD|
+|     *      *      *      *      *      *      *      *     |          |A g=5E v=  6.0 ---CD|
 |   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    TAP   SC_NXT  |          \--------------------/
-|                                              MODE  SC_ONE  |    
+|         SELECT1 SELECT2                      MODE  SC_ONE  |
 |------------------------------------------------------------|    
 
 Press AMP to switch row to AMP mode
+
+Hold SELECT button to select effect MIDI CC
+
+SELECT controls (top):
+|------------------------------------------------------------|
+|     *      *      *      *      *      *      *      *     |          /--------------------\
+|    F=0    F--    F++     OK   CANCEL  AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
+|                                             PR_ONE         |          |Sng 62/62  Scn  2/ 3|
+|                                                            |    LCD:  |Custom1:   Filter1  |
+|     *      *      *      *      *      *      *      *     |          | F=0 F-- F++ OK CNC |
+|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    TAP   SC_NXT  |          \--------------------/
+|         SELECT1 SELECT2                      MODE  SC_ONE  |
+|------------------------------------------------------------|
 
 */
 
