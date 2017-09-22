@@ -31,44 +31,36 @@
     * 5 delay
     * 6 switch to amp controls for row
 
-    TODO : tap tempo, switch program/setlist mode, save program
+    TODO: save program
 
-LIVE:
+AMP controls:
 |------------------------------------------------------------|
-|     *      *      *      *      *      *      *      *     |
-|   DIRTY  ROTARY PITCH  CHORUS DELAY  FILTER PR_PRV PR_NXT  |
-|                                             PR_ONE         |
-|                                                            |
-|     *      *      *      *      *      *      *      *     |
-|   BOTH   MG/JD GAIN/VOL DEC    INC    TAP   SC_PRV SC_NXT  |
-|   SAVE   RESET                        MODE                 |
+|     *      *      *      *      *      *      *      *     |          /--------------------\
+|   DIRTY  VOL--  VOL++  GAIN-- GAIN++  FX    PR_PRV PR_NXT  |          |Beautiful Disaster  |
+|   ACOU   VOL=0 VOL=6   GAIN=T        RESET  PR_ONE         |          |Song 1/62   sc  1/10|
+|                                                            |    LCD:  |Cln g=58 -99.9 P12CD|
+|     *      *      *      *      *      *      *      *     |          |Drv g=5E   6.0 ----D|
+|   DIRTY  VOL--  VOL++  GAIN-- GAIN++  FX     TAP   SC_NXT  |          \--------------------/
+|   ACOU   VOL=0  VOL=6                RESET   MODE  SC_ONE  |
 |------------------------------------------------------------|
-
-Top row of buttons controls selected amp settings
-
-Press BOTH   to select AMP1+2 for modification on top row
-Press MG/JD  to select AMP1 or AMP2 for modification on top row
-
-Press DIRTY  to change from clean to dirty (LED off is clean, on is dirty); gapless audio using scene controllers to modify amp gain
-Press ROTARY to toggle rotary effect
-Press DELAY  to toggle delay effect
-Press PITCH  to toggle pitch effect
-Press CHORUS to toggle chorus effect
-Press DEC    to decrease amp volume, hold DIRTY to affect amp gain
-Press INC    to increase amp volume, hold DIRTY to affect amp gain
-
-Press TAP    to send tap tempo
-Hold  MODE   to switch between setlist and program mode
-
-Press SC_PRV to move to previous scene
-Press SC_NXT to move to next scene
-
-Press PR_PRV to move to previous setlist song / program #
-Press PR_NXT to move to next setlist song / program #
-
-Use scene controllers to transition from clean to dirty on both AMP1 and AMP2, controlled separately
 
 Press MODE   to switch between set-list order and program # order
+
+Press FX to switch row to FX mode
+
+FX controls:
+|------------------------------------------------------------|    
+|     *      *      *      *      *      *      *      *     |          /--------------------\
+|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |Beautiful Disaster  |
+|                                             PR_ONE         |          |Song 1/62   sc  1/10|
+|                                                            |    LCD:  |Cln g=58 -99.9 P12CD|
+|     *      *      *      *      *      *      *      *     |          |Drv g=5E   6.0 ----D|
+|   PITCH  CSTM1  CSTM2  CHORUS DELAY   AMP    TAP   SC_NXT  |          \--------------------/
+|                                              MODE  SC_ONE  |    
+|------------------------------------------------------------|    
+
+Press AMP to switch row to AMP mode
+
 */
 
 #if HW_VERSION == 5
@@ -340,7 +332,7 @@ static s8 ritoa(char *dst, s8 col, u8 n) {
     return col;
 }
 
-// BCD is 2.1 format with MSB indicating sign
+// BCD is 2.1 format with MSB indicating sign (5 chars total) i.e. "-99.9" or " -inf"
 static void bcdtoa(char *dst, u8 col, u16 bcd) {
     u8 sign;
     dst += col;
