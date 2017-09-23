@@ -78,8 +78,8 @@ Hold  SC_ONE  to reset scene to 1 on current song
 FX controls:
 |------------------------------------------------------------|    
 |     *      *      *      *      *      *      *      *     |          /--------------------\
-|   PITCH   FX1    FX2   CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
-|          SELECT SELECT                                     |          |Sng 62/62  Scn  2/ 3|
+|    FX1    FX2    FX3   CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
+|   SELECT SELECT SELECT                                     |          |Sng 62/62  Scn  2/ 3|
 |                                                            |    LCD:  | PIT FX1 FX2 CHO DLY|
 |     *      *      *      *      *      *      *      *     |          |A g=5E v=  6.0 ---CD|
 |  CLN|DRV VOL=0  VOL=6  d=GAIN GAIN=d  FX     MODE  SC_NXT  |          \--------------------/
@@ -88,7 +88,7 @@ FX controls:
 
 Press AMP to switch row to AMP mode
 
-Hold SELECT button to select effect MIDI CC for FX1 or FX2
+Hold SELECT button to select effect MIDI CC for FX1, FX2, or FX3
 
 SELECT controls (top):
 |------------------------------------------------------------|
