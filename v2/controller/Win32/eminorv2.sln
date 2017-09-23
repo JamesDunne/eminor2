@@ -15,12 +15,12 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Debug - v5|x64.ActiveCfg = Debug - v5|x64
 		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Debug - v5|x64.Build.0 = Debug - v5|x64
-		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Debug - v5|x86.ActiveCfg = Debug - v2|Win32
-		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Debug - v5|x86.Build.0 = Debug - v2|Win32
+		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Debug - v5|x86.ActiveCfg = Debug - v5|Win32
+		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Debug - v5|x86.Build.0 = Debug - v5|Win32
 		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Release - v5|x64.ActiveCfg = Release - v5|x64
 		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Release - v5|x64.Build.0 = Release - v5|x64
-		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Release - v5|x86.ActiveCfg = Release|Win32
-		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Release - v5|x86.Build.0 = Release|Win32
+		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Release - v5|x86.ActiveCfg = Release - v5|Win32
+		{E6716D64-13FA-474F-BF8F-86C24F6AE373}.Release - v5|x86.Build.0 = Release - v5|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
