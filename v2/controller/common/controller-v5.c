@@ -10,11 +10,11 @@
     2017-09-21
 
     Axe-FX:
-    * Split stereo cab block into two mono blocks; CAB1 pan L, CAB2 pan R
-    * Try to remove pre-cab PEQ; merge curve with post-cab PEQ
-    * Post-cab PEQ handles stereo out of CABs
-    * Amp X/Y for electric/acoustic (acoustic amp only wants clean volume boost)
-    * Cab X/Y for electric/acoustic
+    + Split stereo cab block into two mono blocks; CAB1 pan L, CAB2 pan R
+    + Try to remove pre-cab PEQ; merge curve with post-cab PEQ
+    + Post-cab PEQ handles stereo out of CABs
+    + Amp X/Y for dirty/clean (disable for acoustic)
+    + Cab X/Y for electric/acoustic
 
     Controller:
     Amp control row:
@@ -47,8 +47,8 @@ AMP controls:
 |  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET   SAVE  SC_ONE  |
 |------------------------------------------------------------|
 
-Press CLN|DRV to toggle clean vs overdrive mode (AMP -> X, CAB -> X, gain = 0 or n)
-Hold  ACOUSTC to switch to acoustic emulation   (AMP -> Y, CAB -> Y, gain = 0?)
+Press CLN|DRV to toggle clean vs overdrive mode (clean:    AMP -> Y, CAB -> X, gain -> 0x5E; dirty: AMP -> X, CAB -> X, gain -> n)
+Hold  ACOUSTC to switch to acoustic emulation   (acoustic: AMP -> bypass, CAB -> Y, gain -> 0x5E)
 
 Press VOL=0   to set volume to 0dB
 Hold  VOL--   to decrease volume slowly
