@@ -18,7 +18,10 @@ typedef union {
     } bits;
 } b8;
 
-typedef struct {
-    b8  bot;
-    b8  top;
+typedef union {
+    struct {
+        b8  bot;
+        b8  top;
+    };
+    u16 word;
 } io16;

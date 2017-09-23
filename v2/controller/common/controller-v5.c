@@ -259,7 +259,7 @@ enum {
     MODE_count
 };
 
-// Structure to represent state that should be compared from current to last to detect changes.
+// Structure to represent state that should be compared from current to last to detect changes in program.
 struct state {
     // Footswitch state:
     io16 fsw;
@@ -303,6 +303,18 @@ io16 mode_leds[MODE_count];
 
 // Whether INC/DEC affects gain (0) or volume (1):
 u8 gain_mode;
+
+enum rowstate_mode {
+    ROWMODE_AMP,
+    ROWMODE_FX,
+    ROWMODE_SELECTFX
+};
+
+// Each row's current state:
+struct {
+    enum rowstate_mode  mode;
+    u8                  fx;
+} rowstate[2];
 
 // BCD-encoded dB value table (from PIC/v4_lookup.h):
 rom const u16 dB_bcd_lookup[128] = {
@@ -1351,9 +1363,22 @@ void controller_10msec_timer(void) {
 // main control loop
 void controller_handle(void) {
     // poll foot-switch depression status:
-    u16 tmp = fsw_poll();
-    curr.fsw.bot.byte = (u8)(tmp & (u8)0xFF);
-    curr.fsw.top.byte = (u8)((tmp >> (u8)8) & (u8)0xFF);
+    curr.fsw.word = fsw_poll();
+    // u16 tmp = fsw_poll();
+    // curr.fsw.bot.byte = (u8)(tmp & (u8)0xFF);
+    // curr.fsw.top.byte = (u8)((tmp >> (u8)8) & (u8)0xFF);
+
+    #define 
+
+    switch (rowstate[0].mode) {
+        case ROWMODE_AMP:
+            if (curr.fsw.top.bits._1)
+            break;
+        case ROWMODE_FX:
+            break;
+        case ROWMODE_SELECTFX:
+            break;
+    }
 
     // Handle bottom control switches:
     // AMP (1 and 2)
