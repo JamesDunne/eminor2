@@ -1,0 +1,65 @@
+{
+  "variant": {
+    "label": "Debug",
+    "keywordSettings": {
+      "buildType": "debug"
+    },
+    "description": "Emit debug information without performing optimizations"
+  },
+  "activeEnvironments": [],
+  "codeModel": {
+    "configurations": [
+      {
+        "name": "Debug",
+        "projects": [
+          {
+            "buildDirectory": "/Users/jimdunne/go/src/github.com/JamesDunne/eminor2/v2/controller/build",
+            "name": "controller",
+            "sourceDirectory": "/Users/jimdunne/go/src/github.com/JamesDunne/eminor2/v2/controller",
+            "targets": [
+              {
+                "artifacts": [
+                  "/Users/jimdunne/go/src/github.com/JamesDunne/eminor2/v2/controller/build/controller"
+                ],
+                "buildDirectory": "/Users/jimdunne/go/src/github.com/JamesDunne/eminor2/v2/controller/build",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "common/hardware.h",
+                      "common/types.h",
+                      "PIC/flash_v4_bank0.h",
+                      "PIC/flash_v4_bank1.h",
+                      "PIC/flash_v4_bank2.h",
+                      "Win32/font-5x8.h",
+                      "PIC/v4_lookup.h"
+                    ]
+                  },
+                  {
+                    "compileFlags": " -std=gnu99 -D HW_VERSION=4 -D HWFEAT_LABEL_UPDATES -D WIN32 -D _CONSOLE -D UNICODE -D _UNICODE -g  ",
+                    "isGenerated": false,
+                    "language": "C",
+                    "sources": [
+                      "common/controller-axe.c",
+                      "Win32/eminorv2.c"
+                    ]
+                  }
+                ],
+                "fullName": "controller",
+                "linkLanguageFlags": "-std=gnu99 -D HW_VERSION=4 -D HWFEAT_LABEL_UPDATES -D WIN32 -D _CONSOLE -D UNICODE -D _UNICODE -g",
+                "linkLibraries": "-lkernel32 -lgdi32 -luser32 -lwinmm",
+                "linkerLanguage": "C",
+                "name": "controller",
+                "sourceDirectory": "/Users/jimdunne/go/src/github.com/JamesDunne/eminor2/v2/controller",
+                "type": "EXECUTABLE"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cookie": "0.2083039795096311",
+    "inReplyTo": "codemodel",
+    "type": "reply"
+  }
+}
