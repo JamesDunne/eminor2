@@ -118,9 +118,9 @@ Press AMP    to cancel and revert to existing FX and then switch to AMP mode for
 #define fxm_1       (u8)0x01
 #define fxm_2       (u8)0x02
 #define fxm_3       (u8)0x04
-#define fxm_chorus  (u8)0x08
-#define fxm_delay   (u8)0x10
-
+#define fxm_4       (u8)0x08
+#define fxm_5       (u8)0x10
+////////////////////////0x20
 #define fxm_acoustc (u8)0x40
 #define fxm_dirty   (u8)0x80
 
@@ -325,6 +325,10 @@ u8 sl_max;
 struct set_list sl;
 // Loaded program:
 struct program pr;
+// Calculated data upon program load:
+struct {
+    rom const char *fx_names[2][5];
+} prcalc;
 // Pointer to unmodified program:
 rom struct program *origpr;
 
@@ -336,6 +340,12 @@ static rom const char *name_get(u16 name_index) {
         return "";
     }
     return (rom const char *)flash_addr(name_table_offs + ((name_index - 1) * 20));
+}
+
+#include "v5_fx_names.h"
+
+static rom const char *fx_name(u8 fx_midi_cc) {
+    return v5_fx_names[fx_midi_cc - 41];
 }
 
 // Set Axe-FX CC value
@@ -519,7 +529,7 @@ static void program_save(void);
 
 // (enable == 0 ? (u8)0 : (u8)0x7F)
 #define calc_cc_toggle(enable) \
-    ((u8)-((s8)enable) >> (u8)1)
+    ((u8) -((s8)(enable)) >> (u8)1)
 
 #define or_default(a, b) (a == 0 ? b : a)
 
@@ -528,10 +538,11 @@ static void program_save(void);
 static void calc_midi(void) {
     u8 diff = 0;
     u8 acoustc, last_acoustc, acoustc_changed;
-    u8 xy;
     u8 send_gain;
     u8 dirty_changed;
     u8 gain_changed;
+    u8 test_fx = 1;
+    u8 i;
 
     // Send MIDI program change:
     if (curr.midi_program != last.midi_program) {
@@ -655,50 +666,16 @@ static void calc_midi(void) {
         diff = 1;
     }
 
-    // Enable FX:
-    if (read_bit(delay, curr.amp[0].fx) != read_bit(delay, last.amp[0].fx)) {
-        DEBUG_LOG1("MIDI set AMP1 delay %s", read_bit(delay, curr.amp[0].fx) == 0 ? "off" : "on");
-        midi_axe_cc(axe_cc_byp_delay1, calc_cc_toggle(read_bit(delay, curr.amp[0].fx)));
-    }
-    if (read_bit(delay, curr.amp[1].fx) != read_bit(delay, last.amp[1].fx)) {
-        DEBUG_LOG1("MIDI set AMP2 delay %s", read_bit(delay, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_axe_cc(axe_cc_byp_delay2, calc_cc_toggle(read_bit(delay, curr.amp[1].fx)));
-    }
-
-    if (read_bit(rotary, curr.amp[0].fx) != read_bit(rotary, last.amp[0].fx)) {
-        DEBUG_LOG1("MIDI set AMP1 rotary %s", read_bit(rotary, curr.amp[0].fx) == 0 ? "off" : "on");
-        midi_axe_cc(axe_cc_byp_rotary1, calc_cc_toggle(read_bit(rotary, curr.amp[0].fx)));
-    }
-    if (read_bit(rotary, curr.amp[1].fx) != read_bit(rotary, last.amp[1].fx)) {
-        DEBUG_LOG1("MIDI set AMP2 rotary %s", read_bit(rotary, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_axe_cc(axe_cc_byp_rotary2, calc_cc_toggle(read_bit(rotary, curr.amp[1].fx)));
-    }
-
-    if (read_bit(pitch, curr.amp[0].fx) != read_bit(pitch, last.amp[0].fx)) {
-        DEBUG_LOG1("MIDI set AMP1 pitch %s", read_bit(pitch, curr.amp[0].fx) == 0 ? "off" : "on");
-        midi_axe_cc(axe_cc_byp_pitch1, calc_cc_toggle(read_bit(pitch, curr.amp[0].fx)));
-    }
-    if (read_bit(pitch, curr.amp[1].fx) != read_bit(pitch, last.amp[1].fx)) {
-        DEBUG_LOG1("MIDI set AMP2 pitch %s", read_bit(pitch, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_axe_cc(axe_cc_byp_pitch2, calc_cc_toggle(read_bit(pitch, curr.amp[1].fx)));
-    }
-
-    if (read_bit(chorus, curr.amp[0].fx) != read_bit(chorus, last.amp[0].fx)) {
-        DEBUG_LOG1("MIDI set AMP1 chorus %s", read_bit(chorus, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_axe_cc(axe_cc_byp_chorus1, calc_cc_toggle(read_bit(chorus, curr.amp[0].fx)));
-    }
-    if (read_bit(chorus, curr.amp[1].fx) != read_bit(chorus, last.amp[1].fx)) {
-        DEBUG_LOG1("MIDI set AMP2 chorus %s", read_bit(chorus, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_axe_cc(axe_cc_byp_chorus2, calc_cc_toggle(read_bit(chorus, curr.amp[1].fx)));
-    }
-
-    if (read_bit(filter, curr.amp[0].fx) != read_bit(filter, last.amp[0].fx)) {
-        DEBUG_LOG1("MIDI set AMP1 filter %s", read_bit(filter, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_axe_cc(axe_cc_byp_phaser1, calc_cc_toggle(read_bit(filter, curr.amp[0].fx)));
-    }
-    if (read_bit(filter, curr.amp[1].fx) != read_bit(filter, last.amp[1].fx)) {
-        DEBUG_LOG1("MIDI set AMP2 filter %s", read_bit(filter, curr.amp[1].fx) == 0 ? "off" : "on");
-        midi_axe_cc(axe_cc_byp_phaser2, calc_cc_toggle(read_bit(filter, curr.amp[1].fx)));
+    // Send FX state:
+    for (i = 0; i < 5; i++) {
+        if ((curr.amp[0].fx & test_fx) != (last.amp[0].fx & test_fx)) {
+            DEBUG_LOG2("MIDI set AMP1 %s %s", prcalc.fx_names[0][i], (curr.amp[0].fx & test_fx) == 0 ? "off" : "on");
+            midi_axe_cc(pr.fx_midi_cc[0][i], calc_cc_toggle(curr.amp[0].fx & test_fx));
+        }
+        if ((curr.amp[1].fx & test_fx) != (last.amp[1].fx & test_fx)) {
+            DEBUG_LOG2("MIDI set AMP2 %s %s", prcalc.fx_names[1][i], (curr.amp[1].fx & test_fx) == 0 ? "off" : "on");
+            midi_axe_cc(pr.fx_midi_cc[1][i], calc_cc_toggle(curr.amp[1].fx & test_fx));
+        }
     }
 
     // Send MIDI tempo change:
@@ -853,29 +830,13 @@ static void update_lcd(void) {
     bcdtoa(lcd_rows[row_amp1], 19, dB_bcd_lookup[curr.amp[1].volume]);
 
     // Amp row 2:
-    lcd_rows[row_amp2][ 0] = (char)'G' | (char)(!read_bit(dirty, curr.amp[0].fx) << 5);
-#if 0
-    lcd_rows[row_amp2][ 1] = (char)'X' | (char)(read_bit(xy, curr.amp[0].fx));
-#else
-    lcd_rows[row_amp2][ 1] = (char)'R' | (char)(!read_bit(rotary, curr.amp[0].fx) << 5);
-#endif
-    lcd_rows[row_amp2][ 2] = (char)'P' | (char)(!read_bit(pitch, curr.amp[0].fx) << 5);
-    lcd_rows[row_amp2][ 3] = (char)'C' | (char)(!read_bit(chorus, curr.amp[0].fx) << 5);
-    lcd_rows[row_amp2][ 4] = (char)'D' | (char)(!read_bit(delay, curr.amp[0].fx) << 5);
-    lcd_rows[row_amp2][ 5] = (char)'F' | (char)(!read_bit(filter, curr.amp[0].fx) << 5);
-    hextoa(lcd_rows[row_amp2], 8, or_default(curr.amp[0].gain));
+    lcd_rows[row_amp2][ 0] = (curr.amp[0].fx & fxm_1) ? '1' : '-';
+    // TODO
+    hextoa(lcd_rows[row_amp2], 8, or_default(curr.amp[0].gain, pr.default_gain[0]));
 
-    lcd_rows[row_amp2][11] = (char)'G' | (char)(!read_bit(dirty, curr.amp[1].fx) << 5);
-#if 0
-    lcd_rows[row_amp2][12] = (char)'X' | (char)(read_bit(xy, curr.amp[1].fx));
-#else
-    lcd_rows[row_amp2][12] = (char)'R' | (char)(!read_bit(rotary, curr.amp[1].fx) << 5);
-#endif
-    lcd_rows[row_amp2][13] = (char)'P' | (char)(!read_bit(pitch, curr.amp[1].fx) << 5);
-    lcd_rows[row_amp2][14] = (char)'C' | (char)(!read_bit(chorus, curr.amp[1].fx) << 5);
-    lcd_rows[row_amp2][15] = (char)'D' | (char)(!read_bit(delay, curr.amp[1].fx) << 5);
-    lcd_rows[row_amp2][16] = (char)'F' | (char)(!read_bit(filter, curr.amp[1].fx) << 5);
-    hextoa(lcd_rows[row_amp2], 19, or_default(curr.amp[1].gain));
+    lcd_rows[row_amp2][11] = (curr.amp[1].fx & fxm_1) ? '1' : '-';
+    // TODO
+    hextoa(lcd_rows[row_amp2], 19, or_default(curr.amp[1].gain, pr.default_gain[1]));
 
     lcd_updated_all();
 #endif
@@ -895,40 +856,8 @@ LIVE:
 */
 
 static void calc_leds(void) {
-    if (curr.selected_both) {
-        mode_leds[mode].top.bits._1 = read_bit(dirty,  curr.amp[0].fx) | read_bit(dirty,  curr.amp[1].fx);
-#if 0
-        mode_leds[mode].top.bits._2 = read_bit(xy,     curr.amp[0].fx) | read_bit(xy,     curr.amp[1].fx);
-#else
-        mode_leds[mode].top.bits._2 = read_bit(rotary, curr.amp[0].fx) | read_bit(rotary, curr.amp[1].fx);
-#endif
-        mode_leds[mode].top.bits._3 = read_bit(pitch,  curr.amp[0].fx) | read_bit(pitch,  curr.amp[1].fx);
-        mode_leds[mode].top.bits._4 = read_bit(chorus, curr.amp[0].fx) | read_bit(chorus, curr.amp[1].fx);
-        mode_leds[mode].top.bits._5 = read_bit(delay,  curr.amp[0].fx) | read_bit(delay,  curr.amp[1].fx);
-        mode_leds[mode].top.bits._6 = read_bit(filter, curr.amp[0].fx) | read_bit(filter, curr.amp[1].fx);
-    } else {
-        mode_leds[mode].top.bits._1 = read_bit(dirty,  curr.amp[curr.selected_amp].fx);
-#if 0
-        mode_leds[mode].top.bits._2 = read_bit(xy,     curr.amp[curr.selected_amp].fx);
-#else
-        mode_leds[mode].top.bits._2 = read_bit(rotary, curr.amp[curr.selected_amp].fx);
-#endif
-        mode_leds[mode].top.bits._3 = read_bit(pitch,  curr.amp[curr.selected_amp].fx);
-        mode_leds[mode].top.bits._4 = read_bit(chorus, curr.amp[curr.selected_amp].fx);
-        mode_leds[mode].top.bits._5 = read_bit(delay,  curr.amp[curr.selected_amp].fx);
-        mode_leds[mode].top.bits._6 = read_bit(filter, curr.amp[curr.selected_amp].fx);
-    }
-    mode_leds[mode].top.bits._7 = curr.fsw.top.bits._7;
-    mode_leds[mode].top.bits._8 = curr.fsw.top.bits._8;
-
-    mode_leds[mode].bot.bits._1 = curr.selected_both;
-    mode_leds[mode].bot.bits._2 = curr.selected_amp;
-    mode_leds[mode].bot.bits._3 = gain_mode;
-    mode_leds[mode].bot.bits._4 = curr.fsw.bot.bits._4;
-    mode_leds[mode].bot.bits._5 = curr.fsw.bot.bits._5;
-    mode_leds[mode].bot.bits._6 = curr.fsw.bot.bits._6;
-    mode_leds[mode].bot.bits._7 = curr.fsw.bot.bits._7;
-    mode_leds[mode].bot.bits._8 = curr.fsw.bot.bits._8;
+    mode_leds[mode].top.byte = (curr.amp[0].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5)) | (curr.fsw.top.byte & (u8)(0x20 | 0x40 | 0x80));
+    mode_leds[mode].bot.byte = (curr.amp[1].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5)) | (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80));
 
     send_leds();
 }
@@ -1095,6 +1024,8 @@ static void prev_scene() {
     }
 }
 
+#if 0
+
 #define min(a,b) (a < b ? a : b)
 #define max(a,b) (a > b ? a : b)
 
@@ -1229,6 +1160,7 @@ static void curr_amp_toggle() {
         curr_amp_vol_toggle();
     }
 }
+#endif
 
 static void program_save() {
     // Load program:
@@ -1439,11 +1371,11 @@ void controller_handle(void) {
             btn_released(top, 6, rowstate[0].mode = ROWMODE_FX)
             break;
         case ROWMODE_FX:
-            btn_released(top, 1, curr.amp[0].fx ^= fxm_1;           calc_fx_modified())
-            btn_released(top, 2, curr.amp[0].fx ^= fxm_2;           calc_fx_modified())
-            btn_released(top, 3, curr.amp[0].fx ^= fxm_3;           calc_fx_modified())
-            btn_released(top, 4, curr.amp[0].fx ^= fxm_chorus;      calc_fx_modified())
-            btn_released(top, 5, curr.amp[0].fx ^= fxm_delay;       calc_fx_modified())
+            btn_released(top, 1, curr.amp[0].fx ^= fxm_1; calc_fx_modified())
+            btn_released(top, 2, curr.amp[0].fx ^= fxm_2; calc_fx_modified())
+            btn_released(top, 3, curr.amp[0].fx ^= fxm_3; calc_fx_modified())
+            btn_released(top, 4, curr.amp[0].fx ^= fxm_4; calc_fx_modified())
+            btn_released(top, 5, curr.amp[0].fx ^= fxm_5; calc_fx_modified())
             btn_released(top, 6, rowstate[0].mode = ROWMODE_AMP)
             break;
         case ROWMODE_SELECTFX:
@@ -1451,7 +1383,7 @@ void controller_handle(void) {
     }
 
     // TAP:
-    if (is_bot_button_pressed(M_6)) {
+    if (is_bot_button_pressed(M_7)) {
         // Toggle TAP CC value between 0x00 and 0x7F:
         timers.bot_6 = (u8)0x80;
         tap ^= (u8)0x7F;
@@ -1460,47 +1392,9 @@ void controller_handle(void) {
         timers.bot_6 = (u8)0x00;
     }
 
-    // PREV/NEXT SCENE:
-    if (is_bot_button_pressed(M_7)) {
-        prev_scene();
-    }
+    // NEXT SCENE:
     if (is_bot_button_pressed(M_8)) {
         next_scene();
-    }
-
-    // Handle top amp effects:
-#define toggle_fx(name) \
-        if (curr.selected_both) { \
-            u8 fx = (curr.amp[0].fx | curr.amp[1].fx) & fxm_##name ^ fxm_##name; \
-            curr.amp[0].fx = (curr.amp[0].fx & ~fxm_##name) | fx; \
-            curr.amp[1].fx = (curr.amp[1].fx & ~fxm_##name) | fx; \
-            calc_fx_modified(); \
-        } else { \
-            toggle_bit(name, curr.amp[curr.selected_amp].fx); \
-            calc_fx_modified(); \
-        }
-
-    if (is_top_button_pressed(M_1)) {
-        toggle_fx(dirty)
-    }
-    if (is_top_button_pressed(M_2)) {
-#if 0
-        toggle_fx(xy)
-#else
-        toggle_fx(rotary)
-#endif
-    }
-    if (is_top_button_pressed(M_3)) {
-        toggle_fx(pitch)
-    }
-    if (is_top_button_pressed(M_4)) {
-        toggle_fx(chorus)
-    }
-    if (is_top_button_pressed(M_5)) {
-        toggle_fx(delay)
-    }
-    if (is_top_button_pressed(M_6)) {
-        toggle_fx(filter)
     }
 
     // PREV/NEXT SONG:
