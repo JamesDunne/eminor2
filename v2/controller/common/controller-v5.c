@@ -1271,7 +1271,7 @@ void controller_handle(void) {
         timers.row##_##n = (u8)0x00; \
     }
 
-#define btn_released(row, n, on_release) \
+#define btn_released_repeater(row, n, on_release) \
         if (is_##row##_button_pressed(M_##n)) { \
             timers.row##_##n = (u8)0x80; \
         } else if (is_##row##_button_released(M_##n)) { \
@@ -1281,22 +1281,32 @@ void controller_handle(void) {
             timers.row##_##n = (u8)0x00; \
         }
 
+#define btn_released_oneshot(row, n, on_release) \
+        if (is_##row##_button_pressed(M_##n)) { \
+            timers.row##_##n = (u8)0x80; \
+        } else if (is_##row##_button_released(M_##n)) { \
+            if ((timers.row##_##n & (u8)0x80) != 0) { \
+                on_release; \
+            } \
+            timers.row##_##n = (u8)0x00; \
+        }
+
     switch (rowstate[0].mode) {
         case ROWMODE_AMP:
-            btn_released(top, 1, curr.amp[0].fx ^= fxm_dirty;           calc_fx_modified())
-            btn_released(top, 2, curr.amp[0].volume = volume_0dB;       calc_volume_modified())
-            btn_released(top, 3, curr.amp[0].volume = volume_6dB;       calc_volume_modified())
-            btn_released(top, 4, pr.default_gain[0] = curr.amp[0].gain)
-            btn_released(top, 5, curr.amp[0].gain = pr.default_gain[0]; calc_gain_modified())
-            btn_released(top, 6, rowstate[0].mode = ROWMODE_FX)
+            btn_released_oneshot(top, 1, curr.amp[0].fx = (curr.amp[0].fx ^ fxm_dirty) & ~fxm_acoustc; calc_fx_modified())
+            btn_released_repeater(top, 2, curr.amp[0].volume = volume_0dB; calc_volume_modified())
+            btn_released_repeater(top, 3, curr.amp[0].volume = volume_6dB; calc_volume_modified())
+            btn_released_repeater(top, 4, pr.default_gain[0] = curr.amp[0].gain)
+            btn_released_repeater(top, 5, curr.amp[0].gain = pr.default_gain[0]; calc_gain_modified())
+            btn_released_oneshot(top, 6, rowstate[0].mode = ROWMODE_FX)
             break;
         case ROWMODE_FX:
-            btn_released(top, 1, curr.amp[0].fx ^= fxm_1; calc_fx_modified())
-            btn_released(top, 2, curr.amp[0].fx ^= fxm_2; calc_fx_modified())
-            btn_released(top, 3, curr.amp[0].fx ^= fxm_3; calc_fx_modified())
-            btn_released(top, 4, curr.amp[0].fx ^= fxm_4; calc_fx_modified())
-            btn_released(top, 5, curr.amp[0].fx ^= fxm_5; calc_fx_modified())
-            btn_released(top, 6, rowstate[0].mode = ROWMODE_AMP)
+            btn_released_oneshot(top, 1, curr.amp[0].fx ^= fxm_1; calc_fx_modified())
+            btn_released_oneshot(top, 2, curr.amp[0].fx ^= fxm_2; calc_fx_modified())
+            btn_released_oneshot(top, 3, curr.amp[0].fx ^= fxm_3; calc_fx_modified())
+            btn_released_oneshot(top, 4, curr.amp[0].fx ^= fxm_4; calc_fx_modified())
+            btn_released_oneshot(top, 5, curr.amp[0].fx ^= fxm_5; calc_fx_modified())
+            btn_released_oneshot(top, 6, rowstate[0].mode = ROWMODE_AMP)
             break;
         case ROWMODE_SELECTFX:
             break;
@@ -1304,20 +1314,20 @@ void controller_handle(void) {
 
     switch (rowstate[1].mode) {
         case ROWMODE_AMP:
-            btn_released(bot, 1, curr.amp[1].fx ^= fxm_dirty;           calc_fx_modified())
-            btn_released(bot, 2, curr.amp[1].volume = volume_0dB;       calc_volume_modified())
-            btn_released(bot, 3, curr.amp[1].volume = volume_6dB;       calc_volume_modified())
-            btn_released(bot, 4, pr.default_gain[1] = curr.amp[1].gain)
-            btn_released(bot, 5, curr.amp[1].gain = pr.default_gain[1]; calc_gain_modified())
-            btn_released(bot, 6, rowstate[1].mode = ROWMODE_FX)
+            btn_released_oneshot(bot, 1, curr.amp[1].fx = (curr.amp[1].fx ^ fxm_dirty) & ~fxm_acoustc; calc_fx_modified())
+            btn_released_repeater(bot, 2, curr.amp[1].volume = volume_0dB; calc_volume_modified())
+            btn_released_repeater(bot, 3, curr.amp[1].volume = volume_6dB; calc_volume_modified())
+            btn_released_repeater(bot, 4, pr.default_gain[1] = curr.amp[1].gain)
+            btn_released_repeater(bot, 5, curr.amp[1].gain = pr.default_gain[1]; calc_gain_modified())
+            btn_released_repeater(bot, 6, rowstate[1].mode = ROWMODE_FX)
             break;
         case ROWMODE_FX:
-            btn_released(bot, 1, curr.amp[1].fx ^= fxm_1; calc_fx_modified())
-            btn_released(bot, 2, curr.amp[1].fx ^= fxm_2; calc_fx_modified())
-            btn_released(bot, 3, curr.amp[1].fx ^= fxm_3; calc_fx_modified())
-            btn_released(bot, 4, curr.amp[1].fx ^= fxm_4; calc_fx_modified())
-            btn_released(bot, 5, curr.amp[1].fx ^= fxm_5; calc_fx_modified())
-            btn_released(bot, 6, rowstate[1].mode = ROWMODE_AMP)
+            btn_released_oneshot(bot, 1, curr.amp[1].fx ^= fxm_1; calc_fx_modified())
+            btn_released_oneshot(bot, 2, curr.amp[1].fx ^= fxm_2; calc_fx_modified())
+            btn_released_oneshot(bot, 3, curr.amp[1].fx ^= fxm_3; calc_fx_modified())
+            btn_released_oneshot(bot, 4, curr.amp[1].fx ^= fxm_4; calc_fx_modified())
+            btn_released_oneshot(bot, 5, curr.amp[1].fx ^= fxm_5; calc_fx_modified())
+            btn_released_oneshot(bot, 6, rowstate[1].mode = ROWMODE_AMP)
             break;
         case ROWMODE_SELECTFX:
             break;
@@ -1333,7 +1343,7 @@ void controller_handle(void) {
     //     timers.bot_6 = (u8)0x00;
     // }
 
-    btn_released(bot,7,toggle_setlist_mode())
+    btn_released_oneshot(bot,7,toggle_setlist_mode())
 
     // NEXT SCENE:
     if (is_bot_button_pressed(M_8)) {
