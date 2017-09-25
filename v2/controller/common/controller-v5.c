@@ -246,10 +246,10 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 #ifdef FEAT_LCD
 // Pointers to LCD character rows:
 char *lcd_rows[LCD_ROWS];
+#define row_song 0
+#define row_stat 1
 #define row_amp1 2
 #define row_amp2 3
-#define row_status 0
-#define row_song 1
 #endif
 
 enum {
@@ -645,7 +645,7 @@ static void calc_midi(void) {
     }
 
     // Send FX state:
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 5; i++, test_fx <<= 1) {
         if ((curr.amp[0].fx & test_fx) != (last.amp[0].fx & test_fx)) {
             DEBUG_LOG2("MIDI set AMP1 %s %s", fx_name(pr.fx_midi_cc[0][i]), (curr.amp[0].fx & test_fx) == 0 ? "off" : "on");
             midi_axe_cc(pr.fx_midi_cc[0][i], calc_cc_toggle(curr.amp[0].fx & test_fx));
@@ -727,61 +727,62 @@ static void update_lcd(void) {
 #ifdef FEAT_LCD
     s8 i;
     rom const char *pr_name;
+    u8 test_fx;
 #endif
     DEBUG_LOG0("update LCD");
 #ifdef HWFEAT_LABEL_UPDATES
-    // Bottom row:
-    labels = label_row_get(0);
-    labels[0] = "BOTH";
-    labels[1] = "MG/JD";
-    labels[2] = "GAIN/VOL";
-    labels[3] = "DEC";
-    labels[4] = "INC";
-    labels[5] = "TAP";
-    labels[6] = "PREV SCENE";
-    labels[7] = "NEXT SCENE";
-    label_row_update(0);
-
     // Top row:
     labels = label_row_get(1);
-    labels[0] = "DIRTY";
-    labels[1] = "ROTARY";
-    labels[2] = "PITCH";
-    labels[3] = "CHORUS";
-    labels[4] = "DELAY";
-    labels[5] = "FILTER";
+    labels[0] = "CLN|DRV";
+    labels[1] = "VOL=0";
+    labels[2] = "VOL=6";
+    labels[3] = "d=GAIN";
+    labels[4] = "GAIN=d";
+    labels[5] = "FX";
     labels[6] = "PREV SONG";
     labels[7] = "NEXT SONG";
     label_row_update(1);
+
+    // Bottom row:
+    labels = label_row_get(0);
+    labels[0] = "CLN|DRV";
+    labels[1] = "VOL=0";
+    labels[2] = "VOL=6";
+    labels[3] = "d=GAIN";
+    labels[4] = "GAIN=d";
+    labels[5] = "FX";
+    labels[6] = "PREV SCENE";
+    labels[7] = "NEXT SCENE";
+    label_row_update(0);
 #endif
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_COLS; ++i) {
-        lcd_rows[row_status][i] = "                    "[i];
         lcd_rows[row_song][i] = "                    "[i];
-        lcd_rows[row_amp1][i] = "MG*   0.0  JD*   0.0"[i];
-        lcd_rows[row_amp2][i] = "GXPCDF 7F  GXPCDF 7F"[i];
+        lcd_rows[row_stat][i] = "                    "[i];
+        lcd_rows[row_amp1][i] = "C g=58 v=-99.9 -----"[i];
+        lcd_rows[row_amp2][i] = "C g=58 v=-99.9 -----"[i];
     }
 
     // Print setlist date:
     if (curr.setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[row_status][i] = "Program    # 0 sc  0"[i];
+            lcd_rows[row_stat][i] = "Prg ##/128 Scn ##/##"[i];
         }
-        ritoa(lcd_rows[row_status], 13, curr.pr_idx + (u8)1);
+
+        // Show program number:
+        ritoa(lcd_rows[row_stat], 5, curr.pr_idx + (u8)1);
     } else {
-        // Show setlist data:
-        u8 yyyy = sl.d1 >> 1;
-        u8 mm = ((sl.d1 & (u8)1) << 3) | (sl.d0 >> 5);
-        u8 dd = (sl.d0 & (u8)31);
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[row_status][i] = "2014-01-01 # 0 sc  0"[i];
+            lcd_rows[row_stat][i] = "Sng ##/##  Scn ##/##"[i];
         }
-        ritoa(lcd_rows[row_status], 3, yyyy + (u8)14);
-        ritoa(lcd_rows[row_status], 6, mm + (u8)1);
-        ritoa(lcd_rows[row_status], 9, dd + (u8)1);
-        ritoa(lcd_rows[row_status], 13, curr.sl_idx + (u8)1);
+
+        // Show setlist song index:
+        ritoa(lcd_rows[row_stat], 5, curr.sl_idx + (u8)1);
+        // Show setlist song count:
+        ritoa(lcd_rows[row_stat], 8, sl_max);
     }
-    ritoa(lcd_rows[row_status], 19, curr.sc_idx + (u8)1);
+    // Show scene number:
+    ritoa(lcd_rows[row_stat], 16, curr.sc_idx + (u8)1);
 
     // Song name:
     if (pr.name_index == 0) {
@@ -799,23 +800,19 @@ static void update_lcd(void) {
         lcd_rows[row_song][19] = '*';
     }
 
-    // Amp row 1:
-    lcd_rows[row_amp1][ 2] = (curr.selected_amp == 0) ? (char)'*' : (char)' ';
-    lcd_rows[row_amp1][13] = (curr.selected_amp == 1) ? (char)'*' : (char)' ';
-
     // Print volume levels:
-    bcdtoa(lcd_rows[row_amp1],  8, dB_bcd_lookup[curr.amp[0].volume]);
-    bcdtoa(lcd_rows[row_amp1], 19, dB_bcd_lookup[curr.amp[1].volume]);
+    bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[0].volume]);
+    hextoa(lcd_rows[row_amp1],  5, or_default(curr.amp[0].gain, pr.default_gain[0]));
 
-    // Amp row 2:
-    lcd_rows[row_amp2][ 0] = (curr.amp[0].fx & fxm_1) ? '1' : '-';
-    // TODO
-    hextoa(lcd_rows[row_amp2], 8, or_default(curr.amp[0].gain, pr.default_gain[0]));
+    test_fx = 0;
+    for (i = 0; i < 5; i++, test_fx <<= 1) {
+        lcd_rows[row_amp2][15 + i] = (curr.amp[0].fx & test_fx) ? '1' : '-';
+    }
 
+    bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[1].volume]);
+    hextoa(lcd_rows[row_amp2],  5, or_default(curr.amp[1].gain, pr.default_gain[1]));
     lcd_rows[row_amp2][11] = (curr.amp[1].fx & fxm_1) ? '1' : '-';
-    // TODO
-    hextoa(lcd_rows[row_amp2], 19, or_default(curr.amp[1].gain, pr.default_gain[1]));
-
+    
     lcd_updated_all();
 #endif
 }
@@ -1088,7 +1085,7 @@ void controller_init(void) {
     for (i = 0; i < LCD_COLS; ++i) {
         lcd_rows[row_amp1][i] = "                    "[i];
         lcd_rows[row_amp2][i] = "                    "[i];
-        lcd_rows[row_status][i] = "                    "[i];
+        lcd_rows[row_stat][i] = "                    "[i];
         lcd_rows[row_song][i] = "                    "[i];
     }
 
