@@ -860,6 +860,18 @@ static void calc_leds(void) {
         case ROWMODE_AMP:
             mode_leds[mode].top.byte |= ((curr.amp[0].fx & fxm_dirty) >> 7)
                 | (curr.fsw.top.byte & (u8)(0x02 | 0x04 | 0x08 | 0x10));
+            if (curr.amp[0].volume < volume_0dB) {
+                mode_leds[mode].top.byte |= 0x02;
+            }
+            if (curr.amp[0].volume > volume_0dB) {
+                mode_leds[mode].top.byte |= 0x04;
+            }
+            if (curr.amp[0].gain < pr.default_gain[0]) {
+                mode_leds[mode].top.byte |= 0x08;
+            }
+            if (curr.amp[0].gain > pr.default_gain[0]) {
+                mode_leds[mode].top.byte |= 0x10;
+            }
             break;
         case ROWMODE_FX:
             mode_leds[mode].top.byte = (curr.amp[0].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
@@ -872,7 +884,19 @@ static void calc_leds(void) {
         case ROWMODE_AMP:
             mode_leds[mode].bot.byte |= ((curr.amp[1].fx & fxm_dirty) >> 7)
                 | (curr.fsw.bot.byte & (u8)(0x02 | 0x04 | 0x08 | 0x10));
-        break;
+            if (curr.amp[1].volume < volume_0dB) {
+                mode_leds[mode].bot.byte |= 0x02;
+            }
+            if (curr.amp[1].volume > volume_0dB) {
+                mode_leds[mode].bot.byte |= 0x04;
+            }
+            if (curr.amp[1].gain < pr.default_gain[0]) {
+                mode_leds[mode].bot.byte |= 0x08;
+            }
+            if (curr.amp[1].gain > pr.default_gain[0]) {
+                mode_leds[mode].bot.byte |= 0x10;
+            }
+            break;
     case ROWMODE_FX:
             mode_leds[mode].bot.byte = (curr.amp[1].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
                 | (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80));
