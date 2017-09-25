@@ -341,6 +341,11 @@ static rom const char *name_get(u16 name_index) {
 #include "v5_fx_names.h"
 
 static rom const char *fx_name(u8 fx_midi_cc) {
+    if (fx_midi_cc < 41) {
+        return "";
+    } else if (fx_midi_cc > 41 + (sizeof(v5_fx_names) / sizeof(rom const char *))) {
+        return "";
+    }
     return v5_fx_names[fx_midi_cc - 41];
 }
 
@@ -759,8 +764,8 @@ static void update_lcd(void) {
     for (i = 0; i < LCD_COLS; ++i) {
         lcd_rows[row_song][i] = "                    "[i];
         lcd_rows[row_stat][i] = "                    "[i];
-        lcd_rows[row_amp1][i] = "C g=58 v=-99.9 -----"[i];
-        lcd_rows[row_amp2][i] = "C g=58 v=-99.9 -----"[i];
+        lcd_rows[row_amp1][i] = "C g= 0 v=  0.0 -----"[i];
+        lcd_rows[row_amp2][i] = "C g= 0 v=  0.0 -----"[i];
     }
 
     // Print setlist date:
@@ -800,6 +805,15 @@ static void update_lcd(void) {
         lcd_rows[row_song][19] = '*';
     }
 
+    // AMP1:
+    if ((curr.amp[0].fx & fxm_acoustc) != 0) {
+        // A for acoustic
+        lcd_rows[row_amp1][0] = 'A';
+    } else {
+        // C/D for clean/dirty
+        lcd_rows[row_amp1][0] = 'C' + ((curr.amp[0].fx & fxm_dirty) != 0);
+    }
+
     // Print volume levels:
     bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[0].volume]);
     hextoa(lcd_rows[row_amp1],  5, or_default(curr.amp[0].gain, pr.default_gain[0]));
@@ -807,6 +821,15 @@ static void update_lcd(void) {
     test_fx = 0;
     for (i = 0; i < 5; i++, test_fx <<= 1) {
         lcd_rows[row_amp2][15 + i] = (curr.amp[0].fx & test_fx) ? '1' : '-';
+    }
+
+    // AMP2:
+    if ((curr.amp[1].fx & fxm_acoustc) != 0) {
+        // A for acoustic
+        lcd_rows[row_amp2][0] = 'A';
+    } else {
+        // C/D for clean/dirty
+        lcd_rows[row_amp2][0] = 'C' + ((curr.amp[1].fx & fxm_dirty) != 0);
     }
 
     bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[1].volume]);
@@ -831,8 +854,29 @@ LIVE:
 */
 
 static void calc_leds(void) {
-    mode_leds[mode].top.byte = (curr.amp[0].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5)) | (curr.fsw.top.byte & (u8)(0x20 | 0x40 | 0x80));
-    mode_leds[mode].bot.byte = (curr.amp[1].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5)) | (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80));
+    mode_leds[mode].top.byte = (curr.fsw.top.byte & (u8)(0x20 | 0x40 | 0x80));
+    switch (rowstate[0].mode) {
+        case ROWMODE_AMP:
+            mode_leds[mode].top.byte |= ((curr.amp[0].fx & fxm_dirty) >> 7)
+                | (curr.fsw.top.byte & (u8)(0x02 | 0x04 | 0x08 | 0x10));
+            break;
+        case ROWMODE_FX:
+            mode_leds[mode].top.byte = (curr.amp[0].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
+                | (curr.fsw.top.byte & (u8)(0x20 | 0x40 | 0x80));
+            break;
+    }
+
+    mode_leds[mode].bot.byte = (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80));
+    switch (rowstate[1].mode) {
+        case ROWMODE_AMP:
+            mode_leds[mode].bot.byte |= ((curr.amp[1].fx & fxm_dirty) >> 7)
+                | (curr.fsw.bot.byte & (u8)(0x02 | 0x04 | 0x08 | 0x10));
+        break;
+    case ROWMODE_FX:
+            mode_leds[mode].bot.byte = (curr.amp[1].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
+                | (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80));
+            break;
+    }
 
     send_leds();
 }
@@ -1061,6 +1105,11 @@ void controller_init(void) {
     load_scene();
     last.sc_idx = curr.sc_idx;
 
+    rowstate[0].mode = ROWMODE_AMP;
+    rowstate[0].fx = 0;
+    rowstate[1].mode = ROWMODE_AMP;
+    rowstate[1].fx = 0;
+
     // Copy current scene settings into state:
     curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
     curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
@@ -1174,19 +1223,27 @@ void controller_10msec_timer(void) {
         } \
     }
 
-    one_shot(top,1,0x1F,curr.amp[0].fx ^= fxm_acoustc; calc_fx_modified())
-    repeater(top,2,0x20,0x01,vol_dec(0))
-    repeater(top,3,0x20,0x01,vol_inc(0))
-    repeater(top,4,0x20,0x01,gain_dec(0))
-    repeater(top,5,0x20,0x01,gain_inc(0))
-    one_shot(top,6,0x1F,midi_invalidate())
+    switch (rowstate[0].mode) {
+        case ROWMODE_AMP:
+            one_shot(top,1,0x1F,curr.amp[0].fx ^= fxm_acoustc; calc_fx_modified())
+            repeater(top,2,0x20,0x01,vol_dec(0))
+            repeater(top,3,0x20,0x01,vol_inc(0))
+            repeater(top,4,0x20,0x01,gain_dec(0))
+            repeater(top,5,0x20,0x01,gain_inc(0))
+            one_shot(top,6,0x1F,midi_invalidate())
+            break;
+    }
 
-    one_shot(bot,1,0x1F,curr.amp[1].fx ^= fxm_acoustc; calc_fx_modified())
-    repeater(bot,2,0x20,0x01,vol_dec(1))
-    repeater(bot,3,0x20,0x01,vol_inc(1))
-    repeater(bot,4,0x20,0x01,gain_dec(1))
-    repeater(bot,5,0x20,0x01,gain_inc(1))
-    one_shot(bot,6,0x1F,midi_invalidate())
+    switch (rowstate[1].mode) {
+        case ROWMODE_AMP:
+            one_shot(bot,1,0x1F,curr.amp[1].fx ^= fxm_acoustc; calc_fx_modified())
+            repeater(bot,2,0x20,0x01,vol_dec(1))
+            repeater(bot,3,0x20,0x01,vol_inc(1))
+            repeater(bot,4,0x20,0x01,gain_dec(1))
+            repeater(bot,5,0x20,0x01,gain_inc(1))
+            one_shot(bot,6,0x1F,midi_invalidate())
+            break;
+    }
 
     one_shot(bot,7,0x3F,program_save())
 
@@ -1200,10 +1257,10 @@ void controller_10msec_timer(void) {
 // main control loop
 void controller_handle(void) {
     // poll foot-switch depression status:
-    curr.fsw.word = fsw_poll();
-    // u16 tmp = fsw_poll();
-    // curr.fsw.bot.byte = (u8)(tmp & (u8)0xFF);
-    // curr.fsw.top.byte = (u8)((tmp >> (u8)8) & (u8)0xFF);
+    // curr.fsw.word = fsw_poll();
+    u16 tmp = fsw_poll();
+    curr.fsw.bot.byte = (u8)(tmp & (u8)0xFF);
+    curr.fsw.top.byte = (u8)((tmp >> (u8)8) & (u8)0xFF);
 
 #define btn_pressed(row, n, on_press) \
     if (is_##row##_button_pressed(M_##n)) { \
@@ -1217,7 +1274,7 @@ void controller_handle(void) {
         if (is_##row##_button_pressed(M_##n)) { \
             timers.row##_##n = (u8)0x80; \
         } else if (is_##row##_button_released(M_##n)) { \
-            if ((timers.row##_##n & (u8)0x80) != 0) { \
+            if ((timers.row##_##n & (u8)0x40) == 0) { \
                 on_release; \
             } \
             timers.row##_##n = (u8)0x00; \
@@ -1239,6 +1296,27 @@ void controller_handle(void) {
             btn_released(top, 4, curr.amp[0].fx ^= fxm_4; calc_fx_modified())
             btn_released(top, 5, curr.amp[0].fx ^= fxm_5; calc_fx_modified())
             btn_released(top, 6, rowstate[0].mode = ROWMODE_AMP)
+            break;
+        case ROWMODE_SELECTFX:
+            break;
+    }
+
+    switch (rowstate[1].mode) {
+        case ROWMODE_AMP:
+            btn_released(bot, 1, curr.amp[1].fx ^= fxm_dirty;           calc_fx_modified())
+            btn_released(bot, 2, curr.amp[1].volume = volume_0dB;       calc_volume_modified())
+            btn_released(bot, 3, curr.amp[1].volume = volume_6dB;       calc_volume_modified())
+            btn_released(bot, 4, pr.default_gain[1] = curr.amp[1].gain)
+            btn_released(bot, 5, curr.amp[1].gain = pr.default_gain[1]; calc_gain_modified())
+            btn_released(bot, 6, rowstate[1].mode = ROWMODE_FX)
+            break;
+        case ROWMODE_FX:
+            btn_released(bot, 1, curr.amp[1].fx ^= fxm_1; calc_fx_modified())
+            btn_released(bot, 2, curr.amp[1].fx ^= fxm_2; calc_fx_modified())
+            btn_released(bot, 3, curr.amp[1].fx ^= fxm_3; calc_fx_modified())
+            btn_released(bot, 4, curr.amp[1].fx ^= fxm_4; calc_fx_modified())
+            btn_released(bot, 5, curr.amp[1].fx ^= fxm_5; calc_fx_modified())
+            btn_released(bot, 6, rowstate[1].mode = ROWMODE_AMP)
             break;
         case ROWMODE_SELECTFX:
             break;
