@@ -813,14 +813,12 @@ static void update_lcd(void) {
         // C/D for clean/dirty
         lcd_rows[row_amp1][0] = 'C' + ((curr.amp[0].fx & fxm_dirty) != 0);
     }
-
-    // Print volume levels:
-    bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[0].volume]);
     hextoa(lcd_rows[row_amp1],  5, or_default(curr.amp[0].gain, pr.default_gain[0]));
+    bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[0].volume]);
 
     test_fx = 0;
     for (i = 0; i < 5; i++, test_fx <<= 1) {
-        lcd_rows[row_amp2][15 + i] = (curr.amp[0].fx & test_fx) ? '1' : '-';
+        lcd_rows[row_amp1][15 + i] = (curr.amp[0].fx & test_fx) ? '1' : '-';
     }
 
     // AMP2:
@@ -831,10 +829,13 @@ static void update_lcd(void) {
         // C/D for clean/dirty
         lcd_rows[row_amp2][0] = 'C' + ((curr.amp[1].fx & fxm_dirty) != 0);
     }
+    hextoa(lcd_rows[row_amp2],  5, or_default(curr.amp[1].gain, pr.default_gain[1]));    
+    bcdtoa(lcd_rows[row_amp2], 13, dB_bcd_lookup[curr.amp[1].volume]);
 
-    bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[1].volume]);
-    hextoa(lcd_rows[row_amp2],  5, or_default(curr.amp[1].gain, pr.default_gain[1]));
-    lcd_rows[row_amp2][11] = (curr.amp[1].fx & fxm_1) ? '1' : '-';
+    test_fx = 0;
+    for (i = 0; i < 5; i++, test_fx <<= 1) {
+        lcd_rows[row_amp2][15 + i] = (curr.amp[1].fx & test_fx) ? '1' : '-';
+    }
     
     lcd_updated_all();
 #endif
