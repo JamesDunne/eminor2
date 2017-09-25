@@ -2,7 +2,7 @@ all: eminorv2.gen.js www/all.min.js www/all.js
 
 debug: eminorv2.gen.js www/all.js
 
-eminorv2.gen.js: hardware.c ../common/controller-v5.c Makefile
+eminorv2.gen.js: hardware.c ../common/controller-v5.c ../common/types.h ../common/hardware.h ../common/v5_fx_names.h Makefile
 	emcc -DHWFEAT_LABEL_UPDATES -DHW_VERSION=5 hardware.c ../common/controller-v5.c -o eminorv2.gen.js -s EXPORT_NAME="'eminorv2'" -s EXPORTED_FUNCTIONS="['_controller_init','_controller_10msec_timer','_controller_handle']" -s DEFAULT_LIBRARY_FUNCS_TO_INCLUDE="['memcpy','memset','malloc','free','strlen','$Browser']" -s LINKABLE="1"
 
 www/all.min.js: es5.js web.js typedarray.js storage.js console.js rainbow.js c.js generic.js eminorv2.gen.js driver.js Makefile
