@@ -115,27 +115,17 @@ Press AMP    to cancel and revert to existing FX and then switch to AMP mode for
 #include "../common/types.h"
 #include "../common/hardware.h"
 
-#define fxm_dirty  (u8)0x01
-#define fxm_xy     (u8)0x02
-#define fxm_pitch  (u8)0x04
-#define fxm_chorus (u8)0x08
-#define fxm_delay  (u8)0x10
-#define fxm_filter (u8)0x20
-#define fxm_rotary (u8)0x40
+#define fxm_1       (u8)0x01
+#define fxm_2       (u8)0x02
+#define fxm_3       (u8)0x04
+#define fxm_chorus  (u8)0x08
+#define fxm_delay   (u8)0x10
 
-#define fxb_dirty  (u8)0
-#define fxb_xy     (u8)1
-#define fxb_pitch  (u8)2
-#define fxb_chorus (u8)3
-#define fxb_delay  (u8)4
-#define fxb_filter (u8)5
-#define fxb_rotary (u8)6
+#define fxm_acoustc (u8)0x40
+#define fxm_dirty   (u8)0x80
 
-#define read_bit(name,e)   ((e & fxm_##name) >> fxb_##name)
+#define read_bit(name,e)   (e & fxm_##name)
 #define toggle_bit(name,e) e = e ^ fxm_##name
-
-#define default_gain ((u8)0x40)
-#define or_default(gain) (gain == 0 ? default_gain : gain)
 
 // For the Axe-FX Vol block, Log 20A means that the resistance is 20% at the halfway point in the travel.
 // If you put the knob at noon, the volume would be 20% of maximum (about -14 dB).
@@ -144,12 +134,12 @@ Press AMP    to cancel and revert to existing FX and then switch to AMP mode for
 #define volume_0dB 98
 #define volume_6dB 127
 
-#define scene_count_max 10
+#define scene_count_max 8
 
 struct amp {
     u8 gain;    // amp gain (7-bit), if 0 then the default gain is used
-    u8 fx;      // bitfield for FX enable/disable, including clean/dirty switch.
-    u8 volume;  // volume (7-bit) represented as quarter-dB where 127 = +6dB, 0dB = 67
+    u8 fx;      // bitfield for FX enable/disable, including clean/dirty/acoustic switch.
+    u8 volume;  // volume (7-bit) represented where 0 = -inf, 98 = 0dB, 127 = +6dB
 };
 
 // Program v5 data structure loaded from / written to flash memory:
@@ -162,6 +152,12 @@ struct program {
 
     // Tempo in bpm:
     u8 tempo;
+
+    // Default gain setting for each amp:
+    u8 default_gain[2];
+
+    // MIDI CC numbers for FX enable/disable for each amp:
+    u8 fx_midi_cc[2][5];
 
     // Scene descriptors (5 bytes each):
     struct scene_descriptor {
@@ -238,6 +234,8 @@ COMPILE_ASSERT(sizeof(struct set_list) == 64);
 
 #define axe_cc_xy_amp1     100
 #define axe_cc_xy_amp2     101
+#define axe_cc_xy_cab2     102
+#define axe_cc_xy_cab1     103
 #define axe_cc_xy_chorus1  104
 #define axe_cc_xy_chorus2  105
 #define axe_cc_xy_delay1   106
@@ -523,13 +521,13 @@ static void program_save(void);
 #define calc_cc_toggle(enable) \
     ((u8)-((s8)enable) >> (u8)1)
 
+#define or_default(a, b) (a == 0 ? b : a)
+
 // MIDI is sent at a fixed 3,125 bytes/sec transfer rate; 56 bytes takes 175ms to complete.
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     u8 diff = 0;
-    u8 gain, last_gain;
-    u8 dirty, last_dirty;
-    u8 gate, last_gate;
+    u8 acoustc, last_acoustc, acoustc_changed;
     u8 xy;
     u8 send_gain;
     u8 dirty_changed;
@@ -542,51 +540,106 @@ static void calc_midi(void) {
     }
 
     // Send gain controller changes:
-    dirty = read_bit(dirty, curr.amp[0].fx);
-    last_dirty = read_bit(dirty, last.amp[0].fx);
-    dirty_changed = (u8)(dirty != last_dirty);
+    acoustc = curr.amp[0].fx & fxm_acoustc;
+    last_acoustc = last.amp[0].fx & fxm_acoustc;
+    acoustc_changed = last_acoustc != acoustc;
 
-    gain = or_default(curr.amp[0].gain);
-    last_gain = or_default(last.amp[0].gain);
-    gain_changed = (u8)(gain != last_gain);
-
-    gate = (u8)(dirty && (gain >= 0x10));
-    last_gate = (u8)(last_dirty && (last_gain >= 0x10));
-
-    diff |= gain_changed;
-
-    send_gain = (u8)((dirty && gain_changed) || dirty_changed);
-    if (send_gain) {
-        DEBUG_LOG2("MIDI set AMP1 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
-        midi_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
-        if (gate != last_gate) {
-            midi_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(gate));
+    if (acoustc_changed) {
+        if (acoustc != 0) {
+            // Changed to acoustic sound:
+            DEBUG_LOG0("MIDI set AMP1 acoustic");
+            // AMP1 -> Y, CAB1 -> Y, GATE -> off, COMPRESSOR -> on, GAIN -> 0x5E
+            midi_axe_cc(axe_cc_xy_amp1, 0x7F);
+            midi_axe_cc(axe_cc_xy_cab1, 0x7F);
+            midi_axe_cc(axe_cc_byp_gate1, 0x00);
             midi_axe_cc(axe_cc_byp_compressor1, 0x7F);
+            midi_axe_cc(axe_cc_external3, 0x5E);
+        } else {
+            // Changed to electric sound:
+            midi_axe_cc(axe_cc_xy_amp1, 0x00);
+            midi_axe_cc(axe_cc_xy_cab1, 0x00);
         }
-        diff = 1;
     }
 
-    dirty = read_bit(dirty, curr.amp[1].fx);
-    last_dirty = read_bit(dirty, last.amp[1].fx);
-    dirty_changed = (u8)(dirty != last_dirty);
+    if (acoustc == 0) {
+        u8 dirty, last_dirty;
+        u8 gain, last_gain;
+        u8 gate, last_gate;
 
-    gain = or_default(curr.amp[1].gain);
-    last_gain = or_default(last.amp[1].gain);
-    gain_changed = (u8)(gain != last_gain);
+        dirty = curr.amp[0].fx & fxm_dirty;
+        last_dirty = last.amp[0].fx & fxm_dirty;
+        dirty_changed = (u8)(dirty != last_dirty);
 
-    gate = (u8)(dirty && (gain >= 0x10));
-    last_gate = (u8)(last_dirty && (last_gain >= 0x10));
+        gain = or_default(curr.amp[0].gain, pr.default_gain[0]);
+        last_gain = or_default(last.amp[0].gain, pr.default_gain[0]);
+        gain_changed = (u8)(gain != last_gain);
 
-    diff |= gain_changed;
-    send_gain = (u8)((dirty && gain_changed) || dirty_changed);
-    if (send_gain) {
-        DEBUG_LOG2("MIDI set AMP2 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
-        midi_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
-        if (gate != last_gate) {
-            midi_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(gate));
-            midi_axe_cc(axe_cc_byp_compressor2, 0x7F);
+        gate = (u8)(dirty && (gain >= 0x01));
+        last_gate = (u8)(last_dirty && (last_gain >= 0x01));
+
+        diff |= gain_changed;
+
+        send_gain = (u8)((dirty && gain_changed) || dirty_changed || acoustc_changed);
+        if (send_gain) {
+            DEBUG_LOG2("MIDI set AMP1 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
+            midi_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
+            if (gate != last_gate) {
+                midi_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(gate));
+                midi_axe_cc(axe_cc_byp_compressor1, 0x7F);
+            }
+            diff = 1;
         }
-        diff = 1;
+    }
+
+    // Send gain controller changes:
+    acoustc = curr.amp[1].fx & fxm_acoustc;
+    last_acoustc = last.amp[1].fx & fxm_acoustc;
+    acoustc_changed = last_acoustc != acoustc;
+
+    if (acoustc_changed) {
+        if (acoustc != 0) {
+            // Changed to acoustic sound:
+            DEBUG_LOG0("MIDI set AMP2 acoustic");
+            // AMP1 -> Y, CAB1 -> Y, GATE -> off, COMPRESSOR -> on, GAIN -> 0x5E
+            midi_axe_cc(axe_cc_xy_amp2, 0x7F);
+            midi_axe_cc(axe_cc_xy_cab2, 0x7F);
+            midi_axe_cc(axe_cc_byp_gate2, 0x00);
+            midi_axe_cc(axe_cc_byp_compressor2, 0x7F);
+            midi_axe_cc(axe_cc_external4, 0x5E);
+        } else {
+            // Changed to electric sound:
+            midi_axe_cc(axe_cc_xy_amp2, 0x00);
+            midi_axe_cc(axe_cc_xy_cab2, 0x00);
+        }
+    }
+
+    if (acoustc == 0) {
+        u8 dirty, last_dirty;
+        u8 gain, last_gain;
+        u8 gate, last_gate;
+
+        dirty = curr.amp[1].fx & (fxm_dirty | fxm_acoustc);
+        last_dirty = last.amp[1].fx & (fxm_dirty | fxm_acoustc);
+        dirty_changed = (u8)(dirty != last_dirty);
+
+        gain = or_default(curr.amp[1].gain, pr.default_gain[1]);
+        last_gain = or_default(last.amp[1].gain, pr.default_gain[1]);
+        gain_changed = (u8)(gain != last_gain);
+
+        gate = (u8)(dirty && (gain >= 0x01));
+        last_gate = (u8)(last_dirty && (last_gain >= 0x01));
+
+        diff |= gain_changed;
+        send_gain = (u8)((dirty && gain_changed) || dirty_changed || acoustc_changed);
+        if (send_gain) {
+            DEBUG_LOG2("MIDI set AMP2 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
+            midi_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
+            if (gate != last_gate) {
+                midi_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(gate));
+                midi_axe_cc(axe_cc_byp_compressor2, 0x7F);
+            }
+            diff = 1;
+        }
     }
 
 #if 0
@@ -1285,14 +1338,20 @@ void controller_init(void) {
 }
 
 struct timers {
+    u8 top_1;
+    u8 top_2;
+    u8 top_3;
+    u8 top_4;
+    u8 top_5;
+    u8 top_6;
+    u8 top_7;
+    u8 top_8;
     u8 bot_1;
     u8 bot_2;
     u8 bot_3;
     u8 bot_4;
     u8 bot_5;
     u8 bot_6;
-    u8 top_7;
-    u8 top_8;
 } timers;
 
 #if 0
@@ -1368,64 +1427,43 @@ void controller_handle(void) {
     // curr.fsw.bot.byte = (u8)(tmp & (u8)0xFF);
     // curr.fsw.top.byte = (u8)((tmp >> (u8)8) & (u8)0xFF);
 
-    #define 
+#define btn_pressed(row, n, on_press) \
+    if (is_##row##_button_pressed(M_##n)) { \
+        timers.row##_##n = (u8)0x80; \
+        on_press; \
+    } else if (is_##row##_button_released(M_##n)) { \
+        timers.row##_##n = (u8)0x00; \
+    }
+
+#define btn_released(row, n, on_release) \
+        if (is_##row##_button_pressed(M_##n)) { \
+            timers.row##_##n = (u8)0x80; \
+        } else if (is_##row##_button_released(M_##n)) { \
+            if ((timers.row##_##n & (u8)0x80) != 0) { \
+                on_release; \
+            } \
+            timers.row##_##n = (u8)0x00; \
+        }
 
     switch (rowstate[0].mode) {
         case ROWMODE_AMP:
-            if (curr.fsw.top.bits._1)
+            btn_released(top, 1, curr.amp[0].fx ^= fxm_dirty;           calc_fx_modified())
+            btn_released(top, 2, curr.amp[0].volume = volume_0dB;       calc_volume_modified())
+            btn_released(top, 3, curr.amp[0].volume = volume_6dB;       calc_volume_modified())
+            btn_released(top, 4, pr.default_gain[0] = curr.amp[0].gain)
+            btn_released(top, 5, curr.amp[0].gain = pr.default_gain[0]; calc_gain_modified())
+            btn_released(top, 6, rowstate[0].mode = ROWMODE_FX)
             break;
         case ROWMODE_FX:
+            btn_released(top, 1, curr.amp[0].fx ^= fxm_1;           calc_fx_modified())
+            btn_released(top, 2, curr.amp[0].fx ^= fxm_2;           calc_fx_modified())
+            btn_released(top, 3, curr.amp[0].fx ^= fxm_3;           calc_fx_modified())
+            btn_released(top, 4, curr.amp[0].fx ^= fxm_chorus;      calc_fx_modified())
+            btn_released(top, 5, curr.amp[0].fx ^= fxm_delay;       calc_fx_modified())
+            btn_released(top, 6, rowstate[0].mode = ROWMODE_AMP)
             break;
         case ROWMODE_SELECTFX:
             break;
-    }
-
-    // Handle bottom control switches:
-    // AMP (1 and 2)
-    if (is_bot_button_pressed(M_1)) {
-        timers.bot_1 = (u8)0x80;
-    } else if (is_bot_button_released(M_1)) {
-        if ((timers.bot_1 & (u8)0x80) != (u8)0) {
-            curr.selected_both ^= 1;
-        }
-        timers.bot_1 = (u8)0;
-    }
-
-    // AMP (1 or 2)
-    if (is_bot_button_pressed(M_2)) {
-        timers.bot_2 = (u8)0x80;
-    } else if (is_bot_button_released(M_2)) {
-        if ((timers.bot_2 & (u8)0x80) != (u8)0) {
-            curr.selected_amp ^= 1;
-            //curr.selected_both = 0;
-        }
-        timers.bot_2 = (u8)0;
-    }
-
-    // GAIN/VOL
-    if (is_bot_button_pressed(M_3)) {
-        timers.bot_3 = (u8)0x80;
-    } else if (is_bot_button_released(M_3)) {
-        if ((timers.bot_3 & (u8)0x80) != (u8)0) {
-            gain_mode ^= (u8)1;
-        }
-        timers.bot_3 = (u8)0;
-    }
-
-    // DEC
-    if (is_bot_button_pressed(M_4)) {
-        timers.bot_4 = (u8)0x80;
-        curr_amp_dec();
-    } else if (is_bot_button_released(M_4)) {
-        timers.bot_4 &= ~(u8)0xC0;
-    }
-
-    // INC
-    if (is_bot_button_pressed(M_5)) {
-        timers.bot_5 = (u8)0x80;
-        curr_amp_inc();
-    } else if (is_bot_button_released(M_5)) {
-        timers.bot_5 &= ~(u8)0xC0;
     }
 
     // TAP:
