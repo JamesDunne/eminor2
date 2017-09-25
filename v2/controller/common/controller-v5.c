@@ -559,6 +559,7 @@ static void calc_midi(void) {
             midi_axe_cc(axe_cc_xy_amp1, 0x00);
             midi_axe_cc(axe_cc_xy_cab1, 0x00);
         }
+        diff = 1;
     }
 
     if (acoustc == 0) {
@@ -641,23 +642,6 @@ static void calc_midi(void) {
             diff = 1;
         }
     }
-
-#if 0
-    // Send X/Y changes:
-    // X = 127, Y = 0
-    xy = read_bit(xy, curr.amp[0].fx);
-    if (xy != read_bit(xy, last.amp[0].fx)) {
-        DEBUG_LOG1("MIDI set AMP1 %s", xy == 0 ? "X" : "Y");
-        midi_axe_cc(axe_cc_xy_amp1, calc_cc_toggle(!xy));
-        diff = 1;
-    }
-    xy = read_bit(xy, curr.amp[1].fx);
-    if (xy != read_bit(xy, last.amp[1].fx)) {
-        DEBUG_LOG1("MIDI set AMP2 %s", xy == 0 ? "X" : "Y");
-        midi_axe_cc(axe_cc_xy_amp2, calc_cc_toggle(!xy));
-        diff = 1;
-    }
-#endif
 
     // Update volumes:
     if (curr.amp[0].volume != last.amp[0].volume) {
