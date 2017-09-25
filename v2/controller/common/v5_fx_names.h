@@ -1,4 +1,4 @@
-rom const char v5_fx_names[10][] = {
+rom const char *v5_fx_names[] = {
  "Chorus1"             // 41
 ,"Chorus2"             // 42
 ,"Comp1"         // 43

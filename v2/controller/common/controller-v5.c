@@ -325,10 +325,6 @@ u8 sl_max;
 struct set_list sl;
 // Loaded program:
 struct program pr;
-// Calculated data upon program load:
-struct {
-    rom const char *fx_names[2][5];
-} prcalc;
 // Pointer to unmodified program:
 rom struct program *origpr;
 
@@ -493,24 +489,6 @@ static void send_leds(void) {
 
 static void update_lcd(void);
 
-static void curr_amp_dec(void);
-
-static void curr_amp_inc(void);
-
-static void curr_amp_toggle(void);
-
-static void curr_amp_vol_decrease(void);
-
-static void curr_amp_vol_increase(void);
-
-static void curr_amp_vol_toggle(void);
-
-static void curr_amp_gain_decrease(void);
-
-static void curr_amp_gain_increase(void);
-
-static void curr_amp_gain_toggle(void);
-
 static void prev_scene(void);
 
 static void next_scene(void);
@@ -669,11 +647,11 @@ static void calc_midi(void) {
     // Send FX state:
     for (i = 0; i < 5; i++) {
         if ((curr.amp[0].fx & test_fx) != (last.amp[0].fx & test_fx)) {
-            DEBUG_LOG2("MIDI set AMP1 %s %s", prcalc.fx_names[0][i], (curr.amp[0].fx & test_fx) == 0 ? "off" : "on");
+            DEBUG_LOG2("MIDI set AMP1 %s %s", fx_name(pr.fx_midi_cc[0][i]), (curr.amp[0].fx & test_fx) == 0 ? "off" : "on");
             midi_axe_cc(pr.fx_midi_cc[0][i], calc_cc_toggle(curr.amp[0].fx & test_fx));
         }
         if ((curr.amp[1].fx & test_fx) != (last.amp[1].fx & test_fx)) {
-            DEBUG_LOG2("MIDI set AMP2 %s %s", prcalc.fx_names[1][i], (curr.amp[1].fx & test_fx) == 0 ? "off" : "on");
+            DEBUG_LOG2("MIDI set AMP2 %s %s", fx_name(pr.fx_midi_cc[1][i]), (curr.amp[1].fx & test_fx) == 0 ? "off" : "on");
             midi_axe_cc(pr.fx_midi_cc[1][i], calc_cc_toggle(curr.amp[1].fx & test_fx));
         }
     }
@@ -1024,143 +1002,8 @@ static void prev_scene() {
     }
 }
 
-#if 0
-
 #define min(a,b) (a < b ? a : b)
 #define max(a,b) (a > b ? a : b)
-
-static void curr_amp_vol_toggle() {
-    // Toggle between 0dB and +6dB:
-    if (curr.selected_both) {
-        u8 volume = max((curr.amp[0].volume), (curr.amp[1].volume));
-        if (volume == volume_0dB) {
-            curr.amp[0].volume = volume_6dB;
-            curr.amp[1].volume = volume_6dB;
-        } else {
-            curr.amp[0].volume = volume_0dB;
-            curr.amp[1].volume = volume_0dB;
-        }
-    } else {
-        if (curr.amp[curr.selected_amp].volume == volume_0dB) {
-            curr.amp[curr.selected_amp].volume = volume_6dB;
-        } else {
-            curr.amp[curr.selected_amp].volume = volume_0dB;
-        }
-    }
-    calc_volume_modified();
-}
-
-static void curr_amp_vol_increase() {
-    if (curr.selected_both) {
-        u8 volume = max((curr.amp[0].volume), (curr.amp[1].volume));
-        if (volume < (u8)127) {
-            volume++;
-            curr.amp[0].volume = volume;
-            curr.amp[1].volume = volume;
-            calc_volume_modified();
-        }
-    } else {
-        u8 volume = (curr.amp[curr.selected_amp].volume);
-        if (volume < (u8)127) {
-            volume++;
-            curr.amp[curr.selected_amp].volume = volume;
-            calc_volume_modified();
-        }
-    }
-}
-
-static void curr_amp_vol_decrease() {
-    if (curr.selected_both) {
-        u8 volume = min((curr.amp[0].volume), (curr.amp[1].volume));
-        if (volume > (u8)0) {
-            volume--;
-            curr.amp[0].volume = volume;
-            curr.amp[1].volume = volume;
-            calc_volume_modified();
-        }
-    } else {
-        u8 volume = (curr.amp[curr.selected_amp].volume);
-        if (volume > (u8)0) {
-            volume--;
-            curr.amp[curr.selected_amp].volume = volume;
-            calc_volume_modified();
-        }
-    }
-}
-
-static void curr_amp_gain_toggle() {
-    // Reset gain to default_gain:
-    if (curr.selected_both) {
-        curr.amp[0].gain = 0;
-        curr.amp[1].gain = 0;
-    } else {
-        curr.amp[curr.selected_amp].gain = 0;
-    }
-    calc_gain_modified();
-}
-
-static void curr_amp_gain_increase() {
-    if (curr.selected_both) {
-        u8 gain = max(or_default(curr.amp[0].gain), or_default(curr.amp[1].gain));
-        if (gain < (u8)127) {
-            gain++;
-            curr.amp[0].gain = gain;
-            curr.amp[1].gain = gain;
-            calc_gain_modified();
-        }
-    } else {
-        u8 gain = or_default(curr.amp[curr.selected_amp].gain);
-        if (gain < (u8)127) {
-            gain++;
-            curr.amp[curr.selected_amp].gain = gain;
-            calc_gain_modified();
-        }
-    }
-}
-
-static void curr_amp_gain_decrease() {
-    if (curr.selected_both) {
-        u8 gain = min(or_default(curr.amp[0].gain), or_default(curr.amp[1].gain));
-        if (gain > (u8)1) {
-            gain--;
-            curr.amp[0].gain = gain;
-            curr.amp[1].gain = gain;
-            calc_gain_modified();
-        }
-    } else {
-        u8 gain = or_default(curr.amp[curr.selected_amp].gain);
-        if (gain > (u8)1) {
-            gain--;
-            curr.amp[curr.selected_amp].gain = gain;
-            calc_gain_modified();
-        }
-    }
-}
-
-static void curr_amp_inc() {
-    if (gain_mode == (u8)0) {
-        curr_amp_gain_increase();
-    } else {
-        curr_amp_vol_increase();
-    }
-}
-
-static void curr_amp_dec() {
-    if (gain_mode == (u8)0) {
-        curr_amp_gain_decrease();
-    } else {
-        curr_amp_vol_decrease();
-    }
-}
-
-static void curr_amp_toggle() {
-    if (gain_mode == (u8)0) {
-        curr_amp_gain_toggle();
-    } else {
-        curr_amp_vol_toggle();
-    }
-}
-#endif
 
 static void program_save() {
     // Load program:
@@ -1268,11 +1111,8 @@ struct timers {
     u8 bot_4;
     u8 bot_5;
     u8 bot_6;
+    u8 bot_7;
 } timers;
-
-#if 0
-u8 val;
-#endif
 
 // called every 10ms
 void controller_10msec_timer(void) {
@@ -1283,7 +1123,7 @@ void controller_10msec_timer(void) {
             timers.row##_##n = (timers.row##_##n & (u8)0x80) | ((timers.row##_##n & (u8)0x7F) + (u8)1); \
             if ((timers.row##_##n & (u8)0x7F) == (u8)max) { \
                 timers.row##_##n = (u8)0x00; \
-                op_func(); \
+                op_func; \
             } \
         } \
     }
@@ -1297,42 +1137,67 @@ void controller_10msec_timer(void) {
             timers.row##_##n |= (u8)0x40; \
         } \
         if (((timers.row##_##n & (u8)0x40) != (u8)0) && ((timers.row##_##n & (u8)mask) == (u8)0)) { \
-            op_func(); \
+            op_func; \
         } \
     }
 
-    one_shot(bot,1,0x3F,program_save)
+#define vol_dec(ampno) { \
+        u8 volume = (curr.amp[ampno].volume); \
+        if (volume > (u8)0) { \
+            volume--; \
+            curr.amp[ampno].volume = volume; \
+            calc_volume_modified(); \
+        } \
+    }
 
-    one_shot(bot,2,0x1F,midi_invalidate)
-    one_shot(bot,3,0x1F,curr_amp_toggle)
+#define vol_inc(ampno) { \
+        u8 volume = (curr.amp[ampno].volume); \
+        if (volume < (u8)127) { \
+            volume++; \
+            curr.amp[ampno].volume = volume; \
+            calc_volume_modified(); \
+        } \
+    }
 
-    repeater(bot,4,0x20,0x01,curr_amp_dec)
-    repeater(bot,5,0x20,0x01,curr_amp_inc)
+#define gain_dec(ampno) { \
+        u8 gain = (curr.amp[ampno].gain); \
+        if (gain > (u8)1) { \
+            gain--; \
+            curr.amp[ampno].gain = gain; \
+            calc_gain_modified(); \
+        } \
+    }
 
-    one_shot(bot,6,0x3F,toggle_setlist_mode)
+#define gain_inc(ampno) { \
+        u8 gain = (curr.amp[ampno].gain); \
+        if (gain < (u8)127) { \
+            gain++; \
+            curr.amp[ampno].gain = gain; \
+            calc_gain_modified(); \
+        } \
+    }
 
-    repeater(top,7,0x20,0x03,prev_song)
-    repeater(top,8,0x20,0x03,next_song)
+    one_shot(top,1,0x1F,curr.amp[0].fx ^= fxm_acoustc; calc_fx_modified())
+    repeater(top,2,0x20,0x01,vol_dec(0))
+    repeater(top,3,0x20,0x01,vol_inc(0))
+    repeater(top,4,0x20,0x01,gain_dec(0))
+    repeater(top,5,0x20,0x01,gain_inc(0))
+    one_shot(top,6,0x1F,midi_invalidate())
+
+    one_shot(bot,1,0x1F,curr.amp[1].fx ^= fxm_acoustc; calc_fx_modified())
+    repeater(bot,2,0x20,0x01,vol_dec(1))
+    repeater(bot,3,0x20,0x01,vol_inc(1))
+    repeater(bot,4,0x20,0x01,gain_dec(1))
+    repeater(bot,5,0x20,0x01,gain_inc(1))
+    one_shot(bot,6,0x1F,midi_invalidate())
+
+    one_shot(bot,7,0x3F,program_save())
+
+    repeater(top,7,0x20,0x03,prev_song())
+    repeater(top,8,0x20,0x03,next_song())
 
 #undef repeater
 #undef one_shot
-
-#if 0
-    // TESTING; change gain of both amps with a triangle oscillator:
-    midi_axe_cc(axe_cc_external3, (val & (u8)0x7F));
-    midi_axe_cc(axe_cc_external4, (val & (u8)0x7F));
-    if ((val & (u8)0x80) == (u8)0x80) {
-        val--;
-        if ((val & (u8)0x7F) == (u8)0) {
-            val &= ~(u8)0x80;
-        }
-    } else {
-        val++;
-        if ((val & (u8)0x7F) == (u8)127) {
-            val |= (u8)0x80;
-        }
-    }
-#endif
 }
 
 // main control loop
@@ -1382,15 +1247,17 @@ void controller_handle(void) {
             break;
     }
 
-    // TAP:
-    if (is_bot_button_pressed(M_7)) {
-        // Toggle TAP CC value between 0x00 and 0x7F:
-        timers.bot_6 = (u8)0x80;
-        tap ^= (u8)0x7F;
-        midi_axe_cc(axe_cc_taptempo, tap);
-    } else if (is_bot_button_pressed(M_6)) {
-        timers.bot_6 = (u8)0x00;
-    }
+    // // TAP:
+    // if (is_bot_button_pressed(M_7)) {
+    //     // Toggle TAP CC value between 0x00 and 0x7F:
+    //     timers.bot_6 = (u8)0x80;
+    //     tap ^= (u8)0x7F;
+    //     midi_axe_cc(axe_cc_taptempo, tap);
+    // } else if (is_bot_button_pressed(M_6)) {
+    //     timers.bot_6 = (u8)0x00;
+    // }
+
+    btn_released(bot,7,toggle_setlist_mode())
 
     // NEXT SCENE:
     if (is_bot_button_pressed(M_8)) {
