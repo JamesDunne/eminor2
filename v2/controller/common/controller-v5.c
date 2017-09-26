@@ -824,9 +824,9 @@ static void update_lcd(void) {
     hextoa(lcd_rows[row_amp1],  5, or_default(curr.amp[0].gain, pr.default_gain[0]));
     bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[0].volume]);
 
-    test_fx = 0;
+    test_fx = 1;
     for (i = 0; i < 5; i++, test_fx <<= 1) {
-        lcd_rows[row_amp1][15 + i] = (curr.amp[0].fx & test_fx) ? '1' : '-';
+        lcd_rows[row_amp1][15 + i] = (curr.amp[0].fx & test_fx) ? '1' + i : '-';
     }
 
     // AMP2:
@@ -840,9 +840,9 @@ static void update_lcd(void) {
     hextoa(lcd_rows[row_amp2],  5, or_default(curr.amp[1].gain, pr.default_gain[1]));    
     bcdtoa(lcd_rows[row_amp2], 13, dB_bcd_lookup[curr.amp[1].volume]);
 
-    test_fx = 0;
+    test_fx = 1;
     for (i = 0; i < 5; i++, test_fx <<= 1) {
-        lcd_rows[row_amp2][15 + i] = (curr.amp[1].fx & test_fx) ? '1' : '-';
+        lcd_rows[row_amp2][15 + i] = (curr.amp[1].fx & test_fx) ? '1' + i : '-';
     }
     
     lcd_updated_all();
