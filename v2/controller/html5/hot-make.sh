@@ -1,1 +1,1 @@
-ls ../common/*.[ch] *.js *.[ch] | entr make debug
+ls ../common/*.[ch] *.js *.[ch] | entr make debug reload

@@ -10,3 +10,6 @@ www/all.min.js: es5.js web.js typedarray.js storage.js console.js rainbow.js c.j
 
 www/all.js: es5.js web.js typedarray.js storage.js console.js rainbow.js c.js generic.js eminorv2.gen.js driver.js Makefile
 	cat es5.js web.js typedarray.js storage.js console.js rainbow.js c.js generic.js eminorv2.gen.js driver.js > www/all.js
+
+reload: debug
+	echo 'tell application "Google Chrome" to reload active tab of window 1' | osascript
