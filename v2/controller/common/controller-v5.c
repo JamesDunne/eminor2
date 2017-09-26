@@ -779,14 +779,14 @@ static void update_lcd(void) {
     // Print setlist date:
     if (curr.setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[row_stat][i] = "Prg ##/128 Scn ##/##"[i];
+            lcd_rows[row_stat][i] = "Prg  0/128 Scn  0/ 0"[i];
         }
 
         // Show program number:
         ritoa(lcd_rows[row_stat], 5, curr.pr_idx + (u8)1);
     } else {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[row_stat][i] = "Sng ##/##  Scn ##/##"[i];
+            lcd_rows[row_stat][i] = "Sng  0/ 0  Scn  0/ 0"[i];
         }
 
         // Show setlist song index:
