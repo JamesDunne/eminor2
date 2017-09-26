@@ -546,9 +546,9 @@ static void calc_midi(void) {
             // AMP1 -> Y, CAB1 -> Y, GATE -> off, COMPRESSOR -> on, GAIN -> 0x5E
             midi_axe_cc(axe_cc_xy_amp1, 0x00);
             midi_axe_cc(axe_cc_xy_cab1, 0x00);
+            midi_axe_cc(axe_cc_external3, 0x5E);
             midi_axe_cc(axe_cc_byp_gate1, 0x00);
             midi_axe_cc(axe_cc_byp_compressor1, 0x7F);
-            midi_axe_cc(axe_cc_external3, 0x5E);
         } else {
             // Changed to electric sound:
             DEBUG_LOG0("MIDI set AMP1 acoustic off");
@@ -898,10 +898,10 @@ static void calc_leds(void) {
             if (curr.amp[1].volume > volume_0dB) {
                 mode_leds[mode].bot.byte |= 0x04;
             }
-            if (curr.amp[1].gain < pr.default_gain[0]) {
+            if (curr.amp[1].gain < pr.default_gain[1]) {
                 mode_leds[mode].bot.byte |= 0x08;
             }
-            if (curr.amp[1].gain > pr.default_gain[0]) {
+            if (curr.amp[1].gain > pr.default_gain[1]) {
                 mode_leds[mode].bot.byte |= 0x10;
             }
             break;
