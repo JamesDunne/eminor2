@@ -883,7 +883,7 @@ static void calc_leds(void) {
             break;
         case ROWMODE_FX:
             mode_leds[mode].top.byte = (curr.amp[0].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
-                | (curr.fsw.top.byte & (u8)(0x20 | 0x40 | 0x80));
+                | 0x20 | (curr.fsw.top.byte & (u8)(0x40 | 0x80));
             break;
     }
 
@@ -907,7 +907,7 @@ static void calc_leds(void) {
             break;
     case ROWMODE_FX:
             mode_leds[mode].bot.byte = (curr.amp[1].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
-                | (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80));
+                | 0x20 | (curr.fsw.bot.byte & (u8)(0x40 | 0x80));
             break;
     }
 
