@@ -112,89 +112,7 @@ Press AMP    to cancel and revert to existing FX and then switch to AMP mode for
 
 #if HW_VERSION == 5
 
-#include "../common/types.h"
-#include "../common/hardware.h"
-
-#define fxm_1       (u8)0x01
-#define fxm_2       (u8)0x02
-#define fxm_3       (u8)0x04
-#define fxm_4       (u8)0x08
-#define fxm_5       (u8)0x10
-////////////////////////0x20
-#define fxm_acoustc (u8)0x40
-#define fxm_dirty   (u8)0x80
-
-#define read_bit(name,e)   (e & fxm_##name)
-#define toggle_bit(name,e) e = e ^ fxm_##name
-
-// For the Axe-FX Vol block, Log 20A means that the resistance is 20% at the halfway point in the travel.
-// If you put the knob at noon, the volume would be 20% of maximum (about -14 dB).
-// So, 0 = -INFdB, 63 = -14dB and 127 = 0dB
-// We adjust the scale by +6dB to define 0dB at 98 and +6dB at 127
-#define volume_0dB 98
-#define volume_6dB 127
-
-#define scene_count_max 8
-
-struct amp {
-    u8 gain;    // amp gain (7-bit), if 0 then the default gain is used
-    u8 fx;      // bitfield for FX enable/disable, including clean/dirty/acoustic switch.
-    u8 volume;  // volume (7-bit) represented where 0 = -inf, 98 = 0dB, 127 = +6dB
-};
-
-// Program v5 data structure loaded from / written to flash memory:
-struct program {
-    // Index into the name table for the name of the program (song):
-    u16 name_index;
-
-    // AXE-FX program # to switch to (7 bit)
-    u8 midi_program;
-
-    // Tempo in bpm:
-    u8 tempo;
-
-    // Default gain setting for each amp:
-    u8 default_gain[2];
-
-    // MIDI CC numbers for FX enable/disable for each amp:
-    u8 fx_midi_cc[2][5];
-
-    // Scene descriptors (5 bytes each):
-    struct scene_descriptor {
-        // 2 amps:
-        struct amp amp[2];
-    } scene[scene_count_max];
-};
-
-// amp state is 3 bytes:
-COMPILE_ASSERT(sizeof(struct amp) == 3);
-
-// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
-// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
-COMPILE_ASSERT(sizeof(struct program) == 64);
-
-// Set list entry
-struct set_entry {
-    u8 program;
-};
-
-// Set lists
-struct set_list {
-    u8 count;                       // number of songs in set list
-    u8 d0, d1;                      // date of show (see DATES below)
-    struct set_entry entries[61];
-};
-
-// DATES since 2014 are stored in 16 bits in the following form: (LSB on right)
-//  yyyyyyym mmmddddd;
-//  |||||||| ||||||||
-//  |||||||| |||\++++ day of month [0..30]
-//  |||||||\-+++----- month [0..11]
-//  \++++++---------- year since 2014 [0..127]
-
-// NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
-// Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
-COMPILE_ASSERT(sizeof(struct set_list) == 64);
+#include "program-v5.h"
 
 // Hard-coded MIDI channel #s:
 #define gmaj_midi_channel    0
@@ -328,15 +246,10 @@ struct program pr;
 // Pointer to unmodified program:
 rom struct program *origpr;
 
-#define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
+#define read_bit(name,e)   (e & fxm_##name)
+#define toggle_bit(name,e) e = e ^ fxm_##name
 
-// Get the name text for the given name_index from flash memory:
-static rom const char *name_get(u16 name_index) {
-    if (name_index == (u16)0) {
-        return "";
-    }
-    return (rom const char *)flash_addr(name_table_offs + ((name_index - 1) * 20));
-}
+#define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
 
 #include "v5_fx_names.h"
 
@@ -798,14 +711,14 @@ static void update_lcd(void) {
     ritoa(lcd_rows[row_stat], 16, curr.sc_idx + (u8)1);
 
     // Song name:
-    if (pr.name_index == 0) {
+    if (pr.name[0] == 0) {
         // Show unnamed song index:
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[row_song][i] = "__unnamed song #    "[i];
         }
         ritoa(lcd_rows[row_song], 18, curr.pr_idx + (u8)1);
     } else {
-        pr_name = name_get(pr.name_index);
+        pr_name = pr.name;
         copy_str_lcd(pr_name, lcd_rows[row_song]);
     }
     // Set modified bit:
