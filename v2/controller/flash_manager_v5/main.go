@@ -22,6 +22,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// #include "../common/types.h"
+// #include "../common/v5_fx_names.h"
+import "C"
+
+var FWfx_names = C.v5_fx_names
+
 var version string
 
 type AmpDefault struct {
@@ -189,6 +195,16 @@ func generatePICH() {
 		fmt.Println("Closed.")
 	}()
 
+	// Create lookup table of FX name to MIDI CC number:
+	fx_midi_cc := make(map[string]uint8)
+	for cc := uint8(41); cc <= 98; cc++ {
+		key := C.GoString(FWfx_names[cc-uint8(41)])
+		key = strings.ToLower(key)
+		key = strings.TrimSpace(key)
+		// fmt.Printf("['%s'] = 0x%02x\n", key, cc)
+		fx_midi_cc[key] = cc
+	}
+
 	// Translate YAML to binary data for FLASH memory (see common/controller.c):
 	songs := 0
 	for i, p := range programs.Programs {
@@ -234,6 +250,18 @@ func generatePICH() {
 		for a, _ := range p.Amp {
 			if p.Amp[a].Gain == 0 {
 				p.Amp[a].Gain = 0x40
+			}
+
+			for f := 0; f < 5; f++ {
+				fxname := p.Amp[a].FXLayout[f]
+				fxname = strings.ToLower(fxname)
+				fxname = strings.TrimSpace(fxname)
+				if cc, ok := fx_midi_cc[fxname]; ok {
+					fwprogram.Fx_midi_cc[a][f] = cc
+				} else {
+					fwprogram.Fx_midi_cc[a][f] = 0
+					fmt.Printf("ERROR: could not find MIDI CC by FX name '%s'\n", fxname)
+				}
 			}
 		}
 

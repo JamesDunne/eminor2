@@ -1103,14 +1103,14 @@ programs:
   amp:
     - fx_layout:
       - pitch1
-      - autowah1
+      - wah1
       - filter1
       - chorus1
       - delay1
       gain: 0
     - fx_layout:
       - pitch2
-      - autowah2
+      - wah2
       - filter2
       - chorus2
       - delay2
@@ -1127,7 +1127,7 @@ programs:
     JD:
       channel: dirty
       level: 5
-      fx: [autowah2]
+      fx: [wah2]
   - name: Clean
     MG:
       channel: clean
@@ -1144,7 +1144,7 @@ programs:
     JD:
       channel: dirty
       level: 5
-      fx: [autowah2]
+      fx: [wah2]
   - name: Dirty
     MG:
       channel: dirty
