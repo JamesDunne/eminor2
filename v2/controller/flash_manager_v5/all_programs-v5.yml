@@ -1052,6 +1052,12 @@ programs:
 - name: Cherub Rock
   tempo: 84
   gain: 0x60
+  fx_layout:
+    - pitch
+    - flanger
+    - filter
+    - chorus
+    - delay
   scenes:
   - name: Intro clean
     MG:
@@ -1080,6 +1086,12 @@ programs:
 
 - name: Beverly Hills
   tempo: 88
+  fx_layout:
+    - pitch
+    - autowah
+    - filter
+    - chorus
+    - delay
   scenes:
   - name: Dirty
     MG:
