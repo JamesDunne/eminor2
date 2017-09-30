@@ -36,7 +36,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay, pitch]
+      fx: [delay2, pitch2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -48,7 +48,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay, pitch]
+      fx: [delay2, pitch2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -60,7 +60,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -80,7 +80,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -94,7 +94,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      fx: [chorus]
+      fx: [chorus2]
 - name: Drive
   tempo: 91
   midi: 1
@@ -109,7 +109,7 @@ programs:
     MG:
       channel: dirty
       level: 3
-      fx: [rotary,delay]
+      fx: [rotary1,delay1]
     JD:
       channel: clean
   - name: Clean
@@ -131,7 +131,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -146,7 +146,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -158,7 +158,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -170,13 +170,13 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD lead;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -209,7 +209,7 @@ programs:
       gain: 0x60
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD lead;MG clean
     MG:
       channel: clean
@@ -217,7 +217,7 @@ programs:
       gain: 0x60
       channel: dirty
       level: 2
-      fx: [delay]
+      fx: [delay2]
   - name: JD clean;MG clean
     MG:
       channel: clean
@@ -240,7 +240,7 @@ programs:
       gain: 0x60
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
 - name: Crawling in the Dark
   tempo: 94
   scenes:
@@ -250,7 +250,7 @@ programs:
     JD:
       gain: 0x20
       channel: dirty
-      fx: [filter, delay]
+      fx: [filter2, delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -262,7 +262,7 @@ programs:
     JD:
       gain: 0x20
       channel: dirty
-      fx: [filter, delay]
+      fx: [filter2, delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -274,7 +274,7 @@ programs:
     JD:
       gain: 0x20
       channel: dirty
-      fx: [filter, delay]
+      fx: [filter2, delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -286,7 +286,7 @@ programs:
     JD:
       gain: 0x20
       channel: dirty
-      fx: [filter, delay]
+      fx: [filter2, delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -342,57 +342,57 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      fx: [delay]
+      fx: [delay2]
   - name: JD clean;MG dirty
     MG:
       channel: dirty
     JD:
       channel: clean
-      fx: [chorus, delay]
+      fx: [chorus2, delay2]
   - name: JD lead;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
-      fx: [delay]
+      fx: [delay2]
   - name: JD clean;MG dirty
     MG:
       channel: dirty
     JD:
       channel: clean
-      fx: [chorus, delay]
+      fx: [chorus2, delay2]
   - name: JD lead;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
-      fx: [delay]
+      fx: [delay2]
   - name: JD lead;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD clean;MG dirty
     MG:
       channel: dirty
     JD:
       channel: clean
-      fx: [chorus, delay]
+      fx: [chorus2, delay2]
   - name: JD lead;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
-      fx: [delay]
+      fx: [delay2]
   - name: JD lead;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
 - name: In Bloom
   tempo: 80
   scenes:
@@ -426,7 +426,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -461,7 +461,7 @@ programs:
     MG:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay1]
     JD:
       channel: dirty
   - name: JD dirty;MG dirty
@@ -490,7 +490,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      fx: [delay, chorus]
+      fx: [delay2, chorus2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -526,7 +526,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -564,14 +564,14 @@ programs:
     MG:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay1]
     JD:
       channel: dirty
   - name: JD clean;MG lead
     MG:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay1]
     JD:
       channel: clean
   - name: JD clean;MG clean
@@ -588,7 +588,7 @@ programs:
     MG:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay1]
     JD:
       channel: dirty
 - name: Dammit
@@ -629,7 +629,7 @@ programs:
     JD:
       channel: dirty
       level: -1
-      fx: [filter, delay]
+      fx: [filter2, delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -659,7 +659,7 @@ programs:
     JD:
       channel: dirty
       level: -3
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -681,7 +681,7 @@ programs:
     JD:
       channel: dirty
       level: 4
-      fx: [chorus]
+      fx: [chorus2]
 - name: Beautiful Disaster
   tempo: 169
   scenes:
@@ -704,7 +704,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
 - name: Fuel
   tempo: 107
   scenes:
@@ -731,7 +731,7 @@ programs:
     JD:
       channel: dirty
       level: 3
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -742,7 +742,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      fx: [delay]
+      fx: [delay2]
 - name: What I Got
   tempo: 96
   midi: 1
@@ -914,7 +914,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -926,7 +926,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
 - name: Story of a Girl
   tempo: 97
   gain: 0x2A
@@ -982,37 +982,37 @@ programs:
     MG:
       channel: clean
       level: 3
-      fx: [chorus]
+      fx: [chorus1]
     JD:
       channel: dirty
-      fx: [delay]
+      fx: [delay2]
   - name: Breakdown harm
     MG:
       channel: clean
       level: 3
-      fx: [chorus]
+      fx: [chorus1]
     JD:
       channel: dirty
       level: -1.5
-      fx: [delay,pitch]
+      fx: [delay2,pitch2]
   - name: Breakdown lead
     MG:
       channel: clean
       level: 3
-      fx: [chorus]
+      fx: [chorus1]
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
   - name: Breakdown harm
     MG:
       channel: clean
       level: 3
-      fx: [chorus]
+      fx: [chorus1]
     JD:
       channel: dirty
       level: -1.5
-      fx: [delay,pitch]
+      fx: [delay2,pitch2]
   - name: Main
     MG:
       channel: dirty
@@ -1025,7 +1025,7 @@ programs:
       channel: dirty
       level: 6
       gain: 0x70
-      fx: [delay]
+      fx: [delay2]
   - name: Main
     MG:
       channel: dirty
@@ -1038,7 +1038,7 @@ programs:
       channel: dirty
       level: 3
       gain: 0x70
-      fx: [delay]
+      fx: [delay2]
 
 - name: Inside Out
   tempo: 107
@@ -1078,7 +1078,7 @@ programs:
       channel: clean
     JD:
       channel: clean
-      fx: [flanger]
+      fx: [flanger2]
   - name: Dirty
     MG:
       channel: dirty
@@ -1090,7 +1090,7 @@ programs:
     JD:
       channel: dirty
       level: 4
-      fx: [chorus]
+      fx: [chorus2]
   - name: Dirty
     MG:
       channel: dirty
@@ -1100,7 +1100,7 @@ programs:
 
 - name: Beverly Hills
   tempo: 88
-  amps:
+  amp:
     - fx_layout:
       - pitch1
       - autowah1
@@ -1127,7 +1127,7 @@ programs:
     JD:
       channel: dirty
       level: 5
-      fx: [autowah]
+      fx: [autowah2]
   - name: Clean
     MG:
       channel: clean
@@ -1144,7 +1144,7 @@ programs:
     JD:
       channel: dirty
       level: 5
-      fx: [autowah]
+      fx: [autowah2]
   - name: Dirty
     MG:
       channel: dirty
@@ -1165,7 +1165,7 @@ programs:
       channel: clean
     JD:
       channel: dirty
-      fx: [delay]
+      fx: [delay2]
   - name: Chorus
     MG:
       channel: dirty
@@ -1176,7 +1176,7 @@ programs:
       channel: clean
     JD:
       channel: dirty
-      fx: [delay]
+      fx: [delay2]
   - name: Chorus
     MG:
       channel: dirty
@@ -1189,7 +1189,7 @@ programs:
       channel: dirty
       level: 6
       gain: 0x40
-      fx: [delay]
+      fx: [delay2]
     # Blue blue is the sun...
   - name: Bridge
     MG:
@@ -1198,7 +1198,7 @@ programs:
     JD:
       channel: dirty
       gain: 0x40
-      fx: [delay]
+      fx: [delay2]
   - name: Chorus
     MG:
       channel: dirty
@@ -1211,7 +1211,7 @@ programs:
       channel: dirty
       level: 0
       gain: 0x40
-      fx: [delay]
+      fx: [delay2]
 
 - name: Closing Time
   tempo: 120
@@ -1261,10 +1261,10 @@ programs:
   - name: Intro
     MG:
       channel: dirty
-      fx: [delay]
+      fx: [delay1]
     JD:
       channel: dirty
-      fx: [delay]
+      fx: [delay2]
   - name: Rhythm
     MG:
       channel: dirty
@@ -1276,7 +1276,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      fx: [delay]
+      fx: [delay2]
 
 - name: Happy Birthday
   tempo: 130
@@ -1294,36 +1294,36 @@ programs:
   - name: Intro
     MG:
       channel: clean
-      fx: [chorus]
+      fx: [chorus1]
     JD:
       channel: clean
-      fx: [chorus]
+      fx: [chorus2]
   - name: Post-Chorus
     MG:
       channel: clean
-      fx: [chorus]
+      fx: [chorus1]
     JD:
       channel: dirty
   - name: Verse
     MG:
       channel: clean
-      fx: [chorus]
+      fx: [chorus1]
     JD:
       channel: clean
-      fx: [chorus]
+      fx: [chorus2]
   - name: Post-Chorus
     MG:
       channel: clean
-      fx: [chorus]
+      fx: [chorus1]
     JD:
       channel: dirty
   - name: Outro
     MG:
       channel: clean
-      fx: [chorus]
+      fx: [chorus1]
     JD:
       channel: clean
-      fx: [chorus]
+      fx: [chorus2]
 
 - name: Bouncing off the Walls
   tempo: 150

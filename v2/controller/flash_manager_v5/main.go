@@ -326,6 +326,8 @@ func generatePICH() {
 				bw.WriteHex(fwamp.Volume)
 			}
 		}
+
+		// Check written size:
 		program_written_size := bw.BytesWritten() - lastWritten
 		if program_written_size != FWprogram_sizeof {
 			panic(fmt.Errorf("Failed to write expected program size %d; wrote %d", FWprogram_sizeof, program_written_size))
