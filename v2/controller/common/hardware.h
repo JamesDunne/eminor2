@@ -11,10 +11,6 @@
 // Enable LCD display:
 #define FEAT_LCD
 
-#ifndef __MCC18
-#define rom
-#endif
-
 // Define a DEBUG_LOG0 macro:
 #ifdef __MCC18
 #define DEBUG_LOG0(fmt)

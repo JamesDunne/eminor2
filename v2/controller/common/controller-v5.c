@@ -112,6 +112,8 @@ Press AMP    to cancel and revert to existing FX and then switch to AMP mode for
 
 #if HW_VERSION == 5
 
+#include "types.h"
+
 #include "program-v5.h"
 #include "hardware.h"
 

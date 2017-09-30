@@ -4,6 +4,7 @@
 
 package main
 
+// #include "../common/types.h"
 // #include "../common/program-v5.h"
 import "C"
 

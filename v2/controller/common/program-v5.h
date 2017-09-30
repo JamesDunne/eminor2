@@ -1,6 +1,4 @@
 
-#include "../common/types.h"
-
 #define fxm_1       (u8)0x01
 #define fxm_2       (u8)0x02
 #define fxm_3       (u8)0x04
@@ -28,7 +26,7 @@ struct amp {
 // Program v5 data structure loaded from / written to flash memory:
 struct program {
     // Name of the song:
-    char name[20];
+    u8 name[20];
 
     // AXE-FX program # to switch to (7 bit)
     u8 midi_program;

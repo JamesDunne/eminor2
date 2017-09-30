@@ -89,3 +89,7 @@ func (w *BankedWriter) WriteChar(b uint8) {
 	fmt.Fprintf(w.fo, "  '%c'", rune(b))
 	w.cycle()
 }
+
+func (w *BankedWriter) BytesWritten() int {
+	return w.bytesWritten
+}

@@ -20,7 +20,7 @@ type FWscene_descriptor struct {
 	Amp [2]FWamp
 }
 type FWprogram struct {
-	Name		[20]int8
+	Name		[20]uint8
 	Midi_program	uint8
 	Tempo		uint8
 	Default_gain	[2]uint8

@@ -24,6 +24,11 @@ import (
 
 var version string
 
+type AmpDefault struct {
+	FXLayout []string `yaml:"fx_layout"`
+	Gain     int      `yaml:"gain"`
+}
+
 type Ampv4 struct {
 	Gain    int      `yaml:"gain"`    // amp gain (1-127), 0 means default
 	Channel string   `yaml:"channel"` // "clean" or "dirty"
@@ -40,13 +45,12 @@ type Programv4 struct {
 	Name             string              `yaml:"name"`
 	MidiProgram      int                 `yaml:"midi"`
 	Tempo            int                 `yaml:"tempo"`
-	Gain             int                 `yaml:"gain"`
-	FXLayout         []string            `yaml:"fx_layout"`
+	Amp              []AmpDefault        `yaml:"amp"`
 	SceneDescriptors []SceneDescriptorv4 `yaml:"scenes"`
 }
 
 type Programsv4 struct {
-	FXLayout []string     `yaml:"fx_standard"`
+	Amp      []AmpDefault `yaml:"amp"`
 	Programs []*Programv4 `yaml:"programs"`
 }
 
@@ -195,6 +199,9 @@ func generatePICH() {
 			return
 		}
 
+		lastWritten := bw.BytesWritten()
+		fwprogram := FWprogram{}
+
 		songs++
 		songs_by_name[meta.PrimaryName] = i
 
@@ -206,24 +213,28 @@ func generatePICH() {
 			return
 		}
 
-		// Write name padded to 20 chars with NULs:
+		// Pad name to 20 chars with NULs:
 		for n := 0; n < 20; n++ {
 			if n < len(short_name) {
-				bw.WriteChar(short_name[n])
+				fwprogram.Name[n] = short_name[n]
 			} else {
-				bw.WriteDecimal(0)
+				fwprogram.Name[n] = 0
 			}
 		}
 
-		// Write MIDI program number:
-		bw.WriteDecimal(uint8(p.MidiProgram))
+		fwprogram.Midi_program = uint8(p.MidiProgram)
+		fwprogram.Tempo = uint8(p.Tempo)
 
-		// Write tempo:
-		bw.WriteDecimal(uint8(p.Tempo))
+		if len(p.Amp) == 0 {
+			p.Amp = make([]AmpDefault, 2)
+			copy(p.Amp, programs.Amp)
+		}
 
 		// Enforce a reasonable default gain if not set:
-		if p.Gain == 0 {
-			p.Gain = 0x40
+		for a, _ := range p.Amp {
+			if p.Amp[a].Gain == 0 {
+				p.Amp[a].Gain = 0x40
+			}
 		}
 
 		// Write scene descriptors (5 bytes each):
@@ -232,8 +243,8 @@ func generatePICH() {
 			n++
 
 			// Write amp descriptors:
-			for _, amp := range []*Ampv4{&s.MG, &s.JD} {
-				var fwamp FWamp
+			for a, amp := range []*Ampv4{&s.MG, &s.JD} {
+				fwamp := &fwprogram.Scene[n].Amp[a]
 				fwamp.Gain = 0
 				fwamp.Fx = 0
 				fwamp.Volume = 0
@@ -242,7 +253,7 @@ func generatePICH() {
 				fwamp.Gain = uint8(logTaper(amp.Gain)) & 0x7F
 				if amp.Gain == 0 {
 					// Use program's default gain:
-					fwamp.Gain = uint8(logTaper(p.Gain)) & 0x7F
+					fwamp.Gain = uint8(logTaper(p.Amp[a].Gain)) & 0x7F
 				}
 
 				// fmt.Printf("%02x or %02x -> %02x\n", amp.Gain, p.Gain, fwamp.gain)
@@ -260,11 +271,7 @@ func generatePICH() {
 					fwamp.Fx |= FWfxm_acoustc
 				}
 
-				fx_layout := p.FXLayout
-				if fx_layout == nil {
-					fx_layout = programs.FXLayout
-				}
-
+				fx_layout := p.Amp[a].FXLayout
 				if len(fx_layout) > 5 {
 					fmt.Printf("Too many effects defined in fx_layout %v\n", fx_layout)
 				} else {
@@ -285,24 +292,43 @@ func generatePICH() {
 						fwamp.Fx |= (1 << uint(fxn))
 					}
 				}
+			}
+		}
 
-				// Write the descriptor:
+		// Write out program data:
+		for n := 0; n < 20; n++ {
+			bw.WriteChar(fwprogram.Name[n])
+		}
+
+		bw.WriteDecimal(uint8(p.MidiProgram))
+		bw.WriteDecimal(uint8(p.Tempo))
+		for a := 0; a < 2; a++ {
+			bw.WriteHex(fwprogram.Default_gain[a])
+		}
+
+		for a := 0; a < 2; a++ {
+			for f := 0; f < 5; f++ {
+				bw.WriteHex(fwprogram.Fx_midi_cc[a][f])
+			}
+		}
+
+		// Padding
+		for a := 0; a < 4; a++ {
+			bw.WriteDecimal(0)
+		}
+
+		for s := 0; s < FWscene_count_max; s++ {
+			for a := 0; a < 2; a++ {
+				fwamp := &fwprogram.Scene[s].Amp[a]
+				// Write the amp descriptor:
 				bw.WriteHex(fwamp.Gain)
 				bw.WriteHex(fwamp.Fx)
 				bw.WriteHex(fwamp.Volume)
 			}
 		}
-
-		if n < FWscene_count_max {
-			// Pad the remaining scenes:
-			for ; n < FWscene_count_max; n++ {
-				bw.WriteDecimal(0)
-				bw.WriteDecimal(0)
-				bw.WriteDecimal(0)
-				bw.WriteDecimal(0)
-				bw.WriteDecimal(0)
-				bw.WriteDecimal(0)
-			}
+		program_written_size := bw.BytesWritten() - lastWritten
+		if program_written_size != FWprogram_sizeof {
+			panic(fmt.Errorf("Failed to write expected program size %d; wrote %d", FWprogram_sizeof, program_written_size))
 		}
 	}
 
