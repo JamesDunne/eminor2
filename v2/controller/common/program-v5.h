@@ -1,25 +1,14 @@
 
 #include "../common/types.h"
-#include "../common/hardware.h"
 
-enum fxm_bits {
-    fxm_1       = (u8)0x01,
-    fxm_2       = (u8)0x02,
-    fxm_3       = (u8)0x04,
-    fxm_4       = (u8)0x08,
-    fxm_5       = (u8)0x10,
-    //////////////////0x20,
-    fxm_acoustc = (u8)0x40,
-    fxm_dirty   = (u8)0x80
-};
-// #define fxm_1       (u8)0x01
-// #define fxm_2       (u8)0x02
-// #define fxm_3       (u8)0x04
-// #define fxm_4       (u8)0x08
-// #define fxm_5       (u8)0x10
-// ////////////////////////0x20
-// #define fxm_acoustc (u8)0x40
-// #define fxm_dirty   (u8)0x80
+#define fxm_1       (u8)0x01
+#define fxm_2       (u8)0x02
+#define fxm_3       (u8)0x04
+#define fxm_4       (u8)0x08
+#define fxm_5       (u8)0x10
+////////////////////////0x20
+#define fxm_acoustc (u8)0x40
+#define fxm_dirty   (u8)0x80
 
 // For the Axe-FX Vol block, Log 20A means that the resistance is 20% at the halfway point in the travel.
 // If you put the knob at noon, the volume would be 20% of maximum (about -14 dB).

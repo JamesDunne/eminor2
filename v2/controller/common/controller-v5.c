@@ -113,6 +113,7 @@ Press AMP    to cancel and revert to existing FX and then switch to AMP mode for
 #if HW_VERSION == 5
 
 #include "program-v5.h"
+#include "hardware.h"
 
 // Hard-coded MIDI channel #s:
 #define gmaj_midi_channel    0

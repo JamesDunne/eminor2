@@ -1,3 +1,10 @@
+
+// --------------- Compiler hacks:
+
+#define STATIC_ASSERT(cond,ident) typedef char _static_assert_##ident[(cond)?1:-1]
+#define COMPILE_ASSERT2(cond,line) STATIC_ASSERT(cond,line)
+#define COMPILE_ASSERT(cond) COMPILE_ASSERT2(cond,__LINE__)
+
 // common typedefs used throughout the code:
 typedef unsigned char   u8;
 typedef signed char     s8;
