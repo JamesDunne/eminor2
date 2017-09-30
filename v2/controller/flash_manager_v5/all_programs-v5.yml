@@ -1,3 +1,10 @@
+fx_standard: &fx_standard
+  - pitch
+  - rotary
+  - filter
+  - chorus
+  - delay
+
 programs:
 - name: Monkey Wrench
   tempo: 175

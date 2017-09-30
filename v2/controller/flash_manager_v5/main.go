@@ -24,21 +24,8 @@ import (
 
 var version string
 
-const (
-	FX4_Dirty uint8 = 1 << iota
-	FX4_XY
-	// TODO: define custom FX CCs per song or maybe per MIDI program
-	FX4_Pitch
-	FX4_Chorus
-	FX4_Delay
-	FX4_Filter
-	FX4_Rotary
-	FX4_unused
-)
-
 type Ampv4 struct {
-	Gain    int      `yaml:"gain"`    // amp gain (0-127)
-	XY      string   `yaml:"xy"`      // "X" or "Y" amp settings
+	Gain    int      `yaml:"gain"`    // amp gain (1-127), 0 means default
 	Channel string   `yaml:"channel"` // "clean" or "dirty"
 	Level   float64  `yaml:"level"`   // pre-delay volume in dB (-inf to +6dB)
 	FX      []string `yaml:"fx,flow"` // any combo of "delay", "pitch", or "chorus"
@@ -52,12 +39,14 @@ type SceneDescriptorv4 struct {
 type Programv4 struct {
 	Name             string              `yaml:"name"`
 	MidiProgram      int                 `yaml:"midi"`
-	Gain             int                 `yaml:"gain"`
 	Tempo            int                 `yaml:"tempo"`
+	Gain             int                 `yaml:"gain"`
+	FXLayout         []string            `yaml:"fx_layout"`
 	SceneDescriptors []SceneDescriptorv4 `yaml:"scenes"`
 }
 
 type Programsv4 struct {
+	FXLayout []string     `yaml:"fx_standard"`
 	Programs []*Programv4 `yaml:"programs"`
 }
 
@@ -280,33 +269,6 @@ func generatePICH() {
 		fmt.Println("Closed.")
 	}()
 
-	// Define name_table:
-	name_table := make([]string, 0, len(programs.Programs))
-	name_table_lookup := make(map[string]int)
-
-	// Function to set or get name_table entry:
-	write_name_table_idx := func(name string) {
-		var idx16 uint16
-		if idx, ok := name_table_lookup[name]; ok {
-			idx16 = uint16(idx)
-		} else {
-			idx := len(name_table)
-			name_table_lookup[name] = idx
-			name_table = append(name_table, name)
-			if idx > math.MaxUint16 {
-				panic("Ran out of name_table entries!")
-			}
-			idx16 = uint16(idx)
-		}
-
-		// We reserve 0 entry for empty string:
-		idx16 += 1
-
-		// Write both bytes:
-		bw.WriteHex(uint8(idx16 & 0xFF))
-		bw.WriteHex(uint8(idx16 >> 8))
-	}
-
 	// Translate YAML to binary data for FLASH memory (see common/controller.c):
 	songs := 0
 	for i, p := range programs.Programs {
@@ -328,34 +290,14 @@ func generatePICH() {
 			return
 		}
 
-		// Write name into name table:
-		write_name_table_idx(short_name)
-
-		// Copy scenes:
-		/*
-			struct amp {
-			    u8 gain;    // amp gain (7-bit), if 0 then the default gain is used
-			    u8 fx;      // bitfield for FX enable/disable, including clean/dirty switch.
-			    u8 volume;  // volume (7-bit) represented as dB where 127 = +6dB, 0dB = 67
-			};
-
-			// Program v4 (next gen) data structure loaded from / written to flash memory:
-			struct program {
-			    // Index into the name table for the name of the program (song):
-			    u16 name_index;
-
-			    // AXE-FX program # to switch to (7 bit)
-			    u8 midi_program;
-
-			    u8 scene_count;
-
-			    // Scene descriptors (5 bytes each):
-			    struct scene_descriptor {
-			        // 2 amps:
-			        struct amp amp[2];
-			    } scene[scene_count_max];
-			};
-		*/
+		// Write name padded to 20 chars with NULs:
+		for n := 0; n < 20; n++ {
+			if n < len(short_name) {
+				bw.WriteChar(short_name[n])
+			} else {
+				bw.WriteDecimal(0)
+			}
+		}
 
 		// Write MIDI program number:
 		bw.WriteDecimal(uint8(p.MidiProgram))
@@ -375,57 +317,69 @@ func generatePICH() {
 
 			// Write amp descriptors:
 			for _, amp := range []*Ampv4{&s.MG, &s.JD} {
-				b0, b1, b2 := byte(0), byte(0), byte(0)
+				var fwamp FWamp
+				fwamp.Gain = 0
+				fwamp.Fx = 0
+				fwamp.Volume = 0
 
 				// Gain (0 = default gain, 127 = full gain):
-				b0 = uint8(logTaper(amp.Gain)) & 0x7F
+				fwamp.Gain = uint8(logTaper(amp.Gain)) & 0x7F
 				if amp.Gain == 0 {
 					// Use program's default gain:
-					b0 = uint8(logTaper(p.Gain)) & 0x7F
+					fwamp.Gain = uint8(logTaper(p.Gain)) & 0x7F
 				}
 
-				// fmt.Printf("%02x or %02x -> %02x\n", amp.Gain, p.Gain, b0)
+				// fmt.Printf("%02x or %02x -> %02x\n", amp.Gain, p.Gain, fwamp.gain)
 
 				// Volume:
 				if amp.Level > 6 {
 					amp.Level = 6
 				}
-				b2 = DBtoMIDI(amp.Level)
+				fwamp.Volume = DBtoMIDI(amp.Level)
 
 				// FX:
 				if amp.Channel == "dirty" {
-					b1 |= FX4_Dirty
+					fwamp.Fx |= FWfxm_dirty
+				} else if amp.Channel == "acoustic" {
+					fwamp.Fx |= FWfxm_acoustc
 				}
-				if amp.XY == "Y" {
-					b1 |= FX4_XY
+
+				fx_layout := p.FXLayout
+				if fx_layout == nil {
+					fx_layout = programs.FXLayout
 				}
-				for _, effect := range amp.FX {
-					if effect == "delay" {
-						b1 |= FX4_Delay
-					} else if effect == "rotary" {
-						b1 |= FX4_Rotary
-					} else if effect == "pitch" {
-						b1 |= FX4_Pitch
-					} else if effect == "chorus" {
-						b1 |= FX4_Chorus
-					} else if effect == "filter" {
-						b1 |= FX4_Filter
-					} else {
-						fmt.Printf("Unrecognized effect name: '%s'\n", effect)
+
+				if len(fx_layout) > 5 {
+					fmt.Printf("Too many effects defined in fx_layout %v\n", fx_layout)
+				} else {
+					for _, effect := range amp.FX {
+						fxn := 5
+						for fxi, fxname := range fx_layout {
+							if effect == fxname {
+								fxn = fxi
+								break
+							}
+						}
+						if fxn >= 5 {
+							fmt.Printf("Effect name '%s' not found in fx_layout %v\n", effect, fx_layout)
+							continue
+						}
+
+						// Enable the effect:
+						fwamp.Fx |= (1 << uint(fxn))
 					}
 				}
 
 				// Write the descriptor:
-				bw.WriteHex(b0)
-				bw.WriteHex(b1)
-				bw.WriteHex(b2)
+				bw.WriteHex(fwamp.Gain)
+				bw.WriteHex(fwamp.Fx)
+				bw.WriteHex(fwamp.Volume)
 			}
 		}
 
-		const max_scene_count = 10
-		if n < max_scene_count {
+		if n < FWscene_count_max {
 			// Pad the remaining scenes:
-			for ; n < max_scene_count; n++ {
+			for ; n < FWscene_count_max; n++ {
 				bw.WriteDecimal(0)
 				bw.WriteDecimal(0)
 				bw.WriteDecimal(0)
@@ -520,21 +474,6 @@ func generatePICH() {
 				fmt.Printf("  %2d) %3d %s\n", j+1, song_index+1, meta.PrimaryName)
 				last_song_index = song_index
 			}
-		}
-	}
-
-	// Generate name table (20 chars each):
-	for _, name := range name_table {
-		for j := 0; j < 20; j++ {
-			if j >= len(name) {
-				bw.WriteDecimal(0)
-				continue
-			}
-			c := name[j]
-			if c < 32 {
-				bw.WriteDecimal(0)
-			}
-			bw.WriteChar(c)
 		}
 	}
 }
