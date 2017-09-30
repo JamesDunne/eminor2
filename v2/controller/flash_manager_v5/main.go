@@ -325,7 +325,12 @@ func generatePICH() {
 
 		// Write out program data:
 		for n := 0; n < 20; n++ {
-			bw.WriteChar(fwprogram.Name[n])
+			c := fwprogram.Name[n]
+			if c < 32 || c > 127 {
+				bw.WriteDecimal(c)
+			} else {
+				bw.WriteChar(c)
+			}
 		}
 
 		bw.WriteDecimal(uint8(p.MidiProgram))
