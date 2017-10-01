@@ -25,7 +25,8 @@ type FWprogram struct {
 	Tempo		uint8
 	Default_gain	[2]uint8
 	Fx_midi_cc	[2][5]uint8
-	X_padding	[4]uint8
+	X_padding	[3]uint8
+	Scene_count	uint8
 	Scene		[15]FWscene_descriptor
 }
 type FWset_entry struct {

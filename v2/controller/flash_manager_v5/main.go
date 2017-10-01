@@ -389,10 +389,8 @@ func generatePICH() {
 		}
 
 		// Write scene descriptors (5 bytes each):
-		n := 0
-		for _, s := range p.SceneDescriptors {
-			n++
-
+		fwprogram.Scene_count = uint8(len(p.SceneDescriptors))
+		for n, s := range p.SceneDescriptors {
 			// Write amp descriptors:
 			for a, amp := range []*Ampv4{&s.MG, &s.JD} {
 				fwamp := &fwprogram.Scene[n].Amp[a]
@@ -467,9 +465,12 @@ func generatePICH() {
 		}
 
 		// Padding
-		for a := 0; a < 4; a++ {
+		for a := 0; a < 3; a++ {
 			bw.WriteDecimal(0)
 		}
+
+		// scene_count
+		bw.WriteDecimal(fwprogram.Scene_count)
 
 		for s := 0; s < FWscene_count_max; s++ {
 			for a := 0; a < 2; a++ {

@@ -41,7 +41,9 @@ struct program {
     u8 fx_midi_cc[2][5];
 
     // 34 bytes
-    u8 _padding[4];
+    u8 _padding[3];
+
+	u8 scene_count;
 
     // Scene descriptors (5 bytes each):
     struct scene_descriptor {
