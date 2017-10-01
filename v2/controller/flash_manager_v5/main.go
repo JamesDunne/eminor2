@@ -238,6 +238,9 @@ func generatePICH() {
 			set.SongNames = append(set.SongNames, text)
 		}
 
+		// Count number of actual songs excluding BREAK lines:
+		song_count = len(set.SongNames)
+
 		fwsetlist := FWset_list{}
 		fwsetlist.Count = uint8(song_count)
 		fmt.Printf("  Songs: %d\n", fwsetlist.Count)
