@@ -32,14 +32,16 @@ var version string
 
 type AmpDefault struct {
 	FXLayout []string `yaml:"fx_layout"`
-	Gain     int      `yaml:"gain"`
+	Gain     int      `yaml:"gain"`     // amp gain (1-127), 0 means default
+	GainLog  int      `yaml:"gain_log"` // amp gain (1-127) in log scale, 0 means default
 }
 
 type Ampv4 struct {
-	Gain    int      `yaml:"gain"`    // amp gain (1-127), 0 means default
-	Channel string   `yaml:"channel"` // "clean" or "dirty"
-	Level   float64  `yaml:"level"`   // pre-delay volume in dB (-inf to +6dB)
-	FX      []string `yaml:"fx,flow"` // any combo of "delay", "pitch", or "chorus"
+	Gain    int      `yaml:"gain"`     // amp gain (1-127), 0 means default
+	GainLog int      `yaml:"gain_log"` // amp gain (1-127) in log scale, 0 means default
+	Channel string   `yaml:"channel"`  // "clean" or "dirty"
+	Level   float64  `yaml:"level"`    // pre-delay volume in dB (-inf to +6dB)
+	FX      []string `yaml:"fx,flow"`  // any combo of "delay", "pitch", or "chorus"
 }
 
 type SceneDescriptorv4 struct {
@@ -51,6 +53,8 @@ type Programv4 struct {
 	Name             string              `yaml:"name"`
 	MidiProgram      int                 `yaml:"midi"`
 	Tempo            int                 `yaml:"tempo"`
+	Gain             int                 `yaml:"gain"`     // amp gain (1-127), 0 means default
+	GainLog          int                 `yaml:"gain_log"` // amp gain (1-127) in log scale, 0 means default
 	Amp              []AmpDefault        `yaml:"amp"`
 	SceneDescriptors []SceneDescriptorv4 `yaml:"scenes"`
 }
@@ -180,6 +184,16 @@ func write_yaml(path string, src interface{}) error {
 func logTaper(b int) int {
 	// 127 * (ln(x+1)^2) / (ln(127+1)^2)
 	return int(127.0 * math.Pow(math.Log2(float64(b)+1.0), 2) / math.Pow(math.Log2(127.0+1.0), 2))
+}
+
+func gainOrLogOrDefault(gain int, gainLog int, gainDefault int) int {
+	if gain != 0 {
+		return gain
+	}
+	if gainLog != 0 {
+		return logTaper(gainLog)
+	}
+	return gainDefault
 }
 
 // Generate flash_rom_init.h for #include in controller C code projects
@@ -353,11 +367,13 @@ func generatePICH() {
 			copy(p.Amp, programs.Amp)
 		}
 
-		// Enforce a reasonable default gain if not set:
+		// Determine default gain for both amps:
+		p.Gain = gainOrLogOrDefault(p.Gain, p.GainLog, 0x5E)
+
+		// Determine default gain for each amp if not set:
 		for a, _ := range p.Amp {
-			if p.Amp[a].Gain == 0 {
-				p.Amp[a].Gain = 0x40
-			}
+			p.Amp[a].Gain = gainOrLogOrDefault(p.Amp[a].Gain, p.Amp[a].GainLog, p.Gain)
+			fwprogram.Default_gain[a] = uint8(p.Amp[a].Gain)
 
 			for f := 0; f < 5; f++ {
 				fxname := p.Amp[a].FXLayout[f]
@@ -380,18 +396,15 @@ func generatePICH() {
 			// Write amp descriptors:
 			for a, amp := range []*Ampv4{&s.MG, &s.JD} {
 				fwamp := &fwprogram.Scene[n].Amp[a]
-				fwamp.Gain = 0
-				fwamp.Fx = 0
-				fwamp.Volume = 0
 
-				// Gain (0 = default gain, 127 = full gain):
-				fwamp.Gain = uint8(logTaper(amp.Gain)) & 0x7F
-				if amp.Gain == 0 {
-					// Use program's default gain:
-					fwamp.Gain = uint8(logTaper(p.Amp[a].Gain)) & 0x7F
+				// Gain (0 = default gain for amp, 1..127 = explicit gain):
+				if amp.Gain != 0 {
+					fwamp.Gain = uint8(amp.Gain)
+				} else if amp.GainLog != 0 {
+					fwamp.Gain = uint8(logTaper(amp.GainLog))
+				} else {
+					fwamp.Gain = 0
 				}
-
-				// fmt.Printf("%02x or %02x -> %02x\n", amp.Gain, p.Gain, fwamp.gain)
 
 				// Volume:
 				if amp.Level > 6 {
@@ -400,6 +413,7 @@ func generatePICH() {
 				fwamp.Volume = DBtoMIDI(amp.Level)
 
 				// FX:
+				fwamp.Fx = 0
 				if amp.Channel == "dirty" {
 					fwamp.Fx |= FWfxm_dirty
 				} else if amp.Channel == "acoustic" {
