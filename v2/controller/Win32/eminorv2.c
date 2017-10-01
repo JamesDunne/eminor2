@@ -1137,9 +1137,6 @@ void flash_load(u16 addr, u16 count, u8 *data) {
     u8 bank = (u8)(addr >> 12);
     addr &= 0x0FFF;
 
-    // Check sanity of write to make sure it fits within one 64-byte chunk of flash and does not cross boundaries:
-    assert(((addr)& ~63) == (((addr + count - 1)) & ~63));
-
     memcpy((void *)data, (void *)&flash_bank[bank][addr], count);
 }
 

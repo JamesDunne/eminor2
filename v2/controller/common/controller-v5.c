@@ -840,6 +840,7 @@ static void calc_volume_modified(void) {
 
 void load_program(void) {
     // Load program:
+    u16 addr;
     u8 pr_num;
 
     if (curr.setlist_mode == 1) {
@@ -850,9 +851,10 @@ void load_program(void) {
 
     DEBUG_LOG1("load program %d", pr_num + 1);
 
-    flash_load((u16) (pr_num * sizeof(struct program)), sizeof(struct program), (u8 *) &pr);
+    addr = (u16)sizeof(struct set_list) + (u16)(pr_num * sizeof(struct program));
+    flash_load(addr, sizeof(struct program), (u8 *) &pr);
 
-    origpr = (rom struct program *)flash_addr((u16)(pr_num * sizeof(struct program)));
+    origpr = (rom struct program *)flash_addr(addr);
     curr.modified = 0;
     curr.midi_program = pr.midi_program;
     curr.tempo = pr.tempo;
@@ -998,7 +1000,7 @@ static void program_save() {
     pr.scene[curr.sc_idx].amp[1] = curr.amp[1];
 
     // Save current program back to flash:
-    addr = (u16)(pr_num * sizeof(struct program));
+    addr = (u16)sizeof(struct set_list) + (u16)(pr_num * sizeof(struct program));
     DEBUG_LOG2("save program %d at addr 0x%04x", pr_num + 1, addr);
     flash_store(addr, sizeof(struct program), (u8 *)&pr);
 
@@ -1027,7 +1029,7 @@ void controller_init(void) {
     last.amp[1].gain = ~(u8)0;
 
     // Load setlist:
-    flash_load((u16)(128 * sizeof(struct program)), sizeof(struct set_list), (u8 *)&sl);
+    flash_load((u16)0, sizeof(struct set_list), (u8 *)&sl);
     sl_max = sl.count - (u8)1;
 
     // Load first program in setlist:
