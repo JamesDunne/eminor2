@@ -449,6 +449,10 @@ static void calc_midi(void) {
         midi_axe_pc(curr.midi_program + 10);
     }
 
+    if (curr.setlist_mode != last.setlist_mode) {
+        diff = 1;
+    }
+
     // Send gain controller changes:
     acoustc = curr.amp[0].fx & fxm_acoustc;
     last_acoustc = last.amp[0].fx & fxm_acoustc;
@@ -680,7 +684,7 @@ static void update_lcd(void) {
     labels[3] = "d=GAIN";
     labels[4] = "GAIN=d";
     labels[5] = "FX";
-    labels[6] = "PREV SCENE";
+    labels[6] = "MODE";
     labels[7] = "NEXT SCENE";
     label_row_update(0);
 #endif
@@ -708,7 +712,7 @@ static void update_lcd(void) {
         // Show setlist song index:
         ritoa(lcd_rows[row_stat], 5, curr.sl_idx + (u8)1);
         // Show setlist song count:
-        ritoa(lcd_rows[row_stat], 8, sl_max);
+        ritoa(lcd_rows[row_stat], 8, sl_max + (u8)1);
     }
     // Show scene number:
     ritoa(lcd_rows[row_stat], 16, curr.sc_idx + (u8)1);
@@ -1075,8 +1079,6 @@ void controller_init(void) {
         lcd_rows[row_stat][i] = "                    "[i];
         lcd_rows[row_song][i] = "                    "[i];
     }
-
-    //update_lcd();
 #endif
 }
 
