@@ -714,8 +714,10 @@ static void update_lcd(void) {
         // Show setlist song count:
         ritoa(lcd_rows[row_stat], 8, sl_max + (u8)1);
     }
-    // Show scene number:
+    // Scene number:
     ritoa(lcd_rows[row_stat], 16, curr.sc_idx + (u8)1);
+    // Scene count:
+    ritoa(lcd_rows[row_stat], 19, pr.scene_count);
 
     // Song name:
     if (pr.name[0] == 0) {
