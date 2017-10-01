@@ -13,7 +13,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-	"time"
+	//"time"
 )
 
 import (
@@ -205,8 +205,115 @@ func generatePICH() {
 		fx_midi_cc[key] = cc
 	}
 
+	// Make song lookup table by name:
+	for i, p := range programs.Programs {
+		// Record the name-to-index mapping:
+		meta, err := partial_match_song_name(p.Name)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return
+		}
+
+		songs_by_name[meta.PrimaryName] = i
+	}
+
+	// Write setlist data for last active setlist:
+	for i := len(setlists.Sets) - 1; i >= 0; i-- {
+		set := setlists.Sets[i]
+		if !set.IsActive {
+			continue
+		}
+
+		song_count := len(set.Songs)
+		fmt.Printf("Set #%d\n", i+1)
+		if song_count > FWmax_set_length {
+			panic(fmt.Errorf("Set list cannot have more than %d songs; %d songs currently.", FWmax_set_length, song_count))
+		}
+
+		set.SongNames = make([]string, 0, song_count)
+		for _, text := range set.Songs {
+			if strings.HasPrefix(text, "BREAK: ") {
+				continue
+			}
+			set.SongNames = append(set.SongNames, text)
+		}
+
+		fwsetlist := FWset_list{}
+		fwsetlist.Count = uint8(song_count)
+		fmt.Printf("  Songs: %d\n", fwsetlist.Count)
+
+		//// dates since 2014 stored in 16 bits:
+		////  yyyyyyym mmmddddd
+		////  |||||||| ||||||||
+		////  |||||||| |||\++++ day of month [0..30]
+		////  |||||||\-+++----- month [0..11, 12-15 unused]
+		////  \++++++---------- year since 2014 [0..127]
+
+		//// Parse date string using `time` package:
+		//t, err := time.Parse("2006-01-02", set.Date)
+		//if err != nil {
+		//	panic(fmt.Errorf("Error parsing date: '%s'", set.Date))
+		//}
+
+		//// Offset our dd, mm, yyyy values for encoding:
+		//dd := (t.Day() - 1)
+		//mm := (int(t.Month()) - 1)
+		//yyyy := (t.Year() - 2014)
+
+		//// Encode date as 16-bit packed value:
+		//d0 := byte((dd & 31) | ((mm & 7) << 5))
+		//d1 := byte(((mm >> 3) & 1) | ((yyyy & 127) << 1))
+
+		//// Write the two 8-bit values for the date:
+		//bw.WriteHex(d0)
+		//bw.WriteHex(d1)
+		//fmt.Printf("  Date:  %04d-%02d-%02d\n", yyyy+2014, mm+1, dd+1)
+
+		last_song_index := 0
+		// Write out the song indices for the setlist:
+		for j := 0; j < FWmax_set_length; j++ {
+			if j >= len(set.SongNames) {
+				fwsetlist.Entries[j].Program = uint8(0xFF)
+			} else {
+				// Look up song by name, case-insensitive:
+				meta, err := partial_match_song_name(set.SongNames[j])
+				if err != nil {
+					//panic(err)
+					fmt.Fprintln(os.Stderr, err)
+					fwsetlist.Entries[j].Program = uint8(last_song_index)
+					continue
+				}
+
+				song_index, exists := songs_by_name[meta.PrimaryName]
+				if !exists {
+					panic(fmt.Errorf("Primary song name not found in all_programs.yml: '%s' ('%s')", meta.PrimaryName, set.SongNames[j]))
+				}
+
+				// Write out song index:
+				fwsetlist.Entries[j].Program = uint8(song_index)
+				fmt.Printf("  %2d) %3d %s\n", j+1, song_index+1, meta.PrimaryName)
+				last_song_index = song_index
+			}
+		}
+
+		// Write out set_list struct:
+		lastWritten := bw.BytesWritten()
+		bw.WriteDecimal(byte(fwsetlist.Count))
+		for j := 0; j < FWmax_set_length; j++ {
+			bw.WriteDecimal(fwsetlist.Entries[j].Program)
+		}
+
+		set_list_size := bw.BytesWritten() - lastWritten
+		if set_list_size != FWset_list_sizeof {
+			panic(fmt.Errorf("Failed to write expected set_list size %d; wrote %d", FWset_list_sizeof, set_list_size))
+		}
+
+		// Can only write one setlist:
+		break
+	}
+
 	// Translate YAML to binary data for FLASH memory (see common/controller.c):
-	songs := 0
+	fmt.Println("Programs:")
 	for i, p := range programs.Programs {
 		// Record the name-to-index mapping:
 		meta, err := partial_match_song_name(p.Name)
@@ -217,9 +324,6 @@ func generatePICH() {
 
 		lastWritten := bw.BytesWritten()
 		fwprogram := FWprogram{}
-
-		songs++
-		songs_by_name[meta.PrimaryName] = i
 
 		short_name := meta.ShortName
 
@@ -364,93 +468,6 @@ func generatePICH() {
 		program_written_size := bw.BytesWritten() - lastWritten
 		if program_written_size != FWprogram_sizeof {
 			panic(fmt.Errorf("Failed to write expected program size %d; wrote %d", FWprogram_sizeof, program_written_size))
-		}
-	}
-
-	for ; songs < 128; songs++ {
-		// Pad the remaining songs:
-		for j := 0; j < 64; j++ {
-			bw.WriteDecimal(0)
-		}
-	}
-
-	const max_set_length = 61
-
-	// Write setlist data in reverse order of sets:
-	for i := len(setlists.Sets) - 1; i >= 0; i-- {
-		set := setlists.Sets[i]
-		if !set.IsActive {
-			continue
-		}
-
-		fmt.Printf("Set #%d\n", i+1)
-		if len(set.Songs) > max_set_length {
-			panic(fmt.Errorf("Set list cannot have more than %d songs; %d songs currently.", max_set_length, len(set.Songs)))
-		}
-
-		set.SongNames = make([]string, 0, len(set.Songs))
-		for _, text := range set.Songs {
-			if strings.HasPrefix(text, "BREAK: ") {
-				continue
-			}
-			set.SongNames = append(set.SongNames, text)
-		}
-
-		fmt.Printf("  Songs: %d\n", len(set.SongNames))
-		bw.WriteDecimal(byte(len(set.SongNames)))
-
-		// dates since 2014 stored in 16 bits:
-		//  yyyyyyym mmmddddd
-		//  |||||||| ||||||||
-		//  |||||||| |||\++++ day of month [0..30]
-		//  |||||||\-+++----- month [0..11, 12-15 unused]
-		//  \++++++---------- year since 2014 [0..127]
-
-		// Parse date string using `time` package:
-		t, err := time.Parse("2006-01-02", set.Date)
-		if err != nil {
-			panic(fmt.Errorf("Error parsing date: '%s'", set.Date))
-		}
-
-		// Offset our dd, mm, yyyy values for encoding:
-		dd := (t.Day() - 1)
-		mm := (int(t.Month()) - 1)
-		yyyy := (t.Year() - 2014)
-
-		// Encode date as 16-bit packed value:
-		d0 := byte((dd & 31) | ((mm & 7) << 5))
-		d1 := byte(((mm >> 3) & 1) | ((yyyy & 127) << 1))
-
-		// Write the two 8-bit values for the date:
-		bw.WriteHex(d0)
-		bw.WriteHex(d1)
-		fmt.Printf("  Date:  %04d-%02d-%02d\n", yyyy+2014, mm+1, dd+1)
-
-		last_song_index := 0
-		// Write out the song indices for the setlist:
-		for j := 0; j < max_set_length; j++ {
-			if j >= len(set.SongNames) {
-				bw.WriteHex(0xFF)
-			} else {
-				// Look up song by name, case-insensitive:
-				meta, err := partial_match_song_name(set.SongNames[j])
-				if err != nil {
-					//panic(err)
-					fmt.Fprintln(os.Stderr, err)
-					bw.WriteDecimal(byte(last_song_index))
-					continue
-				}
-
-				song_index, exists := songs_by_name[meta.PrimaryName]
-				if !exists {
-					panic(fmt.Errorf("Primary song name not found in all_programs.yml: '%s' ('%s')", meta.PrimaryName, set.SongNames[j]))
-				}
-
-				// Write out song index:
-				bw.WriteDecimal(byte(song_index))
-				fmt.Printf("  %2d) %3d %s\n", j+1, song_index+1, meta.PrimaryName)
-				last_song_index = song_index
-			}
 		}
 	}
 }
@@ -645,7 +662,7 @@ func main() {
 	if version == "" {
 		version = "5"
 	}
-	fmt.Fprintf(os.Stderr, "HW_VERSION = '%s'\n", version)
+	// fmt.Fprintf(os.Stderr, "HW_VERSION = '%s'\n", version)
 	version = "v" + version
 
 	// Load song names mapping YAML file:

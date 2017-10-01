@@ -1,5 +1,5 @@
 // Created by cgo -godefs - DO NOT EDIT
-// cgo -godefs program-v5_types.go
+// cgo.exe -godefs program-v5_types.go
 
 package main
 
@@ -33,14 +33,14 @@ type FWset_entry struct {
 }
 type FWset_list struct {
 	Count	uint8
-	D0	uint8
-	D1	uint8
-	Entries	[61]FWset_entry
+	Entries	[127]FWset_entry
 }
 
 const FWamp_sizeof = 0x3
 const FWprogram_sizeof = 0x80
 const FWset_entry_sizeof = 0x1
-const FWset_list_sizeof = 0x40
+const FWset_list_sizeof = 0x80
 
 const FWscene_count_max = 0xf
+
+const FWmax_set_length = 0x7f

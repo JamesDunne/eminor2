@@ -1,7 +1,5 @@
 // +build ignore
 
-//go:generate sh -c "go tool cgo -godefs program-v5_types.go > program-v5.go"
-
 package main
 
 // #include "../common/types.h"
@@ -28,3 +26,5 @@ const FWset_entry_sizeof = C.sizeof_struct_set_entry
 const FWset_list_sizeof = C.sizeof_struct_set_list
 
 const FWscene_count_max = C.scene_count_max
+
+const FWmax_set_length = C.max_set_length
