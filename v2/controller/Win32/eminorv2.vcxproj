@@ -170,9 +170,13 @@
     <ClCompile Include="..\common\controller-v5.c" />
     <ClCompile Include="eminorv2.c" />
     <ClInclude Include="..\common\memory.h" />
-    <ClInclude Include="..\PIC\flash_v3_bank0.h" />
-    <ClInclude Include="..\PIC\flash_v3_bank1.h" />
-    <ClInclude Include="..\PIC\flash_v3_bank2.h" />
+    <ClInclude Include="..\common\program-v5.h" />
+    <ClInclude Include="..\common\v5_fx_names.h" />
+    <ClInclude Include="..\PIC\flash_v5_bank0.h" />
+    <ClInclude Include="..\PIC\flash_v5_bank1.h" />
+    <ClInclude Include="..\PIC\flash_v5_bank2.h" />
+    <ClInclude Include="..\PIC\flash_v5_bank3.h" />
+    <ClInclude Include="..\PIC\flash_v5_bank4.h" />
     <ClInclude Include="font-5x8.h">
       <FileType>CppCode</FileType>
     </ClInclude>
