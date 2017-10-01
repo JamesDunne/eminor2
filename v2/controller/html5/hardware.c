@@ -8,11 +8,11 @@
 #define FLASH_LENGTH (64 * 128 + 64 * 32)
 const int flash_length = FLASH_LENGTH;
 const unsigned char flash_memory[FLASH_LENGTH] = {
-#include "../PIC/flash_v4_bank0.h"
+#include "../PIC/flash_v5_bank0.h"
 ,
-#include "../PIC/flash_v4_bank1.h"
+#include "../PIC/flash_v5_bank1.h"
 ,
-#include "../PIC/flash_v4_bank2.h"
+#include "../PIC/flash_v5_bank2.h"
 };
 #undef FLASH_LENGTH
 
