@@ -12,4 +12,4 @@ www/all.js: es5.js web.js typedarray.js storage.js console.js rainbow.js c.js ge
 	cat es5.js web.js typedarray.js storage.js console.js rainbow.js c.js generic.js eminorv2.gen.js driver.js > www/all.js
 
 reload: debug
-	echo 'tell application "Google Chrome" to reload active tab of window 1' | osascript
+	# echo 'tell application "Google Chrome" to reload active tab of window 1' | osascript
