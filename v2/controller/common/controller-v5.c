@@ -1302,7 +1302,7 @@ void controller_handle(void) {
     btn_released_oneshot(bot,7,toggle_setlist_mode())
 
     // NEXT SCENE:
-    btn_pressed_oneshot(bot,8,next_scene(),reset_scene())
+    btn_pressed_oneshot(bot,8,next_scene())
 
     // PREV/NEXT SONG:
     if (is_top_button_pressed(M_7)) {
