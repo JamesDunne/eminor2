@@ -978,6 +978,11 @@ static void next_scene() {
     }
 }
 
+static void reset_scene() {
+    DEBUG_LOG0("reset scene");
+    curr.sc_idx = 0;
+}
+
 static void prev_scene() {
     if (curr.sc_idx > 0) {
         DEBUG_LOG0("prev scene");
@@ -1098,6 +1103,7 @@ struct timers {
     u8 bot_5;
     u8 bot_6;
     u8 bot_7;
+    u8 bot_8;
 } timers;
 
 // called every 10ms
@@ -1186,6 +1192,7 @@ void controller_10msec_timer(void) {
     }
 
     one_shot(bot,7,0x3F,program_save())
+    one_shot(bot,8,0x3F,reset_scene())
 
     repeater(top,7,0x20,0x03,prev_song())
     repeater(top,8,0x20,0x03,next_song())
@@ -1227,6 +1234,14 @@ void controller_handle(void) {
             if ((timers.row##_##n & (u8)0x80) != 0) { \
                 on_release; \
             } \
+            timers.row##_##n = (u8)0x00; \
+        }
+
+#define btn_pressed_oneshot(row, n, on_pressed) \
+        if (is_##row##_button_pressed(M_##n)) { \
+            timers.row##_##n = (u8)0x80; \
+            on_pressed; \
+        } else if (is_##row##_button_released(M_##n)) { \
             timers.row##_##n = (u8)0x00; \
         }
 
@@ -1285,9 +1300,7 @@ void controller_handle(void) {
     btn_released_oneshot(bot,7,toggle_setlist_mode())
 
     // NEXT SCENE:
-    if (is_bot_button_pressed(M_8)) {
-        next_scene();
-    }
+    btn_pressed_oneshot(bot,8,next_scene(),reset_scene())
 
     // PREV/NEXT SONG:
     if (is_top_button_pressed(M_7)) {
