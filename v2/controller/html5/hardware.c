@@ -5,7 +5,7 @@
 #include "../common/types.h"
 #include "../common/hardware.h"
 
-#define FLASH_LENGTH (64 * 128 + 64 * 32)
+#define FLASH_LENGTH (128 * 128 + 128)
 const int flash_length = FLASH_LENGTH;
 const unsigned char flash_memory[FLASH_LENGTH] = {
 #include "../PIC/flash_v5_bank0.h"
