@@ -283,11 +283,11 @@ static rom const char *fx_name(u8 fx_midi_cc) {
 
 // Top switch press cannot be an accident:
 #define is_top_button_pressed(mask) \
-    ((last.fsw.top.byte == 0) && (curr.fsw.top.byte == mask))
+    (((last.fsw.top.byte & mask) == 0) && ((curr.fsw.top.byte & mask) == mask))
 
 // Always switch programs regardless of whether a top switch was accidentally depressed:
 #define is_bot_button_pressed(mask) \
-    ((last.fsw.bot.byte == 0) && (curr.fsw.bot.byte == mask))
+    (((last.fsw.bot.byte & mask) == 0) && ((curr.fsw.bot.byte & mask) == mask))
 
 #define is_top_button_released(mask) \
     (((last.fsw.top.byte & mask) == mask) && ((curr.fsw.top.byte & mask) == 0))
@@ -296,10 +296,10 @@ static rom const char *fx_name(u8 fx_midi_cc) {
     (((last.fsw.bot.byte & mask) == mask) && ((curr.fsw.bot.byte & mask) == 0))
 
 #define is_top_button_held(mask) \
-    (curr.fsw.top.byte == mask)
+    ((curr.fsw.top.byte & mask) == mask)
 
 #define is_bot_button_held(mask) \
-    (curr.fsw.bot.byte == mask)
+    ((curr.fsw.bot.byte & mask) == mask)
 
 rom char hex[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
@@ -1273,11 +1273,11 @@ void controller_handle(void) {
             btn_released_oneshot(top, 6, rowstate[0].mode = ROWMODE_FX)
             break;
         case ROWMODE_FX:
-            btn_released_oneshot(top, 1, curr.amp[0].fx ^= fxm_1; calc_fx_modified())
-            btn_released_oneshot(top, 2, curr.amp[0].fx ^= fxm_2; calc_fx_modified())
-            btn_released_oneshot(top, 3, curr.amp[0].fx ^= fxm_3; calc_fx_modified())
-            btn_released_oneshot(top, 4, curr.amp[0].fx ^= fxm_4; calc_fx_modified())
-            btn_released_oneshot(top, 5, curr.amp[0].fx ^= fxm_5; calc_fx_modified())
+            btn_pressed(top, 1, curr.amp[0].fx ^= fxm_1; calc_fx_modified())
+            btn_pressed(top, 2, curr.amp[0].fx ^= fxm_2; calc_fx_modified())
+            btn_pressed(top, 3, curr.amp[0].fx ^= fxm_3; calc_fx_modified())
+            btn_pressed(top, 4, curr.amp[0].fx ^= fxm_4; calc_fx_modified())
+            btn_pressed(top, 5, curr.amp[0].fx ^= fxm_5; calc_fx_modified())
             btn_released_oneshot(top, 6, rowstate[0].mode = ROWMODE_AMP)
             break;
         case ROWMODE_SELECTFX:
@@ -1294,11 +1294,11 @@ void controller_handle(void) {
             btn_released_repeater(bot, 6, rowstate[1].mode = ROWMODE_FX)
             break;
         case ROWMODE_FX:
-            btn_released_oneshot(bot, 1, curr.amp[1].fx ^= fxm_1; calc_fx_modified())
-            btn_released_oneshot(bot, 2, curr.amp[1].fx ^= fxm_2; calc_fx_modified())
-            btn_released_oneshot(bot, 3, curr.amp[1].fx ^= fxm_3; calc_fx_modified())
-            btn_released_oneshot(bot, 4, curr.amp[1].fx ^= fxm_4; calc_fx_modified())
-            btn_released_oneshot(bot, 5, curr.amp[1].fx ^= fxm_5; calc_fx_modified())
+            btn_pressed(bot, 1, curr.amp[1].fx ^= fxm_1; calc_fx_modified())
+            btn_pressed(bot, 2, curr.amp[1].fx ^= fxm_2; calc_fx_modified())
+            btn_pressed(bot, 3, curr.amp[1].fx ^= fxm_3; calc_fx_modified())
+            btn_pressed(bot, 4, curr.amp[1].fx ^= fxm_4; calc_fx_modified())
+            btn_pressed(bot, 5, curr.amp[1].fx ^= fxm_5; calc_fx_modified())
             btn_released_oneshot(bot, 6, rowstate[1].mode = ROWMODE_AMP)
             break;
         case ROWMODE_SELECTFX:
