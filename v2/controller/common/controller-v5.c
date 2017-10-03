@@ -464,16 +464,23 @@ static void calc_midi(void) {
             DEBUG_LOG0("MIDI set AMP1 acoustic on");
             // X is 0x7F, Y is 0x00
             // AMP1 -> Y, CAB1 -> Y, GATE -> off, COMPRESSOR -> on, GAIN -> 0x5E
+            DEBUG_LOG0("AMP1 Y");
             midi_axe_cc(axe_cc_xy_amp1, 0x00);
+            DEBUG_LOG0("CAB1 Y");
             midi_axe_cc(axe_cc_xy_cab1, 0x00);
+            DEBUG_LOG0("Gain1 0x5E");
             midi_axe_cc(axe_cc_external3, 0x5E);
+            DEBUG_LOG0("Gate1 off");
             midi_axe_cc(axe_cc_byp_gate1, 0x00);
+            DEBUG_LOG0("Comp1 on");
             midi_axe_cc(axe_cc_byp_compressor1, 0x7F);
         } else {
             // Changed to electric sound:
             DEBUG_LOG0("MIDI set AMP1 acoustic off");
             // X is 0x7F, Y is 0x00
+            DEBUG_LOG0("AMP1 X");
             midi_axe_cc(axe_cc_xy_amp1, 0x7F);
+            DEBUG_LOG0("CAB1 X");
             midi_axe_cc(axe_cc_xy_cab1, 0x7F);
         }
         diff = 1;
@@ -502,7 +509,9 @@ static void calc_midi(void) {
             DEBUG_LOG2("MIDI set AMP1 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
             midi_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
             if (gate != last_gate) {
+                DEBUG_LOG1("Gate1 %s", calc_cc_toggle(gate) == 0 ? "off" : "on");
                 midi_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(gate));
+                DEBUG_LOG0("Comp1 on");
                 midi_axe_cc(axe_cc_byp_compressor1, 0x7F);
             }
             diff = 1;
@@ -520,16 +529,23 @@ static void calc_midi(void) {
             DEBUG_LOG0("MIDI set AMP2 acoustic on");
             // X is 0x7F, Y is 0x00
             // AMP1 -> Y, CAB1 -> Y, GATE -> off, COMPRESSOR -> on, GAIN -> 0x5E
+            DEBUG_LOG0("AMP1 Y");
             midi_axe_cc(axe_cc_xy_amp2, 0x00);
+            DEBUG_LOG0("CAB1 Y");
             midi_axe_cc(axe_cc_xy_cab2, 0x00);
-            midi_axe_cc(axe_cc_byp_gate2, 0x00);
-            midi_axe_cc(axe_cc_byp_compressor2, 0x7F);
+            DEBUG_LOG0("Gain2 0x5E");
             midi_axe_cc(axe_cc_external4, 0x5E);
+            DEBUG_LOG0("Gate2 off");
+            midi_axe_cc(axe_cc_byp_gate2, 0x00);
+            DEBUG_LOG0("Comp2 on");
+            midi_axe_cc(axe_cc_byp_compressor2, 0x7F);
         } else {
             // Changed to electric sound:
             DEBUG_LOG0("MIDI set AMP2 acoustic off");
             // X is 0x7F, Y is 0x00
+            DEBUG_LOG0("AMP2 X");
             midi_axe_cc(axe_cc_xy_amp2, 0x7F);
+            DEBUG_LOG0("CAB2 X");
             midi_axe_cc(axe_cc_xy_cab2, 0x7F);
         }
     }
@@ -556,7 +572,9 @@ static void calc_midi(void) {
             DEBUG_LOG2("MIDI set AMP2 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
             midi_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
             if (gate != last_gate) {
+                DEBUG_LOG1("Gate2 on", calc_cc_toggle(gate) == 0 ? "off" : "on");
                 midi_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(gate));
+                DEBUG_LOG0("Comp2 on");
                 midi_axe_cc(axe_cc_byp_compressor2, 0x7F);
             }
             diff = 1;
@@ -575,7 +593,6 @@ static void calc_midi(void) {
         diff = 1;
     }
 
-#if 0
     // Send FX state:
     for (i = 0; i < 5; i++, test_fx <<= 1) {
         if ((curr.amp[0].fx & test_fx) != (last.amp[0].fx & test_fx)) {
@@ -587,7 +604,6 @@ static void calc_midi(void) {
             midi_axe_cc(pr.fx_midi_cc[1][i], calc_cc_toggle(curr.amp[1].fx & test_fx));
         }
     }
-#endif
 
     // Send MIDI tempo change:
     if ((curr.tempo != last.tempo) && (curr.tempo >= 30)) {
