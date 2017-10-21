@@ -21,6 +21,12 @@
     <ClCompile Include="..\common\controller-v5.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\controller-v5-rom1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\util.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\hardware.h">
@@ -54,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\PIC\flash_v5_bank4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

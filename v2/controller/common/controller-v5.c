@@ -106,7 +106,7 @@ Press AMP    to cancel and revert to existing FX and then switch to AMP mode for
 
 #if HW_VERSION == 5
 
-#include "types.h"
+#include "util.h"
 
 #include "program-v5.h"
 #include "hardware.h"
@@ -178,6 +178,22 @@ enum rowstate_mode {
     ROWMODE_SELECTFX
 };
 
+// Tap tempo CC value (toggles between 0x00 and 0x7F):
+u8 tap;
+
+// Current mode:
+u8 mode;
+// LED state per mode:
+io16 mode_leds[MODE_count];
+
+// Whether INC/DEC affects gain (0) or volume (1):
+u8 gain_mode;
+
+// Max program #:
+u8 sl_max;
+// Pointer to unmodified program:
+rom struct program *origpr;
+
 // Structure to represent state that should be compared from current to last to detect changes in program.
 struct state {
     // Footswitch state:
@@ -212,43 +228,18 @@ struct state {
 };
 
 // Current and last state:
+#pragma udata state
 struct state curr, last;
 
-// Tap tempo CC value (toggles between 0x00 and 0x7F):
-u8 tap;
-
-// Current mode:
-u8 mode;
-// LED state per mode:
-io16 mode_leds[MODE_count];
-
-// Whether INC/DEC affects gain (0) or volume (1):
-u8 gain_mode;
-
-// BCD-encoded dB value table (from PIC/v4_lookup.h):
-rom const u16 dB_bcd_lookup[128] = {
-#include "../PIC/v4_lookup.h"
-};
-
-// Max program #:
-u8 sl_max;
 // Loaded setlist:
+#pragma udata program
 struct set_list sl;
 // Loaded program:
 struct program pr;
-// Pointer to unmodified program:
-rom struct program *origpr;
 
-#include "v5_fx_names.h"
-
-static rom const char *fx_name(u8 fx_midi_cc) {
-    if (fx_midi_cc < 41) {
-        return "";
-    } else if (fx_midi_cc > 41 + (sizeof(v5_fx_names) / 4)) {
-        return "";
-    }
-    return v5_fx_names[fx_midi_cc - 41];
-}
+// BCD-encoded dB value table (from PIC/v4_lookup.h):
+#pragma udata bcd
+extern rom const u16 dB_bcd_lookup[128];
 
 // Set Axe-FX CC value
 #define midi_axe_cc(cc, val) midi_send_cmd2(0xB, axe_midi_channel, cc, val)
@@ -285,103 +276,6 @@ static rom const char *fx_name(u8 fx_midi_cc) {
 
 #define is_bot_button_held(mask) \
     ((curr.fsw.bot.byte & mask) == mask)
-
-rom char hex[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-
-static void hextoa(char *dst, u8 col, u8 n) {
-    dst += col;
-    *dst-- = hex[n & 0x0F];
-    *dst = hex[(n >> 4) & 0x0F];
-}
-
-static s8 ritoa(char *dst, s8 col, u8 n) {
-    do {
-        dst[col--] = (n % (char)10) + (char)'0';
-    } while ((n /= (u8)10) > (u8)0);
-    return col;
-}
-
-// BCD is 2.1 format with MSB indicating sign (5 chars total) i.e. "-99.9" or " -inf"
-static void bcdtoa(char *dst, u8 col, u16 bcd) {
-    u8 sign;
-    dst += col;
-    sign = (u8) ((bcd & 0x8000) != 0);
-    if ((bcd & 0x7FFF) == 0x7FFF) {
-        *dst-- = 'f';
-        *dst-- = 'n';
-        *dst-- = 'i';
-    } else {
-        *dst-- = (char) '0' + (char) (bcd & 0x0F);
-        *dst-- = '.';
-        bcd >>= 4;
-        *dst-- = (char) '0' + (char) (bcd & 0x0F);
-        bcd >>= 4;
-        if ((bcd & 0x0F) > 0) {
-            *dst-- = (char) '0' + (char) (bcd & 0x0F);
-        }
-    }
-    if (sign) {
-        *dst = '-';
-    }
-}
-
-#ifndef __MCC18
-char bcd_tmp[6];
-static char *bcd(u16 n) {
-    bcd_tmp[5] = 0;
-    bcd_tmp[4] = ' ';
-    bcd_tmp[3] = ' ';
-    bcd_tmp[2] = ' ';
-    bcd_tmp[1] = ' ';
-    bcd_tmp[0] = ' ';
-    bcdtoa(bcd_tmp, 4, n);
-    return bcd_tmp;
-}
-#endif
-
-// Copies a fixed-length string optionally NUL-terminated to the LCD display row:
-static void copy_str_lcd(rom const char *src, char *dst) {
-    u8 i;
-    for (i = 0; src[i] != 0 && i < LCD_COLS; ++i) {
-        dst[i] = src[i];
-    }
-    for (; i < LCD_COLS; i++) {
-        dst[i] = ' ';
-    }
-}
-
-// Comment-out unused functions so they don't take up code space on PIC.
-#if 0
-static s8 litoa(char *dst, s8 col, u8 n) {
-    // Write the integer to temporary storage:
-    char tmp[3];
-    s8 c = 0;
-    do {
-        tmp[c++] = (n % (char)10) + (char)'0';
-    } while ((n /= (u8)10) > (u8)0);
-    // Write the left-aligned integer to the destination:
-    for (c--; c >= 0; c--, col++) {
-        dst[col] = tmp[c];
-    }
-    return col;
-}
-
-static void print_half(char *dst, u8 col, s8 volhalfdb) {
-    s8 i;
-    if (volhalfdb < 0) {
-        i = ritoa(dst, col, (u8) (-volhalfdb) >> 1);
-        dst[i] = '-';
-    } else {
-        ritoa(dst, col, (u8) volhalfdb >> 1);
-    }
-    dst[col + 1] = '.';
-    if (((u8)volhalfdb & 1) != 0) {
-        dst[col + 2] = '5';
-    } else {
-        dst[col + 2] = '0';
-    }
-}
-#endif
 
 static void send_leds(void) {
     // Update LEDs:

@@ -167,10 +167,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\common\controller-v5-rom1.c" />
     <ClCompile Include="..\common\controller-v5.c" />
+    <ClCompile Include="..\common\util.c" />
     <ClCompile Include="eminorv2.c" />
     <ClInclude Include="..\common\memory.h" />
     <ClInclude Include="..\common\program-v5.h" />
+    <ClInclude Include="..\common\util.h" />
     <ClInclude Include="..\common\v5_fx_names.h" />
     <ClInclude Include="..\PIC\flash_v5_bank0.h" />
     <ClInclude Include="..\PIC\flash_v5_bank1.h" />
