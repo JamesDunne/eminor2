@@ -1219,9 +1219,12 @@ void controller_handle(void) {
             timers.row##_##n = (u8)0x00; \
         }
 
+#define toggle_dirty(fx) \
+    ((fx & fxm_acoustc) == fxm_acoustc) ? (fx & ~fxm_acoustc) : (fx ^ fxm_dirty)
+
     switch (rowstate[0].mode) {
         case ROWMODE_AMP:
-            btn_released_oneshot(top, 1, curr.amp[0].fx = (curr.amp[0].fx ^ fxm_dirty) & ~fxm_acoustc; calc_fx_modified())
+            btn_released_oneshot(top, 1, curr.amp[0].fx = toggle_dirty(curr.amp[0].fx); calc_fx_modified())
             btn_released_repeater(top, 2, gain_dec(0))
             btn_released_repeater(top, 3, gain_inc(0))
             btn_released_repeater(top, 4, vol_dec(0))
@@ -1242,7 +1245,7 @@ void controller_handle(void) {
 
     switch (rowstate[1].mode) {
         case ROWMODE_AMP:
-            btn_released_oneshot(bot, 1, curr.amp[1].fx = (curr.amp[1].fx ^ fxm_dirty) & ~fxm_acoustc; calc_fx_modified())
+            btn_released_oneshot(bot, 1, curr.amp[1].fx = toggle_dirty(curr.amp[1].fx); calc_fx_modified())
             btn_released_repeater(bot, 2, gain_dec(1))
             btn_released_repeater(bot, 3, gain_inc(1))
             btn_released_repeater(bot, 4, vol_dec(1))
