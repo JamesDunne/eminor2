@@ -39,11 +39,11 @@ TODO: adjust tempo per song
 AMP controls:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |          /--------------------\
-|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX    PR_PRV PR_NXT  |          |Beautiful_Disaster_*|
+|  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX    PR_PRV PR_NXT  |          |Beautiful_Disaster_*|
 |  ACOUSTC                             RESET                 |          |Sng 62/62  Scn  1/10|
 |                                                            |    LCD:  |C g=58 v=-99.9 P12CD|
 |     *      *      *      *      *      *      *      *     |          |D g=5E v=  0.0 -1---|
-|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX     MODE  SC_NXT  |          \--------------------/
+|  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX     MODE  SC_NXT  |          \--------------------/
 |  ACOUSTC                             RESET   SAVE  SC_ONE  |
 |------------------------------------------------------------|
 
@@ -76,7 +76,7 @@ FX controls:
 |   SELECT SELECT SELECT                                     |          |Sng 62/62  Scn  2/ 3|
 |                                                            |    LCD:  | PIT FX1 FX2 CHO DLY|
 |     *      *      *      *      *      *      *      *     |          |A g=5E v=  6.0 ---CD|
-|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX     MODE  SC_NXT  |          \--------------------/
+|  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX     MODE  SC_NXT  |          \--------------------/
 |  ACOUSTC                             RESET   SAVE  SC_ONE  |
 |------------------------------------------------------------|
 
@@ -91,7 +91,7 @@ SELECT controls (top):
 |                                                            |          |Sng 62/62  Scn  2/ 3|
 |                                                            |    LCD:  | F=0 F-- F++ OK  CNC|
 |     *      *      *      *      *      *      *      *     |          |FX1: Filter         |
-|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX     MODE  SC_NXT  |          \--------------------/
+|  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX     MODE  SC_NXT  |          \--------------------/
 |  ACOUSTC                             RESET   SAVE  SC_ONE  |
 |------------------------------------------------------------|
 
@@ -666,25 +666,25 @@ static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
     // Top row:
     labels = label_row_get(1);
-    labels[0] = "CLN|DRV";
-    labels[1] = "VOL=0";
-    labels[2] = "VOL=6";
-    labels[3] = "d=GAIN";
-    labels[4] = "GAIN=d";
-    labels[5] = "FX";
+    labels[0] = "CLN/DRV|AC";
+    labels[1] = "GAIN--";
+    labels[2] = "GAIN++";
+    labels[3] = "VOL--";
+    labels[4] = "VOL++";
+    labels[5] = "FX|RESET";
     labels[6] = "PREV SONG";
     labels[7] = "NEXT SONG";
     label_row_update(1);
 
     // Bottom row:
     labels = label_row_get(0);
-    labels[0] = "CLN|DRV";
-    labels[1] = "VOL=0";
-    labels[2] = "VOL=6";
-    labels[3] = "d=GAIN";
-    labels[4] = "GAIN=d";
-    labels[5] = "FX";
-    labels[6] = "MODE";
+    labels[0] = "CLN/DRV|AC";
+    labels[1] = "GAIN--";
+    labels[2] = "GAIN++";
+    labels[3] = "VOL--";
+    labels[4] = "VOL++";
+    labels[5] = "FX|RESET";
+    labels[6] = "MODE|SAVE";
     labels[7] = "NEXT SCENE";
     label_row_update(0);
 #endif
@@ -777,18 +777,6 @@ static void calc_leds(void) {
         case ROWMODE_AMP:
             mode_leds[mode].top.byte |= ((curr.amp[0].fx & fxm_dirty) >> 7)
                 | (curr.fsw.top.byte & (u8)(0x02 | 0x04 | 0x08 | 0x10));
-            if (curr.amp[0].volume < volume_0dB) {
-                mode_leds[mode].top.byte |= 0x02;
-            }
-            if (curr.amp[0].volume > volume_0dB) {
-                mode_leds[mode].top.byte |= 0x04;
-            }
-            if (curr.amp[0].gain < pr.default_gain[0]) {
-                mode_leds[mode].top.byte |= 0x08;
-            }
-            if (curr.amp[0].gain > pr.default_gain[0]) {
-                mode_leds[mode].top.byte |= 0x10;
-            }
             break;
         case ROWMODE_FX:
             mode_leds[mode].top.byte = (curr.amp[0].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
@@ -801,18 +789,6 @@ static void calc_leds(void) {
         case ROWMODE_AMP:
             mode_leds[mode].bot.byte |= ((curr.amp[1].fx & fxm_dirty) >> 7)
                 | (curr.fsw.bot.byte & (u8)(0x02 | 0x04 | 0x08 | 0x10));
-            if (curr.amp[1].volume < volume_0dB) {
-                mode_leds[mode].bot.byte |= 0x02;
-            }
-            if (curr.amp[1].volume > volume_0dB) {
-                mode_leds[mode].bot.byte |= 0x04;
-            }
-            if (curr.amp[1].gain < pr.default_gain[1]) {
-                mode_leds[mode].bot.byte |= 0x08;
-            }
-            if (curr.amp[1].gain > pr.default_gain[1]) {
-                mode_leds[mode].bot.byte |= 0x10;
-            }
             break;
     case ROWMODE_FX:
             mode_leds[mode].bot.byte = (curr.amp[1].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
@@ -1120,14 +1096,14 @@ void controller_10msec_timer(void) {
 
 #define repeater(row,n,min,mask,op_func) \
     if (is_##row##_button_held(M_##n)) { \
-        if ((timers.row##_##n & (u8)0xC0) != (u8)0) { \
-            timers.row##_##n = (timers.row##_##n & (u8)0xC0) | (((timers.row##_##n & (u8)0x3F) + (u8)1) & (u8)0x3F); \
-        } \
         if (((timers.row##_##n & (u8)0x80) != (u8)0) && ((timers.row##_##n & (u8)0x3F) >= (u8)min)) { \
             timers.row##_##n |= (u8)0x40; \
         } \
         if (((timers.row##_##n & (u8)0x40) != (u8)0) && ((timers.row##_##n & (u8)mask) == (u8)0)) { \
             op_func; \
+        } \
+        if ((timers.row##_##n & (u8)0xC0) != (u8)0) { \
+            timers.row##_##n = (timers.row##_##n & (u8)0xC0) | (((timers.row##_##n & (u8)0x3F) + (u8)1) & (u8)0x3F); \
         } \
     }
 
@@ -1150,7 +1126,7 @@ void controller_10msec_timer(void) {
     }
 
 #define gain_dec(ampno) { \
-        u8 gain = (curr.amp[ampno].gain); \
+        u8 gain = or_default(curr.amp[ampno].gain, pr.default_gain[ampno]); \
         if (gain > (u8)1) { \
             gain--; \
             curr.amp[ampno].gain = gain; \
@@ -1159,7 +1135,7 @@ void controller_10msec_timer(void) {
     }
 
 #define gain_inc(ampno) { \
-        u8 gain = (curr.amp[ampno].gain); \
+        u8 gain = or_default(curr.amp[ampno].gain, pr.default_gain[ampno]); \
         if (gain < (u8)127) { \
             gain++; \
             curr.amp[ampno].gain = gain; \
@@ -1170,10 +1146,10 @@ void controller_10msec_timer(void) {
     switch (rowstate[0].mode) {
         case ROWMODE_AMP:
             one_shot(top,1,0x1F,curr.amp[0].fx ^= fxm_acoustc; calc_fx_modified())
-            repeater(top,2,0x20,0x01,vol_dec(0))
-            repeater(top,3,0x20,0x01,vol_inc(0))
-            repeater(top,4,0x20,0x01,gain_dec(0))
-            repeater(top,5,0x20,0x01,gain_inc(0))
+            repeater(top,2,0x18,0x03,gain_dec(0))
+            repeater(top,3,0x18,0x03,gain_inc(0))
+            repeater(top,4,0x18,0x03,vol_dec(0))
+            repeater(top,5,0x18,0x03,vol_inc(0))
             one_shot(top,6,0x1F,midi_invalidate())
             break;
     }
@@ -1181,10 +1157,10 @@ void controller_10msec_timer(void) {
     switch (rowstate[1].mode) {
         case ROWMODE_AMP:
             one_shot(bot,1,0x1F,curr.amp[1].fx ^= fxm_acoustc; calc_fx_modified())
-            repeater(bot,2,0x20,0x01,vol_dec(1))
-            repeater(bot,3,0x20,0x01,vol_inc(1))
-            repeater(bot,4,0x20,0x01,gain_dec(1))
-            repeater(bot,5,0x20,0x01,gain_inc(1))
+            repeater(bot,2,0x18,0x03,gain_dec(1))
+            repeater(bot,3,0x18,0x03,gain_inc(1))
+            repeater(bot,4,0x18,0x03,vol_dec(1))
+            repeater(bot,5,0x18,0x03,vol_inc(1))
             one_shot(bot,6,0x1F,midi_invalidate())
             break;
     }
@@ -1246,10 +1222,10 @@ void controller_handle(void) {
     switch (rowstate[0].mode) {
         case ROWMODE_AMP:
             btn_released_oneshot(top, 1, curr.amp[0].fx = (curr.amp[0].fx ^ fxm_dirty) & ~fxm_acoustc; calc_fx_modified())
-            btn_released_repeater(top, 2, curr.amp[0].volume = volume_0dB; calc_volume_modified())
-            btn_released_repeater(top, 3, curr.amp[0].volume = volume_6dB; calc_volume_modified())
-            btn_released_repeater(top, 4, pr.default_gain[0] = curr.amp[0].gain)
-            btn_released_repeater(top, 5, curr.amp[0].gain = pr.default_gain[0]; calc_gain_modified())
+            btn_released_repeater(top, 2, gain_dec(0))
+            btn_released_repeater(top, 3, gain_inc(0))
+            btn_released_repeater(top, 4, vol_dec(0))
+            btn_released_repeater(top, 5, vol_inc(0))
             btn_released_oneshot(top, 6, rowstate[0].mode = ROWMODE_FX)
             break;
         case ROWMODE_FX:
@@ -1267,10 +1243,10 @@ void controller_handle(void) {
     switch (rowstate[1].mode) {
         case ROWMODE_AMP:
             btn_released_oneshot(bot, 1, curr.amp[1].fx = (curr.amp[1].fx ^ fxm_dirty) & ~fxm_acoustc; calc_fx_modified())
-            btn_released_repeater(bot, 2, curr.amp[1].volume = volume_0dB; calc_volume_modified())
-            btn_released_repeater(bot, 3, curr.amp[1].volume = volume_6dB; calc_volume_modified())
-            btn_released_repeater(bot, 4, pr.default_gain[1] = curr.amp[1].gain)
-            btn_released_repeater(bot, 5, curr.amp[1].gain = pr.default_gain[1]; calc_gain_modified())
+            btn_released_repeater(bot, 2, gain_dec(1))
+            btn_released_repeater(bot, 3, gain_inc(1))
+            btn_released_repeater(bot, 4, vol_dec(1))
+            btn_released_repeater(bot, 5, vol_inc(1))
             btn_released_repeater(bot, 6, rowstate[1].mode = ROWMODE_FX)
             break;
         case ROWMODE_FX:
