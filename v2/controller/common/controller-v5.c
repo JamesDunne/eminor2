@@ -195,6 +195,12 @@ struct state {
     // Amp definitions:
     struct amp amp[2];
 
+    // Each row's current state:
+    struct {
+        enum rowstate_mode  mode;
+        u8                  fx;
+    } rowstate[2];
+
     // Whether current program is modified in any way:
     u8 modified;
 };
@@ -218,12 +224,6 @@ enum rowstate_mode {
     ROWMODE_FX,
     ROWMODE_SELECTFX
 };
-
-// Each row's current state:
-struct {
-    enum rowstate_mode  mode;
-    u8                  fx;
-} rowstate[2];
 
 // BCD-encoded dB value table (from PIC/v4_lookup.h):
 rom const u16 dB_bcd_lookup[128] = {
@@ -642,6 +642,12 @@ static void calc_midi(void) {
         diff = 1;
     }
 
+    if (curr.rowstate[0].mode != last.rowstate[0].mode) {
+        diff = 1;
+    }
+    if (curr.rowstate[1].mode != last.rowstate[1].mode) {
+        diff = 1;
+    }
     if (curr.modified != last.modified) {
         diff = 1;
     }
@@ -773,7 +779,7 @@ static void update_lcd(void) {
 
 static void calc_leds(void) {
     mode_leds[mode].top.byte = (curr.fsw.top.byte & (u8)(0x20 | 0x40 | 0x80));
-    switch (rowstate[0].mode) {
+    switch (curr.rowstate[0].mode) {
         case ROWMODE_AMP:
             mode_leds[mode].top.byte |= ((curr.amp[0].fx & fxm_dirty) >> 7)
                 | (curr.fsw.top.byte & (u8)(0x02 | 0x04 | 0x08 | 0x10));
@@ -785,7 +791,7 @@ static void calc_leds(void) {
     }
 
     mode_leds[mode].bot.byte = (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80));
-    switch (rowstate[1].mode) {
+    switch (curr.rowstate[1].mode) {
         case ROWMODE_AMP:
             mode_leds[mode].bot.byte |= ((curr.amp[1].fx & fxm_dirty) >> 7)
                 | (curr.fsw.bot.byte & (u8)(0x02 | 0x04 | 0x08 | 0x10));
@@ -1030,10 +1036,14 @@ void controller_init(void) {
     load_scene();
     last.sc_idx = curr.sc_idx;
 
-    rowstate[0].mode = ROWMODE_AMP;
-    rowstate[0].fx = 0;
-    rowstate[1].mode = ROWMODE_AMP;
-    rowstate[1].fx = 0;
+    curr.rowstate[0].mode = ROWMODE_AMP;
+    curr.rowstate[0].fx = 0;
+    curr.rowstate[1].mode = ROWMODE_AMP;
+    curr.rowstate[1].fx = 0;
+    last.rowstate[0].mode = ~ROWMODE_AMP;
+    last.rowstate[0].fx = ~0;
+    last.rowstate[1].mode = ~ROWMODE_AMP;
+    last.rowstate[1].fx = ~0;
 
     // Copy current scene settings into state:
     curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
@@ -1143,7 +1153,7 @@ void controller_10msec_timer(void) {
         } \
     }
 
-    switch (rowstate[0].mode) {
+    switch (curr.rowstate[0].mode) {
         case ROWMODE_AMP:
             one_shot(top,1,0x1F,curr.amp[0].fx ^= fxm_acoustc; calc_fx_modified())
             repeater(top,2,0x18,0x03,gain_dec(0))
@@ -1154,7 +1164,7 @@ void controller_10msec_timer(void) {
             break;
     }
 
-    switch (rowstate[1].mode) {
+    switch (curr.rowstate[1].mode) {
         case ROWMODE_AMP:
             one_shot(bot,1,0x1F,curr.amp[1].fx ^= fxm_acoustc; calc_fx_modified())
             repeater(bot,2,0x18,0x03,gain_dec(1))
@@ -1222,14 +1232,14 @@ void controller_handle(void) {
 #define toggle_dirty(fx) \
     ((fx & fxm_acoustc) == fxm_acoustc) ? (fx & ~fxm_acoustc) : (fx ^ fxm_dirty)
 
-    switch (rowstate[0].mode) {
+    switch (curr.rowstate[0].mode) {
         case ROWMODE_AMP:
             btn_released_oneshot(top, 1, curr.amp[0].fx = toggle_dirty(curr.amp[0].fx); calc_fx_modified())
             btn_released_repeater(top, 2, gain_dec(0))
             btn_released_repeater(top, 3, gain_inc(0))
             btn_released_repeater(top, 4, vol_dec(0))
             btn_released_repeater(top, 5, vol_inc(0))
-            btn_released_oneshot(top, 6, rowstate[0].mode = ROWMODE_FX)
+            btn_released_oneshot(top, 6, curr.rowstate[0].mode = ROWMODE_FX)
             break;
         case ROWMODE_FX:
             btn_pressed(top, 1, curr.amp[0].fx ^= fxm_1; calc_fx_modified())
@@ -1237,20 +1247,20 @@ void controller_handle(void) {
             btn_pressed(top, 3, curr.amp[0].fx ^= fxm_3; calc_fx_modified())
             btn_pressed(top, 4, curr.amp[0].fx ^= fxm_4; calc_fx_modified())
             btn_pressed(top, 5, curr.amp[0].fx ^= fxm_5; calc_fx_modified())
-            btn_released_oneshot(top, 6, rowstate[0].mode = ROWMODE_AMP)
+            btn_released_oneshot(top, 6, curr.rowstate[0].mode = ROWMODE_AMP)
             break;
         case ROWMODE_SELECTFX:
             break;
     }
 
-    switch (rowstate[1].mode) {
+    switch (curr.rowstate[1].mode) {
         case ROWMODE_AMP:
             btn_released_oneshot(bot, 1, curr.amp[1].fx = toggle_dirty(curr.amp[1].fx); calc_fx_modified())
             btn_released_repeater(bot, 2, gain_dec(1))
             btn_released_repeater(bot, 3, gain_inc(1))
             btn_released_repeater(bot, 4, vol_dec(1))
             btn_released_repeater(bot, 5, vol_inc(1))
-            btn_released_repeater(bot, 6, rowstate[1].mode = ROWMODE_FX)
+            btn_released_repeater(bot, 6, curr.rowstate[1].mode = ROWMODE_FX)
             break;
         case ROWMODE_FX:
             btn_pressed(bot, 1, curr.amp[1].fx ^= fxm_1; calc_fx_modified())
@@ -1258,7 +1268,7 @@ void controller_handle(void) {
             btn_pressed(bot, 3, curr.amp[1].fx ^= fxm_3; calc_fx_modified())
             btn_pressed(bot, 4, curr.amp[1].fx ^= fxm_4; calc_fx_modified())
             btn_pressed(bot, 5, curr.amp[1].fx ^= fxm_5; calc_fx_modified())
-            btn_released_oneshot(bot, 6, rowstate[1].mode = ROWMODE_AMP)
+            btn_released_oneshot(bot, 6, curr.rowstate[1].mode = ROWMODE_AMP)
             break;
         case ROWMODE_SELECTFX:
             break;
