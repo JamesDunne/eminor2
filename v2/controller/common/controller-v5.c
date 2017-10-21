@@ -172,6 +172,12 @@ enum {
     MODE_count
 };
 
+enum rowstate_mode {
+    ROWMODE_AMP,
+    ROWMODE_FX,
+    ROWMODE_SELECTFX
+};
+
 // Structure to represent state that should be compared from current to last to detect changes in program.
 struct state {
     // Footswitch state:
@@ -218,12 +224,6 @@ io16 mode_leds[MODE_count];
 
 // Whether INC/DEC affects gain (0) or volume (1):
 u8 gain_mode;
-
-enum rowstate_mode {
-    ROWMODE_AMP,
-    ROWMODE_FX,
-    ROWMODE_SELECTFX
-};
 
 // BCD-encoded dB value table (from PIC/v4_lookup.h):
 rom const u16 dB_bcd_lookup[128] = {
@@ -410,6 +410,8 @@ static void toggle_setlist_mode(void);
 static void scene_default(void);
 
 static void program_save(void);
+
+static void reset_scene(void);
 
 // (enable == 0 ? (u8)0 : (u8)0x7F)
 #define calc_cc_toggle(enable) \
@@ -660,7 +662,7 @@ char tmplabel[5][5];
 // Update LCD display:
 static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
-    char **labels;
+    const char **labels;
     u8 n;
 #endif
 #ifdef FEAT_LCD
@@ -771,7 +773,7 @@ static void update_lcd(void) {
         }
         ritoa(lcd_rows[row_song], 18, curr.pr_idx + (u8)1);
     } else {
-        pr_name = pr.name;
+        pr_name = (rom const char *)pr.name;
         copy_str_lcd(pr_name, lcd_rows[row_song]);
     }
     // Set modified bit:
