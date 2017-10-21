@@ -672,24 +672,48 @@ static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
     // Top row:
     labels = label_row_get(1);
-    labels[0] = "CLN/DRV|AC";
-    labels[1] = "GAIN--";
-    labels[2] = "GAIN++";
-    labels[3] = "VOL--";
-    labels[4] = "VOL++";
-    labels[5] = "FX|RESET";
+    switch (curr.rowstate[0].mode) {
+        case ROWMODE_AMP:
+            labels[0] = "CLN/DRV|AC";
+            labels[1] = "GAIN--";
+            labels[2] = "GAIN++";
+            labels[3] = "VOL--";
+            labels[4] = "VOL++";
+            labels[5] = "FX|RESET";
+            break;
+        case ROWMODE_FX:
+            labels[0] = fx_name(pr.fx_midi_cc[0][0]);
+            labels[1] = fx_name(pr.fx_midi_cc[0][1]);
+            labels[2] = fx_name(pr.fx_midi_cc[0][2]);
+            labels[3] = fx_name(pr.fx_midi_cc[0][3]);
+            labels[4] = fx_name(pr.fx_midi_cc[0][4]);
+            labels[5] = "FX|RESET";
+            break;
+    }
     labels[6] = "PREV SONG";
     labels[7] = "NEXT SONG";
     label_row_update(1);
 
     // Bottom row:
     labels = label_row_get(0);
-    labels[0] = "CLN/DRV|AC";
-    labels[1] = "GAIN--";
-    labels[2] = "GAIN++";
-    labels[3] = "VOL--";
-    labels[4] = "VOL++";
-    labels[5] = "FX|RESET";
+    switch (curr.rowstate[1].mode) {
+        case ROWMODE_AMP:
+            labels[0] = "CLN/DRV|AC";
+            labels[1] = "GAIN--";
+            labels[2] = "GAIN++";
+            labels[3] = "VOL--";
+            labels[4] = "VOL++";
+            labels[5] = "FX|RESET";
+            break;
+        case ROWMODE_FX:
+            labels[0] = fx_name(pr.fx_midi_cc[1][0]);
+            labels[1] = fx_name(pr.fx_midi_cc[1][1]);
+            labels[2] = fx_name(pr.fx_midi_cc[1][2]);
+            labels[3] = fx_name(pr.fx_midi_cc[1][3]);
+            labels[4] = fx_name(pr.fx_midi_cc[1][4]);
+            labels[5] = "FX|RESET";
+            break;
+    }
     labels[6] = "MODE|SAVE";
     labels[7] = "NEXT SCENE";
     label_row_update(0);
