@@ -198,10 +198,6 @@ struct state {
     // Current tempo (bpm):
     u8 tempo;
 
-    // Selected amp (0 or 1):
-    u8 selected_amp;
-    // Selected both amps (0 or 1):
-    u8 selected_both;
     // Amp definitions:
     struct amp amp[2];
 
@@ -652,12 +648,6 @@ static void calc_midi(void) {
         diff = 1;
     }
 
-    if (curr.selected_amp != last.selected_amp) {
-        diff = 1;
-    }
-    if (curr.selected_both != last.selected_both) {
-        diff = 1;
-    }
     if (curr.modified != last.modified) {
         diff = 1;
     }
@@ -1084,10 +1074,6 @@ void controller_init(void) {
     last.amp[1].fx = ~curr.amp[1].fx;
     last.amp[0].volume = ~curr.amp[0].volume;
     last.amp[1].volume = ~curr.amp[1].volume;
-
-    // Select only JD amp by default:
-    curr.selected_amp = 1;
-    curr.selected_both = 0;
 
     // Force MIDI changes on init:
     midi_invalidate();
