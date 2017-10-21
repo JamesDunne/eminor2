@@ -74,7 +74,7 @@ FX controls:
 |     *      *      *      *      *      *      *      *     |          /--------------------\
 |    FX1    FX2    FX3   CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
 |   SELECT SELECT SELECT                                     |          |Sng 62/62  Scn  2/ 3|
-|                                                            |    LCD:  | PIT FX1 FX2 CHO DLY|
+|                                                            |    LCD:  |PIT1ROT1FIL1CHO1DLY1|
 |     *      *      *      *      *      *      *      *     |          |A g=5E v=  6.0 ---CD|
 |  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX     MODE  SC_NXT  |          \--------------------/
 |  ACOUSTC                             RESET   SAVE  SC_ONE  |
@@ -244,7 +244,7 @@ rom struct program *origpr;
 static rom const char *fx_name(u8 fx_midi_cc) {
     if (fx_midi_cc < 41) {
         return "";
-    } else if (fx_midi_cc > 41 + (sizeof(v5_fx_names) / sizeof(rom const char *))) {
+    } else if (fx_midi_cc > 41 + (sizeof(v5_fx_names) / 4)) {
         return "";
     }
     return v5_fx_names[fx_midi_cc - 41];
@@ -653,10 +653,15 @@ static void calc_midi(void) {
     }
 }
 
+#ifdef HWFEAT_LABEL_UPDATES
+char tmplabel[5][5];
+#endif
+
 // Update LCD display:
 static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
     char **labels;
+    u8 n;
 #endif
 #ifdef FEAT_LCD
     s8 i;
@@ -682,6 +687,14 @@ static void update_lcd(void) {
             labels[2] = fx_name(pr.fx_midi_cc[0][2]);
             labels[3] = fx_name(pr.fx_midi_cc[0][3]);
             labels[4] = fx_name(pr.fx_midi_cc[0][4]);
+            for (n = 0; n < 5; n++) {
+                tmplabel[n][0] = labels[n][0];
+                tmplabel[n][1] = labels[n][1];
+                tmplabel[n][2] = labels[n][2];
+                tmplabel[n][3] = labels[n][3];
+                tmplabel[n][4] = 0;
+                labels[n] = tmplabel[n];
+            }
             labels[5] = "FX|RESET";
             break;
     }
@@ -706,6 +719,14 @@ static void update_lcd(void) {
             labels[2] = fx_name(pr.fx_midi_cc[1][2]);
             labels[3] = fx_name(pr.fx_midi_cc[1][3]);
             labels[4] = fx_name(pr.fx_midi_cc[1][4]);
+            for (n = 0; n < 5; n++) {
+                tmplabel[n][0] = labels[n][0];
+                tmplabel[n][1] = labels[n][1];
+                tmplabel[n][2] = labels[n][2];
+                tmplabel[n][3] = labels[n][3];
+                tmplabel[n][4] = 0;
+                labels[n] = tmplabel[n];
+            }
             labels[5] = "FX|RESET";
             break;
     }
@@ -717,8 +738,6 @@ static void update_lcd(void) {
     for (i = 0; i < LCD_COLS; ++i) {
         lcd_rows[row_song][i] = "                    "[i];
         lcd_rows[row_stat][i] = "                    "[i];
-        lcd_rows[row_amp1][i] = "C g= 0 v=  0.0 -----"[i];
-        lcd_rows[row_amp2][i] = "C g= 0 v=  0.0 -----"[i];
     }
 
     // Print setlist date:
@@ -761,35 +780,75 @@ static void update_lcd(void) {
     }
 
     // AMP1:
-    if ((curr.amp[0].fx & fxm_acoustc) != 0) {
-        // A for acoustic
-        lcd_rows[row_amp1][0] = 'A';
-    } else {
-        // C/D for clean/dirty
-        lcd_rows[row_amp1][0] = 'C' + ((curr.amp[0].fx & fxm_dirty) != 0);
-    }
-    hextoa(lcd_rows[row_amp1],  5, or_default(curr.amp[0].gain, pr.default_gain[0]));
-    bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[0].volume]);
+    switch (curr.rowstate[0].mode) {
+        case ROWMODE_AMP:
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[row_amp1][i] = "C g= 0 v=  0.0 -----"[i];
+            }
 
-    test_fx = 1;
-    for (i = 0; i < 5; i++, test_fx <<= 1) {
-        lcd_rows[row_amp1][15 + i] = (curr.amp[0].fx & test_fx) ? '1' + i : '-';
+            if ((curr.amp[0].fx & fxm_acoustc) != 0) {
+                // A for acoustic
+                lcd_rows[row_amp1][0] = 'A';
+            } else {
+                // C/D for clean/dirty
+                lcd_rows[row_amp1][0] = 'C' + ((curr.amp[0].fx & fxm_dirty) != 0);
+            }
+            hextoa(lcd_rows[row_amp1], 5, or_default(curr.amp[0].gain, pr.default_gain[0]));
+            bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[0].volume]);
+
+            test_fx = 1;
+            for (i = 0; i < 5; i++, test_fx <<= 1) {
+                lcd_rows[row_amp1][15 + i] = (curr.amp[0].fx & test_fx) ? '1' + i : '-';
+            }
+            break;
+        case ROWMODE_FX:
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[row_amp1][i] = "                    "[i];
+            }
+            for (i = 0; i < 5; i++) {
+                rom const char *name = fx_name(pr.fx_midi_cc[0][i]);
+                lcd_rows[row_amp1][i*4+0] = name[0];
+                lcd_rows[row_amp1][i*4+1] = name[1];
+                lcd_rows[row_amp1][i*4+2] = name[2];
+                lcd_rows[row_amp1][i*4+3] = name[3];
+            }
+            break;
     }
 
     // AMP2:
-    if ((curr.amp[1].fx & fxm_acoustc) != 0) {
-        // A for acoustic
-        lcd_rows[row_amp2][0] = 'A';
-    } else {
-        // C/D for clean/dirty
-        lcd_rows[row_amp2][0] = 'C' + ((curr.amp[1].fx & fxm_dirty) != 0);
-    }
-    hextoa(lcd_rows[row_amp2],  5, or_default(curr.amp[1].gain, pr.default_gain[1]));    
-    bcdtoa(lcd_rows[row_amp2], 13, dB_bcd_lookup[curr.amp[1].volume]);
+    switch (curr.rowstate[1].mode) {
+        case ROWMODE_AMP:
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[row_amp2][i] = "C g= 0 v=  0.0 -----"[i];
+            }
 
-    test_fx = 1;
-    for (i = 0; i < 5; i++, test_fx <<= 1) {
-        lcd_rows[row_amp2][15 + i] = (curr.amp[1].fx & test_fx) ? '1' + i : '-';
+            if ((curr.amp[1].fx & fxm_acoustc) != 0) {
+                // A for acoustic
+                lcd_rows[row_amp2][0] = 'A';
+            } else {
+                // C/D for clean/dirty
+                lcd_rows[row_amp2][0] = 'C' + ((curr.amp[1].fx & fxm_dirty) != 0);
+            }
+            hextoa(lcd_rows[row_amp2], 5, or_default(curr.amp[1].gain, pr.default_gain[1]));
+            bcdtoa(lcd_rows[row_amp2], 13, dB_bcd_lookup[curr.amp[1].volume]);
+
+            test_fx = 1;
+            for (i = 0; i < 5; i++, test_fx <<= 1) {
+                lcd_rows[row_amp2][15 + i] = (curr.amp[1].fx & test_fx) ? '1' + i : '-';
+            }
+            break;
+        case ROWMODE_FX:
+            for (i = 0; i < LCD_COLS; i++) {
+                lcd_rows[row_amp2][i] = "                    "[i];
+            }
+            for (i = 0; i < 5; i++) {
+                rom const char *name = fx_name(pr.fx_midi_cc[1][i]);
+                lcd_rows[row_amp2][i * 4 + 0] = name[0];
+                lcd_rows[row_amp2][i * 4 + 1] = name[1];
+                lcd_rows[row_amp2][i * 4 + 2] = name[2];
+                lcd_rows[row_amp2][i * 4 + 3] = name[3];
+            }
+            break;
     }
     
     lcd_updated_all();
