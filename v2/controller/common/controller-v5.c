@@ -39,28 +39,22 @@ TODO: adjust tempo per song
 AMP controls:
 |------------------------------------------------------------|
 |     *      *      *      *      *      *      *      *     |          /--------------------\
-|  CLN|DRV VOL=0  VOL=6  GAIN-- GAIN++  FX    PR_PRV PR_NXT  |          |Beautiful_Disaster_*|
-|  ACOUSTC VOL--  VOL++  d=GAIN GAIN=d RESET                 |          |Sng 62/62  Scn  1/10|
+|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX    PR_PRV PR_NXT  |          |Beautiful_Disaster_*|
+|  ACOUSTC                             RESET                 |          |Sng 62/62  Scn  1/10|
 |                                                            |    LCD:  |C g=58 v=-99.9 P12CD|
 |     *      *      *      *      *      *      *      *     |          |D g=5E v=  0.0 -1---|
-|  CLN|DRV VOL=0  VOL=6  GAIN-- GAIN++  FX     MODE  SC_NXT  |          \--------------------/
-|  ACOUSTC VOL--  VOL++  d=GAIN GAIN=d RESET   SAVE  SC_ONE  |
+|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX     MODE  SC_NXT  |          \--------------------/
+|  ACOUSTC                             RESET   SAVE  SC_ONE  |
 |------------------------------------------------------------|
 
 Press CLN|DRV to toggle clean vs overdrive mode (clean:    AMP -> Y, CAB -> X, gain -> 0x5E; dirty: AMP -> X, CAB -> X, gain -> n)
 Hold  ACOUSTC to switch to acoustic emulation   (acoustic: AMP -> bypass, CAB -> Y, gain -> 0x5E)
 
-Press VOL=0   to set volume to 0dB
 Hold  VOL--   to decrease volume slowly
-
-Press VOL=6   to set volume to +6dB
 Hold  VOL++   to increase volume slowly
 
-Press GAIN--  to decrease gain
-Hold  d=GAIN  to store default1 or default2 gain
-
-Press GAIN++  to increase gain
-Hold  GAIN=d  to recall default1 or default2 gain
+Hold  GAIN--  to decrease gain slowly
+Hold  GAIN++  to increase gain slowly
 
 Press FX      to switch row to FX mode
 
@@ -82,8 +76,8 @@ FX controls:
 |   SELECT SELECT SELECT                                     |          |Sng 62/62  Scn  2/ 3|
 |                                                            |    LCD:  | PIT FX1 FX2 CHO DLY|
 |     *      *      *      *      *      *      *      *     |          |A g=5E v=  6.0 ---CD|
-|  CLN|DRV VOL=0  VOL=6  d=GAIN GAIN=d  FX     MODE  SC_NXT  |          \--------------------/
-|  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET   SAVE  SC_ONE  |
+|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX     MODE  SC_NXT  |          \--------------------/
+|  ACOUSTC                             RESET   SAVE  SC_ONE  |
 |------------------------------------------------------------|
 
 Press AMP to switch row to AMP mode
@@ -97,8 +91,8 @@ SELECT controls (top):
 |                                                            |          |Sng 62/62  Scn  2/ 3|
 |                                                            |    LCD:  | F=0 F-- F++ OK  CNC|
 |     *      *      *      *      *      *      *      *     |          |FX1: Filter         |
-|  CLN|DRV VOL=0  VOL=6  d=GAIN GAIN=d  FX     MODE  SC_NXT  |          \--------------------/
-|  ACOUSTC VOL--  VOL++  GAIN-- GAIN++ RESET   SAVE  SC_ONE  |
+|  CLN|DRV VOL--  VOL++  GAIN-- GAIN++  FX     MODE  SC_NXT  |          \--------------------/
+|  ACOUSTC                             RESET   SAVE  SC_ONE  |
 |------------------------------------------------------------|
 
 Press F=0    to reset back to top of FX list
