@@ -581,11 +581,11 @@ static void calc_midi(void) {
     // Send FX state:
     for (i = 0; i < 5; i++, test_fx <<= 1) {
         if ((curr.amp[0].fx & test_fx) != (last.amp[0].fx & test_fx)) {
-            DEBUG_LOG2("MIDI set AMP1 %s %s", fx_name(pr.fx_midi_cc[0][i]), (curr.amp[0].fx & test_fx) == 0 ? "off" : "on");
+            DEBUG_LOG2("MIDI set AMP1 %.4s %s", fx_name(pr.fx_midi_cc[0][i]), (curr.amp[0].fx & test_fx) == 0 ? "off" : "on");
             midi_axe_cc(pr.fx_midi_cc[0][i], calc_cc_toggle(curr.amp[0].fx & test_fx));
         }
         if ((curr.amp[1].fx & test_fx) != (last.amp[1].fx & test_fx)) {
-            DEBUG_LOG2("MIDI set AMP2 %s %s", fx_name(pr.fx_midi_cc[1][i]), (curr.amp[1].fx & test_fx) == 0 ? "off" : "on");
+            DEBUG_LOG2("MIDI set AMP2 %.4s %s", fx_name(pr.fx_midi_cc[1][i]), (curr.amp[1].fx & test_fx) == 0 ? "off" : "on");
             midi_axe_cc(pr.fx_midi_cc[1][i], calc_cc_toggle(curr.amp[1].fx & test_fx));
         }
     }
