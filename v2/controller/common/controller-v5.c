@@ -239,11 +239,6 @@ struct program pr;
 // Pointer to unmodified program:
 rom struct program *origpr;
 
-#define read_bit(name,e)   (e & fxm_##name)
-#define toggle_bit(name,e) e = e ^ fxm_##name
-
-#define name_table_offs ((u16)(128 * sizeof(struct program)) + sizeof(struct set_list))
-
 #include "v5_fx_names.h"
 
 static rom const char *fx_name(u8 fx_midi_cc) {
