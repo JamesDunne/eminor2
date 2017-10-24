@@ -178,8 +178,6 @@
     <ClInclude Include="..\PIC\flash_v5_bank0.h" />
     <ClInclude Include="..\PIC\flash_v5_bank1.h" />
     <ClInclude Include="..\PIC\flash_v5_bank2.h" />
-    <ClInclude Include="..\PIC\flash_v5_bank3.h" />
-    <ClInclude Include="..\PIC\flash_v5_bank4.h" />
     <ClInclude Include="font-5x8.h">
       <FileType>CppCode</FileType>
     </ClInclude>

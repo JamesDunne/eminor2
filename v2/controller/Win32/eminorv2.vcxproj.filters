@@ -56,12 +56,6 @@
     <ClInclude Include="..\PIC\flash_v5_bank2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\PIC\flash_v5_bank3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\PIC\flash_v5_bank4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\common\util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
