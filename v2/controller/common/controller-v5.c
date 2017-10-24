@@ -156,6 +156,7 @@ enum rowstate_mode {
     ROWMODE_FX
 };
 
+#pragma udata state
 // Tap tempo CC value (toggles between 0x00 and 0x7F):
 u8 tap;
 
@@ -163,9 +164,6 @@ u8 tap;
 u8 mode;
 // LED state per mode:
 io16 mode_leds[MODE_count];
-
-// Whether INC/DEC affects gain (0) or volume (1):
-u8 gain_mode;
 
 // Max program #:
 u8 sl_max;
@@ -206,18 +204,20 @@ struct state {
 };
 
 // Current and last state:
-#pragma udata state
 struct state curr, last;
+#pragma udata
 
 // Loaded setlist:
 #pragma udata program
 struct set_list sl;
 // Loaded program:
 struct program pr;
+#pragma udata
 
 // BCD-encoded dB value table (from PIC/v4_lookup.h):
 #pragma udata bcd
 extern rom const u16 dB_bcd_lookup[128];
+#pragma udata
 
 // Set Axe-FX CC value
 #define midi_axe_cc(cc, val) midi_send_cmd2(0xB, axe_midi_channel, cc, val)
@@ -267,7 +267,7 @@ static void send_leds(void) {
 
 static void update_lcd(void);
 
-static void prev_scene(void);
+//static void prev_scene(void);
 
 static void next_scene(void);
 
@@ -278,6 +278,8 @@ static void next_song(void);
 static void midi_invalidate(void);
 
 static void toggle_setlist_mode(void);
+
+static void tap_tempo(void);
 
 static void scene_default(void);
 
@@ -794,6 +796,12 @@ static void calc_volume_modified(void) {
     // DEBUG_LOG1("calc_volume_modified(): 0x%02X", curr.modified);
 }
 
+rom struct program *program_addr(u8 pr) {
+    u16 addr = (u16)sizeof(struct set_list) + (u16)(pr * sizeof(struct program));
+
+    return (rom struct program *)flash_addr(addr);
+}
+
 void load_program(void) {
     // Load program:
     u16 addr;
@@ -850,12 +858,8 @@ void load_scene(void) {
     calc_gain_modified();
 }
 
-rom const u8 default_fx_cc[2][5] = {
-    { 0x4D, 0x56, 0x34, 0x29, 0x2F },
-    { 0x4E, 0x57, 0x35, 0x2A, 0x30 }
-};
-
 void scene_default(void) {
+    rom struct program *default_pr = program_addr(0);
     u8 a, i;
 
     DEBUG_LOG1("default scene %d", curr.sc_idx + 1);
@@ -864,7 +868,7 @@ void scene_default(void) {
     for (a = 0; a < 2; a++) {
         pr.default_gain[a] = 0x5E;
         for (i = 0; i < 5; i++) {
-            pr.fx_midi_cc[a][i] = default_fx_cc[a][i];
+            pr.fx_midi_cc[a][i] = default_pr->fx_midi_cc[a][i];
         }
     }
     pr.scene_count = 1;
@@ -897,7 +901,6 @@ static void toggle_setlist_mode() {
     }
 }
 
-u8 tap;
 static void tap_tempo() {
     tap ^= (u8)0x7F;
     midi_axe_cc(axe_cc_taptempo, tap);
@@ -956,12 +959,12 @@ static void reset_scene() {
     curr.sc_idx = 0;
 }
 
-static void prev_scene() {
-    if (curr.sc_idx > 0) {
-        DEBUG_LOG0("prev scene");
-        curr.sc_idx--;
-    }
-}
+//static void prev_scene() {
+//    if (curr.sc_idx > 0) {
+//        DEBUG_LOG0("prev scene");
+//        curr.sc_idx--;
+//    }
+//}
 
 #define min(a,b) (a < b ? a : b)
 #define max(a,b) (a > b ? a : b)
@@ -984,14 +987,14 @@ void controller_init(void) {
     last.setlist_mode = 1;
     curr.setlist_mode = 1;
 
-    curr.amp[0].gain = 0;
-    curr.amp[1].gain = 0;
-    last.amp[0].gain = ~(u8)0;
-    last.amp[1].gain = ~(u8)0;
-
     // Load setlist:
     flash_load((u16)0, sizeof(struct set_list), (u8 *)&sl);
     sl_max = sl.count - (u8)1;
+
+    for (i = 0; i < 2; i++) {
+        curr.amp[i].gain = 0;
+        last.amp[i].gain = ~(u8)0;
+    }
 
     // Load first program in setlist:
     curr.sl_idx = 0;
@@ -1004,24 +1007,19 @@ void controller_init(void) {
     load_scene();
     last.sc_idx = curr.sc_idx;
 
-    curr.rowstate[0].mode = ROWMODE_AMP;
-    curr.rowstate[0].fx = 0;
-    curr.rowstate[1].mode = ROWMODE_AMP;
-    curr.rowstate[1].fx = 0;
-    last.rowstate[0].mode = ~ROWMODE_AMP;
-    last.rowstate[0].fx = ~0;
-    last.rowstate[1].mode = ~ROWMODE_AMP;
-    last.rowstate[1].fx = ~0;
+    for (i = 0; i < 2; i++) {
+        curr.rowstate[i].mode = ROWMODE_AMP;
+        curr.rowstate[i].fx = 0;
+        last.rowstate[i].mode = ~ROWMODE_AMP;
+        last.rowstate[i].fx = ~0;
 
-    // Copy current scene settings into state:
-    curr.amp[0] = pr.scene[curr.sc_idx].amp[0];
-    curr.amp[1] = pr.scene[curr.sc_idx].amp[1];
+        // Copy current scene settings into state:
+        curr.amp[i] = pr.scene[curr.sc_idx].amp[i];
 
-    // Invert last settings to force initial switch:
-    last.amp[0].fx = ~curr.amp[0].fx;
-    last.amp[1].fx = ~curr.amp[1].fx;
-    last.amp[0].volume = ~curr.amp[0].volume;
-    last.amp[1].volume = ~curr.amp[1].volume;
+        // Invert last settings to force initial switch:
+        last.amp[i].fx = ~curr.amp[i].fx;
+        last.amp[i].volume = ~curr.amp[i].volume;
+    }
 
     // Force MIDI changes on init:
     midi_invalidate();
@@ -1039,6 +1037,7 @@ void controller_init(void) {
 #endif
 }
 
+#pragma udata timers
 struct timers {
     u8 top_1;
     u8 top_2;
@@ -1057,6 +1056,7 @@ struct timers {
     u8 bot_7;
     u8 bot_8;
 } timers;
+#pragma udata
 
 // called every 10ms
 void controller_10msec_timer(void) {
