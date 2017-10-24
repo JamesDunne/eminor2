@@ -175,7 +175,7 @@ struct state {
     // Footswitch state:
     io16 fsw;
     // Actual LED state:
-    u16 leds;
+    io16 leds;
 
     // 0 for program mode, 1 for setlist mode:
     u8 setlist_mode;
@@ -257,9 +257,10 @@ extern rom const u16 dB_bcd_lookup[128];
 
 static void send_leds(void) {
     // Update LEDs:
-    curr.leds = (u16)mode_leds[mode].bot.byte | ((u16)mode_leds[mode].top.byte << 8);
-    if (curr.leds != last.leds) {
-        led_set(curr.leds);
+    u16 curr_leds = (u16)curr.leds.bot.byte | ((u16)curr.leds.top.byte << 8);
+    u16 last_leds = (u16)last.leds.bot.byte | ((u16)last.leds.top.byte << 8);
+    if (curr_leds != last_leds) {
+        led_set(curr_leds);
     }
 }
 
@@ -748,26 +749,26 @@ static void update_lcd(void) {
 }
 
 static void calc_leds(void) {
-    mode_leds[mode].top.byte = (curr.fsw.top.byte & (u8)(0x20 | 0x40 | 0x80));
+    curr.leds.top.byte = (curr.fsw.top.byte & (u8)(0x20 | 0x40 | 0x80));
     switch (curr.rowstate[0].mode) {
         case ROWMODE_AMP:
-            mode_leds[mode].top.byte |= ((curr.amp[0].fx & fxm_dirty) >> 7)
+            curr.leds.top.byte |= ((curr.amp[0].fx & fxm_dirty) >> 7)
                 | (curr.fsw.top.byte & (u8)(0x02 | 0x04 | 0x08 | 0x10));
             break;
         case ROWMODE_FX:
-            mode_leds[mode].top.byte = (curr.amp[0].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
+            curr.leds.top.byte = (curr.amp[0].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
                 | 0x20 | (curr.fsw.top.byte & (u8)(0x40 | 0x80));
             break;
     }
 
-    mode_leds[mode].bot.byte = (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80));
+    curr.leds.bot.byte = (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80));
     switch (curr.rowstate[1].mode) {
         case ROWMODE_AMP:
-            mode_leds[mode].bot.byte |= ((curr.amp[1].fx & fxm_dirty) >> 7)
+            curr.leds.bot.byte |= ((curr.amp[1].fx & fxm_dirty) >> 7)
                 | (curr.fsw.bot.byte & (u8)(0x02 | 0x04 | 0x08 | 0x10));
             break;
     case ROWMODE_FX:
-            mode_leds[mode].bot.byte = (curr.amp[1].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
+            curr.leds.bot.byte = (curr.amp[1].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5))
                 | 0x20 | (curr.fsw.bot.byte & (u8)(0x40 | 0x80));
             break;
     }
@@ -981,8 +982,10 @@ void controller_init(void) {
         mode_leds[i].bot.byte = 0;
     }
 
-    last.leds = 0xFFFFU;
-    curr.leds = 0x0000U;
+    last.leds.bot.byte = 0xFF;
+    last.leds.top.byte = 0xFF;
+    curr.leds.bot.byte = 0x00;
+    curr.leds.top.byte = 0x00;
 
     last.setlist_mode = 1;
     curr.setlist_mode = 1;
