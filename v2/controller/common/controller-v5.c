@@ -850,9 +850,24 @@ void load_scene(void) {
     calc_gain_modified();
 }
 
+rom const u8 default_fx_cc[2][5] = {
+    { 0x4D, 0x56, 0x34, 0x29, 0x2F },
+    { 0x4E, 0x57, 0x35, 0x2A, 0x30 }
+};
 
 void scene_default(void) {
+    u8 a, i;
+
     DEBUG_LOG1("default scene %d", curr.sc_idx + 1);
+
+    // Set defaults per amp:
+    for (a = 0; a < 2; a++) {
+        pr.default_gain[a] = 0x5E;
+        for (i = 0; i < 5; i++) {
+            pr.fx_midi_cc[a][i] = default_fx_cc[a][i];
+        }
+    }
+    pr.scene_count = 1;
     pr.scene[curr.sc_idx].amp[0].gain = 0;
     pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
     pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
