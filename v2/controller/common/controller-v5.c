@@ -296,9 +296,8 @@ static void reset_scene(void);
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     u8 diff = 0;
-    u8 acoustc, last_acoustc, acoustc_changed;
+    u8 acoustc, last_acoustc;
     u8 send_gain;
-    u8 dirty_changed;
     u8 gain_changed;
     u8 test_fx = 1;
     u8 i;
@@ -316,9 +315,8 @@ static void calc_midi(void) {
     // Send gain controller changes:
     acoustc = curr.amp[0].fx & fxm_acoustc;
     last_acoustc = last.amp[0].fx & fxm_acoustc;
-    acoustc_changed = last_acoustc != acoustc;
 
-    if (acoustc_changed) {
+    if (last_acoustc != acoustc) {
         if (acoustc != 0) {
             // Changed to acoustic sound:
             DEBUG_LOG0("MIDI set AMP1 acoustic on");
@@ -349,23 +347,19 @@ static void calc_midi(void) {
     if (acoustc == 0) {
         u8 dirty, last_dirty;
         u8 gain, last_gain;
-        u8 gate, last_gate;
 
         dirty = curr.amp[0].fx & fxm_dirty;
         last_dirty = last.amp[0].fx & fxm_dirty;
-        dirty_changed = (u8)(dirty != last_dirty);
 
         gain = or_default(curr.amp[0].gain, pr.default_gain[0]);
         last_gain = or_default(last.amp[0].gain, pr.default_gain[0]);
-        gain_changed = (u8)(gain != last_gain);
 
-        gate = (u8)(dirty && (gain >= 0x01));
-        last_gate = (u8)(last_dirty && (last_gain >= 0x01));
-
-        diff |= gain_changed;
-
-        send_gain = (u8)((dirty && gain_changed) || dirty_changed || acoustc_changed);
+        send_gain = (u8)((dirty && (gain != last_gain)) || (dirty != last_dirty) || (last_acoustc != acoustc));
         if (send_gain) {
+            u8 gate, last_gate;
+            gate = (u8)(dirty && (gain >= 0x01));
+            last_gate = (u8)(last_dirty && (last_gain >= 0x01));
+
             DEBUG_LOG2("MIDI set AMP1 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
             midi_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
             if (gate != last_gate) {
@@ -381,9 +375,8 @@ static void calc_midi(void) {
     // Send gain controller changes:
     acoustc = curr.amp[1].fx & fxm_acoustc;
     last_acoustc = last.amp[1].fx & fxm_acoustc;
-    acoustc_changed = last_acoustc != acoustc;
 
-    if (acoustc_changed) {
+    if (last_acoustc != acoustc) {
         if (acoustc != 0) {
             // Changed to acoustic sound:
             DEBUG_LOG0("MIDI set AMP2 acoustic on");
@@ -413,22 +406,19 @@ static void calc_midi(void) {
     if (acoustc == 0) {
         u8 dirty, last_dirty;
         u8 gain, last_gain;
-        u8 gate, last_gate;
 
         dirty = curr.amp[1].fx & (fxm_dirty | fxm_acoustc);
         last_dirty = last.amp[1].fx & (fxm_dirty | fxm_acoustc);
-        dirty_changed = (u8)(dirty != last_dirty);
 
         gain = or_default(curr.amp[1].gain, pr.default_gain[1]);
         last_gain = or_default(last.amp[1].gain, pr.default_gain[1]);
-        gain_changed = (u8)(gain != last_gain);
 
-        gate = (u8)(dirty && (gain >= 0x01));
-        last_gate = (u8)(last_dirty && (last_gain >= 0x01));
-
-        diff |= gain_changed;
-        send_gain = (u8)((dirty && gain_changed) || dirty_changed || acoustc_changed);
+        send_gain = (u8)((dirty && (gain != last_gain)) || (dirty != last_dirty) || (last_acoustc != acoustc));
         if (send_gain) {
+            u8 gate, last_gate;
+            gate = (u8)(dirty && (gain >= 0x01));
+            last_gate = (u8)(last_dirty && (last_gain >= 0x01));
+
             DEBUG_LOG2("MIDI set AMP2 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
             midi_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
             if (gate != last_gate) {
@@ -673,7 +663,10 @@ static void update_lcd(void) {
 
             test_fx = 1;
             for (i = 0; i < 5; i++, test_fx <<= 1) {
-                lcd_rows[row_amp1][15 + i] = (curr.amp[0].fx & test_fx) ? '1' + i : '-';
+                rom const char *name = fx_name(pr.fx_midi_cc[0][i]);
+                const u8 lowercase_enable_mask = (~(curr.amp[0].fx & test_fx) << (5 - i));
+                u8 is_alpha_mask, c;
+                c = name[0]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp1][15 + i] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
             }
             break;
         case ROWMODE_FX:
@@ -718,7 +711,10 @@ static void update_lcd(void) {
 
             test_fx = 1;
             for (i = 0; i < 5; i++, test_fx <<= 1) {
-                lcd_rows[row_amp2][15 + i] = (curr.amp[1].fx & test_fx) ? '1' + i : '-';
+                rom const char *name = fx_name(pr.fx_midi_cc[1][i]);
+                const u8 lowercase_enable_mask = (~(curr.amp[1].fx & test_fx) << (5 - i));
+                u8 is_alpha_mask, c;
+                c = name[0]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp2][15 + i] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
             }
             break;
         case ROWMODE_FX:
