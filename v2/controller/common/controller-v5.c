@@ -44,7 +44,7 @@ AMP controls:
 |                                                            |    LCD:  |C g=58 v=-99.9 P12CD|
 |     *      *      *      *      *      *      *      *     |          |D g=5E v=  0.0 -1---|
 |  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX     MODE  SC_NXT  |          \--------------------/
-|  ACOUSTC                             RESET   SAVE  SC_ONE  |
+|  ACOUSTC                             RESET         SC_ONE  |
 |------------------------------------------------------------|
 
 Press CLN|DRV to toggle clean vs overdrive mode (clean:    AMP -> Y, CAB -> X, gain -> 0x5E; dirty: AMP -> X, CAB -> X, gain -> n)
@@ -64,7 +64,6 @@ Press PR_PRV  to select previous song or program depending on MODE
 Press PR_NXT  to select next song or program depending on MODE
 
 Press MODE    to switch between set-list order and program # order
-Hold  SAVE    to save program
 
 Press SC_NXT  to advance to next scene, move to next song scene 1 if at end
 Hold  SC_ONE  to reset scene to 1 on current song
@@ -77,30 +76,10 @@ FX controls:
 |                                                            |    LCD:  |PIT1ROT1FIL1CHO1DLY1|
 |     *      *      *      *      *      *      *      *     |          |A g=5E v=  6.0 ---CD|
 |  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX     MODE  SC_NXT  |          \--------------------/
-|  ACOUSTC                             RESET   SAVE  SC_ONE  |
+|  ACOUSTC                             RESET         SC_ONE  |
 |------------------------------------------------------------|
 
 Press AMP to switch row to AMP mode
-
-Hold SELECT button to select effect MIDI CC for FX1, FX2, or FX3
-
-SELECT controls (top):
-|------------------------------------------------------------|
-|     *      *      *      *      *      *      *      *     |          /--------------------\
-|    F=0    F--    F++    OK    CANCEL  AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
-|                                                            |          |Sng 62/62  Scn  2/ 3|
-|                                                            |    LCD:  | F=0 F-- F++ OK  CNC|
-|     *      *      *      *      *      *      *      *     |          |FX1: Filter         |
-|  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX     MODE  SC_NXT  |          \--------------------/
-|  ACOUSTC                             RESET   SAVE  SC_ONE  |
-|------------------------------------------------------------|
-
-Press F=0    to reset back to top of FX list
-Press F--    to select previous FX (loop to end)
-Press F++    to select next FX (loop to start)
-Press OK     to apply current FX selection (also disables previous FX if enabled)
-Press CANCEL to cancel and revert to existing FX
-Press AMP    to cancel and revert to existing FX and then switch to AMP mode for the row
 
 */
 
@@ -174,8 +153,7 @@ enum {
 
 enum rowstate_mode {
     ROWMODE_AMP,
-    ROWMODE_FX,
-    ROWMODE_SELECTFX
+    ROWMODE_FX
 };
 
 // Tap tempo CC value (toggles between 0x00 and 0x7F):
@@ -302,8 +280,6 @@ static void midi_invalidate(void);
 static void toggle_setlist_mode(void);
 
 static void scene_default(void);
-
-static void program_save(void);
 
 static void reset_scene(void);
 
@@ -594,8 +570,8 @@ static void update_lcd(void) {
             labels[5] = "FX|RESET";
             break;
     }
-    labels[6] = "PREV SONG";
-    labels[7] = "NEXT SONG";
+    labels[6] = "SONG--";
+    labels[7] = "SONG++";
     label_row_update(1);
 
     // Bottom row:
@@ -626,8 +602,8 @@ static void update_lcd(void) {
             labels[5] = "FX|RESET";
             break;
     }
-    labels[6] = "MODE|SAVE";
-    labels[7] = "NEXT SCENE";
+    labels[6] = "TAP|MODE";
+    labels[7] = "SCENE++|1";
     label_row_update(0);
 #endif
 #ifdef FEAT_LCD
@@ -679,15 +655,15 @@ static void update_lcd(void) {
     switch (curr.rowstate[0].mode) {
         case ROWMODE_AMP:
             for (i = 0; i < LCD_COLS; i++) {
-                lcd_rows[row_amp1][i] = "C g= 0 v=  0.0 -----"[i];
+                lcd_rows[row_amp1][i] = "1C g 0  v  0.0 -----"[i];
             }
 
             if ((curr.amp[0].fx & fxm_acoustc) != 0) {
                 // A for acoustic
-                lcd_rows[row_amp1][0] = 'A';
+                lcd_rows[row_amp1][1] = 'A';
             } else {
                 // C/D for clean/dirty
-                lcd_rows[row_amp1][0] = 'C' + ((curr.amp[0].fx & fxm_dirty) != 0);
+                lcd_rows[row_amp1][1] = 'C' + ((curr.amp[0].fx & fxm_dirty) != 0);
             }
             hextoa(lcd_rows[row_amp1], 5, or_default(curr.amp[0].gain, pr.default_gain[0]));
             bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[0].volume]);
@@ -701,12 +677,21 @@ static void update_lcd(void) {
             for (i = 0; i < LCD_COLS; i++) {
                 lcd_rows[row_amp1][i] = "                    "[i];
             }
-            for (i = 0; i < 5; i++) {
+            test_fx = 1;
+            for (i = 0; i < 5; i++, test_fx <<= 1) {
                 rom const char *name = fx_name(pr.fx_midi_cc[0][i]);
-                lcd_rows[row_amp1][i*4+0] = name[0];
-                lcd_rows[row_amp1][i*4+1] = name[1];
-                lcd_rows[row_amp1][i*4+2] = name[2];
-                lcd_rows[row_amp1][i*4+3] = name[3];
+                u8 is_alpha_mask, c;
+
+                // Select 0x20 or 0x00 depending on if FX disabled or enabled, respectively:
+                const u8 lowercase_enable_mask = (~(curr.amp[0].fx & test_fx) << (5 - i));
+
+                // Uppercase enabled fx names; lowercase disabled.
+                // 0x40 is used as an alpha test; this will fail for "@[\]^_`{|}~" but none of these are present in FX names.
+                // 0x40 (or 0) is shifted right 1 bit to turn it into a mask for 0x20 to act as lowercase/uppercase switch.
+                c = name[0]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp1][i*4+0] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                c = name[1]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp1][i*4+1] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                c = name[2]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp1][i*4+2] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                c = name[3]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp1][i*4+3] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
             }
             break;
     }
@@ -715,15 +700,15 @@ static void update_lcd(void) {
     switch (curr.rowstate[1].mode) {
         case ROWMODE_AMP:
             for (i = 0; i < LCD_COLS; i++) {
-                lcd_rows[row_amp2][i] = "C g= 0 v=  0.0 -----"[i];
+                lcd_rows[row_amp2][i] = "2C g 0  v  0.0 -----"[i];
             }
 
             if ((curr.amp[1].fx & fxm_acoustc) != 0) {
                 // A for acoustic
-                lcd_rows[row_amp2][0] = 'A';
+                lcd_rows[row_amp2][1] = 'A';
             } else {
                 // C/D for clean/dirty
-                lcd_rows[row_amp2][0] = 'C' + ((curr.amp[1].fx & fxm_dirty) != 0);
+                lcd_rows[row_amp2][1] = 'C' + ((curr.amp[1].fx & fxm_dirty) != 0);
             }
             hextoa(lcd_rows[row_amp2], 5, or_default(curr.amp[1].gain, pr.default_gain[1]));
             bcdtoa(lcd_rows[row_amp2], 13, dB_bcd_lookup[curr.amp[1].volume]);
@@ -737,12 +722,21 @@ static void update_lcd(void) {
             for (i = 0; i < LCD_COLS; i++) {
                 lcd_rows[row_amp2][i] = "                    "[i];
             }
-            for (i = 0; i < 5; i++) {
+            test_fx = 1;
+            for (i = 0; i < 5; i++, test_fx <<= 1) {
                 rom const char *name = fx_name(pr.fx_midi_cc[1][i]);
-                lcd_rows[row_amp2][i * 4 + 0] = name[0];
-                lcd_rows[row_amp2][i * 4 + 1] = name[1];
-                lcd_rows[row_amp2][i * 4 + 2] = name[2];
-                lcd_rows[row_amp2][i * 4 + 3] = name[3];
+                u8 is_alpha_mask, c;
+
+                // Select 0x20 or 0x00 depending on if FX disabled or enabled, respectively:
+                const u8 lowercase_enable_mask = (~(curr.amp[1].fx & test_fx) << (5 - i));
+
+                // Uppercase enabled fx names; lowercase disabled.
+                // 0x40 is used as an alpha test; this will fail for "@[\]^_`{|}~" but none of these are present in FX names.
+                // 0x40 (or 0) is shifted right 1 bit to turn it into a mask for 0x20 to act as lowercase/uppercase switch.
+                c = name[0]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp2][i * 4 + 0] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                c = name[1]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp2][i * 4 + 1] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                c = name[2]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp2][i * 4 + 2] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                c = name[3]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp2][i * 4 + 3] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
             }
             break;
     }
@@ -888,6 +882,12 @@ static void toggle_setlist_mode() {
     }
 }
 
+u8 tap;
+static void tap_tempo() {
+    tap ^= (u8)0x7F;
+    midi_axe_cc(axe_cc_taptempo, tap);
+}
+
 static void midi_invalidate() {
     // Invalidate all current MIDI state so it gets re-sent at end of loop:
     DEBUG_LOG0("invalidate MIDI state");
@@ -951,32 +951,11 @@ static void prev_scene() {
 #define min(a,b) (a < b ? a : b)
 #define max(a,b) (a > b ? a : b)
 
-static void program_save() {
-    // Load program:
-    u8 pr_num;
-    u16 addr;
-
-    if (curr.setlist_mode == 1) {
-        pr_num = sl.entries[curr.sl_idx].program;
-    } else {
-        pr_num = curr.pr_idx;
-    }
-
-    // Update current scene in program from current state:
-    pr.scene[curr.sc_idx].amp[0] = curr.amp[0];
-    pr.scene[curr.sc_idx].amp[1] = curr.amp[1];
-
-    // Save current program back to flash:
-    addr = (u16)sizeof(struct set_list) + (u16)(pr_num * sizeof(struct program));
-    DEBUG_LOG2("save program %d at addr 0x%04x", pr_num + 1, addr);
-    flash_store(addr, sizeof(struct program), (u8 *)&pr);
-
-    curr.modified = 0;
-}
-
 // set the controller to an initial state
 void controller_init(void) {
     u8 i;
+
+    tap = 0;
 
     mode = MODE_LIVE;
     for (i = 0; i < MODE_count; i++) {
@@ -1149,11 +1128,11 @@ void controller_10msec_timer(void) {
             break;
     }
 
-    one_shot(bot,7,0x3F,program_save())
-    one_shot(bot,8,0x3F,reset_scene())
+    one_shot(bot,7,0x1F,toggle_setlist_mode())
+    one_shot(bot,8,0x1F,reset_scene())
 
-    repeater(top,7,0x20,0x03,prev_song())
-    repeater(top,8,0x20,0x03,next_song())
+    repeater(top,7,0x20,0x07,prev_song())
+    repeater(top,8,0x20,0x07,next_song())
 
 #undef repeater
 #undef one_shot
@@ -1223,8 +1202,6 @@ void controller_handle(void) {
             btn_pressed(top, 5, curr.amp[0].fx ^= fxm_5; calc_fx_modified())
             btn_released_oneshot(top, 6, curr.rowstate[0].mode = ROWMODE_AMP)
             break;
-        case ROWMODE_SELECTFX:
-            break;
     }
 
     switch (curr.rowstate[1].mode) {
@@ -1244,8 +1221,6 @@ void controller_handle(void) {
             btn_pressed(bot, 5, curr.amp[1].fx ^= fxm_5; calc_fx_modified())
             btn_released_oneshot(bot, 6, curr.rowstate[1].mode = ROWMODE_AMP)
             break;
-        case ROWMODE_SELECTFX:
-            break;
     }
 
     // // TAP:
@@ -1258,7 +1233,7 @@ void controller_handle(void) {
     //     timers.bot_6 = (u8)0x00;
     // }
 
-    btn_released_oneshot(bot,7,toggle_setlist_mode())
+    btn_pressed_oneshot(bot,7,tap_tempo())
 
     // NEXT SCENE:
     btn_pressed_oneshot(bot,8,next_scene())

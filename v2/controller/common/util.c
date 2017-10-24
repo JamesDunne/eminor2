@@ -132,9 +132,9 @@ void print_half(char *dst, u8 col, s8 volhalfdb) {
 
 rom const char *fx_name(u8 fx_midi_cc) {
     if (fx_midi_cc < 41) {
-        return "";
+        return "    ";
     } else if (fx_midi_cc > 98) {
-        return "";
+        return "    ";
     }
     return v5_fx_names[fx_midi_cc - 41];
 }
