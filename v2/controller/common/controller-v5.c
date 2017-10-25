@@ -531,7 +531,7 @@ static void update_lcd(void) {
 #ifdef FEAT_LCD
     s8 i;
     rom const char *pr_name;
-    u8 test_fx;
+    u8 test_fx, d;
 #endif
     DEBUG_LOG0("update LCD");
 #ifdef HWFEAT_LABEL_UPDATES
@@ -722,6 +722,7 @@ static void update_lcd(void) {
                 lcd_rows[row_amp2][i] = "                    "[i];
             }
             test_fx = 1;
+            d = 0;
             for (i = 0; i < 5; i++, test_fx <<= 1) {
                 rom const char *name = fx_name(pr.fx_midi_cc[1][i]);
                 u8 is_alpha_mask, c;
@@ -732,10 +733,18 @@ static void update_lcd(void) {
                 // Uppercase enabled fx names; lowercase disabled.
                 // 0x40 is used as an alpha test; this will fail for "@[\]^_`{|}~" but none of these are present in FX names.
                 // 0x40 (or 0) is shifted right 1 bit to turn it into a mask for 0x20 to act as lowercase/uppercase switch.
-                c = name[0]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp2][i * 4 + 0] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
-                c = name[1]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp2][i * 4 + 1] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
-                c = name[2]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp2][i * 4 + 2] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
-                c = name[3]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp2][i * 4 + 3] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                c = name[0];
+                is_alpha_mask = (c & 0x40) >> 1;
+                lcd_rows[row_amp2][d++] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                c = name[1];
+                is_alpha_mask = (c & 0x40) >> 1;
+                lcd_rows[row_amp2][d++] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                c = name[2];
+                is_alpha_mask = (c & 0x40) >> 1;
+                lcd_rows[row_amp2][d++] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                c = name[3];
+                is_alpha_mask = (c & 0x40) >> 1;
+                lcd_rows[row_amp2][d++] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
             }
             break;
     }
