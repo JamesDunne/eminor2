@@ -212,7 +212,7 @@ func generatePICH() {
 	// Create lookup table of FX name to MIDI CC number:
 	fx_midi_cc := make(map[string]uint8)
 	for cc := uint8(41); cc <= 98; cc++ {
-		key := C.GoString(FWfx_names[cc-uint8(41)])
+		key := C.GoStringN(&FWfx_names[cc-uint8(41)][0], 4)
 		key = strings.ToLower(key)
 		key = strings.TrimSpace(key)
 		// fmt.Printf("['%s'] = 0x%02x\n", key, cc)
