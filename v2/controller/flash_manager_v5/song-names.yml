@@ -223,10 +223,14 @@ songs:
   short_name: Bouncing
   starts: Jim
 
-- names: [Kids Arent Alright, Kids Aren't Alright, Kids]
-  short_name: Kids
-  starts: Glaz
-
 - names: [Satan Song, Satan, The Satan Song]
   short_name: Satan Song
   starts: Bremer
+
+- names: [Kids, Kids Arent Alright, Kids Aren't Alright, The Kids Aren't Alright]
+  short_name: Kids
+  starts: Glaz
+
+- names: [Small Things, All The Small Things]
+  short_name: Small Things
+  starts: Bremer fill

@@ -104,19 +104,19 @@ programs:
     MG:
       channel: clean
     JD:
-      channel: clean
+      channel: acoustic
   - name: MG Lead
     MG:
       channel: dirty
       level: 3
       fx: [rtr1,dly1]
     JD:
-      channel: clean
+      channel: acoustic
   - name: Clean
     MG:
       channel: clean
     JD:
-      channel: clean
+      channel: acoustic
 - name: When I Come Around
   tempo: 98
   scenes:
@@ -749,31 +749,31 @@ programs:
   scenes:
   - name: JD clean;MG clean
     MG:
-      channel: clean
+      channel: acoustic
     JD:
-      channel: clean
+      channel: acoustic
   - name: JD clean;MG clean
     MG:
-      channel: clean
+      channel: acoustic
     JD:
-      channel: clean
+      channel: acoustic
       level: 6
   - name: JD clean;MG clean
     MG:
-      channel: clean
+      channel: acoustic
     JD:
-      channel: clean
+      channel: acoustic
   - name: JD clean;MG clean
     MG:
-      channel: clean
+      channel: acoustic
     JD:
-      channel: clean
+      channel: acoustic
       level: 6
   - name: JD clean;MG clean
     MG:
-      channel: clean
+      channel: acoustic
     JD:
-      channel: clean
+      channel: acoustic
 - name: Say It Aint So
   tempo: 77
   scenes:
@@ -1059,26 +1059,13 @@ programs:
 - name: Cherub Rock
   tempo: 84
   gain_log: 0x60
-  amp:
-    - fx_layout:
-      - pit1
-      - flg1
-      - phr1
-      - cho1
-      - dly1
-    - fx_layout:
-      - pit2
-      - flg2
-      - phr2
-      - cho2
-      - dly2
   scenes:
   - name: Intro clean
     MG:
       channel: clean
     JD:
       channel: clean
-      fx: [flg2]
+      fx: [phr2]
   - name: Dirty
     MG:
       channel: dirty
@@ -1415,5 +1402,67 @@ programs:
   - name: Verse
     MG:
       channel: clean
+    JD:
+      channel: dirty
+
+- name: Kids
+  tempo: 130
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Hook
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: +3
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Hook
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: +3
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: +4.5
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+- name: Small Things
+  tempo: 130
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Breakdown
+    MG:
+      channel: dirty
+      gain: 0x20
+    JD:
+      channel: dirty
+  - name: Rhythm
+    MG:
+      channel: dirty
     JD:
       channel: dirty
