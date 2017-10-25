@@ -663,11 +663,15 @@ static void update_lcd(void) {
             bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[0].volume]);
 
             test_fx = 1;
+            d = &lcd_rows[row_amp1][15];
             for (i = 0; i < 5; i++, test_fx <<= 1) {
                 rom const char *name = fx_name(pr.fx_midi_cc[0][i]);
                 const u8 lowercase_enable_mask = (~(curr.amp[0].fx & test_fx) << (5 - i));
                 u8 is_alpha_mask, c;
-                c = name[0]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp1][15 + i] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+
+                c = *name;
+                is_alpha_mask = (c & 0x40) >> 1;
+                *d++ = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
             }
             break;
         case ROWMODE_FX:
@@ -675,9 +679,10 @@ static void update_lcd(void) {
                 lcd_rows[row_amp1][i] = "                    "[i];
             }
             test_fx = 1;
+            d = &lcd_rows[row_amp1][0];
             for (i = 0; i < 5; i++, test_fx <<= 1) {
                 rom const char *name = fx_name(pr.fx_midi_cc[0][i]);
-                u8 is_alpha_mask, c;
+                u8 is_alpha_mask, c, j;
 
                 // Select 0x20 or 0x00 depending on if FX disabled or enabled, respectively:
                 const u8 lowercase_enable_mask = (~(curr.amp[0].fx & test_fx) << (5 - i));
@@ -685,10 +690,11 @@ static void update_lcd(void) {
                 // Uppercase enabled fx names; lowercase disabled.
                 // 0x40 is used as an alpha test; this will fail for "@[\]^_`{|}~" but none of these are present in FX names.
                 // 0x40 (or 0) is shifted right 1 bit to turn it into a mask for 0x20 to act as lowercase/uppercase switch.
-                c = name[0]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp1][i*4+0] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
-                c = name[1]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp1][i*4+1] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
-                c = name[2]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp1][i*4+2] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
-                c = name[3]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp1][i*4+3] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                for (j = 0; j < 4; j++) {
+                    c = *name++;
+                    is_alpha_mask = (c & 0x40) >> 1;
+                    *d++ = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                }
             }
             break;
     }
@@ -711,11 +717,15 @@ static void update_lcd(void) {
             bcdtoa(lcd_rows[row_amp2], 13, dB_bcd_lookup[curr.amp[1].volume]);
 
             test_fx = 1;
+            d = &lcd_rows[row_amp2][15];
             for (i = 0; i < 5; i++, test_fx <<= 1) {
                 rom const char *name = fx_name(pr.fx_midi_cc[1][i]);
                 const u8 lowercase_enable_mask = (~(curr.amp[1].fx & test_fx) << (5 - i));
                 u8 is_alpha_mask, c;
-                c = name[0]; is_alpha_mask = (c & 0x40) >> 1; lcd_rows[row_amp2][15 + i] = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+
+                c = *name;
+                is_alpha_mask = (c & 0x40) >> 1;
+                *d++ = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
             }
             break;
         case ROWMODE_FX:
@@ -723,10 +733,10 @@ static void update_lcd(void) {
                 lcd_rows[row_amp2][i] = "                    "[i];
             }
             test_fx = 1;
-            d = lcd_rows[row_amp2];
+            d = &lcd_rows[row_amp2][0];
             for (i = 0; i < 5; i++, test_fx <<= 1) {
                 rom const char *name = fx_name(pr.fx_midi_cc[1][i]);
-                u8 is_alpha_mask, c;
+                u8 is_alpha_mask, c, j;
 
                 // Select 0x20 or 0x00 depending on if FX disabled or enabled, respectively:
                 const u8 lowercase_enable_mask = (~(curr.amp[1].fx & test_fx) << (5 - i));
@@ -734,18 +744,11 @@ static void update_lcd(void) {
                 // Uppercase enabled fx names; lowercase disabled.
                 // 0x40 is used as an alpha test; this will fail for "@[\]^_`{|}~" but none of these are present in FX names.
                 // 0x40 (or 0) is shifted right 1 bit to turn it into a mask for 0x20 to act as lowercase/uppercase switch.
-                c = name[0];
-                is_alpha_mask = (c & 0x40) >> 1;
-                *d++ = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
-                c = name[1];
-                is_alpha_mask = (c & 0x40) >> 1;
-                *d++ = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
-                c = name[2];
-                is_alpha_mask = (c & 0x40) >> 1;
-                *d++ = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
-                c = name[3];
-                is_alpha_mask = (c & 0x40) >> 1;
-                *d++ = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                for (j = 0; j < 4; j++) {
+                    c = *name++;
+                    is_alpha_mask = (c & 0x40) >> 1;
+                    *d++ = (c & ~is_alpha_mask) | (is_alpha_mask & lowercase_enable_mask);
+                }
             }
             break;
     }
