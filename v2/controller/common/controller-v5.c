@@ -637,8 +637,7 @@ static void update_lcd(void) {
         }
         ritoa(lcd_rows[row_song], 18, curr.pr_idx + (u8)1);
     } else {
-        pr_name = (rom const char *)pr.name;
-        copy_str_lcd(pr_name, lcd_rows[row_song]);
+        copy_str_lcd(pr.name, lcd_rows[row_song]);
     }
     // Set modified bit:
     if (curr.modified) {
