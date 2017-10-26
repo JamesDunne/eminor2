@@ -14,7 +14,7 @@ char *bcd(u16 n);
 #endif
 
 // Copies a fixed-length string optionally NUL-terminated to the LCD display row:
-extern void copy_str_lcd(rom const char *src, char *dst);
+extern void copy_str_lcd(const char *src, char *dst);
 
 extern rom const char v5_fx_names[58][4];
 extern rom const char *fx_name(u8 fx_midi_cc);
