@@ -1,5 +1,5 @@
 // Created by cgo -godefs - DO NOT EDIT
-// cgo.exe -godefs program-v5_types.go
+// cgo -godefs program-v5_types.go
 
 package main
 
