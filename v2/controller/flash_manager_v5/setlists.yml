@@ -1057,8 +1057,6 @@ sets:
 
   - date: "2017-09-16"
     venue: MT Barrels
-    active: true
-    print: true
     songs:
       - Bouncing off the Walls
       - Dammit
@@ -1086,3 +1084,67 @@ sets:
       - 'BREAK: ENCORE'
 
       - The Middle
+
+  - date: "2017-11-18"
+    venue: Chubby Bullfrog
+    active: true
+    print: true
+    songs:
+      - Dammit
+      - Trippin
+      - Zero
+
+      - 'BREAK: HELLO'
+
+      - Bound for the Floor
+      - Hash Pipe
+      - Beautiful Disaster
+      - Hey Jealousy
+      - Machinehead
+      - Brain Stew
+      - My Own Worst Enemy
+      - Song 2
+      - December
+      - Fuel
+      - Say It Ain't So
+      - Basket Case
+      - Cumbersome
+
+      - 'BREAK: TUNING'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: TUNING'
+
+      - Plush
+      - Story of a Girl
+      - What I Got
+      - Kids Aren’t Alright
+      - Low
+      - Small Things
+      - When I Come Around
+      - Enter Sandman
+
+      - 'BREAK: ACOUSTIC'
+
+      - Time of Your Life
+      - The Greatest Song in the World
+      - Sci-Fidentity
+      - Drive
+      - Once is Never Enough
+
+      - 'BREAK: FULL BAND'
+
+      - The Satan Song
+      - Bouncing off the Walls
+      - My Hero
+      - Buddy Holly
+      - Everything Zen
+      - Holiday
+
+      - 'BREAK: ENCORE'
+
+      - Puppets
+      - Bells

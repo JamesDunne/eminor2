@@ -110,5 +110,229 @@
         "starts": "Glaz"
       }
     ]
+  },
+  {
+    "date": "2017-11-18",
+    "venue": "Chubby Bullfrog",
+    "songs": [
+      {
+        "i": 1,
+        "title": "Dammit",
+        "starts": "Jim"
+      },
+      {
+        "i": 2,
+        "title": "Trippin",
+        "starts": "Bremer"
+      },
+      {
+        "i": 3,
+        "title": "Zero",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "HELLO"
+      },
+      {
+        "i": 4,
+        "title": "Bound for the Floor",
+        "starts": "Jim"
+      },
+      {
+        "i": 5,
+        "title": "Hash Pipe",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "i": 6,
+        "title": "Beautiful Disaster",
+        "starts": "Jim"
+      },
+      {
+        "i": 7,
+        "title": "Hey Jealousy",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 8,
+        "title": "Machinehead",
+        "starts": "Jim"
+      },
+      {
+        "i": 9,
+        "title": "Brain Stew",
+        "starts": "Jim"
+      },
+      {
+        "i": 10,
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
+      },
+      {
+        "i": 11,
+        "title": "Song 2",
+        "starts": "Bremer"
+      },
+      {
+        "i": 12,
+        "title": "December",
+        "starts": "Jim"
+      },
+      {
+        "i": 13,
+        "title": "Fuel",
+        "starts": "Glaz"
+      },
+      {
+        "i": 14,
+        "title": "Say It Aint So",
+        "starts": "Jim"
+      },
+      {
+        "i": 15,
+        "title": "Basketcase",
+        "starts": "Glaz"
+      },
+      {
+        "i": 16,
+        "title": "Cumbersome",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "TUNING"
+      },
+      {
+        "i": 17,
+        "title": "The Middle",
+        "starts": "Glaz"
+      },
+      {
+        "i": 18,
+        "title": "Monkey Wrench",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 19,
+        "title": "Lump",
+        "starts": "Bremer+Glaz"
+      },
+      {
+        "breakText": "TUNING"
+      },
+      {
+        "i": 20,
+        "title": "Plush",
+        "starts": "Bremer 2 ct"
+      },
+      {
+        "i": 21,
+        "title": "Story of a Girl",
+        "starts": "Glaz"
+      },
+      {
+        "i": 22,
+        "title": "What I Got",
+        "starts": "Bremer"
+      },
+      {
+        "i": 23,
+        "title": "Kids",
+        "starts": "Glaz"
+      },
+      {
+        "i": 24,
+        "title": "Low",
+        "starts": "Bremer"
+      },
+      {
+        "i": 25,
+        "title": "Small Things",
+        "starts": "Bremer fill"
+      },
+      {
+        "i": 26,
+        "title": "When I Come Around",
+        "starts": "Jim"
+      },
+      {
+        "i": 27,
+        "title": "Enter Sandman",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "ACOUSTIC"
+      },
+      {
+        "i": 28,
+        "title": "Time of Your Life",
+        "starts": ""
+      },
+      {
+        "i": 29,
+        "title": "The Greatest Song in the World",
+        "starts": ""
+      },
+      {
+        "i": 30,
+        "title": "Sci-Fidentity",
+        "starts": ""
+      },
+      {
+        "i": 31,
+        "title": "Drive",
+        "starts": "Jim"
+      },
+      {
+        "i": 32,
+        "title": "Once is Never Enough",
+        "starts": ""
+      },
+      {
+        "breakText": "FULL BAND"
+      },
+      {
+        "i": 33,
+        "title": "Satan Song",
+        "starts": "Bremer"
+      },
+      {
+        "i": 34,
+        "title": "Bouncing off the Walls",
+        "starts": "Jim"
+      },
+      {
+        "i": 35,
+        "title": "My Hero",
+        "starts": "Bremer+Adam"
+      },
+      {
+        "i": 36,
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
+      },
+      {
+        "i": 37,
+        "title": "Everything Zen",
+        "starts": "Glaz"
+      },
+      {
+        "i": 38,
+        "title": "Holiday",
+        "starts": "Jim"
+      },
+      {
+        "breakText": "ENCORE"
+      },
+      {
+        "i": 39,
+        "title": "Master of Puppets",
+        "starts": "Bremer"
+      },
+      {
+        "i": 40,
+        "title": "For Whom The Bell Tolls",
+        "starts": "Bremer"
+      }
+    ]
   }
 ]
