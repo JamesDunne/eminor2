@@ -1276,7 +1276,7 @@ programs:
 
 - name: December
   tempo: 122
-  gain_log: 0x13
+  gain_log: 0x12
   scenes:
   - name: Intro
     MG:
@@ -1291,6 +1291,7 @@ programs:
       fx: [cho1]
     JD:
       channel: dirty
+      level: -2
   - name: Verse
     MG:
       channel: clean
@@ -1304,6 +1305,24 @@ programs:
       fx: [cho1]
     JD:
       channel: dirty
+      level: -2
+  - name: Breakdown
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      gain: 0x10
+      level: -2
+  - name: Jam
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
+      fx: [dly2]
   - name: Outro
     MG:
       channel: clean
