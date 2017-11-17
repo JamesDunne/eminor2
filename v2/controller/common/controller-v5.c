@@ -362,7 +362,7 @@ static void calc_midi(void) {
 
             DEBUG_LOG2("MIDI set AMP1 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
             midi_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
-            if (gate != last_gate) {
+            if ((gate != last_gate) || (acoustc != last_acoustc)) {
                 DEBUG_LOG1("Gate1 %s", calc_cc_toggle(gate) == 0 ? "off" : "on");
                 midi_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(gate));
                 DEBUG_LOG0("Comp1 on");
@@ -421,7 +421,7 @@ static void calc_midi(void) {
 
             DEBUG_LOG2("MIDI set AMP2 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
             midi_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
-            if (gate != last_gate) {
+            if ((gate != last_gate) || (acoustc != last_acoustc)) {
                 DEBUG_LOG1("Gate2 on", calc_cc_toggle(gate) == 0 ? "off" : "on");
                 midi_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(gate));
                 DEBUG_LOG0("Comp2 on");
