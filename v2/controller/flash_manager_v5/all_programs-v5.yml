@@ -15,6 +15,7 @@ amp:
 programs:
 - name: Monkey Wrench
   tempo: 175
+  gain: 0x44
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -1312,8 +1313,16 @@ programs:
       fx: [cho1]
     JD:
       channel: dirty
-      gain: 0x10
+      gain: 0x18
       level: -2
+  - name: Chorus
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      level: -2
+      fx: [dly2]
   - name: Jam
     MG:
       channel: clean
@@ -1321,7 +1330,7 @@ programs:
     JD:
       channel: dirty
       gain_log: 0x20
-      level: -2
+      level: -1
       fx: [dly2]
   - name: Outro
     MG:
@@ -1356,29 +1365,29 @@ programs:
   scenes:
   - name: Verse
     MG:
-      channel: clean
+      channel: acoustic
     JD:
       channel: dirty
   - name: Lead
     MG:
-      channel: clean
+      channel: acoustic
     JD:
       channel: dirty
       level: +6
   - name: Verse
     MG:
-      channel: clean
+      channel: acoustic
     JD:
       channel: dirty
   - name: Lead
     MG:
-      channel: clean
+      channel: acoustic
     JD:
       channel: dirty
       level: +6
   - name: Verse
     MG:
-      channel: clean
+      channel: acoustic
     JD:
       channel: dirty
 
