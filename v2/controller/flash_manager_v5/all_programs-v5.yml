@@ -519,17 +519,20 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
+      gain: 0x30
     JD:
       channel: dirty
   - name: JD lead;MG dirty
     MG:
       channel: dirty
+      gain: 0x30
     JD:
       channel: dirty
       level: 6
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
+      gain: 0x30
       channel: dirty
     JD:
       channel: dirty
