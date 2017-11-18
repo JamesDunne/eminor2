@@ -327,7 +327,7 @@ static void calc_midi(void) {
             DEBUG_LOG0("CAB1 Y");
             midi_axe_cc(axe_cc_xy_cab1, 0x00);
             DEBUG_LOG0("Gain1 0x5E");
-            midi_axe_cc(axe_cc_external3, 0x5E);
+            midi_axe_cc(axe_cc_external3, 0x30);
             DEBUG_LOG0("Gate1 off");
             midi_axe_cc(axe_cc_byp_gate1, 0x00);
             DEBUG_LOG0("Comp1 on");
@@ -387,7 +387,7 @@ static void calc_midi(void) {
             DEBUG_LOG0("CAB1 Y");
             midi_axe_cc(axe_cc_xy_cab2, 0x00);
             DEBUG_LOG0("Gain2 0x5E");
-            midi_axe_cc(axe_cc_external4, 0x5E);
+            midi_axe_cc(axe_cc_external4, 0x30);
             DEBUG_LOG0("Gate2 off");
             midi_axe_cc(axe_cc_byp_gate2, 0x00);
             DEBUG_LOG0("Comp2 on");
