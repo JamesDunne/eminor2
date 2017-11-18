@@ -205,6 +205,9 @@ struct state {
 
 // Current and last state:
 struct state curr, last;
+struct {
+    u8 amp_xy, cab_xy, gain, gate;
+} last_amp[2];
 #pragma udata
 
 // Loaded setlist:
@@ -296,151 +299,126 @@ static void reset_scene(void);
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     u8 diff = 0;
+    u8 dirty, last_dirty;
     u8 acoustc, last_acoustc;
-    u8 send_gain;
-    u8 gain_changed;
     u8 test_fx = 1;
-    u8 i;
+    u8 i, a;
 
     // Send MIDI program change:
     if (curr.midi_program != last.midi_program) {
         DEBUG_LOG1("MIDI change program %d", curr.midi_program);
         midi_axe_pc(curr.midi_program + 10);
+        // All bets are off as to what state when changing program:
+        midi_invalidate();
     }
 
     if (curr.setlist_mode != last.setlist_mode) {
         diff = 1;
     }
 
-    // Send gain controller changes:
-    acoustc = curr.amp[0].fx & fxm_acoustc;
-    last_acoustc = last.amp[0].fx & fxm_acoustc;
+    // Send controller changes per amp:
+    for (a = 0; a < 2; a++) {
+        dirty = curr.amp[a].fx & fxm_dirty;
+        acoustc = curr.amp[a].fx & fxm_acoustc;
+        last_dirty = last.amp[a].fx & fxm_dirty;
+        last_acoustc = last.amp[a].fx & fxm_acoustc;
 
-    if (last_acoustc != acoustc) {
+#define acoustic_gain 0x38
+#define clean_gain 0x38
+
         if (acoustc != 0) {
-            // Changed to acoustic sound:
-            DEBUG_LOG0("MIDI set AMP1 acoustic on");
-            // X is 0x7F, Y is 0x00
-            // AMP1 -> Y, CAB1 -> Y, GATE -> off, COMPRESSOR -> on, GAIN -> 0x5E
-            DEBUG_LOG0("AMP1 Y");
-            midi_axe_cc(axe_cc_xy_amp1, 0x00);
-            DEBUG_LOG0("CAB1 Y");
-            midi_axe_cc(axe_cc_xy_cab1, 0x00);
-            DEBUG_LOG0("Gain1 0x5E");
-            midi_axe_cc(axe_cc_external3, 0x30);
-            DEBUG_LOG0("Gate1 off");
-            midi_axe_cc(axe_cc_byp_gate1, 0x00);
-            DEBUG_LOG0("Comp1 on");
-            midi_axe_cc(axe_cc_byp_compressor1, 0x7F);
-        } else {
-            // Changed to electric sound:
-            DEBUG_LOG0("MIDI set AMP1 acoustic off");
-            // X is 0x7F, Y is 0x00
-            DEBUG_LOG0("AMP1 X");
-            midi_axe_cc(axe_cc_xy_amp1, 0x7F);
-            DEBUG_LOG0("CAB1 X");
-            midi_axe_cc(axe_cc_xy_cab1, 0x7F);
-        }
-        diff = 1;
-    }
-
-    if (acoustc == 0) {
-        u8 dirty, last_dirty;
-        u8 gain, last_gain;
-
-        dirty = curr.amp[0].fx & fxm_dirty;
-        last_dirty = last.amp[0].fx & fxm_dirty;
-
-        gain = or_default(curr.amp[0].gain, pr.default_gain[0]);
-        last_gain = or_default(last.amp[0].gain, pr.default_gain[0]);
-
-        send_gain = (u8)((dirty && (gain != last_gain)) || (dirty != last_dirty) || (last_acoustc != acoustc));
-        if (send_gain) {
-            u8 gate, last_gate;
-            gate = (u8)(dirty && (gain >= 0x01));
-            last_gate = (u8)(last_dirty && (last_gain >= 0x01));
-
-            DEBUG_LOG2("MIDI set AMP1 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
-            midi_axe_cc(axe_cc_external3, (dirty == 0) ? (u8)0x00 : gain);
-            if ((gate != last_gate) || (acoustc != last_acoustc)) {
-                DEBUG_LOG1("Gate1 %s", calc_cc_toggle(gate) == 0 ? "off" : "on");
-                midi_axe_cc(axe_cc_byp_gate1, calc_cc_toggle(gate));
-                DEBUG_LOG0("Comp1 on");
-                midi_axe_cc(axe_cc_byp_compressor1, 0x7F);
+            // acoustic:
+            if (last_amp[a].amp_xy != 0x00) {
+                last_amp[a].amp_xy = 0x00;
+                DEBUG_LOG1("AMP%d Y", a + 1);
+                midi_axe_cc(axe_cc_xy_amp1 + a, last_amp[a].amp_xy);
+                diff = 1;
             }
+            if (last_amp[a].cab_xy != 0x00) {
+                last_amp[a].cab_xy = 0x00;
+                DEBUG_LOG1("CAB%d Y", a + 1);
+                midi_axe_cc(axe_cc_xy_cab1 + a, last_amp[a].cab_xy);
+                diff = 1;
+            }
+            if (last_amp[a].gain != acoustic_gain) {
+                last_amp[a].gain = acoustic_gain;
+                DEBUG_LOG2("Gain%d 0x%02x", a + 1, last_amp[a].gain);
+                midi_axe_cc(axe_cc_external3 + a, last_amp[a].gain);
+                diff = 1;
+            }
+            if (last_amp[a].gate != 0x00) {
+                last_amp[a].gate = 0x00;
+                DEBUG_LOG1("Gate%d off", a + 1);
+                midi_axe_cc(axe_cc_byp_gate1 + a, last_amp[a].gate);
+                diff = 1;
+            }
+        } else if (dirty != 0) {
+            // dirty:
+            u8 gain = or_default(curr.amp[a].gain, pr.default_gain[a]);
+            if (last_amp[a].amp_xy != 0x7F) {
+                last_amp[a].amp_xy = 0x7F;
+                DEBUG_LOG1("AMP%d X", a + 1);
+                midi_axe_cc(axe_cc_xy_amp1 + a, last_amp[a].amp_xy);
+                diff = 1;
+            }
+            if (last_amp[a].cab_xy != 0x7F) {
+                last_amp[a].cab_xy = 0x7F;
+                DEBUG_LOG1("CAB%d X", a + 1);
+                midi_axe_cc(axe_cc_xy_cab1 + a, last_amp[a].cab_xy);
+                diff = 1;
+            }
+            if (last_amp[a].gain != gain) {
+                last_amp[a].gain = gain;
+                DEBUG_LOG2("Gain%d 0x%02x", a + 1, last_amp[a].gain);
+                midi_axe_cc(axe_cc_external3 + a, last_amp[a].gain);
+                diff = 1;
+            }
+            if (last_amp[a].gate != 0x7F) {
+                last_amp[a].gate = 0x7F;
+                DEBUG_LOG1("Gate%d on", a + 1);
+                midi_axe_cc(axe_cc_byp_gate1 + a, last_amp[a].gate);
+                diff = 1;
+            }
+        } else {
+            // clean:
+            if (last_amp[a].amp_xy != 0x00) {
+                last_amp[a].amp_xy = 0x00;
+                DEBUG_LOG1("AMP%d Y", a + 1);
+                midi_axe_cc(axe_cc_xy_amp1 + a, last_amp[a].amp_xy);
+                diff = 1;
+            }
+            if (last_amp[a].cab_xy != 0x7F) {
+                last_amp[a].cab_xy = 0x7F;
+                DEBUG_LOG1("CAB%d X", a + 1);
+                midi_axe_cc(axe_cc_xy_cab1 + a, last_amp[a].cab_xy);
+                diff = 1;
+            }
+            if (last_amp[a].gain != clean_gain) {
+                last_amp[a].gain = clean_gain;
+                DEBUG_LOG2("Gain%d 0x%02x", a + 1, last_amp[a].gain);
+                midi_axe_cc(axe_cc_external3 + a, last_amp[a].gain);
+                diff = 1;
+            }
+            if (last_amp[a].gate != 0x00) {
+                last_amp[a].gate = 0x00;
+                DEBUG_LOG1("Gate%d off", a + 1);
+                midi_axe_cc(axe_cc_byp_gate1 + a, last_amp[a].gate);
+                diff = 1;
+            }
+        }
+
+        if ((last_acoustc | last_dirty) != (acoustc | dirty)) {
+            // Always compressor on:
+            DEBUG_LOG1("Comp%d on", a + 1);
+            midi_axe_cc(axe_cc_byp_compressor1 + a, 0x7F);
+        }
+
+        // Update volumes:
+        if (curr.amp[a].volume != last.amp[a].volume) {
+            DEBUG_LOG2("MIDI set AMP%d volume = %s", a + 1, bcd(dB_bcd_lookup[curr.amp[a].volume]));
+            midi_axe_cc(axe_cc_external1 + a, (curr.amp[a].volume));
             diff = 1;
         }
-    }
-
-    // Send gain controller changes:
-    acoustc = curr.amp[1].fx & fxm_acoustc;
-    last_acoustc = last.amp[1].fx & fxm_acoustc;
-
-    if (last_acoustc != acoustc) {
-        if (acoustc != 0) {
-            // Changed to acoustic sound:
-            DEBUG_LOG0("MIDI set AMP2 acoustic on");
-            // X is 0x7F, Y is 0x00
-            // AMP1 -> Y, CAB1 -> Y, GATE -> off, COMPRESSOR -> on, GAIN -> 0x5E
-            DEBUG_LOG0("AMP1 Y");
-            midi_axe_cc(axe_cc_xy_amp2, 0x00);
-            DEBUG_LOG0("CAB1 Y");
-            midi_axe_cc(axe_cc_xy_cab2, 0x00);
-            DEBUG_LOG0("Gain2 0x5E");
-            midi_axe_cc(axe_cc_external4, 0x30);
-            DEBUG_LOG0("Gate2 off");
-            midi_axe_cc(axe_cc_byp_gate2, 0x00);
-            DEBUG_LOG0("Comp2 on");
-            midi_axe_cc(axe_cc_byp_compressor2, 0x7F);
-        } else {
-            // Changed to electric sound:
-            DEBUG_LOG0("MIDI set AMP2 acoustic off");
-            // X is 0x7F, Y is 0x00
-            DEBUG_LOG0("AMP2 X");
-            midi_axe_cc(axe_cc_xy_amp2, 0x7F);
-            DEBUG_LOG0("CAB2 X");
-            midi_axe_cc(axe_cc_xy_cab2, 0x7F);
-        }
-    }
-
-    if (acoustc == 0) {
-        u8 dirty, last_dirty;
-        u8 gain, last_gain;
-
-        dirty = curr.amp[1].fx & (fxm_dirty | fxm_acoustc);
-        last_dirty = last.amp[1].fx & (fxm_dirty | fxm_acoustc);
-
-        gain = or_default(curr.amp[1].gain, pr.default_gain[1]);
-        last_gain = or_default(last.amp[1].gain, pr.default_gain[1]);
-
-        send_gain = (u8)((dirty && (gain != last_gain)) || (dirty != last_dirty) || (last_acoustc != acoustc));
-        if (send_gain) {
-            u8 gate, last_gate;
-            gate = (u8)(dirty && (gain >= 0x01));
-            last_gate = (u8)(last_dirty && (last_gain >= 0x01));
-
-            DEBUG_LOG2("MIDI set AMP2 %s, gain=0x%02x", dirty == 0 ? "clean" : "dirty", gain);
-            midi_axe_cc(axe_cc_external4, (dirty == 0) ? (u8)0x00 : gain);
-            if ((gate != last_gate) || (acoustc != last_acoustc)) {
-                DEBUG_LOG1("Gate2 on", calc_cc_toggle(gate) == 0 ? "off" : "on");
-                midi_axe_cc(axe_cc_byp_gate2, calc_cc_toggle(gate));
-                DEBUG_LOG0("Comp2 on");
-                midi_axe_cc(axe_cc_byp_compressor2, 0x7F);
-            }
-            diff = 1;
-        }
-    }
-
-    // Update volumes:
-    if (curr.amp[0].volume != last.amp[0].volume) {
-        DEBUG_LOG1("MIDI set AMP1 volume = %s", bcd(dB_bcd_lookup[curr.amp[0].volume]));
-        midi_axe_cc(axe_cc_external1, (curr.amp[0].volume));
-        diff = 1;
-    }
-    if (curr.amp[1].volume != last.amp[1].volume) {
-        DEBUG_LOG1("MIDI set AMP2 volume = %s", bcd(dB_bcd_lookup[curr.amp[1].volume]));
-        midi_axe_cc(axe_cc_external2, (curr.amp[1].volume));
-        diff = 1;
     }
 
     // Send FX state:
@@ -448,10 +426,12 @@ static void calc_midi(void) {
         if ((curr.amp[0].fx & test_fx) != (last.amp[0].fx & test_fx)) {
             DEBUG_LOG2("MIDI set AMP1 %.4s %s", fx_name(pr.fx_midi_cc[0][i]), (curr.amp[0].fx & test_fx) == 0 ? "off" : "on");
             midi_axe_cc(pr.fx_midi_cc[0][i], calc_cc_toggle(curr.amp[0].fx & test_fx));
+            diff = 1;
         }
         if ((curr.amp[1].fx & test_fx) != (last.amp[1].fx & test_fx)) {
             DEBUG_LOG2("MIDI set AMP2 %.4s %s", fx_name(pr.fx_midi_cc[1][i]), (curr.amp[1].fx & test_fx) == 0 ? "off" : "on");
             midi_axe_cc(pr.fx_midi_cc[1][i], calc_cc_toggle(curr.amp[1].fx & test_fx));
+            diff = 1;
         }
     }
 
@@ -530,7 +510,6 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     s8 i;
-    rom const char *pr_name;
     u8 test_fx;
     char *d;
 #endif
@@ -658,7 +637,7 @@ static void update_lcd(void) {
                 // C/D for clean/dirty
                 lcd_rows[row_amp1][1] = 'C' + ((curr.amp[0].fx & fxm_dirty) != 0);
             }
-            hextoa(lcd_rows[row_amp1], 5, or_default(curr.amp[0].gain, pr.default_gain[0]));
+            hextoa(lcd_rows[row_amp1], 5, last_amp[0].gain);
             bcdtoa(lcd_rows[row_amp1], 13, dB_bcd_lookup[curr.amp[0].volume]);
 
             test_fx = 1;
@@ -712,7 +691,7 @@ static void update_lcd(void) {
                 // C/D for clean/dirty
                 lcd_rows[row_amp2][1] = 'C' + ((curr.amp[1].fx & fxm_dirty) != 0);
             }
-            hextoa(lcd_rows[row_amp2], 5, or_default(curr.amp[1].gain, pr.default_gain[1]));
+            hextoa(lcd_rows[row_amp2], 5, last_amp[1].gain);
             bcdtoa(lcd_rows[row_amp2], 13, dB_bcd_lookup[curr.amp[1].volume]);
 
             test_fx = 1;
@@ -926,6 +905,15 @@ static void midi_invalidate() {
     last.amp[1].gain = ~curr.amp[1].gain;
     last.amp[1].fx = ~curr.amp[1].fx;
     last.amp[1].volume = ~curr.amp[1].volume;
+    // Initialize to something neither 0x00 or 0x7F so it gets reset:
+    last_amp[0].amp_xy = 0x40;
+    last_amp[0].cab_xy = 0x40;
+    last_amp[0].gain = ~curr.amp[0].gain;
+    last_amp[0].gate = 0x40;
+    last_amp[1].amp_xy = 0x40;
+    last_amp[1].cab_xy = 0x40;
+    last_amp[1].gain = ~curr.amp[1].gain;
+    last_amp[1].gate = 0x40;
 }
 
 static void next_song() {
