@@ -206,7 +206,7 @@ struct state {
 // Current and last state:
 struct state curr, last;
 struct {
-    u8 amp_xy, cab_xy, gain, gate;
+    u8 amp_byp, amp_xy, cab_xy, gain, clean_gain, gate;
 } last_amp[2];
 #pragma udata
 
@@ -323,27 +323,18 @@ static void calc_midi(void) {
         last_dirty = last.amp[a].fx & fxm_dirty;
         last_acoustc = last.amp[a].fx & fxm_acoustc;
 
-#define acoustic_gain 0x38
-#define clean_gain 0x38
-
         if (acoustc != 0) {
             // acoustic:
-            if (last_amp[a].amp_xy != 0x00) {
-                last_amp[a].amp_xy = 0x00;
-                DEBUG_LOG1("AMP%d Y", a + 1);
-                midi_axe_cc(axe_cc_xy_amp1 + a, last_amp[a].amp_xy);
+            if (last_amp[a].amp_byp != 0x00) {
+                last_amp[a].amp_byp = 0x00;
+                DEBUG_LOG1("AMP%d off", a + 1);
+                midi_axe_cc(axe_cc_byp_amp1 + a, last_amp[a].amp_byp);
                 diff = 1;
             }
             if (last_amp[a].cab_xy != 0x00) {
                 last_amp[a].cab_xy = 0x00;
                 DEBUG_LOG1("CAB%d Y", a + 1);
                 midi_axe_cc(axe_cc_xy_cab1 + a, last_amp[a].cab_xy);
-                diff = 1;
-            }
-            if (last_amp[a].gain != acoustic_gain) {
-                last_amp[a].gain = acoustic_gain;
-                DEBUG_LOG2("Gain%d 0x%02x", a + 1, last_amp[a].gain);
-                midi_axe_cc(axe_cc_external3 + a, last_amp[a].gain);
                 diff = 1;
             }
             if (last_amp[a].gate != 0x00) {
@@ -355,6 +346,12 @@ static void calc_midi(void) {
         } else if (dirty != 0) {
             // dirty:
             u8 gain = or_default(curr.amp[a].gain, pr.default_gain[a]);
+            if (last_amp[a].amp_byp != 0x7F) {
+                last_amp[a].amp_byp = 0x7F;
+                DEBUG_LOG1("AMP%d on", a + 1);
+                midi_axe_cc(axe_cc_byp_amp1 + a, last_amp[a].amp_byp);
+                diff = 1;
+            }
             if (last_amp[a].amp_xy != 0x7F) {
                 last_amp[a].amp_xy = 0x7F;
                 DEBUG_LOG1("AMP%d X", a + 1);
@@ -381,6 +378,12 @@ static void calc_midi(void) {
             }
         } else {
             // clean:
+            if (last_amp[a].amp_byp != 0x7F) {
+                last_amp[a].amp_byp = 0x7F;
+                DEBUG_LOG1("AMP%d on", a + 1);
+                midi_axe_cc(axe_cc_byp_amp1 + a, last_amp[a].amp_byp);
+                diff = 1;
+            }
             if (last_amp[a].amp_xy != 0x00) {
                 last_amp[a].amp_xy = 0x00;
                 DEBUG_LOG1("AMP%d Y", a + 1);
@@ -393,8 +396,8 @@ static void calc_midi(void) {
                 midi_axe_cc(axe_cc_xy_cab1 + a, last_amp[a].cab_xy);
                 diff = 1;
             }
-            if (last_amp[a].gain != clean_gain) {
-                last_amp[a].gain = clean_gain;
+            if (last_amp[a].gain != last_amp[a].clean_gain) {
+                last_amp[a].gain = last_amp[a].clean_gain;
                 DEBUG_LOG2("Gain%d 0x%02x", a + 1, last_amp[a].gain);
                 midi_axe_cc(axe_cc_external3 + a, last_amp[a].gain);
                 diff = 1;
@@ -993,6 +996,7 @@ void controller_init(void) {
     for (i = 0; i < 2; i++) {
         curr.amp[i].gain = 0;
         last.amp[i].gain = ~(u8)0;
+        last_amp[i].clean_gain = 0x10;
     }
 
     // Load first program in setlist:
