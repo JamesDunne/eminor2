@@ -7,7 +7,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - v5|x64'">
     <LocalDebuggerCommand>$(ProjectDir)\$(TargetName)-$(PlatformShortName)$(TargetExt)</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>"AXE-FX II MIDI Out"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>"2- AXE-FX II MIDI Out"</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - v5|Win32'">
     <LocalDebuggerCommand>$(ProjectDir)\$(TargetName)-$(PlatformShortName)$(TargetExt)</LocalDebuggerCommand>
