@@ -337,6 +337,12 @@ static void calc_midi(void) {
                 midi_axe_cc(axe_cc_xy_cab1 + a, last_amp[a].cab_xy);
                 diff = 1;
             }
+            if (last_amp[a].gain != last_amp[a].clean_gain) {
+                last_amp[a].gain = last_amp[a].clean_gain;
+                DEBUG_LOG2("Gain%d 0x%02x", a + 1, last_amp[a].gain);
+                midi_axe_cc(axe_cc_external3 + a, last_amp[a].gain);
+                diff = 1;
+            }
             if (last_amp[a].gate != 0x00) {
                 last_amp[a].gate = 0x00;
                 DEBUG_LOG1("Gate%d off", a + 1);
@@ -1107,19 +1113,35 @@ void controller_10msec_timer(void) {
     }
 
 #define gain_dec(ampno) { \
-        u8 gain = or_default(curr.amp[ampno].gain, pr.default_gain[ampno]); \
-        if (gain > (u8)1) { \
-            gain--; \
-            curr.amp[ampno].gain = gain; \
+        u8 *gain; \
+        if ((curr.amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) { \
+            if (curr.amp[ampno].gain != 0) { \
+                gain = &curr.amp[ampno].gain; \
+            } else { \
+                gain = &pr.default_gain[ampno]; \
+            } \
+        } else { \
+            gain = &last_amp[ampno].clean_gain; \
+        } \
+        if ((*gain) > (u8)1) { \
+            (*gain)--; \
             calc_gain_modified(); \
         } \
     }
 
 #define gain_inc(ampno) { \
-        u8 gain = or_default(curr.amp[ampno].gain, pr.default_gain[ampno]); \
-        if (gain < (u8)127) { \
-            gain++; \
-            curr.amp[ampno].gain = gain; \
+        u8 *gain; \
+        if ((curr.amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) { \
+            if (curr.amp[ampno].gain != 0) { \
+                gain = &curr.amp[ampno].gain; \
+            } else { \
+                gain = &pr.default_gain[ampno]; \
+            } \
+        } else { \
+            gain = &last_amp[ampno].clean_gain; \
+        } \
+        if ((*gain) < (u8)127) { \
+            (*gain)++; \
             calc_gain_modified(); \
         } \
     }
