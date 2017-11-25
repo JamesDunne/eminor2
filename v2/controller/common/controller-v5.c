@@ -307,7 +307,7 @@ static void calc_midi(void) {
     // Send MIDI program change:
     if (curr.midi_program != last.midi_program) {
         DEBUG_LOG1("MIDI change program %d", curr.midi_program);
-        midi_axe_pc(curr.midi_program + 10);
+        midi_axe_pc(curr.midi_program);
         // All bets are off as to what state when changing program:
         midi_invalidate();
     }
