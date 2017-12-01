@@ -1087,8 +1087,6 @@ sets:
 
   - date: "2017-11-18"
     venue: Chubby Bullfrog
-    active: true
-    print: true
     songs:
       - Dammit
       - Trippin
@@ -1122,6 +1120,70 @@ sets:
       - Story of a Girl
       - What I Got
       - Kids Aren’t Alright
+      - Low
+      - Small Things
+      - When I Come Around
+      - Enter Sandman
+
+      - 'BREAK: ACOUSTIC'
+
+      - Time of Your Life
+      - The Greatest Song in the World
+      - Sci-Fidentity
+      - Drive
+      - Once is Never Enough
+
+      - 'BREAK: FULL BAND'
+
+      - The Satan Song
+      - Bouncing off the Walls
+      - My Hero
+      - Buddy Holly
+      - Everything Zen
+      - Holiday
+
+      - 'BREAK: ENCORE'
+
+      - Puppets
+      - Bells
+
+  - date: "2017-12-02"
+    venue: Dannys Pizza
+    active: true
+    print: true
+    songs:
+      - Dammit
+      - Trippin
+      - Zero
+
+      - 'BREAK: HELLO'
+
+      - Bound for the Floor
+      - Hash Pipe
+      - Beautiful Disaster
+      - Hey Jealousy
+      - Machinehead
+      - Brain Stew
+      - Kids Aren't Alright
+      - Song 2
+      - December
+      - Fuel
+      - Say It Ain't So
+      - Basket Case
+      - Cumbersome
+
+      - 'BREAK: TUNING'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: TUNING'
+
+      - Plush
+      - Story of a Girl
+      - What I Got
+      - My Own Worst Enemy
       - Low
       - Small Things
       - When I Come Around

@@ -1,7 +1,7 @@
 [
   {
-    "date": "2017-11-18",
-    "venue": "Chubby Bullfrog",
+    "date": "2017-12-02",
+    "venue": "Dannys Pizza",
     "songs": [
       {
         "i": 1,
@@ -53,8 +53,8 @@
       },
       {
         "i": 10,
-        "title": "My Own Worst Enemy",
-        "starts": "Jim"
+        "title": "Kids",
+        "starts": "Glaz"
       },
       {
         "i": 11,
@@ -124,8 +124,8 @@
       },
       {
         "i": 23,
-        "title": "Kids",
-        "starts": "Glaz"
+        "title": "My Own Worst Enemy",
+        "starts": "Jim"
       },
       {
         "i": 24,
