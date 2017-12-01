@@ -83,8 +83,8 @@
       },
       {
         "i": 16,
-        "title": "Cumbersome",
-        "starts": "Jim"
+        "title": "Enter Sandman",
+        "starts": "Glaz"
       },
       {
         "breakText": "TUNING"
@@ -109,102 +109,71 @@
       },
       {
         "i": 20,
+        "title": "Cumbersome",
+        "starts": "Jim"
+      },
+      {
+        "i": 21,
         "title": "Plush",
         "starts": "Bremer 2 ct"
       },
       {
-        "i": 21,
+        "i": 22,
         "title": "Story of a Girl",
         "starts": "Glaz"
       },
       {
-        "i": 22,
+        "i": 23,
         "title": "What I Got",
         "starts": "Bremer"
       },
       {
-        "i": 23,
+        "i": 24,
         "title": "My Own Worst Enemy",
         "starts": "Jim"
       },
       {
-        "i": 24,
+        "i": 25,
         "title": "Low",
         "starts": "Bremer"
       },
       {
-        "i": 25,
+        "i": 26,
         "title": "Small Things",
         "starts": "Bremer fill"
       },
       {
-        "i": 26,
+        "i": 27,
         "title": "When I Come Around",
         "starts": "Jim"
       },
       {
-        "i": 27,
-        "title": "Enter Sandman",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "ACOUSTIC"
-      },
-      {
         "i": 28,
-        "title": "Time of Your Life",
-        "starts": ""
-      },
-      {
-        "i": 29,
-        "title": "The Greatest Song in the World",
-        "starts": ""
-      },
-      {
-        "i": 30,
-        "title": "Sci-Fidentity",
-        "starts": ""
-      },
-      {
-        "i": 31,
-        "title": "Drive",
-        "starts": "Jim"
-      },
-      {
-        "i": 32,
-        "title": "Once is Never Enough",
-        "starts": ""
-      },
-      {
-        "breakText": "FULL BAND"
-      },
-      {
-        "i": 33,
         "title": "Satan Song",
         "starts": "Bremer"
       },
       {
-        "i": 34,
+        "i": 29,
         "title": "Bouncing off the Walls",
         "starts": "Jim"
       },
       {
-        "i": 35,
+        "i": 30,
         "title": "My Hero",
         "starts": "Bremer+Adam"
       },
       {
-        "i": 36,
+        "i": 31,
         "title": "Buddy Holly",
         "starts": "Glaz+Bremer"
       },
       {
-        "i": 37,
+        "i": 32,
         "title": "Everything Zen",
         "starts": "Glaz"
       },
       {
-        "i": 38,
+        "i": 33,
         "title": "Holiday",
         "starts": "Jim"
       },
@@ -212,12 +181,12 @@
         "breakText": "ENCORE"
       },
       {
-        "i": 39,
+        "i": 34,
         "title": "Master of Puppets",
         "starts": "Bremer"
       },
       {
-        "i": 40,
+        "i": 35,
         "title": "For Whom The Bell Tolls",
         "starts": "Bremer"
       }
