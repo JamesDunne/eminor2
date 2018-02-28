@@ -24,6 +24,9 @@
     <ClCompile Include="..\common\controller-axefx.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\controller-gmaj-vox.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\hardware.h">
