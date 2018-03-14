@@ -974,7 +974,7 @@ programs:
       channel: dirty
 - name: Puppets
   tempo: 106
-  midi: 2
+  midi: 4
   gain_log: 0x4A
   scenes:
   - name: Main

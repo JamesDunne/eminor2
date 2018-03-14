@@ -228,10 +228,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR paCmdLine
 
     printf("Opening MIDI device ID #%d...\r\n", midiDeviceID);
     result = midiOutOpen(&outHandle, midiDeviceID, 0, 0, CALLBACK_WINDOW);
-    if (result)
+    if (result) {
         printf("There was an error opening MIDI device!  Disabling MIDI output...\r\n\r\n");
-    else
+        outHandle = 0;
+    } else {
         printf("Opened MIDI device successfully.\r\n\r\n");
+    }
 #endif
 
 #ifdef HWFEAT_LABEL_UPDATES
