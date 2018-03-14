@@ -170,6 +170,38 @@ u8 sl_max;
 // Pointer to unmodified program:
 rom struct program *origpr;
 
+// struct axe_fx_preset defines the required MIDI CC#s to explicitly enable and disable
+// for each amp channel in each known Axe-FX preset (aka MIDI program).
+//
+// Each amp channel's CCs will be specific to either instance 1 or 2 depending
+// on which amp FX line is being addressed. MG uses instances 1, and JD uses instances 2.
+//
+// An unused CC will be set to 0xFF since this is an invalid MIDI CC# (bit 8 is set).
+//
+// e.g. for most presets:
+//   MG clean:    [AMP1: enabled Y, CAB1: enabled X]
+//   MG dirty:    [AMP1: enabled X, CAB1: enabled X]
+//   MG acoustic: [AMP1: disabled,  CAB1: enabled Y]
+// for Puppets preset:
+//   MG clean:    [GEQ1: disabled, AMP1: enabled Y, CAB1: enabled X]
+//   MG dirty:    [GEQ1: enabled,  AMP1: enabled X, CAB1: enabled X]
+//   MG acoustic: [GEQ1: disabled, AMP1: disabled,  CAB1: enabled Y]
+//
+// for (i = 0; i < 4; i++) {
+//   u8 en = channel[c].enable_cc[i];
+//   u8 dis = channel[c].disable_cc[i];
+//   if (en != 0xFF) midi_cc(en, 0x7F);
+//   if (dis != 0xFF) midi_cc(dis, 0x00);
+// }
+struct axe_fx_preset {
+    struct {
+        struct {
+            u8 enable_cc[4];
+            u8 disable_cc[4];
+        } channel[3];
+    } amp[2];
+};
+
 // Structure to represent state that should be compared from current to last to detect changes in program.
 struct state {
     // Footswitch state:
@@ -739,7 +771,7 @@ static void update_lcd(void) {
             }
             break;
     }
-    
+
     lcd_updated_all();
 #endif
 }

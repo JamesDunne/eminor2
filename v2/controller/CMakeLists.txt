@@ -1,17 +1,18 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.9)
 project(controller)
 
-set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -std=gnu99 -D HW_VERSION=4 -D HWFEAT_LABEL_UPDATES -D WIN32 -D _CONSOLE -D UNICODE -D _UNICODE")
+set(CMAKE_CXX_STANDARD 11)
+add_definitions(-DHW_VERSION=5)
 
-set(SOURCE_FILES
-    common/controller-axe.c
-    common/hardware.h
-    common/types.h
-    PIC/flash_v4_bank0.h
-    PIC/flash_v4_bank1.h
-    PIC/flash_v4_bank2.h
-    Win32/eminorv2.c
-    Win32/font-5x8.h PIC/v4_lookup.h)
-
-add_executable(controller ${SOURCE_FILES})
-target_link_libraries(controller kernel32 gdi32 user32 winmm)
+add_executable(controller
+        common/controller-v5-rom1.c
+        common/controller-v5.c
+        common/hardware.h
+        common/program-v5.h
+        common/types.h
+        common/util.c
+        common/util.h
+        common/v5_fx_names.h
+        PIC/flash_v5_bank0.h
+        PIC/flash_v5_bank1.h
+        PIC/flash_v5_bank2.h)
