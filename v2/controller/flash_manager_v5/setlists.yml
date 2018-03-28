@@ -1149,8 +1149,6 @@ sets:
 
   - date: "2017-12-02"
     venue: Dannys Pizza
-    active: true
-    print: true
     songs:
       - Dammit
       - Trippin
@@ -1202,3 +1200,64 @@ sets:
 
       - Puppets
       - Bells
+
+  - date: "2018-03-31"
+    venue: Spot on 66
+    active: true
+    print: true
+    songs:
+      - 'BREAK: SET 1'
+
+      - Everything Zen
+      - Buddy Holly
+      - My Own Worst Enemy
+
+      - 'BREAK: HELLO'
+
+      - Hey Jealousy
+      - Machinehead
+      - Brain stew
+      - Kids
+      - December
+
+      - 'BREAK: GUEST INTRO'
+
+      - Dammit
+      - Song 2
+      - Zero
+      - Cumbersome
+      - Creep
+      - When I Come Around
+      - Bound
+      - Hash Pipe
+      - Sandman
+
+      - 'BREAK: SET 2'
+
+      - Trippin
+      - Are You Gonna Go My Way
+      - Beautiful Disaster
+      - Say It Ain't So
+      - Basket Case
+      - Plush
+      - Story of a Girl
+
+      - 'BREAK: TUNING'
+
+      - The Middle
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: TUNING'
+
+      - Counting Blue Cars
+      - Undone
+      - Fuel
+
+      - Small Things
+      - Low
+      - Holiday
+
+      - 'BREAK: ENCORE'
+
+      - Puppets
