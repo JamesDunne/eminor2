@@ -846,49 +846,6 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-- name: Breed
-  tempo: 159
-  gain_log: 0x60
-  scenes:
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-- name: Lithium
-  tempo: 124
-  gain_log: 0x60
-  scenes:
-  - name: JD clean;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: clean
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: JD clean;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: clean
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: JD clean;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: clean
-  - name: JD dirty;MG dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
 - name: Undone
   tempo: 81
   scenes:
@@ -1043,104 +1000,6 @@ programs:
       level: 3
       gain_log: 0x70
       fx: [dly2]
-
-- name: Inside Out
-  tempo: 107
-  gain_log: 0x30
-  scenes:
-  - name: Intro
-    gain_log: 0x20
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: Verse/Chorus
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-
-- name: Cherub Rock
-  tempo: 84
-  gain_log: 0x60
-  scenes:
-  - name: Intro clean
-    MG:
-      channel: clean
-    JD:
-      channel: clean
-      fx: [phr2]
-  - name: Dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: Lead
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-      level: 4
-      fx: [cho2]
-  - name: Dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-
-
-- name: Beverly Hills
-  tempo: 88
-  amp:
-    - fx_layout:
-      - pit1
-      - wah1
-      - phr1
-      - cho1
-      - dly1
-      gain_log: 0
-    - fx_layout:
-      - pit2
-      - wah2
-      - phr2
-      - cho2
-      - dly2
-      gain_log: 0
-  scenes:
-  - name: Dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: Lead
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-      level: 5
-      fx: [wah2]
-  - name: Clean
-    MG:
-      channel: clean
-    JD:
-      channel: clean
-  - name: Dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: Lead
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-      level: 5
-      fx: [wah2]
-  - name: Dirty
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
 
 - name: Low
   tempo: 86
@@ -1463,35 +1322,40 @@ programs:
   - name: Rhythm
     MG:
       channel: dirty
+      gain: 0x60
     JD:
       channel: clean
       fx: [cho2]
   - name: Breakdown
     MG:
       channel: dirty
+      gain: 0x60
     JD:
       channel: dirty
   - name: Rhythm
     MG:
       channel: dirty
+      gain: 0x60
     JD:
       channel: clean
       fx: [cho2]
   - name: Breakdown
     MG:
       channel: dirty
+      gain: 0x60
     JD:
       channel: dirty
   - name: Rhythm
     MG:
       channel: dirty
+      gain: 0x60
     JD:
       channel: clean
       fx: [cho2]
 
 - name: Go My Way
   tempo: 130
-  gain: 0x3A
+  gain: 0x42
   scenes:
   - name: Rhythm
     MG:

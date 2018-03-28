@@ -3,17 +3,9 @@ songs:
   short_name: Monkey Wrench
   starts: Bremer 4 ct
 
-- names: [Even Flow]
-  short_name: Even Flow
-  starts: Bremer 4 ct
-
 - names: [Zero]
   short_name: Zero
   starts: Jim
-
-- names: [Wonderwall]
-  short_name: Wonderwall
-  starts: Glaz
 
 - names: [Buddy Holly]
   short_name: Buddy Holly
@@ -55,10 +47,6 @@ songs:
   short_name: Sex Type Thing
   starts: Bremer 4 ct
 
-- names: [Mr Jones, Mr. Jones]
-  short_name: Mr Jones
-  starts: Jim
-
 - names: [Counting Blue Cars, Blue Cars]
   short_name: Blue Cars
   starts: Bremer 4 ct
@@ -93,10 +81,6 @@ songs:
 
 - names: [Bound for the Floor]
   short_name: Bound
-  starts: Jim
-
-- names: [I Alone]
-  short_name: I Alone
   starts: Jim
 
 - names: [Cumbersome]
@@ -135,10 +119,6 @@ songs:
   short_name: Bullet
   starts: Glaz
 
-- names: [If You Could Only See]
-  short_name: If You Could Only
-  starts: Glaz
-
 - names: [Beautiful Disaster]
   short_name: Beautiful Disaster
   starts: Jim
@@ -167,14 +147,6 @@ songs:
   short_name: Basketcase
   starts: Glaz
 
-- names: [Breed]
-  short_name: Breed
-  starts: Jim
-
-- names: [Lithium]
-  short_name: Lithium
-  starts: Jim
-
 - names: [Undone, Sweater Song, The Sweater Song]
   short_name: Undone
   starts: Bremer
@@ -189,18 +161,6 @@ songs:
 
 - names: [Master of Puppets, Puppets]
   short_name: Puppets
-  starts: Bremer
-
-- names: [Inside Out]
-  short_name: Inside Out
-  starts: Glaz
-
-- names: [Cherub Rock]
-  short_name: Cherub Rock
-  starts: Bremer
-
-- names: [Beverly Hills]
-  short_name: Beverly Hills
   starts: Bremer
 
 - names: [Low]
