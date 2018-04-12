@@ -931,7 +931,7 @@ programs:
       channel: dirty
 - name: Puppets
   tempo: 106
-  midi: 4
+  midi: 2
   gain_log: 0x4A
   scenes:
   - name: Main
@@ -954,7 +954,7 @@ programs:
       fx: [cho1]
     JD:
       channel: dirty
-      level: -1.5
+      level: 0
       fx: [dly2,pit2]
   - name: Breakdown lead
     MG:
@@ -972,7 +972,7 @@ programs:
       fx: [cho1]
     JD:
       channel: dirty
-      level: -1.5
+      level: 0
       fx: [dly2,pit2]
   - name: Main
     MG:
@@ -997,7 +997,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 3
+      level: 2
       gain_log: 0x70
       fx: [dly2]
 
