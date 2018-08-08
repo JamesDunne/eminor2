@@ -179,7 +179,7 @@ songs:
   short_name: December
   starts: Jim
 
-- names: [Bouncing off the Walls, Bouncin off the Walls, Bouncin, Bouncing]
+- names: [Bouncing off the Walls, Bouncin off the Walls, Bouncin, Bouncing, "Bouncin'", "Bouncin’"]
   short_name: Bouncing
   starts: Jim
 
@@ -202,3 +202,11 @@ songs:
 - names: [Go My Way, Are You Gonna Go My Way, Gonna Go My Way]
   short_name: Go My Way
   starts: Bremer snare
+
+- names: [Comedown, Come Down]
+  short_name: Comedown
+  starts: Bremer 4 ct
+
+- names: [Interstate Love Song, Interstate, ILS]
+  short_name: Interstate
+  starts: Bremer 4 ct

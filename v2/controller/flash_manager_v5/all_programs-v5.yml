@@ -252,6 +252,7 @@ programs:
       gain_log: 0x20
       channel: dirty
       fx: [phr2, dly2]
+      level: -1.5
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -264,6 +265,7 @@ programs:
       gain_log: 0x20
       channel: dirty
       fx: [phr2, dly2]
+      level: -1.5
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -276,6 +278,7 @@ programs:
       gain_log: 0x20
       channel: dirty
       fx: [phr2, dly2]
+      level: -1.5
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -288,6 +291,7 @@ programs:
       gain_log: 0x20
       channel: dirty
       fx: [phr2, dly2]
+      level: -1.5
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
@@ -932,7 +936,7 @@ programs:
 - name: Puppets
   tempo: 106
   midi: 2
-  gain_log: 0x4A
+  gain: 0x40
   scenes:
   - name: Main
     MG:
@@ -946,6 +950,7 @@ programs:
       fx: [cho1]
     JD:
       channel: dirty
+      level: 1
       fx: [dly2]
   - name: Breakdown harm
     MG:
@@ -954,7 +959,7 @@ programs:
       fx: [cho1]
     JD:
       channel: dirty
-      level: 0
+      level: 1
       fx: [dly2,pit2]
   - name: Breakdown lead
     MG:
@@ -972,7 +977,7 @@ programs:
       fx: [cho1]
     JD:
       channel: dirty
-      level: 0
+      level: 1
       fx: [dly2,pit2]
   - name: Main
     MG:
@@ -1071,11 +1076,11 @@ programs:
     MG:
       channel: dirty
       gain_log: 0x20
-      level: -5
+      level: -2
     JD:
       channel: dirty
       gain_log: 0x20
-      level: -5
+      level: -2
   - name: Chorus
     MG:
       channel: dirty
@@ -1085,11 +1090,25 @@ programs:
     MG:
       channel: dirty
       gain_log: 0x20
-      level: -5
+      level: -2
     JD:
       channel: dirty
       gain_log: 0x20
-      level: -5
+      level: -2
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Verse
+    MG:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
+    JD:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
   - name: Chorus
     MG:
       channel: dirty
@@ -1099,11 +1118,11 @@ programs:
     MG:
       channel: dirty
       gain_log: 0x20
-      level: -5
+      level: -2
     JD:
       channel: dirty
       gain_log: 0x20
-      level: -5
+      level: -2
 
 - name: Slayer
   tempo: 130
@@ -1355,6 +1374,39 @@ programs:
 
 - name: Go My Way
   tempo: 130
+  gain: 0x42
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 3
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+- name: Interstate
+  tempo: 110
+  gain: 0x30
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+      level: -1.5
+    JD:
+      channel: dirty
+      level: -1.5
+
+- name: Comedown
+  tempo: 110
   gain: 0x42
   scenes:
   - name: Rhythm

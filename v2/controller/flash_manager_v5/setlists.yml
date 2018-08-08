@@ -1262,8 +1262,6 @@ sets:
 
   - date: "2018-06-02"
     venue: Chubby Bullfrog
-    active: true
-    print: true
     songs:
       - 'BREAK: SET 1'
 
@@ -1319,3 +1317,57 @@ sets:
       - 'BREAK: ENCORE'
 
       - Bells
+
+  - date: "2018-08-25"
+    venue: Spot On 66
+    active: true
+    print: true
+    songs:
+      - 'BREAK: SET 1'
+
+      - Dammit
+      - Buddy Holly
+      - Zero
+      - Brain Stew
+      - Kids
+      - Machinehead
+      - Say It Ain’t So
+      - Bouncin’
+      - Interstate
+      - December
+      - Small Things
+      - What I Got
+      - Crawling
+
+      - 'BREAK: DOWNTUNE'
+
+      - Shine
+      - The Middle
+
+      - 'BREAK: UPTUNE'
+
+      - Plush
+      - Puppets
+
+      - 'BREAK: SET 2'
+
+      - Go My Way
+      - Song 2
+      - Low
+      - Kryptonite
+      - Sex Type Thing
+      - Story of a Girl
+      - Comedown
+      - Fuel
+      - Undone
+      - My Hero
+      - Trippin’
+      - Creep
+      - Hash Pipe
+      - Closing Time
+      - My Own Worst Enemy
+      - Bullet
+
+      - 'BREAK: ENCORE'
+
+      - Basket Case
