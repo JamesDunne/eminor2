@@ -1166,8 +1166,8 @@ void controller_10msec_timer(void) {
             break;
     }
 
-    one_shot(bot,7,0x1F,toggle_setlist_mode())
-    one_shot(bot,8,0x1F,reset_scene())
+    one_shot(bot,7,0x3F,toggle_setlist_mode())
+    one_shot(bot,8,0x3F,reset_scene())
 
     repeater(top,7,0x20,0x07,prev_song())
     repeater(top,8,0x20,0x07,next_song())
