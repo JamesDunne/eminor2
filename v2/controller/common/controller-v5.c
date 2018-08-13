@@ -43,8 +43,8 @@ AMP controls:
 |  ACOUSTC                             RESET                 |          |Sng 62/62  Scn  1/10|
 |                                                            |    LCD:  |C g=58 v=-99.9 P12CD|
 |     *      *      *      *      *      *      *      *     |          |D g=5E v=  0.0 -1---|
-|  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX     MODE  SC_NXT  |          \--------------------/
-|  ACOUSTC                             RESET         SC_ONE  |
+|  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX    SC_PRV SC_NXT  |          \--------------------/
+|  ACOUSTC                             RESET   MODE  SC_ONE  |
 |------------------------------------------------------------|
 
 Press CLN|DRV to toggle clean vs overdrive mode (clean:    AMP -> Y, CAB -> X, gain -> 0x5E; dirty: AMP -> X, CAB -> X, gain -> n)
@@ -238,11 +238,9 @@ extern rom const u16 dB_bcd_lookup[128];
   midi_send_sysex(0xF7); \
 }
 
-// Top switch press cannot be an accident:
 #define is_top_button_pressed(mask) \
     (((last.fsw.top.byte & mask) == 0) && ((curr.fsw.top.byte & mask) == mask))
 
-// Always switch programs regardless of whether a top switch was accidentally depressed:
 #define is_bot_button_pressed(mask) \
     (((last.fsw.bot.byte & mask) == 0) && ((curr.fsw.bot.byte & mask) == mask))
 
@@ -965,12 +963,12 @@ static void reset_scene() {
     curr.sc_idx = 0;
 }
 
-//static void prev_scene() {
-//    if (curr.sc_idx > 0) {
-//        DEBUG_LOG0("prev scene");
-//        curr.sc_idx--;
-//    }
-//}
+static void prev_scene() {
+    if (curr.sc_idx > 0) {
+        DEBUG_LOG0("prev scene");
+        curr.sc_idx--;
+    }
+}
 
 #define min(a,b) (a < b ? a : b)
 #define max(a,b) (a > b ? a : b)
@@ -1273,7 +1271,7 @@ void controller_handle(void) {
     //     timers.bot_6 = (u8)0x00;
     // }
 
-    btn_pressed_oneshot(bot,7,tap_tempo())
+    btn_pressed_oneshot(bot,7,prev_scene())
 
     // NEXT SCENE:
     btn_pressed_oneshot(bot,8,next_scene())
