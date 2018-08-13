@@ -269,7 +269,7 @@ static void send_leds(void) {
 
 static void update_lcd(void);
 
-//static void prev_scene(void);
+static void prev_scene(void);
 
 static void next_scene(void);
 
@@ -281,7 +281,7 @@ static void midi_invalidate(void);
 
 static void toggle_setlist_mode(void);
 
-static void tap_tempo(void);
+//static void tap_tempo(void);
 
 static void scene_default(void);
 
@@ -896,10 +896,12 @@ static void toggle_setlist_mode() {
     }
 }
 
+#if 0
 static void tap_tempo() {
     tap ^= (u8)0x7F;
     midi_axe_cc(axe_cc_taptempo, tap);
 }
+#endif
 
 static void midi_invalidate() {
     // Invalidate all current MIDI state so it gets re-sent at end of loop:
