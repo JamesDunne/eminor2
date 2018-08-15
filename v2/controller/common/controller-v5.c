@@ -1002,7 +1002,7 @@ void controller_init(void) {
     for (i = 0; i < 2; i++) {
         curr.amp[i].gain = 0;
         last.amp[i].gain = ~(u8)0;
-        last_amp[i].clean_gain = 0x10;
+        last_amp[i].clean_gain = 0x12;
     }
 
     // Load first program in setlist:
