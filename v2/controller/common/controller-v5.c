@@ -1064,6 +1064,7 @@ struct timers {
     u8 bot_6;
     u8 bot_7;
     u8 bot_8;
+    u8 retrigger;
 } timers;
 #pragma udata
 
@@ -1176,6 +1177,14 @@ void controller_10msec_timer(void) {
 
 #undef repeater
 #undef one_shot
+
+    if (timers.retrigger != 0) {
+        if (timers.retrigger < 0x1F) {
+            timers.retrigger++;
+        } else {
+            timers.retrigger = 0;
+        }
+    }
 }
 
 // main control loop
@@ -1273,10 +1282,17 @@ void controller_handle(void) {
     //     timers.bot_6 = (u8)0x00;
     // }
 
-    btn_pressed_oneshot(bot,7,prev_scene())
+#define on_retrigger(action) \
+    if (timers.retrigger == 0) { \
+        action; \
+        timers.retrigger = 1; \
+    }
+
+    btn_pressed_oneshot(bot,7,on_retrigger(prev_scene()))
 
     // NEXT SCENE:
-    btn_pressed_oneshot(bot,8,next_scene())
+    btn_pressed_oneshot(bot,8,on_retrigger(next_scene()))
+
 
     // PREV/NEXT SONG:
     if (is_top_button_pressed(M_7)) {
