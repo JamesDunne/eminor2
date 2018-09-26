@@ -103,19 +103,19 @@ programs:
   scenes:
   - name: Clean
     MG:
-      channel: clean
+      channel: acoustic
     JD:
       channel: acoustic
   - name: MG Lead
     MG:
       channel: dirty
-      level: 3
+      level: 4
       fx: [rtr1,dly1]
     JD:
       channel: acoustic
   - name: Clean
     MG:
-      channel: clean
+      channel: acoustic
     JD:
       channel: acoustic
 - name: When I Come Around
@@ -131,7 +131,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 5
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -146,7 +146,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 5
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -158,7 +158,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 5
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -170,7 +170,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 5
       fx: [dly2]
   - name: JD lead;MG dirty
     MG:
@@ -209,7 +209,7 @@ programs:
     JD:
       gain_log: 0x60
       channel: dirty
-      level: 6
+      level: 5
       fx: [dly2]
   - name: JD lead;MG clean
     MG:
@@ -240,7 +240,7 @@ programs:
     JD:
       gain_log: 0x60
       channel: dirty
-      level: 6
+      level: 5
       fx: [dly2]
 - name: Crawling in the Dark
   tempo: 94
@@ -377,7 +377,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 4
       fx: [dly2]
   - name: JD clean;MG dirty
     MG:
@@ -396,7 +396,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 4
       fx: [dly2]
 - name: In Bloom
   tempo: 80
@@ -465,7 +465,7 @@ programs:
   - name: JD dirty;MG lead
     MG:
       channel: dirty
-      level: 6
+      level: 4
       fx: [dly1]
     JD:
       channel: dirty
@@ -532,7 +532,7 @@ programs:
       gain: 0x30
     JD:
       channel: dirty
-      level: 6
+      level: 4
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -571,14 +571,14 @@ programs:
   - name: JD dirty;MG lead
     MG:
       channel: dirty
-      level: 6
+      level: 3
       fx: [dly1]
     JD:
       channel: dirty
   - name: JD clean;MG lead
     MG:
       channel: dirty
-      level: 6
+      level: 3
       fx: [dly1]
     JD:
       channel: clean
@@ -595,7 +595,7 @@ programs:
   - name: JD dirty;MG lead
     MG:
       channel: dirty
-      level: 6
+      level: 3
       fx: [dly1]
     JD:
       channel: dirty
@@ -615,6 +615,24 @@ programs:
       channel: dirty
     JD:
       channel: dirty
+  - name: JD lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 2
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 2
+      fx: [dly2]
 - name: The Middle
   tempo: 162
   gain_log: 0x22
@@ -630,13 +648,13 @@ programs:
     JD:
       channel: dirty
       gain_log: 0x4A
-      level: 6
+      level: 4
   - name: JD lead;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
-      level: -1
+      level: -2
       fx: [phr2, dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -711,7 +729,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 5
       fx: [dly2]
 - name: Fuel
   tempo: 107
@@ -726,7 +744,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 3
+      level: 4
   - name: JD lead;MG dirty
     MG:
       channel: dirty
@@ -738,7 +756,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 3
+      level: 4
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -765,7 +783,7 @@ programs:
       channel: acoustic
     JD:
       channel: acoustic
-      level: 6
+      level: 4
   - name: JD clean;MG clean
     MG:
       channel: acoustic
@@ -776,7 +794,7 @@ programs:
       channel: acoustic
     JD:
       channel: acoustic
-      level: 6
+      level: 4
   - name: JD clean;MG clean
     MG:
       channel: acoustic
@@ -823,23 +841,26 @@ programs:
       channel: clean
 - name: Shine
   tempo: 151
-  gain_log: 0x50
+  gain_log: 0x2C
   scenes:
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
+      level: -2
     JD:
       channel: dirty
   - name: JD lead
     MG:
       channel: dirty
+      level: -2
     JD:
       gain_log: 0x7C
       channel: dirty
-      level: 6
+      level: 4
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
+      level: -2
     JD:
       channel: dirty
 - name: Basketcase
@@ -878,7 +899,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 4
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -890,11 +911,11 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 4
       fx: [dly2]
 - name: Story of a Girl
   tempo: 97
-  gain_log: 0x2A
+  gain_log: 0x20
   scenes:
   - name: Rhythm
     MG:
@@ -905,9 +926,9 @@ programs:
     MG:
       channel: dirty
     JD:
-      gain_log: 0x50
+      gain_log: 0x60
       channel: dirty
-      level: 6
+      level: 3
   - name: Rhythm
     MG:
       channel: dirty
@@ -915,7 +936,7 @@ programs:
       channel: dirty
 - name: Trippin
   tempo: 107
-  gain_log: 0x2A
+  gain_log: 0x28
   scenes:
   - name: Rhythm
     MG:
@@ -936,7 +957,7 @@ programs:
 - name: Puppets
   tempo: 106
   midi: 2
-  gain: 0x40
+  gain: 0x30
   scenes:
   - name: Main
     MG:
@@ -990,7 +1011,7 @@ programs:
     JD:
       channel: dirty
       level: 6
-      gain_log: 0x70
+      gain: 0x60
       fx: [dly2]
   - name: Main
     MG:
@@ -1002,8 +1023,8 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 2
-      gain_log: 0x70
+      level: 3
+      gain_log: 0x60
       fx: [dly2]
 
 - name: Low
@@ -1042,7 +1063,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 4
       gain_log: 0x40
       fx: [dly2]
     # Blue blue is the sun...
@@ -1052,6 +1073,7 @@ programs:
     # Whale calls
     JD:
       channel: dirty
+      level: -2
       gain_log: 0x40
       fx: [dly2]
   - name: Chorus
@@ -1144,7 +1166,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: 6
+      level: 4
       fx: [dly2]
 
 - name: Happy Birthday
@@ -1194,7 +1216,7 @@ programs:
       fx: [cho1]
     JD:
       channel: dirty
-      gain: 0x18
+      gain: 0x20
       level: -2
   - name: Chorus
     MG:
@@ -1234,7 +1256,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: +4
+      level: 4
   - name: Verse
     MG:
       channel: dirty
@@ -1254,7 +1276,7 @@ programs:
       channel: acoustic
     JD:
       channel: dirty
-      level: +6
+      level: 4
   - name: Verse
     MG:
       channel: acoustic
@@ -1265,7 +1287,7 @@ programs:
       channel: acoustic
     JD:
       channel: dirty
-      level: +6
+      level: 4
   - name: Verse
     MG:
       channel: acoustic
@@ -1285,7 +1307,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: +3
+      level: +4
   - name: Rhythm
     MG:
       channel: dirty
@@ -1296,7 +1318,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: +3
+      level: +4
   - name: Rhythm
     MG:
       channel: dirty
@@ -1307,7 +1329,7 @@ programs:
       channel: dirty
     JD:
       channel: dirty
-      level: +4.5
+      level: +5
   - name: Rhythm
     MG:
       channel: dirty
@@ -1325,7 +1347,7 @@ programs:
   - name: Breakdown
     MG:
       channel: dirty
-      gain: 0x20
+      gain: 0x18
     JD:
       channel: dirty
   - name: Rhythm
@@ -1374,7 +1396,7 @@ programs:
 
 - name: Go My Way
   tempo: 130
-  gain: 0x42
+  gain: 0x3C
   scenes:
   - name: Rhythm
     MG:
@@ -1395,15 +1417,15 @@ programs:
 
 - name: Interstate
   tempo: 110
-  gain: 0x30
+  gain: 0x2C
   scenes:
   - name: Rhythm
     MG:
       channel: dirty
-      level: -1.5
+      level: -1
     JD:
       channel: dirty
-      level: -1.5
+      level: -1
 
 - name: Comedown
   tempo: 110
@@ -1420,8 +1442,16 @@ programs:
     JD:
       channel: dirty
       level: 3
+      fx: [dly2]
   - name: Rhythm
     MG:
       channel: dirty
     JD:
       channel: dirty
+  - name: Outro
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 1
+      fx: [dly2]
