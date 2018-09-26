@@ -1320,8 +1320,6 @@ sets:
 
   - date: "2018-08-25"
     venue: Spot On 66
-    active: true
-    print: true
     songs:
       - 'BREAK: SET 1'
 
@@ -1372,3 +1370,75 @@ sets:
 
       - Basket Case
       - Sandman
+
+  - date: "2018-09-29"
+    venue: D Hangout
+    active: true
+    print: true
+    songs:
+      - 'BREAK: SET 1'
+
+      - Song 2
+      - Zero
+      - Buddy Holly
+
+      - 'BREAK: HELLO'
+
+      - Small Things
+      - Hey Jealousy
+      - My Hero
+      - Kids
+      - December
+      - Story of a Girl
+      - Sex Type Thing
+      - Brain Stew
+      - What I Got
+      - Hash Pipe
+      - Creep
+      - Basket Case
+      - Enter Sandman
+
+      - 'BREAK: SET 2'
+
+      - Go My Way
+      - Trippin’
+
+      - 'BREAK: DOWNTUNE'
+
+      - Shine
+      - Monkey Wrench
+
+      - 'BREAK: UPTUNE'
+
+      - Kryptonite
+      - Comedown
+      - Bouncin'
+      - Cumbersome
+      - Dammit
+      - Counting Blue Cars
+      - Beautiful Disaster
+      - Holiday
+      - Say It Ain’t So
+      - Drive
+      - Machinehead
+      - Puppets
+
+      - 'BREAK: SET 3'
+
+      - Everything Zen
+      - Interstate
+      - When I Come Around
+      - Bullet
+      - Plush
+      - Undone
+      - Fuel
+      - Closing Time
+      - Low
+
+      - 'BREAK: GOODBYE'
+
+      - My Own Worst Enemy
+
+      - 'BREAK: ENCORE (DOWNTUNE)'
+
+      - The Middle
