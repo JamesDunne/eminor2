@@ -1455,3 +1455,13 @@ programs:
       channel: dirty
       level: 1
       fx: [dly2]
+
+- name: Ghostbusters
+  tempo: 120
+  gain: 0x44
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty

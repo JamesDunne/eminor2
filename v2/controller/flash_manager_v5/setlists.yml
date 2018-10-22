@@ -1373,8 +1373,6 @@ sets:
 
   - date: "2018-09-29"
     venue: D Hangout
-    active: true
-    print: true
     songs:
       - 'BREAK: SET 1'
 
@@ -1434,6 +1432,72 @@ sets:
       - Fuel
       - Closing Time
       - Low
+
+      - 'BREAK: GOODBYE'
+
+      - My Own Worst Enemy
+
+      - 'BREAK: ENCORE (DOWNTUNE)'
+
+      - The Middle
+
+  - date: "2018-10-27"
+    venue: Romeoville
+    active: true
+    print: true
+    songs:
+      - 'BREAK: SET 1'
+
+      - Zero
+      - Dammit
+      - Trippin’
+
+      - 'BREAK: HELLO'
+
+      - Hash Pipe
+      - Beautiful Disaster
+      - Hey Jealousy
+      - Creep
+      - Kids
+      - December
+      - Enter Sandman
+      - Say It Ain’t So
+      - Basket Case
+      - Low
+      - Story of a Girl
+
+      - 'BREAK: ENTER CLARISSE'
+
+      - What I Got
+
+      - 'BREAK: EXIT CLARISSE'
+
+      - Counting Blue Cars
+      - Bells
+
+      - 'BREAK: SET 2'
+
+      - Ghostbusters
+      - Go My Way
+      - Song 2
+
+      - 'BREAK: DOWNTUNE'
+
+      - Shine
+      - Monkey Wrench
+
+      - 'BREAK: UPTUNE'
+
+      - Comedown
+      - Buddy Holly
+      - Holiday
+      - Plush
+      - Fuel
+      - Brain Stew
+      - Machinehead
+      - Cumbersome
+      - Small Things
+      - When I Come Around
 
       - 'BREAK: GOODBYE'
 
