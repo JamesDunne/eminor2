@@ -1443,8 +1443,6 @@ sets:
 
   - date: "2018-10-27"
     venue: Romeoville
-    active: true
-    print: true
     songs:
       - 'BREAK: SET 1'
 
@@ -1506,3 +1504,42 @@ sets:
       - 'BREAK: ENCORE (DOWNTUNE)'
 
       - The Middle
+
+  - date: "2018-12-22"
+    venue: Chicago Loop
+    active: true
+    print: true
+    songs:
+      - Song 2
+      - Buddy Holly
+      - Zero
+
+      - 'BREAK: HELLO/TUNE'
+
+      - Story of a Girl
+      - Everything Zen
+      - Brain Stew
+      - Kids
+
+      - 'BREAK: TUNE'
+
+      - Low
+      - Basket Case
+      - Machinehead
+      - Sandman
+
+      - 'BREAK: TUNE'
+
+      - Go My Way
+      - Holiday
+      - Fuel
+
+      - 'BREAK: TUNE'
+
+      - Dammit
+      - Trippin’
+      - Hash Pipe
+
+      - 'BREAK: GOODBYE'
+
+      - My Own Worst Enemy

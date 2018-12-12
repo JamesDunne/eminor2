@@ -1465,3 +1465,27 @@ programs:
       channel: dirty
     JD:
       channel: dirty
+
+- name: Under the Bridge
+  tempo: 120
+  gain: 0x44
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: clean
+      gain: 0x40
+      level: -16
+    JD:
+      channel: clean
+      gain: 0x40
+      level: -16
+
+- name: Slide
+  tempo: 120
+  gain: 0x44
+  scenes:
+  - name: JD acoustic;MG acoustic
+    MG:
+      channel: acoustic
+    JD:
+      channel: acoustic
