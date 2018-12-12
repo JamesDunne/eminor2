@@ -214,3 +214,11 @@ songs:
 - names: [Ghostbusters, Ghost Busters]
   short_name: Ghostbusters
   starts: Glaz
+
+- names: [Under the Bridge]
+  short_name: Under the Bridge
+  starts: Jim
+
+- names: [Slide]
+  short_name: Slide
+  starts: Jim
