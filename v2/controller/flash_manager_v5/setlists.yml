@@ -1507,8 +1507,6 @@ sets:
 
   - date: "2018-12-22"
     venue: Chicago Loop
-    active: true
-    print: true
     songs:
       - Song 2
       - Buddy Holly
@@ -1543,3 +1541,67 @@ sets:
       - 'BREAK: GOODBYE'
 
       - My Own Worst Enemy
+
+  - date: "2019-02-23"
+    venue: Motts in Burlington
+    active: true
+    print: true
+    songs:
+      - 'BREAK: SET 1'
+
+      - Song 2
+      - Buddy Holly
+      - Zero
+
+      - 'BREAK: HELLO'
+
+      - Cumbersome
+      - Small Things
+      - Machinehead
+      - Brain Stew
+      - Kids
+      - Enter Sandman
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Lump
+      - Shine
+      - Monkey Wrench
+
+      - 'BREAK: UPTUNE'
+
+      - December
+      - Story of a Girl
+      - When I Come Around
+      - My Hero
+      - Bullet
+      - Bells
+
+      - 'BREAK: SET 2'
+
+      - Beautiful Disaster
+      - Go My Way
+      - Hash Pipe
+      - Interstate Love
+      - Slide
+      - Counting Blue Cars
+      - Dammit
+      - Trippin’
+      - Holiday
+      - Low
+      - Zen
+      - Hey Jealousy
+      - What I Got
+      - Plush
+      - Fuel
+      - Say It Ain’t So
+      - Comedown
+
+      - 'BREAK: GOODBYE'
+
+      - My Own Worst Enemy
+
+      - 'BREAK: ENCORE'
+
+      - Basket Case
