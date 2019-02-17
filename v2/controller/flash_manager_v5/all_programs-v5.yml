@@ -1482,10 +1482,10 @@ programs:
 
 - name: Slide
   tempo: 120
-  gain: 0x44
+  gain: 0x0A
   scenes:
   - name: JD acoustic;MG acoustic
     MG:
-      channel: acoustic
+      channel: clean
     JD:
-      channel: acoustic
+      channel: dirty
