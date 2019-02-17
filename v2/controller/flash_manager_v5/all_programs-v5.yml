@@ -2,13 +2,13 @@ amp:
   - fx_layout:
     - pit1
     - rtr1
-    - phr1
+    - flg1
     - cho1
     - dly1
   - fx_layout:
     - pit2
     - rtr2
-    - phr2
+    - flg2
     - cho2
     - dly2
 
@@ -251,7 +251,7 @@ programs:
     JD:
       gain_log: 0x20
       channel: dirty
-      fx: [phr2, dly2]
+      fx: [flg2, dly2]
       level: -1.5
   - name: JD dirty;MG dirty
     MG:
@@ -264,7 +264,7 @@ programs:
     JD:
       gain_log: 0x20
       channel: dirty
-      fx: [phr2, dly2]
+      fx: [flg2, dly2]
       level: -1.5
   - name: JD dirty;MG dirty
     MG:
@@ -277,7 +277,7 @@ programs:
     JD:
       gain_log: 0x20
       channel: dirty
-      fx: [phr2, dly2]
+      fx: [flg2, dly2]
       level: -1.5
   - name: JD dirty;MG dirty
     MG:
@@ -290,7 +290,7 @@ programs:
     JD:
       gain_log: 0x20
       channel: dirty
-      fx: [phr2, dly2]
+      fx: [flg2, dly2]
       level: -1.5
   - name: JD dirty;MG dirty
     MG:
@@ -655,7 +655,7 @@ programs:
     JD:
       channel: dirty
       level: -2
-      fx: [phr2, dly2]
+      fx: [flg2, dly2]
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
