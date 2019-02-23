@@ -64,18 +64,18 @@
       },
       {
         "i": 11,
-        "title": "Lump",
-        "starts": "Bremer+Glaz"
-      },
-      {
-        "i": 12,
         "title": "Shine",
         "starts": "Jim"
       },
       {
-        "i": 13,
+        "i": 12,
         "title": "Monkey Wrench",
         "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 13,
+        "title": "Lump",
+        "starts": "Bremer+Glaz"
       },
       {
         "breakText": "UPTUNE"
