@@ -1544,8 +1544,6 @@ sets:
 
   - date: "2019-02-23"
     venue: Motts in Burlington
-    active: true
-    print: true
     songs:
       - 'BREAK: SET 1'
 
@@ -1605,3 +1603,83 @@ sets:
       - 'BREAK: ENCORE'
 
       - Basket Case
+
+  - date: "2019-04-06"
+    venue: Spot on 66
+    active: true
+    print: true
+    songs:
+      - Brain Stew
+      - Small Things
+      - Zero
+
+      - 'BREAK: HELLO'
+
+      - Hash Pipe
+      - Slide
+      - When I Come Around
+      - Kids
+
+      - 'BREAK: BREAK'
+
+      - Say It Ain’t So
+      - Interstate Love Song
+      - Enter Sandman
+
+      - 'BREAK: DOWNTUNE'
+
+      - The Middle
+      - Shine
+      - Monkey Wrench
+      - Lump
+
+      - 'BREAK: UPTUNE'
+
+      - Creep
+      - Story of a Girl
+      - Zen
+
+      - 'BREAK: BREAK'
+
+      - Puppets
+
+
+      - 'BREAK: SET 2'
+
+
+      - Go My Way
+
+      - 'BREAK: BREAK'
+
+      - Hey Jealousy
+      - Cumbersome
+      - Kryptonite
+      - Bouncing off the Walls
+
+      - 'BREAK: BREAK'
+
+      - What I Got
+      - Dammit
+      - Trippin’
+      - Holiday
+
+      - 'BREAK: BREAK'
+
+      - Counting Blue Cars
+      - Undone
+      - Fuel
+
+      - 'BREAK: BREAK'
+
+      - Comedown
+      - Song 2
+      - Low
+      - Basket Case
+
+      - 'BREAK: GOODBYE'
+
+      - Worst Enemy
+
+      - 'BREAK: ENCORE'
+
+      - Buddy Holly
