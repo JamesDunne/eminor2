@@ -1606,8 +1606,6 @@ sets:
 
   - date: "2019-04-06"
     venue: Spot on 66
-    active: true
-    print: true
     songs:
       - Brain Stew
       - Small Things
@@ -1683,3 +1681,87 @@ sets:
       - 'BREAK: ENCORE'
 
       - Buddy Holly
+
+  - date: "2019-04-27"
+    venue: "Danny's Pizza"
+    active: true
+    print: true
+    songs:
+    - Brain Stew
+    - Small Things
+    - Zero
+
+    - 'BREAK: HELLO'
+
+    - Machinehead
+    - Hash Pipe
+    - Slide
+    - When I Come Around
+    - Kids
+
+    - 'BREAK: BREAK'
+
+    - Say It Ain't So
+    - Basket Case
+    - Interstate Love Song
+    - Fuel
+
+    - 'BREAK: DOWNTUNE'
+
+    - The Middle
+    - Shine
+    - Monkey Wrench
+    - Lump
+
+    - 'BREAK: UPTUNE'
+
+    - Creep
+    - Story of a Girl
+    - Buddy Holly
+
+    - 'BREAK: BREAK'
+
+    - Enter Sandman
+
+
+    - 'BREAK: SET 2'
+
+
+    - Shallow
+    - Go My Way
+    - Bells
+
+    - 'BREAK: BREAK'
+
+    - Hey Jealousy
+    - Cumbersome
+    - Kryptonite
+    - Bouncing off the Walls
+
+    - 'BREAK: BREAK'
+
+    - My Hero
+    - December
+    - Dammit
+    - Trippin'
+
+    - 'BREAK: BREAK'
+
+    - What I Got
+    - Everything Zen
+    - Counting Blue Cars
+    - Undone
+
+    - 'BREAK: BREAK'
+
+    - Song 2
+    - Comedown
+    - Low
+
+    - 'BREAK: GOODBYE'
+
+    - Worst Enemy
+
+    - 'BREAK: ENCORE'
+
+    - Holiday

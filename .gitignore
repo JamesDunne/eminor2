@@ -25,6 +25,7 @@ midicontroller.cof
 v2/controller/go-ui/go-ui
 v2/controller/flash_manager/flash_manager
 v2/controller/flash_manager/all_programs-v2-gen.yml
+v2/controller/flash_manager_v5/flash_manager_v5
 
 .DS_Store
 Thumbs.db

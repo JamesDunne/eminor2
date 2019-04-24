@@ -330,7 +330,7 @@ func generatePICH() {
 	}
 
 	// Translate YAML to binary data for FLASH memory (see common/controller.c):
-	fmt.Println("Programs:")
+	// fmt.Println("Programs:")
 	for i, p := range programs.Programs {
 		// Record the name-to-index mapping:
 		meta, err := partial_match_song_name(p.Name)
@@ -344,11 +344,12 @@ func generatePICH() {
 
 		short_name := meta.ShortName
 
-		_, err = fmt.Printf("%3d) %s\n", i+1, short_name)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			return
-		}
+		_ = i
+		// _, err = fmt.Printf("%3d) %s\n", i+1, short_name)
+		// if err != nil {
+		// 	fmt.Fprintln(os.Stderr, err)
+		// 	return
+		// }
 
 		// Pad name to 20 chars with NULs:
 		for n := 0; n < 20; n++ {

@@ -1,7 +1,7 @@
 [
   {
-    "date": "2019-04-06",
-    "venue": "Spot on 66",
+    "date": "2019-04-27",
+    "venue": "Danny's Pizza",
     "songs": [
       {
         "i": 1,
@@ -23,21 +23,26 @@
       },
       {
         "i": 4,
+        "title": "Machinehead",
+        "starts": "Jim"
+      },
+      {
+        "i": 5,
         "title": "Hash Pipe",
         "starts": "Bremer+Adam"
       },
       {
-        "i": 5,
+        "i": 6,
         "title": "Slide",
         "starts": "Jim"
       },
       {
-        "i": 6,
+        "i": 7,
         "title": "When I Come Around",
         "starts": "Jim"
       },
       {
-        "i": 7,
+        "i": 8,
         "title": "Kids",
         "starts": "Glaz"
       },
@@ -45,40 +50,45 @@
         "breakText": "BREAK"
       },
       {
-        "i": 8,
+        "i": 9,
         "title": "Say It Aint So",
         "starts": "Jim"
       },
       {
-        "i": 9,
+        "i": 10,
+        "title": "Basketcase",
+        "starts": "Glaz"
+      },
+      {
+        "i": 11,
         "title": "Interstate Love Song",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 10,
-        "title": "Enter Sandman",
+        "i": 12,
+        "title": "Fuel",
         "starts": "Glaz"
       },
       {
         "breakText": "DOWNTUNE"
       },
       {
-        "i": 11,
+        "i": 13,
         "title": "The Middle",
         "starts": "Glaz"
       },
       {
-        "i": 12,
+        "i": 14,
         "title": "Shine",
         "starts": "Jim"
       },
       {
-        "i": 13,
+        "i": 15,
         "title": "Monkey Wrench",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 14,
+        "i": 16,
         "title": "Lump",
         "starts": "Bremer+Glaz"
       },
@@ -86,56 +96,66 @@
         "breakText": "UPTUNE"
       },
       {
-        "i": 15,
+        "i": 17,
         "title": "Creep",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 16,
+        "i": 18,
         "title": "Story of a Girl",
         "starts": "Glaz"
       },
       {
-        "i": 17,
-        "title": "Everything Zen",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 18,
-        "title": "Master of Puppets",
-        "starts": "Bremer"
-      },
-      {
-        "breakText": "SET 2"
-      },
-      {
         "i": 19,
-        "title": "Go My Way",
-        "starts": "Bremer snare"
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
       },
       {
         "breakText": "BREAK"
       },
       {
         "i": 20,
+        "title": "Enter Sandman",
+        "starts": "Glaz"
+      },
+      {
+        "breakText": "SET 2"
+      },
+      {
+        "i": 21,
+        "title": "Shallow",
+        "starts": ""
+      },
+      {
+        "i": 22,
+        "title": "Go My Way",
+        "starts": "Bremer snare"
+      },
+      {
+        "i": 23,
+        "title": "For Whom The Bell Tolls",
+        "starts": "Bremer"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 24,
         "title": "Hey Jealousy",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 21,
+        "i": 25,
         "title": "Cumbersome",
         "starts": "Jim"
       },
       {
-        "i": 22,
+        "i": 26,
         "title": "Kryptonite",
         "starts": "Glaz"
       },
       {
-        "i": 23,
+        "i": 27,
         "title": "Bouncing off the Walls",
         "starts": "Jim"
       },
@@ -143,71 +163,71 @@
         "breakText": "BREAK"
       },
       {
-        "i": 24,
-        "title": "What I Got",
-        "starts": "Bremer"
+        "i": 28,
+        "title": "My Hero",
+        "starts": "Bremer+Adam"
       },
       {
-        "i": 25,
+        "i": 29,
+        "title": "December",
+        "starts": "Jim"
+      },
+      {
+        "i": 30,
         "title": "Dammit",
         "starts": "Jim"
       },
       {
-        "i": 26,
+        "i": 31,
         "title": "Trippin",
         "starts": "Bremer"
       },
       {
-        "i": 27,
-        "title": "Holiday",
-        "starts": "Jim"
-      },
-      {
         "breakText": "BREAK"
-      },
-      {
-        "i": 28,
-        "title": "Counting Blue Cars",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 29,
-        "title": "Undone",
-        "starts": "Bremer"
-      },
-      {
-        "i": 30,
-        "title": "Fuel",
-        "starts": "Glaz"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 31,
-        "title": "Comedown",
-        "starts": "Bremer 4 ct"
       },
       {
         "i": 32,
-        "title": "Song 2",
+        "title": "What I Got",
         "starts": "Bremer"
       },
       {
         "i": 33,
-        "title": "Low",
-        "starts": "Bremer"
+        "title": "Everything Zen",
+        "starts": "Glaz"
       },
       {
         "i": 34,
-        "title": "Basketcase",
-        "starts": "Glaz"
+        "title": "Counting Blue Cars",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 35,
+        "title": "Undone",
+        "starts": "Bremer"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 36,
+        "title": "Song 2",
+        "starts": "Bremer"
+      },
+      {
+        "i": 37,
+        "title": "Comedown",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "i": 38,
+        "title": "Low",
+        "starts": "Bremer"
       },
       {
         "breakText": "GOODBYE"
       },
       {
-        "i": 35,
+        "i": 39,
         "title": "My Own Worst Enemy",
         "starts": "Jim"
       },
@@ -215,9 +235,9 @@
         "breakText": "ENCORE"
       },
       {
-        "i": 36,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
+        "i": 40,
+        "title": "Holiday",
+        "starts": "Jim"
       }
     ]
   }
