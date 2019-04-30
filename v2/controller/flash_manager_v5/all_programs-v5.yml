@@ -846,13 +846,13 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
-      level: -2
+      level: -3
     JD:
       channel: dirty
   - name: JD lead
     MG:
       channel: dirty
-      level: -2
+      level: -3
     JD:
       gain_log: 0x7C
       channel: dirty
@@ -860,7 +860,7 @@ programs:
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
-      level: -2
+      level: -3
     JD:
       channel: dirty
 - name: Basketcase
