@@ -958,7 +958,7 @@ programs:
 - name: Puppets
   tempo: 106
   midi: 2
-  gain: 0x30
+  gain: 0x5e
   scenes:
   - name: Main
     MG:
@@ -968,7 +968,6 @@ programs:
   - name: Breakdown clean
     MG:
       channel: clean
-      level: 3
       fx: [cho1]
     JD:
       channel: dirty
@@ -977,7 +976,6 @@ programs:
   - name: Breakdown harm
     MG:
       channel: clean
-      level: 3
       fx: [cho1]
     JD:
       channel: dirty
@@ -986,7 +984,6 @@ programs:
   - name: Breakdown lead
     MG:
       channel: clean
-      level: 3
       fx: [cho1]
     JD:
       channel: dirty
@@ -995,7 +992,6 @@ programs:
   - name: Breakdown harm
     MG:
       channel: clean
-      level: 3
       fx: [cho1]
     JD:
       channel: dirty
