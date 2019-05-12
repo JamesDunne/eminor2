@@ -93642,11 +93642,11 @@ function init() {
                                 return;
                             }
 
-                            midiOutput = midiAccess.outputs.get(parseInt(midiSelect.value, 10));
+                            midiOutput = midiAccess.outputs.get(midiSelect.value);
                             if (midiOutput) {
                                 console.log("change MIDI to " + midiOutput.name);
                             } else {
-                                console.error("failed to find MIDI by key=" + midiSelect.value);
+                                console.error("failed to find MIDI by key '" + midiSelect.value + "'");
                             }
                         });
                     }
