@@ -1684,8 +1684,6 @@ sets:
 
   - date: "2019-04-27"
     venue: "Danny's Pizza"
-    active: true
-    print: true
     songs:
     - Brain Stew
     - Small Things
@@ -1751,6 +1749,82 @@ sets:
     - Everything Zen
     - Counting Blue Cars
     - Undone
+
+    - 'BREAK: BREAK'
+
+    - Song 2
+    - Comedown
+    - Low
+
+    - 'BREAK: GOODBYE'
+
+    - Worst Enemy
+
+    - 'BREAK: ENCORE'
+
+    - Holiday
+
+  - date: "2019-05-17"
+    venue: Bowl-Hi Lanes
+    active: true
+    print: true
+    songs:
+    - Brain Stew
+    - Small Things
+    - Zero
+
+    - 'BREAK: HELLO'
+
+    - Machinehead
+    - Hash Pipe
+    - Slide
+    - When I Come Around
+    - Kids
+
+    - 'BREAK: BREAK'
+
+    - Say It Ain't So
+    - Basket Case
+    - Interstate Love Song
+    - Fuel
+
+    - 'BREAK: DOWNTUNE'
+
+    - The Middle
+    - Shine
+    - Monkey Wrench
+    - Lump
+
+    - 'BREAK: UPTUNE'
+
+    - Enter Sandman
+
+
+    - 'BREAK: SET 2'
+
+
+    - Go My Way
+    - Bells
+
+    - 'BREAK: BREAK'
+
+    - Hey Jealousy
+    - Buddy Holly
+    - Cumbersome
+    - Bouncing off the Walls
+
+    - 'BREAK: BREAK'
+
+    - Creep
+    - Story of a Girl
+    - Undone
+
+    - 'BREAK: BREAK'
+
+    - Dammit
+    - Trippin'
+    - Everything Zen
+    - Counting Blue Cars
 
     - 'BREAK: BREAK'
 

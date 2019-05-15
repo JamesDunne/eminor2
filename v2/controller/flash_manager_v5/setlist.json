@@ -1,7 +1,7 @@
 [
   {
-    "date": "2019-04-27",
-    "venue": "Danny's Pizza",
+    "date": "2019-05-17",
+    "venue": "Bowl-Hi Lanes",
     "songs": [
       {
         "i": 1,
@@ -97,24 +97,6 @@
       },
       {
         "i": 17,
-        "title": "Creep",
-        "starts": "Bremer 4 ct"
-      },
-      {
-        "i": 18,
-        "title": "Story of a Girl",
-        "starts": "Glaz"
-      },
-      {
-        "i": 19,
-        "title": "Buddy Holly",
-        "starts": "Glaz+Bremer"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 20,
         "title": "Enter Sandman",
         "starts": "Glaz"
       },
@@ -122,17 +104,12 @@
         "breakText": "SET 2"
       },
       {
-        "i": 21,
-        "title": "Shallow",
-        "starts": ""
-      },
-      {
-        "i": 22,
+        "i": 18,
         "title": "Go My Way",
         "starts": "Bremer snare"
       },
       {
-        "i": 23,
+        "i": 19,
         "title": "For Whom The Bell Tolls",
         "starts": "Bremer"
       },
@@ -140,22 +117,22 @@
         "breakText": "BREAK"
       },
       {
-        "i": 24,
+        "i": 20,
         "title": "Hey Jealousy",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 25,
+        "i": 21,
+        "title": "Buddy Holly",
+        "starts": "Glaz+Bremer"
+      },
+      {
+        "i": 22,
         "title": "Cumbersome",
         "starts": "Jim"
       },
       {
-        "i": 26,
-        "title": "Kryptonite",
-        "starts": "Glaz"
-      },
-      {
-        "i": 27,
+        "i": 23,
         "title": "Bouncing off the Walls",
         "starts": "Jim"
       },
@@ -163,45 +140,17 @@
         "breakText": "BREAK"
       },
       {
-        "i": 28,
-        "title": "My Hero",
-        "starts": "Bremer+Adam"
-      },
-      {
-        "i": 29,
-        "title": "December",
-        "starts": "Jim"
-      },
-      {
-        "i": 30,
-        "title": "Dammit",
-        "starts": "Jim"
-      },
-      {
-        "i": 31,
-        "title": "Trippin",
-        "starts": "Bremer"
-      },
-      {
-        "breakText": "BREAK"
-      },
-      {
-        "i": 32,
-        "title": "What I Got",
-        "starts": "Bremer"
-      },
-      {
-        "i": 33,
-        "title": "Everything Zen",
-        "starts": "Glaz"
-      },
-      {
-        "i": 34,
-        "title": "Counting Blue Cars",
+        "i": 24,
+        "title": "Creep",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 35,
+        "i": 25,
+        "title": "Story of a Girl",
+        "starts": "Glaz"
+      },
+      {
+        "i": 26,
         "title": "Undone",
         "starts": "Bremer"
       },
@@ -209,17 +158,40 @@
         "breakText": "BREAK"
       },
       {
-        "i": 36,
+        "i": 27,
+        "title": "Dammit",
+        "starts": "Jim"
+      },
+      {
+        "i": 28,
+        "title": "Trippin",
+        "starts": "Bremer"
+      },
+      {
+        "i": 29,
+        "title": "Everything Zen",
+        "starts": "Glaz"
+      },
+      {
+        "i": 30,
+        "title": "Counting Blue Cars",
+        "starts": "Bremer 4 ct"
+      },
+      {
+        "breakText": "BREAK"
+      },
+      {
+        "i": 31,
         "title": "Song 2",
         "starts": "Bremer"
       },
       {
-        "i": 37,
+        "i": 32,
         "title": "Comedown",
         "starts": "Bremer 4 ct"
       },
       {
-        "i": 38,
+        "i": 33,
         "title": "Low",
         "starts": "Bremer"
       },
@@ -227,7 +199,7 @@
         "breakText": "GOODBYE"
       },
       {
-        "i": 39,
+        "i": 34,
         "title": "My Own Worst Enemy",
         "starts": "Jim"
       },
@@ -235,7 +207,7 @@
         "breakText": "ENCORE"
       },
       {
-        "i": 40,
+        "i": 35,
         "title": "Holiday",
         "starts": "Jim"
       }
