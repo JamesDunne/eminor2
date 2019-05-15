@@ -582,7 +582,7 @@ static void update_lcd(void) {
             labels[5] = "FX|RESET";
             break;
     }
-    labels[6] = "TAP|MODE";
+    labels[6] = "SCENE--|MODE";
     labels[7] = "SCENE++|1";
     label_row_update(0);
 #endif
