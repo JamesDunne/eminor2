@@ -18,10 +18,12 @@ songs:
 - names: [Come Out and Play]
   short_name: Come Out
   starts: Bremer
+  deprecated: true
 
 - names: [Drive]
   short_name: Drive
   starts: Jim
+  deprecated: true
 
 - names: [When I Come Around]
   short_name: Come Around
@@ -38,6 +40,7 @@ songs:
 - names: [Crawling in the Dark, Crawling]
   short_name: Crawling
   starts: Jim
+  deprecated: true
 
 - names: [Song 2]
   short_name: Song 2
@@ -54,6 +57,7 @@ songs:
 - names: [In Bloom]
   short_name: In Bloom
   starts: Bremer 4 ct
+  deprecated: true
 
 - names: [Hash Pipe, Hashpipe]
   short_name: Hash Pipe
@@ -106,6 +110,7 @@ songs:
 - names: [Semi-charmed Life, Semi-charmed Kind of Life, Semicharmed Kind of Life]
   short_name: Semi-charmed
   starts: Bremer
+  deprecated: true
 
 - names: [My Own Worst Enemy, Worst Enemy]
   short_name: My Own Worst Enemy
@@ -143,8 +148,8 @@ songs:
   short_name: Shine
   starts: Jim
 
-- names: [Basketcase, Basket Case]
-  short_name: Basketcase
+- names: [Basket Case, Basketcase]
+  short_name: Basket Case
   starts: Glaz
 
 - names: [Undone, Sweater Song, The Sweater Song]
@@ -155,7 +160,7 @@ songs:
   short_name: Story of a Girl
   starts: Glaz
 
-- names: [Trippin, Trippin’, Trippin', Trippin on a Hole in a Paper Heart, Trippin on a Hole, Tripping, Tripping on a Hole in a Paper Heart, Tripping on a Hole]
+- names: [Trippin, "Trippin’", "Trippin'", Trippin on a Hole in a Paper Heart, Trippin on a Hole, Tripping, Tripping on a Hole in a Paper Heart, Tripping on a Hole]
   short_name: Trippin
   starts: Bremer
 
@@ -170,10 +175,12 @@ songs:
 - names: [Slayer, Raining Blood]
   short_name: Slayer
   starts: Bremer
+  deprecated: true
 
 - names: [Happy Birthday]
   short_name: Birthday
   starts: Glaz
+  deprecated: true
 
 - names: [December]
   short_name: December
@@ -186,6 +193,7 @@ songs:
 - names: [Satan Song, Satan, The Satan Song]
   short_name: Satan Song
   starts: Bremer
+  deprecated: true
 
 - names: [Kids, Kids Arent Alright, Kids Aren't Alright, The Kids Aren't Alright, Kids Aren’t Alright]
   short_name: Kids
@@ -214,10 +222,12 @@ songs:
 - names: [Ghostbusters, Ghost Busters]
   short_name: Ghostbusters
   starts: Glaz
+  deprecated: true
 
 - names: [Under the Bridge]
   short_name: Under the Bridge
   starts: Jim
+  deprecated: true
 
 - names: [Slide]
   short_name: Slide
