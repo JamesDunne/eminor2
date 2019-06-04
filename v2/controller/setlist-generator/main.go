@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"os"
+	"strconv"
 
 	"gopkg.in/yaml.v2"
 )
@@ -72,6 +74,17 @@ func main() {
 	r := rand.New(NewCryptoRandSource())
 	r.Shuffle(len(song_names), func(i, j int) { song_names[i], song_names[j] = song_names[j], song_names[i] })
 
+	// clip shuffled song list:
+	args := os.Args
+	if len(args) > 1 {
+		max, _ := strconv.Atoi(args[1])
+		if max < 0 {
+			max = 0
+		}
+		song_names = song_names[:max]
+	}
+
+	// output song list:
 	for _, song := range song_names {
 		fmt.Println(song.Names[0])
 	}
