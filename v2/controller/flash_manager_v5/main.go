@@ -688,6 +688,7 @@ func main() {
 	song_names := &struct {
 		Songs []*SongMeta
 	}{}
+	fmt.Fprintln(os.Stderr, "Loading 'song-names.yml'")
 	err := parse_yaml("song-names.yml", song_names)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -705,6 +706,7 @@ func main() {
 	}
 
 	// Add setlist data:
+	fmt.Fprintln(os.Stderr, "Loading 'setlists.yml'")
 	err = parse_yaml("setlists.yml", &setlists)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -714,7 +716,9 @@ func main() {
 
 	songs_by_name = make(map[string]int)
 
-	err = parse_yaml(fmt.Sprintf("all_programs-%s.yml", version), &programs)
+	programs_yaml := fmt.Sprintf("all_programs-%s.yml", version)
+	fmt.Fprintf(os.Stderr, "Loading '%s'\n", programs_yaml)
+	err = parse_yaml(programs_yaml, &programs)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
