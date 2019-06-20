@@ -1840,8 +1840,6 @@ sets:
 
   - date: "2019-06-22"
     venue: Private Party
-    active: true
-    print: true
     songs:
     - Darnit
     - Holigay
@@ -1881,3 +1879,85 @@ sets:
     - Small Thongs
     - Slippin' on a Ho's Anal Tapered Shart
     - My Own Warped Enema
+
+  - date: "2019-06-22"
+    venue: Private Party
+    active: true
+    print: true
+    songs:
+     - Everything Zen
+     - Dammit
+     - "Trippin'"
+
+     - 'BREAK: HELLO'
+
+     - Slide
+     - Kids
+     - Say It Ain't So
+     - Brain Stew
+
+     - 'BREAK: DOWNTUNE'
+
+     - The Middle
+     - Shine
+     - Monkey Wrench
+     - Lump
+
+     - 'BREAK: UPTUNE'
+
+     - Creep
+     - Story of a Girl
+     - Cumbersome
+     - Buddy Holly
+
+     - 'BREAK: BREAK'
+
+     - Counting Blue Cars
+     - Low
+     - When I Come Around
+
+     - 'BREAK: BREAK'
+
+     - Enter Sandman
+
+
+     - 'BREAK: SET 2'
+
+
+     - Beautiful Disaster
+     - Machinehead
+
+     - 'BREAK: BREAK'
+
+     - December
+     - Zero
+     - Hey Jealousy
+
+     - 'BREAK: BREAK'
+
+     - Song 2
+     - Holiday
+     - What I Got
+     - Go My Way
+
+     - 'BREAK: BREAK'
+
+     - Interstate Love Song
+     - Basket Case
+     - Comedown
+     - Small Things
+
+     - 'BREAK: BREAK'
+
+     - Plush
+     - Fuel
+     - Kryptonite
+
+     - 'BREAK: GOODBYE'
+
+     - Closing Time
+     - Worst Enemy
+
+     - 'BREAK: ENCORE'
+
+     - Hash Pipe
