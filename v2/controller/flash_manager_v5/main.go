@@ -456,7 +456,7 @@ func generatePICH() {
 				}
 
 				// Gate:
-				g := -40.0 // dB
+				g := -42.0 // dB
 				if amp.Gate != 0 {
 					g = amp.Gate
 				} else if p.Gate != 0 {
