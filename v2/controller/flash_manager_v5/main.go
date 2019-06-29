@@ -56,6 +56,7 @@ type Programv4 struct {
 	Tempo            int                 `yaml:"tempo"`
 	Gain             int                 `yaml:"gain"`     // amp gain (1-127), 0 means default
 	GainLog          int                 `yaml:"gain_log"` // amp gain (1-127) in log scale, 0 means default
+	Gate             float64             `yaml:"gate"`     // gate threshold -76dB to -12.5dB
 	Amp              []AmpDefault        `yaml:"amp"`
 	SceneDescriptors []SceneDescriptorv4 `yaml:"scenes"`
 }
@@ -455,14 +456,22 @@ func generatePICH() {
 				}
 
 				// Gate:
-				fwamp.Gate = 0x47
+				g := -40.0 // dB
 				if amp.Gate != 0 {
-					// Range clamp:
-					g := amp.Gate
-					g = math.Max(-76.0, math.Min(-12.0, g))
+					g = amp.Gate
+				} else if p.Gate != 0 {
+					g = p.Gate
+				}
 
-					// Convert from dB to MIDI 0..127 external controller map for gate1/2 threshold:
-					fwamp.Gate = uint8(127 - ((g + 12.0) / 2.0))
+				// Range clamp:
+				g = math.Max(-76.0, math.Min(-12.5, g))
+
+				// Convert from dB to MIDI 0..127 external controller map for gate1/2 threshold:
+				// SPOILER ALERT: (128.0 / (-12.0 - -76.0)) = 2.0
+				fwamp.Gate = uint8((g - -76.0) * (128.0 / (-12.0 - -76.0)))
+
+				if fwamp.Gate > 0x7F {
+					panic(fmt.Errorf("gate threshold %d cannot exceed max of 127", fwamp.Gate))
 				}
 			}
 		}

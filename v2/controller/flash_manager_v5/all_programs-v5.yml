@@ -476,6 +476,8 @@ programs:
       channel: dirty
 - name: Brain Stew
   tempo: 76
+  gain: 0x50
+  gate: -30
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -916,7 +918,8 @@ programs:
       fx: [dly2]
 - name: Story of a Girl
   tempo: 97
-  gain_log: 0x20
+  gain: 0x24
+  gate: -48
   scenes:
   - name: Rhythm
     MG:
@@ -927,7 +930,8 @@ programs:
     MG:
       channel: dirty
     JD:
-      gain_log: 0x60
+      gain: 0x60
+      gate: -40
       channel: dirty
       level: 3
   - name: Rhythm
