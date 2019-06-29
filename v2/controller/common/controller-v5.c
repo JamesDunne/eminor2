@@ -106,6 +106,9 @@ Press AMP to switch row to AMP mode
 // Amp gain:
 #define axe_cc_external3    18
 #define axe_cc_external4    19
+// Gate threshold:
+#define axe_cc_external5    20
+#define axe_cc_external6    21
 
 #define axe_cc_scene        34
 
@@ -344,7 +347,7 @@ static void calc_midi(void) {
             if (last_amp[a].gate != 0x00) {
                 last_amp[a].gate = 0x00;
                 DEBUG_LOG1("Gate%d off", a + 1);
-                midi_axe_cc(axe_cc_byp_gate1 + a, last_amp[a].gate);
+                midi_axe_cc(axe_cc_external5 + a, last_amp[a].gate);
                 diff = 1;
             }
         } else if (dirty != 0) {
@@ -374,10 +377,10 @@ static void calc_midi(void) {
                 midi_axe_cc(axe_cc_external3 + a, last_amp[a].gain);
                 diff = 1;
             }
-            if (last_amp[a].gate != 0x7F) {
-                last_amp[a].gate = 0x7F;
-                DEBUG_LOG1("Gate%d on", a + 1);
-                midi_axe_cc(axe_cc_byp_gate1 + a, last_amp[a].gate);
+            if (last_amp[a].gate != curr.amp[a].gate) {
+                last_amp[a].gate = curr.amp[a].gate;
+                DEBUG_LOG2("Gate%d %d", a + 1, last_amp[a].gate);
+                midi_axe_cc(axe_cc_external5 + a, last_amp[a].gate);
                 diff = 1;
             }
         } else {
@@ -409,7 +412,7 @@ static void calc_midi(void) {
             if (last_amp[a].gate != 0x00) {
                 last_amp[a].gate = 0x00;
                 DEBUG_LOG1("Gate%d off", a + 1);
-                midi_axe_cc(axe_cc_byp_gate1 + a, last_amp[a].gate);
+                midi_axe_cc(axe_cc_external5 + a, last_amp[a].gate);
                 diff = 1;
             }
         }
@@ -870,9 +873,11 @@ void scene_default(void) {
     pr.scene[curr.sc_idx].amp[0].gain = 0;
     pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
     pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
+    pr.scene[curr.sc_idx].amp[0].gate = gate_default;
     pr.scene[curr.sc_idx].amp[1].gain = 0;
     pr.scene[curr.sc_idx].amp[1].fx = fxm_dirty;
     pr.scene[curr.sc_idx].amp[1].volume = volume_0dB;
+    pr.scene[curr.sc_idx].amp[1].gate = gate_default;
 }
 
 static void toggle_setlist_mode() {
@@ -915,14 +920,14 @@ static void midi_invalidate() {
     last.amp[1].fx = ~curr.amp[1].fx;
     last.amp[1].volume = ~curr.amp[1].volume;
     // Initialize to something neither 0x00 or 0x7F so it gets reset:
-    last_amp[0].amp_xy = 0x40;
-    last_amp[0].cab_xy = 0x40;
+    last_amp[0].amp_xy = 0xff;
+    last_amp[0].cab_xy = 0xff;
     last_amp[0].gain = ~curr.amp[0].gain;
-    last_amp[0].gate = 0x40;
-    last_amp[1].amp_xy = 0x40;
-    last_amp[1].cab_xy = 0x40;
+    last_amp[0].gate = 0xff;
+    last_amp[1].amp_xy = 0xff;
+    last_amp[1].cab_xy = 0xff;
     last_amp[1].gain = ~curr.amp[1].gain;
-    last_amp[1].gate = 0x40;
+    last_amp[1].gate = 0xff;
 }
 
 static void next_song() {
@@ -1002,7 +1007,7 @@ void controller_init(void) {
     for (i = 0; i < 2; i++) {
         curr.amp[i].gain = 0;
         last.amp[i].gain = ~(u8)0;
-        last_amp[i].clean_gain = 0x16;
+        last_amp[i].clean_gain = 0x1A;
     }
 
     // Load first program in setlist:

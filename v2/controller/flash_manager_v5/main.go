@@ -42,6 +42,7 @@ type Ampv4 struct {
 	Channel string   `yaml:"channel"`  // "clean" or "dirty"
 	Level   float64  `yaml:"level"`    // pre-delay volume in dB (-inf to +6dB)
 	FX      []string `yaml:"fx,flow"`  // any combo of "delay", "pitch", or "chorus"
+	Gate    float64  `yaml:"gate"`     // post-amp gate (-76dB to -12dB, default -40dB)
 }
 
 type SceneDescriptorv4 struct {
@@ -339,6 +340,18 @@ func generatePICH() {
 			return
 		}
 
+		// Too many scenes?
+		if len(p.SceneDescriptors) > FWscene_count_max {
+			fmt.Fprintf(
+				os.Stderr,
+				"Song %s has %d scenes, more than the maximum of %d!\n",
+				p.Name,
+				len(p.SceneDescriptors),
+				FWscene_count_max,
+			)
+			return
+		}
+
 		lastWritten := bw.BytesWritten()
 		fwprogram := FWprogram{}
 
@@ -437,8 +450,19 @@ func generatePICH() {
 						}
 
 						// Enable the effect:
-						fwamp.Fx |= (1 << uint(fxn))
+						fwamp.Fx |= 1 << uint(fxn)
 					}
+				}
+
+				// Gate:
+				fwamp.Gate = 0x47
+				if amp.Gate != 0 {
+					// Range clamp:
+					g := amp.Gate
+					g = math.Max(-76.0, math.Min(-12.0, g))
+
+					// Convert from dB to MIDI 0..127 external controller map for gate1/2 threshold:
+					fwamp.Gate = uint8(127 - ((g + 12.0) / 2.0))
 				}
 			}
 		}
@@ -466,7 +490,7 @@ func generatePICH() {
 		}
 
 		// Padding
-		for a := 0; a < 3; a++ {
+		for a := 0; a < len(fwprogram.X_padding); a++ {
 			bw.WriteDecimal(0)
 		}
 
@@ -480,6 +504,7 @@ func generatePICH() {
 				bw.WriteHex(fwamp.Gain)
 				bw.WriteHex(fwamp.Fx)
 				bw.WriteHex(fwamp.Volume)
+				bw.WriteHex(fwamp.Gate)
 			}
 		}
 

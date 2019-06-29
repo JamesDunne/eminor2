@@ -15,13 +15,19 @@
 #define volume_0dB 98
 #define volume_6dB 127
 
-#define scene_count_max 15
+#define gate_default 71
+
+#define scene_count_max 11
 
 struct amp {
     u8 gain;    // amp gain (7-bit), if 0 then the default gain is used
-    u8 fx;      // bitfield for FX enable/disable, including clean/dirty/acoustic switch.
+    u8 fx;      // bitfield for FX enable/disable, including clean/dirty/acoustic switch
     u8 volume;  // volume (7-bit) represented where 0 = -inf, 98 = 0dB, 127 = +6dB
+    u8 gate;    // gate threshold (7-bit) represented where 0 = -76.0dB, 127 = -12.0dB, default should be 71 = -40.0dB aka 0x47
 };
+
+// amp state is 4 bytes:
+COMPILE_ASSERT(sizeof(struct amp) == 4);
 
 // Program v5 data structure loaded from / written to flash memory:
 struct program {
@@ -38,22 +44,20 @@ struct program {
     u8 default_gain[2];
 
     // MIDI CC numbers for FX enable/disable for each amp:
+    // TODO: this will be redundant per MIDI program. Better to move this out to a per-program storage instead of per-song.
     u8 fx_midi_cc[2][5];
 
-    // 34 bytes
-    u8 _padding[3];
+    // 34 bytes consumed up to this point. 128 - 34 = 94 bytes to spend on scene descriptors.
+    u8 _padding[5];
 
-	u8 scene_count;
+    u8 scene_count;
 
-    // Scene descriptors (5 bytes each):
+    // Scene descriptors (8 bytes each):
     struct scene_descriptor {
-        // 2 amps:
+        // 2 amps (4 bytes each):
         struct amp amp[2];
     } scene[scene_count_max];
 };
-
-// amp state is 3 bytes:
-COMPILE_ASSERT(sizeof(struct amp) == 3);
 
 // NOTE(jsd): Struct size must be a divisor of 64 to avoid crossing 64-byte boundaries in flash!
 // Struct sizes of 1, 2, 4, 8, 16, and 32 qualify.
