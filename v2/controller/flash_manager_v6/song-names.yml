@@ -1,0 +1,234 @@
+songs:
+- names: [Monkey Wrench, Monkeywrench, Monkey Wretch]
+  short_name: Monkey Wrench
+  starts: Bremer 4 ct
+
+- names: [Zero, Zorro]
+  short_name: Zero
+  starts: Jim
+
+- names: [Buddy Holly, Bloody Hobbit]
+  short_name: Buddy Holly
+  starts: Glaz+Bremer
+
+- names: [Plush, Plunch]
+  short_name: Plush
+  starts: Bremer 2 ct
+
+- names: [Come Out and Play]
+  short_name: Come Out
+  starts: Bremer
+  deprecated: true
+
+- names: [Drive]
+  short_name: Drive
+  starts: Jim
+  deprecated: true
+
+- names: [When I Come Around, When I Cum Aloud]
+  short_name: Come Around
+  starts: Jim
+
+- names: [Everything Zen, Zen, Everything Zorg]
+  short_name: Zen
+  starts: Glaz
+
+- names: [Enter Sandman, Sandman, Enter Spandex]
+  short_name: Sandman
+  starts: Glaz
+
+- names: [Crawling in the Dark, Crawling]
+  short_name: Crawling
+  starts: Jim
+  deprecated: true
+
+- names: [Song 2, Shlong 2]
+  short_name: Song 2
+  starts: Bremer
+
+- names: [Sex Type Thing]
+  short_name: Sex Type Thing
+  starts: Bremer 4 ct
+
+- names: [Counting Blue Cars, Blue Cars, Crowding Blue Farts]
+  short_name: Blue Cars
+  starts: Bremer 4 ct
+
+- names: [In Bloom]
+  short_name: In Bloom
+  starts: Bremer 4 ct
+  deprecated: true
+
+- names: [Hash Pipe, Hashpipe, Hoarse Pope]
+  short_name: Hash Pipe
+  starts: Bremer+Adam
+
+- names: [My Hero]
+  short_name: My Hero
+  starts: Bremer+Adam
+
+- names: [Machinehead, Machine Head, Machineface]
+  short_name: Machinehead
+  starts: Jim
+
+- names: [Holiday, Holigay]
+  short_name: Holiday
+  starts: Jim
+
+- names: [Closing Time, Closing Thighs]
+  short_name: Closing Time
+  starts: Glaz
+
+- names: [Brain Stew, Brainstew, Bran Stew]
+  short_name: Brain Stew
+  starts: Jim
+
+- names: [Bound for the Floor]
+  short_name: Bound
+  starts: Jim
+
+- names: [Cumbersome, Cumberbuns]
+  short_name: Cumbersome
+  starts: Jim
+
+- names: [Lump, Lamp]
+  short_name: Lump
+  starts: Bremer+Glaz
+
+- names: [Hey Jealousy, Hey Gelatin]
+  short_name: Hey Jealousy
+  starts: Bremer 4 ct
+
+- names: [Kryptonite, Krypnotize]
+  short_name: Kryptonite
+  starts: Glaz
+
+- names: [Dammit, Damnit, Damn It, Darnit]
+  short_name: Dammit
+  starts: Jim
+
+- names: [Semi-charmed Life, Semi-charmed Kind of Life, Semicharmed Kind of Life]
+  short_name: Semi-charmed
+  starts: Bremer
+  deprecated: true
+
+- names: [My Own Worst Enemy, Worst Enemy, My Own Warped Enema]
+  short_name: My Own Worst Enemy
+  starts: Jim
+
+- names: [The Middle, Middle, The Midget]
+  short_name: The Middle
+  starts: Glaz
+
+- names: [Bullet With Butterfly Wings, Bullet]
+  short_name: Bullet
+  starts: Glaz
+
+- names: [Beautiful Disaster, Beautiful Dispatcher]
+  short_name: Beautiful Disaster
+  starts: Jim
+
+- names: [For Whom The Bell Tolls, Bells]
+  short_name: Bells
+  starts: Bremer
+
+- names: [Fuel, Feud]
+  short_name: Fuel
+  starts: Glaz
+
+- names: [What I Got, What I Grope]
+  short_name: What I Got
+  starts: Bremer
+
+- names: [Say It Aint So, "Say It Ain't So", Say It Ain’t So, Say It Ain't Chode]
+  short_name: Say It Aint So
+  starts: Jim
+
+- names: [Shine, Shrine]
+  short_name: Shine
+  starts: Jim
+
+- names: [Basket Case, Basketcase, Casket Face]
+  short_name: Basket Case
+  starts: Glaz
+
+- names: [Undone, Sweater Song, The Sweater Song]
+  short_name: Undone
+  starts: Bremer
+
+- names: [Story of a Girl, Absolutely, Story of a GERD]
+  short_name: Story of a Girl
+  starts: Glaz
+
+- names: [Trippin, "Trippin’", "Trippin'", Trippin on a Hole in a Paper Heart, Trippin on a Hole, Tripping, Tripping on a Hole in a Paper Heart, Tripping on a Hole, Slippin' on a Ho's Anal Tapered Shart]
+  short_name: Trippin
+  starts: Bremer
+
+- names: [Master of Puppets, Puppets]
+  short_name: Puppets
+  starts: Bremer
+
+- names: [Low, "Lowe's"]
+  short_name: Low
+  starts: Bremer
+
+- names: [Slayer, Raining Blood]
+  short_name: Slayer
+  starts: Bremer
+  deprecated: true
+
+- names: [Happy Birthday]
+  short_name: Birthday
+  starts: Glaz
+  deprecated: true
+
+- names: [December, Dismember]
+  short_name: December
+  starts: Jim
+
+- names: [Bouncing off the Walls, Bouncin off the Walls, Bouncin, Bouncing, "Bouncin'", "Bouncin’"]
+  short_name: Bouncing
+  starts: Jim
+
+- names: [Satan Song, Satan, The Satan Song]
+  short_name: Satan Song
+  starts: Bremer
+  deprecated: true
+
+- names: [Kids, Kids Arent Alright, Kids Aren't Alright, The Kids Aren't Alright, Kids Aren’t Alright, The Kids Aren't All White]
+  short_name: Kids
+  starts: Glaz
+
+- names: [Small Things, All The Small Things, Small Thongs]
+  short_name: Small Things
+  starts: Bremer fill
+
+- names: [Creep, "Crêpe"]
+  short_name: Creep
+  starts: Bremer 4 ct
+
+- names: [Go My Way, Are You Gonna Go My Way, Gonna Go My Way, "Are You Gonna Blow My Gay?"]
+  short_name: Go My Way
+  starts: Bremer snare
+
+- names: [Comedown, Come Down, Crumbdown]
+  short_name: Comedown
+  starts: Bremer 4 ct
+
+- names: [Interstate Love Song, Interstate, ILS, Interstate Lung Song]
+  short_name: Interstate
+  starts: Bremer 4 ct
+
+- names: [Ghostbusters, Ghost Busters]
+  short_name: Ghostbusters
+  starts: Glaz
+  deprecated: true
+
+- names: [Under the Bridge]
+  short_name: Under the Bridge
+  starts: Jim
+  deprecated: true
+
+- names: [Slide, Slimed]
+  short_name: Slide
+  starts: Jim

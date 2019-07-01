@@ -1,0 +1,1534 @@
+axe_midi:
+  - midi: 0
+    defaults:
+      clean_gain: 0x1A
+      dirty_gain: 0x5E
+      gate: -40
+    amps:
+      - fx_layout:
+        - pit1
+        - rtr1
+        - flg1
+        - cho1
+        - dly1
+      - fx_layout:
+        - pit2
+        - rtr2
+        - flg2
+        - cho2
+        - dly2
+  - midi: 1
+    defaults:
+      clean_gain: 0x1A
+      dirty_gain: 0x5E
+      gate: -40
+    amps:
+      - fx_layout:
+          - pit1
+          - rtr1
+          - flg1
+          - cho1
+          - dly1
+      - fx_layout:
+          - pit2
+          - rtr2
+          - flg2
+          - cho2
+          - dly2
+  - midi: 2
+    defaults:
+      clean_gain: 0x1A
+      dirty_gain: 0x5E
+      gate: -40
+    amps:
+      - fx_layout:
+          - pit1
+          - rtr1
+          - flg1
+          - cho1
+          - dly1
+      - fx_layout:
+          - pit2
+          - rtr2
+          - flg2
+          - cho2
+          - dly2
+
+songs:
+- name: Monkey Wrench
+  tempo: 175
+  gain: 0x44
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Zero
+  tempo: 129
+  gain_log: 0x60
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+      fx: [dly2, pit2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+      fx: [dly2, pit2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Buddy Holly
+  tempo: 121
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Plush
+  tempo: 145
+  scenes:
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      fx: [cho2]
+- name: Drive
+  tempo: 91
+  axe_midi: 1
+  gain_log: 0x60
+  scenes:
+  - name: Clean
+    MG:
+      channel: acoustic
+    JD:
+      channel: acoustic
+  - name: MG Lead
+    MG:
+      channel: dirty
+      level: 4
+      fx: [rtr1,dly1]
+    JD:
+      channel: acoustic
+  - name: Clean
+    MG:
+      channel: acoustic
+    JD:
+      channel: acoustic
+- name: When I Come Around
+  tempo: 98
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 5
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Everything Zen
+  tempo: 135
+  scenes:
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 5
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 5
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 5
+      fx: [dly2]
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Enter Sandman
+  tempo: 124
+  scenes:
+  - name: Clean intro
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+      level: -1.0
+  - name: Intro
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: -3.0
+  - name: Verse
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead
+    MG:
+      channel: dirty
+    JD:
+      gain_log: 0x60
+      channel: dirty
+      level: 5
+      fx: [dly2]
+  - name: JD lead;MG clean
+    MG:
+      channel: clean
+    JD:
+      gain_log: 0x60
+      channel: dirty
+      level: 2
+      fx: [dly2]
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD clean;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      gain_log: 0x60
+      channel: dirty
+      level: 5
+      fx: [dly2]
+- name: Crawling in the Dark
+  tempo: 94
+  scenes:
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      gain_log: 0x20
+      channel: dirty
+      fx: [flg2, dly2]
+      level: -1.5
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      gain_log: 0x20
+      channel: dirty
+      fx: [flg2, dly2]
+      level: -1.5
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      gain_log: 0x20
+      channel: dirty
+      fx: [flg2, dly2]
+      level: -1.5
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      gain_log: 0x20
+      channel: dirty
+      fx: [flg2, dly2]
+      level: -1.5
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Song 2
+  tempo: 130
+  gain_log: 0x60
+  scenes:
+  - name: JD clean;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD clean;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD clean;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Sex Type Thing
+  tempo: 135
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Counting Blue Cars
+  tempo: 101
+  scenes:
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      fx: [dly2]
+  - name: JD clean;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: clean
+      fx: [cho2, dly2]
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      fx: [dly2]
+  - name: JD clean;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: clean
+      fx: [cho2, dly2]
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      fx: [dly2]
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4
+      fx: [dly2]
+  - name: JD clean;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: clean
+      fx: [cho2, dly2]
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      fx: [dly2]
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4
+      fx: [dly2]
+- name: In Bloom
+  tempo: 80
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Hash Pipe
+  tempo: 126
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: My Hero
+  tempo: 154
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Machinehead
+  tempo: 110
+  gain_log: 0x30
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Holiday
+  tempo: 168
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD dirty;MG lead
+    MG:
+      channel: dirty
+      level: 4
+      fx: [dly1]
+    JD:
+      channel: dirty
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Brain Stew
+  tempo: 76
+  gain: 0x50
+  gate: -30
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Bound for the Floor
+  tempo: 120
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      fx: [dly2, cho2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Cumbersome
+  tempo: 81
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Lump
+  tempo: 143
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Hey Jealousy
+  tempo: 154
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+      gain: 0x30
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+      gain: 0x30
+    JD:
+      channel: dirty
+      level: 4
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      gain: 0x30
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Kryptonite
+  tempo: 100
+  scenes:
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD clean;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: clean
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD dirty;MG lead
+    MG:
+      channel: dirty
+      level: 3
+      fx: [dly1]
+    JD:
+      channel: dirty
+  - name: JD clean;MG lead
+    MG:
+      channel: dirty
+      level: 3
+      fx: [dly1]
+    JD:
+      channel: clean
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD dirty;MG lead
+    MG:
+      channel: dirty
+      level: 3
+      fx: [dly1]
+    JD:
+      channel: dirty
+- name: Dammit
+  tempo: 110
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: My Own Worst Enemy
+  tempo: 104
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 2
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 2
+      fx: [dly2]
+- name: The Middle
+  tempo: 162
+  gain_log: 0x22
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      gain_log: 0x4A
+      level: 4
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: -2
+      fx: [flg2, dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Bullet With Butterfly Wings
+  tempo: 122
+  scenes:
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD lead;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
+      level: -3
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4
+      fx: [cho2]
+- name: Beautiful Disaster
+  tempo: 169
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Bells
+  tempo: 118
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 5
+      fx: [dly2]
+- name: Fuel
+  tempo: 107
+  gain: 0x50
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 3
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4.5
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 2
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD echo
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      fx: [dly2]
+- name: What I Got
+  tempo: 96
+  axe_midi: 1
+  scenes:
+  - name: JD clean;MG clean
+    MG:
+      channel: acoustic
+    JD:
+      channel: acoustic
+  - name: JD clean;MG clean
+    MG:
+      channel: acoustic
+    JD:
+      channel: acoustic
+      level: 4
+  - name: JD clean;MG clean
+    MG:
+      channel: acoustic
+    JD:
+      channel: acoustic
+  - name: JD clean;MG clean
+    MG:
+      channel: acoustic
+    JD:
+      channel: acoustic
+      level: 4
+  - name: JD clean;MG clean
+    MG:
+      channel: acoustic
+    JD:
+      channel: acoustic
+- name: Say It Aint So
+  tempo: 77
+  scenes:
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD clean;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: clean
+- name: Shine
+  tempo: 151
+  gain_log: 0x2C
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+      level: -3
+    JD:
+      channel: dirty
+  - name: JD lead
+    MG:
+      channel: dirty
+      level: -3
+    JD:
+      gain_log: 0x7C
+      channel: dirty
+      level: 4
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+      level: -3
+    JD:
+      channel: dirty
+- name: Basketcase
+  tempo: 86
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Undone
+  tempo: 81
+  scenes:
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD clean;MG clean
+    MG:
+      channel: clean
+    JD:
+      channel: clean
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4
+      fx: [dly2]
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4
+      fx: [dly2]
+- name: Story of a Girl
+  tempo: 97
+  gain: 0x24
+  gate: -48
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead
+    MG:
+      channel: dirty
+    JD:
+      gain: 0x60
+      gate: -40
+      channel: dirty
+      level: 3
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Trippin
+  tempo: 107
+  gain_log: 0x28
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+- name: Puppets
+  tempo: 106
+  axe_midi: 2
+  gain: 0x5e
+  scenes:
+  - name: Main
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Breakdown clean
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      level: 1
+      fx: [dly2]
+  - name: Breakdown harm
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      level: 1
+      fx: [dly2,pit2]
+  - name: Breakdown lead
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      level: 6
+      fx: [dly2]
+  - name: Breakdown harm
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      level: 1
+      fx: [dly2,pit2]
+  - name: Main
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 6
+      gain: 0x60
+      fx: [dly2]
+  - name: Main
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 3
+      gain_log: 0x60
+      fx: [dly2]
+
+- name: Low
+  tempo: 86
+  gain_log: 0x20
+  scenes:
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Verse
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
+      fx: [dly2]
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Verse
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
+      fx: [dly2]
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4
+      gain_log: 0x40
+      fx: [dly2]
+    # Blue blue is the sun...
+  - name: Bridge
+    MG:
+      channel: clean
+    # Whale calls
+    JD:
+      channel: dirty
+      level: -2
+      gain_log: 0x40
+      fx: [dly2]
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Outro Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 0
+      gain_log: 0x40
+      fx: [dly2]
+
+- name: Closing Time
+  tempo: 120
+  gain_log: 0x40
+  scenes:
+  - name: Intro
+    MG:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
+    JD:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Verse
+    MG:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
+    JD:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Verse
+    MG:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
+    JD:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Outro
+    MG:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
+    JD:
+      channel: dirty
+      gain_log: 0x20
+      level: -2
+
+- name: Slayer
+  tempo: 130
+  scenes:
+  - name: Intro
+    MG:
+      channel: dirty
+      fx: [dly1]
+    JD:
+      channel: dirty
+      fx: [dly2]
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: JD lead;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4
+      fx: [dly2]
+
+- name: Happy Birthday
+  tempo: 130
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+- name: December
+  tempo: 122
+  gain_log: 0x12
+  scenes:
+  - name: Intro
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: clean
+      fx: [cho2]
+  - name: Post-Chorus
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      level: -2
+  - name: Verse
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: clean
+      fx: [cho2]
+  - name: Post-Chorus
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      level: -2
+  - name: Breakdown
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      gain: 0x20
+      level: -2
+  - name: Chorus
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      level: -2
+      fx: [dly2]
+  - name: Jam
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: dirty
+      gain_log: 0x20
+      level: -1
+      fx: [dly2]
+  - name: Outro
+    MG:
+      channel: clean
+      fx: [cho1]
+    JD:
+      channel: clean
+      fx: [cho2]
+
+- name: Bouncing off the Walls
+  tempo: 150
+  scenes:
+  - name: Intro
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 4
+  - name: Verse
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+- name: Satan Song
+  tempo: 140
+  scenes:
+  - name: Verse
+    MG:
+      channel: acoustic
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: acoustic
+    JD:
+      channel: dirty
+      level: 4
+  - name: Verse
+    MG:
+      channel: acoustic
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: acoustic
+    JD:
+      channel: dirty
+      level: 4
+  - name: Verse
+    MG:
+      channel: acoustic
+    JD:
+      channel: dirty
+
+- name: Kids
+  tempo: 130
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Hook
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: +4
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Hook
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: +4
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: +5
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+- name: Small Things
+  tempo: 130
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Breakdown
+    MG:
+      channel: dirty
+      gain: 0x18
+    JD:
+      channel: dirty
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+- name: Creep
+  tempo: 82
+  gain: 0x3A
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+      gain: 0x60
+    JD:
+      channel: clean
+      fx: [cho2]
+  - name: Breakdown
+    MG:
+      channel: dirty
+      gain: 0x60
+    JD:
+      channel: dirty
+  - name: Rhythm
+    MG:
+      channel: dirty
+      gain: 0x60
+    JD:
+      channel: clean
+      fx: [cho2]
+  - name: Breakdown
+    MG:
+      channel: dirty
+      gain: 0x60
+    JD:
+      channel: dirty
+  - name: Rhythm
+    MG:
+      channel: dirty
+      gain: 0x60
+    JD:
+      channel: clean
+      fx: [cho2]
+
+- name: Go My Way
+  tempo: 130
+  gain: 0x3C
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 3
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+- name: Interstate
+  tempo: 110
+  gain: 0x2C
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+      level: -1
+    JD:
+      channel: dirty
+      level: -1
+
+- name: Comedown
+  tempo: 110
+  gain: 0x42
+  scenes:
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Lead
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 3
+      fx: [dly2]
+  - name: Rhythm
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Outro
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+      level: 1
+      fx: [dly2]
+
+- name: Ghostbusters
+  tempo: 120
+  gain: 0x44
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+
+- name: Under the Bridge
+  tempo: 120
+  gain: 0x44
+  scenes:
+  - name: JD dirty;MG dirty
+    MG:
+      channel: clean
+      gain: 0x40
+      level: -16
+    JD:
+      channel: clean
+      gain: 0x40
+      level: -16
+
+- name: Slide
+  tempo: 120
+  gain: 0x0A
+  scenes:
+  - name: JD acoustic;MG acoustic
+    MG:
+      channel: clean
+    JD:
+      channel: dirty
