@@ -116,7 +116,12 @@ COMPILE_ASSERT(sizeof(struct set_list) == 126);
 //  |||||||\-+++----- month [0..11]
 //  \++++++---------- year since 2014 [0..127]
 
-#define axe_midi_padding (128 - (128 / sizeof(struct axe_midi_program)) * sizeof(struct axe_midi_program))
+#define max_axe_midi_program_count (128 / sizeof(struct axe_midi_program))
+#define axe_midi_padding (128 - (max_axe_midi_program_count * sizeof(struct axe_midi_program)))
+
+COMPILE_ASSERT(axe_midi_padding + (max_axe_midi_program_count * sizeof(struct axe_midi_program)) == 128);
+
+#define max_song_count ((WRITABLE_SEG_LEN - (2 * 128)) / sizeof(struct song))
 
 // Actual structured layout of flash memory:
 struct romdata {
@@ -130,5 +135,7 @@ struct romdata {
     u8 _padding1[axe_midi_padding];
 
     // Third 128 byte "page" starts song descriptors:
-    struct song songs[WRITABLE_SEG_LEN / sizeof(struct song)];
+    struct song songs[max_song_count];
 };
+
+COMPILE_ASSERT(sizeof(struct romdata) == WRITABLE_SEG_LEN);
