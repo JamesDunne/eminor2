@@ -1,4 +1,6 @@
 
+#include "hardware.h"
+
 #define fx_count    5
 
 #define fxm_1       (u8)0x01
@@ -25,14 +27,20 @@ struct amp_defaults {
     u8 gate;
 };
 
+// amp defaults descriptor is 3 bytes:
+COMPILE_ASSERT(sizeof(struct amp_defaults) == 3);
+
 struct axe_midi_program {
+    // Default settings for both amps:
+    struct amp_defaults amp_defaults;
+    // FX CC mapping per amp:
     struct amp_descriptor {
         // MIDI CC controller numbers for each FX:
-        u8                  fx_midi_cc[fx_count];
-        // Default settings:
-        struct amp_defaults amp_defaults;
+        u8 fx_midi_cc[fx_count];
     } amps[2];
 };
+
+COMPILE_ASSERT(sizeof(struct axe_midi_program) == 3 + (2 * fx_count));
 
 struct amp {
     u8 gain;    // amp gain (7-bit), if 0 then the default gain is used
@@ -40,6 +48,8 @@ struct amp {
     u8 fx;      // bitfield for FX enable/disable, including clean/dirty/acoustic switch
     u8 volume;  // volume (7-bit) represented where 0 = -inf, 98 = 0dB, 127 = +6dB
 };
+
+COMPILE_ASSERT(sizeof(struct amp) == 4);
 
 struct scene_descriptor {
     struct amp amp[2];
@@ -50,7 +60,7 @@ COMPILE_ASSERT(sizeof(struct scene_descriptor) == 8);
 
 #define scene_count_max 12
 
-#define padding_bytes (128 - (23 + sizeof(struct amp_defaults) * 2 + 1 + sizeof(struct scene_descriptor) * scene_count_max))
+#define padding_bytes (128 - (23 + sizeof(struct amp_defaults) + 1 + sizeof(struct scene_descriptor) * scene_count_max))
 
 // Song v6 data structure loaded from / written to flash memory:
 struct song {
@@ -69,7 +79,7 @@ struct song {
     /////////////////////////////////////////////////////////////////////////////////////////
 
     // Default settings for each amp, overrides defaults from axe_midi_program:
-    struct amp_defaults amp_defaults[2];
+    struct amp_defaults amp_defaults;
 
     u8 scene_count;
 
@@ -105,3 +115,20 @@ COMPILE_ASSERT(sizeof(struct set_list) == 126);
 //  |||||||| |||\++++ day of month [0..30]
 //  |||||||\-+++----- month [0..11]
 //  \++++++---------- year since 2014 [0..127]
+
+#define axe_midi_padding (128 - (128 / sizeof(struct axe_midi_program)) * sizeof(struct axe_midi_program))
+
+// Actual structured layout of flash memory:
+struct romdata {
+    // First 128 byte "page" contains metadata and setlist:
+    u8 axe_midi_program_count;
+    u8 song_count;
+    struct set_list set_list;
+
+    // Second 128 byte "page" contains definitions of axe-fx program data:
+    struct axe_midi_program axe_midi_programs[128 / sizeof(struct axe_midi_program)];
+    u8 _padding1[axe_midi_padding];
+
+    // Third 128 byte "page" starts song descriptors:
+    struct song songs[WRITABLE_SEG_LEN / sizeof(struct song)];
+};

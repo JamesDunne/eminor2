@@ -70,7 +70,6 @@ Press AMP to switch row to AMP mode
 #include "util.h"
 
 #include "song-v6.h"
-#include "hardware.h"
 
 // Hard-coded MIDI channel #s (0 based):
 #define axe_midi_channel     2
@@ -141,19 +140,7 @@ enum rowstate_mode {
 
 // Structured read-only view of writable ROM section that contains all our data:
 #pragma romdata romdata=WRITABLE_SEG_ADDR
-struct {
-    // First 128 byte "page" contains metadata and setlist:
-    u8 axe_midi_program_count;
-    u8 song_count;
-    struct set_list set_list;
-
-    // Second 128 byte "page" contains definitions of axe-fx program data:
-    struct axe_midi_program axe_midi_programs[128 / sizeof(struct axe_midi_program)];
-    u8 _padding1[128 - (128 / sizeof(struct axe_midi_program)) * sizeof(struct axe_midi_program)];
-
-    // Third 128 byte "page" starts song descriptors:
-    struct song songs[WRITABLE_SEG_LEN / sizeof(struct song)];
-} romdata;
+struct romdata romdata;
 #pragma romdata
 
 #pragma udata state
@@ -367,7 +354,7 @@ static void calc_midi(void) {
 
         if (acoustc != 0) {
             // acoustic:
-            curr.amp_live[a].gain = or_default(pr.amp_defaults[a].clean_gain, axe_midi->amps[a].amp_defaults.clean_gain);
+            curr.amp_live[a].gain = or_default(pr.amp_defaults.clean_gain, axe_midi->amp_defaults.clean_gain);
             curr.amp_live[a].gate = 0;
 
             if (midi_axe_cc(CC_AMP_BYP, a, 0x00)) {
@@ -378,18 +365,10 @@ static void calc_midi(void) {
                 DEBUG_LOG1("CAB%d Y", a + 1);
                 diff = 1;
             }
-            if (midi_axe_cc(CC_GAIN, a, or_default(pr.amp_defaults[a].clean_gain, axe_midi->amps[a].amp_defaults.clean_gain))) {
-                DEBUG_LOG2("Gain%d 0x%02x", a + 1, pr.amp_defaults[a].clean_gain);
-                diff = 1;
-            }
-            if (midi_axe_cc(CC_GATE, a, 0x00)) {
-                DEBUG_LOG1("Gate%d off", a + 1);
-                diff = 1;
-            }
         } else if (dirty != 0) {
             // dirty:
-            curr.amp_live[a].gain = or_default(curr.amp[a].gain, or_default(pr.amp_defaults[a].dirty_gain, axe_midi->amps[a].amp_defaults.dirty_gain));
-            curr.amp_live[a].gate = or_default(curr.amp[a].gate, or_default(pr.amp_defaults[a].gate, axe_midi->amps[a].amp_defaults.gate));
+            curr.amp_live[a].gain = or_default(curr.amp[a].gain, or_default(pr.amp_defaults.dirty_gain, axe_midi->amp_defaults.dirty_gain));
+            curr.amp_live[a].gate = or_default(curr.amp[a].gate, or_default(pr.amp_defaults.gate, axe_midi->amp_defaults.gate));
 
             if (midi_axe_cc(CC_AMP_BYP, a, 0x7F)) {
                 DEBUG_LOG1("AMP%d on", a + 1);
@@ -405,7 +384,7 @@ static void calc_midi(void) {
             }
         } else {
             // clean:
-            curr.amp_live[a].gain = or_default(pr.amp_defaults[a].clean_gain, axe_midi->amps[a].amp_defaults.clean_gain);
+            curr.amp_live[a].gain = or_default(pr.amp_defaults.clean_gain, axe_midi->amp_defaults.clean_gain);
             curr.amp_live[a].gate = 0;
 
             if (midi_axe_cc(CC_AMP_BYP, a, 0x7F)) {
@@ -809,7 +788,6 @@ static void calc_volume_modified(void) {
 
 void load_program(void) {
     // Load program:
-    u16 addr;
     u8 pr_num;
     u8 a, i;
 
@@ -874,26 +852,22 @@ void load_scene(void) {
 }
 
 void scene_default(void) {
-    rom struct song *default_pr = &romdata.songs[0];
-    u8 a, i;
-
     DEBUG_LOG1("default scene %d", curr.sc_idx + 1);
 
-    // Set defaults per amp:
-    for (a = 0; a < 2; a++) {
-        pr.amp_defaults[a].dirty_gain = 0x5E;
-        pr.amp_defaults[a].gate = gate_default;
-    }
+    // Set defaults for both amps:
+    pr.amp_defaults.dirty_gain = 0x5E;
+    pr.amp_defaults.clean_gain = 0x1A;
+    pr.amp_defaults.gate = gate_default;
 
     pr.scene_count = 1;
 
     pr.scene[curr.sc_idx].amp[0].gain = 0;
-    pr.scene[curr.sc_idx].amp[0].gate = gate_default;
+    pr.scene[curr.sc_idx].amp[0].gate = 0;
     pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
     pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
 
     pr.scene[curr.sc_idx].amp[1].gain = 0;
-    pr.scene[curr.sc_idx].amp[1].gate = gate_default;
+    pr.scene[curr.sc_idx].amp[1].gate = 0;
     pr.scene[curr.sc_idx].amp[1].fx = fxm_dirty;
     pr.scene[curr.sc_idx].amp[1].volume = volume_0dB;
 }
@@ -1164,10 +1138,10 @@ void controller_10msec_timer(void) {
             if (curr.amp[ampno].gain != 0) { \
                 gain = &curr.amp[ampno].gain; \
             } else { \
-                gain = &pr.amp_defaults[ampno].dirty_gain; \
+                gain = &pr.amp_defaults.dirty_gain; \
             } \
         } else { \
-            gain = &pr.amp_defaults[ampno].clean_gain; \
+            gain = &pr.amp_defaults.clean_gain; \
         } \
         if ((*gain) > (u8)1) { \
             (*gain)--; \
@@ -1181,10 +1155,10 @@ void controller_10msec_timer(void) {
             if (curr.amp[ampno].gain != 0) { \
                 gain = &curr.amp[ampno].gain; \
             } else { \
-                gain = &pr.amp_defaults[ampno].dirty_gain; \
+                gain = &pr.amp_defaults.dirty_gain; \
             } \
         } else { \
-            gain = &pr.amp_defaults[ampno].clean_gain; \
+            gain = &pr.amp_defaults.clean_gain; \
         } \
         if ((*gain) < (u8)127) { \
             (*gain)++; \
