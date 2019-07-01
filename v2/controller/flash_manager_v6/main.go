@@ -69,12 +69,19 @@ type AxeMidiProgramv6 struct {
 	AmpDefaults AmpDefault     `yaml:"defaults"`
 }
 
-type Programsv4 struct {
-	AxeMidi []AxeMidiProgramv6 `yaml:"axe_midi"`
-	Songs   []*Songv6          `yaml:"songs"`
+// Defaults for all songs:
+type AllSongsv6 struct {
+	AxeMidiProgram  int `yaml:"axe_midi"`
+	TD50MidiProgram int `yaml:"td50_midi"`
 }
 
-type Setlistv4 struct {
+type Programsv6 struct {
+	AxeMidi  []AxeMidiProgramv6 `yaml:"axe_midi"`
+	AllSongs AllSongsv6         `yaml:"all_songs"`
+	Songs    []*Songv6          `yaml:"songs"`
+}
+
+type Setlistv6 struct {
 	// YAML sourced:
 	Date        string   `yaml:"date"`
 	Venue       string   `yaml:"venue"`
@@ -86,9 +93,9 @@ type Setlistv4 struct {
 	SongNames []string
 }
 
-type Setlistsv4 struct {
+type Setlistsv6 struct {
 	Set  int         `yaml:"set"`
-	Sets []Setlistv4 `yaml:"sets"`
+	Sets []Setlistv6 `yaml:"sets"`
 }
 
 const (
@@ -125,8 +132,8 @@ type SongMeta struct {
 
 // Globals, yuck, but this is just a dumb CLI tool so who cares.
 var (
-	programs Programsv4
-	setlists Setlistsv4
+	programs Programsv6
+	setlists Setlistsv6
 
 	songs_by_name map[string]int
 	song_meta     []*SongMeta
@@ -435,11 +442,18 @@ func generatePICH() {
 			}
 		}
 
-		fwprogram.Axe_midi_program = uint8(p.AxeMidiProgram)
-		fwprogram.Td50_midi_program = uint8(p.TD50MidiProgram)
+		if p.AxeMidiProgram == 0 {
+			p.AxeMidiProgram = programs.AllSongs.AxeMidiProgram
+		}
+		if p.TD50MidiProgram == 0 {
+			p.TD50MidiProgram = programs.AllSongs.TD50MidiProgram
+		}
+
+		fwprogram.Axe_midi_program = uint8(p.AxeMidiProgram - 1)
+		fwprogram.Td50_midi_program = uint8(p.TD50MidiProgram - 1)
 		fwprogram.Tempo = uint8(p.Tempo)
 
-		axemidi := programs.AxeMidi[p.AxeMidiProgram]
+		axemidi := programs.AxeMidi[fwprogram.Axe_midi_program]
 
 		if len(p.Amp) == 0 {
 			p.Amp = make([]AmpDefault, 2)
@@ -528,9 +542,9 @@ func generatePICH() {
 			}
 		}
 
-		bw.WriteDecimal(uint8(p.AxeMidiProgram))
-		bw.WriteDecimal(uint8(p.TD50MidiProgram))
-		bw.WriteDecimal(uint8(p.Tempo))
+		bw.WriteDecimal(fwprogram.Axe_midi_program)
+		bw.WriteDecimal(fwprogram.Td50_midi_program)
+		bw.WriteDecimal(fwprogram.Tempo)
 
 		if (bw.BytesWritten() - lastWritten) != 23 {
 			panic(fmt.Errorf("out of sync - expected to write only 23 bytes so far"))

@@ -1,5 +1,9 @@
+all_songs:
+  axe_midi: 1
+  td50_midi: 51
+
 axe_midi:
-  - midi: 0
+  - midi: 1
     defaults:
       clean_gain: 0x1A
       dirty_gain: 0x5E
@@ -17,7 +21,7 @@ axe_midi:
         - flg2
         - cho2
         - dly2
-  - midi: 1
+  - midi: 2
     defaults:
       clean_gain: 0x1A
       dirty_gain: 0x5E
@@ -35,7 +39,7 @@ axe_midi:
           - flg2
           - cho2
           - dly2
-  - midi: 2
+  - midi: 3
     defaults:
       clean_gain: 0x1A
       dirty_gain: 0x5E
@@ -140,7 +144,7 @@ songs:
       fx: [cho2]
 - name: Drive
   tempo: 91
-  axe_midi: 1
+  axe_midi: 2
   gain_log: 0x60
   scenes:
   - name: Clean
@@ -816,7 +820,7 @@ songs:
       fx: [dly2]
 - name: What I Got
   tempo: 96
-  axe_midi: 1
+  axe_midi: 2
   scenes:
   - name: JD clean;MG clean
     MG:
@@ -1003,7 +1007,7 @@ songs:
       channel: dirty
 - name: Puppets
   tempo: 106
-  axe_midi: 2
+  axe_midi: 3
   gain: 0x5e
   scenes:
   - name: Main
