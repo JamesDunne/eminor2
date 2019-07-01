@@ -220,6 +220,21 @@ func gainOrLogOrDefault(gain int, gainLog int, gainDefault int) int {
 	return gainDefault
 }
 
+func gateToMIDI(g float64) uint8 {
+	// Range clamp:
+	g = math.Max(-76.0, math.Min(-12.5, g))
+
+	// Convert from dB to MIDI 0..127 external controller map for gate1/2 threshold:
+	// SPOILER ALERT: (128.0 / (-12.0 - -76.0)) = 2.0
+	gate := uint8((g - -76.0) * (128.0 / (-12.0 - -76.0)))
+
+	if gate > 0x7F {
+		panic(fmt.Errorf("gate threshold %d cannot exceed max of 127", gate))
+	}
+
+	return gate
+}
+
 // Generate flash_rom_init.h for #include in controller C code projects
 func generatePICH() {
 	//var err error
@@ -361,7 +376,7 @@ func generatePICH() {
 	for _, am := range programs.AxeMidi {
 		bw.WriteHex(uint8(am.AmpDefaults.DirtyGain))
 		bw.WriteHex(uint8(am.AmpDefaults.CleanGain))
-		bw.WriteHex(uint8(am.AmpDefaults.Gate))
+		bw.WriteHex(gateToMIDI(am.AmpDefaults.Gate))
 
 		for a := 0; a < 2; a++ {
 			for x := 0; x < 5; x++ {
@@ -516,18 +531,7 @@ func generatePICH() {
 				// Gate:
 				fwamp.Gate = 0
 				if amp.Gate != 0 {
-					g := amp.Gate
-
-					// Range clamp:
-					g = math.Max(-76.0, math.Min(-12.5, g))
-
-					// Convert from dB to MIDI 0..127 external controller map for gate1/2 threshold:
-					// SPOILER ALERT: (128.0 / (-12.0 - -76.0)) = 2.0
-					fwamp.Gate = uint8((g - -76.0) * (128.0 / (-12.0 - -76.0)))
-
-					if fwamp.Gate > 0x7F {
-						panic(fmt.Errorf("gate threshold %d cannot exceed max of 127", fwamp.Gate))
-					}
+					fwamp.Gate = gateToMIDI(amp.Gate)
 				}
 			}
 		}
@@ -576,7 +580,7 @@ func generatePICH() {
 		// Check written size:
 		program_written_size := bw.BytesWritten() - lastWritten
 		if program_written_size != FWsong_sizeof {
-			panic(fmt.Errorf("Failed to write expected program size %d; wrote %d", FWsong_sizeof, program_written_size))
+			panic(fmt.Errorf("failed to write expected program size %d; wrote %d", FWsong_sizeof, program_written_size))
 		}
 	}
 }
