@@ -463,30 +463,31 @@ function _midi_send_sysex(byte) {
 
     if (sysexMsg === null) {
          if (byte === 0xF0) {
-            sysexMsg = [0xF0];
+            sysexMsg = [];
          } else {
             console.error("Attempting to start SysEx message without 0xF0! " + byte);
          }
-    } else {
-        sysexMsg.push(byte);
-        if (byte === 0xF7) {
-            if (midiSupport && midiOutput) {
-                try {
-                    midiOutput.send(sysexMsg);
-                } catch (e) {
-                    console.error(e);
-                }
-            }
+    }
 
+    sysexMsg.push(byte);
+    if (byte === 0xF7) {
+        if (midiSupport && midiOutput) {
             try {
-                str = ""
-                for (var i = 0; i < sysexMsg.length; i++) {
-                    str += hex2(sysexMsg[i]) + " ";
-                }
-                midi_log("" + str + "\n");
+                midiOutput.send(sysexMsg);
             } catch (e) {
                 console.error(e);
             }
+        }
+
+        try {
+            str = "";
+            for (var i = 0; i < sysexMsg.length; i++) {
+                str += hex2(sysexMsg[i]) + " ";
+            }
+            midi_log("" + str + "\n");
+            sysexMsg = [];
+        } catch (e) {
+            console.error(e);
         }
     }
 }
