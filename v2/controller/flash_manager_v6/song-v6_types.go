@@ -24,6 +24,7 @@ type FWsong C.struct_song
 type FWset_entry C.struct_set_entry
 type FWset_list C.struct_set_list
 
+const FWmax_axe_midi_program_count = C.max_axe_midi_program_count
 const FWaxe_midi_padding = C.axe_midi_padding
 
 const FWamp_sizeof = C.sizeof_struct_amp

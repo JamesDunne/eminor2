@@ -251,7 +251,6 @@ func generatePICH() {
 	// Write header data:
 	bw.WriteDecimal(uint8(len(programs.AxeMidi)))
 	bw.WriteDecimal(uint8(len(programs.Songs)))
-	bw.WriteDecimal(uint8(len(setlists.Sets)))
 
 	// Write setlist data for last active setlist:
 	for i := len(setlists.Sets) - 1; i >= 0; i-- {
@@ -369,6 +368,25 @@ func generatePICH() {
 				bw.WriteHex(cc)
 			}
 		}
+	}
+
+	// Fill in remaining descriptors for axe_midi:
+	for i := len(programs.AxeMidi); i < FWmax_axe_midi_program_count; i++ {
+		bw.WriteHex(0x5E) // dirty_gain
+		bw.WriteHex(0x1A) // clean_gain
+		bw.WriteHex(71)   // gate
+
+		bw.WriteHex(uint8(fx_midi_cc["pit1"]))
+		bw.WriteHex(uint8(fx_midi_cc["rtr1"]))
+		bw.WriteHex(uint8(fx_midi_cc["flg1"]))
+		bw.WriteHex(uint8(fx_midi_cc["cho1"]))
+		bw.WriteHex(uint8(fx_midi_cc["dly1"]))
+
+		bw.WriteHex(uint8(fx_midi_cc["pit2"]))
+		bw.WriteHex(uint8(fx_midi_cc["rtr2"]))
+		bw.WriteHex(uint8(fx_midi_cc["flg2"]))
+		bw.WriteHex(uint8(fx_midi_cc["cho2"]))
+		bw.WriteHex(uint8(fx_midi_cc["dly2"]))
 	}
 
 	for i := 0; i < FWaxe_midi_padding; i++ {

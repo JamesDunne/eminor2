@@ -51,6 +51,7 @@ type FWset_list struct {
 	Entries	[125]FWset_entry
 }
 
+const FWmax_axe_midi_program_count = 0x9
 const FWaxe_midi_padding = 0xb
 
 const FWamp_sizeof = 0x4
