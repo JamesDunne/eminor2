@@ -138,4 +138,13 @@ struct romdata {
     struct song songs[max_song_count];
 };
 
+#ifndef __MCC18
+#define offsetof(st, m) ((size_t)&(((st *)0)->m))
+COMPILE_ASSERT(offsetof(struct romdata, axe_midi_program_count) == 0);
+COMPILE_ASSERT(offsetof(struct romdata, song_count) == 1);
+COMPILE_ASSERT(offsetof(struct romdata, set_list) == 2);
+COMPILE_ASSERT(offsetof(struct romdata, axe_midi_programs) == 128);
+COMPILE_ASSERT(offsetof(struct romdata, songs) == 2 * 128);
+#endif
+
 COMPILE_ASSERT(sizeof(struct romdata) == WRITABLE_SEG_LEN);
