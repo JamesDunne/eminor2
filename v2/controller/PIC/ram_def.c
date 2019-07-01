@@ -27,7 +27,7 @@ unsigned char SystickCntr3;
 TwoBytes tTimer1Value;
 
 // User-writable flash memory:
-#pragma romdata overlay Writable=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
+#pragma romdata ROM_SAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
 #if HW_VERSION == 1
 rom unsigned char ROM_SAVEDATA[3][4096] = {
     {

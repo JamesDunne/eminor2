@@ -1,9 +1,5 @@
-#include "types.h"
 
-#ifndef __MCC18
-// for memcpy:
-#include <string.h>
-#endif
+#include "types.h"
 
 extern void hextoa(char *dst, u8 col, u8 n);
 

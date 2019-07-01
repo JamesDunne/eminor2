@@ -171,15 +171,15 @@ void lcd_updated_all(void) {
 
 #ifdef MIDI_BLOCKING
 // Non-buffered (immediate, blocking) MIDI transmission functions:
-#define midi_enq(byte) { \
-	nop(); \
-	nop(); \
-	while (PIR1bits.TXIF == 0) {} \
-	nop(); \
-	nop(); \
-	TXREG = byte; \
-	nop(); \
-	nop(); \
+static void midi_enq(u8 byte) {
+	nop();
+	nop();
+	while (PIR1bits.TXIF == 0) {}
+	nop();
+	nop();
+	TXREG = byte;
+	nop();
+	nop();
 }
 #endif
 
@@ -214,6 +214,7 @@ void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2) {
 // FLASH memory is written to by erasing 64 bytes at a time on aligned addresses and then writing 32 bytes at a time.
 
 void flash_load(u16 addr, u16 count, u8 *data) {
+#if 0
     u8 i;
     u8 bank;
     u16 saddr;
@@ -229,9 +230,11 @@ void flash_load(u16 addr, u16 count, u8 *data) {
     // Copy data from ROM to destination:
     for (i = 0, saddr = addr; i < count; i++, saddr++)
         data[i] = ROM_SAVEDATA[bank][saddr];
+#endif
 }
 
 void flash_store(u16 addr, u16 count, u8 *data) {
+#if 0
     u8 i;
     u8 bank;
     u16 bankedaddr, saddr, daddr;
@@ -263,6 +266,7 @@ void flash_store(u16 addr, u16 count, u8 *data) {
     // arb will catch this and handle it later...
     Write0Pending = true;
     Write32Pending = true;
+#endif
 }
 
 rom const u8 *flash_addr(u16 addr) {

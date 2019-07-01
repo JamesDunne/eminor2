@@ -138,12 +138,10 @@ enum rowstate_mode {
     ROWMODE_FX
 };
 
-// Structured read-only view of writable ROM section that contains all our data:
-#pragma romdata overlay Writable=WRITABLE_SEG_ADDR
-rom struct romdata romdata;
-#pragma romdata
-
 #pragma udata state
+// Structured read-only view of writable ROM section that contains all our data:
+rom struct romdata *romdata;
+
 // Pointer to unmodified program:
 rom struct song *origpr;
 
@@ -792,22 +790,22 @@ void load_program(void) {
     u8 a, i;
 
     if (curr.setlist_mode == 1) {
-        pr_num = romdata.set_list.entries[curr.sl_idx].song;
+        pr_num = romdata->set_list.entries[curr.sl_idx].song;
     } else {
         pr_num = curr.pr_idx;
     }
 
     DEBUG_LOG1("load program %d", pr_num + 1);
 
-    origpr = &romdata.songs[pr_num];
-    pr = romdata.songs[pr_num];
+    origpr = &romdata->songs[pr_num];
+    pr = romdata->songs[pr_num];
 
     modified = 0;
     curr.axe_midi_program = pr.axe_midi_program;
     curr.td50_midi_program = pr.td50_midi_program;
     curr.tempo = pr.tempo;
 
-    axe_midi = (rom struct axe_midi_program *)(&romdata.axe_midi_programs[curr.axe_midi_program]);
+    axe_midi = &romdata->axe_midi_programs[curr.axe_midi_program];
 
     // Copy in AXE-FX MIDI program information to CC lookup table:
     for (a = 0; a < 2; a++) {
@@ -878,10 +876,10 @@ static void toggle_setlist_mode() {
     if (curr.setlist_mode == 1) {
         // Remap sl_idx by looking up program in setlist otherwise default to first setlist entry:
         u8 i;
-        sl_max = romdata.set_list.count - (u8)1;
+        sl_max = romdata->set_list.count - (u8)1;
         curr.sl_idx = 0;
-        for (i = 0; i < romdata.set_list.count; i++) {
-            if (romdata.set_list.entries[i].song == curr.pr_idx) {
+        for (i = 0; i < romdata->set_list.count; i++) {
+            if (romdata->set_list.entries[i].song == curr.pr_idx) {
                 curr.sl_idx = i;
                 break;
             }
@@ -889,7 +887,7 @@ static void toggle_setlist_mode() {
     } else {
         // Lookup program number from setlist:
         sl_max = 127;
-        curr.pr_idx = romdata.set_list.entries[curr.sl_idx].song;
+        curr.pr_idx = romdata->set_list.entries[curr.sl_idx].song;
     }
 }
 
@@ -970,11 +968,8 @@ static void prev_scene() {
 void controller_init(void) {
     u8 i;
 
-#ifndef __MCC18
-    // For platforms that cannot rely on #pragma romdata linker hacks,
-    // copy read-only flash data to `romdata` structured view:
-    memcpy((void *)&romdata, (void *)flash_addr(0), WRITABLE_SEG_LEN);
-#endif
+    // Initialize romdata pointer:
+    romdata = (rom struct romdata *)flash_addr(0);
 
     for (i = 0; i < 2; i++) {
         cc_lookup[CC_AMP2 * i + CC_FX1] = 0xFF;
@@ -1008,7 +1003,7 @@ void controller_init(void) {
     last.setlist_mode = 1;
     curr.setlist_mode = 1;
 
-    sl_max = romdata.set_list.count - (u8)1;
+    sl_max = romdata->set_list.count - (u8)1;
 
     for (i = 0; i < 2; i++) {
         amp[i].gain = 0;

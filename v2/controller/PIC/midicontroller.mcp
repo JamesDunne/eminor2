@@ -58,6 +58,7 @@ file_030=.
 file_031=.
 file_032=.
 file_033=.
+file_034=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -93,6 +94,7 @@ file_030=no
 file_031=no
 file_032=no
 file_033=no
+file_034=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -128,6 +130,7 @@ file_030=no
 file_031=no
 file_032=no
 file_033=no
+file_034=no
 [FILE_INFO]
 file_000=main.c
 file_001=startup.c
@@ -162,7 +165,8 @@ file_029=..\common\util.h
 file_030=flash_v6_bank0.h
 file_031=flash_v6_bank1.h
 file_032=G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h
-file_033=18f4550.lkr
+file_033=G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\v5_fx_names.h
+file_034=18f4550.lkr
 [SUITE_INFO]
 suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 suite_state=

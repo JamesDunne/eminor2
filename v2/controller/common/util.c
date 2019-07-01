@@ -1,13 +1,22 @@
 #include "util.h"
 #include "hardware.h"
 
-#pragma romdata hex
-rom const char hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+//rom const char hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 void hextoa(char *dst, u8 col, u8 n) {
+    u8 x = n & 0x0F;
     dst += col;
-    *dst-- = hex[n & 0x0F];
-    *dst = hex[(n >> 4) & 0x0F];
+    if (x < 10) {
+        *dst-- = '0' + x;
+    } else {
+        *dst-- = 'A' + (x - 10);
+    }
+    x = (n >> 4) & 0x0F;
+    if (x < 10) {
+        *dst = '0' + x;
+    } else {
+        *dst = 'A' + (x - 10);
+    }
 }
 
 // TODO: remove division operator to cut code size down drastically!
