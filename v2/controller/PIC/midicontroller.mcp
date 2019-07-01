@@ -58,7 +58,6 @@ file_030=.
 file_031=.
 file_032=.
 file_033=.
-file_034=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -94,7 +93,6 @@ file_030=no
 file_031=no
 file_032=no
 file_033=no
-file_034=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -130,7 +128,6 @@ file_030=no
 file_031=no
 file_032=no
 file_033=no
-file_034=no
 [FILE_INFO]
 file_000=main.c
 file_001=startup.c
@@ -146,9 +143,9 @@ file_010=BootUserStartup.c
 file_011=UserAppCode.c
 file_012=comm_lcd.c
 file_013=comm_midi.c
-file_014=..\common\controller-v5.c
-file_015=..\common\controller-v5-rom1.c
-file_016=..\common\util.c
+file_014=..\common\util.c
+file_015=G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c
+file_016=G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6-rom1.c
 file_017=p18f4550.h
 file_018=c_cnstdef.h
 file_019=c_portdef.h
@@ -161,19 +158,18 @@ file_025=..\common\types.h
 file_026=a_micrdef.inc
 file_027=assert.h
 file_028=boot.h
-file_029=flash_v5_bank0.h
-file_030=flash_v5_bank1.h
-file_031=flash_v5_bank2.h
-file_032=..\common\util.h
-file_033=..\common\program-v5.h
-file_034=18f4550.lkr
+file_029=..\common\util.h
+file_030=flash_v6_bank0.h
+file_031=flash_v6_bank1.h
+file_032=G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h
+file_033=18f4550.lkr
 [SUITE_INFO]
 suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 suite_state=
 [TOOL_SETTINGS]
 TS{DD2213A8-6310-47B1-8376-9430CDFC013F}=
 TS{BFD27FBA-4A02-4C0E-A5E5-B812F3E7707C}=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(BINDIR_)$(TARGETBASE).cof"
-TS{C2AF05E7-1416-4625-923D-E114DB6E2B96}=-nw 2060 -nw 2056 -nw 2055 -DHW_VERSION=5 -D__MCC18 -DMIDI_BLOCKING
+TS{C2AF05E7-1416-4625-923D-E114DB6E2B96}=-nw 2060 -nw 2056 -nw 2055 -DHW_VERSION=6 -D__MCC18 -DMIDI_BLOCKING
 TS{C2AF05E7-1416-4625-923D-E114DB6E2B96}_alt=yes
 TS{ADE93A55-C7C7-4D4D-A4BA-59305F7D0391}=
 [INSTRUMENTED_TRACE]

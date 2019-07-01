@@ -1,5 +1,7 @@
 //This file contains the global ram definitions for the project
 #include    "c_system.h"
+#include    "util.h"
+#include    "hardware.h"
 
 //----------------------------Access bank variables----------------------------------------
 
@@ -25,7 +27,7 @@ unsigned char SystickCntr3;
 TwoBytes tTimer1Value;
 
 // User-writable flash memory:
-#pragma romdata ROMSAVEDATA=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
+#pragma romdata overlay Writable=WRITABLE_SEG_ADDR       //Update lkr file if this is to change!!
 #if HW_VERSION == 1
 rom unsigned char ROM_SAVEDATA[3][4096] = {
     {
@@ -95,8 +97,8 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
 #include "flash_v6_bank1.h"
     },
     {
-#include "flash_v6_bank2.h"
-    }
+        0
+    }    
 };
 #else
 #error HW_ VERSION must be set
