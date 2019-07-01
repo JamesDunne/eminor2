@@ -172,8 +172,8 @@ enum cc_key {
     CC_FX3,
     CC_FX4,
     CC_FX5,
-    CC_GAIN,
     CC_VOLUME,
+    CC_GAIN,
     CC_GATE,
     CC_AMP_BYP,
     CC_AMP_XY,
@@ -388,7 +388,7 @@ static void calc_midi(void) {
             }
         } else if (dirty != 0) {
             // dirty:
-            curr.amp_live[a].gain = or_default(curr.amp[a].gain, or_default(pr.amp_defaults[a].gain, axe_midi->amps[a].amp_defaults.gain));
+            curr.amp_live[a].gain = or_default(curr.amp[a].gain, or_default(pr.amp_defaults[a].dirty_gain, axe_midi->amps[a].amp_defaults.dirty_gain));
             curr.amp_live[a].gate = or_default(curr.amp[a].gate, or_default(pr.amp_defaults[a].gate, axe_midi->amps[a].amp_defaults.gate));
 
             if (midi_axe_cc(CC_AMP_BYP, a, 0x7F)) {
@@ -811,6 +811,7 @@ void load_program(void) {
     // Load program:
     u16 addr;
     u8 pr_num;
+    u8 a, i;
 
     if (curr.setlist_mode == 1) {
         pr_num = romdata.set_list.entries[curr.sl_idx].song;
@@ -829,6 +830,13 @@ void load_program(void) {
     curr.tempo = pr.tempo;
 
     axe_midi = (rom struct axe_midi_program *)(&romdata.axe_midi_programs[curr.axe_midi_program]);
+
+    // Copy in AXE-FX MIDI program information to CC lookup table:
+    for (a = 0; a < 2; a++) {
+        for (i = 0; i < fx_count; i++) {
+            cc_lookup[CC_AMP2 * a + CC_FX1 + i] = axe_midi->amps[a].fx_midi_cc[i];
+        }
+    }
 
     // Establish a sane default for an undefined program:
     curr.sc_idx = 0;
@@ -873,7 +881,7 @@ void scene_default(void) {
 
     // Set defaults per amp:
     for (a = 0; a < 2; a++) {
-        pr.amp_defaults[a].gain = 0x5E;
+        pr.amp_defaults[a].dirty_gain = 0x5E;
         pr.amp_defaults[a].gate = gate_default;
     }
 
@@ -1003,6 +1011,21 @@ void controller_init(void) {
     // copy read-only flash data to `romdata` structured view:
     memcpy((void *)&romdata, (void *)flash_addr(0), WRITABLE_SEG_LEN);
 #endif
+
+    for (i = 0; i < 2; i++) {
+        cc_lookup[CC_AMP2 * i + CC_FX1] = 0xFF;
+        cc_lookup[CC_AMP2 * i + CC_FX2] = 0xFF;
+        cc_lookup[CC_AMP2 * i + CC_FX3] = 0xFF;
+        cc_lookup[CC_AMP2 * i + CC_FX4] = 0xFF;
+        cc_lookup[CC_AMP2 * i + CC_FX5] = 0xFF;
+
+        cc_lookup[CC_AMP2 * i + CC_VOLUME] = axe_cc_external1 + i;
+        cc_lookup[CC_AMP2 * i + CC_GAIN] = axe_cc_external3 + i;
+        cc_lookup[CC_AMP2 * i + CC_GATE] = axe_cc_external5 + i;
+        cc_lookup[CC_AMP2 * i + CC_AMP_BYP] = axe_cc_byp_amp1 + i;
+        cc_lookup[CC_AMP2 * i + CC_AMP_XY] = axe_cc_xy_amp1 + i;
+        cc_lookup[CC_AMP2 * i + CC_CAB_XY] = axe_cc_xy_cab1 + i;
+    }
 
     tap = 0;
 
@@ -1141,7 +1164,7 @@ void controller_10msec_timer(void) {
             if (curr.amp[ampno].gain != 0) { \
                 gain = &curr.amp[ampno].gain; \
             } else { \
-                gain = &pr.amp_defaults[ampno].gain; \
+                gain = &pr.amp_defaults[ampno].dirty_gain; \
             } \
         } else { \
             gain = &pr.amp_defaults[ampno].clean_gain; \
@@ -1158,7 +1181,7 @@ void controller_10msec_timer(void) {
             if (curr.amp[ampno].gain != 0) { \
                 gain = &curr.amp[ampno].gain; \
             } else { \
-                gain = &pr.amp_defaults[ampno].gain; \
+                gain = &pr.amp_defaults[ampno].dirty_gain; \
             } \
         } else { \
             gain = &pr.amp_defaults[ampno].clean_gain; \

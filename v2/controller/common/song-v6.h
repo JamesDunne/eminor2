@@ -20,7 +20,7 @@
 #define gate_default 71
 
 struct amp_defaults {
-    u8 gain;
+    u8 dirty_gain;
     u8 clean_gain;
     u8 gate;
 };
