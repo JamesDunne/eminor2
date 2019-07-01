@@ -59,6 +59,7 @@ type Songv6 struct {
 	TD50MidiProgram  int                 `yaml:"td50_midi"`
 	Tempo            int                 `yaml:"tempo"`
 	Gain             int                 `yaml:"gain"` // amp gain (1-127), 0 means default
+	CleanGain        int                 `yaml:"clean_gain"`
 	Gate             float64             `yaml:"gate"` // gate threshold -76dB to -12.5dB
 	Amp              []AmpDefault        `yaml:"amp"`
 	SceneDescriptors []SceneDescriptorv6 `yaml:"scenes"`
@@ -221,6 +222,10 @@ func gainOrLogOrDefault(gain int, gainLog int, gainDefault int) int {
 }
 
 func gateToMIDI(g float64) uint8 {
+	if g == 0.0 {
+		return 0
+	}
+
 	// Range clamp:
 	g = math.Max(-76.0, math.Min(-12.5, g))
 
@@ -468,6 +473,10 @@ func generatePICH() {
 		fwprogram.Td50_midi_program = uint8(p.TD50MidiProgram - 1)
 		fwprogram.Tempo = uint8(p.Tempo)
 
+		fwprogram.Amp_defaults.Dirty_gain = uint8(p.Gain)
+		fwprogram.Amp_defaults.Clean_gain = uint8(p.CleanGain)
+		fwprogram.Amp_defaults.Gate = gateToMIDI(p.Gate)
+
 		axemidi := programs.AxeMidi[fwprogram.Axe_midi_program]
 
 		if len(p.Amp) == 0 {
@@ -476,6 +485,9 @@ func generatePICH() {
 			p.Amp[0].DirtyGain = 0
 			p.Amp[0].CleanGain = 0
 			p.Amp[0].Gate = 0
+			p.Amp[1].DirtyGain = 0
+			p.Amp[1].CleanGain = 0
+			p.Amp[1].Gate = 0
 		}
 
 		// Write scene descriptors (5 bytes each):
@@ -529,10 +541,7 @@ func generatePICH() {
 				}
 
 				// Gate:
-				fwamp.Gate = 0
-				if amp.Gate != 0 {
-					fwamp.Gate = gateToMIDI(amp.Gate)
-				}
+				fwamp.Gate = gateToMIDI(amp.Gate)
 			}
 		}
 
