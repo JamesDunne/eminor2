@@ -314,6 +314,7 @@ static u8 midi_axe_cc(enum cc_key key, u8 a, u8 value) {
     u8 last_value = cc_sent[amp_key];
     if (value != last_value) {
         midi_send_cmd2(0xB, axe_midi_channel, cc_lookup[amp_key], value);
+        cc_sent[amp_key] = value;
         return 1;
     }
     return 0;
