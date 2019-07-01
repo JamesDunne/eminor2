@@ -7,6 +7,7 @@
 
 #define FLASH_LENGTH (128 * 128 + 128)
 const int flash_length = FLASH_LENGTH;
+#if HW_VERSION==5
 const unsigned char flash_memory[FLASH_LENGTH] = {
 #include "../PIC/flash_v5_bank0.h"
 ,
@@ -14,6 +15,13 @@ const unsigned char flash_memory[FLASH_LENGTH] = {
 ,
 #include "../PIC/flash_v5_bank2.h"
 };
+#else
+const unsigned char flash_memory[FLASH_LENGTH] = {
+#include "../PIC/flash_v6_bank0.h"
+,
+#include "../PIC/flash_v6_bank1.h"
+};
+#endif
 #undef FLASH_LENGTH
 
 const unsigned short lookup[128] = {
