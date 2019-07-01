@@ -1,1 +1,1 @@
-clang -Wall -DHW_VERSION=5 -c ./common/controller-v5.c -o /dev/null
+clang -Wall -DHW_VERSION=6 -c ./common/controller-v6.c -o /dev/null

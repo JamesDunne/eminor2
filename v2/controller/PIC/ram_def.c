@@ -86,6 +86,18 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
 #include "flash_v5_bank2.h"
     }
 };
+#elif HW_VERSION == 6
+rom unsigned char ROM_SAVEDATA[3][4096] = {
+    {
+#include "flash_v6_bank0.h"
+    },
+    {
+#include "flash_v6_bank1.h"
+    },
+    {
+#include "flash_v6_bank2.h"
+    }
+};
 #else
 #error HW_ VERSION must be set
 #endif
