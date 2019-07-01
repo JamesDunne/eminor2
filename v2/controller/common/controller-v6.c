@@ -162,6 +162,7 @@ enum cc_key {
     CC_VOLUME,
     CC_GAIN,
     CC_GATE,
+    CC_GATE_BYP,
     CC_AMP_BYP,
     CC_AMP_XY,
     CC_CAB_XY,
@@ -356,7 +357,6 @@ static void calc_midi(void) {
         if (acoustc != 0) {
             // acoustic:
             curr.amp_live[a].gain = or_default(pr.amp_defaults.clean_gain, axe_midi->amp_defaults.clean_gain);
-            curr.amp_live[a].gate = 0;
 
             if (midi_axe_cc(CC_AMP_BYP, a, 0x00)) {
                 DEBUG_LOG1("AMP%d off", a + 1);
@@ -364,6 +364,10 @@ static void calc_midi(void) {
             }
             if (midi_axe_cc(CC_CAB_XY, a, 0x00)) {
                 DEBUG_LOG1("CAB%d Y", a + 1);
+                diff = 1;
+            }
+            if (midi_axe_cc(CC_GATE_BYP, a, 0x00)) {
+                DEBUG_LOG1("GATE%d off", a + 1);
                 diff = 1;
             }
         } else if (dirty != 0) {
@@ -383,10 +387,13 @@ static void calc_midi(void) {
                 DEBUG_LOG1("CAB%d X", a + 1);
                 diff = 1;
             }
+            if (midi_axe_cc(CC_GATE_BYP, a, 0x7F)) {
+                DEBUG_LOG1("GATE%d on", a + 1);
+                diff = 1;
+            }
         } else {
             // clean:
             curr.amp_live[a].gain = or_default(pr.amp_defaults.clean_gain, axe_midi->amp_defaults.clean_gain);
-            curr.amp_live[a].gate = 0;
 
             if (midi_axe_cc(CC_AMP_BYP, a, 0x7F)) {
                 DEBUG_LOG1("AMP%d on", a + 1);
@@ -398,6 +405,10 @@ static void calc_midi(void) {
             }
             if (midi_axe_cc(CC_CAB_XY, a, 0x7F)) {
                 DEBUG_LOG1("CAB%d X", a + 1);
+                diff = 1;
+            }
+            if (midi_axe_cc(CC_GATE_BYP, a, 0x00)) {
+                DEBUG_LOG1("GATE%d off", a + 1);
                 diff = 1;
             }
         }
@@ -997,6 +1008,7 @@ void controller_init(void) {
         cc_lookup[CC_AMP2 * i + CC_VOLUME] = axe_cc_external1 + i;
         cc_lookup[CC_AMP2 * i + CC_GAIN] = axe_cc_external3 + i;
         cc_lookup[CC_AMP2 * i + CC_GATE] = axe_cc_external5 + i;
+        cc_lookup[CC_AMP2 * i + CC_GATE_BYP] = axe_cc_byp_gate1 + i;
         cc_lookup[CC_AMP2 * i + CC_AMP_BYP] = axe_cc_byp_amp1 + i;
         cc_lookup[CC_AMP2 * i + CC_AMP_XY] = axe_cc_xy_amp1 + i;
         cc_lookup[CC_AMP2 * i + CC_CAB_XY] = axe_cc_xy_cab1 + i;
