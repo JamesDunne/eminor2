@@ -810,7 +810,7 @@ void load_program(void) {
     // Copy in AXE-FX MIDI program information to CC lookup table:
     for (a = 0; a < 2; a++) {
         for (i = 0; i < fx_count; i++) {
-            cc_lookup[CC_AMP2 * a + CC_FX1 + i] = axe_midi->amps[a].fx_midi_cc[i];
+            cc_lookup[(CC_AMP2 * a) + CC_FX1 + i] = axe_midi->amps[a].fx_midi_cc[i];
         }
     }
 
