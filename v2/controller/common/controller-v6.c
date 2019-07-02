@@ -352,95 +352,55 @@ static void calc_midi(void) {
             // acoustic:
             amp_live[a].gain = or_default(pr.amp_defaults.clean_gain, axe_midi->amp_defaults.clean_gain);
 
-            if (midi_axe_cc(CC_AMP_BYP, a, 0x00)) {
-                DEBUG_LOG1("AMP%d off", a + 1);
-                diff = 1;
-            }
-            if (midi_axe_cc(CC_CAB_XY, a, 0x00)) {
-                DEBUG_LOG1("CAB%d Y", a + 1);
-                diff = 1;
-            }
-            if (midi_axe_cc(CC_GATE_BYP, a, 0x00)) {
-                DEBUG_LOG1("GATE%d off", a + 1);
-                diff = 1;
-            }
+            DEBUG_LOG1("AMP%d off", a + 1);
+            diff |= midi_axe_cc(CC_AMP_BYP, a, 0x00);
+            DEBUG_LOG1("CAB%d Y", a + 1);
+            diff |= midi_axe_cc(CC_CAB_XY, a, 0x00);
+            DEBUG_LOG1("GATE%d off", a + 1);
+            diff |= midi_axe_cc(CC_GATE_BYP, a, 0x00);
         } else if (dirty != 0) {
             // dirty:
             amp_live[a].gain = or_default(amp[a].gain, or_default(pr.amp_defaults.dirty_gain, axe_midi->amp_defaults.dirty_gain));
             amp_live[a].gate = or_default(amp[a].gate, or_default(pr.amp_defaults.gate, axe_midi->amp_defaults.gate));
 
-            if (midi_axe_cc(CC_AMP_BYP, a, 0x7F)) {
-                DEBUG_LOG1("AMP%d on", a + 1);
-                diff = 1;
-            }
-            if (midi_axe_cc(CC_AMP_XY, a, 0x7F)) {
-                DEBUG_LOG1("AMP%d X", a + 1);
-                diff = 1;
-            }
-            if (midi_axe_cc(CC_CAB_XY, a, 0x7F)) {
-                DEBUG_LOG1("CAB%d X", a + 1);
-                diff = 1;
-            }
-            if (midi_axe_cc(CC_GATE_BYP, a, 0x7F)) {
-                DEBUG_LOG1("GATE%d on", a + 1);
-                diff = 1;
-            }
+            DEBUG_LOG1("AMP%d on", a + 1);
+            diff |= midi_axe_cc(CC_AMP_BYP, a, 0x7F);
+            DEBUG_LOG1("AMP%d X", a + 1);
+            diff |= midi_axe_cc(CC_AMP_XY, a, 0x7F);
+            DEBUG_LOG1("CAB%d X", a + 1);
+            diff |= midi_axe_cc(CC_CAB_XY, a, 0x7F);
+            DEBUG_LOG1("GATE%d on", a + 1);
+            diff |= midi_axe_cc(CC_GATE_BYP, a, 0x7F);
         } else {
             // clean:
             amp_live[a].gain = or_default(pr.amp_defaults.clean_gain, axe_midi->amp_defaults.clean_gain);
 
-            if (midi_axe_cc(CC_AMP_BYP, a, 0x7F)) {
-                DEBUG_LOG1("AMP%d on", a + 1);
-                diff = 1;
-            }
-            if (midi_axe_cc(CC_AMP_XY, a, 0x00)) {
-                DEBUG_LOG1("AMP%d Y", a + 1);
-                diff = 1;
-            }
-            if (midi_axe_cc(CC_CAB_XY, a, 0x7F)) {
-                DEBUG_LOG1("CAB%d X", a + 1);
-                diff = 1;
-            }
-            if (midi_axe_cc(CC_GATE_BYP, a, 0x00)) {
-                DEBUG_LOG1("GATE%d off", a + 1);
-                diff = 1;
-            }
+            DEBUG_LOG1("AMP%d on", a + 1);
+            diff |= midi_axe_cc(CC_AMP_BYP, a, 0x7F);
+            DEBUG_LOG1("AMP%d Y", a + 1);
+            diff |= midi_axe_cc(CC_AMP_XY, a, 0x00);
+            DEBUG_LOG1("CAB%d X", a + 1);
+            diff |= midi_axe_cc(CC_CAB_XY, a, 0x7F);
+            DEBUG_LOG1("GATE%d off", a + 1);
+            diff |= midi_axe_cc(CC_GATE_BYP, a, 0x00);
         }
 
-        if (midi_axe_cc(CC_GAIN, a, amp_live[a].gain)) {
-            DEBUG_LOG2("Gain%d 0x%02x", a + 1, amp_live[a].gain);
-            diff = 1;
-        }
-        if (midi_axe_cc(CC_GATE, a, amp_live[a].gate)) {
-            DEBUG_LOG2("Gate%d %d", a + 1, amp_live[a].gate);
-            diff = 1;
-        }
-
-        // Leave compressor alone for now.
-
-        //if ((last_acoustc | last_dirty) != (acoustc | dirty)) {
-        //    // Always compressor on:
-        //    DEBUG_LOG1("Comp%d on", a + 1);
-        //    midi_axe_cc(axe_cc_byp_compressor1 + a, 0x7F);
-        //}
+        DEBUG_LOG2("Gain%d 0x%02x", a + 1, amp_live[a].gain);
+        diff |= midi_axe_cc(CC_GAIN, a, amp_live[a].gain);
+        DEBUG_LOG2("Gate%d %d", a + 1, amp_live[a].gate);
+        diff |= midi_axe_cc(CC_GATE, a, amp_live[a].gate);
 
         // Update volumes:
-        if (midi_axe_cc(CC_VOLUME, a, amp[a].volume)) {
-            DEBUG_LOG2("MIDI set AMP%d volume = %s", a + 1, bcd(dB_bcd_lookup[amp[a].volume]));
-            diff = 1;
-        }
+        DEBUG_LOG2("MIDI set AMP%d volume = %s", a + 1, bcd(dB_bcd_lookup[amp[a].volume]));
+        diff |= midi_axe_cc(CC_VOLUME, a, amp[a].volume);
     }
 
     // Send FX state:
     for (i = 0; i < 5; i++, test_fx <<= 1) {
-        if (midi_axe_cc(CC_FX1 + i, 0, calc_cc_toggle(amp[0].fx & test_fx))) {
-            DEBUG_LOG2("MIDI set AMP1 %.4s %s", fx_name(fx_midi_cc(0)[i]), (amp[0].fx & test_fx) == 0 ? "off" : "on");
-            diff = 1;
-        }
-        if (midi_axe_cc(CC_FX1 + i, 1, calc_cc_toggle(amp[1].fx & test_fx))) {
-            DEBUG_LOG2("MIDI set AMP2 %.4s %s", fx_name(fx_midi_cc(1)[i]), (amp[1].fx & test_fx) == 0 ? "off" : "on");
-            diff = 1;
-        }
+        DEBUG_LOG2("MIDI set AMP1 %.4s %s", fx_name(fx_midi_cc(0)[i]), (amp[0].fx & test_fx) == 0 ? "off" : "on");
+        diff |= midi_axe_cc(CC_FX1 + i, 0, calc_cc_toggle(amp[0].fx & test_fx));
+        DEBUG_LOG2("MIDI set AMP2 %.4s %s", fx_name(fx_midi_cc(1)[i]), (amp[1].fx & test_fx) == 0 ? "off" : "on");
+        diff |= midi_axe_cc(CC_FX1 + i, 1, calc_cc_toggle(amp[1].fx & test_fx));
     }
 
     // Send MIDI tempo change:
