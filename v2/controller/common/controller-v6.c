@@ -1,5 +1,5 @@
 /*
-    Programmable e-minor MIDI foot controller v2.
+    Programmable e-minor MIDI foot controller hardware v2, software v6.
 
     Currently designed to work with:
         Axe-FX II (MIDI channel 3)
@@ -8,62 +8,126 @@
     Written by
     James S. Dunne
     https://github.com/JamesDunne/
-    2017-09-21
+    2019-07-02
 
     Axe-FX:
     + Split stereo cab block into two mono blocks; CAB1 pan L, CAB2 pan R
     + Amp X/Y for dirty/clean (disable for acoustic)
     + Cab X/Y for electric/acoustic
 
-TODO: adjust MIDI program # per song
-TODO: adjust tempo per song
+LCD designs:
+    /--------------------\
+    |Sandman             | Song
+    |X  1 K 51 I12/38 c/c| Program
+    |C 1a     -50.4 P12CD| MG AMP
+    |D 5e -40   0.0 -1---| JD AMP
+    \--------------------/
 
-AMP controls:
-|------------------------------------------------------------|
-|     *      *      *      *      *      *      *      *     |          /--------------------\
-|  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX    PR_PRV PR_NXT  |          |Beautiful_Disaster_*|
-|  ACOUSTC                             RESET                 |          |Sng 62/62  Scn  1/10|
-|                                                            |    LCD:  |C g=58 v=-99.9 P12CD|
-|     *      *      *      *      *      *      *      *     |          |D g=5E v=  0.0 -1---|
-|  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX    SC_PRV SC_NXT  |          \--------------------/
-|  ACOUSTC                             RESET   MODE  SC_ONE  |
-|------------------------------------------------------------|
+    /--------------------\
+    |What I Got          | Song
+    |X  2 K 52 S31/96 c/c| Program
+    |A          0.0 P12CD| MG AMP
+    |A          0.0 -1---| JD AMP
+    \--------------------/
 
-Press CLN|DRV to toggle clean vs overdrive mode (clean:    AMP -> Y, CAB -> X, gain -> 0x5E; dirty: AMP -> X, CAB -> X, gain -> n)
-Hold  ACOUSTC to switch to acoustic emulation   (acoustic: AMP -> bypass, CAB -> Y, gain -> 0x5E)
+    Song row columns
+    [ 0] 20 char = Song name
 
-Hold  VOL--   to decrease volume slowly
-Hold  VOL++   to increase volume slowly
+    Program row columns:
+    [ 0]  1 char = 'X' to indicate aXe-fx MIDI program number
+    [ 1]  3 char = AXE-FX MIDI program number in decimal
+    [ 4]  1 char = space
+    [ 5]  1 char = 'K' to indicate drum Kit for TD-50 MIDI program number
+    [ 6]  3 char = TD-50 MIDI program number in decimal
+    [ 9]  1 char = space
+    [10]  1 char = 'I' for index in setlist mode or 'S' for song in rehearsal mode
+    [11]  2 char = setlist index or song number, 1-based, decimal
+    [13]  1 char = '/'
+    [14]  2 char = max setlist index or max song number, 1-based, decimal
+    [16]  1 char = space
+    [17]  1 char = scene index, hexadecimal, lowercase, 1-based
+    [18]  1 char = '/'
+    [19]  1 char = max scene index, hexadecimal, lowercase, 1-based
 
-Hold  GAIN--  to decrease gain slowly
-Hold  GAIN++  to increase gain slowly
+    AMP row columns:
+    [ 0]  1 char = [C]lean | [D]irty | [A]coustic channel
+    [ 1]  1 char = space
+    [ 2]  2 char = gain in lowercase hex for clean|dirty channels: "1a" or empty "  " for acoustic
+    [ 4]  1 char = space
+    [ 5]  3 char = gate threshold in dB for dirty channel: "-40" or empty "   " for clean|acoustic
+    [ 8]  1 char = space
+    [ 9]  5 char = volume in dB: " -inf", "-50.4", "  0.0", " +6.0"
+    [14]  1 char = space
+    [15]  5 char = FX enable/disable
 
-Press FX      to switch row to FX mode
+TODO: editing FX mode LCD design
 
-Hold  RESET   to resend MIDI state for amp
+    /--------------------\
+    |What_I_Got_________*|
+    |Sng 62/62  Scn  2/ 3|
+    |PIT1ROT1FIL1CHO1DLY1|
+    |A g=5E v=  6.0 ---CD|
+    \--------------------/
 
-Press PR_PRV  to select previous song or program depending on MODE
-Press PR_NXT  to select next song or program depending on MODE
+Desired functions:
+MIDI EDIT MODE (edit AXE-FX and TD-50 midi program numbers)
+RESET MIDI state
+MODE toggle between setlist and rehearsal
+TAP TEMPO
 
-Press MODE    to switch between set-list order and program # order
+SC_NXT - next scene, next song if last scene
+SC_PRV - prev scene, prev song if before 1
+SC_ONE - goto scene 1
+PR_NXT - next song
+PR_PRV - prev song
 
-Press SC_NXT  to advance to next scene, move to next song scene 1 if at end
-Hold  SC_ONE  to reset scene to 1 on current song
+GAIN-- - decrease gain
+GAIN++ - increase gain
+VOLU-- - decrease volume
+VOLU++ - increase volume
+GATE-- - decrease gate threshold
+GATE++ - increase gate threshold
 
-FX controls:
-|------------------------------------------------------------|    
-|     *      *      *      *      *      *      *      *     |          /--------------------\
-|    FX1    FX2    FX3   CHORUS DELAY   AMP   PR_PRV PR_NXT  |          |What_I_Got_________*|
-|   SELECT SELECT SELECT                                     |          |Sng 62/62  Scn  2/ 3|
-|                                                            |    LCD:  |PIT1ROT1FIL1CHO1DLY1|
-|     *      *      *      *      *      *      *      *     |          |A g=5E v=  6.0 ---CD|
-|  CLN|DRV GAIN-- GAIN++ VOL--  VOL++   FX     MODE  SC_NXT  |          \--------------------/
-|  ACOUSTC                             RESET         SC_ONE  |
-|------------------------------------------------------------|
+CHANNEL  = CLEAN | DIRTY
+ACOUSTIC =    on | off
+EDIT     =    FX | AMP
+AMP      =    JD | MG
 
-Press AMP to switch row to AMP mode
+    EDIT AMP
+    |------------------------------------------------------------|
+    |     *      *      *      *      *      *      *      *     |
+    |   ACOUS  GAIN-- VOLU-- GATE-- MG|JD   MODE PR_PRV PR_NXT   |
+    |                                       MIDI                 |
+    |                                                            |
+    |     *      *      *      *      *      *      *      *     |
+    |  CHANNEL GAIN++ VOLU++ GATE++ FX|AMP  TAP  SC_PRV SC_NXT   |
+    |                                      RESET SC_ONE          |
+    |------------------------------------------------------------|
+
+    EDIT FX
+    |------------------------------------------------------------|
+    |     *      *      *      *      *      *      *      *     |
+    |                                       MODE PR_PRV PR_NXT   |
+    |                                       MIDI                 |
+    |                                                            |
+    |     *      *      *      *      *      *      *      *     |
+    |    FX1    FX2    FX3    FX4    FX5    TAP  SC_PRV SC_NXT   |
+    |                                      RESET SC_ONE          |
+    |------------------------------------------------------------|
+
+    MIDI EDIT
+    |------------------------------------------------------------|
+    |     *      *      *      *      *      *      *      *     |
+    |                                       MODE PR_PRV PR_NXT   |
+    |                                       MIDI                 |
+    |                                                            |
+    |     *      *      *      *      *      *      *      *     |
+    |                                       TAP  SC_PRV SC_NXT   |
+    |                                      RESET SC_ONE          |
+    |------------------------------------------------------------|
 
 */
+
 
 #if HW_VERSION == 6
 
