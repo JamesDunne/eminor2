@@ -70,7 +70,7 @@ songs:
       channel: dirty
 - name: Zero
   tempo: 129
-  gain_log: 0x60
+  gain: 0x70
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -145,7 +145,7 @@ songs:
 - name: Drive
   tempo: 91
   axe_midi: 2
-  gain_log: 0x60
+  gain: 0x70
   scenes:
   - name: Clean
     MG:
@@ -253,7 +253,7 @@ songs:
     MG:
       channel: dirty
     JD:
-      gain_log: 0x60
+      gain: 0x70
       channel: dirty
       level: 5
       fx: [dly2]
@@ -261,7 +261,7 @@ songs:
     MG:
       channel: clean
     JD:
-      gain_log: 0x60
+      gain: 0x70
       channel: dirty
       level: 2
       fx: [dly2]
@@ -284,7 +284,7 @@ songs:
     MG:
       channel: dirty
     JD:
-      gain_log: 0x60
+      gain: 0x70
       channel: dirty
       level: 5
       fx: [dly2]
@@ -295,7 +295,7 @@ songs:
     MG:
       channel: dirty
     JD:
-      gain_log: 0x20
+      gain: 0x41
       channel: dirty
       fx: [flg2, dly2]
       level: -1.5
@@ -308,7 +308,7 @@ songs:
     MG:
       channel: dirty
     JD:
-      gain_log: 0x20
+      gain: 0x41
       channel: dirty
       fx: [flg2, dly2]
       level: -1.5
@@ -321,7 +321,7 @@ songs:
     MG:
       channel: dirty
     JD:
-      gain_log: 0x20
+      gain: 0x41
       channel: dirty
       fx: [flg2, dly2]
       level: -1.5
@@ -334,7 +334,7 @@ songs:
     MG:
       channel: dirty
     JD:
-      gain_log: 0x20
+      gain: 0x41
       channel: dirty
       fx: [flg2, dly2]
       level: -1.5
@@ -345,7 +345,7 @@ songs:
       channel: dirty
 - name: Song 2
   tempo: 130
-  gain_log: 0x60
+  gain: 0x70
   scenes:
   - name: JD clean;MG dirty
     MG:
@@ -493,7 +493,7 @@ songs:
       channel: dirty
 - name: Machinehead
   tempo: 110
-  gain_log: 0x30
+  gain: 0x51
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -683,7 +683,7 @@ songs:
       fx: [dly2]
 - name: The Middle
   tempo: 162
-  gain_log: 0x22
+  gain: 0x44
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -695,7 +695,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
-      gain_log: 0x4A
+      gain: 0x5E
       level: 4
   - name: JD lead;MG dirty
     MG:
@@ -890,7 +890,7 @@ songs:
       channel: clean
 - name: Shine
   tempo: 151
-  gain_log: 0x2C
+  gain: 0x4E
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -903,7 +903,7 @@ songs:
       channel: dirty
       level: -3
     JD:
-      gain_log: 0x7C
+      gain: 0x7D
       channel: dirty
       level: 4
   - name: JD dirty;MG dirty
@@ -987,7 +987,7 @@ songs:
       channel: dirty
 - name: Trippin
   tempo: 107
-  gain_log: 0x28
+  gain: 0x4A
   scenes:
   - name: Rhythm
     MG:
@@ -1071,12 +1071,12 @@ songs:
     JD:
       channel: dirty
       level: 3
-      gain_log: 0x60
+      gain: 0x70
       fx: [dly2]
 
 - name: Low
   tempo: 86
-  gain_log: 0x20
+  gain: 0x41
   scenes:
   - name: Chorus
     MG:
@@ -1111,7 +1111,7 @@ songs:
     JD:
       channel: dirty
       level: 4
-      gain_log: 0x40
+      gain: 0x5E
       fx: [dly2]
     # Blue blue is the sun...
   - name: Bridge
@@ -1121,7 +1121,7 @@ songs:
     JD:
       channel: dirty
       level: -2
-      gain_log: 0x40
+      gain: 0x5E
       fx: [dly2]
   - name: Chorus
     MG:
@@ -1134,35 +1134,21 @@ songs:
     JD:
       channel: dirty
       level: 0
-      gain_log: 0x40
+      gain: 0x5E
       fx: [dly2]
 
 - name: Closing Time
   tempo: 120
-  gain_log: 0x40
+  gain: 0x5E
   scenes:
   - name: Intro
     MG:
       channel: dirty
-      gain_log: 0x20
+      gain: 0x41
       level: -2
     JD:
       channel: dirty
-      gain_log: 0x20
-      level: -2
-  - name: Chorus
-    MG:
-      channel: dirty
-    JD:
-      channel: dirty
-  - name: Verse
-    MG:
-      channel: dirty
-      gain_log: 0x20
-      level: -2
-    JD:
-      channel: dirty
-      gain_log: 0x20
+      gain: 0x41
       level: -2
   - name: Chorus
     MG:
@@ -1172,11 +1158,25 @@ songs:
   - name: Verse
     MG:
       channel: dirty
-      gain_log: 0x20
+      gain: 0x41
       level: -2
     JD:
       channel: dirty
-      gain_log: 0x20
+      gain: 0x41
+      level: -2
+  - name: Chorus
+    MG:
+      channel: dirty
+    JD:
+      channel: dirty
+  - name: Verse
+    MG:
+      channel: dirty
+      gain: 0x41
+      level: -2
+    JD:
+      channel: dirty
+      gain: 0x41
       level: -2
   - name: Chorus
     MG:
@@ -1186,11 +1186,11 @@ songs:
   - name: Outro
     MG:
       channel: dirty
-      gain_log: 0x20
+      gain: 0x41
       level: -2
     JD:
       channel: dirty
-      gain_log: 0x20
+      gain: 0x41
       level: -2
 
 - name: Slayer
@@ -1227,7 +1227,7 @@ songs:
 
 - name: December
   tempo: 122
-  gain_log: 0x12
+  gain: 0x2E
   scenes:
   - name: Intro
     MG:
@@ -1279,7 +1279,7 @@ songs:
       fx: [cho1]
     JD:
       channel: dirty
-      gain_log: 0x20
+      gain: 0x41
       level: -1
       fx: [dly2]
   - name: Outro
