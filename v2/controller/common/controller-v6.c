@@ -238,8 +238,6 @@ extern rom const u16 dB_bcd_lookup[128];
 #pragma udata
 
 // Set Axe-FX CC value
-//#define midi_axe_cc(cc, val) midi_send_cmd2(0xB, axe_midi_channel, cc, val)
-//#define midi_axe_pc(program) midi_send_cmd1(0xC, axe_midi_channel, program)
 #define midi_axe_sysex_start(fn) { \
   midi_send_sysex(0xF0); \
   midi_send_sysex(0x00); \
@@ -1069,6 +1067,62 @@ struct timers {
 } timers;
 #pragma udata
 
+static void vol_dec(u8 ampno) {
+    u8 volume = (amp[ampno].volume);
+    if (volume > (u8)0) {
+        volume--;
+        amp[ampno].volume = volume;
+        calc_volume_modified();
+    }
+}
+
+static void vol_inc(u8 ampno) {
+    u8 volume = (amp[ampno].volume);
+    if (volume < (u8)127) {
+        volume++;
+        amp[ampno].volume = volume;
+        calc_volume_modified();
+    }
+}
+
+static void gain_dec(u8 ampno) {
+    u8 *gain;
+    if ((amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) {
+        if (amp[ampno].gain != 0) {
+            gain = &amp[ampno].gain;
+        } else {
+            gain = &pr.amp_defaults.dirty_gain;
+            if (*gain == 0) { *gain = axe_midi->amp_defaults.dirty_gain; }
+        }
+    } else {
+        gain = &pr.amp_defaults.clean_gain;
+        if (*gain == 0) { *gain = axe_midi->amp_defaults.clean_gain; }
+    }
+    if ((*gain) > (u8)1) {
+        (*gain)--;
+        calc_gain_modified();
+    }
+}
+
+static void gain_inc(u8 ampno) {
+    u8 *gain;
+    if ((amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) {
+        if (amp[ampno].gain != 0) {
+            gain = &amp[ampno].gain;
+        } else {
+            gain = &pr.amp_defaults.dirty_gain;
+            if (*gain == 0) { *gain = axe_midi->amp_defaults.dirty_gain; }
+        }
+    } else {
+        gain = &pr.amp_defaults.clean_gain;
+        if (*gain == 0) { *gain = axe_midi->amp_defaults.clean_gain; }
+    }
+    if ((*gain) < (u8)127) {
+        (*gain)++;
+        calc_gain_modified();
+    }
+}
+
 // called every 10ms
 void controller_10msec_timer(void) {
 #define one_shot(row,n,max,op_func) \
@@ -1093,62 +1147,6 @@ void controller_10msec_timer(void) {
         } \
         if ((timers.row##_##n & (u8)0xC0) != (u8)0) { \
             timers.row##_##n = (timers.row##_##n & (u8)0xC0) | (((timers.row##_##n & (u8)0x3F) + (u8)1) & (u8)0x3F); \
-        } \
-    }
-
-#define vol_dec(ampno) { \
-        u8 volume = (amp[ampno].volume); \
-        if (volume > (u8)0) { \
-            volume--; \
-            amp[ampno].volume = volume; \
-            calc_volume_modified(); \
-        } \
-    }
-
-#define vol_inc(ampno) { \
-        u8 volume = (amp[ampno].volume); \
-        if (volume < (u8)127) { \
-            volume++; \
-            amp[ampno].volume = volume; \
-            calc_volume_modified(); \
-        } \
-    }
-
-#define gain_dec(ampno) { \
-        u8 *gain; \
-        if ((amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) { \
-            if (amp[ampno].gain != 0) { \
-                gain = &amp[ampno].gain; \
-            } else { \
-                gain = &pr.amp_defaults.dirty_gain; \
-                if (*gain == 0) { *gain = axe_midi->amp_defaults.dirty_gain; } \
-            } \
-        } else { \
-            gain = &pr.amp_defaults.clean_gain; \
-            if (*gain == 0) { *gain = axe_midi->amp_defaults.clean_gain; } \
-        } \
-        if ((*gain) > (u8)1) { \
-            (*gain)--; \
-            calc_gain_modified(); \
-        } \
-    }
-
-#define gain_inc(ampno) { \
-        u8 *gain; \
-        if ((amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) { \
-            if (amp[ampno].gain != 0) { \
-                gain = &amp[ampno].gain; \
-            } else { \
-                gain = &pr.amp_defaults.dirty_gain; \
-                if (*gain == 0) { *gain = axe_midi->amp_defaults.dirty_gain; } \
-            } \
-        } else { \
-            gain = &pr.amp_defaults.clean_gain; \
-            if (*gain == 0) { *gain = axe_midi->amp_defaults.clean_gain; } \
-        } \
-        if ((*gain) < (u8)127) { \
-            (*gain)++; \
-            calc_gain_modified(); \
         } \
     }
 
