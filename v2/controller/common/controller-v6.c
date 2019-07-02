@@ -1121,9 +1121,11 @@ void controller_10msec_timer(void) {
                 gain = &amp[ampno].gain; \
             } else { \
                 gain = &pr.amp_defaults.dirty_gain; \
+                if (*gain == 0) { *gain = axe_midi->amp_defaults.dirty_gain; } \
             } \
         } else { \
             gain = &pr.amp_defaults.clean_gain; \
+            if (*gain == 0) { *gain = axe_midi->amp_defaults.clean_gain; } \
         } \
         if ((*gain) > (u8)1) { \
             (*gain)--; \
@@ -1138,9 +1140,11 @@ void controller_10msec_timer(void) {
                 gain = &amp[ampno].gain; \
             } else { \
                 gain = &pr.amp_defaults.dirty_gain; \
+                if (*gain == 0) { *gain = axe_midi->amp_defaults.dirty_gain; } \
             } \
         } else { \
             gain = &pr.amp_defaults.clean_gain; \
+            if (*gain == 0) { *gain = axe_midi->amp_defaults.clean_gain; } \
         } \
         if ((*gain) < (u8)127) { \
             (*gain)++; \
