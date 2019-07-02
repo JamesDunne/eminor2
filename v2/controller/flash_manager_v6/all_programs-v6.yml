@@ -68,6 +68,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Zero
   tempo: 129
   gain: 0x70
@@ -113,6 +114,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Buddy Holly
   tempo: 121
   scenes:
@@ -133,6 +135,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Plush
   tempo: 145
   scenes:
@@ -142,6 +145,7 @@ songs:
     JD:
       channel: dirty
       fx: [cho2]
+
 - name: Drive
   tempo: 91
   axe_midi: 2
@@ -164,6 +168,7 @@ songs:
       channel: acoustic
     JD:
       channel: acoustic
+
 - name: When I Come Around
   tempo: 98
   scenes:
@@ -184,6 +189,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Everything Zen
   tempo: 135
   scenes:
@@ -229,6 +235,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Enter Sandman
   tempo: 124
   scenes:
@@ -243,7 +250,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
-      level: -3.0
+      level: -2.0
   - name: Verse
     MG:
       channel: dirty
@@ -288,6 +295,7 @@ songs:
       channel: dirty
       level: 5
       fx: [dly2]
+
 - name: Crawling in the Dark
   tempo: 94
   scenes:
@@ -343,6 +351,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Song 2
   tempo: 130
   gain: 0x70
@@ -377,6 +386,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Sex Type Thing
   tempo: 135
   scenes:
@@ -385,6 +395,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Counting Blue Cars
   tempo: 101
   scenes:
@@ -444,8 +455,10 @@ songs:
       channel: dirty
       level: 4
       fx: [dly2]
+
 - name: In Bloom
   tempo: 80
+  deprecated: true
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -463,6 +476,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Hash Pipe
   tempo: 126
   scenes:
@@ -483,6 +497,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: My Hero
   tempo: 154
   scenes:
@@ -491,6 +506,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Machinehead
   tempo: 110
   gain: 0x51
@@ -500,6 +516,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Holiday
   tempo: 168
   scenes:
@@ -520,6 +537,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Brain Stew
   tempo: 76
   gain: 0x50
@@ -530,6 +548,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Bound for the Floor
   tempo: 120
   scenes:
@@ -549,6 +568,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Cumbersome
   tempo: 81
   scenes:
@@ -557,6 +577,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Lump
   tempo: 143
   scenes:
@@ -565,6 +586,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Hey Jealousy
   tempo: 154
   scenes:
@@ -588,6 +610,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Kryptonite
   tempo: 100
   scenes:
@@ -647,6 +670,7 @@ songs:
       fx: [dly1]
     JD:
       channel: dirty
+
 - name: Dammit
   tempo: 110
   scenes:
@@ -655,6 +679,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: My Own Worst Enemy
   tempo: 104
   scenes:
@@ -681,6 +706,7 @@ songs:
       channel: dirty
       level: 2
       fx: [dly2]
+
 - name: The Middle
   tempo: 162
   gain: 0x44
@@ -709,6 +735,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Bullet With Butterfly Wings
   tempo: 122
   scenes:
@@ -756,14 +783,17 @@ songs:
       channel: dirty
       level: 4
       fx: [cho2]
+
 - name: Beautiful Disaster
   tempo: 169
+  td50_midi: 54
   scenes:
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Bells
   tempo: 118
   scenes:
@@ -779,9 +809,11 @@ songs:
       channel: dirty
       level: 5
       fx: [dly2]
+
 - name: Fuel
   tempo: 107
   gain: 0x50
+  td50_midi: 53
   scenes:
   - name: JD dirty;MG dirty
     MG:
@@ -818,9 +850,11 @@ songs:
     JD:
       channel: dirty
       fx: [dly2]
+
 - name: What I Got
   tempo: 96
   axe_midi: 2
+  td50_midi: 51
   scenes:
   - name: JD clean;MG clean
     MG:
@@ -849,8 +883,10 @@ songs:
       channel: acoustic
     JD:
       channel: acoustic
+
 - name: Say It Aint So
   tempo: 77
+  td50_midi: 52
   scenes:
   - name: JD clean;MG clean
     MG:
@@ -888,20 +924,21 @@ songs:
       channel: dirty
     JD:
       channel: clean
+
 - name: Shine
   tempo: 151
-  gain: 0x4E
+  gain: 0x40
   scenes:
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
-      level: -3
+      level: -2
     JD:
       channel: dirty
   - name: JD lead
     MG:
       channel: dirty
-      level: -3
+      level: -2
     JD:
       gain: 0x7D
       channel: dirty
@@ -909,9 +946,10 @@ songs:
   - name: JD dirty;MG dirty
     MG:
       channel: dirty
-      level: -3
+      level: -2
     JD:
       channel: dirty
+
 - name: Basketcase
   tempo: 86
   scenes:
@@ -920,6 +958,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Undone
   tempo: 81
   scenes:
@@ -962,9 +1001,10 @@ songs:
       channel: dirty
       level: 4
       fx: [dly2]
+
 - name: Story of a Girl
   tempo: 97
-  gain: 0x24
+  gain: 0x1C
   gate: -48
   scenes:
   - name: Rhythm
@@ -985,6 +1025,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Trippin
   tempo: 107
   gain: 0x4A
@@ -1005,6 +1046,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
+
 - name: Puppets
   tempo: 106
   axe_midi: 3
@@ -1227,6 +1269,7 @@ songs:
 
 - name: December
   tempo: 122
+  td50_midi: 52
   gain: 0x2E
   scenes:
   - name: Intro
@@ -1405,6 +1448,7 @@ songs:
 
 - name: Creep
   tempo: 82
+  td50_midi: 52
   gain: 0x3A
   scenes:
   - name: Rhythm
@@ -1464,6 +1508,7 @@ songs:
 
 - name: Interstate
   tempo: 110
+  td50_midi: 52
   gain: 0x2C
   scenes:
   - name: Rhythm
