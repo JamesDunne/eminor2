@@ -43,9 +43,9 @@
 #define INIT_PR2            0xF9        //250uS interrupt
 #define INIT_PIE1           0b00000011  //enable pr2 to tmr2 match interrupt, TMR1IE on
 
-// 32 MHz clock cycle.
-#define TMR1_BAUD9600_PERIOD    	833 // TimerCountValue = (1000000 / baud_rate) * 8;   (833.3333333 for 9600 baud)
-#define TMR1_ISR_LATENCY			189	// latency to next ISR (a.k.a. time spent in ISR)
+// 8 MHz clock cycle.
+#define TMR1_BAUD9600_PERIOD    	833 // TimerCountValue = (8000000Hz / baud_rate);   (833.3333333 for 9600 baud)
+#define TMR1_ISR_LATENCY			196	// latency to next ISR (a.k.a. time spent in ISR)
 
 #define TMR1_START_LATENCY      0		// Subtract ISR code latency (see assembly listing of ISR code and calculate cycles)
 #define TMR1_RELOAD_LATENCY     0

@@ -29,6 +29,13 @@ char LCDRamMap[4][20];
 // Wait for the LCD to initialize.
 void lcd_init(void) {
     unsigned char i;
+    
+    swuart_tx_bufptr = 0;
+    swuart_tx_bufoutptr = 0;
+    swuart_txbyte = 0;
+    swuart_txmask = 0;
+    swuart_mode = SWUARTMODE_TX_IDLE;
+    swuart_started = 0;
 
     // Disable timer interrupt:
     DISABLE_ALL_INTERRUPTS();
@@ -102,6 +109,7 @@ void lcd_enqueue(unsigned char v) {
 
 void swuart_tx_start(void) {
     // TODO(jsd): Need critical section here? disable interrupts?
+    DISABLE_ALL_INTERRUPTS();
 
     // Set SWUART to TX mode:
     swuart_mode = SWUARTMODE_TX_START_BIT;
@@ -112,6 +120,7 @@ void swuart_tx_start(void) {
     TMR1L = ((unsigned short)0xFFFF - ((unsigned short)TMR1_BAUD9600_PERIOD) - (unsigned short)2) & 0xFF;   // 0x80
     TMR1H = (((unsigned short)0xFFFF - ((unsigned short)TMR1_BAUD9600_PERIOD) - (unsigned short)2) >> 8) & 0xFF;    // 0xFE
     T1CONbits.TMR1ON = 1;
+    ENABLE_ALL_INTERRUPTS();
 }
 
 // ISR for SWUART:
