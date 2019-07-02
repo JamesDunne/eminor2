@@ -185,7 +185,9 @@ func write_yaml(path string, src interface{}) error {
 
 func logTaper(b int) int {
 	// 127 * (ln(x+1)^2) / (ln(127+1)^2)
-	return int(127.0 * math.Pow(math.Log2(float64(b)+1.0), 2) / math.Pow(math.Log2(127.0+1.0), 2))
+	gain := int(127.0 * math.Pow(math.Log2(float64(b)+1.0), 2) / math.Pow(math.Log2(127.0+1.0), 2))
+	fmt.Printf("gain_log(0x%02X) = 0x%02X\n", b, gain)
+	return gain
 }
 
 func gainOrLogOrDefault(gain int, gainLog int, gainDefault int) int {
