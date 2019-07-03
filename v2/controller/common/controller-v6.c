@@ -364,6 +364,8 @@ static void next_song(void);
 
 static void midi_invalidate(void);
 
+static void midi_reset_cc(void);
+
 static void toggle_setlist_mode(void);
 
 static void tap_tempo(void);
@@ -402,8 +404,8 @@ static void calc_midi(void) {
     if (curr.axe_midi_program != last.axe_midi_program) {
         DEBUG_LOG1("AXE-FX MIDI change program %d", curr.axe_midi_program);
         midi_send_cmd1(0xC, axe_midi_channel, curr.axe_midi_program);
-        // All bets are off as to what state when changing program:
-        midi_invalidate();
+        // All bets are off as to what state was last sent when changing programs:
+        midi_reset_cc();
         diff = 1;
     }
 
@@ -923,7 +925,7 @@ void scene_default(void) {
     pr.scene[curr.sc_idx].amp[1].volume = volume_0dB;
 }
 
-static void toggle_setlist_mode() {
+static void toggle_setlist_mode(void) {
     DEBUG_LOG0("change setlist mode");
     curr.setlist_mode ^= (u8)1;
     if (curr.setlist_mode == 1) {
@@ -944,12 +946,22 @@ static void toggle_setlist_mode() {
     }
 }
 
-static void tap_tempo() {
+static void tap_tempo(void) {
     tap ^= (u8)0x7F;
     midi_send_cmd2(0xB, axe_midi_channel, axe_cc_taptempo, tap);
 }
 
-static void midi_invalidate() {
+static void midi_reset_cc(void) {
+    u8 i;
+    // Forget last-sent CC state:
+    for (i = 0; i < CC_AMP2; i++) {
+        // Since MIDI values are 7-bit, 0xff here is a value that will never be legitimately sent:
+        cc_sent[i] = 0xff;
+        cc_sent[CC_AMP2 + i] = 0xff;
+    }
+}
+
+static void midi_invalidate(void) {
     u8 i;
 
     // Invalidate all current MIDI state so it gets re-sent at end of loop:
@@ -959,15 +971,10 @@ static void midi_invalidate() {
     last.td50_midi_program = ~curr.td50_midi_program;
     last.tempo = ~curr.tempo;
 
-    // Forget last-sent CC state:
-    for (i = 0; i < CC_AMP2; i++) {
-        // Since MIDI values are 7-bit, 0xff here is a value that will never be legitimately sent:
-        cc_sent[i] = 0xff;
-        cc_sent[CC_AMP2 + i] = 0xff;
-    }
+    midi_reset_cc();
 }
 
-static void next_song() {
+static void next_song(void) {
     if (curr.setlist_mode == 0) {
         if (curr.pr_idx < 127) {
             DEBUG_LOG0("next program");
@@ -981,7 +988,7 @@ static void next_song() {
     }
 }
 
-static void prev_song() {
+static void prev_song(void) {
     if (curr.setlist_mode == 0) {
         if (curr.pr_idx > 0) {
             DEBUG_LOG0("prev program");
@@ -995,19 +1002,19 @@ static void prev_song() {
     }
 }
 
-static void next_scene() {
+static void next_scene(void) {
     if (curr.sc_idx < scene_count_max - 1) {
         DEBUG_LOG0("next scene");
         curr.sc_idx++;
     }
 }
 
-static void reset_scene() {
+static void reset_scene(void) {
     DEBUG_LOG0("reset scene");
     curr.sc_idx = 0;
 }
 
-static void prev_scene() {
+static void prev_scene(void) {
     if (curr.sc_idx > 0) {
         DEBUG_LOG0("prev scene");
         curr.sc_idx--;
@@ -1182,7 +1189,7 @@ static void gate_dec(u8 ampno) {
     }
     if ((*gate) > (u8)1) {
         (*gate)--;
-        calc_gain_modified();
+        //calc_gain_modified();
     }
 }
 
@@ -1196,7 +1203,19 @@ static void gate_inc(u8 ampno) {
     }
     if ((*gate) < (u8)127) {
         (*gate)++;
-        calc_gain_modified();
+        //calc_gain_modified();
+    }
+}
+
+static void bounded_dec(u8 *value, u8 min) {
+    if ((*value) > min) {
+        (*value)--;
+    }
+}
+
+static void bounded_inc(u8 *value, u8 max) {
+    if ((*value) < max) {
+        (*value)++;
     }
 }
 
@@ -1242,10 +1261,10 @@ void controller_10msec_timer(void) {
         case SCREEN_FX:
             break;
         case SCREEN_MIDI:
-            repeater(top,3,0x18,0x03,curr.axe_midi_program--)
-            repeater(bot,3,0x18,0x03,curr.axe_midi_program++)
-            repeater(top,4,0x18,0x03,curr.td50_midi_program--)
-            repeater(bot,4,0x18,0x03,curr.td50_midi_program++)
+            repeater(top,3,0x18,0x03,bounded_dec(&curr.axe_midi_program, 0))
+            repeater(bot,3,0x18,0x03,bounded_inc(&curr.axe_midi_program, max_axe_midi_program_count-1))
+            repeater(top,4,0x18,0x03,bounded_dec(&curr.td50_midi_program, 0))
+            repeater(bot,4,0x18,0x03,bounded_inc(&curr.td50_midi_program, 127))
             break;
     }
 
@@ -1335,10 +1354,10 @@ void controller_handle(void) {
             btn_released_oneshot(top, 5, curr.screen = (curr.screen & 1) ^ 1)
             break;
         case SCREEN_MIDI:
-            btn_released_repeater(top, 3, curr.axe_midi_program--)
-            btn_released_repeater(bot, 3, curr.axe_midi_program++)
-            btn_released_repeater(top, 4, curr.td50_midi_program--)
-            btn_released_repeater(bot, 4, curr.td50_midi_program++)
+            btn_released_repeater(top, 3, bounded_dec(&curr.axe_midi_program, 0))
+            btn_released_repeater(bot, 3, bounded_inc(&curr.axe_midi_program, max_axe_midi_program_count-1))
+            btn_released_repeater(top, 4, bounded_dec(&curr.td50_midi_program, 0))
+            btn_released_repeater(bot, 4, bounded_inc(&curr.td50_midi_program, 127))
             btn_released_oneshot(top, 5, curr.screen = (curr.screen & 1) ^ 1)
             break;
     }
