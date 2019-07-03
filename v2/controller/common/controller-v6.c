@@ -100,11 +100,11 @@ TODO: record tempo from taps
     EDIT AMP
     |------------------------------------------------------------|
     |     *      *      *      *      *      *      *      *     |
-    |   ACOUS  GAIN-- VOLU-- GATE-- AMP|FX  MIDI SONG-- SONG++   |
+    |   ACOUS  GAIN-- GATE-- VOLU-- AMP|FX  MIDI SONG-- SONG++   |
     |                                       MODE                 |
     |                                                            |
     |     *      *      *      *      *      *      *      *     |
-    |  CHANNEL GAIN++ VOLU++ GATE++ JD|MG   TAP  SCEN-- SCEN++   |
+    |  CHANNEL GAIN++ GATE++ VOLU++ JD|MG   TAP  SCEN-- SCEN++   |
     |                                      RESET SCEN=1          |
     |------------------------------------------------------------|
 
@@ -661,10 +661,10 @@ static void update_lcd(void) {
             labels_bot[0] = "CHANNEL";
             labels_top[1] = "GAIN--";
             labels_bot[1] = "GAIN++";
-            labels_top[2] = "VOLU--";
-            labels_bot[2] = "VOLU++";
-            labels_top[3] = "GATE--";
-            labels_bot[3] = "GATE++";
+            labels_top[2] = "GATE--";
+            labels_bot[2] = "GATE++";
+            labels_top[3] = "VOLU--";
+            labels_bot[3] = "VOLU++";
             labels_top[4] = "AMP|FX";
             labels_bot[4] = "JD|MG";
             break;
@@ -1091,7 +1091,7 @@ void controller_init(void) {
 #ifdef FEAT_LCD
     for (i = 0; i < LCD_ROWS; ++i)
         lcd_rows[i] = lcd_row_get(i);
-
+#if 0
     for (i = 0; i < LCD_COLS; ++i) {
         lcd_rows[row_amp1][i] = "                    "[i];
         lcd_rows[row_amp2][i] = "                    "[i];
@@ -1099,23 +1099,24 @@ void controller_init(void) {
         lcd_rows[row_song][i] = "                    "[i];
     }
 #endif
+#endif
 }
 
 #pragma udata timers
 struct timers {
-    u8 top_1;
+    //u8 top_1;
     u8 top_2;
     u8 top_3;
     u8 top_4;
-    u8 top_5;
+    //u8 top_5;
     u8 top_6;
     u8 top_7;
     u8 top_8;
-    u8 bot_1;
+    //u8 bot_1;
     u8 bot_2;
     u8 bot_3;
     u8 bot_4;
-    u8 bot_5;
+    //u8 bot_5;
     u8 bot_6;
     u8 bot_7;
     u8 bot_8;
@@ -1249,14 +1250,12 @@ void controller_10msec_timer(void) {
     // on timer:
     switch (curr.screen) {
         case SCREEN_AMP:
-            one_shot(top,1,0x1F,amp[curr.selected_amp].fx ^= fxm_acoustc; calc_fx_modified())
-            one_shot(bot,1,0x1F,amp[curr.selected_amp].fx ^= fxm_dirty; calc_fx_modified())
             repeater(top,2,0x18,0x03,gain_dec(curr.selected_amp))
             repeater(bot,2,0x18,0x03,gain_inc(curr.selected_amp))
-            repeater(top,3,0x18,0x03,vol_dec(curr.selected_amp))
-            repeater(bot,3,0x18,0x03,vol_inc(curr.selected_amp))
-            repeater(top,4,0x18,0x03,gate_dec(curr.selected_amp))
-            repeater(bot,4,0x18,0x03,gate_inc(curr.selected_amp))
+            repeater(top,3,0x18,0x03,gate_dec(curr.selected_amp))
+            repeater(bot,3,0x18,0x03,gate_inc(curr.selected_amp))
+            repeater(top,4,0x18,0x03,vol_dec(curr.selected_amp))
+            repeater(bot,4,0x18,0x03,vol_inc(curr.selected_amp))
             break;
         case SCREEN_FX:
             break;
@@ -1297,10 +1296,7 @@ void controller_handle(void) {
 
 #define btn_pressed(row, n, on_press) \
     if (is_##row##_button_pressed(M_##n)) { \
-        timers.row##_##n = (u8)0x80; \
         on_press; \
-    } else if (is_##row##_button_released(M_##n)) { \
-        timers.row##_##n = (u8)0x00; \
     }
 
 #define btn_released_repeater(row, n, on_release) \
@@ -1334,16 +1330,16 @@ void controller_handle(void) {
 
     switch (curr.screen) {
         case SCREEN_AMP:
-            btn_released_oneshot(top, 1, amp[curr.selected_amp].fx ^= fxm_acoustc; calc_fx_modified())
-            btn_released_oneshot(bot, 1, amp[curr.selected_amp].fx ^= fxm_dirty; calc_fx_modified())
+            btn_pressed(top, 1, amp[curr.selected_amp].fx ^= fxm_acoustc; calc_fx_modified())
+            btn_pressed(bot, 1, amp[curr.selected_amp].fx ^= fxm_dirty; calc_fx_modified())
             btn_released_repeater(top, 2, gain_dec(curr.selected_amp))
             btn_released_repeater(bot, 2, gain_inc(curr.selected_amp))
-            btn_released_repeater(top, 3, vol_dec(curr.selected_amp))
-            btn_released_repeater(bot, 3, vol_inc(curr.selected_amp))
-            btn_released_repeater(top, 4, gate_dec(curr.selected_amp))
-            btn_released_repeater(bot, 4, gate_inc(curr.selected_amp))
-            btn_released_oneshot(top, 5, curr.screen = (curr.screen & 1) ^ 1)
-            btn_released_oneshot(bot, 5, curr.selected_amp ^= JD)
+            btn_released_repeater(top, 3, gate_dec(curr.selected_amp))
+            btn_released_repeater(bot, 3, gate_inc(curr.selected_amp))
+            btn_released_repeater(top, 4, vol_dec(curr.selected_amp))
+            btn_released_repeater(bot, 4, vol_inc(curr.selected_amp))
+            btn_pressed(top, 5, curr.screen = (curr.screen & 1) ^ 1)
+            btn_pressed(bot, 5, curr.selected_amp ^= JD)
             break;
         case SCREEN_FX:
             btn_pressed(bot, 1, amp[curr.selected_amp].fx ^= fxm_1; calc_fx_modified())
@@ -1351,14 +1347,14 @@ void controller_handle(void) {
             btn_pressed(bot, 3, amp[curr.selected_amp].fx ^= fxm_3; calc_fx_modified())
             btn_pressed(bot, 4, amp[curr.selected_amp].fx ^= fxm_4; calc_fx_modified())
             btn_pressed(bot, 5, amp[curr.selected_amp].fx ^= fxm_5; calc_fx_modified())
-            btn_released_oneshot(top, 5, curr.screen = (curr.screen & 1) ^ 1)
+            btn_pressed(top, 5, curr.screen = (curr.screen & 1) ^ 1)
             break;
         case SCREEN_MIDI:
             btn_released_repeater(top, 3, bounded_dec(&curr.axe_midi_program, 0))
             btn_released_repeater(bot, 3, bounded_inc(&curr.axe_midi_program, max_axe_midi_program_count-1))
             btn_released_repeater(top, 4, bounded_dec(&curr.td50_midi_program, 0))
             btn_released_repeater(bot, 4, bounded_inc(&curr.td50_midi_program, 127))
-            btn_released_oneshot(top, 5, curr.screen = (curr.screen & 1) ^ 1)
+            btn_pressed(top, 5, curr.screen = (curr.screen & 1) ^ 1)
             break;
     }
 
