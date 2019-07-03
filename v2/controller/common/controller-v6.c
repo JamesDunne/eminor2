@@ -571,7 +571,7 @@ static void lcd_amp_row(u8 a) {
     u8 row = row_amp1 + a;
 
     for (i = 0; i < LCD_COLS; i++) {
-        lcd_rows[row][i] = "C 1a       0.0 P12CD"[i];
+        lcd_rows[row][i] = "C 1a       0.0 -----"[i];
     }
 
     if ((amp[a].fx & fxm_acoustc) != 0) {
