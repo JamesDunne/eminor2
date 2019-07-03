@@ -700,18 +700,26 @@ static void update_lcd(void) {
         switch (curr.rowstate[a].mode) {
             case ROWMODE_AMP:
                 for (i = 0; i < LCD_COLS; i++) {
-                    lcd_rows[row][i] = "1C g 0  v  0.0 -----"[i];
+                    lcd_rows[row][i] = "C 1a       0.0 P12CD"[i];
                 }
 
                 if ((amp[a].fx & fxm_acoustc) != 0) {
                     // A for acoustic
-                    lcd_rows[row][1] = 'A';
+                    lcd_rows[row][0] = 'A';
                 } else {
                     // C/D for clean/dirty
-                    lcd_rows[row][1] = 'C' + ((amp[a].fx & fxm_dirty) != 0);
+                    lcd_rows[row][0] = 'C' + ((amp[a].fx & fxm_dirty) != 0);
                 }
-                hextoa(lcd_rows[row], 5, amp_live[a].gain);
+                hextoa(lcd_rows[row], 3, amp_live[a].gain);
                 bcdtoa(lcd_rows[row], 13, dB_bcd_lookup[amp[a].volume]);
+
+                // Only display gate threshold if on dirty channel:
+                if ((amp[a].fx & (fxm_dirty|fxm_acoustc)) == fxm_dirty) {
+                    // Convert gate MIDI back to dB:
+                    s8 gate = -((s8)(amp_live[a].gate >> (u8)1) - (s8)76);
+                    s8 col = ritoa(lcd_rows[row], 7, gate);
+                    lcd_rows[row][col] = '-';
+                }
 
                 test_fx = 1;
                 d = &lcd_rows[row][15];

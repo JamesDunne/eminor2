@@ -57,9 +57,9 @@ s8 ritoa(char *dst, s8 col, u8 n) {
 
 // BCD is 2.1 format with MSB indicating sign (5 chars total) i.e. "-99.9" or " -inf"
 void bcdtoa(char *dst, u8 col, u16 bcd) {
-    u8 sign;
+    u8 sign = (u8)((bcd & 0x8000) != 0);
+    u8 pos = (bcd > 0x0000) && (bcd < 0x8000);
     dst += col;
-    sign = (u8)((bcd & 0x8000) != 0);
     if ((bcd & 0x7FFF) == 0x7FFF) {
         *dst-- = 'f';
         *dst-- = 'n';
@@ -76,6 +76,8 @@ void bcdtoa(char *dst, u8 col, u16 bcd) {
     }
     if (sign) {
         *dst = '-';
+    } else if (pos) {
+        *dst = '+';
     }
 }
 
