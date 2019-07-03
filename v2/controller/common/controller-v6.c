@@ -368,8 +368,6 @@ static void midi_reset_cc(void);
 
 static void toggle_setlist_mode(void);
 
-static void tap_tempo(void);
-
 static void scene_default(void);
 
 static void reset_scene(void);
@@ -421,10 +419,7 @@ static void calc_midi(void) {
 
     // Send controller changes per amp:
     for (a = 0; a < 2; a++) {
-        dirty = amp[a].fx & fxm_dirty;
-        acoustc = amp[a].fx & fxm_acoustc;
-
-        if (acoustc != 0) {
+        if ((amp[a].fx & fxm_acoustc) != 0) {
             // acoustic:
             amp_live[a].gain = or_default(pr.amp_defaults.clean_gain, axe_midi->amp_defaults.clean_gain);
 
@@ -440,7 +435,7 @@ static void calc_midi(void) {
                 DEBUG_LOG1("GATE%d off", a + 1);
                 diff = 1;
             }
-        } else if (dirty != 0) {
+        } else if ((amp[a].fx & fxm_dirty) != 0) {
             // dirty:
             amp_live[a].gain = or_default(amp[a].gain, or_default(pr.amp_defaults.dirty_gain, axe_midi->amp_defaults.dirty_gain));
             amp_live[a].gate = or_default(amp[a].gate, or_default(pr.amp_defaults.gate, axe_midi->amp_defaults.gate));
@@ -494,7 +489,7 @@ static void calc_midi(void) {
 
         // Update volumes:
         if (midi_axe_cc(CC_VOLUME, a, amp[a].volume)) {
-            DEBUG_LOG2("MIDI set AMP%d volume = %s", a + 1, bcd(dB_bcd_lookup[amp[a].volume]));
+            DEBUG_LOG2("AMP%d volume = %s", a + 1, bcd(dB_bcd_lookup[amp[a].volume]));
             diff = 1;
         }
     }
@@ -502,11 +497,11 @@ static void calc_midi(void) {
     // Send FX state:
     for (i = 0; i < 5; i++, test_fx <<= 1) {
         if (midi_axe_cc(CC_FX1 + i, 0, calc_cc_toggle(amp[0].fx & test_fx))) {
-            DEBUG_LOG2("MIDI set AMP1 %.4s %s", fx_name(fx_midi_cc(0)[i]), (amp[0].fx & test_fx) == 0 ? "off" : "on");
+            DEBUG_LOG2("AMP1 %.4s %s", fx_name(fx_midi_cc(0)[i]), (amp[0].fx & test_fx) == 0 ? "off" : "on");
             diff = 1;
         }
         if (midi_axe_cc(CC_FX1 + i, 1, calc_cc_toggle(amp[1].fx & test_fx))) {
-            DEBUG_LOG2("MIDI set AMP2 %.4s %s", fx_name(fx_midi_cc(1)[i]), (amp[1].fx & test_fx) == 0 ? "off" : "on");
+            DEBUG_LOG2("AMP2 %.4s %s", fx_name(fx_midi_cc(1)[i]), (amp[1].fx & test_fx) == 0 ? "off" : "on");
             diff = 1;
         }
     }
@@ -647,9 +642,6 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     s8 i;
-    u8 test_fx;
-    u8 a;
-    char *d;
 #endif
     DEBUG_LOG0("update LCD");
 #ifdef HWFEAT_LABEL_UPDATES
@@ -762,9 +754,8 @@ static void update_lcd(void) {
     // AMP rows:
     switch (curr.screen) {
         case SCREEN_AMP:
-            for (a = 0; a < 2; a++) {
-                lcd_amp_row(a);
-            }
+            lcd_amp_row(0);
+            lcd_amp_row(1);
             break;
         case SCREEN_FX:
             lcd_amp_row(1 - curr.selected_amp);
@@ -946,13 +937,11 @@ static void toggle_setlist_mode(void) {
     }
 }
 
-static void tap_tempo(void) {
-    tap ^= (u8)0x7F;
-    midi_send_cmd2(0xB, axe_midi_channel, axe_cc_taptempo, tap);
-}
-
 static void midi_reset_cc(void) {
     u8 i;
+
+    DEBUG_LOG0("reset MIDI CC state");
+
     // Forget last-sent CC state:
     for (i = 0; i < CC_AMP2; i++) {
         // Since MIDI values are 7-bit, 0xff here is a value that will never be legitimately sent:
@@ -1360,14 +1349,16 @@ void controller_handle(void) {
 
     btn_released_oneshot(top, 6, curr.screen = (curr.screen & 2) ^ 2)
 
-     // TAP:
-     if (is_bot_button_pressed(M_6)) {
-         // Toggle TAP CC value between 0x00 and 0x7F:
-         timers.bot_6 = (u8)0x80;
-         tap_tempo();
-     } else if (is_bot_button_pressed(M_6)) {
-         timers.bot_6 = (u8)0x00;
-     }
+    // TAP:
+    if (is_bot_button_pressed(M_6)) {
+        timers.bot_6 = (u8)0x80;
+
+        // Toggle TAP CC value between 0x00 and 0x7F:
+        tap ^= (u8)0x7F;
+        midi_send_cmd2(0xB, axe_midi_channel, axe_cc_taptempo, tap);
+    } else if (is_bot_button_pressed(M_6)) {
+        timers.bot_6 = (u8)0x00;
+    }
 
 #define on_retrigger(action) \
     if (timers.retrigger == 0) { \
@@ -1375,6 +1366,7 @@ void controller_handle(void) {
         timers.retrigger = 1; \
     }
 
+    // PREV SCENE:
     btn_pressed_oneshot(bot,7,on_retrigger(prev_scene()))
 
     // NEXT SCENE:
