@@ -1339,7 +1339,7 @@ void controller_handle(void) {
             btn_released_repeater(bot, 3, curr.axe_midi_program++)
             btn_released_repeater(top, 4, curr.td50_midi_program--)
             btn_released_repeater(bot, 4, curr.td50_midi_program++)
-            btn_released_oneshot(top, 5, curr.screen = (curr.screen & ~(u8)1) ^ 1)
+            btn_released_oneshot(top, 5, curr.screen = (curr.screen & 1) ^ 1)
             break;
     }
 
