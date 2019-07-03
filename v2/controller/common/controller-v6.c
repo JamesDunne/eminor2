@@ -247,8 +247,6 @@ u8 tap;
 
 // Current mode:
 u8 mode;
-// LED state per mode:
-io16 mode_leds[MODE_count];
 
 // Max program #:
 u8 sl_max;
@@ -279,7 +277,6 @@ struct state {
     // Each row's current state:
     struct {
         enum rowstate_mode  mode;
-        u8                  fx;
     } rowstate[2];
 } curr, last;
 
@@ -287,9 +284,9 @@ struct state {
 struct amp amp[2];
 
 struct {
- u8 gain;
- u8 gate;
- u8 volume;
+    u8 gain;
+    u8 gate;
+    u8 volume;
 } amp_live[2];
 
 // Whether current program is modified in any way:
@@ -1017,10 +1014,6 @@ void controller_init(void) {
     tap = 0;
 
     mode = MODE_LIVE;
-    for (i = 0; i < MODE_count; i++) {
-        mode_leds[i].top.byte = 0;
-        mode_leds[i].bot.byte = 0;
-    }
 
     last.leds.bot.byte = 0xFF;
     last.leds.top.byte = 0xFF;
@@ -1050,9 +1043,7 @@ void controller_init(void) {
 
     for (i = 0; i < 2; i++) {
         curr.rowstate[i].mode = ROWMODE_AMP;
-        curr.rowstate[i].fx = 0;
         last.rowstate[i].mode = ~ROWMODE_AMP;
-        last.rowstate[i].fx = ~0;
 
         // Copy current scene settings into state:
         amp[i] = pr.scene[curr.sc_idx].amp[i];
