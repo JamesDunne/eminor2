@@ -1,6 +1,7 @@
 
 #include "types.h"
 
+extern char h1toa(u8 n);
 extern void hextoa(char *dst, u8 col, u8 n);
 
 extern s8 ritoa(char *dst, s8 col, u8 n);

@@ -652,25 +652,29 @@ static void update_lcd(void) {
     // Print setlist date:
     if (curr.setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[row_stat][i] = "Prg  0/128 Scn  0/ 0"[i];
+            lcd_rows[row_stat][i] = "X  0 K  0 S 1/96 0/0"[i];
         }
 
         // Show program number:
-        ritoa(lcd_rows[row_stat], 5, curr.pr_idx + (u8)1);
+        ritoa(lcd_rows[row_stat], 12, curr.pr_idx + (u8)1);
     } else {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[row_stat][i] = "Sng  0/ 0  Scn  0/ 0"[i];
+            lcd_rows[row_stat][i] = "X  0 K  0 I 1/ 1 0/0"[i];
         }
 
         // Show setlist song index:
-        ritoa(lcd_rows[row_stat], 5, curr.sl_idx + (u8)1);
+        ritoa(lcd_rows[row_stat], 12, curr.sl_idx + (u8)1);
         // Show setlist song count:
-        ritoa(lcd_rows[row_stat], 8, sl_max + (u8)1);
+        ritoa(lcd_rows[row_stat], 15, sl_max + (u8)1);
     }
+    // AXE-FX MIDI:
+    ritoa(lcd_rows[row_stat],  3, curr.axe_midi_program + (u8)1);
+    // TD-50 MIDI:
+    ritoa(lcd_rows[row_stat],  8, curr.td50_midi_program + (u8)1);
     // Scene number:
-    ritoa(lcd_rows[row_stat], 16, curr.sc_idx + (u8)1);
+    lcd_rows[row_stat][17] = h1toa(curr.sc_idx + (u8)1);
     // Scene count:
-    ritoa(lcd_rows[row_stat], 19, pr.scene_count);
+    lcd_rows[row_stat][19] = h1toa(pr.scene_count);
 
     // Song name:
     if (pr.name[0] == 0) {
@@ -682,6 +686,8 @@ static void update_lcd(void) {
     } else {
         copy_str_lcd(pr.name, lcd_rows[row_song]);
     }
+
+    // TODO: remove this
     // Set modified bit:
     if (modified) {
         lcd_rows[row_song][19] = '*';
@@ -794,7 +800,7 @@ static void update_lcd(void) {
             }
             break;
     }
-    
+
     lcd_updated_all();
 #endif
 }

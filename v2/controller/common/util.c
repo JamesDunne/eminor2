@@ -3,20 +3,19 @@
 
 //rom const char hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
+char h1toa(u8 n) {
+    u8 x = n & 0x0F;
+    if (x < 10) {
+        return '0' + x;
+    }
+    return 'a' + (x - 10);
+}
+
 void hextoa(char *dst, u8 col, u8 n) {
     u8 x = n & 0x0F;
     dst += col;
-    if (x < 10) {
-        *dst-- = '0' + x;
-    } else {
-        *dst-- = 'A' + (x - 10);
-    }
-    x = (n >> 4) & 0x0F;
-    if (x < 10) {
-        *dst = '0' + x;
-    } else {
-        *dst = 'A' + (x - 10);
-    }
+    *dst-- = h1toa(n & 0x0F);
+    *dst = h1toa((n >> 4) & 0x0F);
 }
 
 // TODO: remove division operator to cut code size down drastically!
