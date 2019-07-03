@@ -756,6 +756,9 @@ static void update_lcd(void) {
         case SCREEN_AMP:
             lcd_amp_row(0);
             lcd_amp_row(1);
+            // According to http://www.newhavendisplay.com/specs/NHD-0420D3Z-NSW-BBW-V3.pdf char 127 is a left-arrow indicator:
+            lcd_rows[row_amp1 + curr.selected_amp][14] = 127;
+            lcd_rows[row_amp1 + 1 - curr.selected_amp][14] = 32;
             break;
         case SCREEN_FX:
             lcd_amp_row(1 - curr.selected_amp);
