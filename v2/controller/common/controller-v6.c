@@ -70,7 +70,7 @@ TODO: editing FX mode LCD design
     \--------------------/
 
 Desired functions:
-MIDI EDIT MODE (edit AXE-FX and TD-50 midi program numbers)
+EDIT  MIDI (edit AXE-FX and TD-50 midi program numbers)
 RESET MIDI state
 MODE toggle between setlist and rehearsal
 TAP TEMPO
@@ -93,36 +93,41 @@ ACOUSTIC =    on | off
 EDIT     =    FX | AMP
 AMP      =    JD | MG
 
+TODO: want to change songs without activating scene 1 each time
+TODO: show tempo via blinking LED
+TODO: edit tempo via buttons
+TODO: record tempo from taps
+
     EDIT AMP
     |------------------------------------------------------------|
     |     *      *      *      *      *      *      *      *     |
-    |   ACOUS  GAIN-- VOLU-- GATE-- MG|JD   MODE PR_PRV PR_NXT   |
-    |                                       MIDI                 |
+    |   ACOUS  GAIN-- VOLU-- GATE-- FX|AMP  MIDI PR_PRV PR_NXT   |
+    |                                       MODE                 |
     |                                                            |
     |     *      *      *      *      *      *      *      *     |
-    |  CHANNEL GAIN++ VOLU++ GATE++ FX|AMP  TAP  SC_PRV SC_NXT   |
+    |  CHANNEL GAIN++ VOLU++ GATE++ MG|JD   TAP  SC_PRV SC_NXT   |
     |                                      RESET SC_ONE          |
     |------------------------------------------------------------|
 
     EDIT FX
     |------------------------------------------------------------|
     |     *      *      *      *      *      *      *      *     |
-    |                                       MODE PR_PRV PR_NXT   |
-    |                                       MIDI                 |
+    |                               FX|AMP  MIDI PR_PRV PR_NXT   |
+    |                                       MODE                 |
     |                                                            |
     |     *      *      *      *      *      *      *      *     |
     |    FX1    FX2    FX3    FX4    FX5    TAP  SC_PRV SC_NXT   |
     |                                      RESET SC_ONE          |
     |------------------------------------------------------------|
 
-    MIDI EDIT
+    EDIT MIDI
     |------------------------------------------------------------|
     |     *      *      *      *      *      *      *      *     |
-    |                                       MODE PR_PRV PR_NXT   |
-    |                                       MIDI                 |
+    |                  X--    K--   FX|AMP  MIDI PR_PRV PR_NXT   |
+    |                                       MODE                 |
     |                                                            |
     |     *      *      *      *      *      *      *      *     |
-    |                                       TAP  SC_PRV SC_NXT   |
+    |                  X++    K++           TAP  SC_PRV SC_NXT   |
     |                                      RESET SC_ONE          |
     |------------------------------------------------------------|
 
