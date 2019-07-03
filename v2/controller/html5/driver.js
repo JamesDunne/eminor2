@@ -398,10 +398,21 @@ function _lcd_updated_row(row) {
     for (i = 0; i < 20; ++i) {
         // Read char from RAM:
         var c = Module.getValue(text_ptr + i, 'i8');
-        if (c == 0) break;
+        if (c === 0) break;
 
         // Assume ASCII and append char to string:
-        lcd_rows[row] += String.fromCharCode(c & 127);
+        // NOTE: mapping LCD chars from http://www.newhavendisplay.com/specs/NHD-0420D3Z-NSW-BBW-V3.pdf
+        var tc = " ";
+        if (c >= 32 && c < 126) {
+            tc = String.fromCharCode(c & 127);
+        } else if (c === 126) {
+            // Exception case for right arrow:
+            tc = "\u2192";
+        } else if (c === 127) {
+            // Exception case for left arrow:
+            tc = "\u2190";
+        }
+        lcd_rows[row] += tc;
     }
     // Fill the rest with spaces:
     for (; i < 20; ++i)
