@@ -69,28 +69,28 @@ LCD designs:
     [15]  5 char = FX enable/disable
 
 Desired functions:
-EDIT  MIDI (edit AXE-FX and TD-50 midi program numbers)
-RESET MIDI state
-MODE toggle between setlist and rehearsal
-TAP TEMPO
+MIDI    : switch screen to edit AXE-FX and TD-50 MIDI program numbers
+RESET   : clear last-sent MIDI state per CC and re-send
+MODE    : toggle between setlist and rehearsal mode
+TAP     : tap tempo
 
-SC_NXT - next scene, next song if last scene
-SC_PRV - prev scene, prev song if before 1
-SC_ONE - goto scene 1
-PR_NXT - next song
-PR_PRV - prev song
+SCEN++  : next scene, next song if last scene
+SCEN--  : prev scene, prev song if before 1
+SCEN=1  : goto scene 1
+SONG++  : next song
+SONG--  : prev song
 
-GAIN-- - decrease gain
-GAIN++ - increase gain
-VOLU-- - decrease volume
-VOLU++ - increase volume
-GATE-- - decrease gate threshold
-GATE++ - increase gate threshold
+GAIN--  : decrease gain
+GAIN++  : increase gain
+VOLU--  : decrease volume
+VOLU++  : increase volume
+GATE--  : decrease gate threshold
+GATE++  : increase gate threshold
 
-CHANNEL  = CLEAN | DIRTY
-ACOUSTIC =    on | off
-EDIT     =    FX | AMP
-AMP      =    JD | MG
+CHANNEL : CLEAN | DIRTY
+ACOUS   :    on | off
+EDIT    :    FX | AMP
+AMP     :    JD | MG
 
 TODO: want to change songs without activating scene 1 each time
 TODO: show tempo via blinking LED
@@ -104,7 +104,7 @@ TODO: record tempo from taps
     |                                       MODE                 |
     |                                                            |
     |     *      *      *      *      *      *      *      *     |
-    |  CHANNEL GAIN++ VOLU++ GATE++ MG|JD   TAP  SCEN-- SCEN++   |
+    |  CHANNEL GAIN++ VOLU++ GATE++ JD|MG   TAP  SCEN-- SCEN++   |
     |                                      RESET SCEN=1          |
     |------------------------------------------------------------|
 
@@ -404,11 +404,13 @@ static void calc_midi(void) {
         midi_send_cmd1(0xC, axe_midi_channel, curr.axe_midi_program);
         // All bets are off as to what state when changing program:
         midi_invalidate();
+        diff = 1;
     }
 
     if (curr.td50_midi_program != last.td50_midi_program) {
         DEBUG_LOG1("TD-50  MIDI change program %d", curr.td50_midi_program);
         midi_send_cmd1(0xC, td50_midi_channel, curr.td50_midi_program);
+        diff = 1;
     }
 
     if (curr.setlist_mode != last.setlist_mode) {
@@ -662,7 +664,7 @@ static void update_lcd(void) {
             labels_top[3] = "GATE--";
             labels_bot[3] = "GATE++";
             labels_top[4] = "AMP|FX";
-            labels_bot[4] = "MG|JD";
+            labels_bot[4] = "JD|MG";
             break;
         case SCREEN_FX:
             labels_top[0] = "";
@@ -1341,7 +1343,7 @@ void controller_handle(void) {
             break;
     }
 
-    btn_released_oneshot(top, 6, curr.screen = SCREEN_MIDI)
+    btn_released_oneshot(top, 6, curr.screen = (curr.screen & 2) ^ 2)
 
      // TAP:
      if (is_bot_button_pressed(M_6)) {
