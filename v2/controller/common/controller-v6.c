@@ -337,10 +337,8 @@ extern rom const u16 dB_bcd_lookup[128];
 
 static void send_leds(void) {
     // Update LEDs:
-    //u16 curr_leds = (u16)curr.leds.bot.byte | ((u16)curr.leds.top.byte << 8);
-    u16 curr_leds = curr.leds.word;
-    //u16 last_leds = (u16)last.leds.bot.byte | ((u16)last.leds.top.byte << 8);
-    u16 last_leds = curr.leds.word;
+    u16 curr_leds = (u16)curr.leds.bot.byte | ((u16)curr.leds.top.byte << 8);
+    u16 last_leds = (u16)last.leds.bot.byte | ((u16)last.leds.top.byte << 8);
     if (curr_leds != last_leds) {
         led_set(curr_leds);
     }
@@ -1237,11 +1235,9 @@ void controller_10msec_timer(void) {
 // main control loop
 void controller_handle(void) {
     // poll foot-switch depression status:
-    // curr.fsw.word = fsw_poll();
     u16 tmp = fsw_poll();
-    curr.fsw.word = tmp;
-    //curr.fsw.bot.byte = (u8)(tmp & (u8)0xFF);
-    //curr.fsw.top.byte = (u8)((tmp >> (u8)8) & (u8)0xFF);
+    curr.fsw.bot.byte = (u8)(tmp & (u8)0xFF);
+    curr.fsw.top.byte = (u8)((tmp >> (u8)8) & (u8)0xFF);
 
 #define btn_pressed(row, n, on_press) \
     if (is_##row##_button_pressed(M_##n)) { \
