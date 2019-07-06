@@ -199,28 +199,6 @@ func write_yaml(path string, src interface{}) error {
 	return err
 }
 
-func logTaper(b int) int {
-	// 127 * (ln(x+1)^2) / (ln(127+1)^2)
-	return int(127.0 * math.Pow(math.Log2(float64(b)+1.0), 2) / math.Pow(math.Log2(127.0+1.0), 2))
-}
-
-func gainOrDefault(gain int, gainDefault int) int {
-	if gain != 0 {
-		return gain
-	}
-	return gainDefault
-}
-
-func gainOrLogOrDefault(gain int, gainLog int, gainDefault int) int {
-	if gain != 0 {
-		return gain
-	}
-	if gainLog != 0 {
-		return logTaper(gainLog)
-	}
-	return gainDefault
-}
-
 func gateToMIDI(g float64) uint8 {
 	if g == 0.0 {
 		return 0
