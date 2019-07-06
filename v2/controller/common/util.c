@@ -11,7 +11,7 @@ char h1toa(u8 n) {
     return 'a' + (x - 10);
 }
 
-void hextoa(char *dst, u8 col, u8 n) {
+void hextoa(near char *dst, u8 col, u8 n) {
     u8 x = n & 0x0F;
     dst += col;
     *dst-- = h1toa(n & 0x0F);
@@ -20,18 +20,18 @@ void hextoa(char *dst, u8 col, u8 n) {
 
 // TODO: remove division operator to cut code size down drastically!
 #if 1
-s8 ritoa(char *dst, s8 col, u8 n) {
+s8 ritoa(near char *dst, s8 col, u8 n) {
     do {
         dst[col--] = (n % (char)10) + (char)'0';
     } while ((n /= (u8)10) > (u8)0);
     return col;
 }
 #else
-s8 ritoa(char *dst, s8 col, u8 n) {
+s8 ritoa(near char *dst, s8 col, u8 n) {
     u8 ax, bx, cx, dx;
     u8 pow10[] = {0x64, 0x0A, 0x00};
     u8 digits[3] = { 0, 0, 0 };
-    u8 *dig = digits;
+    near u8 *dig = digits;
 
     ax = n;
     bx = 0;
@@ -56,7 +56,7 @@ s8 ritoa(char *dst, s8 col, u8 n) {
 #endif
 
 // BCD is 2.1 format with MSB indicating sign (5 chars total) i.e. "-99.9" or " -inf"
-void bcdtoa(char *dst, u8 col, u16 bcd) {
+void bcdtoa(near char *dst, u8 col, u16 bcd) {
     u8 sign = (u8)((bcd & 0x8000) != 0);
     u8 pos = (bcd > 0x0000) && (bcd < 0x8000);
     dst += col;
@@ -97,7 +97,7 @@ char *bcd(u16 n) {
 #endif
 
 // Copies a fixed-length string optionally NUL-terminated to the LCD display row:
-void copy_str_lcd(const char *src, char *dst) {
+void copy_str_lcd(near const char *src, near char *dst) {
     u8 i;
     for (i = 0; src[i] != 0 && i < LCD_COLS; ++i) {
         dst[i] = src[i];
@@ -140,7 +140,7 @@ void print_half(char *dst, u8 col, s8 volhalfdb) {
 }
 #endif
 
-rom const char *fx_name(u8 fx_midi_cc) {
+rom near const char *fx_name(u8 fx_midi_cc) {
     if (fx_midi_cc < 41) {
         return "    ";
     } else if (fx_midi_cc > 98) {

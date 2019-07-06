@@ -1093,7 +1093,7 @@ static void vol_inc(u8 ampno) {
 }
 
 static void gain_dec(u8 ampno) {
-    near u8 *gain;
+    u8 *gain;
     if ((amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) {
         if (amp[ampno].gain != 0) {
             gain = &amp[ampno].gain;
@@ -1111,7 +1111,7 @@ static void gain_dec(u8 ampno) {
 }
 
 static void gain_inc(u8 ampno) {
-    near u8 *gain;
+    u8 *gain;
     if ((amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) {
         if (amp[ampno].gain != 0) {
             gain = &amp[ampno].gain;
@@ -1129,7 +1129,7 @@ static void gain_inc(u8 ampno) {
 }
 
 static void gate_dec(u8 ampno) {
-    near u8 *gate;
+    u8 *gate;
     if (amp[ampno].gate != 0) {
         gate = &amp[ampno].gate;
     } else {
@@ -1142,7 +1142,7 @@ static void gate_dec(u8 ampno) {
 }
 
 static void gate_inc(u8 ampno) {
-    near u8 *gate;
+    u8 *gate;
     if (amp[ampno].gate != 0) {
         gate = &amp[ampno].gate;
     } else {
@@ -1154,13 +1154,13 @@ static void gate_inc(u8 ampno) {
     }
 }
 
-static void bounded_dec(near u8 *value, u8 min) {
+static void bounded_dec(u8 *value, u8 min) {
     if ((*value) > min) {
         (*value)--;
     }
 }
 
-static void bounded_inc(near u8 *value, u8 max) {
+static void bounded_inc(u8 *value, u8 max) {
     if ((*value) < max) {
         (*value)++;
     }

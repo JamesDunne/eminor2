@@ -157,7 +157,7 @@ void led_set(u16 leds){
     LedStatesBot = leds & 0xFF;
 }
 
-char *lcd_row_get(u8 row) {
+near char *lcd_row_get(u8 row) {
     assert(row < 4);
     return LCDRamMap[row];
 }
@@ -267,7 +267,7 @@ void flash_store(u16 addr, u16 count, u8 *data) {
 }
 #endif
 
-rom const u8 *flash_addr(u16 addr) {
+rom near const u8 *flash_addr(u16 addr) {
     u8 bank;
 
     bank = (u8)(addr >> 12);

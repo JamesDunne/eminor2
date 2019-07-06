@@ -57,7 +57,7 @@ extern void led_set(u16 leds);
 
 // Get pointer to a specific LCD row:
 // A terminating NUL character will clear the rest of the row with empty space.
-extern char *lcd_row_get(u8 row);
+extern near char *lcd_row_get(u8 row);
 
 // Update all LCD display rows as updated:
 extern void lcd_updated_all(void);
@@ -92,7 +92,7 @@ extern void flash_load(u16 addr, u16 count, u8 *data);
 extern void flash_store(u16 addr, u16 count, u8 *data);
 
 // Get a pointer to flash memory at address:
-extern rom const u8 *flash_addr(u16 addr);
+extern rom near const u8 *flash_addr(u16 addr);
 
 // --------------- Controller logic interface functions:
 
@@ -104,7 +104,7 @@ extern rom const u8 *flash_addr(u16 addr);
 
 // --------------- Change button labels (for Win32 / HTML5 interfaces only):
 
-/* export */ extern char **label_row_get(u8 row);
+/* export */ extern near char **label_row_get(u8 row);
 /* export */ extern void label_row_update(u8 row);
 
 #endif
