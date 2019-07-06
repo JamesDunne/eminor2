@@ -270,6 +270,13 @@ struct state {
     u8 sl_idx;
     // Current program:
     u8 pr_idx;
+
+    // Next song to load:
+    u8 next_pr_idx, next_sl_idx;
+
+    // Currently loaded song number:
+    u8 pr_num;
+
     // Current scene:
     u8 sc_idx;
 
@@ -297,6 +304,7 @@ struct {
 #pragma udata program
 // Loaded program:
 struct song pr;
+rom near const char *song_name;
 #pragma udata
 
 // BCD-encoded dB value table (from PIC/v4_lookup.h):
@@ -538,6 +546,12 @@ static void calc_midi(void) {
         diff = 1;
     } else if (curr.pr_idx != last.pr_idx) {
         diff = 1;
+    } else if (curr.next_pr_idx != last.next_pr_idx) {
+        diff = 1;
+    } else if (curr.next_sl_idx != last.next_sl_idx) {
+        diff = 1;
+    } else if (curr.pr_num != last.pr_num) {
+        diff = 1;
     } else if (curr.sc_idx != last.sc_idx) {
         diff = 1;
     }
@@ -699,10 +713,6 @@ static void update_lcd(void) {
     label_row_update(1);
 #endif
 #ifdef FEAT_LCD
-    for (i = 0; i < LCD_COLS; ++i) {
-        lcd_rows[row_song][i] = "                    "[i];
-    }
-
     // Print setlist date:
     if (curr.setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
@@ -710,14 +720,14 @@ static void update_lcd(void) {
         }
 
         // Show program number:
-        ritoa(lcd_rows[row_stat], 12, curr.pr_idx + (u8)1);
+        ritoa(lcd_rows[row_stat], 12, curr.next_pr_idx + (u8)1);
     } else {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[row_stat][i] = "X  0 K  0 I 1/ 1 0/0"[i];
         }
 
         // Show setlist song index:
-        ritoa(lcd_rows[row_stat], 12, curr.sl_idx + (u8)1);
+        ritoa(lcd_rows[row_stat], 12, curr.next_sl_idx + (u8)1);
         // Show setlist song count:
         ritoa(lcd_rows[row_stat], 15, sl_max + (u8)1);
     }
@@ -731,14 +741,23 @@ static void update_lcd(void) {
     lcd_rows[row_stat][19] = h1toa(pr.scene_count);
 
     // Song name:
-    if (pr.name[0] == 0) {
+    if (song_name[0] == 0) {
         // Show unnamed song index:
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[row_song][i] = "__unnamed song #    "[i];
         }
-        ritoa(lcd_rows[row_song], 18, curr.pr_idx + (u8)1);
+        ritoa(lcd_rows[row_song], 18, curr.next_pr_idx + (u8)1);
     } else {
-        copy_str_lcd(pr.name, lcd_rows[row_song]);
+        for (i = 0; i < LCD_COLS; ++i) {
+            lcd_rows[row_song][i] = "                    "[i];
+        }
+
+        copy_str_lcd(song_name, lcd_rows[row_song]);
+    }
+
+    // Indicate that next song needs activation:
+    if ((curr.next_sl_idx != curr.sl_idx) || (curr.next_pr_idx != curr.pr_idx)) {
+        lcd_rows[row_song][19] = '*';
     }
 
     // AMP rows:
@@ -805,6 +824,11 @@ static void calc_leds(void) {
             break;
     }
 
+    // Indicate next song needs activation:
+    if ((curr.next_sl_idx != curr.sl_idx) || (curr.next_pr_idx != curr.pr_idx)) {
+        curr.leds.bot.byte |= M_8;
+    }
+
     send_leds();
 }
 
@@ -833,6 +857,11 @@ static void load_program(void) {
 
     DEBUG_LOG1("load program %d", pr_num + 1);
     pr = romdata->songs[pr_num];
+    song_name = &romdata->songs[pr_num].name;
+
+    curr.pr_num = pr_num;
+    curr.next_sl_idx = curr.sl_idx;
+    curr.next_pr_idx = curr.pr_idx;
 
     curr.axe_midi_program = pr.axe_midi_program;
     curr.td50_midi_program = pr.td50_midi_program;
@@ -842,15 +871,13 @@ static void load_program(void) {
 
     // Establish a sane default for an undefined program:
     curr.sc_idx = 0;
+
     // TODO: better define how an undefined program is detected.
     // For now the heuristic is if an amp's volume is non-zero. A properly initialized amp will likely
     // have a value near `volume_0dB` (98).
     if (pr.scene[0].amp[1].volume == 0) {
         scene_default();
     }
-
-    // Trigger a scene reload:
-    //last.sc_idx = ~curr.sc_idx;
 }
 
 static void load_scene(void) {
@@ -935,36 +962,52 @@ static void midi_invalidate(void) {
 
 static void next_song(void) {
     if (curr.setlist_mode == 0) {
-        if (curr.pr_idx < 127) {
+        if (curr.next_pr_idx < 127) {
             DEBUG_LOG0("next program");
-            curr.pr_idx++;
+            curr.next_pr_idx++;
         }
     } else {
-        if (curr.sl_idx < sl_max) {
+        if (curr.next_sl_idx < sl_max) {
             DEBUG_LOG0("next song");
-            curr.sl_idx++;
+            curr.next_sl_idx++;
         }
     }
 }
 
 static void prev_song(void) {
     if (curr.setlist_mode == 0) {
-        if (curr.pr_idx > 0) {
+        if (curr.next_pr_idx > 0) {
             DEBUG_LOG0("prev program");
-            curr.pr_idx--;
+            curr.next_pr_idx--;
         }
     } else {
-        if (curr.sl_idx > 0) {
+        if (curr.next_sl_idx > 0) {
             DEBUG_LOG0("prev song");
-            curr.sl_idx--;
+            curr.next_sl_idx--;
         }
     }
 }
 
 static void next_scene(void) {
-    if (curr.sc_idx < scene_count_max - 1) {
+    if (curr.setlist_mode == 0) {
+        if (curr.next_pr_idx != curr.pr_idx) {
+            DEBUG_LOG0("activate song");
+            curr.pr_idx = curr.next_pr_idx;
+            return;
+        }
+    } else {
+        if (curr.next_sl_idx != curr.sl_idx) {
+            DEBUG_LOG0("activate song");
+            curr.sl_idx = curr.next_sl_idx;
+            return;
+        }
+    }
+
+    if (curr.sc_idx < pr.scene_count - 1) {
         DEBUG_LOG0("next scene");
         curr.sc_idx++;
+    } else {
+
     }
 }
 
@@ -1033,6 +1076,8 @@ void controller_init(void) {
     curr.pr_idx = 0;
     last.sl_idx = 0;
     last.pr_idx = 0;
+    curr.next_pr_idx = 0;
+    curr.next_sl_idx = 0;
     last.axe_midi_program = 0x7F;
     last.tempo = 0;
     load_program();
@@ -1355,6 +1400,16 @@ void controller_handle(void) {
     }
 
     // Update state:
+    if ((curr.next_pr_idx != last.next_pr_idx) || (curr.next_sl_idx != last.next_sl_idx)) {
+        u8 pr_num;
+        if (curr.setlist_mode == 1) {
+            pr_num = romdata->set_list.entries[curr.next_sl_idx].song;
+        } else {
+            pr_num = curr.next_pr_idx;
+        }
+        song_name = &romdata->songs[pr_num].name;
+    }
+
     if ((curr.setlist_mode != last.setlist_mode) || (curr.sl_idx != last.sl_idx) || (curr.pr_idx != last.pr_idx)) {
         load_program();
         load_scene();
