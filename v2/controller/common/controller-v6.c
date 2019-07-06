@@ -649,7 +649,7 @@ static void update_lcd(void) {
     labels_top = label_row_get(1);
     switch (curr.screen) {
         case SCREEN_AMP:
-            labels_top[0] = "ACOUS";
+            labels_top[0] = "ACOU";
             labels_bot[0] = "CHANNEL";
             labels_top[1] = "GAIN--";
             labels_bot[1] = "GAIN++";
