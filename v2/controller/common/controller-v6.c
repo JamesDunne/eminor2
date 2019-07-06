@@ -495,7 +495,7 @@ static void calc_midi(void) {
     }
 
     // Send FX state:
-    for (i = 0; i < 5; i++, test_fx <<= 1) {
+    for (i = 0; i < fx_count; i++, test_fx <<= 1) {
         if (midi_axe_cc(CC_FX1 + i, 0, calc_cc_toggle(amp[0].fx & test_fx))) {
             DEBUG_LOG2("AMP1 %.4s %s", fx_name(fx_midi_cc(0)[i]), (amp[0].fx & test_fx) == 0 ? "off" : "on");
             diff = 1;
@@ -589,7 +589,7 @@ static void lcd_amp_row(u8 a) {
 
     test_fx = 1;
     d = &lcd_rows[row][15];
-    for (i = 0; i < 5; i++, test_fx <<= 1) {
+    for (i = 0; i < fx_count; i++, test_fx <<= 1) {
         rom near const char *name = fx_name(fx_midi_cc(a)[i]);
         const u8 lowercase_enable_mask = (~(amp[a].fx & test_fx) << (5 - i));
         u8 is_alpha_mask, c;
@@ -612,7 +612,7 @@ static void lcd_fx_row(u8 a) {
 
     test_fx = 1;
     d = &lcd_rows[row][0];
-    for (i = 0; i < 5; i++, test_fx <<= 1) {
+    for (i = 0; i < fx_count; i++, test_fx <<= 1) {
         rom near const char *name = fx_name(fx_midi_cc(a)[i]);
         u8 is_alpha_mask, c, j;
 
@@ -631,7 +631,7 @@ static void lcd_fx_row(u8 a) {
 }
 
 #ifdef HWFEAT_LABEL_UPDATES
-char tmplabel[5][5];
+char tmplabel[fx_count][5];
 #endif
 
 // Update LCD display:
@@ -666,12 +666,12 @@ static void update_lcd(void) {
             labels_top[2] = "";
             labels_top[3] = "";
             labels_top[4] = "AMP|FX";
+            labels_bot[4] = "JD|MG";
             labels_bot[0] = fx_name(fx_midi_cc(curr.selected_amp)[0]);
             labels_bot[1] = fx_name(fx_midi_cc(curr.selected_amp)[1]);
             labels_bot[2] = fx_name(fx_midi_cc(curr.selected_amp)[2]);
             labels_bot[3] = fx_name(fx_midi_cc(curr.selected_amp)[3]);
-            labels_bot[4] = fx_name(fx_midi_cc(curr.selected_amp)[4]);
-            for (n = 0; n < 5; n++) {
+            for (n = 0; n < fx_count; n++) {
                 tmplabel[n][0] = labels_bot[n][0];
                 tmplabel[n][1] = labels_bot[n][1];
                 tmplabel[n][2] = labels_bot[n][2];
@@ -790,7 +790,8 @@ static void calc_leds(void) {
                 | ((curr.screen == SCREEN_FX) << 4)
                 | ((curr.screen == SCREEN_MIDI) << 5);
             curr.leds.bot.byte = (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80))
-                | (amp[curr.selected_amp].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5));
+                | (amp[curr.selected_amp].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4))
+                | ((JD - curr.selected_amp) << 4);
             break;
         case SCREEN_MIDI:
             curr.leds.top.byte =
@@ -1296,8 +1297,8 @@ void controller_handle(void) {
             btn_pressed(bot, 2, amp[curr.selected_amp].fx ^= fxm_2)
             btn_pressed(bot, 3, amp[curr.selected_amp].fx ^= fxm_3)
             btn_pressed(bot, 4, amp[curr.selected_amp].fx ^= fxm_4)
-            btn_pressed(bot, 5, amp[curr.selected_amp].fx ^= fxm_5)
             btn_pressed(top, 5, curr.screen = (curr.screen & 1) ^ 1)
+            btn_pressed(bot, 5, curr.selected_amp ^= JD)
             break;
         case SCREEN_MIDI:
             btn_released_repeater(top, 3, bounded_dec(&curr.axe_midi_program, 0))
