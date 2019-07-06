@@ -11,13 +11,11 @@ axe_midi:
     amps:
       - fx_layout:
         - pit1
-        - rtr1
         - flg1
         - cho1
         - dly1
       - fx_layout:
         - pit2
-        - rtr2
         - flg2
         - cho2
         - dly2
@@ -28,13 +26,11 @@ axe_midi:
       gate: -40
     amps:
       - fx_layout:
-          - pit1
           - rtr1
           - flg1
           - cho1
           - dly1
       - fx_layout:
-          - pit2
           - rtr2
           - flg2
           - cho2
@@ -47,13 +43,11 @@ axe_midi:
     amps:
       - fx_layout:
           - pit1
-          - rtr1
           - flg1
           - cho1
           - dly1
       - fx_layout:
           - pit2
-          - rtr2
           - flg2
           - cho2
           - dly2

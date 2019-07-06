@@ -384,7 +384,7 @@ func generatePICH() {
 		bw.WriteHex(gateToMIDI(am.AmpDefaults.Gate))
 
 		for a := 0; a < 2; a++ {
-			for x := 0; x < 5; x++ {
+			for x := 0; x < FWfx_count; x++ {
 				key := strings.ToLower(am.AxeMidiAmps[a].FXLayout[x])
 				key = strings.TrimSpace(key)
 				cc, ok := fx_midi_cc[key]
@@ -401,16 +401,14 @@ func generatePICH() {
 	for i := len(programs.AxeMidi); i < FWmax_axe_midi_program_count; i++ {
 		bw.WriteHex(0x5E) // dirty_gain
 		bw.WriteHex(0x1A) // clean_gain
-		bw.WriteHex(71)   // gate
+		bw.WriteHex(gateToMIDI(0.0))   // gate
 
 		bw.WriteHex(uint8(fx_midi_cc["pit1"]))
-		bw.WriteHex(uint8(fx_midi_cc["rtr1"]))
 		bw.WriteHex(uint8(fx_midi_cc["flg1"]))
 		bw.WriteHex(uint8(fx_midi_cc["cho1"]))
 		bw.WriteHex(uint8(fx_midi_cc["dly1"]))
 
 		bw.WriteHex(uint8(fx_midi_cc["pit2"]))
-		bw.WriteHex(uint8(fx_midi_cc["rtr2"]))
 		bw.WriteHex(uint8(fx_midi_cc["flg2"]))
 		bw.WriteHex(uint8(fx_midi_cc["cho2"]))
 		bw.WriteHex(uint8(fx_midi_cc["dly2"]))
@@ -519,18 +517,18 @@ func generatePICH() {
 				}
 
 				fx_layout := axemidi.AxeMidiAmps[a].FXLayout
-				if len(fx_layout) > 5 {
+				if len(fx_layout) > FWfx_count {
 					fmt.Printf("Too many effects defined in fx_layout %v\n", fx_layout)
 				} else {
 					for _, effect := range amp.FX {
-						fxn := 5
+						fxn := FWfx_count + 1
 						for fxi, fxname := range fx_layout {
 							if effect == fxname {
 								fxn = fxi
 								break
 							}
 						}
-						if fxn >= 5 {
+						if fxn >= FWfx_count + 1 {
 							fmt.Printf("Effect name '%s' not found in fx_layout %v\n", effect, fx_layout)
 							continue
 						}

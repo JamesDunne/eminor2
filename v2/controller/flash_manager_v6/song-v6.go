@@ -3,11 +3,12 @@
 
 package main
 
+const FWfx_count = 0x4
 const FWfxm_1 = 0x1
 const FWfxm_2 = 0x2
 const FWfxm_3 = 0x4
 const FWfxm_4 = 0x8
-const FWfxm_5 = 0x10
+
 const FWfxm_acoustc = 0x40
 const FWfxm_dirty = 0x80
 
@@ -17,7 +18,7 @@ type FWamp_defaults struct {
 	Gate		uint8
 }
 type FWamp_descriptor struct {
-	Midi_cc [5]uint8
+	Midi_cc [4]uint8
 }
 type FWaxe_midi_program struct {
 	Defaults	FWamp_defaults
@@ -51,8 +52,8 @@ type FWset_list struct {
 	Entries	[125]FWset_entry
 }
 
-const FWmax_axe_midi_program_count = 0x9
-const FWaxe_midi_padding = 0xb
+const FWmax_axe_midi_program_count = 0xb
+const FWaxe_midi_padding = 0x7
 
 const FWamp_sizeof = 0x4
 const FWsong_sizeof = 0x80

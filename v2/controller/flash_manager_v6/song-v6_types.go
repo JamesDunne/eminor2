@@ -6,11 +6,12 @@ package main
 // #include "../common/song-v6.h"
 import "C"
 
+const FWfx_count = C.fx_count
 const FWfxm_1 = C.fxm_1
 const FWfxm_2 = C.fxm_2
 const FWfxm_3 = C.fxm_3
 const FWfxm_4 = C.fxm_4
-const FWfxm_5 = C.fxm_5
+//const FWfxm_5 = C.fxm_5
 const FWfxm_acoustc = C.fxm_acoustc
 const FWfxm_dirty = C.fxm_dirty
 

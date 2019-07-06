@@ -120,7 +120,7 @@ TODO: record tempo from taps
     |                                       MODE                 |
     |                                                            |
     |     *      *      *      *      *      *      *      *     |
-    |    FX1    FX2    FX3    FX4    FX5    TAP  SC_PRV SC_NXT   |
+    |    FX1    FX2    FX3    FX4   JD|MG   TAP  SC_PRV SC_NXT   |
     |                                      RESET SC_ONE          |
     |------------------------------------------------------------|
 

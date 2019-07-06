@@ -1,13 +1,13 @@
 
 #include "hardware.h"
 
-#define fx_count    5
+#define fx_count    4
 
 #define fxm_1       (u8)0x01
 #define fxm_2       (u8)0x02
 #define fxm_3       (u8)0x04
 #define fxm_4       (u8)0x08
-#define fxm_5       (u8)0x10
+////////////////////////0x10
 ////////////////////////0x20
 #define fxm_acoustc (u8)0x40
 #define fxm_dirty   (u8)0x80
@@ -40,7 +40,7 @@ struct axe_midi_program {
     } amps[2];
 };
 
-COMPILE_ASSERT(sizeof(struct axe_midi_program) == 3 + (2 * fx_count));
+COMPILE_ASSERT(sizeof(struct axe_midi_program) == 11);
 
 struct amp {
     u8 gain;    // amp gain (7-bit), if 0 then the default gain is used
@@ -138,13 +138,11 @@ struct romdata {
     struct song songs[max_song_count];
 };
 
-//#ifndef __MCC18
 #define offsetof(st, m) ((int)&(((st *)0)->m))
 COMPILE_ASSERT(offsetof(struct romdata, axe_midi_program_count) == 0);
 COMPILE_ASSERT(offsetof(struct romdata, song_count) == 1);
 COMPILE_ASSERT(offsetof(struct romdata, set_list) == 2);
 COMPILE_ASSERT(offsetof(struct romdata, axe_midi_programs) == 128);
 COMPILE_ASSERT(offsetof(struct romdata, songs) == 2 * 128);
-//#endif
 
 COMPILE_ASSERT(sizeof(struct romdata) == WRITABLE_SEG_LEN);
