@@ -18,13 +18,13 @@
     <ClCompile Include="eminorv2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\controller-v5.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\controller-v5-rom1.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\common\util.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\controller-v6-rom1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\controller-v6.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,9 +41,6 @@
     <ClInclude Include="..\common\memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\program-v5.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\common\v5_fx_names.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -57,6 +54,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\common\util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PIC\flash_v6_bank0.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PIC\flash_v6_bank1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\song-v6.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

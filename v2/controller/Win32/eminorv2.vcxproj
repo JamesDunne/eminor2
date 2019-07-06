@@ -111,7 +111,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>HW_VERSION=5;HWFEAT_LABEL_UPDATES;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HW_VERSION=6;HWFEAT_LABEL_UPDATES;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>
       </ExceptionHandling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -167,17 +167,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\controller-v5-rom1.c" />
-    <ClCompile Include="..\common\controller-v5.c" />
+    <ClCompile Include="..\common\controller-v6-rom1.c" />
+    <ClCompile Include="..\common\controller-v6.c" />
     <ClCompile Include="..\common\util.c" />
     <ClCompile Include="eminorv2.c" />
     <ClInclude Include="..\common\memory.h" />
-    <ClInclude Include="..\common\program-v5.h" />
+    <ClInclude Include="..\common\song-v6.h" />
     <ClInclude Include="..\common\util.h" />
     <ClInclude Include="..\common\v5_fx_names.h" />
     <ClInclude Include="..\PIC\flash_v5_bank0.h" />
     <ClInclude Include="..\PIC\flash_v5_bank1.h" />
     <ClInclude Include="..\PIC\flash_v5_bank2.h" />
+    <ClInclude Include="..\PIC\flash_v6_bank0.h" />
+    <ClInclude Include="..\PIC\flash_v6_bank1.h" />
     <ClInclude Include="font-5x8.h">
       <FileType>CppCode</FileType>
     </ClInclude>
