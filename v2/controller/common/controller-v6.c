@@ -651,6 +651,7 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     s8 i;
+    rom const u8 *song_name;
 #endif
     DEBUG_LOG0("update LCD");
 #ifdef HWFEAT_LABEL_UPDATES
@@ -740,7 +741,7 @@ static void update_lcd(void) {
     lcd_rows[row_stat][19] = h1toa(pr.scene_count);
 
     // Song name:
-    rom const u8 *song_name = romdata->songs[curr.next_pr_num].name;
+    song_name = romdata->songs[curr.next_pr_num].name;
     if (song_name[0] == 0) {
         // Show unnamed song index:
         for (i = 0; i < LCD_COLS; i++) {
