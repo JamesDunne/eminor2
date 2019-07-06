@@ -15,6 +15,13 @@ const FWfxm_4 = C.fxm_4
 const FWfxm_acoustc = C.fxm_acoustc
 const FWfxm_dirty = C.fxm_dirty
 
+const FWvolume_0dB = C.volume_0dB
+const FWvolume_6dB = C.volume_6dB
+
+const FWdirty_gain_default = C.dirty_gain_default
+const FWclean_gain_default = C.clean_gain_default
+const FWgate_default = C.gate_default
+
 type FWamp_defaults C.struct_amp_defaults
 type FWamp_descriptor C.struct_amp_descriptor
 type FWaxe_midi_program C.struct_axe_midi_program

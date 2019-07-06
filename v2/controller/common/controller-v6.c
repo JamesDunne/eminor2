@@ -875,8 +875,8 @@ static void scene_default(void) {
     DEBUG_LOG1("default scene %d", curr.sc_idx + 1);
 
     // Set defaults for both amps:
-    pr.amp_defaults.dirty_gain = 0x5E;
-    pr.amp_defaults.clean_gain = 0x1A;
+    pr.amp_defaults.dirty_gain = dirty_gain_default;
+    pr.amp_defaults.clean_gain = clean_gain_default;
     pr.amp_defaults.gate = gate_default;
 
     pr.scene_count = 1;

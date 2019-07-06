@@ -399,9 +399,9 @@ func generatePICH() {
 
 	// Fill in remaining descriptors for axe_midi:
 	for i := len(programs.AxeMidi); i < FWmax_axe_midi_program_count; i++ {
-		bw.WriteHex(0x5E) // dirty_gain
-		bw.WriteHex(0x1A) // clean_gain
-		bw.WriteHex(gateToMIDI(0.0))   // gate
+		bw.WriteHex(FWdirty_gain_default) // dirty_gain
+		bw.WriteHex(FWclean_gain_default) // clean_gain
+		bw.WriteHex(FWgate_default)       // gate
 
 		bw.WriteHex(uint8(fx_midi_cc["pit1"]))
 		bw.WriteHex(uint8(fx_midi_cc["flg1"]))

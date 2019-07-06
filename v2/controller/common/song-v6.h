@@ -19,7 +19,9 @@
 #define volume_0dB 98
 #define volume_6dB 127
 
-#define gate_default 71
+#define dirty_gain_default 0x5E
+#define clean_gain_default 0x1A
+#define gate_default 68
 
 struct amp_defaults {
     u8 dirty_gain;

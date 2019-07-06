@@ -7,7 +7,7 @@ axe_midi:
     defaults:
       clean_gain: 0x1A
       dirty_gain: 0x5E
-      gate: -40
+      gate: -42
     amps:
       - fx_layout:
         - pit1
@@ -23,7 +23,7 @@ axe_midi:
     defaults:
       clean_gain: 0x1A
       dirty_gain: 0x5E
-      gate: -40
+      gate: -42
     amps:
       - fx_layout:
           - rtr1
@@ -39,7 +39,7 @@ axe_midi:
     defaults:
       clean_gain: 0x1A
       dirty_gain: 0x5E
-      gate: -40
+      gate: -42
     amps:
       - fx_layout:
           - pit1

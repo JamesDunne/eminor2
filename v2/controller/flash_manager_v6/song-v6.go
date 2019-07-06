@@ -12,6 +12,13 @@ const FWfxm_4 = 0x8
 const FWfxm_acoustc = 0x40
 const FWfxm_dirty = 0x80
 
+const FWvolume_0dB = 0x62
+const FWvolume_6dB = 0x7f
+
+const FWdirty_gain_default = 0x5e
+const FWclean_gain_default = 0x1a
+const FWgate_default = 0x44
+
 type FWamp_defaults struct {
 	Dirty_gain	uint8
 	Clean_gain	uint8
