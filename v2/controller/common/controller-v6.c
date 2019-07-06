@@ -266,16 +266,16 @@ struct state {
 
     // 0 for program mode, 1 for setlist mode:
     u8 setlist_mode;
+
     // Current setlist entry:
     u8 sl_idx;
     // Current program:
     u8 pr_idx;
-
-    // Next song to load:
-    u8 next_pr_idx, next_sl_idx;
-
     // Currently loaded song number:
     u8 pr_num;
+
+    // Next song to load:
+    u8 next_pr_idx, next_sl_idx, next_pr_num;
 
     // Current scene:
     u8 sc_idx;
@@ -304,7 +304,6 @@ struct {
 #pragma udata program
 // Loaded program:
 struct song pr;
-rom near const char *song_name;
 #pragma udata
 
 // BCD-encoded dB value table (from PIC/v4_lookup.h):
@@ -741,6 +740,7 @@ static void update_lcd(void) {
     lcd_rows[row_stat][19] = h1toa(pr.scene_count);
 
     // Song name:
+    rom const u8 *song_name = romdata->songs[curr.next_pr_num].name;
     if (song_name[0] == 0) {
         // Show unnamed song index:
         for (i = 0; i < LCD_COLS; i++) {
@@ -752,7 +752,7 @@ static void update_lcd(void) {
             lcd_rows[row_song][i] = "                    "[i];
         }
 
-        copy_str_lcd(song_name, lcd_rows[row_song]);
+        copy_str_lcd(lcd_rows[row_song], song_name);
     }
 
     // Indicate that next song needs activation:
@@ -857,9 +857,9 @@ static void load_program(void) {
 
     DEBUG_LOG1("load program %d", pr_num + 1);
     pr = romdata->songs[pr_num];
-    song_name = &romdata->songs[pr_num].name;
 
     curr.pr_num = pr_num;
+    curr.next_pr_num = pr_num;
     curr.next_sl_idx = curr.sl_idx;
     curr.next_pr_idx = curr.pr_idx;
 
@@ -1411,7 +1411,7 @@ void controller_handle(void) {
         } else {
             pr_num = curr.next_pr_idx;
         }
-        song_name = &romdata->songs[pr_num].name;
+        curr.next_pr_num = pr_num;
     }
 
     if ((curr.setlist_mode != last.setlist_mode) || (curr.sl_idx != last.sl_idx) || (curr.pr_idx != last.pr_idx)) {

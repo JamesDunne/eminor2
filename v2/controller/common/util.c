@@ -97,7 +97,7 @@ char *bcd(u16 n) {
 #endif
 
 // Copies a fixed-length string optionally NUL-terminated to the LCD display row:
-void copy_str_lcd(near const char *src, near char *dst) {
+void copy_str_lcd(near char *dst, rom near const u8 *src) {
     u8 i;
     for (i = 0; src[i] != 0 && i < LCD_COLS; ++i) {
         dst[i] = src[i];
