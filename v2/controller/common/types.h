@@ -5,8 +5,9 @@
 #define COMPILE_ASSERT2(cond,line) STATIC_ASSERT(cond,line)
 #define COMPILE_ASSERT(cond) COMPILE_ASSERT2(cond,__LINE__)
 
-#ifndef __MCC18
+#ifndef __18CXX
 #define rom
+#define near
 #endif
 
 // common typedefs used throughout the code:

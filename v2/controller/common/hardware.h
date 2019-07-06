@@ -16,7 +16,7 @@
 #define FEAT_LCD
 
 // Define a DEBUG_LOG0 macro:
-#ifdef __MCC18
+#ifdef __18CXX
 #define DEBUG_LOG0(fmt)
 #define DEBUG_LOG1(fmt,a1)
 #define DEBUG_LOG2(fmt,a1,a2)

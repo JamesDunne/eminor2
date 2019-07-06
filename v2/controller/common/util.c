@@ -82,7 +82,7 @@ void bcdtoa(char *dst, u8 col, u16 bcd) {
 }
 
 // For DEBUG_LOG usage:
-#ifndef __MCC18
+#ifndef __18CXX
 char bcd_tmp[6];
 char *bcd(u16 n) {
     bcd_tmp[5] = 0;

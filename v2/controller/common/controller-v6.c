@@ -189,7 +189,7 @@ TODO: record tempo from taps
 
 #ifdef FEAT_LCD
 // Pointers to LCD character rows:
-char *lcd_rows[LCD_ROWS];
+near char *lcd_rows[LCD_ROWS];
 #define row_song 0
 #define row_stat 1
 #define row_amp1 2
@@ -208,9 +208,9 @@ enum rowstate_mode {
 
 #pragma udata state
 // Structured read-only view of writable ROM section that contains all our data:
-rom struct romdata *romdata;
+rom near struct romdata *romdata;
 
-rom struct axe_midi_program *axe_midi;
+rom near struct axe_midi_program *axe_midi;
 
 #define fx_midi_cc(a) (axe_midi->amps[a].fx_midi_cc)
 
@@ -556,7 +556,7 @@ static void calc_midi(void) {
 
 static void lcd_amp_row(u8 a) {
     u8 i;
-    char *d;
+    near char *d;
     u8 test_fx;
     u8 row = row_amp1 + a;
 
@@ -585,7 +585,7 @@ static void lcd_amp_row(u8 a) {
     test_fx = 1;
     d = &lcd_rows[row][15];
     for (i = 0; i < 5; i++, test_fx <<= 1) {
-        rom const char *name = fx_name(fx_midi_cc(a)[i]);
+        rom near const char *name = fx_name(fx_midi_cc(a)[i]);
         const u8 lowercase_enable_mask = (~(amp[a].fx & test_fx) << (5 - i));
         u8 is_alpha_mask, c;
 
@@ -597,7 +597,7 @@ static void lcd_amp_row(u8 a) {
 
 static void lcd_fx_row(u8 a) {
     u8 i;
-    char *d;
+    near char *d;
     u8 test_fx;
     u8 row = row_amp1 + a;
 
@@ -608,7 +608,7 @@ static void lcd_fx_row(u8 a) {
     test_fx = 1;
     d = &lcd_rows[row][0];
     for (i = 0; i < 5; i++, test_fx <<= 1) {
-        rom const char *name = fx_name(fx_midi_cc(a)[i]);
+        rom near const char *name = fx_name(fx_midi_cc(a)[i]);
         u8 is_alpha_mask, c, j;
 
         // Select 0x20 or 0x00 depending on if FX disabled or enabled, respectively:
@@ -981,7 +981,7 @@ void controller_init(void) {
     u8 i;
 
     // Initialize romdata pointer:
-    romdata = (rom struct romdata *)flash_addr(0);
+    romdata = (rom near struct romdata *)flash_addr(0);
 
     for (i = 0; i < 2; i++) {
         cc_lookup[CC_AMP2 * i + CC_FX1] = 0xFF;
@@ -1093,7 +1093,7 @@ static void vol_inc(u8 ampno) {
 }
 
 static void gain_dec(u8 ampno) {
-    u8 *gain;
+    near u8 *gain;
     if ((amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) {
         if (amp[ampno].gain != 0) {
             gain = &amp[ampno].gain;
@@ -1111,7 +1111,7 @@ static void gain_dec(u8 ampno) {
 }
 
 static void gain_inc(u8 ampno) {
-    u8 *gain;
+    near u8 *gain;
     if ((amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) {
         if (amp[ampno].gain != 0) {
             gain = &amp[ampno].gain;
@@ -1129,7 +1129,7 @@ static void gain_inc(u8 ampno) {
 }
 
 static void gate_dec(u8 ampno) {
-    u8 *gate;
+    near u8 *gate;
     if (amp[ampno].gate != 0) {
         gate = &amp[ampno].gate;
     } else {
@@ -1142,7 +1142,7 @@ static void gate_dec(u8 ampno) {
 }
 
 static void gate_inc(u8 ampno) {
-    u8 *gate;
+    near u8 *gate;
     if (amp[ampno].gate != 0) {
         gate = &amp[ampno].gate;
     } else {
@@ -1154,13 +1154,13 @@ static void gate_inc(u8 ampno) {
     }
 }
 
-static void bounded_dec(u8 *value, u8 min) {
+static void bounded_dec(near u8 *value, u8 min) {
     if ((*value) > min) {
         (*value)--;
     }
 }
 
-static void bounded_inc(u8 *value, u8 max) {
+static void bounded_inc(near u8 *value, u8 max) {
     if ((*value) < max) {
         (*value)++;
     }

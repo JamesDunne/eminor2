@@ -340,7 +340,7 @@ static void bcdtoa(char *dst, u8 col, u16 bcd) {
     }
 }
 
-#ifndef __MCC18
+#ifndef __18CXX
 char bcd_tmp[6];
 static char *bcd(u16 n) {
     bcd_tmp[5] = 0;
