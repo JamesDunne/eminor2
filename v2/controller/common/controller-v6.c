@@ -210,9 +210,6 @@ enum rowstate_mode {
 // Structured read-only view of writable ROM section that contains all our data:
 rom struct romdata *romdata;
 
-// Pointer to unmodified program:
-rom struct song *origpr;
-
 rom struct axe_midi_program *axe_midi;
 
 #define fx_midi_cc(a) (axe_midi->amps[a].fx_midi_cc)
@@ -294,9 +291,6 @@ struct {
     u8 gate;
     u8 volume;
 } amp_live[2];
-
-// Whether current program is modified in any way:
-u8 modified;
 #pragma udata
 
 #pragma udata program
@@ -366,6 +360,8 @@ static void midi_invalidate(void);
 
 static void midi_reset_cc(void);
 
+static void load_axe_midi(void);
+
 static void toggle_setlist_mode(void);
 
 static void scene_default(void);
@@ -393,8 +389,6 @@ static u8 midi_axe_cc(enum cc_key key, u8 a, u8 value) {
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
 static void calc_midi(void) {
     u8 diff = 0;
-    u8 dirty;
-    u8 acoustc;
     u8 test_fx = 1;
     u8 i, a;
 
@@ -404,6 +398,7 @@ static void calc_midi(void) {
         midi_send_cmd1(0xC, axe_midi_channel, curr.axe_midi_program);
         // All bets are off as to what state was last sent when changing programs:
         midi_reset_cc();
+        load_axe_midi();
         diff = 1;
     }
 
@@ -745,12 +740,6 @@ static void update_lcd(void) {
         copy_str_lcd(pr.name, lcd_rows[row_song]);
     }
 
-    // TODO: remove this
-    // Set modified bit:
-    if (modified) {
-        lcd_rows[row_song][19] = '*';
-    }
-
     // AMP rows:
     switch (curr.screen) {
         case SCREEN_AMP:
@@ -776,32 +765,32 @@ static void update_lcd(void) {
 static void calc_leds(void) {
     switch (curr.screen) {
         case SCREEN_AMP:
-            curr.leds.top.byte = curr.fsw.top.byte
+            curr.leds.top.byte =
                 // mask out special LEDs from footswitch state:
-                & ((u8)~(M_1 | M_5 | M_6))
+                (curr.fsw.top.byte & ((u8)~(M_1 | M_5 | M_6)))
                 | ((amp[curr.selected_amp].fx & fxm_acoustc) >> 6)
                 | ((curr.screen == SCREEN_FX) << 4)
                 | ((curr.screen == SCREEN_MIDI) << 5);
             // TODO: make TAP LED blink in tempo?
-            curr.leds.bot.byte = curr.fsw.bot.byte
+            curr.leds.bot.byte =
                 // mask out special LEDs from footswitch state:
-                & ((u8)~(M_1 | M_5))
+                (curr.fsw.bot.byte & ((u8)~(M_1 | M_5)))
                 | ((amp[curr.selected_amp].fx & fxm_dirty) >> 7)
                 | ((JD - curr.selected_amp) << 4);
             break;
         case SCREEN_FX:
-            curr.leds.top.byte = curr.fsw.top.byte
+            curr.leds.top.byte =
                 // mask out special LEDs from footswitch state:
-                & ((u8)~(M_5 | M_6))
+                (curr.fsw.top.byte & ((u8)~(M_5 | M_6)))
                 | ((curr.screen == SCREEN_FX) << 4)
                 | ((curr.screen == SCREEN_MIDI) << 5);
             curr.leds.bot.byte = (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80))
                 | (amp[curr.selected_amp].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4 | fxm_5));
             break;
         case SCREEN_MIDI:
-            curr.leds.top.byte = curr.fsw.top.byte
+            curr.leds.top.byte =
                 // mask out special LEDs from footswitch state:
-                & ((u8)~(M_5 | M_6))
+                (curr.fsw.top.byte & ((u8)~(M_5 | M_6)))
                 | ((curr.screen == SCREEN_FX) << 4)
                 | ((curr.screen == SCREEN_MIDI) << 5);
             // TODO: make TAP LED blink in tempo?
@@ -812,47 +801,8 @@ static void calc_leds(void) {
     send_leds();
 }
 
-static void calc_gain_modified(void) {
-    modified = (modified & ~(u8) 0x11) |
-                    ((u8) (amp[0].gain != origpr->scene[curr.sc_idx].amp[0].gain) << (u8) 0) |
-                    ((u8) (amp[1].gain != origpr->scene[curr.sc_idx].amp[1].gain) << (u8) 4);
-    // DEBUG_LOG1("calc_gain_modified():   0x%02X", curr.modified);
-}
-
-static void calc_fx_modified(void) {
-    modified = (modified & ~(u8) 0x22) |
-                    ((u8) (amp[0].fx != origpr->scene[curr.sc_idx].amp[0].fx) << (u8) 1) |
-                    ((u8) (amp[1].fx != origpr->scene[curr.sc_idx].amp[1].fx) << (u8) 5);
-    // DEBUG_LOG1("calc_fx_modified():     0x%02X", curr.modified);
-}
-
-static void calc_volume_modified(void) {
-    modified = (modified & ~(u8) 0x44) |
-                    ((u8) (amp[0].volume != origpr->scene[curr.sc_idx].amp[0].volume) << (u8) 2) |
-                    ((u8) (amp[1].volume != origpr->scene[curr.sc_idx].amp[1].volume) << (u8) 6);
-    // DEBUG_LOG1("calc_volume_modified(): 0x%02X", curr.modified);
-}
-
-void load_program(void) {
-    // Load program:
-    u8 pr_num;
+static void load_axe_midi(void) {
     u8 a, i;
-
-    if (curr.setlist_mode == 1) {
-        pr_num = romdata->set_list.entries[curr.sl_idx].song;
-    } else {
-        pr_num = curr.pr_idx;
-    }
-
-    DEBUG_LOG1("load program %d", pr_num + 1);
-
-    origpr = &romdata->songs[pr_num];
-    pr = romdata->songs[pr_num];
-
-    modified = 0;
-    curr.axe_midi_program = pr.axe_midi_program;
-    curr.td50_midi_program = pr.td50_midi_program;
-    curr.tempo = pr.tempo;
 
     axe_midi = &romdata->axe_midi_programs[curr.axe_midi_program];
 
@@ -862,6 +812,26 @@ void load_program(void) {
             cc_lookup[(CC_AMP2 * a) + CC_FX1 + i] = axe_midi->amps[a].fx_midi_cc[i];
         }
     }
+}
+
+static void load_program(void) {
+    // Load program:
+    u8 pr_num;
+
+    if (curr.setlist_mode == 1) {
+        pr_num = romdata->set_list.entries[curr.sl_idx].song;
+    } else {
+        pr_num = curr.pr_idx;
+    }
+
+    DEBUG_LOG1("load program %d", pr_num + 1);
+    pr = romdata->songs[pr_num];
+
+    curr.axe_midi_program = pr.axe_midi_program;
+    curr.td50_midi_program = pr.td50_midi_program;
+    curr.tempo = pr.tempo;
+
+    load_axe_midi();
 
     // Establish a sane default for an undefined program:
     curr.sc_idx = 0;
@@ -876,29 +846,21 @@ void load_program(void) {
     //last.sc_idx = ~curr.sc_idx;
 }
 
-void load_scene(void) {
+static void load_scene(void) {
     DEBUG_LOG1("load scene %d", curr.sc_idx + 1);
 
     // Detect if scene is uninitialized:
     if ((pr.scene[curr.sc_idx].amp[0].gain == 0) && (pr.scene[curr.sc_idx].amp[0].volume == 0) &&
         (pr.scene[curr.sc_idx].amp[1].gain == 0) && (pr.scene[curr.sc_idx].amp[1].volume == 0)) {
-        // Reset to default scene state:
-        //scene_default();
         pr.scene[curr.sc_idx] = pr.scene[curr.sc_idx-1];
     }
 
     // Copy new scene settings into current state:
     amp[0] = pr.scene[curr.sc_idx].amp[0];
     amp[1] = pr.scene[curr.sc_idx].amp[1];
-
-    // Recalculate modified status for this scene:
-    modified = 0;
-    calc_volume_modified();
-    calc_fx_modified();
-    calc_gain_modified();
 }
 
-void scene_default(void) {
+static void scene_default(void) {
     DEBUG_LOG1("default scene %d", curr.sc_idx + 1);
 
     // Set defaults for both amps:
@@ -954,8 +916,6 @@ static void midi_reset_cc(void) {
 }
 
 static void midi_invalidate(void) {
-    u8 i;
-
     // Invalidate all current MIDI state so it gets re-sent at end of loop:
     DEBUG_LOG0("invalidate MIDI state");
 
@@ -1121,7 +1081,6 @@ static void vol_dec(u8 ampno) {
     if (volume > (u8)0) {
         volume--;
         amp[ampno].volume = volume;
-        calc_volume_modified();
     }
 }
 
@@ -1130,7 +1089,6 @@ static void vol_inc(u8 ampno) {
     if (volume < (u8)127) {
         volume++;
         amp[ampno].volume = volume;
-        calc_volume_modified();
     }
 }
 
@@ -1149,7 +1107,6 @@ static void gain_dec(u8 ampno) {
     }
     if ((*gain) > (u8)1) {
         (*gain)--;
-        calc_gain_modified();
     }
 }
 
@@ -1168,7 +1125,6 @@ static void gain_inc(u8 ampno) {
     }
     if ((*gain) < (u8)127) {
         (*gain)++;
-        calc_gain_modified();
     }
 }
 
@@ -1182,7 +1138,6 @@ static void gate_dec(u8 ampno) {
     }
     if ((*gate) > (u8)1) {
         (*gate)--;
-        //calc_gain_modified();
     }
 }
 
@@ -1196,7 +1151,6 @@ static void gate_inc(u8 ampno) {
     }
     if ((*gate) < (u8)127) {
         (*gate)++;
-        //calc_gain_modified();
     }
 }
 
@@ -1322,8 +1276,8 @@ void controller_handle(void) {
 
     switch (curr.screen) {
         case SCREEN_AMP:
-            btn_pressed(top, 1, amp[curr.selected_amp].fx ^= fxm_acoustc; calc_fx_modified())
-            btn_pressed(bot, 1, amp[curr.selected_amp].fx ^= fxm_dirty; calc_fx_modified())
+            btn_pressed(top, 1, amp[curr.selected_amp].fx ^= fxm_acoustc)
+            btn_pressed(bot, 1, amp[curr.selected_amp].fx ^= fxm_dirty)
             btn_released_repeater(top, 2, gain_dec(curr.selected_amp))
             btn_released_repeater(bot, 2, gain_inc(curr.selected_amp))
             btn_released_repeater(top, 3, gate_dec(curr.selected_amp))
@@ -1334,11 +1288,11 @@ void controller_handle(void) {
             btn_pressed(bot, 5, curr.selected_amp ^= JD)
             break;
         case SCREEN_FX:
-            btn_pressed(bot, 1, amp[curr.selected_amp].fx ^= fxm_1; calc_fx_modified())
-            btn_pressed(bot, 2, amp[curr.selected_amp].fx ^= fxm_2; calc_fx_modified())
-            btn_pressed(bot, 3, amp[curr.selected_amp].fx ^= fxm_3; calc_fx_modified())
-            btn_pressed(bot, 4, amp[curr.selected_amp].fx ^= fxm_4; calc_fx_modified())
-            btn_pressed(bot, 5, amp[curr.selected_amp].fx ^= fxm_5; calc_fx_modified())
+            btn_pressed(bot, 1, amp[curr.selected_amp].fx ^= fxm_1)
+            btn_pressed(bot, 2, amp[curr.selected_amp].fx ^= fxm_2)
+            btn_pressed(bot, 3, amp[curr.selected_amp].fx ^= fxm_3)
+            btn_pressed(bot, 4, amp[curr.selected_amp].fx ^= fxm_4)
+            btn_pressed(bot, 5, amp[curr.selected_amp].fx ^= fxm_5)
             btn_pressed(top, 5, curr.screen = (curr.screen & 1) ^ 1)
             break;
         case SCREEN_MIDI:
