@@ -92,15 +92,11 @@ ACOUS   :    on | off
 EDIT    :    FX | AMP
 AMP     :    JD | MG
 
-TODO: reduce from 5 FX to 4 FX
-TODO: add JD|MG button on FX screen
-TODO: on FX screen edit whether using song-default or per-scene gain
-TODO: on FX screen edit whether using song-default or per-scene gate
 TODO: scene++ moves to next song
 TODO: after song++ or song-- require scene++ button to activate scene 1
+TODO: record tempo from taps
 TODO: show tempo via blinking LED
 TODO: edit tempo via buttons
-TODO: record tempo from taps
 
     EDIT AMP
     |------------------------------------------------------------|
@@ -116,7 +112,7 @@ TODO: record tempo from taps
     EDIT FX
     |------------------------------------------------------------|
     |     *      *      *      *      *      *      *      *     |
-    |                               AMP|FX  MIDI PR_PRV PR_NXT   |
+    |           GAIN   GATE   VOLU  AMP|FX  MIDI PR_PRV PR_NXT   |
     |                                       MODE                 |
     |                                                            |
     |     *      *      *      *      *      *      *      *     |
