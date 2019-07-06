@@ -662,9 +662,9 @@ static void update_lcd(void) {
             break;
         case SCREEN_FX:
             labels_top[0] = "";
-            labels_top[1] = "";
-            labels_top[2] = "";
-            labels_top[3] = "";
+            labels_top[1] = "GAIN";
+            labels_top[2] = "GATE";
+            labels_top[3] = "VOLU";
             labels_top[4] = "AMP|FX";
             labels_bot[4] = "JD|MG";
             labels_bot[0] = fx_name(fx_midi_cc(curr.selected_amp)[0]);
@@ -787,9 +787,14 @@ static void calc_leds(void) {
             curr.leds.top.byte =
                 // mask out special LEDs from footswitch state:
                 (curr.fsw.top.byte & ((u8)~(M_5 | M_6)))
+                | ((amp[curr.selected_amp].gain == 0) << 1)
+                | ((amp[curr.selected_amp].gate == 0) << 2)
+                | ((amp[curr.selected_amp].volume == volume_0dB) << 3)
                 | ((curr.screen == SCREEN_FX) << 4)
                 | ((curr.screen == SCREEN_MIDI) << 5);
-            curr.leds.bot.byte = (curr.fsw.bot.byte & (u8)(0x20 | 0x40 | 0x80))
+            curr.leds.bot.byte =
+                // mask out special LEDs from footswitch state:
+                (curr.fsw.bot.byte & (u8)(M_6 | M_7 | M_8))
                 | (amp[curr.selected_amp].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4))
                 | ((JD - curr.selected_amp) << 4);
             break;
@@ -1293,6 +1298,10 @@ void controller_handle(void) {
             btn_pressed(bot, 5, curr.selected_amp ^= JD)
             break;
         case SCREEN_FX:
+            btn_pressed(top, 2, { u8 g = amp[curr.selected_amp].gain; amp[curr.selected_amp].gain = (g == 0) ? axe_midi->amp_defaults.dirty_gain : 0; })
+            btn_pressed(top, 3, { u8 g = amp[curr.selected_amp].gate; amp[curr.selected_amp].gate = (g == 0) ? axe_midi->amp_defaults.gate : 0; })
+            btn_pressed(top, 4, amp[curr.selected_amp].volume = volume_0dB)
+
             btn_pressed(bot, 1, amp[curr.selected_amp].fx ^= fxm_1)
             btn_pressed(bot, 2, amp[curr.selected_amp].fx ^= fxm_2)
             btn_pressed(bot, 3, amp[curr.selected_amp].fx ^= fxm_3)
