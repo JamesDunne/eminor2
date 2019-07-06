@@ -1007,7 +1007,11 @@ static void next_scene(void) {
         DEBUG_LOG0("next scene");
         curr.sc_idx++;
     } else {
-
+        DEBUG_LOG0("next scene - advance song");
+        next_song();
+        // Ensure next song is activated:
+        curr.pr_idx = curr.next_pr_idx;
+        curr.sl_idx = curr.next_sl_idx;
     }
 }
 
