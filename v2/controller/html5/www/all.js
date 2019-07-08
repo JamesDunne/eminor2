@@ -93065,10 +93065,11 @@ function _midi_send_sysex(byte) {
                 str += hex2(sysexMsg[i]) + " ";
             }
             midi_log("" + str + "\n");
-            sysexMsg = [];
         } catch (e) {
             console.error(e);
         }
+
+        sysexMsg = [];
     }
 }
 
@@ -93170,19 +93171,20 @@ function init() {
                     midiSupport = true;
                     midiOutput = null;
 
-                    var midiSelect = document.getElementById("midiSelect");
-
                     // onchange event:
+                    var midiSelect = document.getElementById("midiSelect");
                     if (midiSelect) {
                         midiSelect.addEventListener("change", function (e) {
-                            if (midiSelect.value == 0) {
+                            if (midiSelect.value === "0") {
                                 console.log("disable MIDI");
+                                localStorage.setItem("midiDevice", "none");
                                 midiOutput = null;
                                 return;
                             }
 
                             midiOutput = midiAccess.outputs.get(midiSelect.value);
                             if (midiOutput) {
+                                localStorage.setItem("midiDevice", midiOutput.name);
                                 console.log("change MIDI to " + midiOutput.name);
                             } else {
                                 console.error("failed to find MIDI by key '" + midiSelect.value + "'");
@@ -93191,6 +93193,7 @@ function init() {
                     }
 
                     // Could be 0..n outputs; try to select first if any:
+                    var lastSelectedName = localStorage.getItem("midiDevice");
                     midiAccess.outputs.forEach(function(output, key) {
                         if (midiSelect) {
                             // Create an <option> for the MIDI output port:
@@ -93200,12 +93203,18 @@ function init() {
                             midiSelect.appendChild(opt);
 
                             if (midiOutput === null) {
-                                midiOutput = output;
-                                midiSelect.value = key;
+                                if (!lastSelectedName || output.name === lastSelectedName) {
+                                    midiOutput = output;
+                                    midiSelect.value = key;
+                                    localStorage.setItem("midiDevice", midiOutput.name);
+                                }
                             }
                         } else {
                             if (midiOutput === null) {
-                                midiOutput = output;
+                                if (!lastSelectedName || output.name === lastSelectedName) {
+                                    midiOutput = output;
+                                    localStorage.setItem("midiDevice", midiOutput.name);
+                                }
                             }
                         }
                     });
@@ -93213,6 +93222,7 @@ function init() {
                     startMachine();
                 },
                 function (err) {
+                    console.log("MIDI support unavailable; disabling");
                     midiSupport = false;
                     startMachine();
                 }
