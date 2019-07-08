@@ -92784,24 +92784,30 @@ function renderUI() {
 function keydown(e) {
     if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return false;
 
+    // We use `code` here because we're only interested in the physical layout of the keyboard, not the actual letter
+    // that's pressed.
+    var code = e.code;
+
     // ASDFGHJK for bottom row:
-    if (e.keyCode == 65) fsw_state |= 1;
-    else if (e.keyCode == 83) fsw_state |= 2;
-    else if (e.keyCode == 68) fsw_state |= 4;
-    else if (e.keyCode == 70) fsw_state |= 8;
-    else if (e.keyCode == 71) fsw_state |= 16;
-    else if (e.keyCode == 72) fsw_state |= 32;
-    else if (e.keyCode == 74) fsw_state |= 64;
-    else if (e.keyCode == 75) fsw_state |= 128;
-        // QWERTYUI for top row:
-    else if (e.keyCode == 81) fsw_state |= 256;
-    else if (e.keyCode == 87) fsw_state |= 512;
-    else if (e.keyCode == 69) fsw_state |= 1024;
-    else if (e.keyCode == 82) fsw_state |= 2048;
-    else if (e.keyCode == 84) fsw_state |= 4096;
-    else if (e.keyCode == 89) fsw_state |= 8192;
-    else if (e.keyCode == 85) fsw_state |= 16384;
-    else if (e.keyCode == 73) fsw_state |= 32768;
+         if (code === 'KeyA') fsw_state |= 1;
+    else if (code === 'KeyS') fsw_state |= 2;
+    else if (code === 'KeyD') fsw_state |= 4;
+    else if (code === 'KeyF') fsw_state |= 8;
+    else if (code === 'KeyG') fsw_state |= 16;
+    else if (code === 'KeyH') fsw_state |= 32;
+    else if (code === 'KeyJ') fsw_state |= 64;
+    else if (code === 'KeyK') fsw_state |= 128;
+    // special hack for USB foot pedal to bind to SCENE++ button:
+    else if (code === 'KeyB') fsw_state |= 128;
+    // QWERTYUI for top row:
+    else if (code === 'KeyQ') fsw_state |= 256;
+    else if (code === 'KeyW') fsw_state |= 512;
+    else if (code === 'KeyE') fsw_state |= 1024;
+    else if (code === 'KeyR') fsw_state |= 2048;
+    else if (code === 'KeyT') fsw_state |= 4096;
+    else if (code === 'KeyY') fsw_state |= 8192;
+    else if (code === 'KeyU') fsw_state |= 16384;
+    else if (code === 'KeyI') fsw_state |= 32768;
     else return true;
 
     ui_modified = true;
@@ -92812,24 +92818,30 @@ function keydown(e) {
 function keyup(e) {
     if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return false;
 
+    // We use `code` here because we're only interested in the physical layout of the keyboard, not the actual letter
+    // that's pressed.
+    var code = e.code;
+
     // ASDFGHJK for bottom row:
-    if (e.keyCode == 65) fsw_state &= 1 ^ 65535;
-    else if (e.keyCode == 83) fsw_state &= 2 ^ 65535;
-    else if (e.keyCode == 68) fsw_state &= 4 ^ 65535;
-    else if (e.keyCode == 70) fsw_state &= 8 ^ 65535;
-    else if (e.keyCode == 71) fsw_state &= 16 ^ 65535;
-    else if (e.keyCode == 72) fsw_state &= 32 ^ 65535;
-    else if (e.keyCode == 74) fsw_state &= 64 ^ 65535;
-    else if (e.keyCode == 75) fsw_state &= 128 ^ 65535;
-        // QWERTYUI for top row:
-    else if (e.keyCode == 81) fsw_state &= 256 ^ 65535;
-    else if (e.keyCode == 87) fsw_state &= 512 ^ 65535;
-    else if (e.keyCode == 69) fsw_state &= 1024 ^ 65535;
-    else if (e.keyCode == 82) fsw_state &= 2048 ^ 65535;
-    else if (e.keyCode == 84) fsw_state &= 4096 ^ 65535;
-    else if (e.keyCode == 89) fsw_state &= 8192 ^ 65535;
-    else if (e.keyCode == 85) fsw_state &= 16384 ^ 65535;
-    else if (e.keyCode == 73) fsw_state &= 32768 ^ 65535;
+         if (code === 'KeyA') fsw_state &= 1 ^ 65535;
+    else if (code === 'KeyS') fsw_state &= 2 ^ 65535;
+    else if (code === 'KeyD') fsw_state &= 4 ^ 65535;
+    else if (code === 'KeyF') fsw_state &= 8 ^ 65535;
+    else if (code === 'KeyG') fsw_state &= 16 ^ 65535;
+    else if (code === 'KeyH') fsw_state &= 32 ^ 65535;
+    else if (code === 'KeyJ') fsw_state &= 64 ^ 65535;
+    else if (code === 'KeyK') fsw_state &= 128 ^ 65535;
+    // special hack for USB foot pedal to bind to SCENE++ button:
+    else if (code === 'KeyB') fsw_state &= 128 ^ 65535;
+    // QWERTYUI for top row:
+    else if (code === 'KeyQ') fsw_state &= 256 ^ 65535;
+    else if (code === 'KeyW') fsw_state &= 512 ^ 65535;
+    else if (code === 'KeyE') fsw_state &= 1024 ^ 65535;
+    else if (code === 'KeyR') fsw_state &= 2048 ^ 65535;
+    else if (code === 'KeyT') fsw_state &= 4096 ^ 65535;
+    else if (code === 'KeyY') fsw_state &= 8192 ^ 65535;
+    else if (code === 'KeyU') fsw_state &= 16384 ^ 65535;
+    else if (code === 'KeyI') fsw_state &= 32768 ^ 65535;
     else return true;
 
     ui_modified = true;
