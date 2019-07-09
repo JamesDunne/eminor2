@@ -503,7 +503,7 @@ function _midi_send_sysex(byte) {
         }
 
         try {
-            str = "";
+            var str = "";
             for (var i = 0; i < sysexMsg.length; i++) {
                 str += hex2(sysexMsg[i]) + " ";
             }
@@ -514,6 +514,26 @@ function _midi_send_sysex(byte) {
 
         sysexMsg = [];
     }
+}
+
+function _midi_send_sysex_buffer(length, bufptr) {
+    var sysexMsg = Module.HEAPU8.subarray(bufptr, bufptr+length);
+
+    try {
+        var str = "";
+        for (var i = 0; i < sysexMsg.length; i++) {
+            str += hex2(sysexMsg[i]) + " ";
+        }
+        midi_log("" + str + "\n");
+    } catch (e) {
+        console.error(e);
+    }
+
+    if (!midiSupport || !midiOutput) {
+        return;
+    }
+
+    midiOutput.send(sysexMsg);
 }
 
 function _midi_log_cwrap(text_ptr) {

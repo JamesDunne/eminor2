@@ -242,6 +242,8 @@ u8 cc_sent[CC_AMP2 * 2];
 // Last-sent tap tempo CC value (toggles between 0x00 and 0x7F):
 u8 tap;
 
+u8 tempo_sysex[16];
+
 // Current screen:
 enum screen {
     SCREEN_AMP,
@@ -310,6 +312,11 @@ struct song pr;
 #pragma udata bcd
 extern rom const u16 dB_bcd_lookup[128];
 #pragma udata
+
+rom const u8 tempo_sysex_template[16] = {
+//     0     1     2     3     4     5     6     7     8     9  T_lo  T_hi    12    13   chk    15
+    0xF0, 0x00, 0x01, 0x74, 0x03, 0x02, 0x0D, 0x01, 0x20, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0xF7
+};
 
 // Set Axe-FX CC value
 #define midi_axe_sysex_start(fn) { \
@@ -522,23 +529,18 @@ static void calc_midi(void) {
         u8 d;
 
         DEBUG_LOG1("MIDI set tempo = %d bpm", curr.tempo);
-        // Start the sysex command targeted at the Axe-FX II to initiate tempo change:
-        midi_axe_sysex_start(0x02);
-        midi_send_sysex(0x0D);
-        midi_send_sysex(0x01);
-        midi_send_sysex(0x20);
-        midi_send_sysex(0x00);
-        // Tempo value split in 2x 7-bit values:
         d = (curr.tempo & (u8)0x7F);
         cs ^= d;
-        midi_send_sysex(d);
+        tempo_sysex[10] = d;
         d = (curr.tempo >> (u8)7);
         cs ^= d;
-        midi_send_sysex(d);
-        //  Finish the tempo command and send the sysex checksum and terminator:
-        midi_send_sysex(0x00);
-        midi_send_sysex(0x01);
-        midi_axe_sysex_end(cs & (u8) 0x7F);
+        tempo_sysex[11] = d;
+
+        // Set checksum byte:
+        tempo_sysex[14] = cs & (u8) 0x7F;
+
+        // Send entire sysex buffer at once:
+        midi_send_sysex_buffer(16, tempo_sysex);
     }
 
     if (curr.sl_idx != last.sl_idx) {
@@ -1037,6 +1039,11 @@ void controller_init(void) {
 
     // Initialize romdata pointer:
     romdata = (rom near struct romdata *)flash_addr(0);
+
+    // Copy tempo sysex template to tempo sysex buffer:
+    for (i = 0; i < 16; i++) {
+        tempo_sysex[i] = tempo_sysex_template[i];
+    }
 
     for (i = 0; i < 2; i++) {
         cc_lookup[CC_AMP2 * i + CC_FX1] = 0xFF;

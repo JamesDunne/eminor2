@@ -80,6 +80,9 @@ extern void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2);
 // Send a single byte for SysEx:
 extern void midi_send_sysex(u8 byte);
 
+// Send a buffer of SysEx data, starting with F0 and ending with F7:
+extern void midi_send_sysex_buffer(u8 length, const u8 *buf);
+
 // --------------- Flash memory functions:
 
 // Flash addresses are 0-based where 0 is the first available byte of
