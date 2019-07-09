@@ -238,19 +238,19 @@ CCPR1L	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef
 CCPR2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	147;"	q	line:147
 CCPR2H	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	149;"	q	line:149
 CCPR2L	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	148;"	q	line:148
-CC_AMP2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	235;"	e	line:235	enum:cc_key	file:
-CC_AMP_BYP	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	232;"	e	line:232	enum:cc_key	file:
-CC_AMP_XY	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	233;"	e	line:233	enum:cc_key	file:
-CC_CAB_XY	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	234;"	e	line:234	enum:cc_key	file:
-CC_FX1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	223;"	e	line:223	enum:cc_key	file:
-CC_FX2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	224;"	e	line:224	enum:cc_key	file:
-CC_FX3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	225;"	e	line:225	enum:cc_key	file:
-CC_FX4	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	226;"	e	line:226	enum:cc_key	file:
-CC_FX5	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	227;"	e	line:227	enum:cc_key	file:
-CC_GAIN	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	229;"	e	line:229	enum:cc_key	file:
-CC_GATE	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	230;"	e	line:230	enum:cc_key	file:
-CC_GATE_BYP	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	231;"	e	line:231	enum:cc_key	file:
-CC_VOLUME	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	228;"	e	line:228	enum:cc_key	file:
+CC_AMP2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	233;"	e	line:233	enum:cc_key	file:
+CC_AMP_BYP	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	230;"	e	line:230	enum:cc_key	file:
+CC_AMP_XY	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	231;"	e	line:231	enum:cc_key	file:
+CC_CAB_XY	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	232;"	e	line:232	enum:cc_key	file:
+CC_FX1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	221;"	e	line:221	enum:cc_key	file:
+CC_FX2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	222;"	e	line:222	enum:cc_key	file:
+CC_FX3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	223;"	e	line:223	enum:cc_key	file:
+CC_FX4	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	224;"	e	line:224	enum:cc_key	file:
+CC_FX5	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	225;"	e	line:225	enum:cc_key	file:
+CC_GAIN	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	227;"	e	line:227	enum:cc_key	file:
+CC_GATE	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	228;"	e	line:228	enum:cc_key	file:
+CC_GATE_BYP	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	229;"	e	line:229	enum:cc_key	file:
+CC_VOLUME	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	226;"	e	line:226	enum:cc_key	file:
 CFGS	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	777;"	q	line:777
 CFGS	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\p18f4550.h	618;"	m	line:618
 CHS0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	944;"	q	line:944
@@ -988,8 +988,8 @@ MG	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller
 MIDITxBufOutPtr	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_midi.c	14;"	v	line:14
 MIDITxBufPtr	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_midi.c	13;"	v	line:13
 MIDITxBuffer	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_midi.c	12;"	v	line:12
-MODE_LIVE	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	200;"	e	line:200	file:
-MODE_count	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	201;"	e	line:201	file:
+MODE_LIVE	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	201;"	e	line:201	file:
+MODE_count	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	202;"	e	line:202	file:
 MSB::(a)((a).v[1])	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	86;"	d	line:86
 M_1::0x01U	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	34;"	d	line:34
 M_2::0x02U	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	35;"	d	line:35
@@ -1347,8 +1347,8 @@ ROM_SAVEDATA	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram
 ROM_SAVEDATA	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c	68;"	v	line:68
 ROM_SAVEDATA	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c	80;"	v	line:80
 ROM_SAVEDATA	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c	92;"	v	line:92
-ROWMODE_AMP	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	205;"	e	line:205	enum:rowstate_mode	file:
-ROWMODE_FX	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	206;"	e	line:206	enum:rowstate_mode	file:
+ROWMODE_AMP	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	206;"	e	line:206	enum:rowstate_mode	file:
+ROWMODE_FX	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	207;"	e	line:207	enum:rowstate_mode	file:
 RSEN	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	958;"	q	line:958
 RSEN	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\p18f4550.h	847;"	m	line:847
 RX	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	511;"	q	line:511
@@ -1951,14 +1951,14 @@ WriteProgMem	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_s
 WriteProgMem	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c	25;"	f	line:25	signature:(unsigned char index)
 Z	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	1127;"	q	line:1127
 Z	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\p18f4550.h	1072;"	m	line:1072
-_1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	21;"	m	line:21
-_2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	22;"	m	line:22
-_3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	23;"	m	line:23
-_4	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	24;"	m	line:24
-_5	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	25;"	m	line:25
-_6	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	26;"	m	line:26
-_7	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	27;"	m	line:27
-_8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	28;"	m	line:28
+_1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	22;"	m	line:22
+_2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	23;"	m	line:23
+_3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	24;"	m	line:24
+_4	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	25;"	m	line:25
+_5	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	26;"	m	line:26
+_6	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	27;"	m	line:27
+_7	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	28;"	m	line:28
+_8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	29;"	m	line:29
 _BOOL	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	152;"	g	line:152
 _BORV_21_2L	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	1290;"	q	line:1290
 _BORV_28_2L	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	1289;"	q	line:1289
@@ -2105,72 +2105,71 @@ _byte	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h
 _dword	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	90;"	m	line:90	union:_DWORD
 _entry	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c	12;"	p	line:12	file:	signature:(void)
 _entry	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c	18;"	f	line:18	signature:(void)
-_padding	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	89;"	m	line:89	struct:song
-_padding1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	135;"	m	line:135	struct:romdata
+_padding	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	91;"	m	line:91	struct:song
+_padding1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	137;"	m	line:137	struct:romdata
 _startup	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c	13;"	p	line:13	file:	signature:(void)
 _startup	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c	24;"	f	line:24	signature:(void)
 _word	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	135;"	m	line:135	union:_POINTER
 _word	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	64;"	m	line:64	union:_WORD
-a	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	399;"	l	line:399
+a	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	408;"	l	line:408
 a	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	839;"	l	line:839
-acoustc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	397;"	l	line:397
-amp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	290;"	v	line:290
-amp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	45;"	s	line:45
-amp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	55;"	m	line:55	struct:scene_descriptor
-amp_defaults	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	24;"	s	line:24
-amp_defaults	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	35;"	m	line:35	struct:axe_midi_program
-amp_defaults	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	82;"	m	line:82	struct:song
-amp_descriptor	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	37;"	s	line:37	struct:axe_midi_program
-amp_key	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	382;"	l	line:382
-amp_live	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	296;"	v	line:296
-amps	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	40;"	m	line:40	struct:axe_midi_program
+amp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	297;"	v	line:297
+amp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	47;"	s	line:47
+amp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	57;"	m	line:57	struct:scene_descriptor
+amp_defaults	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	26;"	s	line:26
+amp_defaults	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	37;"	m	line:37	struct:axe_midi_program
+amp_defaults	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	84;"	m	line:84	struct:song
+amp_descriptor	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	39;"	s	line:39	struct:axe_midi_program
+amp_key	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	393;"	l	line:393
+amp_live	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	303;"	v	line:303
+amps	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	42;"	m	line:42	struct:axe_midi_program
 app_sig	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c	25;"	v	line:25
 app_ver	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\UserAppCode.c	28;"	v	line:28
 assert::(e)((void)0)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\assert.h	15;"	d	line:15
 ax	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	31;"	l	line:31
-axe_cc_byp_amp1::37	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	162;"	d	line:162	file:
-axe_cc_byp_amp2::38	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	163;"	d	line:163	file:
-axe_cc_byp_chorus1::41	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	164;"	d	line:164	file:
-axe_cc_byp_chorus2::42	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	165;"	d	line:165	file:
-axe_cc_byp_compressor1::43	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	166;"	d	line:166	file:
-axe_cc_byp_compressor2::44	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	167;"	d	line:167	file:
-axe_cc_byp_delay1::47	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	168;"	d	line:168	file:
-axe_cc_byp_delay2::48	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	169;"	d	line:169	file:
-axe_cc_byp_gate1::60	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	170;"	d	line:170	file:
-axe_cc_byp_gate2::61	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	171;"	d	line:171	file:
-axe_cc_byp_phaser1::75	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	172;"	d	line:172	file:
-axe_cc_byp_phaser2::76	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	173;"	d	line:173	file:
-axe_cc_byp_pitch1::77	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	174;"	d	line:174	file:
-axe_cc_byp_pitch2::78	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	175;"	d	line:175	file:
-axe_cc_byp_rotary1::86	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	176;"	d	line:176	file:
-axe_cc_byp_rotary2::87	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	177;"	d	line:177	file:
-axe_cc_external1::16	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	151;"	d	line:151	file:
-axe_cc_external2::17	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	152;"	d	line:152	file:
-axe_cc_external3::18	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	154;"	d	line:154	file:
-axe_cc_external4::19	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	155;"	d	line:155	file:
-axe_cc_external5::20	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	157;"	d	line:157	file:
-axe_cc_external6::21	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	158;"	d	line:158	file:
-axe_cc_scene::34	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	160;"	d	line:160	file:
-axe_cc_taptempo::14	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	147;"	d	line:147	file:
-axe_cc_tuner::15	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	148;"	d	line:148	file:
-axe_cc_xy_amp1::100	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	179;"	d	line:179	file:
-axe_cc_xy_amp2::101	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	180;"	d	line:180	file:
-axe_cc_xy_cab1::102	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	181;"	d	line:181	file:
-axe_cc_xy_cab2::103	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	182;"	d	line:182	file:
-axe_cc_xy_chorus1::104	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	183;"	d	line:183	file:
-axe_cc_xy_chorus2::105	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	184;"	d	line:184	file:
-axe_cc_xy_delay1::106	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	185;"	d	line:185	file:
-axe_cc_xy_delay2::107	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	186;"	d	line:186	file:
-axe_cc_xy_pitch1::114	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	187;"	d	line:187	file:
-axe_cc_xy_pitch2::115	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	188;"	d	line:188	file:
-axe_midi	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	216;"	v	line:216
-axe_midi_channel::2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	143;"	d	line:143	file:
-axe_midi_padding::(128-(max_axe_midi_program_cou	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	120;"	d	line:120
-axe_midi_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	282;"	m	line:282	struct:state	file:
-axe_midi_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	33;"	s	line:33
-axe_midi_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	71;"	m	line:71	struct:song
-axe_midi_program_count	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	129;"	m	line:129	struct:romdata
-axe_midi_programs	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	134;"	m	line:134	struct:romdata
+axe_cc_byp_amp1::37	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	163;"	d	line:163	file:
+axe_cc_byp_amp2::38	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	164;"	d	line:164	file:
+axe_cc_byp_chorus1::41	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	165;"	d	line:165	file:
+axe_cc_byp_chorus2::42	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	166;"	d	line:166	file:
+axe_cc_byp_compressor1::43	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	167;"	d	line:167	file:
+axe_cc_byp_compressor2::44	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	168;"	d	line:168	file:
+axe_cc_byp_delay1::47	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	169;"	d	line:169	file:
+axe_cc_byp_delay2::48	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	170;"	d	line:170	file:
+axe_cc_byp_gate1::60	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	171;"	d	line:171	file:
+axe_cc_byp_gate2::61	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	172;"	d	line:172	file:
+axe_cc_byp_phaser1::75	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	173;"	d	line:173	file:
+axe_cc_byp_phaser2::76	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	174;"	d	line:174	file:
+axe_cc_byp_pitch1::77	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	175;"	d	line:175	file:
+axe_cc_byp_pitch2::78	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	176;"	d	line:176	file:
+axe_cc_byp_rotary1::86	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	177;"	d	line:177	file:
+axe_cc_byp_rotary2::87	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	178;"	d	line:178	file:
+axe_cc_external1::16	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	152;"	d	line:152	file:
+axe_cc_external2::17	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	153;"	d	line:153	file:
+axe_cc_external3::18	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	155;"	d	line:155	file:
+axe_cc_external4::19	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	156;"	d	line:156	file:
+axe_cc_external5::20	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	158;"	d	line:158	file:
+axe_cc_external6::21	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	159;"	d	line:159	file:
+axe_cc_scene::34	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	161;"	d	line:161	file:
+axe_cc_taptempo::14	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	148;"	d	line:148	file:
+axe_cc_tuner::15	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	149;"	d	line:149	file:
+axe_cc_xy_amp1::100	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	180;"	d	line:180	file:
+axe_cc_xy_amp2::101	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	181;"	d	line:181	file:
+axe_cc_xy_cab1::102	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	182;"	d	line:182	file:
+axe_cc_xy_cab2::103	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	183;"	d	line:183	file:
+axe_cc_xy_chorus1::104	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	184;"	d	line:184	file:
+axe_cc_xy_chorus2::105	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	185;"	d	line:185	file:
+axe_cc_xy_delay1::106	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	186;"	d	line:186	file:
+axe_cc_xy_delay2::107	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	187;"	d	line:187	file:
+axe_cc_xy_pitch1::114	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	188;"	d	line:188	file:
+axe_cc_xy_pitch2::115	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	189;"	d	line:189	file:
+axe_midi	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	214;"	v	line:214
+axe_midi_channel::2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	144;"	d	line:144	file:
+axe_midi_padding::(128-(max_axe_midi_program_cou	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	122;"	d	line:122
+axe_midi_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	289;"	m	line:289	struct:state	file:
+axe_midi_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	35;"	s	line:35
+axe_midi_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	73;"	m	line:73	struct:song
+axe_midi_program_count	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	131;"	m	line:131	struct:romdata
+axe_midi_programs	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	136;"	m	line:136	struct:romdata
 b0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	51;"	m	line:51	struct:_BYTE::<anonymous>
 b1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	52;"	m	line:52	struct:_BYTE::<anonymous>
 b2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	53;"	m	line:53	struct:_BYTE::<anonymous>
@@ -2179,7 +2178,7 @@ b4	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	55
 b5	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	56;"	m	line:56	struct:_BYTE::<anonymous>
 b6	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	57;"	m	line:57	struct:_BYTE::<anonymous>
 b7	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	58;"	m	line:58	struct:_BYTE::<anonymous>
-b8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	30;"	t	line:30
+b8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	31;"	t	line:31
 bHigh	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	132;"	m	line:132	struct:_POINTER::<anonymous>
 bLow	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	131;"	m	line:131	struct:_POINTER::<anonymous>
 bRam	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	139;"	m	line:139	union:_POINTER
@@ -2192,8 +2191,8 @@ b_formBits	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOL
 bcd	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	87;"	f	line:87	signature:(u16 n)
 bcd	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	15;"	p	line:15	signature:(u16 n)
 bcd_tmp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	86;"	v	line:86
-bcdtoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	59;"	f	line:59	signature:(char *dst, u8 col, u16 bcd)
-bcdtoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	10;"	p	line:10	signature:(char *dst, u8 col, u16 bcd)
+bcdtoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	59;"	f	line:59	signature:(near char *dst, u8 col, u16 bcd)
+bcdtoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	10;"	p	line:10	signature:(near char *dst, u8 col, u16 bcd)
 bit0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	45;"	m	line:45
 bit1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	46;"	m	line:46
 bit2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	47;"	m	line:47
@@ -2203,27 +2202,27 @@ bit5	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	50
 bit6	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	51;"	m	line:51
 bit7	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	52;"	m	line:52
 bitloc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c	61;"	l	line:61
-bits	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	29;"	m	line:29
+bits	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	30;"	m	line:30
 bootNopFunc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c	28;"	p	line:28	file:	signature:(void)
 bot	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c	137;"	l	line:137
-bot	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	33;"	m	line:33
-bot_2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1108;"	m	line:1108	struct:timers	file:
-bot_3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1109;"	m	line:1109	struct:timers	file:
-bot_4	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1110;"	m	line:1110	struct:timers	file:
-bot_6	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1112;"	m	line:1112	struct:timers	file:
-bot_7	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1113;"	m	line:1113	struct:timers	file:
-bot_8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1114;"	m	line:1114	struct:timers	file:
-bounded_dec	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1203;"	f	line:1203	file:	signature:(u8 *value, u8 min)
-bounded_inc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1209;"	f	line:1209	file:	signature:(u8 *value, u8 max)
-btn_pressed::(row,n,on_press)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1292;"	d	line:1292	file:
-btn_pressed_oneshot::(row,n,on_pressed)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1320;"	d	line:1320	file:
-btn_released_oneshot::(row,n,on_release)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1312;"	d	line:1312	file:
-btn_released_repeater::(row,n,on_release)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1302;"	d	line:1302	file:
+bot	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	34;"	m	line:34
+bot_2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1132;"	m	line:1132	struct:timers	file:
+bot_3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1133;"	m	line:1133	struct:timers	file:
+bot_4	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1134;"	m	line:1134	struct:timers	file:
+bot_6	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1136;"	m	line:1136	struct:timers	file:
+bot_7	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1137;"	m	line:1137	struct:timers	file:
+bot_8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1138;"	m	line:1138	struct:timers	file:
+bounded_dec	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1221;"	f	line:1221	file:	signature:(u8 *value, u8 min)
+bounded_inc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1227;"	f	line:1227	file:	signature:(u8 *value, u8 max)
+btn_pressed::(row,n,on_press)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1309;"	d	line:1309	file:
+btn_pressed_oneshot::(row,n,on_pressed)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1337;"	d	line:1337	file:
+btn_released_oneshot::(row,n,on_release)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1329;"	d	line:1329	file:
+btn_released_repeater::(row,n,on_release)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1319;"	d	line:1319	file:
 bx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	31;"	l	line:31
 byte	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	43;"	m	line:43
 byte	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	71;"	m	line:71
 byte	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	42;"	t	line:42
-byte	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	19;"	m	line:19
+byte	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	20;"	m	line:20
 byte0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	63;"	m	line:63
 byte0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	73;"	m	line:73
 byte0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	84;"	m	line:84
@@ -2244,90 +2243,87 @@ byte3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	8
 byte3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	85;"	m	line:85
 byte3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	86;"	m	line:86
 byte3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	96;"	m	line:96	struct:_DWORD::<anonymous>
-c	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	595;"	l	line:595
-c	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	617;"	l	line:617
-calc_cc_toggle::(enable)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	377;"	d	line:377	file:
-calc_fx_modified	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	822;"	f	line:822	file:	signature:(void)
-calc_gain_modified	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	815;"	f	line:815	file:	signature:(void)
-calc_leds	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	776;"	f	line:776	file:	signature:(void)
-calc_midi	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	394;"	f	line:394	file:	signature:(void)
-calc_volume_modified	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	829;"	f	line:829	file:	signature:(void)
-cc_key	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	222;"	g	line:222	file:
-cc_lookup	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	239;"	v	line:239
-cc_sent	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	242;"	v	line:242
+c	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	606;"	l	line:606
+c	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	628;"	l	line:628
+calc_cc_toggle::(enable)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	388;"	d	line:388	file:
+calc_leds	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	788;"	f	line:788	file:	signature:(void)
+calc_midi	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	405;"	f	line:405	file:	signature:(void)
+cc_key	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	220;"	g	line:220	file:
+cc_lookup	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	237;"	v	line:237
+cc_sent	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	240;"	v	line:240
 chkbit::(VAR,Place)(VAR&(1<<Place))	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	29;"	d	line:29
-clean_gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	26;"	m	line:26	struct:amp_defaults
+clean_gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	28;"	m	line:28	struct:amp_defaults
+clean_gain_default::0x1A	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	23;"	d	line:23
 clrbit::(VAR,Place)VAR&=(1<<Place)^255	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	28;"	d	line:28
-col	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	586;"	l	line:586
-controller_10msec_timer	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1216;"	f	line:1216	signature:(void)
-controller_10msec_timer	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	100;"	p	line:100	signature:(void)
-controller_handle	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1282;"	f	line:1282	signature:(void)
-controller_handle	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	101;"	p	line:101	signature:(void)
-controller_init	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1020;"	f	line:1020	signature:(void)
-controller_init	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	99;"	p	line:99	signature:(void)
-copy_str_lcd	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	100;"	f	line:100	signature:(const char *src, char *dst)
-copy_str_lcd	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	19;"	p	line:19	signature:(const char *src, char *dst)
-count	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	105;"	m	line:105	struct:set_list
+col	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	597;"	l	line:597
+controller_10msec_timer	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1234;"	f	line:1234	signature:(void)
+controller_10msec_timer	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	103;"	p	line:103	signature:(void)
+controller_handle	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1300;"	f	line:1300	signature:(void)
+controller_handle	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	104;"	p	line:104	signature:(void)
+controller_init	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1037;"	f	line:1037	signature:(void)
+controller_init	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	102;"	p	line:102	signature:(void)
+copy_str_lcd	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	100;"	f	line:100	signature:(near char *dst, rom near const u8 *src)
+copy_str_lcd	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	19;"	p	line:19	signature:(near char *dst, rom near const u8 *src)
+count	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	107;"	m	line:107	struct:set_list
 counter	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\writeprogmem.c	27;"	l	line:27
-cs	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	518;"	l	line:518
-curr	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	287;"	v	line:287
-curr_leds	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	346;"	l	line:346
+cs	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	528;"	l	line:528
+curr	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	294;"	v	line:294
+curr_leds	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	355;"	l	line:355
 cx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	31;"	l	line:31
-d	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	519;"	l	line:519
-d	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	564;"	l	line:564
-d	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	605;"	l	line:605
+d	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	529;"	l	line:529
+d	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	575;"	l	line:575
+d	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	616;"	l	line:616
 dB_bcd_lookup	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6-rom1.c	5;"	v	line:5
 debug_log	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	25;"	p	line:25	signature:(const char *fmt, ...)
-diff	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	395;"	l	line:395
+diff	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	406;"	l	line:406
 dig	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	34;"	l	line:34
 digits	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	33;"	l	line:33
-dirty	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	396;"	l	line:396
-dirty_gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	25;"	m	line:25	struct:amp_defaults
+dirty_gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	27;"	m	line:27	struct:amp_defaults
+dirty_gain_default::0x5E	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	22;"	d	line:22
 dword	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	44;"	t	line:44
 dx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	31;"	l	line:31
-entries	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	107;"	m	line:107	struct:set_list
+entries	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	109;"	m	line:109	struct:set_list
 false::0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	21;"	d	line:21
 filler0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc	865;"	q	line:865
 filler0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\p18f4550.h	730;"	m	line:730
-flash_addr	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	95;"	p	line:95	signature:(u16 addr)
-flash_load	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	89;"	p	line:89	signature:(u16 addr, u16 count, u8 *data)
-flash_store	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	92;"	p	line:92	signature:(u16 addr, u16 count, u8 *data)
+flash_addr	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	98;"	p	line:98	signature:(u16 addr)
+flash_load	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	92;"	p	line:92	signature:(u16 addr, u16 count, u8 *data)
+flash_store	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	95;"	p	line:95	signature:(u16 addr, u16 count, u8 *data)
 fsw	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c	128;"	l	line:128
 fsw	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	265;"	m	line:265	struct:state	file:
 fsw_poll	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c	127;"	f	line:127
 fsw_poll	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	47;"	p	line:47	signature:(void)
-fx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	48;"	m	line:48	struct:amp
-fx_count::5	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	4;"	d	line:4
-fx_midi_cc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	39;"	m	line:39	struct:axe_midi_program::amp_descriptor
-fx_midi_cc::(a)(axe_midi->amps[a].fx_midi_	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	218;"	d	line:218	file:
+fx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	50;"	m	line:50	struct:amp
+fx_count::4	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	4;"	d	line:4
+fx_midi_cc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	41;"	m	line:41	struct:axe_midi_program::amp_descriptor
+fx_midi_cc::(a)(axe_midi->amps[a].fx_midi_	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	216;"	d	line:216	file:
 fx_name	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	143;"	f	line:143	signature:(u8 fx_midi_cc)
 fx_name	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	22;"	p	line:22	signature:(u8 fx_midi_cc)
 fxm_1::(u8)0x01	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	6;"	d	line:6
 fxm_2::(u8)0x02	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	7;"	d	line:7
 fxm_3::(u8)0x04	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	8;"	d	line:8
 fxm_4::(u8)0x08	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	9;"	d	line:9
-fxm_5::(u8)0x10	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	10;"	d	line:10
 fxm_acoustc::(u8)0x40	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	12;"	d	line:12
 fxm_dirty::(u8)0x80	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	13;"	d	line:13
-gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1138;"	l	line:1138
-gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1157;"	l	line:1157
-gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	293;"	m	line:293	file:
-gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	46;"	m	line:46	struct:amp
-gain_dec	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1137;"	f	line:1137	file:	signature:(u8 ampno)
-gain_inc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1156;"	f	line:1156	file:	signature:(u8 ampno)
-gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1176;"	l	line:1176
-gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1190;"	l	line:1190
-gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	294;"	m	line:294	file:
-gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	585;"	l	line:585
-gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	27;"	m	line:27	struct:amp_defaults
-gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	47;"	m	line:47	struct:amp
-gate_dec	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1175;"	f	line:1175	file:	signature:(u8 ampno)
-gate_default::71	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	22;"	d	line:22
-gate_inc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1189;"	f	line:1189	file:	signature:(u8 ampno)
+gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1160;"	l	line:1160
+gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1178;"	l	line:1178
+gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	300;"	m	line:300	file:
+gain	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	48;"	m	line:48	struct:amp
+gain_dec	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1159;"	f	line:1159	file:	signature:(u8 ampno)
+gain_inc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1177;"	f	line:1177	file:	signature:(u8 ampno)
+gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1196;"	l	line:1196
+gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1209;"	l	line:1209
+gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	301;"	m	line:301	file:
+gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	596;"	l	line:596
+gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	29;"	m	line:29	struct:amp_defaults
+gate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	49;"	m	line:49	struct:amp
+gate_dec	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1195;"	f	line:1195	file:	signature:(u8 ampno)
+gate_default::68	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	24;"	d	line:24
+gate_inc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1208;"	f	line:1208	file:	signature:(u8 ampno)
 h1toa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	6;"	f	line:6	signature:(u8 n)
 h1toa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	4;"	p	line:4	signature:(u8 n)
-hextoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	14;"	f	line:14	signature:(char *dst, u8 col, u8 n)
-hextoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	5;"	p	line:5	signature:(char *dst, u8 col, u8 n)
+hextoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	14;"	f	line:14	signature:(near char *dst, u8 col, u8 n)
+hextoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	5;"	p	line:5	signature:(near char *dst, u8 col, u8 n)
 high	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	62;"	m	line:62
 high	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	70;"	m	line:70
 high	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	83;"	m	line:83
@@ -2335,178 +2331,186 @@ high_word	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS
 i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c	31;"	l	line:31
 i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c	64;"	l	line:64
 i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c	61;"	l	line:61
-i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1021;"	l	line:1021
-i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	399;"	l	line:399
-i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	563;"	l	line:563
-i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	604;"	l	line:604
-i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	644;"	l	line:644
+i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1038;"	l	line:1038
+i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	408;"	l	line:408
+i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	574;"	l	line:574
+i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	615;"	l	line:615
+i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	655;"	l	line:655
 i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	839;"	l	line:839
-i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	927;"	l	line:927
-i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	944;"	l	line:944
-i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	957;"	l	line:957
+i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	926;"	l	line:926
+i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	943;"	l	line:943
 i	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	101;"	l	line:101
 init	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	36;"	p	line:36	signature:(void)
 init	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\init.c	12;"	f	line:12	signature:(void)
 interrupt_at_high_vector	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c	54;"	f	line:54	signature:(void)
 interrupt_at_low_vector	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c	61;"	f	line:61	signature:(void)
-io16	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	35;"	t	line:35
-is_alpha_mask	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	595;"	l	line:595
-is_alpha_mask	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	617;"	l	line:617
-is_bot_button_held::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	342;"	d	line:342	file:
-is_bot_button_pressed::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	330;"	d	line:330	file:
-is_bot_button_released::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	336;"	d	line:336	file:
-is_top_button_held::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	339;"	d	line:339	file:
-is_top_button_pressed::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	327;"	d	line:327	file:
-is_top_button_released::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	333;"	d	line:333	file:
-j	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	617;"	l	line:617
+io16	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	36;"	t	line:36
+is_alpha_mask	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	606;"	l	line:606
+is_alpha_mask	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	628;"	l	line:628
+is_bot_button_held::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	351;"	d	line:351	file:
+is_bot_button_pressed::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	339;"	d	line:339	file:
+is_bot_button_released::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	345;"	d	line:345	file:
+is_top_button_held::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	348;"	d	line:348	file:
+is_top_button_pressed::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	336;"	d	line:336	file:
+is_top_button_released::(mask)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	342;"	d	line:342	file:
+j	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	628;"	l	line:628
 jumpto::(LOCATION)_asmgotoLOCATION_end	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	32;"	d	line:32
 l_form	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	82;"	m	line:82
-label_row_get	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	107;"	p	line:107	signature:(u8 row)
-label_row_update	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	108;"	p	line:108	signature:(u8 row)
-labels_bot	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	640;"	l	line:640
-labels_top	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	640;"	l	line:640
-last	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	287;"	v	line:287
-last_leds	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	347;"	l	line:347
-last_value	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	383;"	l	line:383
-lcd_amp_row	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	562;"	f	line:562	file:	signature:(u8 a)
+label_row_get	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	110;"	p	line:110	signature:(u8 row)
+label_row_update	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	111;"	p	line:111	signature:(u8 row)
+labels_bot	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	651;"	l	line:651
+labels_top	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	651;"	l	line:651
+last	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	294;"	v	line:294
+last_leds	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	356;"	l	line:356
+last_value	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	394;"	l	line:394
+lcd_amp_row	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	573;"	f	line:573	file:	signature:(u8 a)
 lcd_clear_buffer	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	48;"	p	line:48	signature:(void)
 lcd_enqueue	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	49;"	p	line:49	signature:(unsigned char Input)
 lcd_enqueue	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c	95;"	f	line:95	signature:(unsigned char v)
-lcd_fx_row	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	603;"	f	line:603	file:	signature:(u8 a)
+lcd_fx_row	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	614;"	f	line:614	file:	signature:(u8 a)
 lcd_init	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	47;"	p	line:47	signature:(void)
 lcd_init	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c	30;"	f	line:30	signature:(void)
 lcd_row_get	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c	160;"	f	line:160	signature:(u8 row)
 lcd_row_get	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	60;"	p	line:60	signature:(u8 row)
-lcd_rows	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	192;"	v	line:192
+lcd_rows	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	193;"	v	line:193
 lcd_update_screen	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	50;"	p	line:50	signature:(void)
 lcd_update_screen	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c	63;"	f	line:63	signature:(void)
 lcd_updated_all	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	63;"	p	line:63	signature:(void)
 led_set	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c	155;"	f	line:155	signature:(u16 leds)
 led_set	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	50;"	p	line:50	signature:(u16 leds)
 leds	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	267;"	m	line:267	struct:state	file:
-load_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	836;"	f	line:836	signature:(void)
-load_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	879;"	f	line:879	signature:(void)
+load_axe_midi	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	378;"	p	line:378	file:	signature:(void)
+load_axe_midi	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	838;"	f	line:838	file:	signature:(void)
+load_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	851;"	f	line:851	file:	signature:(void)
+load_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	886;"	f	line:886	file:	signature:(void)
 low	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	62;"	m	line:62
 low	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	70;"	m	line:70
 low	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	83;"	m	line:83
 low_word	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	72;"	m	line:72
-lowercase_enable_mask	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	594;"	l	line:594
-lowercase_enable_mask	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	620;"	l	line:620
+lowercase_enable_mask	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	605;"	l	line:605
+lowercase_enable_mask	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	631;"	l	line:631
 ls_form	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	69;"	m	line:69
-main	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c	29;"	f	line:29
+main	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\main.c	31;"	f	line:31
 main	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\startup.c	10;"	p	line:10	file:	signature:(void)
-max::(a,b)(a>b?a:b)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1017;"	d	line:1017	file:
-max_axe_midi_program_count::(128/sizeof(structaxe_midi_pro	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	119;"	d	line:119
-max_set_length::125	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	101;"	d	line:101
-max_song_count::((WRITABLE_SEG_LEN-(2*128))/si	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	124;"	d	line:124
+max::(a,b)(a>b?a:b)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1034;"	d	line:1034	file:
+max_axe_midi_program_count::(128/sizeof(structaxe_midi_pro	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	121;"	d	line:121
+max_set_length::125	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	103;"	d	line:103
+max_song_count::((WRITABLE_SEG_LEN-(2*128))/si	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	126;"	d	line:126
 mid	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	84;"	m	line:84
-midi_axe_cc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	381;"	f	line:381	file:	signature:(enum cc_key key, u8 a, u8 value)
-midi_axe_sysex_end::(chksum){	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	324;"	d	line:324	file:
-midi_axe_sysex_start::(fn){	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	320;"	d	line:320	file:
+midi_axe_cc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	392;"	f	line:392	file:	signature:(enum cc_key key, u8 a, u8 value)
+midi_axe_sysex_end::(chksum){	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	333;"	d	line:333	file:
+midi_axe_sysex_start::(fn){	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	329;"	d	line:329	file:
 midi_clear_buffer	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	42;"	p	line:42	signature:(void)
 midi_clear_buffer	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_midi.c	49;"	f	line:49	signature:(void)
 midi_enq	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	43;"	p	line:43	signature:(unsigned char Input)
 midi_enq	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_midi.c	38;"	f	line:38	signature:(unsigned char Input)
 midi_enq::(byte){	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c	183;"	d	line:183	file:
-midi_invalidate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	365;"	p	line:365	file:	signature:(void)
-midi_invalidate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	956;"	f	line:956	file:	signature:(void)
-midi_reset_cc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	367;"	p	line:367	file:	signature:(void)
-midi_reset_cc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	943;"	f	line:943	file:	signature:(void)
+midi_invalidate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	374;"	p	line:374	file:	signature:(void)
+midi_invalidate	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	955;"	f	line:955	file:	signature:(void)
+midi_reset_cc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	376;"	p	line:376	file:	signature:(void)
+midi_reset_cc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	942;"	f	line:942	file:	signature:(void)
 midi_send_cmd1::(cmd,channel,data1)midi_send_c	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	75;"	d	line:75
 midi_send_cmd1_impl	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	76;"	p	line:76	signature:(u8 cmd_byte, u8 data1)
 midi_send_cmd2::(cmd,channel,data1,data2)midi_	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	77;"	d	line:77
 midi_send_cmd2_impl	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	78;"	p	line:78	signature:(u8 cmd_byte, u8 data1, u8 data2)
 midi_send_sysex	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	81;"	p	line:81	signature:(u8 byte)
+midi_send_sysex_buffer	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\hardware.h	84;"	p	line:84	signature:(u8 length, const u8 *buf)
 midi_tx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	44;"	p	line:44	signature:(void)
 midi_tx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_midi.c	16;"	f	line:16
-min::(a,b)(a<b?a:b)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1016;"	d	line:1016	file:
-modified	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	299;"	v	line:299
-n	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	641;"	l	line:641
-name	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	593;"	l	line:593
-name	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	616;"	l	line:616
-name	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	68;"	m	line:68	struct:song
-next_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	359;"	p	line:359	file:	signature:(void)
-next_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	997;"	f	line:997	file:	signature:(void)
-next_song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	363;"	p	line:363	file:	signature:(void)
-next_song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	969;"	f	line:969	file:	signature:(void)
+min::(a,b)(a<b?a:b)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1033;"	d	line:1033	file:
+n	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	652;"	l	line:652
+name	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	604;"	l	line:604
+name	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	627;"	l	line:627
+name	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	70;"	m	line:70	struct:song
+near	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	10;"	d	line:10
+next_pr_idx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	280;"	m	line:280	struct:state	file:
+next_pr_num	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	280;"	m	line:280	struct:state	file:
+next_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	368;"	p	line:368	file:	signature:(void)
+next_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	994;"	f	line:994	file:	signature:(void)
+next_sl_idx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	280;"	m	line:280	struct:state	file:
+next_song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	372;"	p	line:372	file:	signature:(void)
+next_song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	966;"	f	line:966	file:	signature:(void)
 nop::(x)_asmNOP_endasm	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	34;"	d	line:34
-nothing5	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1414;"	t	line:1414	file:
-offsetof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	143;"	p	line:143	signature:(struct romdata, axe_midi_program_count)
-offsetof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	144;"	p	line:144	signature:(struct romdata, song_count)
-offsetof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	145;"	p	line:145	signature:(struct romdata, set_list)
-offsetof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	146;"	p	line:146	signature:(struct romdata, axe_midi_programs)
-offsetof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	147;"	p	line:147	signature:(struct romdata, songs)
-offsetof::(st,m)((int)&(((st*)0)->m))	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	142;"	d	line:142
-on_retrigger::(action)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1370;"	d	line:1370	file:
-one_shot	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1270;"	d	line:1270	file:
-one_shot::(row,n,max,op_func)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1227;"	d	line:1227	file:
-or_default::(a,b)(a==0?b:a)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	379;"	d	line:379	file:
-origpr	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	214;"	v	line:214
+nothing5	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1445;"	t	line:1445	file:
+offsetof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	144;"	p	line:144	signature:(struct romdata, axe_midi_program_count)
+offsetof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	145;"	p	line:145	signature:(struct romdata, song_count)
+offsetof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	146;"	p	line:146	signature:(struct romdata, set_list)
+offsetof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	147;"	p	line:147	signature:(struct romdata, axe_midi_programs)
+offsetof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	148;"	p	line:148	signature:(struct romdata, songs)
+offsetof::(st,m)((int)&(((st*)0)->m))	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	143;"	d	line:143
+on_retrigger::(action)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1391;"	d	line:1391	file:
+one_shot	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1288;"	d	line:1288	file:
+one_shot::(row,n,max,op_func)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1245;"	d	line:1245	file:
+or_default::(a,b)(a==0?b:a)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	390;"	d	line:390	file:
 pFunc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	125;"	t	line:125
-padding_bytes::(128-(23+sizeof(structamp_defa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	63;"	d	line:63
+padding_bytes::(128-(23+sizeof(structamp_defa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	65;"	d	line:65
 pos	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	61;"	l	line:61
 pow10	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	32;"	l	line:32
-pr	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	304;"	v	line:304
-pr_idx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	274;"	m	line:274	struct:state	file:
-pr_num	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	838;"	l	line:838
-prev_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1009;"	f	line:1009	file:	signature:(void)
-prev_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	357;"	p	line:357	file:	signature:(void)
-prev_song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	361;"	p	line:361	file:	signature:(void)
-prev_song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	983;"	f	line:983	file:	signature:(void)
+pr	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	308;"	v	line:308
+pr_idx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	275;"	m	line:275	struct:state	file:
+pr_num	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1416;"	l	line:1416
+pr_num	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	277;"	m	line:277	struct:state	file:
+pr_num	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	853;"	l	line:853
+prev_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1026;"	f	line:1026	file:	signature:(void)
+prev_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	366;"	p	line:366	file:	signature:(void)
+prev_song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	370;"	p	line:370	file:	signature:(void)
+prev_song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	980;"	f	line:980	file:	signature:(void)
 reloadTimer1::(period){	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	78;"	d	line:78
-repeater	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1269;"	d	line:1269	file:
-repeater::(row,n,min,mask,op_func)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1240;"	d	line:1240	file:
-reset_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1004;"	f	line:1004	file:	signature:(void)
-reset_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	373;"	p	line:373	file:	signature:(void)
-retrigger	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1115;"	m	line:1115	struct:timers	file:
-ritoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	23;"	f	line:23	signature:(char *dst, s8 col, u8 n)
-ritoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	30;"	f	line:30	signature:(char *dst, s8 col, u8 n)
-ritoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	7;"	p	line:7	signature:(char *dst, s8 col, u8 n)
+repeater	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1287;"	d	line:1287	file:
+repeater::(row,n,min,mask,op_func)	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1258;"	d	line:1258	file:
+reset_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1021;"	f	line:1021	file:	signature:(void)
+reset_scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	384;"	p	line:384	file:	signature:(void)
+retrigger	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1139;"	m	line:1139	struct:timers	file:
+ritoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	23;"	f	line:23	signature:(near char *dst, s8 col, u8 n)
+ritoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	30;"	f	line:30	signature:(near char *dst, s8 col, u8 n)
+ritoa	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h	7;"	p	line:7	signature:(near char *dst, s8 col, u8 n)
 rom	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	9;"	d	line:9
-romdata	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	211;"	v	line:211
-romdata	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	127;"	s	line:127
+romdata	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	212;"	v	line:212
+romdata	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	129;"	s	line:129
 row	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c	64;"	l	line:64
-row	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	566;"	l	line:566
-row	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	607;"	l	line:607
-row_amp1::2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	195;"	d	line:195	file:
-row_amp2::3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	196;"	d	line:196	file:
-row_song::0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	193;"	d	line:193	file:
-row_stat::1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	194;"	d	line:194	file:
-rowstate_mode	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	204;"	g	line:204	file:
-s16	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	16;"	t	line:16
-s8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	14;"	t	line:14
+row	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	577;"	l	line:577
+row	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	618;"	l	line:618
+row_amp1::2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	196;"	d	line:196	file:
+row_amp2::3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	197;"	d	line:197	file:
+row_song::0	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	194;"	d	line:194	file:
+row_stat::1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	195;"	d	line:195	file:
+rowstate_mode	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	205;"	g	line:205	file:
+s16	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	17;"	t	line:17
+s8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	15;"	t	line:15
 s_form	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	61;"	m	line:61
 s_form	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	83;"	m	line:83
-sc_idx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	276;"	m	line:276	struct:state	file:
-scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	86;"	m	line:86	struct:song
-scene_count	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	84;"	m	line:84	struct:song
-scene_count_max::12	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	61;"	d	line:61
-scene_default	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	371;"	p	line:371	file:	signature:(void)
-scene_default	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	901;"	f	line:901	signature:(void)
-scene_descriptor	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	54;"	s	line:54
+sc_idx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	283;"	m	line:283	struct:state	file:
+scene	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	88;"	m	line:88	struct:song
+scene_count	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	86;"	m	line:86	struct:song
+scene_count_max::12	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	63;"	d	line:63
+scene_default	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	382;"	p	line:382	file:	signature:(void)
+scene_default	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	900;"	f	line:900	file:	signature:(void)
+scene_descriptor	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	56;"	s	line:56
 screen	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	248;"	g	line:248	file:
-screen	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	279;"	m	line:279	struct:state	file:
+screen	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	286;"	m	line:286	struct:state	file:
 selected_amp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	254;"	g	line:254	file:
-selected_amp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	278;"	m	line:278	struct:state	file:
-send_leds	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	344;"	f	line:344	file:	signature:(void)
-set_entry	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	97;"	s	line:97
-set_list	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	104;"	s	line:104
-set_list	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	131;"	m	line:131	struct:romdata
+selected_amp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	285;"	m	line:285	struct:state	file:
+send_leds	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	353;"	f	line:353	file:	signature:(void)
+set_entry	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	99;"	s	line:99
+set_list	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	106;"	s	line:106
+set_list	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	133;"	m	line:133	struct:romdata
 setbit::(VAR,Place)VAR|=1<<Place	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	25;"	d	line:25
 setlist_mode	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	270;"	m	line:270	struct:state	file:
 sign	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.c	60;"	l	line:60
-sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	110;"	p	line:110	signature:(struct set_list)
-sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	31;"	p	line:31	signature:(struct amp_defaults)
-sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	52;"	p	line:52	signature:(struct amp)
-sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	59;"	p	line:59	signature:(struct scene_descriptor)
-sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	94;"	p	line:94	signature:(struct song)
-sl_idx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	272;"	m	line:272	struct:state	file:
+sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	112;"	p	line:112	signature:(struct set_list)
+sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	33;"	p	line:33	signature:(struct amp_defaults)
+sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	45;"	p	line:45	signature:(struct axe_midi_program)
+sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	54;"	p	line:54	signature:(struct amp)
+sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	61;"	p	line:61	signature:(struct scene_descriptor)
+sizeof	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	96;"	p	line:96	signature:(struct song)
+sl_idx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	273;"	m	line:273	struct:state	file:
 sl_max	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	260;"	v	line:260
 sm_form	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	84;"	m	line:84
-song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	66;"	s	line:66
-song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	98;"	m	line:98	struct:set_entry
-song_count	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	130;"	m	line:130	struct:romdata
-songs	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	138;"	m	line:138	struct:romdata
+song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	100;"	m	line:100	struct:set_entry
+song	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	68;"	s	line:68
+song_count	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	132;"	m	line:132	struct:romdata
+song_name	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	656;"	l	line:656
+songs	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	140;"	m	line:140	struct:romdata
 startTimer1::(period){	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	67;"	d	line:67
 state	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	263;"	s	line:263	file:
 stopTimer1::{	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\c_system.h	85;"	d	line:85
@@ -2522,46 +2526,48 @@ swuart_tx_start	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\
 swuart_txbyte	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c	18;"	v	line:18
 swuart_txmask	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\comm_lcd.c	19;"	v	line:19
 tTimer1Value	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\ram_def.c	27;"	v	line:27
-tap	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	245;"	v	line:245
-td50_midi_channel::9	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	144;"	d	line:144	file:
-td50_midi_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	283;"	m	line:283	struct:state	file:
-td50_midi_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	73;"	m	line:73	struct:song
-tempo	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	286;"	m	line:286	struct:state	file:
-tempo	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	76;"	m	line:76	struct:song
-test_fx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	398;"	l	line:398
-test_fx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	565;"	l	line:565
-test_fx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	606;"	l	line:606
+tap	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	243;"	v	line:243
+td50_midi_channel::9	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	145;"	d	line:145	file:
+td50_midi_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	290;"	m	line:290	struct:state	file:
+td50_midi_program	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	75;"	m	line:75	struct:song
+tempo	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	293;"	m	line:293	struct:state	file:
+tempo	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	78;"	m	line:78	struct:song
+tempo_sysex	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	245;"	v	line:245
+tempo_sysex_template	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	316;"	v	line:316
+test_fx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	407;"	l	line:407
+test_fx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	576;"	l	line:576
+test_fx	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	617;"	l	line:617
 tglbit::(VAR,Place)VAR^=1<<Place	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	30;"	d	line:30
-timers	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1098;"	s	line:1098	file:
-timers	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1116;"	v	line:1116
-tmp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1285;"	l	line:1285
-tmplabel	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	634;"	v	line:634
-toggle_setlist_mode	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	369;"	p	line:369	file:	signature:(void)
-toggle_setlist_mode	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	922;"	f	line:922	file:	signature:(void)
+timers	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1122;"	s	line:1122	file:
+timers	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1140;"	v	line:1140
+tmp	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1302;"	l	line:1302
+tmplabel	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	645;"	v	line:645
+toggle_setlist_mode	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	380;"	p	line:380	file:	signature:(void)
+toggle_setlist_mode	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	921;"	f	line:921	file:	signature:(void)
 top	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\hwcalls.c	136;"	l	line:136
-top	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	34;"	m	line:34
-top_2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1100;"	m	line:1100	struct:timers	file:
-top_3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1101;"	m	line:1101	struct:timers	file:
-top_4	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1102;"	m	line:1102	struct:timers	file:
-top_6	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1104;"	m	line:1104	struct:timers	file:
-top_7	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1105;"	m	line:1105	struct:timers	file:
-top_8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1106;"	m	line:1106	struct:timers	file:
+top	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	35;"	m	line:35
+top_2	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1124;"	m	line:1124	struct:timers	file:
+top_3	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1125;"	m	line:1125	struct:timers	file:
+top_4	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1126;"	m	line:1126	struct:timers	file:
+top_6	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1128;"	m	line:1128	struct:timers	file:
+top_7	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1129;"	m	line:1129	struct:timers	file:
+top_8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1130;"	m	line:1130	struct:timers	file:
 true::1	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	22;"	d	line:22
 true_entry	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\BootUserStartup.c	44;"	f	line:44	signature:(void)
-u16	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	15;"	t	line:15
-u8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	13;"	t	line:13
-update_lcd	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	355;"	p	line:355	file:	signature:(void)
-update_lcd	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	638;"	f	line:638	file:	signature:(void)
+u16	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	16;"	t	line:16
+u8	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\types.h	14;"	t	line:14
+update_lcd	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	364;"	p	line:364	file:	signature:(void)
+update_lcd	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	649;"	f	line:649	file:	signature:(void)
 upper	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	70;"	m	line:70
 v	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	117;"	m	line:117	struct:_DWORD::<anonymous>
 v	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\typedefs.h	82;"	m	line:82	struct:_WORD::<anonymous>
 v5_fx_names	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\v5_fx_names.h	2;"	v	line:2
-vol_dec	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1119;"	f	line:1119	file:	signature:(u8 ampno)
-vol_inc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1128;"	f	line:1128	file:	signature:(u8 ampno)
-volume	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1120;"	l	line:1120
-volume	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1129;"	l	line:1129
-volume	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	295;"	m	line:295	file:
-volume	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	49;"	m	line:49	struct:amp
+vol_dec	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1143;"	f	line:1143	file:	signature:(u8 ampno)
+vol_inc	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1151;"	f	line:1151	file:	signature:(u8 ampno)
+volume	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1144;"	l	line:1144
+volume	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	1152;"	l	line:1152
+volume	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\controller-v6.c	302;"	m	line:302	file:
+volume	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	51;"	m	line:51	struct:amp
 volume_0dB::98	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	19;"	d	line:19
 volume_6dB::127	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h	20;"	d	line:20
 w	G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\_TOOLS.H	68;"	m	line:68

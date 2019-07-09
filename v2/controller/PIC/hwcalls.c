@@ -183,9 +183,11 @@ void lcd_updated_all(void) {
 }
 #endif
 
-// Send a single MIDI byte for SysEx:
-void midi_send_sysex(u8 byte) {
-	midi_enq(byte);
+void midi_send_sysex_buffer(u8 length, const u8 *buf) {
+    u8 i;
+    for (i=0;i<length;++i) {
+	    midi_enq(buf[i]);
+	}
 }
 
 /* Send formatted MIDI commands.

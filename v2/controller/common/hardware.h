@@ -77,19 +77,13 @@ extern void midi_send_cmd1_impl(u8 cmd_byte, u8 data1);
 #define midi_send_cmd2(cmd, channel, data1, data2) midi_send_cmd2_impl((((u8)cmd & (u8)0xF) << (u8)4) | ((u8)channel & (u8)0xF), (u8)data1, (u8)data2)
 extern void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2);
 
-// Send a single byte for SysEx:
-extern void midi_send_sysex(u8 byte);
-
-// Send a buffer of SysEx data, starting with F0 and ending with F7:
+// Send a buffer of SysEx data; buffer must start with F0 and end with F7:
 extern void midi_send_sysex_buffer(u8 length, const u8 *buf);
 
 // --------------- Flash memory functions:
 
 // Flash addresses are 0-based where 0 is the first available byte of
 // non-program flash memory.
-
-// Load `count` bytes from flash memory at address `addr` into `data`:
-extern void flash_load(u16 addr, u16 count, u8 *data);
 
 // Stores `count` bytes from `data` into flash memory at address `addr`:
 extern void flash_store(u16 addr, u16 count, u8 *data);
