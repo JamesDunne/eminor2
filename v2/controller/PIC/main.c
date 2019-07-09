@@ -10,7 +10,9 @@
 #pragma config VREGEN = ON, PWRT=ON, BOR=ON, BORV=0
 //#pragma config WDT = ON, WDTPS = 32768                          //IMPORTANT!!  Long watchdog timeout is REQUIRED for this bootloader!!
 #pragma config CCP2MX=ON, PBADEN=OFF, LPT1OSC=OFF, MCLRE=ON
-#pragma config STVREN=ON, LVP=OFF, ICPRT=OFF, XINST=OFF
+//#pragma config STVREN=ON, LVP=OFF, ICPRT=OFF, XINST=OFF
+#pragma config STVREN=ON, LVP=OFF, ICPRT=OFF
+#pragma config XINST=OFF
 #pragma config CP0=OFF, CP1=OFF, CP2=OFF
 #pragma config CPB=OFF, CPD=OFF
 #pragma config WRT0=OFF, WRT1=OFF, WRT2=OFF

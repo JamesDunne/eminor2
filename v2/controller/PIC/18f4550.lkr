@@ -5,12 +5,12 @@
 LIBPATH C:\mplabc18\v3.46\lib
 
 // for non-extended mode:
-//FILES clib.lib
-//FILES p18f4550.lib
+FILES clib.lib
+FILES p18f4550.lib
 
 // for extended mode:
-FILES clib_e.lib
-FILES p18f4550_e.lib
+//FILES clib_e.lib
+//FILES p18f4550_e.lib
 
 CODEPAGE   NAME=BootStartup  START=0x0000       END=0x0000BF       PROTECTED
 CODEPAGE   NAME=Bootloader   START=0x0C0        END=0x000FFF       PROTECTED
