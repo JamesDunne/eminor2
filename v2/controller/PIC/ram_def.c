@@ -98,7 +98,7 @@ rom unsigned char ROM_SAVEDATA[3][4096] = {
     },
     {
         0
-    }    
+    }
 };
 #else
 #error HW_ VERSION must be set
