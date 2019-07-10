@@ -16224,7 +16224,7 @@ function _update_lcd() {
  }
  $266 = HEAP32[(185192)>>2]|0;
  switch ($266|0) {
- case 0:  {
+ case 0: case 2:  {
   _lcd_amp_row(0);
   _lcd_amp_row(1);
   $267 = HEAP32[(185188)>>2]|0;
