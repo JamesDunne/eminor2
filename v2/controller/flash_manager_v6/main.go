@@ -204,17 +204,22 @@ func gateToMIDI(g float64) uint8 {
 		return 0
 	}
 
+	//fmt.Printf("g_in    = %v\n", g)
 	// Range clamp:
 	g = math.Max(-76.0, math.Min(-12.5, g))
+	//fmt.Printf("g_clamp = %v\n", g)
 
-	// Convert from dB to MIDI 0..127 external controller map for gate1/2 threshold:
+	// Convert from dB to MIDI 1..127 external controller map for gate1/2 threshold:
 	// SPOILER ALERT: (128.0 / (-12.0 - -76.0)) = 2.0
 	gate := uint8((g - -76.0) * (128.0 / (-12.0 - -76.0)))
-
 	if gate > 0x7F {
 		panic(fmt.Errorf("gate threshold %d cannot exceed max of 127", gate))
 	}
+	if gate < 1 {
+		gate = 1
+	}
 
+	//fmt.Printf("gate    = %v\n", gate)
 	return gate
 }
 
