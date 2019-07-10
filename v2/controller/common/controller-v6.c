@@ -760,6 +760,7 @@ static void update_lcd(void) {
 
     // AMP rows:
     switch (curr.screen) {
+        case SCREEN_MIDI:
         case SCREEN_AMP:
             lcd_amp_row(0);
             lcd_amp_row(1);
@@ -770,9 +771,6 @@ static void update_lcd(void) {
         case SCREEN_FX:
             lcd_amp_row(1 - curr.selected_amp);
             lcd_fx_row(curr.selected_amp);
-            break;
-        case SCREEN_MIDI:
-            // TODO
             break;
     }
 
