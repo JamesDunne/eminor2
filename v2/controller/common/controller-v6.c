@@ -379,8 +379,6 @@ static void load_axe_midi(void);
 
 static void toggle_setlist_mode(void);
 
-static void scene_default(void);
-
 static void reset_scene(void);
 
 // (enable == 0 ? (u8)0 : (u8)0x7F)
@@ -847,7 +845,7 @@ static void load_axe_midi(void) {
 
 static void load_program(void) {
     // Load program:
-    u8 pr_num;
+    u8 pr_num, i;
 
     if (curr.setlist_mode == 1) {
         pr_num = romdata->set_list.entries[curr.sl_idx].song;
@@ -858,26 +856,50 @@ static void load_program(void) {
     DEBUG_LOG1("load program %d", pr_num + 1);
     pr = romdata->songs[pr_num];
 
+    // If no song name, then song is uninitialized:
+    if (pr.name[0] == 0) {
+        DEBUG_LOG0("undefined song - initialize to defaults");
+
+        // 0-based MIDI program numbers:
+        pr.axe_midi_program = 0;
+        pr.td50_midi_program = 50;
+
+        pr.tempo = 120;
+
+        // Set defaults for both amps:
+        pr.amp_defaults.dirty_gain = dirty_gain_default;
+        pr.amp_defaults.clean_gain = clean_gain_default;
+        pr.amp_defaults.gate = gate_default;
+
+        // Generate maximum number of scenes:
+        pr.scene_count = scene_count_max;
+
+        // Default all scenes:
+        for (i = 0; i < scene_count_max; i++) {
+            pr.scene[i].amp[0].gain = 0;
+            pr.scene[i].amp[0].gate = 0;
+            pr.scene[i].amp[0].fx = fxm_dirty;
+            pr.scene[i].amp[0].volume = volume_0dB;
+
+            pr.scene[i].amp[1].gain = 0;
+            pr.scene[i].amp[1].gate = 0;
+            pr.scene[i].amp[1].fx = fxm_dirty;
+            pr.scene[i].amp[1].volume = volume_0dB;
+        }
+    }
+
     curr.pr_num = pr_num;
     curr.next_pr_num = pr_num;
     curr.next_sl_idx = curr.sl_idx;
     curr.next_pr_idx = curr.pr_idx;
+
+    curr.sc_idx = 0;
 
     curr.axe_midi_program = pr.axe_midi_program;
     curr.td50_midi_program = pr.td50_midi_program;
     curr.tempo = pr.tempo;
 
     load_axe_midi();
-
-    // Establish a sane default for an undefined program:
-    curr.sc_idx = 0;
-
-    // TODO: better define how an undefined program is detected.
-    // For now the heuristic is if an amp's volume is non-zero. A properly initialized amp will likely
-    // have a value near `volume_0dB` (98).
-    if (pr.scene[0].amp[1].volume == 0) {
-        scene_default();
-    }
 }
 
 static void load_scene(void) {
@@ -892,27 +914,6 @@ static void load_scene(void) {
     // Copy new scene settings into current state:
     amp[0] = pr.scene[curr.sc_idx].amp[0];
     amp[1] = pr.scene[curr.sc_idx].amp[1];
-}
-
-static void scene_default(void) {
-    DEBUG_LOG1("default scene %d", curr.sc_idx + 1);
-
-    // Set defaults for both amps:
-    pr.amp_defaults.dirty_gain = dirty_gain_default;
-    pr.amp_defaults.clean_gain = clean_gain_default;
-    pr.amp_defaults.gate = gate_default;
-
-    pr.scene_count = 1;
-
-    pr.scene[curr.sc_idx].amp[0].gain = 0;
-    pr.scene[curr.sc_idx].amp[0].gate = 0;
-    pr.scene[curr.sc_idx].amp[0].fx = fxm_dirty;
-    pr.scene[curr.sc_idx].amp[0].volume = volume_0dB;
-
-    pr.scene[curr.sc_idx].amp[1].gain = 0;
-    pr.scene[curr.sc_idx].amp[1].gate = 0;
-    pr.scene[curr.sc_idx].amp[1].fx = fxm_dirty;
-    pr.scene[curr.sc_idx].amp[1].volume = volume_0dB;
 }
 
 static void toggle_setlist_mode(void) {
