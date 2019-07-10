@@ -718,11 +718,12 @@ static void update_lcd(void) {
     // Print setlist date:
     if (curr.setlist_mode == 0) {
         for (i = 0; i < LCD_COLS; i++) {
-            lcd_rows[row_stat][i] = "X  0 K  0 S 1/96 0/0"[i];
+            lcd_rows[row_stat][i] = "X  0 K  0 S 1/ 1 0/0"[i];
         }
 
         // Show program number:
         ritoa(lcd_rows[row_stat], 12, curr.next_pr_idx + (u8)1);
+        ritoa(lcd_rows[row_stat], 15, max_song_count);
     } else {
         for (i = 0; i < LCD_COLS; i++) {
             lcd_rows[row_stat][i] = "X  0 K  0 I 1/ 1 0/0"[i];
@@ -751,10 +752,6 @@ static void update_lcd(void) {
         }
         ritoa(lcd_rows[row_song], 18, curr.next_pr_idx + (u8)1);
     } else {
-        for (i = 0; i < LCD_COLS; ++i) {
-            lcd_rows[row_song][i] = "                    "[i];
-        }
-
         copy_str_lcd(lcd_rows[row_song], song_name);
     }
 
@@ -965,7 +962,7 @@ static void midi_invalidate(void) {
 
 static void next_song(void) {
     if (curr.setlist_mode == 0) {
-        if (curr.next_pr_idx < 127) {
+        if (curr.next_pr_idx < max_song_count - 1) {
             DEBUG_LOG0("next program");
             curr.next_pr_idx++;
         }
