@@ -232,3 +232,11 @@ songs:
 - names: [Slide, Slimed]
   short_name: Slide
   starts: Jim
+
+- names: [Teen Spirit, Smells Like Teen Spirit]
+  short_name: Teen Spirit
+  starts: Jim
+
+- names: [Stacys Mom, Stacy's Mom, Stacy’s Mom]
+  short_name: Stacys Mom
+  starts: Jim

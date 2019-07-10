@@ -1575,3 +1575,127 @@ songs:
       channel: clean
     JD:
       channel: dirty
+
+- name: Teen Spirit
+  tempo: 115
+  gain: 0x50
+  scenes:
+    - name: intro
+      MG:
+        channel: dirty
+      JD:
+        channel: clean
+    - name: chorus
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+    - name: verse
+      MG:
+        channel: clean
+        fx: [cho1]
+      JD:
+        channel: clean
+        fx: [cho2]
+    - name: pre-chorus
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+        level: -1.5
+        fx: [cho2]
+    - name: chorus
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+    - name: verse
+      MG:
+        channel: clean
+        fx: [cho1]
+      JD:
+        channel: clean
+        fx: [cho2]
+    - name: pre-chorus
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+        level: -1.5
+        fx: [cho2]
+    - name: chorus
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+    - name: lead
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+        gate: -120
+        level: 4.0
+        fx: [dly2, cho2]
+    - name: lead fade
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+        gate: -120
+        level: 2.0
+        fx: [dly2, cho2]
+    - name: pre-chorus
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+        level: -1.5
+        fx: [cho2]
+    - name: chorus
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+
+- name: Stacys Mom
+  tempo: 120
+  gain: 0x40
+  gate: -50
+  scenes:
+    - name: verse
+      MG:
+        channel: dirty
+        gain: 0x26
+      JD:
+        channel: dirty
+        gain: 0x26
+    - name: chorus
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+    - name: verse
+      MG:
+        channel: dirty
+        gain: 0x26
+      JD:
+        channel: dirty
+        gain: 0x26
+    - name: chorus
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+    - name: lead
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
+        gain: 0x50
+        level: 3.0
+        fx: [cho2]
+    - name: chorus
+      MG:
+        channel: dirty
+      JD:
+        channel: dirty
