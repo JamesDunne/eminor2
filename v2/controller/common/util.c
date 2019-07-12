@@ -18,8 +18,8 @@ void hextoa(near char *dst, u8 col, u8 n) {
     *dst = h1toa((n >> 4) & 0x0F);
 }
 
+#if 0
 // TODO: remove division operator to cut code size down drastically!
-#if 1
 s8 ritoa(near char *dst, s8 col, u8 n) {
     do {
         dst[col--] = (n % (char)10) + (char)'0';
@@ -27,31 +27,37 @@ s8 ritoa(near char *dst, s8 col, u8 n) {
     return col;
 }
 #else
+rom const u8 pow10[3] = {0x64, 0x0A, 0x00};
+
 s8 ritoa(near char *dst, s8 col, u8 n) {
     u8 ax, bx, cx, dx;
-    u8 pow10[] = {0x64, 0x0A, 0x00};
-    u8 digits[3] = { 0, 0, 0 };
-    near u8 *dig = digits;
+    s8 w;
+    near char *dig = dst + col - 2;
 
     ax = n;
     bx = 0;
-    while (cx = pow10[bx]) {
+    w = 0;
+    while ((cx = pow10[bx])) {
         dx = 0;
-        while (ax > cx) {
+        while (ax >= cx) {
             ax -= cx;
             dx++;
         }
-        dx += '0';
-        *dig++ = dx;
+        if (ax < n) {
+            *dig = dx + '0';
+            w++;
+#if 0
+        } else {
+            *dig = ' ';
+#endif
+        }
+        dig++;
         bx++;
     }
     ax += '0';
     *dig = ax;
-
-    // right-align values:
-    while (dig > digits) {
-        dst[col--] = *dig--;
-    }
+    w++;
+    return col - w;
 }
 #endif
 
