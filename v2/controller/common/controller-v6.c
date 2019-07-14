@@ -241,6 +241,7 @@ u8 cc_sent[CC_AMP2 * 2];
 
 // Last-sent tap tempo CC value (toggles between 0x00 and 0x7F):
 u8 tap;
+u16 tap_msec;
 
 u8 tempo_sysex[16];
 
@@ -779,6 +780,9 @@ static void update_lcd(void) {
 }
 
 static void calc_leds(void) {
+    // Use TIME_MARKER_1 to track blink state for TAP TEMPO LED:
+    u16 blink_delta = time_interval(TIME_MARKER_1, tap_msec);
+
     switch (curr.screen) {
         case SCREEN_AMP:
             curr.leds.top.byte =
@@ -787,7 +791,6 @@ static void calc_leds(void) {
                 | ((amp[curr.selected_amp].fx & fxm_acoustc) >> 6)
                 | ((curr.screen == SCREEN_FX) << 4)
                 | ((curr.screen == SCREEN_MIDI) << 5);
-            // TODO: make TAP LED blink in tempo?
             curr.leds.bot.byte =
                 // mask out special LEDs from footswitch state:
                 (curr.fsw.bot.byte & ((u8)~(M_1 | M_5)))
@@ -815,7 +818,6 @@ static void calc_leds(void) {
                 (curr.fsw.top.byte & ((u8)~(M_5 | M_6)))
                 | ((curr.screen == SCREEN_FX) << 4)
                 | ((curr.screen == SCREEN_MIDI) << 5);
-            // TODO: make TAP LED blink in tempo?
             curr.leds.bot.byte = curr.fsw.bot.byte;
             break;
     }
@@ -823,6 +825,13 @@ static void calc_leds(void) {
     // Indicate next song needs activation:
     if ((curr.next_sl_idx != curr.sl_idx) || (curr.next_pr_idx != curr.pr_idx)) {
         curr.leds.bot.byte |= M_8;
+    }
+
+    if (blink_delta != 0xFFFFu) {
+        // Turn on TAP LED for 100ms:
+        if (blink_delta <= 100u) {
+            curr.leds.bot.byte |= M_6;
+        }
     }
 
     send_leds();
@@ -896,6 +905,10 @@ static void load_program(void) {
     curr.axe_midi_program = pr.axe_midi_program;
     curr.td50_midi_program = pr.td50_midi_program;
     curr.tempo = pr.tempo;
+
+    // Calculate timer period for TAP tempo LED and reset timer:
+    tap_msec = 60000 / curr.tempo;
+    time_delta_and_mark(TIME_MARKER_1);
 
     load_axe_midi();
 }
@@ -1058,6 +1071,10 @@ void controller_init(void) {
     }
 
     tap = 0;
+    tap_msec = 500;
+
+    curr.tempo = 120;
+    last.tempo = ~curr.tempo;
 
     curr.screen = SCREEN_AMP;
     curr.selected_amp = JD;
@@ -1112,6 +1129,9 @@ void controller_init(void) {
     }
 #endif
 #endif
+
+    // Start timer for TIME_MARKER_1 to use for TAP TEMPO blinking:
+    time_delta_and_mark(TIME_MARKER_1);
 }
 
 #pragma udata timers
@@ -1372,6 +1392,17 @@ void controller_handle(void) {
     // TAP:
     if (is_bot_button_pressed(M_6)) {
         timers.bot_6 = (u8)0x80;
+
+        // Measure time difference since last tap:
+        tap_msec = time_delta_and_mark(TIME_MARKER_0);
+        time_marker_dup(TIME_MARKER_1, TIME_MARKER_0);
+#if 0
+        if ((tap_msec != 0xFFFFu) && (tap_msec > 0u)) {
+            // Calculate tempo in bpm:
+            // (setting `curr.tempo` will send SysEx messages to Axe-FX II to change tempo)
+            curr.tempo = 60000 / tap_msec;
+        }
+#endif
 
         // Toggle TAP CC value between 0x00 and 0x7F:
         tap ^= (u8)0x7F;

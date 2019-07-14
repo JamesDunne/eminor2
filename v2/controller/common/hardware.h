@@ -105,3 +105,29 @@ extern rom near const u8 *flash_addr(u16 addr);
 /* export */ extern void label_row_update(u8 row);
 
 #endif
+
+// --------------- Timing interface:
+
+// Time is tracked using multiple markers as the difference in milliseconds since last call per marker
+
+enum time_marker {
+    TIME_MARKER_0,
+    TIME_MARKER_1,
+    TIME_MARKER_COUNT
+};
+
+// Get the amount of time elapsed (in milliseconds) since last call to `time_delta_and_mark(mark_index)` and mark new time at now:
+// clamped to 0xFFFF and does not overflow
+// default to 0xFFFF if `time_delta_and_mark(mark_index)` not yet called for `mark_index`
+extern u16 time_delta_and_mark(u8 mark_index);
+
+// Get the amount of time elapsed (in milliseconds) since last call to `time_delta_and_mark(mark_index)` without marking new time:
+// clamped to 0xFFFF and does not overflow
+// default to 0xFFFF if `time_delta_and_mark(mark_index)` not yet called
+extern u16 time_delta(u8 mark_index);
+
+// Determine if the interval has elapsed, return 1 if so, return 0 if not:
+extern u16 time_interval(u8 mark_index, u16 msec);
+
+// Copy time marker from mark_index_src to mark_index_dst:
+extern void time_marker_dup(u8 mark_index_dst, u8 mark_index_src);

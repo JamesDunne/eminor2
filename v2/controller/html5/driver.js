@@ -562,6 +562,60 @@ function _label_row_update(row) {
     ui_modified = true;
 }
 
+var marked_time_msec = [0, 0];
+
+function _time_delta_and_mark(mark_index) {
+    if (mark_index >= 2) {
+        throw "Invalid mark_index!";
+    }
+
+    var now = performance.now() | 0;
+    var delta = now - marked_time_msec[mark_index];
+    if (delta > 0xFFFF) {
+        delta = 0xFFFF;
+    }
+
+    marked_time_msec[mark_index] = now;
+
+    return delta;
+}
+
+function _time_delta(mark_index) {
+    if (mark_index >= 2) {
+        throw "Invalid mark_index!";
+    }
+
+    var now = performance.now() | 0;
+    var delta = now - marked_time_msec[mark_index];
+    if (delta < 0 || delta > 0xFFFF) {
+        delta = 0xFFFF;
+    }
+
+    return delta;
+}
+
+function _time_interval(mark_index, msec) {
+    if (mark_index >= 2) {
+        throw "Invalid mark_index!";
+    }
+
+    var now = performance.now() | 0;
+    var delta = now - marked_time_msec[mark_index];
+    if (delta > 0xFFFF) {
+        delta = 0xFFFF;
+    }
+
+    if (delta >= msec) {
+        marked_time_msec[mark_index] = now + (delta - msec);
+    }
+
+    return delta;
+}
+
+function _time_marker_dup(mark_index_dst, mark_index_src) {
+    marked_time_msec[mark_index_dst] = marked_time_msec[mark_index_src];
+}
+
 // ----------------------------- Startup:
 
 // Document initialization:
