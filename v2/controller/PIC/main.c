@@ -49,6 +49,7 @@ void main() {
     // Initialize controller logic:
     ReadButtons();
     controller_init();
+    systick_init();
 
     // Main event loop:
     for(;;) {

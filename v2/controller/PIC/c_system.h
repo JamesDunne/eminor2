@@ -32,6 +32,7 @@ void    WriteProgMem(unsigned char index);
 
 //routine prototypes:
 void    InterruptHandlerHigh();
+void    systick_init(void);
 void    SystemTimeRoutine(void);
 void    init(void);
 

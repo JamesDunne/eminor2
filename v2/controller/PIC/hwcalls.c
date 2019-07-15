@@ -296,29 +296,34 @@ rom near const u8 *flash_addr(param u16 addr) {
 
 // --------------- Timing interface:
 
-u16 mark[TIME_MARKER_COUNT];
+u16 timer[TIME_MARKER_COUNT];
 
 // Get the amount of time elapsed (in milliseconds) since last call to `time_delta_and_mark(mark_index)` and mark new time at now:
 // clamped to 0xFFFF and does not overflow
 // default to 0xFFFF if `time_delta_and_mark(mark_index)` not yet called for `mark_index`
 u16 time_delta_and_mark(param u8 mark_index) {
-    u16 diff = 0;
-    return diff;
+    u16 delta = timer[mark_index];
+    timer[mark_index] = 0u;
+    return delta;
 }
 
 // Get the amount of time elapsed (in milliseconds) since last call to `time_delta_and_mark(mark_index)` without marking new time:
 // clamped to 0xFFFF and does not overflow
 // default to 0xFFFF if `time_delta_and_mark(mark_index)` not yet called
 u16 time_delta(param u8 mark_index) {
-    return 0;
+    return timer[mark_index];
 }
 
-// Determine if the interval has elapsed, return 1 if so, return 0 if not:
+// Determine if the interval has elapsed:
 u16 time_interval(param u8 mark_index, param u16 msec) {
-    return 0;
+    u16 delta = timer[mark_index];
+    if (delta >= msec) {
+        timer[mark_index] -= msec;
+    }
+    return delta;
 }
 
 // Copy time marker from mark_index_src to mark_index_dst:
 void time_marker_dup(param u8 mark_index_dst, param u8 mark_index_src) {
-    mark[mark_index_dst] = mark[mark_index_src];
+    timer[mark_index_dst] = timer[mark_index_src];
 }

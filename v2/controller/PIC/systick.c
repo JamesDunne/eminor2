@@ -11,6 +11,13 @@
 #include "typedefs.h"
 #include "hardware.h"
 
+extern u16 timer[TIME_MARKER_COUNT];
+
+void systick_init(void) {
+    timer[0] = 0xFFFFu;
+    timer[1] = 0xFFFFu;
+}
+
 //1mS time keeping routine:
 void    SystemTimeRoutine(void) {
     SystickCntr2++;
@@ -21,6 +28,14 @@ void    SystemTimeRoutine(void) {
         HandleController = true;
         HandleLeds = true;
         ControllerTiming = true;
+
+        // Timers:
+        if (timer[0] != 0xFFFF) {
+            timer[0]++;
+        }
+        if (timer[1] != 0xFFFF) {
+            timer[1]++;
+        }
 
         SystickCntr3++;
         if (SystickCntr3 == SYSTEM_TIME_40MS) {
