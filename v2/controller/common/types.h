@@ -8,6 +8,9 @@
 #ifndef __18CXX
 #define rom
 #define near
+#define param
+#else
+#define param static
 #endif
 
 // common typedefs used throughout the code:

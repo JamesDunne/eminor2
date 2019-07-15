@@ -319,20 +319,6 @@ rom const u8 tempo_sysex_template[16] = {
     0xF0, 0x00, 0x01, 0x74, 0x03, 0x02, 0x0D, 0x01, 0x20, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0xF7
 };
 
-// Set Axe-FX CC value
-#define midi_axe_sysex_start(fn) { \
-  midi_send_sysex(0xF0); \
-  midi_send_sysex(0x00); \
-  midi_send_sysex(0x01); \
-  midi_send_sysex(0x74); \
-  midi_send_sysex(0x03); \
-  midi_send_sysex(fn); \
-}
-#define midi_axe_sysex_end(chksum) { \
-  midi_send_sysex(chksum); \
-  midi_send_sysex(0xF7); \
-}
-
 #define is_top_button_pressed(mask) \
     (((last.fsw.top.byte & mask) == 0) && ((curr.fsw.top.byte & mask) == mask))
 
@@ -388,7 +374,7 @@ static void reset_scene(void);
 
 #define or_default(a, b) (a == 0 ? b : a)
 
-static u8 midi_axe_cc(enum cc_key key, u8 a, u8 value) {
+static u8 midi_axe_cc(param enum cc_key key, param u8 a, param u8 value) {
     enum cc_key amp_key = key + (a * CC_AMP2);
     u8 last_value = cc_sent[amp_key];
     if (value != last_value) {
@@ -569,7 +555,7 @@ static void calc_midi(void) {
     }
 }
 
-static void lcd_amp_row(u8 a) {
+static void lcd_amp_row(param u8 a) {
     u8 i;
     near char *d;
     u8 test_fx;
@@ -610,7 +596,7 @@ static void lcd_amp_row(u8 a) {
     }
 }
 
-static void lcd_fx_row(u8 a) {
+static void lcd_fx_row(param u8 a) {
     u8 i;
     near char *d;
     u8 test_fx;
@@ -1156,7 +1142,7 @@ struct timers {
 } timers;
 #pragma udata
 
-static void vol_dec(u8 ampno) {
+static void vol_dec(param u8 ampno) {
     u8 volume = (amp[ampno].volume);
     if (volume > (u8)0) {
         volume--;
@@ -1164,7 +1150,7 @@ static void vol_dec(u8 ampno) {
     }
 }
 
-static void vol_inc(u8 ampno) {
+static void vol_inc(param u8 ampno) {
     u8 volume = (amp[ampno].volume);
     if (volume < (u8)127) {
         volume++;
@@ -1172,7 +1158,7 @@ static void vol_inc(u8 ampno) {
     }
 }
 
-static void gain_dec(u8 ampno) {
+static void gain_dec(param u8 ampno) {
     u8 *gain;
     if ((amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) {
         if (amp[ampno].gain != 0) {
@@ -1190,7 +1176,7 @@ static void gain_dec(u8 ampno) {
     }
 }
 
-static void gain_inc(u8 ampno) {
+static void gain_inc(param u8 ampno) {
     u8 *gain;
     if ((amp[ampno].fx & (fxm_dirty | fxm_acoustc)) == fxm_dirty) {
         if (amp[ampno].gain != 0) {
@@ -1208,7 +1194,7 @@ static void gain_inc(u8 ampno) {
     }
 }
 
-static void gate_dec(u8 ampno) {
+static void gate_dec(param u8 ampno) {
     u8 *gate;
     if (amp[ampno].gate != 0) {
         gate = &amp[ampno].gate;
@@ -1221,7 +1207,7 @@ static void gate_dec(u8 ampno) {
     }
 }
 
-static void gate_inc(u8 ampno) {
+static void gate_inc(param u8 ampno) {
     u8 *gate;
     if (amp[ampno].gate != 0) {
         gate = &amp[ampno].gate;
@@ -1234,13 +1220,13 @@ static void gate_inc(u8 ampno) {
     }
 }
 
-static void bounded_dec(u8 *value, u8 min) {
+static void bounded_dec(param u8 *value, param u8 min) {
     if ((*value) > min) {
         (*value)--;
     }
 }
 
-static void bounded_inc(u8 *value, u8 max) {
+static void bounded_inc(param u8 *value, param u8 max) {
     if ((*value) < max) {
         (*value)++;
     }

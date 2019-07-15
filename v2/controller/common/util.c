@@ -3,7 +3,7 @@
 
 //rom const char hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
-char h1toa(u8 n) {
+char h1toa(param u8 n) {
     u8 x = n & 0x0F;
     if (x < 10) {
         return '0' + x;
@@ -11,16 +11,16 @@ char h1toa(u8 n) {
     return 'a' + (x - 10);
 }
 
-void hextoa(near char *dst, u8 col, u8 n) {
+void hextoa(param near char *dst, param u8 col, param u8 n) {
     u8 x = n & 0x0F;
     dst += col;
     *dst-- = h1toa(n & 0x0F);
     *dst = h1toa((n >> 4) & 0x0F);
 }
 
-#if 0
+#if 1
 // TODO: remove division operator to cut code size down drastically!
-s8 ritoa(near char *dst, s8 col, u8 n) {
+s8 ritoa(param near char *dst, param s8 col, param u8 n) {
     do {
         dst[col--] = (n % (char)10) + (char)'0';
     } while ((n /= (u8)10) > (u8)0);
@@ -29,7 +29,7 @@ s8 ritoa(near char *dst, s8 col, u8 n) {
 #else
 rom const u8 pow10[3] = {0x64, 0x0A, 0x00};
 
-s8 ritoa(near char *dst, s8 col, u8 n) {
+s8 ritoa(param near char *dst, param s8 col, param u8 n) {
     u8 ax, bx, cx, dx;
     s8 w;
     near char *dig = dst + col - 2;
@@ -62,7 +62,7 @@ s8 ritoa(near char *dst, s8 col, u8 n) {
 #endif
 
 // BCD is 2.1 format with MSB indicating sign (5 chars total) i.e. "-99.9" or " -inf"
-void bcdtoa(near char *dst, u8 col, u16 bcd) {
+void bcdtoa(param near char *dst, param u8 col, param u16 bcd) {
     u8 sign = (u8)((bcd & 0x8000) != 0);
     u8 pos = (bcd > 0x0000) && (bcd < 0x8000);
     dst += col;
@@ -103,7 +103,7 @@ char *bcd(u16 n) {
 #endif
 
 // Copies a fixed-length string optionally NUL-terminated to the LCD display row:
-void copy_str_lcd(near char *dst, rom near const u8 *src) {
+void copy_str_lcd(param near char *dst, param rom near const u8 *src) {
     u8 i;
     for (i = 0; src[i] != 0 && i < LCD_COLS; ++i) {
         dst[i] = src[i];
@@ -146,7 +146,7 @@ void print_half(char *dst, u8 col, s8 volhalfdb) {
 }
 #endif
 
-rom near const char *fx_name(u8 fx_midi_cc) {
+rom near const char *fx_name(param u8 fx_midi_cc) {
     if (fx_midi_cc < 41) {
         return "    ";
     } else if (fx_midi_cc > 98) {

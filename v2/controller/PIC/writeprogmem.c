@@ -9,6 +9,7 @@
 
 #include "c_system.h"
 
+#if ENABLE_WRITE
 void StartWrite(void)
 {
     /*
@@ -62,6 +63,7 @@ void EraseProgMem(void) //TESTED: Passed
                             // optional fix is to set large code model
                             // (for USER ID 0x20 0x00 0x00)
 }
+#endif
 
 #if 0
 unsigned char ReadEE(unsigned char Addr) //TESTED: Passed

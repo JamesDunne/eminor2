@@ -55,6 +55,7 @@ void main() {
         CLRWDT();
         ENABLE_ALL_INTERRUPTS();
 
+#if ENABLE_WRITE
         if (Write0Pending) {
             Write0Pending = false;
             WriteProgMem(0);            //write first set of 32 bytes.
@@ -64,6 +65,7 @@ void main() {
             Write32Pending = false;
             WriteProgMem(32);           //write second set of 32 bytes.
         }
+#endif
 
         if (Systick) {
             Systick = false;

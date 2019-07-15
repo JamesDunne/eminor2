@@ -47,7 +47,7 @@ extern void debug_log(const char *fmt, ...);
 extern u16 fsw_poll(void);
 
 // Explicitly set the state of all 16 LEDs:
-extern void led_set(u16 leds);
+extern void led_set(param u16 leds);
 
 #ifdef FEAT_LCD
 
@@ -57,7 +57,7 @@ extern void led_set(u16 leds);
 
 // Get pointer to a specific LCD row:
 // A terminating NUL character will clear the rest of the row with empty space.
-extern near char *lcd_row_get(u8 row);
+extern near char *lcd_row_get(param u8 row);
 
 // Update all LCD display rows as updated:
 extern void lcd_updated_all(void);
@@ -73,12 +73,12 @@ extern void lcd_updated_all(void);
     00 <= data2   <= FF   - second (optional) data byte of MIDI command
 */
 #define midi_send_cmd1(cmd, channel, data1) midi_send_cmd1_impl((((u8)cmd & (u8)0xF) << (u8)4) | ((u8)channel & (u8)0xF), (u8)data1)
-extern void midi_send_cmd1_impl(u8 cmd_byte, u8 data1);
+extern void midi_send_cmd1_impl(param u8 cmd_byte, param u8 data1);
 #define midi_send_cmd2(cmd, channel, data1, data2) midi_send_cmd2_impl((((u8)cmd & (u8)0xF) << (u8)4) | ((u8)channel & (u8)0xF), (u8)data1, (u8)data2)
-extern void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2);
+extern void midi_send_cmd2_impl(param u8 cmd_byte, param u8 data1, param u8 data2);
 
 // Send a buffer of SysEx data; buffer must start with F0 and end with F7:
-extern void midi_send_sysex_buffer(u8 length, const u8 *buf);
+extern void midi_send_sysex_buffer(param u8 length, param const u8 *buf);
 
 // --------------- Flash memory functions:
 
@@ -86,10 +86,10 @@ extern void midi_send_sysex_buffer(u8 length, const u8 *buf);
 // non-program flash memory.
 
 // Stores `count` bytes from `data` into flash memory at address `addr`:
-extern void flash_store(u16 addr, u16 count, u8 *data);
+extern void flash_store(param u16 addr, param u16 count, param u8 *data);
 
 // Get a pointer to flash memory at address:
-extern rom near const u8 *flash_addr(u16 addr);
+extern rom near const u8 *flash_addr(param u16 addr);
 
 // --------------- Controller logic interface functions:
 
@@ -101,8 +101,8 @@ extern rom near const u8 *flash_addr(u16 addr);
 
 // --------------- Change button labels (for Win32 / HTML5 interfaces only):
 
-/* export */ extern near char **label_row_get(u8 row);
-/* export */ extern void label_row_update(u8 row);
+/* export */ extern near char **label_row_get(param u8 row);
+/* export */ extern void label_row_update(param u8 row);
 
 #endif
 
@@ -119,15 +119,15 @@ enum time_marker {
 // Get the amount of time elapsed (in milliseconds) since last call to `time_delta_and_mark(mark_index)` and mark new time at now:
 // clamped to 0xFFFF and does not overflow
 // default to 0xFFFF if `time_delta_and_mark(mark_index)` not yet called for `mark_index`
-extern u16 time_delta_and_mark(u8 mark_index);
+extern u16 time_delta_and_mark(param u8 mark_index);
 
 // Get the amount of time elapsed (in milliseconds) since last call to `time_delta_and_mark(mark_index)` without marking new time:
 // clamped to 0xFFFF and does not overflow
 // default to 0xFFFF if `time_delta_and_mark(mark_index)` not yet called
-extern u16 time_delta(u8 mark_index);
+extern u16 time_delta(param u8 mark_index);
 
 // Determine if the interval has elapsed, return 1 if so, return 0 if not:
-extern u16 time_interval(u8 mark_index, u16 msec);
+extern u16 time_interval(param u8 mark_index, param u16 msec);
 
 // Copy time marker from mark_index_src to mark_index_dst:
-extern void time_marker_dup(u8 mark_index_dst, u8 mark_index_src);
+extern void time_marker_dup(param u8 mark_index_dst, param u8 mark_index_src);

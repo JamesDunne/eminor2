@@ -152,12 +152,12 @@ void UpdateLeds(void) {
 }
 
 /* Set currently active program foot-switch's LED indicator and disable all others */
-void led_set(u16 leds){
+void led_set(param u16 leds){
     LedStatesTop = (leds >> 8) & 0xFF;
     LedStatesBot = leds & 0xFF;
 }
 
-near char *lcd_row_get(u8 row) {
+near char *lcd_row_get(param u8 row) {
     assert(row < 4);
     return LCDRamMap[row];
 }
@@ -170,6 +170,7 @@ void lcd_updated_all(void) {
 /* --------------- MIDI I/O functions: */
 
 #ifdef MIDI_BLOCKING
+#ifdef MIDI_INLINE
 // Non-buffered (immediate, blocking) MIDI transmission functions:
 #define midi_enq(byte) { \
 	nop(); \
@@ -181,9 +182,22 @@ void lcd_updated_all(void) {
 	nop(); \
 	nop(); \
 }
+#else
+// Non-buffered (immediate, blocking) MIDI transmission functions:
+static void midi_enq(param u8 byte) {
+	//nop();
+	//nop();
+	while (PIR1bits.TXIF == 0) {}
+	//nop();
+	//nop();
+	TXREG = byte;
+	//nop();
+	//nop();
+}
+#endif
 #endif
 
-void midi_send_sysex_buffer(u8 length, const u8 *buf) {
+void midi_send_sysex_buffer(param u8 length, param const u8 *buf) {
     u8 i;
     for (i=0;i<length;++i) {
 	    midi_enq(buf[i]);
@@ -194,7 +208,7 @@ void midi_send_sysex_buffer(u8 length, const u8 *buf) {
     00 <= cmd <= FF     - MIDI command
     00 <= data1 <= 7F   - data byte of MIDI command
 */
-void midi_send_cmd1_impl(u8 cmd_byte, u8 data1) {
+void midi_send_cmd1_impl(param u8 cmd_byte, param u8 data1) {
     midi_enq(cmd_byte);
     midi_enq(data1);
 }
@@ -204,7 +218,7 @@ void midi_send_cmd1_impl(u8 cmd_byte, u8 data1) {
     00 <= data1 <= 7F   - first data byte of MIDI command
     00 <= data2 <= 7F   - second (optional) data byte of MIDI command
 */
-void midi_send_cmd2_impl(u8 cmd_byte, u8 data1, u8 data2) {
+void midi_send_cmd2_impl(param u8 cmd_byte, param u8 data1, param u8 data2) {
     midi_enq(cmd_byte);
     midi_enq(data1);
     midi_enq(data2);
@@ -233,7 +247,9 @@ void flash_load(u16 addr, u16 count, u8 *data) {
     for (i = 0, saddr = addr; i < count; i++, saddr++)
         data[i] = ROM_SAVEDATA[bank][saddr];
 }
+#endif
 
+#if ENABLE_WRITE
 void flash_store(u16 addr, u16 count, u8 *data) {
     u8 i;
     u8 bank;
@@ -269,10 +285,40 @@ void flash_store(u16 addr, u16 count, u8 *data) {
 }
 #endif
 
-rom near const u8 *flash_addr(u16 addr) {
+rom near const u8 *flash_addr(param u16 addr) {
     u8 bank;
 
     bank = (u8)(addr >> 12);
     addr &= 0x0FFF;
     return (rom const u8 *)&ROM_SAVEDATA[bank][addr];
+}
+
+
+// --------------- Timing interface:
+
+u16 mark[TIME_MARKER_COUNT];
+
+// Get the amount of time elapsed (in milliseconds) since last call to `time_delta_and_mark(mark_index)` and mark new time at now:
+// clamped to 0xFFFF and does not overflow
+// default to 0xFFFF if `time_delta_and_mark(mark_index)` not yet called for `mark_index`
+u16 time_delta_and_mark(param u8 mark_index) {
+    u16 diff = 0;
+    return diff;
+}
+
+// Get the amount of time elapsed (in milliseconds) since last call to `time_delta_and_mark(mark_index)` without marking new time:
+// clamped to 0xFFFF and does not overflow
+// default to 0xFFFF if `time_delta_and_mark(mark_index)` not yet called
+u16 time_delta(param u8 mark_index) {
+    return 0;
+}
+
+// Determine if the interval has elapsed, return 1 if so, return 0 if not:
+u16 time_interval(param u8 mark_index, param u16 msec) {
+    return 0;
+}
+
+// Copy time marker from mark_index_src to mark_index_dst:
+void time_marker_dup(param u8 mark_index_dst, param u8 mark_index_src) {
+    mark[mark_index_dst] = mark[mark_index_src];
 }
