@@ -37,36 +37,29 @@ func (w *BankedWriter) writeSeparator() {
 	// Open new file when needed:
 	if w.fo == nil {
 		var err error
-		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_%s_bank%d.h", version, w.bankNumber), os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+		w.fo, err = os.OpenFile(fmt.Sprintf("../PIC/flash_%s.h", version), os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			panic(err)
 		}
 	}
 
-	// Don't write separators at top of bank files:
-	if w.bytesWritten&0x0FFF == 0 {
+	// Write leading open curly every 128 bytes:
+	if w.bytesWritten&0x7F == 0 {
+		if w.bytesWritten > 0 {
+			// End the previous line with a comma:
+			fmt.Fprint(w.fo, ",\n")
+		}
+		fmt.Fprint(w.fo, "{")
 		return
 	}
 
 	fmt.Fprint(w.fo, ",")
-	//if version == "v4" {
-	if w.bytesWritten&63 == 0 {
-		fmt.Fprint(w.fo, "\n")
-	}
-	//}
 }
 
 func (w *BankedWriter) cycle() {
-	// Are we about to cross a 4K boundary?
-	if (w.bytesWritten & 0x0FFF) == 0x0FFF {
-		// Close last open file:
-		w.Close()
-
-		// Next bank:
-		w.bankNumber++
-
-		// Indicate to open a new file on next write:
-		w.fo = nil
+	if (w.bytesWritten & 0x7F) == 0x7F {
+		// Close last line:
+		fmt.Fprint(w.fo, "}")
 	}
 
 	w.bytesWritten++

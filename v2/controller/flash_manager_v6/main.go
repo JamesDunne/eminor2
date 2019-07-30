@@ -573,6 +573,11 @@ func generatePICH() {
 			panic(fmt.Errorf("failed to write expected program size %d; wrote %d", FWsong_sizeof, program_written_size))
 		}
 	}
+
+	// Generate 0s for the remainder of flash:
+	for rem := (0x8000 - 0x5100) - bw.BytesWritten(); rem > 0; rem-- {
+		bw.WriteDecimal(0)
+	}
 }
 
 // Generate JSON for Google Docs setlist generator script:

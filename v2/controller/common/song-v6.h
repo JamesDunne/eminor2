@@ -1,5 +1,6 @@
 
 #include "hardware.h"
+#include "flash.h"
 
 #define fx_count    4
 
