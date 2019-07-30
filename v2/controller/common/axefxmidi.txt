@@ -21,8 +21,8 @@ CC#	Description
 28	Looper Record
 29	Looper Play
 30	Looper Once
-31	Looper Dub 
-32	Looper Rev 
+31	Looper Dub
+32	Looper Rev
 33	Looper Bypass
 120	Looper Half
 121	Looper Undo

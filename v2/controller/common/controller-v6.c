@@ -131,6 +131,17 @@ TODO: edit tempo via buttons
     |                                      RESET SC_ONE          |
     |------------------------------------------------------------|
 
+    LOOPER
+    |------------------------------------------------------------|
+    |     *      *      *      *      *      *      *      *     |
+    |                               AMP|FX  MIDI PR_PRV PR_NXT   |
+    |                                       MODE                 |
+    |                                                            |
+    |     *      *      *      *      *      *      *      *     |
+    |    REC    PLAY   ONCE   DUB   BYPASS  TAP  SC_PRV SC_NXT   |
+    |                                      RESET SC_ONE          |
+    |------------------------------------------------------------|
+
 */
 
 
@@ -141,24 +152,33 @@ TODO: edit tempo via buttons
 #include "song-v6.h"
 
 // Hard-coded MIDI channel #s (0 based):
-#define axe_midi_channel     2
-#define td50_midi_channel    9
+#define axe_midi_channel        2
+#define td50_midi_channel       9
 
 // Axe-FX II CC messages:
-#define axe_cc_taptempo     14
-#define axe_cc_tuner        15
+#define axe_cc_taptempo         14
+#define axe_cc_tuner            15
 
 // Pre-delay volume:
-#define axe_cc_external1    16
-#define axe_cc_external2    17
+#define axe_cc_external1        16
+#define axe_cc_external2        17
 // Amp gain:
-#define axe_cc_external3    18
-#define axe_cc_external4    19
+#define axe_cc_external3        18
+#define axe_cc_external4        19
 // Gate threshold:
-#define axe_cc_external5    20
-#define axe_cc_external6    21
+#define axe_cc_external5        20
+#define axe_cc_external6        21
 
-#define axe_cc_scene        34
+#define axe_cc_looper_record    28
+#define axe_cc_looper_play      29
+#define axe_cc_looper_once      30
+#define axe_cc_looper_dub       31
+#define axe_cc_looper_rev       32
+#define axe_cc_looper_bypass    33
+#define axe_cc_looper_half      120
+#define axe_cc_looper_undo      121
+
+#define axe_cc_scene            34
 
 #define axe_cc_byp_amp1         37
 #define axe_cc_byp_amp2         38
@@ -197,16 +217,6 @@ near char *lcd_rows[LCD_ROWS];
 #define row_amp2 3
 #endif
 
-enum {
-    MODE_LIVE = 0,
-    MODE_count
-};
-
-enum rowstate_mode {
-    ROWMODE_AMP,
-    ROWMODE_FX
-};
-
 #pragma udata state
 // Structured read-only view of writable ROM section that contains all our data:
 rom near struct romdata *romdata;
@@ -230,6 +240,14 @@ enum cc_key {
     CC_AMP_BYP,
     CC_AMP_XY,
     CC_CAB_XY,
+    CC_LOOPER_REC,
+    CC_LOOPER_PLAY,
+    CC_LOOPER_ONCE,
+    CC_LOOPER_DUB,
+    CC_LOOPER_REV,
+    CC_LOOPER_BYP,
+    CC_LOOPER_HALF,
+    CC_LOOPER_UNDO,
     CC_AMP2
 };
 
@@ -243,13 +261,29 @@ u8 cc_sent[CC_AMP2 * 2];
 u8 tap;
 u16 tap_msec;
 
+// Buffer to hold SysEx message which changes tempo:
 u8 tempo_sysex[16];
+
+union looper_state {
+    struct {
+        u8 record:1;
+        u8 play:1;
+        u8 once:1;
+        u8 dub:1;
+        u8 bypass:1;    // NOTE: bypass and rev are switched here to make it easier to update LED state
+        u8 rev:1;
+        u8 half:1;
+        u8 undo:1;
+    };
+    u8 byte;
+};
 
 // Current screen:
 enum screen {
     SCREEN_AMP,
     SCREEN_FX,
-    SCREEN_MIDI
+    SCREEN_LOOPER,
+    SCREEN_MIDI,
 };
 
 enum selected_amp {
@@ -292,6 +326,8 @@ struct state {
 
     // Current tempo (bpm):
     u8 tempo;
+
+    union looper_state looper_state;
 } curr, last;
 
 // Current amp state:
@@ -528,6 +564,28 @@ static void calc_midi(void) {
         midi_send_sysex_buffer(16, tempo_sysex);
     }
 
+    // Send LOOPER state:
+    if (midi_axe_cc(CC_LOOPER_REC, 1, curr.looper_state.record ? 0x7F : 0)) {
+        DEBUG_LOG1("LOOP REC  %s", curr.looper_state.record ? "on" : "off");
+        diff = 1;
+    }
+    if (midi_axe_cc(CC_LOOPER_PLAY, 1, curr.looper_state.play ? 0x7F : 0)) {
+        DEBUG_LOG1("LOOP PLAY %s", curr.looper_state.play ? "on" : "off");
+        diff = 1;
+    }
+    if (midi_axe_cc(CC_LOOPER_ONCE, 1, curr.looper_state.once ? 0x7F : 0)) {
+        DEBUG_LOG1("LOOP ONCE %s", curr.looper_state.once ? "on" : "off");
+        diff = 1;
+    }
+    if (midi_axe_cc(CC_LOOPER_DUB, 1, curr.looper_state.dub ? 0x7F : 0)) {
+        DEBUG_LOG1("LOOP DUB  %s", curr.looper_state.dub ? "on" : "off");
+        diff = 1;
+    }
+    if (midi_axe_cc(CC_LOOPER_BYP, 1, curr.looper_state.bypass ? 0x7F : 0)) {
+        DEBUG_LOG1("LOOP BYP  %s", curr.looper_state.bypass ? "on" : "off");
+        diff = 1;
+    }
+
     if (curr.sl_idx != last.sl_idx) {
         diff = 1;
     } else if (curr.pr_idx != last.pr_idx) {
@@ -630,6 +688,10 @@ static void lcd_fx_row(param u8 a) {
 char tmplabel[fx_count][5];
 #endif
 
+#ifdef FEAT_LCD
+rom const u8 looper_lcd[20] = "rec ply onc dub byp ";
+#endif
+
 // Update LCD display:
 static void update_lcd(void) {
 #ifdef HWFEAT_LABEL_UPDATES
@@ -638,6 +700,7 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     s8 i;
+    u8 test;
     rom const u8 *song_name;
 #endif
     DEBUG_LOG0("update LCD");
@@ -676,6 +739,18 @@ static void update_lcd(void) {
                 tmplabel[n][4] = 0;
                 labels_bot[n] = tmplabel[n];
             }
+            break;
+        case SCREEN_LOOPER:
+            labels_top[0] = "";
+            labels_bot[0] = "REC";
+            labels_top[1] = "";
+            labels_bot[1] = "PLAY";
+            labels_top[2] = "";
+            labels_bot[2] = "ONCE";
+            labels_top[3] = "";
+            labels_bot[3] = "DUB";
+            labels_top[4] = "";
+            labels_bot[4] = "BYPASS";
             break;
         case SCREEN_MIDI:
             labels_top[0] = "";
@@ -755,6 +830,17 @@ static void update_lcd(void) {
             lcd_rows[row_amp1 + curr.selected_amp][14] = 127;
             lcd_rows[row_amp1 + 1 - curr.selected_amp][14] = 32;
             break;
+        case SCREEN_LOOPER:
+            lcd_amp_row(0);
+            for (i = 0; i < LCD_COLS; i++) {
+                u8 j = i >> 2;
+                u8 c = "rec ply onc dub byp "[i];
+                if (((c & 0x40) != 0) && ((curr.looper_state.byte & (1<<j)) != 0)) {
+                    c = c & 0xDFu;  // = ~(u8)0x20u
+                }
+                lcd_rows[row_amp2][i] = c;
+            }
+            break;
         case SCREEN_FX:
             lcd_amp_row(1 - curr.selected_amp);
             lcd_fx_row(curr.selected_amp);
@@ -797,6 +883,16 @@ static void calc_leds(void) {
                 (curr.fsw.bot.byte & (u8)(M_6 | M_7 | M_8))
                 | (amp[curr.selected_amp].fx & (fxm_1 | fxm_2 | fxm_3 | fxm_4))
                 | ((JD - curr.selected_amp) << 4);
+            break;
+        case SCREEN_LOOPER:
+            curr.leds.top.byte =
+                // mask out special LEDs from footswitch state:
+                (curr.fsw.top.byte & ((u8)~(M_5 | M_6)))
+                | ((curr.screen == SCREEN_FX) << 4)
+                | ((curr.screen == SCREEN_MIDI) << 5);
+            curr.leds.bot.byte =
+                (curr.fsw.bot.byte & (u8)(M_6 | M_7 | M_8))
+                | (curr.looper_state.byte & ~(u8)(M_6 | M_7 | M_8));
             break;
         case SCREEN_MIDI:
             curr.leds.top.byte =
@@ -1054,7 +1150,20 @@ void controller_init(void) {
         cc_lookup[CC_AMP2 * i + CC_AMP_BYP] = axe_cc_byp_amp1 + i;
         cc_lookup[CC_AMP2 * i + CC_AMP_XY] = axe_cc_xy_amp1 + i;
         cc_lookup[CC_AMP2 * i + CC_CAB_XY] = axe_cc_xy_cab1 + i;
+
+        // Only one instance of looper block on all Axe-FX models:
+        cc_lookup[CC_AMP2 * i + CC_LOOPER_REC] = axe_cc_looper_record;
+        cc_lookup[CC_AMP2 * i + CC_LOOPER_PLAY] = axe_cc_looper_play;
+        cc_lookup[CC_AMP2 * i + CC_LOOPER_ONCE] = axe_cc_looper_once;
+        cc_lookup[CC_AMP2 * i + CC_LOOPER_DUB] = axe_cc_looper_dub;
+        cc_lookup[CC_AMP2 * i + CC_LOOPER_REV] = axe_cc_looper_rev;
+        cc_lookup[CC_AMP2 * i + CC_LOOPER_BYP] = axe_cc_looper_bypass;
+        cc_lookup[CC_AMP2 * i + CC_LOOPER_HALF] = axe_cc_looper_half;
+        cc_lookup[CC_AMP2 * i + CC_LOOPER_UNDO] = axe_cc_looper_undo;
     }
+
+    curr.looper_state.byte = 0;
+    last.looper_state.byte = 0xFF;
 
     tap = 0;
     tap_msec = 500;
@@ -1338,7 +1447,6 @@ void controller_handle(void) {
             timers.row##_##n = (u8)0x00; \
         }
 
-
     switch (curr.screen) {
         case SCREEN_AMP:
             btn_pressed(top, 1, amp[curr.selected_amp].fx ^= fxm_acoustc)
@@ -1364,6 +1472,13 @@ void controller_handle(void) {
             btn_pressed(top, 5, curr.screen = (curr.screen & 1) ^ 1)
             btn_pressed(bot, 5, curr.selected_amp ^= JD)
             break;
+        case SCREEN_LOOPER:
+            btn_pressed(bot, 1, curr.looper_state.record ^= 1)
+            btn_pressed(bot, 2, curr.looper_state.play ^= 1)
+            btn_pressed(bot, 3, curr.looper_state.once ^= 1)
+            btn_pressed(bot, 4, curr.looper_state.dub ^= 1)
+            btn_pressed(bot, 5, curr.looper_state.bypass ^= 1)
+            break;
         case SCREEN_MIDI:
             btn_released_repeater(top, 3, bounded_dec(&curr.axe_midi_program, 0))
             btn_released_repeater(bot, 3, bounded_inc(&curr.axe_midi_program, max_axe_midi_program_count-1))
@@ -1373,7 +1488,7 @@ void controller_handle(void) {
             break;
     }
 
-    btn_released_oneshot(top, 6, curr.screen = (curr.screen & 2) ^ 2)
+    btn_released_oneshot(top, 6, curr.screen = (curr.screen + 1) & 3)
 
     // TAP:
     if (is_bot_button_pressed(M_6)) {
@@ -1408,7 +1523,6 @@ void controller_handle(void) {
 
     // NEXT SCENE:
     btn_pressed_oneshot(bot,8,on_retrigger(next_scene()))
-
 
     // PREV/NEXT SONG:
     if (is_top_button_pressed(M_7)) {
