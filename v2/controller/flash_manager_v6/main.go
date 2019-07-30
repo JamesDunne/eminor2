@@ -24,6 +24,7 @@ import (
 
 // #include "../common/types.h"
 // #include "../common/v5_fx_names.h"
+// #include "../common/flash.h"
 import "C"
 
 var FWfx_names = C.v5_fx_names
@@ -575,7 +576,7 @@ func generatePICH() {
 	}
 
 	// Generate 0s for the remainder of flash:
-	for rem := (0x8000 - 0x5100) - bw.BytesWritten(); rem > 0; rem-- {
+	for rem := C.WRITABLE_SEG_LEN - bw.BytesWritten(); rem > 0; rem-- {
 		bw.WriteDecimal(0)
 	}
 }

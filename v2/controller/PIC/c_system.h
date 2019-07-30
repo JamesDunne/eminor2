@@ -11,6 +11,7 @@
 #include "c_cnstdef.h"
 #include "c_ramdef.h"
 #include "c_portdef.h"
+#include "flash.h"
 
 //-----------------------------------------------------------------------------
 //macros:
@@ -53,7 +54,7 @@ void    lcd_update_screen(void);
 void    swuart_tx_start(void);
 void    swuart_tx_interrupt(void);
 
-extern rom unsigned char ROM_SAVEDATA[3][4096];
+extern rom unsigned char ROM_SAVEDATA[(WRITABLE_SEG_LEN)/128][128];
 //-----------------------------------------------------------------------------
 
 // NOTE(jsd): These macros are just plain broken on the MPLAB SIM; unknown on PIC18.

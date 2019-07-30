@@ -162,10 +162,10 @@ file_026=a_micrdef.inc
 file_027=assert.h
 file_028=boot.h
 file_029=..\common\util.h
-file_030=flash_v6_bank0.h
-file_031=flash_v6_bank1.h
-file_032=G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h
-file_033=G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\v5_fx_names.h
+file_030=G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h
+file_031=G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\v5_fx_names.h
+file_032=G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\flash.h
+file_033=flash_v6.h
 file_034=18f4550.lkr
 [SUITE_INFO]
 suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
