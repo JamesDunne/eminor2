@@ -910,8 +910,8 @@ static void calc_leds(void) {
     }
 
     if (blink_delta != 0xFFFFu) {
-        // Turn on TAP LED for 100ms:
-        if (blink_delta <= 100u) {
+        // Turn on TAP LED for 125ms:
+        if (blink_delta <= 125u) {
             curr.leds.bot.byte |= M_6;
         }
     }
@@ -1519,10 +1519,10 @@ void controller_handle(void) {
     }
 
     // PREV SCENE:
-    btn_pressed_oneshot(bot,7,on_retrigger(prev_scene()))
+    btn_pressed_oneshot(bot,7,(prev_scene()))
 
     // NEXT SCENE:
-    btn_pressed_oneshot(bot,8,on_retrigger(next_scene()))
+    btn_pressed_oneshot(bot,8,(next_scene()))
 
     // PREV/NEXT SONG:
     if (is_top_button_pressed(M_7)) {

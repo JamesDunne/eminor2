@@ -54,7 +54,53 @@ void SendDataToShiftReg16(unsigned char lo, unsigned char hi) {
     SHIFTREG_SER_IN_LAT_BIT = true;             //Release data signal
     SHIFTREG_SRCK_LAT_BIT = true;           //Release serial clk
 }
+
 //------------------------------------------------------------------------------
+
+// Footswitch debouncing; call once every msec
+rom const u8 debounce_max[16] = {
+    // bottom:
+    125, 125, 125, 125, 125, 125, 125, 250,
+    // top
+    125, 125, 125, 125, 125, 125, 125, 125
+};
+u8 debounce[16] = {0};
+u16 fsw_debounced = 0;
+
+void fsw_debounce(void) {
+    u8 i;
+    u16 test;
+    u16 fsw, deb;
+
+    fsw = ButtonStateBot | ((u16)ButtonStateTop << 8);
+    deb = 0;
+
+    // debounce buttons:
+    for (i=0,test=1;i<16;i++,test<<=1) {
+        if (debounce[i] == 0) {
+            if (fsw & test) {
+                // button pressed:
+                debounce[i] = 1;
+                deb |= test;
+            }
+        } else {
+            // keep button down for at least 125msec:
+            if (debounce[i] < debounce_max[i]) {
+                debounce[i]++;
+                deb |= test;
+            } else {
+                // use live state:
+                if (fsw & test) {
+                    deb |= test;
+                } else {
+                    debounce[i] = 0;
+                }
+            }
+        }
+    }
+
+    fsw_debounced = deb;
+}
 
 //returns data into ButtonStateTop and ButtonStateBot.
 void ReadButtons(void) {
@@ -110,6 +156,9 @@ void ReadButtons(void) {
       | ((TempButtons1.byte & (u8)(1 << 5)) >> 1)
       | ((TempButtons1.byte & (u8)(1 << 6)))
       | ((TempButtons1.byte & (u8)(1 << 7)) >> 2);
+
+    // debounce buttons every msec:
+    fsw_debounce();
 }
 
 void SetDipAddress(unsigned char Address) {
@@ -123,14 +172,11 @@ void SetDipAddress(unsigned char Address) {
     if (chkbit(Address,3)) BTN_S3_LAT_BIT = true;
 }
 
-/* --------------- LED read-out display functions: */
 u16 fsw_poll() {
-    u16 fsw;
-
-    fsw = ButtonStateBot | ((u16)ButtonStateTop << 8);
-
-    return fsw;
+    return fsw_debounced;
 }
+
+/* --------------- LED read-out display functions: */
 
 void UpdateLeds(void) {
     u8 top;

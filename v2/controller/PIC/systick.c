@@ -21,16 +21,17 @@ void systick_init(void) {
 //1mS time keeping routine:
 void SystemTimeRoutine(void) {
     // 1mS routines:
+    CheckButtons = true;
+    HandleController = true;
+    HandleLeds = true;
 
-    // Timers:
+    // Advance msec timers:
     if (timer[0] != 0xFFFF) {
         timer[0]++;
     }
     if (timer[1] != 0xFFFF) {
         timer[1]++;
     }
-    HandleController = true;
-    HandleLeds = true;
 
     SystickCntr2++;
     if (SystickCntr2 == SYSTEM_TIME_10MS) {
@@ -38,7 +39,6 @@ void SystemTimeRoutine(void) {
 
         // 10mS routines:
         ControllerTiming = true;
-        CheckButtons = true;
 
         SystickCntr3++;
         if (SystickCntr3 == SYSTEM_TIME_40MS) {
