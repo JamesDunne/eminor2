@@ -78,11 +78,6 @@ void main() {
             ReadButtons();              //read buttons off the multiplexor
         }
 
-        if (HandleLeds) {
-            HandleLeds = false;
-            UpdateLeds();               //handle leds
-        }
-
         if (ControllerTiming) {
             ControllerTiming = false;
             controller_10msec_timer();  //controller timing functions
@@ -91,6 +86,11 @@ void main() {
         if (HandleController) {
             HandleController = false;
             controller_handle();        //handle UI and other midi commands
+        }
+
+        if (HandleLeds) {
+            HandleLeds = false;
+            UpdateLeds();               //handle leds
         }
 
         if (LCDUpdateRequest && !LCDUpdate) {

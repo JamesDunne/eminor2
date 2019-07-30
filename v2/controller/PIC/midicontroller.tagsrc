@@ -28,7 +28,7 @@ G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\a_micrdef.inc
 G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\assert.h
 G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\boot.h
 G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\util.h
-G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\flash_v6_bank0.h
-G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\flash_v6_bank1.h
 G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\song-v6.h
 G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\v5_fx_names.h
+G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\common\flash.h
+G:\git_c\go\src\github.com\JamesDunne\eminor2\v2\controller\PIC\flash_v6.h
