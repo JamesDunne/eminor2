@@ -1377,27 +1377,27 @@ void controller_10msec_timer(void) {
     // on timer:
     switch (curr.screen) {
         case SCREEN_AMP:
-            repeater(top,2,0x18,0x03,gain_dec(curr.selected_amp))
-            repeater(bot,2,0x18,0x03,gain_inc(curr.selected_amp))
-            repeater(top,3,0x18,0x03,gate_dec(curr.selected_amp))
-            repeater(bot,3,0x18,0x03,gate_inc(curr.selected_amp))
-            repeater(top,4,0x18,0x03,vol_dec(curr.selected_amp))
-            repeater(bot,4,0x18,0x03,vol_inc(curr.selected_amp))
+            repeater(top,2,0x30,0x03,gain_dec(curr.selected_amp))
+            repeater(bot,2,0x30,0x03,gain_inc(curr.selected_amp))
+            repeater(top,3,0x30,0x03,gate_dec(curr.selected_amp))
+            repeater(bot,3,0x30,0x03,gate_inc(curr.selected_amp))
+            repeater(top,4,0x30,0x03,vol_dec(curr.selected_amp))
+            repeater(bot,4,0x30,0x03,vol_inc(curr.selected_amp))
             break;
         case SCREEN_FX:
             break;
         case SCREEN_MIDI:
-            repeater(top,3,0x18,0x03,bounded_dec(&curr.axe_midi_program, 0))
-            repeater(bot,3,0x18,0x03,bounded_inc(&curr.axe_midi_program, max_axe_midi_program_count-1))
-            repeater(top,4,0x18,0x03,bounded_dec(&curr.td50_midi_program, 0))
-            repeater(bot,4,0x18,0x03,bounded_inc(&curr.td50_midi_program, 127))
+            repeater(top,3,0x30,0x03,bounded_dec(&curr.axe_midi_program, 0))
+            repeater(bot,3,0x30,0x03,bounded_inc(&curr.axe_midi_program, max_axe_midi_program_count-1))
+            repeater(top,4,0x30,0x03,bounded_dec(&curr.td50_midi_program, 0))
+            repeater(bot,4,0x30,0x03,bounded_inc(&curr.td50_midi_program, 127))
             break;
     }
 
     one_shot(top,6,0x3F,toggle_setlist_mode())
     one_shot(bot,6,0x1F,midi_invalidate())
-    repeater(top,7,0x20,0x07,prev_song())
-    repeater(top,8,0x20,0x07,next_song())
+    repeater(top,7,0x30,0x07,prev_song())
+    repeater(top,8,0x30,0x07,next_song())
 
     one_shot(bot,7,0x3F,reset_scene())
 
