@@ -1882,8 +1882,6 @@ sets:
 
   - date: "2019-06-22"
     venue: Private Party
-    active: true
-    print: true
     songs:
      - Everything Zen
      - Dammit
@@ -1960,4 +1958,57 @@ sets:
 
      - 'BREAK: ENCORE'
 
+     - Hash Pipe
+
+  - date: "2019-08-03"
+    venue: Chubby Bullfrog
+    active: true
+    print: true
+    songs:
+     - Everything Zen
+     - Dammit
+     - Trippin'
+     - 'BREAK: HELLO'
+     - Slide
+     - Kids
+     - Say It Ain't So
+     - Hey Jealousy
+     - Enter Sandman
+     - 'BREAK: DOWNTUNE'
+     - The Middle
+     - Shine
+     - Monkey Wrench
+     - Lump
+     - 'BREAK: UPTUNE'
+     - Creep
+     - Story of a Girl
+     - Machinehead
+     - Buddy Holly
+     - 'BREAK: BREAK'
+     - Puppets
+     - 'BREAK: SET 2'
+     - Brain Stew
+     - Small Things
+     - 'BREAK: BREAK'
+     - Beautiful Disaster
+     - When I Come Around
+     - Song 2
+     - Stacy's Mom
+     - 'BREAK: BREAK'
+     - Comedown
+     - Go My Way
+     - Bullet With Butterfly Wings
+     - 'BREAK: BREAK'
+     - Interstate Love Song
+     - Fuel
+     - 'BREAK: BREAK'
+     - Counting Blue Cars
+     - Holiday
+     - Zero
+     - 'BREAK: BREAK'
+     - Low
+     - Basket Case
+     - 'BREAK: GOODBYE'
+     - Worst Enemy
+     - 'BREAK: ENCORE'
      - Hash Pipe
