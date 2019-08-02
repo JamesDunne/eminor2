@@ -324,8 +324,10 @@ struct state {
     u8 axe_midi_program;
     u8 td50_midi_program;
 
-    // Current tempo (bpm):
+    // Tempo from program (bpm):
     u8 tempo;
+    // Tapped tempo (bpm):
+    u8 tapped_tempo;
 
     union looper_state looper_state;
     u8 timer_once;
@@ -563,6 +565,10 @@ static void calc_midi(void) {
 
         // Send entire sysex buffer at once:
         midi_send_sysex_buffer(16, tempo_sysex);
+    }
+
+    if (curr.tapped_tempo != last.tapped_tempo) {
+        diff = 1;
     }
 
     // Send LOOPER state:
@@ -864,7 +870,13 @@ static void update_lcd(void) {
                 lcd_rows[row_amp1][i] = "q=  0bpm            "[i];
                 lcd_rows[row_amp2][i] = "                    "[i];
             }
-            ritoa(lcd_rows[row_amp1], 4, curr.tempo);
+            {
+                u8 tempo = curr.tempo;
+                if (curr.tapped_tempo > 0) {
+                    tempo = curr.tapped_tempo;
+                }
+                ritoa(lcd_rows[row_amp1], 4, tempo);
+            }
             break;
     }
 
@@ -1015,6 +1027,9 @@ static void load_program(void) {
     // Calculate timer period for TAP tempo LED and reset timer:
     tap_msec = 60000 / curr.tempo;
     time_delta_and_mark(TIME_MARKER_1);
+
+    curr.tapped_tempo = 0;
+    last.tapped_tempo = 0xFF;
 
     load_axe_midi();
 }
@@ -1197,6 +1212,9 @@ void controller_init(void) {
 
     curr.tempo = 120;
     last.tempo = ~curr.tempo;
+
+    curr.tapped_tempo = 0;
+    last.tapped_tempo = 0xFF;
 
     curr.screen = SCREEN_AMP;
     curr.selected_amp = JD;
@@ -1528,13 +1546,16 @@ void controller_handle(void) {
         // Measure time difference since last tap:
         tap_msec = time_delta_and_mark(TIME_MARKER_0);
         time_marker_dup(TIME_MARKER_1, TIME_MARKER_0);
-#if 0
+
         if ((tap_msec != 0xFFFFu) && (tap_msec > 0u)) {
-            // Calculate tempo in bpm:
-            // (setting `curr.tempo` will send SysEx messages to Axe-FX II to change tempo)
-            curr.tempo = 60000 / tap_msec;
+            // TODO: average with last tapped tempo?
+            // Calculate tapped tempo in bpm:
+            u16 tapped_tempo = 60000 / tap_msec;
+            if (tapped_tempo > 255) {
+                tapped_tempo = 255;
+            }
+            curr.tapped_tempo = (u8)tapped_tempo;
         }
-#endif
 
         // Toggle TAP CC value between 0x00 and 0x7F:
         tap ^= (u8)0x7F;
