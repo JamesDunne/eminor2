@@ -1545,14 +1545,24 @@ void controller_handle(void) {
 
     // TAP:
     if (is_bot_button_pressed(M_6)) {
+        u16 delta;
         timers.bot_6 = (u8)0x80;
 
         // Measure time difference since last tap:
-        tap_msec = time_delta_and_mark(TIME_MARKER_0);
-        time_marker_dup(TIME_MARKER_1, TIME_MARKER_0);
+        delta = time_delta_and_mark(TIME_MARKER_0);
 
-        if ((tap_msec != 0xFFFFu) && (tap_msec > 0u)) {
-            // TODO: average with last tapped tempo?
+        if (delta > 2000u) {
+            tap_msec = 0;
+        } else {
+            if (tap_msec > 0) {
+                tap_msec = (tap_msec + delta) >> 1;
+            } else {
+                tap_msec = delta;
+            }
+
+            // Copy marker 0 to marker 1 for LED blinking timing:
+            time_marker_dup(TIME_MARKER_1, TIME_MARKER_0);
+
             // Calculate tapped tempo in bpm:
             u16 tapped_tempo = 60000 / tap_msec;
             if (tapped_tempo > 255) {
