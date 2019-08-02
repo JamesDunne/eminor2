@@ -329,9 +329,11 @@ struct state {
     // Tapped tempo (bpm):
     u8 tapped_tempo;
 
-    union looper_state looper_state;
     u8 timer_once;
 } curr, last;
+
+// Current looper state:
+union looper_state looper_state;
 
 // Current amp state:
 struct amp amp[2];
@@ -423,6 +425,13 @@ static u8 midi_axe_cc(param enum cc_key key, param u8 a, param u8 value) {
     }
     return 0;
 }
+
+#if 0
+static void midi_axe_cc_fake(param enum cc_key key, param u8 a, param u8 value) {
+    enum cc_key amp_key = key + (a * CC_AMP2);
+    cc_sent[amp_key] = value;
+}
+#endif
 
 // MIDI is sent at a fixed 3,125 bytes/sec transfer rate; 56 bytes takes 175ms to complete.
 // calculate the difference from last MIDI state to current MIDI state and send the difference as MIDI commands:
@@ -572,25 +581,25 @@ static void calc_midi(void) {
     }
 
     // Send LOOPER state:
-    if (midi_axe_cc(CC_LOOPER_REC, 1, curr.looper_state.record ? 0x7F : 0)) {
-        DEBUG_LOG1("LOOP REC    %s", curr.looper_state.record ? "on" : "off");
+    if (midi_axe_cc(CC_LOOPER_REC, 1, looper_state.record ? 0x7F : 0)) {
+        DEBUG_LOG1("LOOP REC    %s", looper_state.record ? "on" : "off");
         diff = 1;
     }
-    if (midi_axe_cc(CC_LOOPER_PLAY, 1, curr.looper_state.play ? 0x7F : 0)) {
-        DEBUG_LOG1("LOOP PLAY   %s", curr.looper_state.play ? "on" : "off");
+    if (midi_axe_cc(CC_LOOPER_PLAY, 1, looper_state.play ? 0x7F : 0)) {
+        DEBUG_LOG1("LOOP PLAY   %s", looper_state.play ? "on" : "off");
         diff = 1;
     }
     // ONCE is edge triggered.
-    if (midi_axe_cc(CC_LOOPER_ONCE, 1, curr.looper_state.once ? 0x7F : 0)) {
+    if (midi_axe_cc(CC_LOOPER_ONCE, 1, looper_state.once ? 0x7F : 0)) {
         DEBUG_LOG0("LOOP ONCE");
         diff = 1;
     }
-    if (midi_axe_cc(CC_LOOPER_DUB, 1, curr.looper_state.dub ? 0x7F : 0)) {
-        DEBUG_LOG1("LOOP DUB    %s", curr.looper_state.dub ? "on" : "off");
+    if (midi_axe_cc(CC_LOOPER_DUB, 1, looper_state.dub ? 0x7F : 0)) {
+        DEBUG_LOG1("LOOP DUB    %s", looper_state.dub ? "on" : "off");
         diff = 1;
     }
-    if (midi_axe_cc(CC_LOOPER_BYP, 1, curr.looper_state.enable ? 0x7F : 0)) {
-        DEBUG_LOG1("LOOP ENABLE %s", curr.looper_state.enable ? "on" : "off");
+    if (midi_axe_cc(CC_LOOPER_BYP, 1, looper_state.enable ? 0x7F : 0)) {
+        DEBUG_LOG1("LOOP ENABLE %s", looper_state.enable ? "on" : "off");
         diff = 1;
     }
 
@@ -701,10 +710,6 @@ static void lcd_fx_row(param u8 a) {
 
 #ifdef HWFEAT_LABEL_UPDATES
 char tmplabel[fx_count][5];
-#endif
-
-#ifdef FEAT_LCD
-rom const u8 looper_lcd[20] = "rec ply onc dub byp ";
 #endif
 
 // Update LCD display:
@@ -847,14 +852,14 @@ static void update_lcd(void) {
             lcd_amp_row(0);
             for (i = 0; i < LCD_COLS; i++) {
                 u8 j = i >> 2;
-                u8 c = "rec ply onc dub byp "[i];
+                u8 c = "rec ply onc dub ena "[i];
                 if ((c & 0x40) != 0) {
                     if (j == 2) {
                         // special case for ONCE state:
                         if (curr.timer_once > 0) {
                             c = c & 0xDFu;
                         }
-                    } else if (((curr.looper_state.byte & (1<<j)) != 0)) {
+                    } else if (((looper_state.byte & (1<<j)) != 0)) {
                         c = c & 0xDFu;  // 0xDFu == ~(u8)0x20u
                     }
                 }
@@ -926,7 +931,7 @@ static void calc_leds(void) {
             curr.leds.bot.byte =
                 (curr.fsw.bot.byte)
                 // exclue ONCE state (M_3) since it is edge triggered:
-                | (curr.looper_state.byte & ~(u8)(M_3 | M_6 | M_7 | M_8))
+                | (looper_state.byte & ~(u8)(M_3 | M_6 | M_7 | M_8))
                 // enable ONCE LED (M_3) for 250ms after press:
                 | (curr.timer_once > 0 ? M_3 : 0);
             break;
@@ -1201,8 +1206,7 @@ void controller_init(void) {
         cc_lookup[CC_AMP2 * i + CC_LOOPER_UNDO] = axe_cc_looper_undo;
     }
 
-    curr.looper_state.byte = 0;
-    last.looper_state.byte = 0xFF;
+    looper_state.byte = 0;
 
     curr.timer_once = 0;
     last.timer_once = 0xFF;
@@ -1522,11 +1526,11 @@ void controller_handle(void) {
             btn_pressed(bot, 5, curr.selected_amp ^= JD)
             break;
         case SCREEN_LOOPER:
-            btn_pressed(bot, 1, curr.looper_state.record ^= 1)
-            btn_pressed(bot, 2, curr.looper_state.play ^= 1)
-            btn_pressed(bot, 3, curr.looper_state.once ^= 1; curr.timer_once = 40)
-            btn_pressed(bot, 4, curr.looper_state.dub ^= 1)
-            btn_pressed(bot, 5, curr.looper_state.enable ^= 1)
+            btn_pressed(bot, 1, looper_state.record ^= 1)
+            btn_pressed(bot, 2, looper_state.play ^= 1)
+            btn_pressed(bot, 3, looper_state.once ^= 1; curr.timer_once = 40)
+            btn_pressed(bot, 4, looper_state.dub ^= 1)
+            btn_pressed(bot, 5, looper_state.enable ^= 1)
             break;
         case SCREEN_MIDI:
             btn_released_repeater(top, 3, bounded_dec(&curr.axe_midi_program, 0))
