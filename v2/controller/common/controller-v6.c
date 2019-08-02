@@ -138,7 +138,7 @@ TODO: edit tempo via buttons
     |                                       MODE                 |
     |                                                            |
     |     *      *      *      *      *      *      *      *     |
-    |    REC    PLAY   ONCE   DUB   BYPASS  TAP  SC_PRV SC_NXT   |
+    |    REC    PLAY   ONCE   DUB   ENABLE  TAP  SC_PRV SC_NXT   |
     |                                      RESET SC_ONE          |
     |------------------------------------------------------------|
 
@@ -174,7 +174,7 @@ TODO: edit tempo via buttons
 #define axe_cc_looper_once      30
 #define axe_cc_looper_dub       31
 #define axe_cc_looper_rev       32
-#define axe_cc_looper_bypass    33
+#define axe_cc_looper_enable    33
 #define axe_cc_looper_half      120
 #define axe_cc_looper_undo      121
 
@@ -270,7 +270,7 @@ union looper_state {
         u8 play:1;
         u8 once:1;
         u8 dub:1;
-        u8 bypass:1;    // NOTE: bypass and rev are switched here to make it easier to update LED state
+        u8 enable:1;    // NOTE: enable and rev are switched here to make it easier to update LED state
         u8 rev:1;
         u8 half:1;
         u8 undo:1;
@@ -566,11 +566,11 @@ static void calc_midi(void) {
 
     // Send LOOPER state:
     if (midi_axe_cc(CC_LOOPER_REC, 1, curr.looper_state.record ? 0x7F : 0)) {
-        DEBUG_LOG1("LOOP REC  %s", curr.looper_state.record ? "on" : "off");
+        DEBUG_LOG1("LOOP REC    %s", curr.looper_state.record ? "on" : "off");
         diff = 1;
     }
     if (midi_axe_cc(CC_LOOPER_PLAY, 1, curr.looper_state.play ? 0x7F : 0)) {
-        DEBUG_LOG1("LOOP PLAY %s", curr.looper_state.play ? "on" : "off");
+        DEBUG_LOG1("LOOP PLAY   %s", curr.looper_state.play ? "on" : "off");
         diff = 1;
     }
     if (midi_axe_cc(CC_LOOPER_ONCE, 1, curr.looper_state.once ? 0x7F : 0)) {
@@ -578,11 +578,11 @@ static void calc_midi(void) {
         diff = 1;
     }
     if (midi_axe_cc(CC_LOOPER_DUB, 1, curr.looper_state.dub ? 0x7F : 0)) {
-        DEBUG_LOG1("LOOP DUB  %s", curr.looper_state.dub ? "on" : "off");
+        DEBUG_LOG1("LOOP DUB    %s", curr.looper_state.dub ? "on" : "off");
         diff = 1;
     }
-    if (midi_axe_cc(CC_LOOPER_BYP, 1, curr.looper_state.bypass ? 0x7F : 0)) {
-        DEBUG_LOG1("LOOP BYP  %s", curr.looper_state.bypass ? "on" : "off");
+    if (midi_axe_cc(CC_LOOPER_BYP, 1, curr.looper_state.enable ? 0x7F : 0)) {
+        DEBUG_LOG1("LOOP ENABLE %s", curr.looper_state.enable ? "on" : "off");
         diff = 1;
     }
 
@@ -750,7 +750,7 @@ static void update_lcd(void) {
             labels_top[3] = "";
             labels_bot[3] = "DUB";
             labels_top[4] = "";
-            labels_bot[4] = "BYPASS";
+            labels_bot[4] = "ENABLE";
             break;
         case SCREEN_MIDI:
             labels_top[0] = "";
@@ -1163,7 +1163,7 @@ void controller_init(void) {
         cc_lookup[CC_AMP2 * i + CC_LOOPER_ONCE] = axe_cc_looper_once;
         cc_lookup[CC_AMP2 * i + CC_LOOPER_DUB] = axe_cc_looper_dub;
         cc_lookup[CC_AMP2 * i + CC_LOOPER_REV] = axe_cc_looper_rev;
-        cc_lookup[CC_AMP2 * i + CC_LOOPER_BYP] = axe_cc_looper_bypass;
+        cc_lookup[CC_AMP2 * i + CC_LOOPER_BYP] = axe_cc_looper_enable;
         cc_lookup[CC_AMP2 * i + CC_LOOPER_HALF] = axe_cc_looper_half;
         cc_lookup[CC_AMP2 * i + CC_LOOPER_UNDO] = axe_cc_looper_undo;
     }
@@ -1483,7 +1483,7 @@ void controller_handle(void) {
             btn_pressed(bot, 2, curr.looper_state.play ^= 1)
             btn_pressed(bot, 3, curr.looper_state.once ^= 1)
             btn_pressed(bot, 4, curr.looper_state.dub ^= 1)
-            btn_pressed(bot, 5, curr.looper_state.bypass ^= 1)
+            btn_pressed(bot, 5, curr.looper_state.enable ^= 1)
             break;
         case SCREEN_MIDI:
             btn_released_repeater(top, 3, bounded_dec(&curr.axe_midi_program, 0))
