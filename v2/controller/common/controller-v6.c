@@ -328,6 +328,7 @@ struct state {
     u8 tempo;
 
     union looper_state looper_state;
+    u8 timer_once;
 } curr, last;
 
 // Current amp state:
@@ -573,8 +574,9 @@ static void calc_midi(void) {
         DEBUG_LOG1("LOOP PLAY   %s", curr.looper_state.play ? "on" : "off");
         diff = 1;
     }
+    // ONCE is edge triggered.
     if (midi_axe_cc(CC_LOOPER_ONCE, 1, curr.looper_state.once ? 0x7F : 0)) {
-        DEBUG_LOG1("LOOP ONCE %s", curr.looper_state.once ? "on" : "off");
+        DEBUG_LOG0("LOOP ONCE");
         diff = 1;
     }
     if (midi_axe_cc(CC_LOOPER_DUB, 1, curr.looper_state.dub ? 0x7F : 0)) {
@@ -597,6 +599,13 @@ static void calc_midi(void) {
     } else if (curr.pr_num != last.pr_num) {
         diff = 1;
     } else if (curr.sc_idx != last.sc_idx) {
+        diff = 1;
+    }
+
+    // Update LCD when ONCE LED turns on or off:
+    if (curr.timer_once == 0 && last.timer_once > 0) {
+        diff = 1;
+    } else if (curr.timer_once > last.timer_once) {
         diff = 1;
     }
 
@@ -700,7 +709,6 @@ static void update_lcd(void) {
 #endif
 #ifdef FEAT_LCD
     s8 i;
-    u8 test;
     rom const u8 *song_name;
 #endif
     DEBUG_LOG0("update LCD");
@@ -834,8 +842,15 @@ static void update_lcd(void) {
             for (i = 0; i < LCD_COLS; i++) {
                 u8 j = i >> 2;
                 u8 c = "rec ply onc dub byp "[i];
-                if (((c & 0x40) != 0) && ((curr.looper_state.byte & (1<<j)) != 0)) {
-                    c = c & 0xDFu;  // = ~(u8)0x20u
+                if ((c & 0x40) != 0) {
+                    if (j == 2) {
+                        // special case for ONCE state:
+                        if (curr.timer_once > 0) {
+                            c = c & 0xDFu;
+                        }
+                    } else if (((curr.looper_state.byte & (1<<j)) != 0)) {
+                        c = c & 0xDFu;  // 0xDFu == ~(u8)0x20u
+                    }
                 }
                 lcd_rows[row_amp2][i] = c;
             }
@@ -897,8 +912,11 @@ static void calc_leds(void) {
                 | ((curr.screen == SCREEN_FX) << 4)
                 | ((curr.screen == SCREEN_MIDI) << 5);
             curr.leds.bot.byte =
-                (curr.fsw.bot.byte & (u8)(M_6 | M_7 | M_8))
-                | (curr.looper_state.byte & ~(u8)(M_6 | M_7 | M_8));
+                (curr.fsw.bot.byte)
+                // exclue ONCE state (M_3) since it is edge triggered:
+                | (curr.looper_state.byte & ~(u8)(M_3 | M_6 | M_7 | M_8))
+                // enable ONCE LED (M_3) for 250ms after press:
+                | (curr.timer_once > 0 ? M_3 : 0);
             break;
         case SCREEN_MIDI:
             curr.leds.top.byte =
@@ -1171,6 +1189,9 @@ void controller_init(void) {
     curr.looper_state.byte = 0;
     last.looper_state.byte = 0xFF;
 
+    curr.timer_once = 0;
+    last.timer_once = 0xFF;
+
     tap = 0;
     tap_msec = 500;
 
@@ -1411,6 +1432,10 @@ void controller_10msec_timer(void) {
             timers.retrigger = 0;
         }
     }
+
+    if (curr.timer_once > 0) {
+        curr.timer_once--;
+    }
 }
 
 // main control loop
@@ -1481,7 +1506,7 @@ void controller_handle(void) {
         case SCREEN_LOOPER:
             btn_pressed(bot, 1, curr.looper_state.record ^= 1)
             btn_pressed(bot, 2, curr.looper_state.play ^= 1)
-            btn_pressed(bot, 3, curr.looper_state.once ^= 1)
+            btn_pressed(bot, 3, curr.looper_state.once ^= 1; curr.timer_once = 40)
             btn_pressed(bot, 4, curr.looper_state.dub ^= 1)
             btn_pressed(bot, 5, curr.looper_state.enable ^= 1)
             break;
