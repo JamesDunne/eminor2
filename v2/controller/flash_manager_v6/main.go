@@ -575,6 +575,8 @@ func generatePICH() {
 		}
 	}
 
+	fmt.Printf("0x%04X bytes written of 0x%04X total bytes\n", bw.BytesWritten(), C.WRITABLE_SEG_LEN)
+
 	// Generate 0s for the remainder of flash:
 	for rem := C.WRITABLE_SEG_LEN - bw.BytesWritten(); rem > 0; rem-- {
 		bw.WriteDecimal(0)
