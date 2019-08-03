@@ -56,7 +56,7 @@ func main() {
 	meta := &struct {
 		Songs []*SongMeta
 	}{}
-	err := parse_yaml("../flash_manager_v5/song-names.yml", &meta)
+	err := parse_yaml("../flash_manager_v6/song-names.yml", &meta)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -80,6 +80,9 @@ func main() {
 		max, _ := strconv.Atoi(args[1])
 		if max < 0 {
 			max = 0
+		}
+		if max >= len(song_names) {
+			max = len(song_names)
 		}
 		song_names = song_names[:max]
 	}
