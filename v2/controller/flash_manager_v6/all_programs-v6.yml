@@ -78,7 +78,7 @@ songs:
     JD:
       channel: dirty
       level: 6
-      gate: -62
+      gate: -52
       fx: [dly2, pit2]
   - name: JD dirty;MG dirty
     MG:
@@ -91,7 +91,7 @@ songs:
     JD:
       channel: dirty
       level: 6
-      gate: -62
+      gate: -52
       fx: [dly2, pit2]
   - name: JD dirty;MG dirty
     MG:
@@ -104,7 +104,7 @@ songs:
     JD:
       channel: dirty
       level: 6
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -126,7 +126,7 @@ songs:
     JD:
       channel: dirty
       level: 6
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -158,6 +158,7 @@ songs:
     MG:
       channel: dirty
       level: 4
+      gate: -52
       fx: [rtr1,dly1]
     JD:
       channel: acoustic
@@ -181,7 +182,7 @@ songs:
     JD:
       channel: dirty
       level: 5
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -198,7 +199,7 @@ songs:
     JD:
       channel: dirty
       level: 4.5
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -211,7 +212,7 @@ songs:
     JD:
       channel: dirty
       level: 4.5
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -224,14 +225,14 @@ songs:
     JD:
       channel: dirty
       level: 4.5
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD lead;MG dirty
     MG:
       channel: dirty
     JD:
       channel: dirty
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -266,7 +267,7 @@ songs:
       gain: 0x70
       channel: dirty
       level: 5
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD lead;MG clean
     MG:
@@ -275,7 +276,7 @@ songs:
       gain: 0x70
       channel: dirty
       level: 2
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD clean;MG clean
     MG:
@@ -299,7 +300,7 @@ songs:
       gain: 0x70
       channel: dirty
       level: 5
-      gate: -62
+      gate: -52
       fx: [dly2]
 
 - name: Crawling in the Dark
@@ -410,7 +411,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD clean;MG dirty
     MG:
@@ -423,7 +424,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD clean;MG dirty
     MG:
@@ -436,7 +437,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD lead;MG dirty
     MG:
@@ -444,7 +445,7 @@ songs:
     JD:
       channel: dirty
       level: 4
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD clean;MG dirty
     MG:
@@ -457,7 +458,7 @@ songs:
       channel: dirty
     JD:
       channel: dirty
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD lead;MG dirty
     MG:
@@ -465,7 +466,7 @@ songs:
     JD:
       channel: dirty
       level: 4
-      gate: -62
+      gate: -52
       fx: [dly2]
 
 - name: In Bloom
@@ -503,7 +504,7 @@ songs:
     JD:
       channel: dirty
       level: 6
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: JD dirty;MG dirty
     MG:
@@ -542,6 +543,7 @@ songs:
     MG:
       channel: dirty
       level: 4
+      gate: -52
       fx: [dly1]
     JD:
       channel: dirty
@@ -656,6 +658,7 @@ songs:
     MG:
       channel: dirty
       level: 3
+      gate: -52
       fx: [dly1]
     JD:
       channel: dirty
@@ -663,6 +666,7 @@ songs:
     MG:
       channel: dirty
       level: 3
+      gate: -52
       fx: [dly1]
     JD:
       channel: clean
@@ -680,6 +684,7 @@ songs:
     MG:
       channel: dirty
       level: 3
+      gate: -52
       fx: [dly1]
     JD:
       channel: dirty
@@ -1077,7 +1082,7 @@ songs:
     JD:
       channel: dirty
       level: 1
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: Breakdown harm
     MG:
@@ -1086,7 +1091,7 @@ songs:
     JD:
       channel: dirty
       level: 1
-      gate: -62
+      gate: -52
       fx: [dly2,pit2]
   - name: Breakdown lead
     MG:
@@ -1095,7 +1100,7 @@ songs:
     JD:
       channel: dirty
       level: 6
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: Breakdown harm
     MG:
@@ -1104,7 +1109,7 @@ songs:
     JD:
       channel: dirty
       level: 1
-      gate: -62
+      gate: -52
       fx: [dly2,pit2]
   - name: Main
     MG:
@@ -1118,7 +1123,7 @@ songs:
       channel: dirty
       level: 6
       gain: 0x60
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: Main
     MG:
@@ -1132,7 +1137,7 @@ songs:
       channel: dirty
       level: 3
       gain: 0x70
-      gate: -62
+      gate: -52
       fx: [dly2]
 
 - name: Low
@@ -1149,7 +1154,7 @@ songs:
       channel: clean
     JD:
       channel: dirty
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: Chorus
     MG:
@@ -1161,7 +1166,7 @@ songs:
       channel: clean
     JD:
       channel: dirty
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: Chorus
     MG:
@@ -1175,7 +1180,7 @@ songs:
       channel: dirty
       level: 4
       gain: 0x5E
-      gate: -62
+      gate: -52
       fx: [dly2]
     # Blue blue is the sun...
   - name: Bridge
@@ -1186,7 +1191,7 @@ songs:
       channel: dirty
       level: -2
       gain: 0x5E
-      gate: -62
+      gate: -52
       fx: [dly2]
   - name: Chorus
     MG:
@@ -1264,6 +1269,7 @@ songs:
   - name: Intro
     MG:
       channel: dirty
+      gate: -52
       fx: [dly1]
     JD:
       channel: dirty
@@ -1294,7 +1300,7 @@ songs:
   tempo: 122
   td50_midi: 52
   gain: 0x2E
-  gate: -62
+  gate: -52
   scenes:
   - name: Intro
     MG:
@@ -1599,7 +1605,7 @@ songs:
 - name: Slide
   tempo: 120
   gain: 0x0A
-  gate: -62
+  gate: -52
   scenes:
   - name: JD acoustic;MG acoustic
     MG:
@@ -1666,7 +1672,7 @@ songs:
         channel: dirty
       JD:
         channel: dirty
-        gate: -62
+        gate: -52
         level: 4.0
         fx: [dly2, cho2]
     - name: lead fade
@@ -1674,7 +1680,7 @@ songs:
         channel: dirty
       JD:
         channel: dirty
-        gate: -62
+        gate: -52
         level: 2.0
         fx: [dly2, cho2]
     - name: pre-chorus
