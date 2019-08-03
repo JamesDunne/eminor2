@@ -65,6 +65,7 @@ rom const u8 debounce_max[16] = {
     125, 125, 125, 125, 125, 125, 125, 125
 };
 u8 debounce[16] = {0};
+u8 rebounce[16] = {0};
 u16 fsw_debounced = 0;
 
 void fsw_debounce(void) {
@@ -81,20 +82,26 @@ void fsw_debounce(void) {
             if (fsw & test) {
                 // button pressed:
                 debounce[i] = 1;
+                rebounce[i] = 0;
                 deb |= test;
             }
         } else {
-            // keep button down for at least 125msec:
-            if (debounce[i] < debounce_max[i]) {
-                debounce[i]++;
-                deb |= test;
-            } else {
-                // use live state:
-                if (fsw & test) {
+            if (rebounce[i] == 0) {
+                // keep button down for at least 125msec:
+                if (debounce[i] < debounce_max[i]) {
+                    debounce[i]++;
                     deb |= test;
                 } else {
-                    debounce[i] = 0;
+                    // use live state:
+                    if (fsw & test) {
+                        deb |= test;
+                    } else {
+                        debounce[i] = 0;
+                        rebounce[i] = 40;
+                    }
                 }
+            } else {
+                rebounce[i]--;
             }
         }
     }

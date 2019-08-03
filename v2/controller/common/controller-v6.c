@@ -1554,6 +1554,7 @@ void controller_handle(void) {
         if (delta > 2000u) {
             tap_msec = 0;
         } else {
+            u16 tapped_tempo;
             if (tap_msec > 0) {
                 tap_msec = (tap_msec + delta) >> 1;
             } else {
@@ -1564,7 +1565,7 @@ void controller_handle(void) {
             time_marker_dup(TIME_MARKER_1, TIME_MARKER_0);
 
             // Calculate tapped tempo in bpm:
-            u16 tapped_tempo = 60000 / tap_msec;
+            tapped_tempo = 60000 / tap_msec;
             if (tapped_tempo > 255) {
                 tapped_tempo = 255;
             }
@@ -1585,10 +1586,10 @@ void controller_handle(void) {
     }
 
     // PREV SCENE:
-    btn_pressed_oneshot(bot,7,(prev_scene()))
+    btn_pressed_oneshot(bot,7,on_retrigger(prev_scene()))
 
     // NEXT SCENE:
-    btn_pressed_oneshot(bot,8,(next_scene()))
+    btn_pressed_oneshot(bot,8,on_retrigger(next_scene()))
 
     // PREV/NEXT SONG:
     if (is_top_button_pressed(M_7)) {
