@@ -1962,8 +1962,6 @@ sets:
 
   - date: "2019-08-03"
     venue: Chubby Bullfrog
-    active: true
-    print: true
     songs:
      - Everything Zen
      - Dammit
@@ -2012,3 +2010,59 @@ sets:
      - Worst Enemy
      - 'BREAK: ENCORE'
      - Hash Pipe
+
+  - date: "2019-08-17"
+    venue: MT Barrels
+    active: true
+    print: true
+    songs:
+     - Song 2
+     - Dammit
+     - Trippin'
+     - 'BREAK: HELLO'
+     - Slide
+     - Kids
+     - Say It Ain't So
+     - 'BREAK: BREAK'
+     - Hey Jealousy
+     - Stacy's Mom
+     - Enter Sandman
+     - 'BREAK: DOWNTUNE'
+     - The Middle
+     - Shine
+     - Monkey Wrench
+     - Lump
+     - 'BREAK: UPTUNE'
+     - Bullet With Butterfly Wings
+     - Creep
+     - Story of a Girl
+     - Machinehead
+     - Zero
+     - 'BREAK: BREAK'
+     - Bells
+     - 'BREAK: SET 2'
+     - Brain Stew
+     - Small Things
+     - 'BREAK: BREAK'
+     - December
+     - Go My Way
+     - Beautiful Disaster
+     - 'BREAK: BREAK'
+     - When I Come Around
+     - My Hero
+     - Hash Pipe
+     - 'BREAK: BREAK'
+     - Low
+     - Holiday
+     - Everything Zen
+     - Interstate Love Song
+     - Fuel
+     - 'BREAK: BREAK'
+     - Comedown
+     - Buddy Holly
+     - Counting Blue Cars
+     - Basket Case
+     - 'BREAK: GOODBYE'
+     - Worst Enemy
+     - 'BREAK: ENCORE'
+     - Kryptonite
