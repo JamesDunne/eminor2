@@ -14,12 +14,14 @@ import (
 )
 
 type SongMeta struct {
-	PrimaryName string
+	primaryName string
 
-	Names      []string `yaml:"names"`
-	ShortName  string   `yaml:"short_name"`
-	Starts     string   `yaml:"starts"`
-	Deprecated bool     `yaml:"deprecated"`
+	Names       []string `yaml:"names"`
+	ShortName   string   `yaml:"short_name"`
+	Artist      string   `yaml:"artist"`
+	Starts      string   `yaml:"starts"`
+	Deprecated  bool     `yaml:"deprecated"`
+	YouTubeLink string   `yaml:"youtubeLink"`
 }
 
 func parse_yaml(path string, dest interface{}) error {
@@ -56,7 +58,8 @@ func main() {
 	meta := &struct {
 		Songs []*SongMeta
 	}{}
-	err := parse_yaml("../flash_manager_v6/song-names.yml", &meta)
+	songNamesYamlPath := "../flash_manager_v6/song-names.yml"
+	err := parse_yaml(songNamesYamlPath, &meta)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,7 +70,32 @@ func main() {
 		if song.Deprecated {
 			continue
 		}
+		song.primaryName = song.Names[0]
+
+		if song.YouTubeLink == "" {
+			query := fmt.Sprintf("%s %s", song.Artist, song.primaryName)
+			var rspb []byte
+			song.YouTubeLink, rspb, err = searchVideoLink(query)
+			if err != nil {
+				fmt.Println(err)
+				goto ok
+			}
+			fmt.Fprintf(os.Stderr, "search for '%s':\n%s\n", query, string(rspb))
+		}
+
+		//fmt.Printf("%s - %s\t%s\n", song.Artist, song.primaryName, song.YouTubeLink)
+	ok:
 		song_names = append(song_names, song)
+	}
+
+	outb, err := yaml.Marshal(&meta)
+	if err != nil {
+		log.Println(err)
+	} else {
+		err = ioutil.WriteFile(songNamesYamlPath, outb, 0644)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 
 	// shuffle song list:
