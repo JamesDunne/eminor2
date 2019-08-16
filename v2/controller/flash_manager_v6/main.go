@@ -100,28 +100,6 @@ type Setlistsv6 struct {
 	Sets []Setlistv6 `yaml:"sets"`
 }
 
-const (
-	FX3_Compressor uint8 = 1 << iota
-	FX3_Filter
-	FX3_Pitch
-	FX3_Chorus
-	FX3_Delay
-	FX3_Reverb
-	FX3_Noisegate
-	FX3_EQ
-)
-
-var FXNames = []string{
-	"compressor",
-	"filter",
-	"pitch",
-	"chorus",
-	"delay",
-	"reverb",
-	"gate",
-	"eq",
-}
-
 const song_name_max_length = 20
 
 type SongMeta struct {
@@ -129,6 +107,7 @@ type SongMeta struct {
 
 	Names     []string `yaml:"names"`
 	ShortName string   `yaml:"short_name"`
+	Artist    string   `yaml:"artist"`
 	Starts    string   `yaml:"starts"`
 }
 
@@ -340,7 +319,7 @@ func generatePICH() {
 
 				// Write out song index:
 				fwsetlist.Entries[j].Song = uint8(song_index)
-				fmt.Printf("  %2d) %3d %s\n", j+1, song_index+1, meta.PrimaryName)
+				fmt.Printf("  %2d) %s - %s\n", j+1, meta.Artist, meta.PrimaryName)
 				last_song_index = song_index
 			}
 		}
@@ -512,7 +491,7 @@ func generatePICH() {
 								break
 							}
 						}
-						if fxn >= FWfx_count + 1 {
+						if fxn >= FWfx_count+1 {
 							fmt.Printf("Effect name '%s' not found in fx_layout %v\n", effect, fx_layout)
 							continue
 						}

@@ -1,242 +1,300 @@
 songs:
 - names: [Monkey Wrench, Monkeywrench, Monkey Wretch]
   short_name: Monkey Wrench
+  artist: Foo Fighters
   starts: Bremer 4 ct
 
 - names: [Zero, Zorro]
   short_name: Zero
+  artist: Smashing Pumpkins
   starts: Jim
 
 - names: [Buddy Holly, Bloody Hobbit]
   short_name: Buddy Holly
+  artist: Weezer
   starts: Glaz+Bremer
 
 - names: [Plush, Plunch]
   short_name: Plush
+  artist: Stone Temple Pilots
   starts: Bremer 2 ct
 
 - names: [Come Out and Play]
   short_name: Come Out
+  artist: The Offspring
   starts: Bremer
   deprecated: true
 
 - names: [Drive]
   short_name: Drive
+  artist: Incubus
   starts: Jim
   deprecated: true
 
 - names: [When I Come Around, When I Cum Aloud]
   short_name: Come Around
+  artist: Green Day
   starts: Jim
 
 - names: [Everything Zen, Zen, Everything Zorg]
   short_name: Zen
+  artist: Bush
   starts: Glaz
 
 - names: [Enter Sandman, Sandman, Enter Spandex]
   short_name: Sandman
+  artist: Metallica
   starts: Glaz
 
 - names: [Crawling in the Dark, Crawling]
   short_name: Crawling
+  artist: Hoobastank
   starts: Jim
   deprecated: true
 
 - names: [Song 2, Shlong 2]
   short_name: Song 2
+  artist: Blur
   starts: Bremer
 
 - names: [Sex Type Thing]
   short_name: Sex Type Thing
+  artist: Stone Temple Pilots
   starts: Bremer 4 ct
 
 - names: [Counting Blue Cars, Blue Cars, Crowding Blue Farts]
   short_name: Blue Cars
+  artist: Dishwalla
   starts: Bremer 4 ct
 
 - names: [In Bloom]
   short_name: In Bloom
+  artist: Nirvana
   starts: Bremer 4 ct
   deprecated: true
 
 - names: [Hash Pipe, Hashpipe, Hoarse Pope]
   short_name: Hash Pipe
+  artist: Weezer
   starts: Bremer+Adam
 
 - names: [My Hero]
   short_name: My Hero
+  artist: Foo Fighters
   starts: Bremer+Adam
 
 - names: [Machinehead, Machine Head, Machineface]
   short_name: Machinehead
+  artist: Bush
   starts: Jim
 
 - names: [Holiday, Holigay]
   short_name: Holiday
+  artist: Green Day
   starts: Jim
 
 - names: [Closing Time, Closing Thighs]
   short_name: Closing Time
+  artist: Semisonic
   starts: Glaz
 
 - names: [Brain Stew, Brainstew, Bran Stew]
   short_name: Brain Stew
+  artist: Green Day
   starts: Jim
 
 - names: [Bound for the Floor]
   short_name: Bound
+  artist: Local H
   starts: Jim
 
 - names: [Cumbersome, Cumberbuns]
   short_name: Cumbersome
+  artist: Seven Mary Three
   starts: Jim
 
 - names: [Lump, Lamp]
   short_name: Lump
+  artist: Presidents of the USA
   starts: Bremer+Glaz
 
 - names: [Hey Jealousy, Hey Gelatin]
   short_name: Hey Jealousy
+  artist: Gin Blossoms
   starts: Bremer 4 ct
 
 - names: [Kryptonite, Krypnotize]
   short_name: Kryptonite
+  artist: Three Doors Down
   starts: Glaz
 
 - names: [Dammit, Damnit, Damn It, Darnit]
   short_name: Dammit
+  artist: Blink 182
   starts: Jim
 
 - names: [Semi-charmed Life, Semi-charmed Kind of Life, Semicharmed Kind of Life]
   short_name: Semi-charmed
+  artist: Third Eye Blind
   starts: Bremer
   deprecated: true
 
 - names: [My Own Worst Enemy, Worst Enemy, My Own Warped Enema]
   short_name: My Own Worst Enemy
+  artist: Lit
   starts: Jim
 
 - names: [The Middle, Middle, The Midget]
   short_name: The Middle
+  artist: Jimmy Eat World
   starts: Glaz
 
 - names: [Bullet With Butterfly Wings, Bullet]
   short_name: Bullet
+  artist: Smashing Pumpkins
   starts: Glaz
 
 - names: [Beautiful Disaster, Beautiful Dispatcher]
   short_name: Beautiful Disaster
+  artist: '311'
   starts: Jim
 
 - names: [For Whom The Bell Tolls, Bells]
   short_name: Bells
+  artist: Metallica
   starts: Bremer
 
 - names: [Fuel, Feud]
   short_name: Fuel
+  artist: Metallica
   starts: Glaz
 
 - names: [What I Got, What I Grope]
   short_name: What I Got
+  artist: Sublime
   starts: Bremer
 
 - names: [Say It Aint So, "Say It Ain't So", Say It Ain’t So, Say It Ain't Chode]
   short_name: Say It Aint So
+  artist: Weezer
   starts: Jim
 
 - names: [Shine, Shrine]
   short_name: Shine
+  artist: Collective Soul
   starts: Jim
 
 - names: [Basket Case, Basketcase, Casket Face]
   short_name: Basket Case
+  artist: Green Day
   starts: Glaz
 
-- names: [Undone, Sweater Song, The Sweater Song]
+- names: [Undone (The Sweater Song), Undone, Sweater Song, The Sweater Song]
   short_name: Undone
+  artist: Weezer
   starts: Bremer
 
 - names: [Story of a Girl, Absolutely, Story of a GERD]
   short_name: Story of a Girl
+  artist: Nine Days
   starts: Glaz
 
-- names: [Trippin, "Trippin’", "Trippin'", Trippin on a Hole in a Paper Heart, Trippin on a Hole, Tripping, Tripping on a Hole in a Paper Heart, Tripping on a Hole, Slippin' on a Ho's Anal Tapered Shart]
+- names: [Trippin on a Hole in a Paper Heart, Trippin, "Trippin’", "Trippin'", Trippin on a Hole, Tripping, Tripping on a Hole in a Paper Heart, Tripping on a Hole, Slippin' on a Ho's Anal Tapered Shart]
   short_name: Trippin
+  artist: Stone Temple Pilots
   starts: Bremer
 
 - names: [Master of Puppets, Puppets]
   short_name: Puppets
+  artist: Metallica
   starts: Bremer
 
 - names: [Low, "Lowe's"]
   short_name: Low
+  artist: Cracker
   starts: Bremer
 
-- names: [Slayer, Raining Blood]
+- names: [Raining Blood, Slayer]
   short_name: Slayer
+  artist: Slayer
   starts: Bremer
   deprecated: true
 
 - names: [Happy Birthday]
   short_name: Birthday
+  artist: Matt Glaz
   starts: Glaz
   deprecated: true
 
 - names: [December, Dismember]
   short_name: December
+  artist: Collective Soul
   starts: Jim
 
 - names: [Bouncing off the Walls, Bouncin off the Walls, Bouncin, Bouncing, "Bouncin'", "Bouncin’"]
   short_name: Bouncing
+  artist: Sugarcult
   starts: Jim
 
 - names: [Satan Song, Satan, The Satan Song]
   short_name: Satan Song
+  artist: Matt Glaz
   starts: Bremer
   deprecated: true
 
-- names: [Kids, Kids Arent Alright, Kids Aren't Alright, The Kids Aren't Alright, Kids Aren’t Alright, The Kids Aren't All White]
+- names: [The Kids Aren't Alright, Kids, Kids Arent Alright, Kids Aren't Alright, Kids Aren’t Alright, The Kids Aren't All White]
   short_name: Kids
+  artist: The Offspring
   starts: Glaz
 
 - names: [Small Things, All The Small Things, Small Thongs]
   short_name: Small Things
+  artist: Blink 182
   starts: Bremer fill
 
 - names: [Creep, "Crêpe"]
   short_name: Creep
+  artist: Radiohead
   starts: Bremer 4 ct
 
-- names: [Go My Way, Are You Gonna Go My Way, Gonna Go My Way, "Are You Gonna Blow My Gay?"]
+- names: [Are You Gonna Go My Way, Go My Way, Gonna Go My Way, "Are You Gonna Blow My Gay?"]
   short_name: Go My Way
+  artist: Lenny Kravitz
   starts: Bremer snare
 
 - names: [Comedown, Come Down, Crumbdown]
   short_name: Comedown
+  artist: Bush
   starts: Bremer 4 ct
 
 - names: [Interstate Love Song, Interstate, ILS, Interstate Lung Song]
   short_name: Interstate
+  artist: Stone Temple Pilots
   starts: Bremer 4 ct
 
 - names: [Ghostbusters, Ghost Busters]
   short_name: Ghostbusters
+  artist: Ray Parker Jr
   starts: Glaz
   deprecated: true
 
 - names: [Under the Bridge]
   short_name: Under the Bridge
+  artist: Red Hot Chili Peppers
   starts: Jim
   deprecated: true
 
 - names: [Slide, Slimed]
   short_name: Slide
+  artist: Goo Goo Dolls
   starts: Jim
 
 - names: [Teen Spirit, Smells Like Teen Spirit]
   short_name: Teen Spirit
+  artist: Nirvana
   starts: Jim
 
 - names: [Stacys Mom, Stacy's Mom, Stacy’s Mom]
   short_name: Stacys Mom
+  artist: Fountains of Wayne
   starts: Jim
