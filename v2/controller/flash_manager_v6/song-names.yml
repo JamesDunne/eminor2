@@ -496,3 +496,9 @@ songs:
   starts: Jim
   deprecated: false
   youtubeLink: https://www.youtube.com/watch?v=dZLfasMPOU4
+- names:
+  - Mysterious Ways
+  short_name: Mysterious Ways
+  artist: U2
+  starts: Jim
+  deprecated: false

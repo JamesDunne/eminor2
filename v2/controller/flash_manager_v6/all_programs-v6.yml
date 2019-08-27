@@ -51,6 +51,22 @@ axe_midi:
           - flg2
           - cho2
           - dly2
+  - midi: 4
+    defaults:
+      clean_gain: 0x1A
+      dirty_gain: 0x50
+      gate: -56
+    amps:
+      - fx_layout:
+        - wah1
+        - phr1
+        - flg1
+        - dly1
+      - fx_layout:
+        - wah2
+        - phr2
+        - flg2
+        - dly2
 
 songs:
 - name: Monkey Wrench
@@ -1739,3 +1755,31 @@ songs:
         channel: dirty
       JD:
         channel: dirty
+
+- name: Mysterious Ways
+  tempo: 120
+  axe_midi: 4
+  gain: 0x50
+  gate: -56
+  scenes:
+    - name: verse
+      MG:
+        channel: dirty
+        fx: [flg1,dly1]
+      JD:
+        channel: dirty
+        fx: [wah2,dly2]
+    - name: bridge
+      MG:
+        channel: dirty
+        fx: [flg1,dly1]
+      JD:
+        channel: dirty
+        fx: [dly2]
+    - name: verse
+      MG:
+        channel: dirty
+        fx: [flg1,dly1]
+      JD:
+        channel: dirty
+        fx: [wah2,dly2]
