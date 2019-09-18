@@ -2013,8 +2013,6 @@ sets:
 
   - date: "2019-08-17"
     venue: MT Barrels
-    active: true
-    print: true
     songs:
      - Song 2
      - Dammit
@@ -2066,3 +2064,42 @@ sets:
      - Worst Enemy
      - 'BREAK: ENCORE'
      - Kryptonite
+
+  - date: "2019-09-20"
+    venue: HOME Bar
+    active: true
+    print: true
+    songs:
+     - Worst Enemy
+     - Go My Way
+     - Trippin'
+     - 'BREAK: HELLO'
+     - Small Things
+     - When I Come Around
+     - Buddy Holly
+     - Kids
+     - 'BREAK: BREAK'
+     - Plush
+     - Fuel
+     - 'BREAK: DOWNTUNE'
+     - The Middle
+     - Monkey Wrench
+     - 'BREAK: UPTUNE'
+     - Interstate Love Song
+     - Bullet With Butterfly Wings
+     - Everything Zen
+     - 'BREAK: BREAK'
+     - Counting Blue Cars
+     - My Hero
+     - Stacy's Mom
+     - 'BREAK: BREAK'
+     - Comedown
+     - Basket Case
+     - Closing Time
+     - Master of Puppets
+     - 'BREAK: GOODBYE'
+     - Holiday
+     - 'BREAK: ENCORE'
+     - Hash Pipe
+     - 'BREAK: SMASH OUR INSTRUMENTS AND SET FIRE TO THE DRUMS'
+
